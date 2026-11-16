@@ -10,6 +10,8 @@ namespace BalloonParty.Tests.Balloon
     {
         private const int FromLevel = 3;
         private const int Cooldown = 4;
+        private const int SureLevel = 10;
+        private const int SureAfter = 3;
 
         private INukeOddsSettings _settings;
         private INukeOdds _odds;
@@ -313,6 +315,116 @@ namespace BalloonParty.Tests.Balloon
             _schedule.Placed();
             _schedule.Due(FromLevel);
             _odds.Received(5).LinePassed();
+        }
+
+        [Test]
+        public void SureLevel_BringsOneAfterItsLines_EvenWithNoChance()
+        {
+            UseSureLevel();
+            _odds.Chance.Returns(0f);
+
+            for (var line = 1; line < SureAfter; line++)
+            {
+                Assert.IsFalse(_schedule.Due(SureLevel), $"line {line}, before the sure line");
+            }
+
+            Assert.IsTrue(_schedule.Due(SureLevel));
+            Assert.AreEqual(0, _draws);
+        }
+
+        [Test]
+        public void SureLevel_IgnoresTheCooldown()
+        {
+            UseSureLevel();
+            _settings.CooldownLines.Returns(1000);
+            _schedule.Due(FromLevel);
+            _schedule.Placed()();
+            _schedule.ForgetLevel();
+
+            Assert.IsTrue(DueWithin(SureLevel, SureAfter), "the cooldown from the last level's nuke is ignored");
+        }
+
+        [Test]
+        public void SureLevel_BelowFromLevel_StillBringsOne()
+        {
+            UseSureLevel();
+            _settings.FromLevel.Returns(SureLevel + 5);
+
+            Assert.IsTrue(DueWithin(SureLevel, SureAfter));
+        }
+
+        [Test]
+        public void SureLevel_CountsItsLinesFromTheLevelsStart()
+        {
+            UseSureLevel();
+            _odds.Chance.Returns(0f);
+            for (var line = 0; line < 20; line++)
+            {
+                _schedule.Due(SureLevel - 1);
+            }
+
+            _schedule.ForgetLevel();
+
+            Assert.IsFalse(_schedule.Due(SureLevel), "the last level's lines do not count");
+        }
+
+        [Test]
+        public void SureLevel_NotWhileOneIsOnTheBoard()
+        {
+            UseSureLevel();
+            _schedule.Due(FromLevel);
+            _schedule.Placed();
+            _schedule.ForgetLevel();
+
+            Assert.IsFalse(DueWithin(SureLevel, SureAfter * 3));
+        }
+
+        [Test]
+        public void SureLevel_NotASecondOnceTheLevelHasHadItsOne()
+        {
+            UseSureLevel();
+            _settings.PerLevel.Returns(1);
+            Assert.IsTrue(_schedule.Due(SureLevel), "won on the roll before the sure line");
+            _schedule.Placed()();
+
+            Assert.IsFalse(DueWithin(SureLevel, SureAfter * 3));
+        }
+
+        [Test]
+        public void SureLevel_PerLevelZero_TurnsItOff()
+        {
+            UseSureLevel();
+            _settings.PerLevel.Returns(0);
+
+            Assert.IsFalse(DueWithin(SureLevel, SureAfter * 3));
+        }
+
+        [Test]
+        public void SureLevel_OtherLevels_StayOnTheOdds()
+        {
+            UseSureLevel();
+            _odds.Chance.Returns(0f);
+
+            Assert.IsFalse(DueWithin(SureLevel + 1, SureAfter * 3));
+        }
+
+        private void UseSureLevel()
+        {
+            _settings.SureLevel.Returns(SureLevel);
+            _settings.SureAfterLines.Returns(SureAfter);
+        }
+
+        private bool DueWithin(int level, int lines)
+        {
+            for (var line = 0; line < lines; line++)
+            {
+                if (_schedule.Due(level))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

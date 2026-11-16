@@ -19,7 +19,7 @@ ball's pop paints the board rainbow (see The disco ball's wave).
 |---|---|
 | `IRewardBalloonRequests` | What `BalloonSpawner` asks. `TryTakeDue` once per clock line: whether this line brings one, and which. `Placed` once it is on the board: returns the callback to call when it leaves |
 | `RewardBalloonService` | The rules behind the answer. Registered as `IRewardBalloonRequests` and `IRunResettable` |
-| `NukeSchedule` | When the nuke is due, and whether one is on the board: its gates (`FromLevel`, `PerLevel`, `CooldownLines`) and the roll against `INukeOdds.Chance`. The service asks it first on a line |
+| `NukeSchedule` | When the nuke is due, and whether one is on the board: its gates (`FromLevel`, `PerLevel`, `CooldownLines`), the sure level (`SureLevel`) and the roll against `INukeOdds.Chance`. The service asks it first on a line |
 | `INukeOdds`, `NukeOdds` | The nuke's chance on a line: a tiny base raised by the trouble the player is in (board fill, spawn-clock pressure, low hearts, hearts lost in succession, read from `WaveDamageMessage` and fading each line). Registered as an entry point and `IRunResettable` |
 | `NukeFuse` | The armed nuke's three-second countdown: publishes `NukeArmedMessage` and a `NukeCountdownMessage` each second, pulls the nearby balloons in, then calls `INukeDetonator.Detonate`. Stops with no blast on a level change, game over or run reset. Registered as an entry point and `IRunResettable` |
 | `INukeDetonator`, `NukeBlast` | `Detonate` is the blast itself: pops the nuke, kills the shots in flight, then grows a disc from it that pops every balloon it reaches but the other rewards, scoring nothing, and finally asks the spawn clock for a breather. `NukeBlast` implements it, as an entry point and `IRunResettable`; drawn by `Balloon/View/NukeBlastView` and `NukeCloudView` |
@@ -176,7 +176,8 @@ lamp is green until the nuke is armed and then red, blinking with each beep, and
 semitone lower on each dent, and `BalloonPopNuke`, a deep boom.
 
 **When it comes.** `NukeSchedule` asks, first on every clock line while the level is played: from
-`INukeOddsSettings.FromLevel` on, `PerLevel` a level, `CooldownLines` lines apart, one on the board at most. The
+`INukeOddsSettings.FromLevel` on, `PerLevel` a level, `CooldownLines` lines apart, one on the board at most, and
+for sure on `SureLevel` (10), `SureAfterLines` (10) lines in, past the odds and the cooldown. The
 roll's chance is `BaseChance` raised toward `MaxChance` by the weighted sum of four signals (`NukeOdds`), capped
 at 1: the board's fill (`FillFrom` to `FillFull`), the spawn clock's pressure, `PlayerNeed.HeartsNeed` (full hearts
 to the last one), and hearts lost recently (each `WaveDamageMessage` adds its loss, and each line keeps

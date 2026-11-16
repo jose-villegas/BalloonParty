@@ -17,6 +17,15 @@ namespace BalloonParty.Configuration.Balloons
         /// <summary>Clock lines after one is placed before the next can roll.</summary>
         int CooldownLines { get; }
 
+        /// <summary>
+        ///     The level that always brings one, past the odds and the cooldown, once <see cref="SureAfterLines" />
+        ///     lines in; 0 for none.
+        /// </summary>
+        int SureLevel { get; }
+
+        /// <summary>Clock lines into <see cref="SureLevel" /> before its nuke comes.</summary>
+        int SureAfterLines { get; }
+
         /// <summary>The chance on a line out of trouble.</summary>
         float BaseChance { get; }
 

@@ -116,6 +116,9 @@ the catalogue has an entry for. The numbers are `INukeOddsSettings`.
 - After one is placed, `CooldownLines` (150) lines pass before the next roll. Lines come every 2 s on the
   first level and every 0.55 s late in a run, so that is about two to five minutes.
 - A won roll stays owed until placed, as for the other rewards. A new level drops it.
+- Level `SureLevel` (10) always brings one, `SureAfterLines` (10) lines in so the board has filled: past the
+  odds and the cooldown, so every run that gets that far sees a nuke. Not if one is already on the board, or
+  the level has already had its `PerLevel`. 0 turns it off.
 
 **The chance.** Each line rolls
 

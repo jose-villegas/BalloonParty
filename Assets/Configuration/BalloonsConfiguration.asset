@@ -347,6 +347,8 @@ MonoBehaviour:
     _fromLevel: 4
     _perLevel: 1
     _cooldownLines: 150
+    _sureLevel: 10
+    _sureAfterLines: 10
     _baseChance: 0.0005
     _maxChance: 0.04
     _fillFrom: 0.7

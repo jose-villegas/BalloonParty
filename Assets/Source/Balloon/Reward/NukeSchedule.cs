@@ -7,8 +7,9 @@ namespace BalloonParty.Balloon.Reward
     ///     When the nuke balloon is due (PLAN-NukeBalloon), and whether one is on the board. Every clock line from
     ///     <see cref="INukeOddsSettings.FromLevel" /> on rolls <see cref="INukeOdds.Chance" />, up to
     ///     <see cref="INukeOddsSettings.PerLevel" /> a level, once <see cref="INukeOddsSettings.CooldownLines" /> lines
-    ///     have passed since the last was placed. A won roll stays due until the nuke is placed: a line with no room
-    ///     for it passes it on. A new level drops one still owed.
+    ///     have passed since the last was placed. <see cref="INukeOddsSettings.SureLevel" /> brings one for sure,
+    ///     <see cref="INukeOddsSettings.SureAfterLines" /> lines in. A won roll stays due until the nuke is placed: a
+    ///     line with no room for it passes it on. A new level drops one still owed.
     /// </summary>
     internal sealed class NukeSchedule
     {
@@ -20,6 +21,7 @@ namespace BalloonParty.Balloon.Reward
         private bool _owed;
         private int _placedThisLevel;
         private int _linesSinceLast;
+        private int _linesThisLevel;
         // Which placement a leave callback belongs to; a stale one (an earlier nuke, or one from before a run
         // reset) must not clear the flag of the nuke on the board now.
         private int _placement;
@@ -40,6 +42,8 @@ namespace BalloonParty.Balloon.Reward
                 _linesSinceLast++;
             }
 
+            _linesThisLevel++;
+
             var due = Roll(levelNumber);
             _odds.LinePassed();
             return due;
@@ -58,6 +62,7 @@ namespace BalloonParty.Balloon.Reward
         internal void ForgetLevel()
         {
             _placedThisLevel = 0;
+            _linesThisLevel = 0;
             _owed = false;
         }
 
@@ -82,8 +87,18 @@ namespace BalloonParty.Balloon.Reward
                 return true;
             }
 
-            if (levelNumber < _settings.FromLevel || _placedThisLevel >= _settings.PerLevel
-                                                  || _linesSinceLast < _settings.CooldownLines)
+            if (_placedThisLevel >= _settings.PerLevel)
+            {
+                return false;
+            }
+
+            if (levelNumber == _settings.SureLevel && _linesThisLevel >= _settings.SureAfterLines)
+            {
+                _owed = true;
+                return true;
+            }
+
+            if (levelNumber < _settings.FromLevel || _linesSinceLast < _settings.CooldownLines)
             {
                 return false;
             }

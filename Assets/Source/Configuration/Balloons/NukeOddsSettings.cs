@@ -16,6 +16,13 @@ namespace BalloonParty.Configuration.Balloons
                  "level and every 0.55 s late in a run, so 150 is about two to five minutes.")]
         [SerializeField] [Min(0)] private int _cooldownLines = 150;
 
+        [Tooltip("The level that always brings one, whatever the odds and the cooldown: every run gets to see a " +
+                 "nuke. Not if one is already on the board or the level has had its Per Level. 0 for none.")]
+        [SerializeField] [Min(0)] private int _sureLevel = 10;
+
+        [Tooltip("Clock lines into the sure level before it comes, so the board has filled up first.")]
+        [SerializeField] [Min(1)] private int _sureAfterLines = 10;
+
         [Tooltip("The chance on a clock line out of trouble. 0.0005 is about one in 2,000 lines, an hour of play.")]
         [SerializeField] [Range(0f, 1f)] private float _baseChance = 0.0005f;
 
@@ -54,6 +61,8 @@ namespace BalloonParty.Configuration.Balloons
         public int FromLevel => _fromLevel;
         public int PerLevel => _perLevel;
         public int CooldownLines => _cooldownLines;
+        public int SureLevel => _sureLevel;
+        public int SureAfterLines => Mathf.Max(1, _sureAfterLines);
         public float BaseChance => _baseChance;
         public float MaxChance => _maxChance;
         public float FillFrom => _fillFrom;
