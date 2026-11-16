@@ -171,17 +171,6 @@ The two abstractions live in `Model/`, the service in `Buffs/`:
 
 The model stores buffs in a plain list exposed via `HasBuff(ProjectileBuffId)` (read), `ComputeBuffedValue(id, baseValue)` (aggregated stat query), and `AddBuff`/`RemoveBuff` (write); a fresh `ProjectileModel` per throw resets them for free.
 
-## Draw order
-
-The ball draws above every effect on the board, so the player can always see it however busy the board
-gets. Its renderers sit on the `ScoreTrail` sorting layer at orders 99 to 115, their old relative orders
-lifted by 100, and the shield's gain, lose and bounce bursts sit at 120. Under it: power-up bursts,
-lightning, laser and paint on `PowerUps`, puff clouds and bushes on `GridActors`, and the score trails
-and shapes on `ScoreTrail` itself (orders up to 1). Only `BakedShadow` stays on the `Projectile` layer,
-under the effects, because it lies on the ground. The `Sky` layer (dust, the scene light, the card
-reveal) and `UI` still draw over the ball. The aim lines (`TraceDrawer`, `SnipeLanceLine`) and the
-thrower stay on `Projectile`.
-
 ## How it works
 
 - **`ProjectilePoolChannel`** — `InjectingPoolChannel<ProjectileView>` that creates projectiles via `IObjectResolver` injection from the parent container (no child scope on the prefab). Accessed through `PoolManager`.
