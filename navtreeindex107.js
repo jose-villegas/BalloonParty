@@ -1,9 +1,5 @@
 var NAVTREEINDEX107 =
 {
-"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IDiscoWaveSettings.html#a8d7d77911b6c9e3cf57bde864dfe42a6":[5,0,0,3,0,9,1],
-"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IDiscoWaveSettings.html#a8d7d77911b6c9e3cf57bde864dfe42a6":[6,0,0,3,0,9,1],
-"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IDiscoWaveSettings.html#ad69af3036cea0900884c977ba3897fb9":[5,0,0,3,0,9,2],
-"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IDiscoWaveSettings.html#ad69af3036cea0900884c977ba3897fb9":[6,0,0,3,0,9,2],
 "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IDiscoWaveSettings.html#ae85fe390f435f300dc4a7fea51b4f022":[5,0,0,3,0,9,6],
 "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IDiscoWaveSettings.html#ae85fe390f435f300dc4a7fea51b4f022":[6,0,0,3,0,9,6],
 "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IDiscoWaveSettings.html#ae9978593a809acb0c6e17c76bc5b3e01":[5,0,0,3,0,9,5],
@@ -249,5 +245,9 @@ var NAVTREEINDEX107 =
 "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a9fa912a9bdc244148ee0631efb0854d4":[5,0,0,3,2,1,44],
 "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a9fa912a9bdc244148ee0631efb0854d4":[6,0,0,3,2,1,44],
 "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#aa28949182f9d2e4685986292f9269ad9":[5,0,0,3,2,1,51],
-"interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#aa28949182f9d2e4685986292f9269ad9":[6,0,0,3,2,1,51]
+"interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#aa28949182f9d2e4685986292f9269ad9":[6,0,0,3,2,1,51],
+"interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#aa5aadef73d1cbb335c22e527275c87e0":[5,0,0,3,2,1,15],
+"interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#aa5aadef73d1cbb335c22e527275c87e0":[6,0,0,3,2,1,15],
+"interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#aa7cf22e3bf03823cbf9b042fc38a4016":[5,0,0,3,2,1,1],
+"interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#aa7cf22e3bf03823cbf9b042fc38a4016":[6,0,0,3,2,1,1]
 };

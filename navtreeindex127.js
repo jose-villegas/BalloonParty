@@ -1,10 +1,5 @@
 var NAVTREEINDEX127 =
 {
-"structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#aab5b15186fdf96916bf4486b6758c92a":[6,0,0,7,1,9,1],
-"structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#adde66113d5e4dbcf436b88ebdaed1cd4":[5,0,0,7,1,9,5],
-"structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#adde66113d5e4dbcf436b88ebdaed1cd4":[6,0,0,7,1,9,5],
-"structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#ae64ac2dfcc6b840746f5ba603c98d619":[5,0,0,7,1,9,3],
-"structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#ae64ac2dfcc6b840746f5ba603c98d619":[6,0,0,7,1,9,3],
 "structBalloonParty_1_1Item_1_1ItemActivationContext.html":[5,0,0,7,14],
 "structBalloonParty_1_1Item_1_1ItemActivationContext.html":[6,0,0,7,14],
 "structBalloonParty_1_1Item_1_1ItemActivationContext.html#a13fd0314f544b91348cd99ed1a0d8bfd":[5,0,0,7,14,4],
@@ -249,5 +244,10 @@ var NAVTREEINDEX127 =
 "structBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceStroke.html#a03f8807d48d852bdfc399dadf9f9b318":[6,0,0,7,7,12,4],
 "structBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceStroke.html#a5b7737e757b990c58e333414271f7a04":[5,0,0,7,7,12,3],
 "structBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceStroke.html#a5b7737e757b990c58e333414271f7a04":[6,0,0,7,7,12,3],
-"structBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceStroke.html#a847db0be982dadb1ad38f2efca07352f":[5,0,0,7,7,12,1]
+"structBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceStroke.html#a847db0be982dadb1ad38f2efca07352f":[5,0,0,7,7,12,1],
+"structBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceStroke.html#a847db0be982dadb1ad38f2efca07352f":[6,0,0,7,7,12,1],
+"structBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceStroke.html#a8a0ca00a352cf6dd1df3df698b49e29a":[5,0,0,7,7,12,0],
+"structBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceStroke.html#a8a0ca00a352cf6dd1df3df698b49e29a":[6,0,0,7,7,12,0],
+"structBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceStroke.html#a8f0df3ccb3020f3a657d665de82f60b7":[5,0,0,7,7,12,2],
+"structBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceStroke.html#a8f0df3ccb3020f3a657d665de82f60b7":[6,0,0,7,7,12,2]
 };

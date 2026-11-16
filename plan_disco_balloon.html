@@ -258,7 +258,7 @@ The wave</h2>
 <p><b>Time scale.</b> The wave runs on scaled time, so a slow-motion beat (the pierce discharge's slow-mo, if it overlaps) slows the ripple too and keeps it in step with the rest of the board.</p>
 <h2><a class="anchor" id="autotoc_md459"></a>
 Self-feeding check (the rainbow multiplier trap)</h2>
-<p>The known trap: a shot's own effect paints balloons rainbow, and then the same shot pops them. Each pop is a wildcard pop (<code>CarryStreak</code>, or <code>DeferredStreak</code> for a colourless shot), and <code>ColorStreak.RecordWildcard</code> raises the streak with no cap. This has been fixed twice already: once for the side neighbours in <code>ProjectileHitResolver</code>, and once for the forward exclusion in <code>SnipeDischargeBloom</code>. The disco ball is the worst case yet, because it paints the whole board.</p>
+<p>The known trap: a shot's own effect paints balloons rainbow, and then the same shot pops them. Each pop is a wildcard pop (<code>CarryStreak</code>, coloured shot or not), and <code>ColorStreak.RecordWildcard</code> raises the streak with no cap. This has been fixed twice already: once for the side neighbours in <code>ProjectileHitResolver</code>, and once for the forward exclusion in <code>SnipeDischargeBloom</code>. The disco ball is the worst case yet, because it paints the whole board.</p>
 <p><b>Does the same shot hit what it painted? Yes, on every way it can break:</b></p>
 <ol type="1">
 <li><b>Pierce.</b> The ball pops at the shot's next wall, and the shot then bounces straight back into a board that is turning rainbow in front of it. If a Snipe charge was banked, the shot even re-arms its pierce at that moment and plows through it.</li>
@@ -268,7 +268,7 @@ Self-feeding check (the rainbow multiplier trap)</h2>
 <p><b>Why the earlier fixes don't carry over.</b> Both of them worked by geometry: they skipped balloons ahead of the shot. A whole-board wave has no "behind": the shot is inside the disc, and the bounce can send it anywhere.</p>
 <p><b>The guard: <code>ShotPaintLedger</code>.</b> For each conversion the wave records the pair (the shot that broke the ball, the balloon painted). The shot comes from the pop's <code>DamageContext.Projectile</code>, which may be null for a cheat, in which case nothing needs guarding. In <code>ProjectileHitResolver</code>, when <code>isWildcardPop</code> is true and the ledger holds (this projectile, this balloon):</p>
 <ul>
-<li>it adds neither <code>CarryStreak</code> nor <code>DeferredStreak</code>, and arms no carry;</li>
+<li>it adds no <code>CarryStreak</code>, and arms no carry;</li>
 <li>the pop scores at whatever multiplier is already live, and the streak neither climbs nor breaks. It needs a new <code>DamageFlags.OwnPaint</code>, read by <code>ScoreController.RecordStreakMultiplier</code> as "return the current
   multiplier, change nothing". The <code>Log.Assert</code> that guards against items authoring streak flags covers it;</li>
 <li>the pop refunds no streak shield. A continued streak pays a shield on every pop from x2, so a painter at x2 or more would otherwise refill its shields off its own paint and fly on through the rainbow board;</li>

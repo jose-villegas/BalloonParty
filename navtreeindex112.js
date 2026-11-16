@@ -1,9 +1,5 @@
 var NAVTREEINDEX112 =
 {
-"interfaceBalloonParty_1_1Game_1_1Run_1_1IBoardResettable.html#aec1cf0f6798b207b14f85f1fce54e2dd":[5,0,0,6,8,6,0],
-"interfaceBalloonParty_1_1Game_1_1Run_1_1IBoardResettable.html#aec1cf0f6798b207b14f85f1fce54e2dd":[6,0,0,6,8,6,0],
-"interfaceBalloonParty_1_1Game_1_1Run_1_1IBonusCardSource.html":[5,0,0,6,8,7],
-"interfaceBalloonParty_1_1Game_1_1Run_1_1IBonusCardSource.html":[6,0,0,6,8,7],
 "interfaceBalloonParty_1_1Game_1_1Run_1_1IBonusCardSource.html#af4b96207890dca21e1305ba4e4ca0879":[5,0,0,6,8,7,0],
 "interfaceBalloonParty_1_1Game_1_1Run_1_1IBonusCardSource.html#af4b96207890dca21e1305ba4e4ca0879":[6,0,0,6,8,7,0],
 "interfaceBalloonParty_1_1Game_1_1Run_1_1IFailureOffers.html":[5,0,0,6,8,8],
@@ -249,5 +245,9 @@ var NAVTREEINDEX112 =
 "interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeLanceArming.html#aba38fc536ba2cef77269fabd3db6ad46":[5,0,0,7,7,4,1],
 "interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeLanceArming.html#aba38fc536ba2cef77269fabd3db6ad46":[6,0,0,7,7,4,1],
 "interfaceBalloonParty_1_1Nudge_1_1INudgeable.html":[5,0,0,8,1],
-"interfaceBalloonParty_1_1Nudge_1_1INudgeable.html":[6,0,0,8,1]
+"interfaceBalloonParty_1_1Nudge_1_1INudgeable.html":[6,0,0,8,1],
+"interfaceBalloonParty_1_1Nudge_1_1INudgeable.html#aaabacf86170297047b3649d79bef483b":[5,0,0,8,1,0],
+"interfaceBalloonParty_1_1Nudge_1_1INudgeable.html#aaabacf86170297047b3649d79bef483b":[6,0,0,8,1,0],
+"interfaceBalloonParty_1_1Projectile_1_1Buffs_1_1IProjectileBuffs.html":[5,0,0,10,0,0],
+"interfaceBalloonParty_1_1Projectile_1_1Buffs_1_1IProjectileBuffs.html":[6,0,0,10,0,0]
 };

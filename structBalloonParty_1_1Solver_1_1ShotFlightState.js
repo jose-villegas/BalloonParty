@@ -9,7 +9,6 @@ var structBalloonParty_1_1Solver_1_1ShotFlightState =
     [ "CarryOnColorChange", "structBalloonParty_1_1Solver_1_1ShotFlightState.html#a635c17677a8f657f8962a90136f1a25e", null ],
     [ "ConsecutiveSweeps", "structBalloonParty_1_1Solver_1_1ShotFlightState.html#a418aa832c9a052e765377c886760c51b", null ],
     [ "ConsecutiveWallBounces", "structBalloonParty_1_1Solver_1_1ShotFlightState.html#abc773af72df854eaa99f041c51b195f4", null ],
-    [ "DeferredPops", "structBalloonParty_1_1Solver_1_1ShotFlightState.html#acd7038f6ba20bd14ce94871e24613c40", null ],
     [ "Died", "structBalloonParty_1_1Solver_1_1ShotFlightState.html#aac84495f92b4e1798305d22de4e8026f", null ],
     [ "Direction", "structBalloonParty_1_1Solver_1_1ShotFlightState.html#a4cccf4500c4ed97b5e63ec89094555f8", null ],
     [ "DiscoPops", "structBalloonParty_1_1Solver_1_1ShotFlightState.html#aeb25eb467deb398a416a5b70b5edcce1", null ],

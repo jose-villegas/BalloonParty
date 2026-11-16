@@ -1,10 +1,5 @@
 var NAVTREEINDEX122 =
 {
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a832b59ff5278de7e7b01df5f1e40cac0":[6,0,0,3,5,27,5],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a85dd020a6892fe29e4af140c0c4ee478":[5,0,0,3,5,27,15],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a85dd020a6892fe29e4af140c0c4ee478":[6,0,0,3,5,27,15],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a89923e47dfd5f8a7654f06bec37958e1":[5,0,0,3,5,27,12],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a89923e47dfd5f8a7654f06bec37958e1":[6,0,0,3,5,27,12],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#aad179e180cb0427922c38dbad8045d4c":[5,0,0,3,5,27,3],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#aad179e180cb0427922c38dbad8045d4c":[6,0,0,3,5,27,3],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#aaef307d65ba0cb41ae7a3a54b537ead1":[5,0,0,3,5,27,9],
@@ -249,5 +244,10 @@ var NAVTREEINDEX122 =
 "structBalloonParty_1_1Configuration_1_1Level_1_1BudgetFormula.html#afad78d59eae3809961a48e32902b5986":[6,0,0,3,9,3,2],
 "structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html":[5,0,0,3,9,4],
 "structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html":[6,0,0,3,9,4],
-"structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html#a065d71338cf1b77bea1b123c4341271e":[5,0,0,3,9,4,1]
+"structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html#a065d71338cf1b77bea1b123c4341271e":[5,0,0,3,9,4,1],
+"structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html#a065d71338cf1b77bea1b123c4341271e":[6,0,0,3,9,4,1],
+"structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html#a10875fb8fa23d03d0aa2b6c2faed613b":[5,0,0,3,9,4,0],
+"structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html#a10875fb8fa23d03d0aa2b6c2faed613b":[6,0,0,3,9,4,0],
+"structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html#a1f41783a581b194f5ef13f87a27aeaec":[5,0,0,3,9,4,3],
+"structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html#a1f41783a581b194f5ef13f87a27aeaec":[6,0,0,3,9,4,3]
 };

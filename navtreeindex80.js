@@ -1,9 +1,5 @@
 var NAVTREEINDEX80 =
 {
-"classBalloonParty_1_1Shared_1_1Animation_1_1RollingTextAnimator.html#ad4aa8ea6b66c7c1c4b3400d6b7373787":[5,0,0,12,0,2,25],
-"classBalloonParty_1_1Shared_1_1Animation_1_1RollingTextAnimator.html#ad4aa8ea6b66c7c1c4b3400d6b7373787":[6,0,0,12,0,2,25],
-"classBalloonParty_1_1Shared_1_1Animation_1_1RollingTextAnimator.html#ad4b756475dfecdb5f9d4ba4f0e19d72d":[5,0,0,12,0,2,14],
-"classBalloonParty_1_1Shared_1_1Animation_1_1RollingTextAnimator.html#ad4b756475dfecdb5f9d4ba4f0e19d72d":[6,0,0,12,0,2,14],
 "classBalloonParty_1_1Shared_1_1Animation_1_1RollingTextAnimator.html#ada8fb0e26e940a08b52affe019111f2a":[5,0,0,12,0,2,23],
 "classBalloonParty_1_1Shared_1_1Animation_1_1RollingTextAnimator.html#ada8fb0e26e940a08b52affe019111f2a":[6,0,0,12,0,2,23],
 "classBalloonParty_1_1Shared_1_1Animation_1_1RollingTextAnimator.html#adc7345fa7da2caaf0310961ec9d5fc80":[5,0,0,12,0,2,21],
@@ -249,5 +245,9 @@ var NAVTREEINDEX80 =
 "classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldResources.html#af4d09fb5d720ae200380fa429c3a01d2":[5,0,0,12,3,1,7],
 "classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldResources.html#af4d09fb5d720ae200380fa429c3a01d2":[6,0,0,12,3,1,7],
 "classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldResources.html#afa5b528c7c0d6245c112642a721e9917":[5,0,0,12,3,1,22],
-"classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldResources.html#afa5b528c7c0d6245c112642a721e9917":[6,0,0,12,3,1,22]
+"classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldResources.html#afa5b528c7c0d6245c112642a721e9917":[6,0,0,12,3,1,22],
+"classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html":[5,0,0,12,3,2],
+"classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html":[6,0,0,12,3,2],
+"classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html#a0499911bb1030e7d211f4e952be185bd":[5,0,0,12,3,2,51],
+"classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html#a0499911bb1030e7d211f4e952be185bd":[6,0,0,12,3,2,51]
 };

@@ -1,10 +1,5 @@
 var NAVTREEINDEX119 =
 {
-"plan_gameplay_telemetry.html#autotoc_md595":[3,11,0,2,7],
-"plan_gameplay_telemetry.html#autotoc_md598":[3,11,0,3],
-"plan_gameplay_telemetry.html#autotoc_md599":[3,11,0,3,0],
-"plan_gameplay_telemetry.html#autotoc_md600":[3,11,0,3,1],
-"plan_gameplay_telemetry.html#autotoc_md601":[3,11,0,3,2],
 "plan_gameplay_telemetry.html#autotoc_md602":[3,11,0,3,3],
 "plan_gameplay_telemetry.html#autotoc_md604":[3,11,0,4],
 "plan_gameplay_telemetry.html#autotoc_md607":[3,11,0,5],
@@ -249,5 +244,10 @@ var NAVTREEINDEX119 =
 "plan_unbreakable_formations.html#autotoc_md879":[3,1,0],
 "plan_unbreakable_formations.html#autotoc_md881":[3,1,0,0],
 "plan_unbreakable_formations.html#autotoc_md883":[3,1,0,1],
-"plan_unbreakable_formations.html#autotoc_md885":[3,1,0,2]
+"plan_unbreakable_formations.html#autotoc_md885":[3,1,0,2],
+"plan_unbreakable_formations.html#autotoc_md887":[3,1,0,3],
+"plan_unbreakable_formations.html#autotoc_md889":[3,1,0,4],
+"plan_unbreakable_formations.html#autotoc_md890":[3,1,0,4,0],
+"plan_unbreakable_formations.html#autotoc_md891":[3,1,0,4,1],
+"plan_unbreakable_formations.html#autotoc_md892":[3,1,0,4,2]
 };

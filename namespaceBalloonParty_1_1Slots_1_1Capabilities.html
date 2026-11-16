@@ -169,8 +169,7 @@ Enumerations</h2></td></tr>
 , <a class="el" href="#af915a4f3df9f513ca2c08e1a87aff762ab3fb6cd550a52ce3f69b60a4261937fa">WildcardStreak</a> = 1 &lt;&lt; 1
 , <a class="el" href="#af915a4f3df9f513ca2c08e1a87aff762aa5dcddfe1229c26686d7abc62e4223ec">DirectHit</a> = 1 &lt;&lt; 2
 , <br />
-&#160;&#160;<a class="el" href="#af915a4f3df9f513ca2c08e1a87aff762afd7495145e5651d0a7edad206f333719">DeferredStreak</a> = 1 &lt;&lt; 3
-, <a class="el" href="#af915a4f3df9f513ca2c08e1a87aff762aff6e0f3ea4bd148ea37497a00a98bf98">CarryStreak</a> = 1 &lt;&lt; 4
+&#160;&#160;<a class="el" href="#af915a4f3df9f513ca2c08e1a87aff762aff6e0f3ea4bd148ea37497a00a98bf98">CarryStreak</a> = 1 &lt;&lt; 4
 , <a class="el" href="#af915a4f3df9f513ca2c08e1a87aff762adc6e84a67852dd96c1ba57da273b26ac">Beam</a> = 1 &lt;&lt; 5
 , <a class="el" href="#af915a4f3df9f513ca2c08e1a87aff762a3afe0d7cdba2953d9d9538360d4ad4bc">OwnPaint</a> = 1 &lt;&lt; 6
 <br />
@@ -214,9 +213,8 @@ Enumerations</h2></td></tr>
 <tr><td class="fieldname"><a id="af915a4f3df9f513ca2c08e1a87aff762aa5dcddfe1229c26686d7abc62e4223ec" name="af915a4f3df9f513ca2c08e1a87aff762aa5dcddfe1229c26686d7abc62e4223ec"></a>DirectHit&#160;</td><td class="fielddoc"><p>The projectile itself struck the actor, as opposed to an item/AOE effect (bomb, laser, lightning) popping it. </p>
 <p>Lets systems that trigger off a pop (e.g. spawning something from it) exclude those items, and gates whether a pop can grow the colour streak (<code>ScoreController.RecordStreakMultiplier</code>) — an item/AOE pop still scores at the live multiplier and still breaks the streak on a mismatch, it just can't climb it. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="af915a4f3df9f513ca2c08e1a87aff762afd7495145e5651d0a7edad206f333719" name="af915a4f3df9f513ca2c08e1a87aff762afd7495145e5651d0a7edad206f333719"></a>DeferredStreak&#160;</td><td class="fielddoc"><p>A colourless projectile popped a rainbow balloon — the streak contribution is deferred until the projectile adopts a colour on a subsequent hit. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="af915a4f3df9f513ca2c08e1a87aff762aff6e0f3ea4bd148ea37497a00a98bf98" name="af915a4f3df9f513ca2c08e1a87aff762aff6e0f3ea4bd148ea37497a00a98bf98"></a>CarryStreak&#160;</td><td class="fielddoc"><p>A coloured projectile popped a rainbow — the streak multiplier should carry intact to the next colour the projectile adopts. </p>
+<tr><td class="fieldname"><a id="af915a4f3df9f513ca2c08e1a87aff762aff6e0f3ea4bd148ea37497a00a98bf98" name="af915a4f3df9f513ca2c08e1a87aff762aff6e0f3ea4bd148ea37497a00a98bf98"></a>CarryStreak&#160;</td><td class="fielddoc"><p>The shot (not rainbow-buffed) popped a rainbow it didn't paint: the pop climbs its streak whatever its colour, and the multiplier carries intact to the next colour the shot adopts. </p>
+<p>A shot with no colour yet climbs too, so a board of rainbows still builds a multiplier. (1 &lt;&lt; 3 was a colourless shot's banked rainbow pop, which paid ×1 until a colour came.) </p>
 </td></tr>
 <tr><td class="fieldname"><a id="af915a4f3df9f513ca2c08e1a87aff762adc6e84a67852dd96c1ba57da273b26ac" name="af915a4f3df9f513ca2c08e1a87aff762adc6e84a67852dd96c1ba57da273b26ac"></a>Beam&#160;</td><td class="fielddoc"><p>A laser beam struck the actor. </p>
 <p>The beam's damage also carries <a class="el" href="#af915a4f3df9f513ca2c08e1a87aff762a71b82d588f8ca5360dd8f79f4452f61a">Piercing</a>, as a bomb's blast on its neighbours does; this tells the two apart, for the golden balloon, which a beam breaks and a blast must not. </p>

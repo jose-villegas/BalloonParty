@@ -128,11 +128,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab7fd8a63f19077341035f86f4de94d8e" id="r_ab7fd8a63f19077341035f86f4de94d8e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab7fd8a63f19077341035f86f4de94d8e">Record</a> (string colorId, bool breaksStreak=false, bool canIncrement=true)</td></tr>
 <tr class="memdesc:ab7fd8a63f19077341035f86f4de94d8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Records a balloon pop against the streak and returns the multiplier to score it at.  <br /></td></tr>
 <tr class="separator:ab7fd8a63f19077341035f86f4de94d8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4630d7bf45b52a1819a01aa6d95a419d" id="r_a4630d7bf45b52a1819a01aa6d95a419d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4630d7bf45b52a1819a01aa6d95a419d">RecordDeferred</a> ()</td></tr>
-<tr class="memdesc:a4630d7bf45b52a1819a01aa6d95a419d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Banks a pop from a colourless projectile hitting a rainbow balloon.  <br /></td></tr>
-<tr class="separator:a4630d7bf45b52a1819a01aa6d95a419d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a426e90ae88c1def53f783cc6f3ca7939" id="r_a426e90ae88c1def53f783cc6f3ca7939"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a426e90ae88c1def53f783cc6f3ca7939">RecordWildcard</a> ()</td></tr>
-<tr class="memdesc:a426e90ae88c1def53f783cc6f3ca7939"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extends the streak regardless of colour — used while the projectile carries a colour-agnostic (rainbow) buff, so every pop keeps the multiplier climbing.  <br /></td></tr>
+<tr class="memdesc:a426e90ae88c1def53f783cc6f3ca7939"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extends the streak regardless of colour, and carries it to the next colour: a rainbow-buffed shot's every pop, and any shot's pop of a rainbow balloon, coloured yet or not.  <br /></td></tr>
 <tr class="separator:a426e90ae88c1def53f783cc6f3ca7939"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
@@ -166,8 +163,6 @@ Private Attributes</h2></td></tr>
 <tr class="separator:aafb2367288bd35f92ac622c92f88d415"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb23edd7ebaf2a560b8a7bd919212ea5" id="r_afb23edd7ebaf2a560b8a7bd919212ea5"><td class="memItemLeft" align="right" valign="top">readonly IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html">StreakChangedMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afb23edd7ebaf2a560b8a7bd919212ea5">_changedPublisher</a></td></tr>
 <tr class="separator:afb23edd7ebaf2a560b8a7bd919212ea5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b123e03f7f29b3d7250e6bd3807453d" id="r_a9b123e03f7f29b3d7250e6bd3807453d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9b123e03f7f29b3d7250e6bd3807453d">_deferredPops</a></td></tr>
-<tr class="separator:a9b123e03f7f29b3d7250e6bd3807453d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>One ball's same-colour pop streak. </p>
@@ -291,27 +286,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Records a balloon pop against the streak and returns the multiplier to score it at. </p>
-<p>Pass <em>canIncrement</em>  as false for a pop that didn't come from the shot itself (an item/AOE pop): a same-colour pop then keeps the streak alive at its current multiplier without pushing it higher, and a colour change still tracks the new colour (so a later direct hit resumes from the right place) but can't cash in a carried rainbow bonus or the deferred bank — both stay armed, untouched, for whichever direct hit claims them. <em>breaksStreak</em>  always resets regardless of <em>canIncrement</em> . </p>
-
-</div>
-</div>
-<a id="a4630d7bf45b52a1819a01aa6d95a419d" name="a4630d7bf45b52a1819a01aa6d95a419d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4630d7bf45b52a1819a01aa6d95a419d">&#9670;&#160;</a></span>RecordDeferred()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int BalloonParty.Game.Score.ColorStreak.RecordDeferred </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Banks a pop from a colourless projectile hitting a rainbow balloon. </p>
-<p>The count is folded into the streak the next time <a class="el" href="#ab7fd8a63f19077341035f86f4de94d8e" title="Records a balloon pop against the streak and returns the multiplier to score it at.">Record</a> establishes a colour. </p>
+<p>Pass <em>canIncrement</em>  as false for a pop that didn't come from the shot itself (an item/AOE pop): a same-colour pop then keeps the streak alive at its current multiplier without pushing it higher, and a colour change still tracks the new colour (so a later direct hit resumes from the right place) but can't cash in a carried rainbow bonus — it stays armed, untouched, for whichever direct hit claims it. <em>breaksStreak</em>  always resets regardless of <em>canIncrement</em> . </p>
 
 </div>
 </div>
@@ -330,7 +305,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Extends the streak regardless of colour — used while the projectile carries a colour-agnostic (rainbow) buff, so every pop keeps the multiplier climbing. </p>
+<p>Extends the streak regardless of colour, and carries it to the next colour: a rainbow-buffed shot's every pop, and any shot's pop of a rainbow balloon, coloured yet or not. </p>
 
 </div>
 </div>
@@ -393,28 +368,6 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly IPublisher&lt;<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html">StreakChangedMessage</a>&gt; BalloonParty.Game.Score.ColorStreak._changedPublisher</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a9b123e03f7f29b3d7250e6bd3807453d" name="a9b123e03f7f29b3d7250e6bd3807453d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9b123e03f7f29b3d7250e6bd3807453d">&#9670;&#160;</a></span>_deferredPops</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int BalloonParty.Game.Score.ColorStreak._deferredPops</td>
         </tr>
       </table>
   </td>

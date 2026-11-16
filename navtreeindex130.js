@@ -1,10 +1,5 @@
 var NAVTREEINDEX130 =
 {
-"structBalloonParty_1_1Shared_1_1Messages_1_1PierceDischargedMessage.html#a645e1f948ea02ea2afb32bb85ee89844":[6,0,0,12,7,30,2],
-"structBalloonParty_1_1Shared_1_1Messages_1_1PierceDischargedMessage.html#ac4f109f5b2b341380beb4063abfb7afa":[5,0,0,12,7,30,0],
-"structBalloonParty_1_1Shared_1_1Messages_1_1PierceDischargedMessage.html#ac4f109f5b2b341380beb4063abfb7afa":[6,0,0,12,7,30,0],
-"structBalloonParty_1_1Shared_1_1Messages_1_1PierceDischargedMessage.html#acbcbfefc237f61153d7b20a01f77d345":[5,0,0,12,7,30,6],
-"structBalloonParty_1_1Shared_1_1Messages_1_1PierceDischargedMessage.html#acbcbfefc237f61153d7b20a01f77d345":[6,0,0,12,7,30,6],
 "structBalloonParty_1_1Shared_1_1Messages_1_1PierceWallReachedMessage.html":[5,0,0,12,7,31],
 "structBalloonParty_1_1Shared_1_1Messages_1_1PierceWallReachedMessage.html":[6,0,0,12,7,31],
 "structBalloonParty_1_1Shared_1_1Messages_1_1PierceWallReachedMessage.html#a1ec3d8d0127a6e1caf4c8e6d15bb428d":[5,0,0,12,7,31,2],
@@ -249,5 +244,10 @@ var NAVTREEINDEX130 =
 "structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage.html#afd73c2dfbd84767d434ebb395df21dda":[6,0,0,12,7,59,1],
 "structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html":[5,0,0,12,7,60],
 "structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html":[6,0,0,12,7,60],
-"structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html#a0a651249925686f2fe16da5c5eee025c":[5,0,0,12,7,60,0]
+"structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html#a0a651249925686f2fe16da5c5eee025c":[5,0,0,12,7,60,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html#a0a651249925686f2fe16da5c5eee025c":[6,0,0,12,7,60,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html#a8d522fc79e22b54205d307d06a5db13d":[5,0,0,12,7,60,2],
+"structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html#a8d522fc79e22b54205d307d06a5db13d":[6,0,0,12,7,60,2],
+"structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html#ab0a81f174d0151d5ddeea7d55711021a":[5,0,0,12,7,60,3],
+"structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html#ab0a81f174d0151d5ddeea7d55711021a":[6,0,0,12,7,60,3]
 };
