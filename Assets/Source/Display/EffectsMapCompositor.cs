@@ -16,7 +16,8 @@ namespace BalloonParty.Display
     ///     the effects draw straight into the frame, as they would without it.
     /// </summary>
     [RequireComponent(typeof(Camera))]
-    public class EffectsMapCompositor : MonoBehaviour
+    [DefaultExecutionOrder(EffectsClearingMaskView.ExecutionOrder + 1)]
+    internal class EffectsMapCompositor : MonoBehaviour
     {
         private const float QuadDistance = 5f;
 
@@ -118,17 +119,7 @@ namespace BalloonParty.Display
 
             _live = live;
 
-            // Only the bits this took out go back, so a mask someone else changes meanwhile is left alone.
-            if (live)
-            {
-                _removedLayers = _camera.cullingMask & _effectLayers.value;
-                _camera.cullingMask &= ~_effectLayers.value;
-            }
-            else
-            {
-                _camera.cullingMask |= _removedLayers;
-                _removedLayers = 0;
-            }
+            SuppressEffectLayers(live);
 
             if (_effectsCamera != null)
             {
@@ -138,6 +129,29 @@ namespace BalloonParty.Display
             if (_quad != null)
             {
                 _quad.enabled = live;
+            }
+        }
+
+        // The one place this writes its camera's culling mask. Fine on the HUD camera, which nothing else writes; the
+        // main camera's mask also belongs to NavigationCameraReveal, so phase 3 needs one owner for it (the plan).
+        private void SuppressEffectLayers(bool suppress)
+        {
+            // Torn down with the camera, the component may already be gone.
+            if (_camera == null)
+            {
+                return;
+            }
+
+            // Only the bits this took out go back, so a mask someone else changes meanwhile is left alone.
+            if (suppress)
+            {
+                _removedLayers = _camera.cullingMask & _effectLayers.value;
+                _camera.cullingMask &= ~_effectLayers.value;
+            }
+            else
+            {
+                _camera.cullingMask |= _removedLayers;
+                _removedLayers = 0;
             }
         }
 
@@ -242,9 +256,9 @@ namespace BalloonParty.Display
                 Destroy(_map);
             }
 
-            // URP's RenderGraph rejects a depthless camera output texture; nothing samples the depth.
+            // URP's RenderGraph rejects a depthless camera output texture. Nothing samples the depth, so 16 bits.
             var format = _hdr ? RenderTextureFormat.ARGBHalf : RenderTextureFormat.ARGB32;
-            _map = new RenderTexture(width, height, 24, format)
+            _map = new RenderTexture(width, height, 16, format)
             {
                 name = "EffectsMap",
                 filterMode = FilterMode.Bilinear,

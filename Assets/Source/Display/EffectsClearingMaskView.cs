@@ -13,8 +13,13 @@ namespace BalloonParty.Display
     ///     linger time.
     /// </summary>
     [RequireComponent(typeof(Camera))]
-    public class EffectsClearingMaskView : MonoBehaviour
+    [DefaultExecutionOrder(ExecutionOrder)]
+    internal class EffectsClearingMaskView : MonoBehaviour
     {
+        // After every LateUpdate that moves or zooms the camera (shake, cinematics, the device fit), so the stamps
+        // frame the view this frame renders; EffectsMapCompositor runs right after, to see this frame's IsClearing.
+        internal const int ExecutionOrder = 1000;
+
         private static readonly int MaskTexId = Shader.PropertyToID("_EffectsClearMask");
         private static readonly int ClearParamsId = Shader.PropertyToID("_EffectsClearParams");
         private static readonly int DecayId = Shader.PropertyToID("_Decay");
@@ -57,7 +62,9 @@ namespace BalloonParty.Display
 
             var view = new ClearingView(_camera.transform.position, _camera.orthographicSize, _camera.aspect);
             var count = _source != null ? _source.FillStamps(view, _stamps) : 0;
-            var deltaTime = _settings.UseUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
+            // Game time while a ball flies, so slow-mo stretches its clearing and a pause holds it. Real time once
+            // nothing stamps: a freeze that starts after the shot (the level-up) must not hold the hole open.
+            var deltaTime = count > 0 && !_settings.UseUnscaledTime ? Time.deltaTime : Time.unscaledDeltaTime;
 
             if (count > 0)
             {
@@ -96,6 +103,7 @@ namespace BalloonParty.Display
 
         private void OnDestroy()
         {
+            Shader.SetGlobalTexture(MaskTexId, Texture2D.blackTexture);
             ReleaseTarget(ref _front);
             ReleaseTarget(ref _back);
 

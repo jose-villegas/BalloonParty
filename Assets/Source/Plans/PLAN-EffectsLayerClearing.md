@@ -137,8 +137,9 @@ How the stamps are fed:
   with the board.
 - The radius is deliberately large: the default is about two balloon widths, to be tuned on the phone. The
   rejected attempt used a circle a little wider than the ball, and it read as nothing.
-- Δt is **game time** (`Time.deltaTime`): slow-mo stretches a clearing along with the ball, and a pause holds
-  it. `UseUnscaledTime` is a setting in case that reads wrong.
+- Δt is **game time** (`Time.deltaTime`) while a ball flies: slow-mo stretches a clearing along with the
+  ball, and a pause holds it. Once no ball is in flight it's real time, so a freeze that starts after the
+  shot can't hold a clearing open. `UseUnscaledTime` puts the flight on real time too.
 
 `MaxStamps` caps the uniform array. It's a constant, not a setting: a shader array's size is fixed when it compiles. More balls than that in flight (a split shot, say) keep the nearest
 `MaxStamps` to the screen's centre. Nothing in today's shots comes close.
@@ -238,13 +239,26 @@ Each phase follows the per-phase review protocol: implement, review, curate, own
 - **Heads-ups stayed on the `UI` layer.** Moving them to `Trail` would also put them in the GI scene capture,
   which renders `Trail`: heads-up text would start to shade the board under it. Open question 4.
 - **The composite sorts at UI 3300**, where the score trails are set, not at 100 as first planned.
+- **The decay clock.** Game time while a ball flies (slow-mo stretches the clearing, a pause holds it),
+  real time once none does. Otherwise a freeze that starts just after a shot, the level-up's, would hold
+  the hole open through the cinematic. `UseUnscaledTime` puts the flight on real time too.
+- **Update order.** The mask view runs after every `LateUpdate` that moves the camera
+  (`[DefaultExecutionOrder]` 1000), and the compositor right after it, so the stamps frame the view this
+  frame renders and the map turns on in the same frame as the first stamp.
 
 ### Phase 3: the main effects map (gated)
 
 Only if phase 2 reads well on the phone and its cost leaves room, and after open questions 1 and 2 are
-answered. The owner adds the `Effects` physics layer. Effect prefabs move to it, the main camera gets its
-own `EffectsMapCompositor` (`ARGBHalf`, composite at Sky −1), and `NavigationCameraReveal`'s game mask
-leaves `Effects` out. Its alpha audit covers the particle shaders.
+answered. The owner adds the `Effects` physics layer. Effect prefabs move to it, and the main camera gets
+its own `EffectsMapCompositor` (`ARGBHalf`, composite at Sky −1). Its alpha audit covers the particle
+shaders.
+
+The main camera's culling mask has two writers then: `NavigationCameraReveal` replaces the whole mask on
+each navigation change, and the compositor takes `Effects` out while it runs. A navigation change while
+live would put `Effects` back (drawn twice), or leak it into the launch screen at idle. So the mask gets
+one owner first, the way `TimeScaleService` owns the time scale: navigation sets the base mask (the game
+mask *includes* `Effects`), compositors claim the layers they suppress, and the camera draws the base mask
+minus the claims. The compositor's mask writes are already in one method, `SuppressEffectLayers`.
 
 ---
 

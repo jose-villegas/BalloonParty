@@ -484,17 +484,17 @@ namespace BalloonParty.Editor.Maps
                     "Clearing — 1 on a ball's path, falling off to 0 at the clearing radius; decays to 0 over " +
                     "the linger time, so a clearing shrinks inward behind the ball. Effects fade between edge low and " +
                     "edge high.",
-                    "Unused (R8 map).",
-                    "Unused (R8 map).",
-                    "Unused (R8 map)."),
+                    "Unused.",
+                    "Unused.",
+                    "Unused."),
 
                 new MapDescriptor(
                     "HUD Effects Map",
                     FetchHudEffectsMap,
                     "No effects map yet — it's made the first time a ball flies, and only renders while a clearing is open.",
-                    "Score shapes, trails and heads-ups, premultiplied — red.",
-                    "Score shapes, trails and heads-ups, premultiplied — green.",
-                    "Score shapes, trails and heads-ups, premultiplied — blue.",
+                    "Score shapes and trails, premultiplied — red.",
+                    "Score shapes and trails, premultiplied — green.",
+                    "Score shapes and trails, premultiplied — blue.",
                     "Coverage — how much of the frame the effects hide at each pixel."),
 
                 new MapDescriptor("Custom…", null, null, null, null, null, null),

@@ -29,8 +29,9 @@ namespace BalloonParty.Configuration.Effects
         [Range(0f, 1f)]
         [SerializeField] private float _strength = 1f;
 
-        [Tooltip("Decay on real time instead of game time. Off, slow-mo stretches a clearing with the ball and a " +
-                 "pause holds it.")]
+        [Tooltip("Decay on real time even while a ball flies. Off, slow-mo stretches a clearing with the ball and a " +
+                 "pause holds it. Once no ball is in flight it always closes on real time, so a freeze after the " +
+                 "shot (the level-up) can't hold it open.")]
         [SerializeField] private bool _useUnscaledTime;
 
         [Tooltip("Screen size over the clearing mask's size. The mask is soft, so it runs small.")]

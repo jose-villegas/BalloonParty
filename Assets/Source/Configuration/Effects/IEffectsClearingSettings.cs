@@ -26,6 +26,7 @@ namespace BalloonParty.Configuration.Effects
         /// <summary>How much of the effects a full clearing removes: 1 hides them, below 1 leaves a trace.</summary>
         float Strength { get; }
 
+        /// <summary>Decay on real time even while a ball flies; once none does, it always is.</summary>
         bool UseUnscaledTime { get; }
 
         /// <summary>Screen size over the clearing mask's size.</summary>
