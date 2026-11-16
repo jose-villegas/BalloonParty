@@ -12,7 +12,6 @@ namespace BalloonParty.Game.Score
     {
         private readonly IPublisher<StreakChangedMessage> _changedPublisher;
 
-        private int _deferredPops;
         private bool _carryOnColorChange;
 
         public string LastColor { get; private set; }
@@ -22,7 +21,7 @@ namespace BalloonParty.Game.Score
         // streak. Set by the tracker when it hands a pooled streak to a ball.
         internal IProjectileModel Owner { get; set; }
 
-        internal bool IsClear => LastColor == null && CurrentStreak == 0 && _deferredPops == 0 && !_carryOnColorChange;
+        internal bool IsClear => LastColor == null && CurrentStreak == 0 && !_carryOnColorChange;
 
         internal ColorStreak(IPublisher<StreakChangedMessage> changedPublisher)
         {
@@ -38,8 +37,8 @@ namespace BalloonParty.Game.Score
         /// Pass <paramref name="canIncrement" /> as false for a pop that didn't come from the shot itself
         /// (an item/AOE pop): a same-colour pop then keeps the streak alive at its current multiplier
         /// without pushing it higher, and a colour change still tracks the new colour (so a later direct
-        /// hit resumes from the right place) but can't cash in a carried rainbow bonus or the deferred
-        /// bank — both stay armed, untouched, for whichever direct hit claims them. <paramref
+        /// hit resumes from the right place) but can't cash in a carried rainbow bonus — it stays armed,
+        /// untouched, for whichever direct hit claims it. <paramref
         /// name="breaksStreak" /> always resets regardless of <paramref name="canIncrement" />.</summary>
         public int Record(string colorId, bool breaksStreak = false, bool canIncrement = true)
         {
@@ -79,41 +78,28 @@ namespace BalloonParty.Game.Score
 
             if (_carryOnColorChange && CurrentStreak > 0)
             {
-                // A rainbow pop flagged carry: the multiplier transfers to the new colour intact,
-                // folding in any deferred rainbow pops banked since the carry was armed.
-                CurrentStreak += 1 + _deferredPops;
+                // A rainbow pop flagged carry: the multiplier transfers to the new colour intact.
+                CurrentStreak++;
             }
             else
             {
-                // Flush any deferred rainbow pops into the new colour's streak — they happened
-                // before the projectile had a colour, so they count toward this first real hit.
-                CurrentStreak = 1 + _deferredPops;
+                CurrentStreak = 1;
             }
 
             LastColor = colorId;
             _carryOnColorChange = false;
-            _deferredPops = 0;
             PublishChanged();
             return CurrentStreak;
         }
 
-        /// <summary>Extends the streak regardless of colour — used while the projectile carries a
-        /// colour-agnostic (rainbow) buff, so every pop keeps the multiplier climbing.</summary>
+        /// <summary>Extends the streak regardless of colour, and carries it to the next colour: a rainbow-buffed
+        /// shot's every pop, and any shot's pop of a rainbow balloon, coloured yet or not.</summary>
         public int RecordWildcard()
         {
-            _deferredPops = 0;
             CurrentStreak++;
             _carryOnColorChange = true;
             PublishChanged();
             return CurrentStreak;
-        }
-
-        /// <summary>Banks a pop from a colourless projectile hitting a rainbow balloon. The count
-        /// is folded into the streak the next time <see cref="Record"/> establishes a colour.</summary>
-        public int RecordDeferred()
-        {
-            _deferredPops++;
-            return _deferredPops;
         }
 
         // Announces only a real change: the shared streak resets on every load, which with rapid fire
@@ -134,7 +120,6 @@ namespace BalloonParty.Game.Score
         {
             LastColor = null;
             CurrentStreak = 0;
-            _deferredPops = 0;
             _carryOnColorChange = false;
         }
 

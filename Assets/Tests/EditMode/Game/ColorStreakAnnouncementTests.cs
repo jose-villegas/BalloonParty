@@ -106,11 +106,11 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void Reset_OnlyDeferredPopsBanked_StillCountsAsStateToAnnounce()
+        public void Reset_OnlyRainbowPopsBeforeAnyColour_StillCountsAsStateToAnnounce()
         {
-            // A banked rainbow pop is state a reset really discards, even with no colour or streak yet.
+            // A colourless shot's rainbow pops build a streak with no colour yet: a reset really discards it.
             var streak = _tracker.For(Fly());
-            streak.RecordDeferred();
+            streak.RecordWildcard();
 
             streak.Reset();
 

@@ -138,16 +138,16 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void Record_CanIncrementFalse_DifferentColor_PreservesDeferredBankForDirectHit()
+        public void Record_CanIncrementFalse_DifferentColor_PreservesColourlessRainbowStreakForDirectHit()
         {
-            _streak.RecordDeferred();
-            _streak.RecordDeferred();
+            _streak.RecordWildcard();
+            _streak.RecordWildcard();
 
-            // An intervening item/AOE pop of some OTHER colour must not burn the bank — only a direct
-            // hit establishing a real colour may fold it in.
+            // An intervening item/AOE pop of some OTHER colour must not burn the rainbow streak: only a
+            // direct hit establishing a real colour may carry it on.
             _streak.Record("Blue", canIncrement: false);
 
-            Assert.AreEqual(3, _streak.Record("Red"), "the banked deferred pops still fold into the first direct hit");
+            Assert.AreEqual(3, _streak.Record("Red"), "the rainbow pops' streak still carries into the first direct hit");
         }
 
         [Test]
@@ -169,18 +169,19 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void RecordDeferred_ThenRecord_FoldsIntoStreak()
+        public void ColourlessRainbowPops_ClimbAtOnce_ThenCarryIntoTheFirstColour()
         {
-            _streak.RecordDeferred();
-            _streak.RecordDeferred();
+            // A board of rainbows must still build a multiplier: each pop climbs before the shot has a colour.
+            Assert.AreEqual(1, _streak.RecordWildcard());
+            Assert.AreEqual(2, _streak.RecordWildcard());
 
             Assert.AreEqual(3, _streak.Record("Red"));
         }
 
         [Test]
-        public void RecordDeferred_ThenSameColorContinues_KeepsClimbing()
+        public void ColourlessRainbowPop_ThenSameColorContinues_KeepsClimbing()
         {
-            _streak.RecordDeferred();
+            _streak.RecordWildcard();
 
             _streak.Record("Red");
 
@@ -188,10 +189,10 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void RecordDeferred_ResetClearsDeferredPops()
+        public void ColourlessRainbowPops_LoadResetClearsThem()
         {
-            _streak.RecordDeferred();
-            _streak.RecordDeferred();
+            _streak.RecordWildcard();
+            _streak.RecordWildcard();
 
             _projectileLoadedHandler.Handle(new ProjectileLoadedMessage(null));
 
@@ -199,9 +200,9 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void RecordDeferred_ClearedOnColorChange()
+        public void ColourlessRainbowPop_CarryIsSpentOnTheFirstColour_NotTheSecond()
         {
-            _streak.RecordDeferred();
+            _streak.RecordWildcard();
             _streak.Record("Red");
 
             Assert.AreEqual(1, _streak.Record("Blue"));
@@ -309,18 +310,15 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void Deferred_ThenWildcards_ThenColor_FoldsCorrectly()
+        public void FourRainbowPops_ThenColor_CarriesTheWholeChain()
         {
-            // Two deferred rainbow pops (colourless projectile), then projectile gets a colour,
-            // then two more rainbow pops (wildcard), then a real colour hit.
-            _streak.RecordDeferred();
-            _streak.RecordDeferred();
-            // Wildcard clears deferred bank and starts streak at 1
+            // Rainbow pops by a colourless shot, then more by a rainbow buff: every one climbs the same streak.
+            _streak.RecordWildcard();
+            _streak.RecordWildcard();
             _streak.RecordWildcard();
             _streak.RecordWildcard();
 
-            // First real colour inherits wildcard streak (2+1 = 3)
-            Assert.AreEqual(3, _streak.Record("Blue"));
+            Assert.AreEqual(5, _streak.Record("Blue"));
         }
     }
 }

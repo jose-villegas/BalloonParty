@@ -103,7 +103,7 @@ classDiagram
 | Type | Description |
 |---|---|
 | `DamageContext` | Readonly struct — `int Damage` + `DamageFlags Flags` + `string SourceColorId`. Default `Flags = DamageFlags.Normal`, `SourceColorId = ""`. `SourceColorId` carries the palette color name of the projectile or item responsible for the hit — used by `UnbreakableBalloonModel` for score attribution to the source color |
-| `DamageFlags` | `[Flags]` enum — `Normal = 0`; `Piercing = 1 << 0` bypasses `HitsRemaining` and forces `Pop`; `WildcardStreak = 1 << 1` marks a colour-agnostic streak (a rainbow-buffed shot keeps the streak climbing regardless of colour); `DirectHit = 1 << 2` marks a hit the projectile itself struck, as opposed to AOE/item damage (gates `BalloonSpawner`'s pop-spawn roll and `SnipeItemHandler`'s lance activation); `DeferredStreak = 1 << 3` marks a colourless projectile popping a rainbow balloon, banking the streak contribution until the projectile adopts a real colour |
+| `DamageFlags` | `[Flags]` enum — `Normal = 0`; `Piercing = 1 << 0` bypasses `HitsRemaining` and forces `Pop`; `WildcardStreak = 1 << 1` marks a colour-agnostic streak (a rainbow-buffed shot keeps the streak climbing regardless of colour); `DirectHit = 1 << 2` marks a hit the projectile itself struck, as opposed to AOE/item damage (gates `BalloonSpawner`'s pop-spawn roll and `SnipeItemHandler`'s lance activation); `1 << 3` is unused (it banked a colourless shot's rainbow pops until a colour came; those now climb at once, as `CarryStreak`) |
 
 Paintability is expressed purely through types: a `BalloonModel` implements `IPaintable`; a `ToughBalloonModel` does not — no runtime flag needed.
 

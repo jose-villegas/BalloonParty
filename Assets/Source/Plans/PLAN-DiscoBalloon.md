@@ -187,7 +187,7 @@ it overlaps) slows the ripple too and keeps it in step with the rest of the boar
 ## Self-feeding check (the rainbow multiplier trap)
 
 The known trap: a shot's own effect paints balloons rainbow, and then the same shot pops them. Each pop
-is a wildcard pop (`CarryStreak`, or `DeferredStreak` for a colourless shot), and
+is a wildcard pop (`CarryStreak`, coloured shot or not), and
 `ColorStreak.RecordWildcard` raises the streak with no cap. This has been fixed twice already: once for the
 side neighbours in `ProjectileHitResolver`, and once for the forward exclusion in `SnipeDischargeBloom`.
 The disco ball is the worst case yet, because it paints the whole board.
@@ -212,7 +212,7 @@ ball, the balloon painted). The shot comes from the pop's `DamageContext.Project
 a cheat, in which case nothing needs guarding. In `ProjectileHitResolver`, when `isWildcardPop` is true and
 the ledger holds (this projectile, this balloon):
 
-- it adds neither `CarryStreak` nor `DeferredStreak`, and arms no carry;
+- it adds no `CarryStreak`, and arms no carry;
 - the pop scores at whatever multiplier is already live, and the streak neither climbs nor breaks. It needs
   a new `DamageFlags.OwnPaint`, read by `ScoreController.RecordStreakMultiplier` as "return the current
   multiplier, change nothing". The `Log.Assert` that guards against items authoring streak flags covers it;

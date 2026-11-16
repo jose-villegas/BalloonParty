@@ -845,10 +845,7 @@ namespace BalloonParty.Solver
             var isOwnPaint = balloon.IsRainbow && balloon.OwnPaint && !state.HasRainbowBuff;
             var cause = ShotPopCause.ProjectileContact(
                 state.HasRainbowBuff, state.IsPiercing,
-                isRainbowTargetDeferred: balloon.IsRainbow && !state.HasRainbowBuff && !isOwnPaint
-                    && string.IsNullOrEmpty(state.ProjectileColor),
-                isRainbowTargetCarry: balloon.IsRainbow && !state.HasRainbowBuff && !isOwnPaint
-                    && !string.IsNullOrEmpty(state.ProjectileColor),
+                isRainbowTargetCarry: balloon.IsRainbow && !state.HasRainbowBuff && !isOwnPaint,
                 projectileColor: state.ProjectileColor,
                 isOwnPaint: isOwnPaint);
             ResolvePopScore(balloon, in scoreRules, in cause, ref state);
@@ -1137,7 +1134,6 @@ namespace BalloonParty.Solver
             state.ToughsCleared++;
             state.StreakColor = null;
             state.StreakCount = 0;
-            state.DeferredPops = 0;
             state.CarryOnColorChange = false;
         }
 
@@ -1156,8 +1152,8 @@ namespace BalloonParty.Solver
         //   AOE dispatch never touches projectile.ColorName live, so a Bomb/Laser/Lightning pop must
         //   never steal the shot's travelling colour.
         // - Dispatch: (1) WildcardStreak scores colour-agnostically — even an otherwise streak-breaking
-        //   tough/Unbreakable pop just keeps the multiplier climbing; (2) DeferredStreak banks a
-        //   colourless-projectile rainbow pop; (3) absent both flags, a colourless target that doesn't
+        //   tough/Unbreakable pop just keeps the multiplier climbing; (2) CarryStreak climbs a rainbow
+        //   pop colour-agnostically, coloured shot or not yet; (3) absent both flags, a colourless target that doesn't
         //   PaysSourceColor (an ordinary Tough) takes the flat/streak-breaking rule and RETURNS — never
         //   reaching the shared payout/refund step below, matching live's IHasColor-gated refund;
         //   (4) a rainbow target anchors on cause.SourceColorId if still allowed, else the balloon's
@@ -1229,21 +1225,13 @@ namespace BalloonParty.Solver
             }
             else if (cause.Flags.HasFlag(DamageFlags.WildcardStreak))
             {
-                state.DeferredPops = 0;
                 multiplier = ++state.StreakCount;
                 state.CarryOnColorChange = true;
                 attributedColorId = balloon.PaysSourceColor ? cause.SourceColorId : balloon.ColorId;
             }
-            else if (cause.Flags.HasFlag(DamageFlags.DeferredStreak))
-            {
-                state.DeferredPops++;
-                multiplier = 1;
-                attributedColorId = balloon.ColorId;
-            }
             else if (cause.Flags.HasFlag(DamageFlags.CarryStreak))
             {
                 // Mirrors RecordWildcard: colour-agnostic increment + arm carry.
-                state.DeferredPops = 0;
                 multiplier = ++state.StreakCount;
                 state.CarryOnColorChange = true;
                 if (balloon.IsRainbow)
@@ -1308,10 +1296,9 @@ namespace BalloonParty.Solver
             }
         }
 
-        // Mirrors ColorStreakTracker.Record's non-breaking branch, including the deferred-pop fold
-        // and carry-on-color-change: repeating the same colour just increments, a colour change with
-        // carry transfers the multiplier, otherwise a new colour starts at 1 plus any banked deferred
-        // rainbow pops — either way the deferred bank clears.
+        // Mirrors ColorStreakTracker.Record's non-breaking branch, including carry-on-color-change:
+        // repeating the same colour just increments, a colour change with carry transfers the
+        // multiplier, otherwise a new colour starts at 1.
         private static int RecordColor(string colorId, ref ShotFlightState state)
         {
             if (string.Equals(state.StreakColor, colorId, StringComparison.Ordinal))
@@ -1321,17 +1308,16 @@ namespace BalloonParty.Solver
             else if (state.CarryOnColorChange && state.StreakCount > 0)
             {
                 state.StreakColor = colorId;
-                state.StreakCount += 1 + state.DeferredPops;
+                state.StreakCount++;
                 state.CarryOnColorChange = false;
             }
             else
             {
-                state.StreakCount = 1 + state.DeferredPops;
+                state.StreakCount = 1;
                 state.StreakColor = colorId;
                 state.CarryOnColorChange = false;
             }
 
-            state.DeferredPops = 0;
             return state.StreakCount;
         }
 

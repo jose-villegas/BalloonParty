@@ -100,18 +100,16 @@ namespace BalloonParty.Solver
         /// <summary>Mirrors <c>ProjectileHitResolver.ResolveContactPop</c>'s own flag composition —
         /// <see cref="DamageFlags.DirectHit" /> always; <see cref="DamageFlags.WildcardStreak" /> plus
         /// <see cref="DamageFlags.Piercing" /> under a rainbow buff; <see cref="DamageFlags.Piercing" />
-        /// alone under an armed (non-buffed) shot; <see cref="DamageFlags.DeferredStreak" /> for a
-        /// colourless projectile popping a rainbow target absent a buff; <see cref="DamageFlags.CarryStreak" />
-        /// for a coloured projectile popping a rainbow target absent a buff; <see cref="DamageFlags.OwnPaint" />
-        /// in place of those two for a rainbow the shot painted itself.</summary>
+        /// alone under an armed (non-buffed) shot; <see cref="DamageFlags.CarryStreak" /> for the shot popping
+        /// a rainbow target absent a buff, coloured yet or not; <see cref="DamageFlags.OwnPaint" /> in its
+        /// place for a rainbow the shot painted itself.</summary>
         public static ShotPopCause ProjectileContact(
-            bool hasRainbowBuff, bool isPiercing, bool isRainbowTargetDeferred, bool isRainbowTargetCarry,
+            bool hasRainbowBuff, bool isPiercing, bool isRainbowTargetCarry,
             string projectileColor, bool isOwnPaint = false)
         {
             var flags = DamageFlags.DirectHit
                 | (hasRainbowBuff ? DamageFlags.WildcardStreak : DamageFlags.Normal)
                 | (isPiercing ? DamageFlags.Piercing : DamageFlags.Normal)
-                | (isRainbowTargetDeferred ? DamageFlags.DeferredStreak : DamageFlags.Normal)
                 | (isRainbowTargetCarry ? DamageFlags.CarryStreak : DamageFlags.Normal)
                 | (isOwnPaint ? DamageFlags.OwnPaint : DamageFlags.Normal);
             return new ShotPopCause(true, projectileColor, flags);
@@ -181,9 +179,6 @@ namespace BalloonParty.Solver
         public bool CarryOnColorChange;
         public string ProjectileColor;
 
-        // Banks a colourless-projectile rainbow pop until the streak next anchors on a real colour
-        // (ColorStreakTracker.RecordDeferred/Record's fold) — see ShotSimulator.RecordColor.
-        public int DeferredPops;
         public int RawScore;
         public int Pops;
         public int GoldenPops;
@@ -226,7 +221,6 @@ namespace BalloonParty.Solver
             StreakCount = seed.StreakCount;
             CarryOnColorChange = false;
             ProjectileColor = seed.ProjectileColor;
-            DeferredPops = 0;
             RawScore = 0;
             Pops = 0;
             GoldenPops = 0;

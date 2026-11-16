@@ -101,9 +101,9 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
   `ScoreController.RecordStreakMultiplier`'s own precedence: a rainbow-buffed shot scores every
   pop colour-agnostically (even an otherwise streak-breaking tough pop just keeps the multiplier
   climbing); absent that buff, a colourless pop still takes the flat/streak-breaking tough rule
-  and skips the refund entirely; a rainbow target hit by a still-colourless projectile defers the
-  streak instead of resetting it (a banked count that folds in as `1 + deferred` the next time the
-  streak anchors on a real colour, mirroring `ColorStreakTracker`'s deferred-pop fold); an
+  and skips the refund entirely; a rainbow target the shot didn't paint climbs the streak
+  colour-agnostically and carries it to the next real colour, whether or not the projectile has a
+  colour yet (`CarryStreak`, mirroring `ColorStreak.RecordWildcard`); an
   anchoring rainbow pop uses the projectile's own colour if the board still allows it, else the
   board's first allowed colour. Colour adoption always gates on the POPPED balloon being rainbow,
   never on the shot's own buff — an ordinary coloured pop steals the projectile's colour

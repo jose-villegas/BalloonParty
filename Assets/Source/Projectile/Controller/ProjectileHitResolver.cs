@@ -197,19 +197,10 @@ namespace BalloonParty.Projectile.Controller
                     damageContext.SourceColorId,
                     projectile);
             }
-            else if (isWildcardPop && !isRainbowBuff && string.IsNullOrEmpty(projectile.ColorName.Value))
+            else if (isWildcardPop && !isRainbowBuff)
             {
-                // A colourless projectile popping a rainbow can't anchor the streak yet — defer the count
-                // so it folds into the streak once the projectile adopts a real colour on a later hit.
-                damageContext = new DamageContext(
-                    damageContext.Damage,
-                    damageContext.Flags | DamageFlags.DeferredStreak,
-                    damageContext.SourceColorId,
-                    projectile);
-            }
-            else if (isWildcardPop && !isRainbowBuff && !string.IsNullOrEmpty(projectile.ColorName.Value))
-            {
-                // Coloured projectile popping a rainbow: the multiplier carries to the next colour.
+                // A rainbow climbs the multiplier, which carries to the next colour, whether or not the shot
+                // has a colour yet: a board of rainbows must still build a streak.
                 damageContext = new DamageContext(
                     damageContext.Damage,
                     damageContext.Flags | DamageFlags.CarryStreak,

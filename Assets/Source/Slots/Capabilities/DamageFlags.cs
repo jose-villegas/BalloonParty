@@ -19,12 +19,10 @@ namespace BalloonParty.Slots.Capabilities
         /// multiplier and still breaks the streak on a mismatch, it just can't climb it.</summary>
         DirectHit = 1 << 2,
 
-        /// <summary>A colourless projectile popped a rainbow balloon — the streak contribution is
-        /// deferred until the projectile adopts a colour on a subsequent hit.</summary>
-        DeferredStreak = 1 << 3,
-
-        /// <summary>A coloured projectile popped a rainbow — the streak multiplier should carry
-        /// intact to the next colour the projectile adopts.</summary>
+        /// <summary>The shot (not rainbow-buffed) popped a rainbow it didn't paint: the pop climbs its streak
+        /// whatever its colour, and the multiplier carries intact to the next colour the shot adopts. A shot
+        /// with no colour yet climbs too, so a board of rainbows still builds a multiplier. (1 &lt;&lt; 3 was
+        /// a colourless shot's banked rainbow pop, which paid ×1 until a colour came.)</summary>
         CarryStreak = 1 << 4,
 
         /// <summary>A laser beam struck the actor. The beam's damage also carries <see cref="Piercing" />,

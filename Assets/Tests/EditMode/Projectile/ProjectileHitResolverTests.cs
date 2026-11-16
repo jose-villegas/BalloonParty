@@ -556,8 +556,7 @@ namespace BalloonParty.Tests.Projectile
 
             _hitDispatcher.Received(1).Dispatch(Arg.Is<ActorHitMessage>(m =>
                 m.Context.Flags.HasFlag(DamageFlags.OwnPaint)
-                && !m.Context.Flags.HasFlag(DamageFlags.CarryStreak)
-                && !m.Context.Flags.HasFlag(DamageFlags.DeferredStreak)));
+                && !m.Context.Flags.HasFlag(DamageFlags.CarryStreak)));
         }
 
         // A streak-shield refund on every painted pop would let a disco shot refill its shields off its own paint.

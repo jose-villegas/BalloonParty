@@ -88,14 +88,14 @@ namespace BalloonParty.Tests.ShotSolver
         }
 
         [Test]
-        public void ResolvePopScore_ColorlessProjectile_RainbowPopsDefer_ThenFoldIntoTheNextRealColour()
+        public void ResolvePopScore_ColorlessProjectile_RainbowPopsClimb_ThenCarryIntoTheNextRealColour()
         {
-            // Mirrors RecordDeferred/RecordDeferred/Record's fold (ColorStreakTrackerTests'
-            // RecordDeferred_ThenRecord_FoldsIntoStreak, live-side).
+            // Mirrors ColorStreakTrackerTests.ColourlessRainbowPops_ClimbAtOnce_ThenCarryIntoTheFirstColour,
+            // live-side: a board of rainbows still builds a multiplier before the shot has a colour.
             var tracker = CreateTracker().For(null);
-            tracker.RecordDeferred();
-            var expectedFold = tracker.RecordDeferred();
-            var expectedFoldedStreak = tracker.Record("Red");
+            var expectedFirst = tracker.RecordWildcard();
+            var expectedSecond = tracker.RecordWildcard();
+            var expectedCarried = tracker.Record("Red");
 
             var board = new[]
             {
@@ -109,12 +109,12 @@ namespace BalloonParty.Tests.ShotSolver
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
                 workingSet: workingSet, allowedColors: new[] { "Red" });
 
-            Assert.AreEqual(2, expectedFold, "sanity: two deferred pops bank to 2");
-            Assert.AreEqual(3, expectedFoldedStreak, "sanity: the fold gives the third pop a streak of 3");
+            Assert.AreEqual(1, expectedFirst, "sanity: the first rainbow pop scores x1");
+            Assert.AreEqual(2, expectedSecond, "sanity: the second climbs to x2");
+            Assert.AreEqual(3, expectedCarried, "sanity: the carry gives the first colour a streak of 3");
 
-            // Both deferred rainbow pops pay unfiltered (allowedColors.Count == 1, multiplier 1 each);
-            // the folded green pop pays its own ScoreValue at the folded multiplier.
-            var expectedScore = (5 * 1) + (5 * 1) + (3 * expectedFoldedStreak);
+            // Each rainbow pop pays at its own climbing multiplier; the red pop at the carried one.
+            var expectedScore = (5 * expectedFirst) + (5 * expectedSecond) + (3 * expectedCarried);
             Assert.AreEqual(expectedScore, result.RawScore);
             Assert.AreEqual(3, result.Pops);
         }
@@ -220,13 +220,13 @@ namespace BalloonParty.Tests.ShotSolver
         }
 
         [Test]
-        public void ResolvePopScore_Chain_WashThenColorlessRainbowDefers_ThenFoldsIntoTheNextRealColourPop()
+        public void ResolvePopScore_Chain_WashThenColorlessRainbowClimbs_ThenCarriesIntoTheNextRealColourPop()
         {
-            // Distinct from RainbowPopsDefer_ThenFold (projectile is colourless because nothing has
+            // Distinct from RainbowPopsClimb_ThenCarry (projectile is colourless because nothing has
             // popped yet) and from the Wash test (its chain ends at the washer's OWN tough pop,
-            // never reaching a real-colour fold): here a soap wash colourlesses an ALREADY-colour
-            // projectile, the very next balloon is a rainbow (defers instead of anchoring), and only
-            // THEN does a real colour arrive to fold the bank in — the scenario the design memo calls
+            // never reaching a real colour): here a soap wash colourlesses an ALREADY-colour
+            // projectile, the very next balloon is a rainbow (climbs a fresh streak), and only
+            // THEN does a real colour arrive to take the carry — the scenario the design memo calls
             // out by name.
             var board = new[]
             {
@@ -241,8 +241,8 @@ namespace BalloonParty.Tests.ShotSolver
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
                 workingSet: workingSet, allowedColors: new[] { "Red" });
 
-            // Red(2*1) + washer's tough pop(5, ALSO clears the streak/deferred bank) + rainbow
-            // defers colourless(3*1) + Blue folds the one banked defer into a fresh streak(7*2).
+            // Red(2*1) + washer's tough pop(5, ALSO clears the streak) + the colourless shot's rainbow
+            // starts a fresh streak(3*1) + Blue takes the carried streak(7*2).
             Assert.AreEqual(2 + 5 + 3 + 14, result.RawScore);
             Assert.AreEqual(4, result.Pops);
             Assert.AreEqual(1, result.ToughsCleared, "only the washer's own pop is a tough pop");
@@ -250,16 +250,15 @@ namespace BalloonParty.Tests.ShotSolver
         }
 
         [Test]
-        public void ResolveBalloonContact_Wash_FiresOnAMereDeflectContact_ThenTheNextRainbowDefers()
+        public void ResolveBalloonContact_Wash_FiresOnAMereDeflectContact_ThenTheNextRainbowStartsAFreshStreak()
         {
             // Ordering pin (memo: wash -> adopt -> record -> refund; ProjectileHitResolver.cs:154,
             // 169-176): pop a real "Red" first (adopts), then dead-centre deflect off a washing
             // 2-hit tough (ProjectileHitResolver.cs:193-201's wash fires on the DEFLECT outcome, not
             // just a pop) — reused from ShotSimulatorTests.Simulate_ToughTwoTouch's bounce-back trick
             // (bottom wall close, dead-on-centre hit reflects straight back). If wash didn't fire on
-            // the deflect, the rainbow below would anchor on the still-adopted "Red" (mirrors "Red")
-            // instead of deferring — scoring 6 instead of 3 — and the washer's final (tough) pop
-            // would leave a stale deferred bank instead of a fresh Reset.
+            // the deflect, the rainbow below would climb the still-standing "Red" streak instead of
+            // starting a fresh one — scoring 6 instead of 3.
             var walls = new Vector4(1000f, 1000f, -1f, -1000f);
             var board = new[]
             {
@@ -273,7 +272,7 @@ namespace BalloonParty.Tests.ShotSolver
                 board, walls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
                 workingSet: workingSet, allowedColors: new[] { "Red" });
 
-            // green(2*1) + rainbow-deferred(3*1, NOT 3*2) + washer's tough pop(7)
+            // green(2*1) + rainbow on a washed streak(3*1, NOT 3*2) + washer's tough pop(7)
             Assert.AreEqual(2 + 3 + 7, result.RawScore);
             Assert.AreEqual(3, result.Pops);
             Assert.AreEqual(1, result.ToughsCleared, "only the washer's final (colourless) pop is a tough pop");

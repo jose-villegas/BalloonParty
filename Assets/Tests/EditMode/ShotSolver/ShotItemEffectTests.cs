@@ -864,7 +864,7 @@ namespace BalloonParty.Tests.ShotSolver
         {
             // Design ruling 2026-07-25: the laser's ItemConfiguration.asset _damageFlags was a CONFIG
             // ERROR (previously -1), now fixed to 1 (DamageFlags.Piercing only) — no WildcardStreak, no
-            // DirectHit, no DeferredStreak. Piercing alone still pops EVERYTHING in the corridor
+            // DirectHit. Piercing alone still pops EVERYTHING in the corridor
             // (unbreakables included, HitsRemaining == int.MaxValue), but every item pop otherwise
             // follows the ORDINARY per-hit streak rule (adoption/refund are suppressed for any item
             // cause regardless of flags — see ShotPopCause.IsProjectileContact's own doc): each pop
@@ -1415,11 +1415,9 @@ namespace BalloonParty.Tests.ShotSolver
         {
             // A rainbow host's colour IS the rainbow marker (PaintItemHandler.cs:63-71) — the SAME
             // recolour path Paint always runs converts a normal downstream balloon to rainbow too. A
-            // real coloured seed pop establishes a non-null, non-rainbow ProjectileColor FIRST, so
-            // neither the host's own pop nor the downstream's takes the DEFERRED branch (see
-            // ResolvePopScore's isRainbowTargetDeferred guard) — letting the downstream's LATER pop
-            // exercise the ordinary rainbow-attribution branch (item 4 in ResolvePopScore, not
-            // Wildcard/Deferred): primary = allowed("Green") -> RecordColor("Green"), extending the
+            // real coloured seed pop establishes a non-null, non-rainbow ProjectileColor FIRST, letting
+            // the downstream's LATER pop exercise the ordinary rainbow-attribution branch (item 4 in
+            // ResolvePopScore): primary = allowed("Green") -> RecordColor("Green"), extending the
             // SAME streak the seed and host built.
             //
             // Hand-trace: seed (5*streak1=5) -> host (rainbow, primary "Green", streak1->2: 10*2=20) ->

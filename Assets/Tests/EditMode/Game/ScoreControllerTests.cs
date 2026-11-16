@@ -277,12 +277,13 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void StreakGrew_BankedRainbowPops_AnnounceOnceWhenTheyLandOnAColour()
+        public void StreakGrew_RainbowPopsBeforeAnyColour_ClimbAtOnce_ThenCarryOntoTheColour()
         {
             var ball = NewBall();
-            FireRainbowPopFrom(ball, DamageFlags.DirectHit | DamageFlags.DeferredStreak);
-            FireRainbowPopFrom(ball, DamageFlags.DirectHit | DamageFlags.DeferredStreak);
-            _streakGrewPublisher.DidNotReceive().Publish(Arg.Any<StreakGrewMessage>());
+            FireRainbowPopFrom(ball, DamageFlags.DirectHit | DamageFlags.CarryStreak);
+            FireRainbowPopFrom(ball, DamageFlags.DirectHit | DamageFlags.CarryStreak);
+            _streakGrewPublisher.Received(1).Publish(Arg.Is<StreakGrewMessage>(m => m.Color == null && m.Streak == 2));
+            _streakGrewPublisher.ClearReceivedCalls();
 
             FirePopFrom(ball, Red);
 

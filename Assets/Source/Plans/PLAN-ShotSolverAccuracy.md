@@ -171,7 +171,8 @@ with a test.
   defaults (gather does NOT read the live projectile — impossible and unnecessary; reviewer).
 - Scoring mirrors (fidelity-tested against `ProjectileHitResolver` + `ColorStreakTracker`):
   wildcard pop keeps projectile color; colorless-projectile rainbow pop defers streak
-  (`RecordDeferred`, folds in at the next real-color pop); rainbow-buffed = color-agnostic streak
+  (`RecordDeferred`, folds in at the next real-color pop; since 2026-11-16 it climbs at once and
+  carries instead, so a board of rainbows still scores); rainbow-buffed = color-agnostic streak
   (`RecordWildcard`) + pop-neighbor conversion; rainbow attribution pays ScoreValue × every
   allowed color (Target Colour filter counts rainbows for any target color); soap
   (`IWashesProjectileColor`) washes projectile color on contact without popping.

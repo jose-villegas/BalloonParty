@@ -223,14 +223,7 @@ namespace BalloonParty.Game.Score
                 return streak.RecordWildcard();
             }
 
-            // A colourless projectile popping a rainbow — bank the pop for a later colour hit.
-            if (flags.HasFlag(DamageFlags.DeferredStreak))
-            {
-                streak.RecordDeferred();
-                return 1;
-            }
-
-            // A coloured projectile popping a rainbow — increment the streak colour-agnostically
+            // The shot popping a rainbow, coloured yet or not: increment the streak colour-agnostically
             // (like a wildcard) and arm carry so the multiplier transfers to the next real colour.
             if (flags.HasFlag(DamageFlags.CarryStreak))
             {
