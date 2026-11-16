@@ -1,5 +1,13 @@
 var NAVTREEINDEX132 =
 {
+"structBalloonParty_1_1Solver_1_1ColorProfile.html#a29c6a6e0d7a78917906e23f1e7d02d04":[5,0,0,14,1,2],
+"structBalloonParty_1_1Solver_1_1ColorProfile.html#a29c6a6e0d7a78917906e23f1e7d02d04":[6,0,0,14,1,2],
+"structBalloonParty_1_1Solver_1_1ColorProfile.html#afb96aba372ec349615dc726f5f0dca91":[5,0,0,14,1,0],
+"structBalloonParty_1_1Solver_1_1ColorProfile.html#afb96aba372ec349615dc726f5f0dca91":[6,0,0,14,1,0],
+"structBalloonParty_1_1Solver_1_1ItemProfile.html":[5,0,0,14,2],
+"structBalloonParty_1_1Solver_1_1ItemProfile.html":[6,0,0,14,2],
+"structBalloonParty_1_1Solver_1_1ItemProfile.html#a12634ca24b86602ca5823948a3b6ab87":[5,0,0,14,2,0],
+"structBalloonParty_1_1Solver_1_1ItemProfile.html#a12634ca24b86602ca5823948a3b6ab87":[6,0,0,14,2,0],
 "structBalloonParty_1_1Solver_1_1ItemProfile.html#a14184ca30373fee05a6fb1b2448b71dd":[5,0,0,14,2,1],
 "structBalloonParty_1_1Solver_1_1ItemProfile.html#a14184ca30373fee05a6fb1b2448b71dd":[6,0,0,14,2,1],
 "structBalloonParty_1_1Solver_1_1ItemProfile.html#a6b552737640998745750e8ba2f68126d":[5,0,0,14,2,2],
@@ -241,13 +249,5 @@ var NAVTREEINDEX132 =
 "structBalloonParty_1_1Solver_1_1ShotFlightState.html#ad60f469257a04a07d994b151b8de04a3":[5,0,0,14,10,12],
 "structBalloonParty_1_1Solver_1_1ShotFlightState.html#ad60f469257a04a07d994b151b8de04a3":[6,0,0,14,10,12],
 "structBalloonParty_1_1Solver_1_1ShotFlightState.html#aeb25eb467deb398a416a5b70b5edcce1":[5,0,0,14,10,11],
-"structBalloonParty_1_1Solver_1_1ShotFlightState.html#aeb25eb467deb398a416a5b70b5edcce1":[6,0,0,14,10,11],
-"structBalloonParty_1_1Solver_1_1ShotFlightState.html#af3595575e2820c0393cffcf44934b74d":[5,0,0,14,10,30],
-"structBalloonParty_1_1Solver_1_1ShotFlightState.html#af3595575e2820c0393cffcf44934b74d":[6,0,0,14,10,30],
-"structBalloonParty_1_1Solver_1_1ShotItemActivation.html":[5,0,0,14,11],
-"structBalloonParty_1_1Solver_1_1ShotItemActivation.html":[6,0,0,14,11],
-"structBalloonParty_1_1Solver_1_1ShotItemActivation.html#a270a5fe40e91bd3969ac94b997da0565":[5,0,0,14,11,4],
-"structBalloonParty_1_1Solver_1_1ShotItemActivation.html#a270a5fe40e91bd3969ac94b997da0565":[6,0,0,14,11,4],
-"structBalloonParty_1_1Solver_1_1ShotItemActivation.html#a2eb32df72340942849aeac6e69b3cec3":[5,0,0,14,11,5],
-"structBalloonParty_1_1Solver_1_1ShotItemActivation.html#a2eb32df72340942849aeac6e69b3cec3":[6,0,0,14,11,5]
+"structBalloonParty_1_1Solver_1_1ShotFlightState.html#aeb25eb467deb398a416a5b70b5edcce1":[6,0,0,14,10,11]
 };

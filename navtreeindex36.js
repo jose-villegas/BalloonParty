@@ -246,8 +246,8 @@ var NAVTREEINDEX36 =
 "classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#af3aaaacf0cb976b787dd96a746586d6f":[6,0,0,3,34,15],
 "classBalloonParty_1_1Configuration_1_1UpgradeSettings.html":[5,0,0,3,35],
 "classBalloonParty_1_1Configuration_1_1UpgradeSettings.html":[6,0,0,3,35],
-"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a0e516ee54bad96bf0120ab7bcb669cd7":[5,0,0,3,35,4],
-"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a0e516ee54bad96bf0120ab7bcb669cd7":[6,0,0,3,35,4],
-"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a4abdf175b2a88d0c4e53d76c10abce01":[5,0,0,3,35,6],
-"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a4abdf175b2a88d0c4e53d76c10abce01":[6,0,0,3,35,6]
+"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a0e516ee54bad96bf0120ab7bcb669cd7":[5,0,0,3,35,5],
+"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a0e516ee54bad96bf0120ab7bcb669cd7":[6,0,0,3,35,5],
+"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a345ecd47c34b9217c085c39c64c6cab5":[5,0,0,3,35,8],
+"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a345ecd47c34b9217c085c39c64c6cab5":[6,0,0,3,35,8]
 };

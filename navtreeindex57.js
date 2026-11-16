@@ -1,5 +1,9 @@
 var NAVTREEINDEX57 =
 {
+"classBalloonParty_1_1Game_1_1Run_1_1RunController.html#ad27012b68b13a374f14369c2a392753c":[5,0,0,6,8,21,12],
+"classBalloonParty_1_1Game_1_1Run_1_1RunController.html#ad27012b68b13a374f14369c2a392753c":[6,0,0,6,8,21,12],
+"classBalloonParty_1_1Game_1_1Run_1_1RunController.html#ad5455629dd78e6fb30a255650c28616a":[5,0,0,6,8,21,1],
+"classBalloonParty_1_1Game_1_1Run_1_1RunController.html#ad5455629dd78e6fb30a255650c28616a":[6,0,0,6,8,21,1],
 "classBalloonParty_1_1Game_1_1Run_1_1RunController.html#ae487dece8a96772350e1918548ff3183":[5,0,0,6,8,21,19],
 "classBalloonParty_1_1Game_1_1Run_1_1RunController.html#ae487dece8a96772350e1918548ff3183":[6,0,0,6,8,21,19],
 "classBalloonParty_1_1Game_1_1Run_1_1RunController.html#af81820533f5a1cacab1e3a3d6407b352":[5,0,0,6,8,21,15],
@@ -245,9 +249,5 @@ var NAVTREEINDEX57 =
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html#a07d7473510fe727059b546e6a8ddbfd2":[5,0,0,6,9,0,4,3],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html#a07d7473510fe727059b546e6a8ddbfd2":[6,0,0,6,9,0,4,3],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html#a1b6e651335168edb45088f01127ee634":[5,0,0,6,9,0,4,1],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html#a1b6e651335168edb45088f01127ee634":[6,0,0,6,9,0,4,1],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html#a573617eeee87fa37636904db7522667c":[5,0,0,6,9,0,4,2],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html#a573617eeee87fa37636904db7522667c":[6,0,0,6,9,0,4,2],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html#a6ee5ffc331bce18a3454fa457efa99e6":[5,0,0,6,9,0,4,4],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html#a6ee5ffc331bce18a3454fa457efa99e6":[6,0,0,6,9,0,4,4]
+"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html#a1b6e651335168edb45088f01127ee634":[6,0,0,6,9,0,4,1]
 };

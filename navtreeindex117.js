@@ -1,5 +1,13 @@
 var NAVTREEINDEX117 =
 {
+"namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebaea2b3b1b3474d39e4dde52681d9ecaf8":[5,0,0,6,10,28,29],
+"namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebaf8fed9f975697e26feccf5fbda9125f2":[5,0,0,6,10,28,19],
+"namespaceBalloonParty_1_1Game_1_1Telemetry.html#a70fd8bf1148bf059d1e9549b680d3a18":[5,0,0,6,10,27],
+"namespaceBalloonParty_1_1Game_1_1Telemetry.html#a70fd8bf1148bf059d1e9549b680d3a18a29a3922237fd0263dff4affed9b7a637":[5,0,0,6,10,27,2],
+"namespaceBalloonParty_1_1Game_1_1Telemetry.html#a70fd8bf1148bf059d1e9549b680d3a18a5c760ea42fb8dc6b21f4023967f109a8":[5,0,0,6,10,27,1],
+"namespaceBalloonParty_1_1Game_1_1Telemetry.html#a70fd8bf1148bf059d1e9549b680d3a18acb5feb1b7314637725a2e73bdc9f7295":[5,0,0,6,10,27,0],
+"namespaceBalloonParty_1_1Game_1_1Telemetry.html#a7d92d3154f481b1e25541b132865a4f1":[5,0,0,6,10,26],
+"namespaceBalloonParty_1_1Game_1_1Telemetry.html#a7d92d3154f481b1e25541b132865a4f1a6a061313d22e51e0f25b7cd4dc065233":[5,0,0,6,10,26,1],
 "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a7d92d3154f481b1e25541b132865a4f1aa0ec87054b5e5b7847d0d8780a01a3d5":[5,0,0,6,10,26,0],
 "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a7d92d3154f481b1e25541b132865a4f1ad55b30607c2a9a2616347d6edb789f6b":[5,0,0,6,10,26,2],
 "namespaceBalloonParty_1_1Game_1_1Telemetry.html#afe92d9f4b6c560e2af24ec284ae652c1":[5,0,0,6,10,31],
@@ -241,13 +249,5 @@ var NAVTREEINDEX117 =
 "namespaceBalloonParty_1_1Solver.html#a542a88f2d2015fc35cc0479c6b46c6a7a6b8a071d3bbcb8dbc788e488f7ece25c":[5,0,0,14,28,3],
 "namespaceBalloonParty_1_1Solver.html#a542a88f2d2015fc35cc0479c6b46c6a7a7d2b88f5977b8a31c6193b4c81a43daf":[5,0,0,14,28,1],
 "namespaceBalloonParty_1_1Solver.html#a542a88f2d2015fc35cc0479c6b46c6a7af4a6ceffc0054a855f31f42083328df9":[5,0,0,14,28,2],
-"namespaceBalloonParty_1_1Thrower.html":[5,0,0,15],
-"namespaceBalloonParty_1_1UI.html":[5,0,0,16],
-"namespaceBalloonParty_1_1UI_1_1Binding.html":[5,0,0,16,0],
-"namespaceBalloonParty_1_1UI_1_1CardReveal.html":[5,0,0,16,1],
-"namespaceBalloonParty_1_1UI_1_1ClothRibbon.html":[5,0,0,16,2],
-"namespaceBalloonParty_1_1UI_1_1Danger.html":[5,0,0,16,3],
-"namespaceBalloonParty_1_1UI_1_1GameOver.html":[5,0,0,16,4],
-"namespaceBalloonParty_1_1UI_1_1HeadsUp.html":[5,0,0,16,5],
-"namespaceBalloonParty_1_1UI_1_1Health.html":[5,0,0,16,6]
+"namespaceBalloonParty_1_1Thrower.html":[5,0,0,15]
 };

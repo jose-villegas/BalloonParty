@@ -1,5 +1,13 @@
 var NAVTREEINDEX121 =
 {
+"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html":[5,0,0,1,1,0],
+"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html":[6,0,0,1,1,0],
+"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html#a6bd8cd92a3cb884da4c89e9703374837":[5,0,0,1,1,0,1],
+"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html#a6bd8cd92a3cb884da4c89e9703374837":[6,0,0,1,1,0,1],
+"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html#ac8010fa493e1a7322a6d0faafebfc36c":[5,0,0,1,1,0,2],
+"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html#ac8010fa493e1a7322a6d0faafebfc36c":[6,0,0,1,1,0,2],
+"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html#af14895b130e330c6a096c746cbfb5e5a":[5,0,0,1,1,0,0],
+"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html#af14895b130e330c6a096c746cbfb5e5a":[6,0,0,1,1,0,0],
 "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Pair.html":[5,0,0,1,1,1,0],
 "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Pair.html":[6,0,0,1,1,1,0],
 "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Pair.html#a7472e7dd70544a2213a1341f9e9e3d23":[5,0,0,1,1,1,0,2],
@@ -241,13 +249,5 @@ var NAVTREEINDEX121 =
 "structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a6e1772ddcc1d49ebde36f4a17c388df4":[5,0,0,3,5,27,1],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a6e1772ddcc1d49ebde36f4a17c388df4":[6,0,0,3,5,27,1],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a6f0945abb75fe111cb30bbd1d2cd7429":[5,0,0,3,5,27,16],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a6f0945abb75fe111cb30bbd1d2cd7429":[6,0,0,3,5,27,16],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a7717295e16a227984e7eb2f0591fbfcc":[5,0,0,3,5,27,7],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a7717295e16a227984e7eb2f0591fbfcc":[6,0,0,3,5,27,7],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a832b59ff5278de7e7b01df5f1e40cac0":[5,0,0,3,5,27,5],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a832b59ff5278de7e7b01df5f1e40cac0":[6,0,0,3,5,27,5],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a85dd020a6892fe29e4af140c0c4ee478":[5,0,0,3,5,27,15],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a85dd020a6892fe29e4af140c0c4ee478":[6,0,0,3,5,27,15],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a89923e47dfd5f8a7654f06bec37958e1":[5,0,0,3,5,27,12],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a89923e47dfd5f8a7654f06bec37958e1":[6,0,0,3,5,27,12]
+"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a6f0945abb75fe111cb30bbd1d2cd7429":[6,0,0,3,5,27,16]
 };

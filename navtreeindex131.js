@@ -1,5 +1,13 @@
 var NAVTREEINDEX131 =
 {
+"structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html":[5,0,0,12,7,60],
+"structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html":[6,0,0,12,7,60],
+"structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html#a0a651249925686f2fe16da5c5eee025c":[5,0,0,12,7,60,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html#a0a651249925686f2fe16da5c5eee025c":[6,0,0,12,7,60,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html#a8d522fc79e22b54205d307d06a5db13d":[5,0,0,12,7,60,2],
+"structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html#a8d522fc79e22b54205d307d06a5db13d":[6,0,0,12,7,60,2],
+"structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html#ab0a81f174d0151d5ddeea7d55711021a":[5,0,0,12,7,60,3],
+"structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html#ab0a81f174d0151d5ddeea7d55711021a":[6,0,0,12,7,60,3],
 "structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html#ad4c0c4ffe5380847234b49ea0483e9aa":[5,0,0,12,7,60,1],
 "structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html#ad4c0c4ffe5380847234b49ea0483e9aa":[6,0,0,12,7,60,1],
 "structBalloonParty_1_1Shared_1_1Pause_1_1PausedMessage.html":[5,0,0,12,8,1],
@@ -241,13 +249,5 @@ var NAVTREEINDEX131 =
 "structBalloonParty_1_1Solver_1_1ColorProfile.html#a0e87ec54bb535ec3fe908d530f0b310c":[5,0,0,14,1,4],
 "structBalloonParty_1_1Solver_1_1ColorProfile.html#a0e87ec54bb535ec3fe908d530f0b310c":[6,0,0,14,1,4],
 "structBalloonParty_1_1Solver_1_1ColorProfile.html#a10db03ea1fe533d0ceafa39422863a4b":[5,0,0,14,1,1],
-"structBalloonParty_1_1Solver_1_1ColorProfile.html#a10db03ea1fe533d0ceafa39422863a4b":[6,0,0,14,1,1],
-"structBalloonParty_1_1Solver_1_1ColorProfile.html#a29c6a6e0d7a78917906e23f1e7d02d04":[5,0,0,14,1,2],
-"structBalloonParty_1_1Solver_1_1ColorProfile.html#a29c6a6e0d7a78917906e23f1e7d02d04":[6,0,0,14,1,2],
-"structBalloonParty_1_1Solver_1_1ColorProfile.html#afb96aba372ec349615dc726f5f0dca91":[5,0,0,14,1,0],
-"structBalloonParty_1_1Solver_1_1ColorProfile.html#afb96aba372ec349615dc726f5f0dca91":[6,0,0,14,1,0],
-"structBalloonParty_1_1Solver_1_1ItemProfile.html":[5,0,0,14,2],
-"structBalloonParty_1_1Solver_1_1ItemProfile.html":[6,0,0,14,2],
-"structBalloonParty_1_1Solver_1_1ItemProfile.html#a12634ca24b86602ca5823948a3b6ab87":[5,0,0,14,2,0],
-"structBalloonParty_1_1Solver_1_1ItemProfile.html#a12634ca24b86602ca5823948a3b6ab87":[6,0,0,14,2,0]
+"structBalloonParty_1_1Solver_1_1ColorProfile.html#a10db03ea1fe533d0ceafa39422863a4b":[6,0,0,14,1,1]
 };

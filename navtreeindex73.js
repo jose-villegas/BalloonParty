@@ -1,5 +1,11 @@
 var NAVTREEINDEX73 =
 {
+"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#ac114c9fec13aadc1a326f71a782d32b2":[5,0,0,9,7,6],
+"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#ac114c9fec13aadc1a326f71a782d32b2":[6,0,0,9,7,6],
+"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#acf8c0860dc169f5b66d14bfd2f22e1d8":[5,0,0,9,7,3],
+"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#acf8c0860dc169f5b66d14bfd2f22e1d8":[6,0,0,9,7,3],
+"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#afaea73053fd99bf0102725dd8e00fa24":[5,0,0,9,7,5],
+"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#afaea73053fd99bf0102725dd8e00fa24":[6,0,0,9,7,5],
 "classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#afafce404e080f9cc990516fa34dc7b85":[5,0,0,9,7,4],
 "classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#afafce404e080f9cc990516fa34dc7b85":[6,0,0,9,7,4],
 "classBalloonParty_1_1Projectile_1_1Buffs_1_1PierceEndedEndCondition.html":[5,0,0,10,0,1],
@@ -243,11 +249,5 @@ var NAVTREEINDEX73 =
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileMotionResolver.html#afaec98cf01a9371c97084d3b1806ff55":[5,0,0,10,1,8,2],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileMotionResolver.html#afaec98cf01a9371c97084d3b1806ff55":[6,0,0,10,1,8,2],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html":[5,0,0,10,1,10],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html":[6,0,0,10,1,10],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html#a11146c5a3a97c3a82faafb79f20a9da1":[5,0,0,10,1,10,11],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html#a11146c5a3a97c3a82faafb79f20a9da1":[6,0,0,10,1,10,11],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html#a13e805d80325f0b52666c5eb28e28452":[5,0,0,10,1,10,15],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html#a13e805d80325f0b52666c5eb28e28452":[6,0,0,10,1,10,15],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html#a27790614dd0ec436d9608c74ea829e81":[5,0,0,10,1,10,14],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html#a27790614dd0ec436d9608c74ea829e81":[6,0,0,10,1,10,14]
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html":[6,0,0,10,1,10]
 };

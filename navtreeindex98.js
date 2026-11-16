@@ -1,5 +1,11 @@
 var NAVTREEINDEX98 =
 {
+"classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonClothSettings.html#a100adee6f4e065651485c5912782175b":[5,0,0,16,2,4,11],
+"classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonClothSettings.html#a100adee6f4e065651485c5912782175b":[6,0,0,16,2,4,11],
+"classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonClothSettings.html#a1389777bde05c6e395182254790c3c2e":[5,0,0,16,2,4,13],
+"classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonClothSettings.html#a1389777bde05c6e395182254790c3c2e":[6,0,0,16,2,4,13],
+"classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonClothSettings.html#a1674a774336b979ef1bde78fb8c5de02":[5,0,0,16,2,4,2],
+"classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonClothSettings.html#a1674a774336b979ef1bde78fb8c5de02":[6,0,0,16,2,4,2],
 "classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonClothSettings.html#a3ef074bc2f4266caf4acfe696b969471":[5,0,0,16,2,4,14],
 "classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonClothSettings.html#a3ef074bc2f4266caf4acfe696b969471":[6,0,0,16,2,4,14],
 "classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonClothSettings.html#a41e06823ac6a6c9c5a0a9c10074c57b6":[5,0,0,16,2,4,16],
@@ -243,11 +249,5 @@ var NAVTREEINDEX98 =
 "classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html#a0f4b4537d348f727f2e8346004f49292":[5,0,0,16,4,1,23],
 "classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html#a0f4b4537d348f727f2e8346004f49292":[6,0,0,16,4,1,23],
 "classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html#a118ab26e49d7f7cf84c0fcef1cf9f3be":[5,0,0,16,4,1,30],
-"classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html#a118ab26e49d7f7cf84c0fcef1cf9f3be":[6,0,0,16,4,1,30],
-"classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html#a186a1ba83c2f061fc12f9a9ace384ef4":[5,0,0,16,4,1,35],
-"classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html#a186a1ba83c2f061fc12f9a9ace384ef4":[6,0,0,16,4,1,35],
-"classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html#a20f21523a5868c2f4fccb92c07f6449c":[5,0,0,16,4,1,41],
-"classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html#a20f21523a5868c2f4fccb92c07f6449c":[6,0,0,16,4,1,41],
-"classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html#a23db5833df513b9e7ad574939fad64fc":[5,0,0,16,4,1,40],
-"classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html#a23db5833df513b9e7ad574939fad64fc":[6,0,0,16,4,1,40]
+"classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html#a118ab26e49d7f7cf84c0fcef1cf9f3be":[6,0,0,16,4,1,30]
 };
