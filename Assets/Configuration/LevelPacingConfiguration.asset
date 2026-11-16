@@ -1231,7 +1231,9 @@ MonoBehaviour:
       _value: 3
     _extraColor:
       _fromLevel: 8
-      _chance: 0.2
+      _chance: 0.15
+      _chanceGrowthPerLevel: 0.1
+      _minLevelsBetween: 2
       _spawnIntervalScale: 0.7
       _extraItemChance: 0.3
     _boardLines:
