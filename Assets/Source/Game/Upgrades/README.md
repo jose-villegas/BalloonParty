@@ -55,6 +55,11 @@ lance whatever the card's chance, with no cooldown in the way (`Item/Snipe/Golde
 `ISnipeGuarantee.GuaranteeNext` on `SnipeChanceRoll`). The player sees the lance pop what bounced their
 shots. It counts only that first golden balloon, comes once a run, and a retry keeps it given.
 
+Winning the card shows it too: the first time the run gets Sharpshooter (a level-up's pick or a golden
+balloon's free card, so an `UpgradeCardHeldMessage`), the next ball loaded is a Snipe lance the same way
+(`Item/Snipe/SharpshooterSnipeGift`). The card an ad lends for one retry isn't won and doesn't count. Once a
+run, and a retry keeps it given.
+
 The roll happens once per ball, the moment the thrower loads it (`SnipeChanceRoll.TryArm`), which is also
 when its reload starts. After a hit no load rolls for `IUpgradeSettings.SnipeCooldownSeconds` (8 s of game
 time, on `RunConfig`'s upgrades block), so rapid fire can't chain lances; a miss starts no wait. The card's

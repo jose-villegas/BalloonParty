@@ -362,6 +362,7 @@ namespace BalloonParty.Game
             builder.Register<SnipeChanceRoll>(Lifetime.Singleton).As<ISnipeChanceRoll>().As<ISnipeGuarantee>()
                 .As<IRunResettable>();
             builder.RegisterEntryPoint<GoldenSnipeGift>().As<IRunResettable>();
+            builder.RegisterEntryPoint<SharpshooterSnipeGift>().As<IRunResettable>();
             builder.RegisterEntryPoint<SnipeDischargeBloom>();
             builder.RegisterEntryPoint<ItemSightTracker>().AsSelf();
 
