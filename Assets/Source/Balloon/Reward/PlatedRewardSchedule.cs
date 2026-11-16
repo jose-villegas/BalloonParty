@@ -16,9 +16,9 @@ namespace BalloonParty.Balloon.Reward
     ///         Off a purple level, every <see cref="PlatedRewardTuning.OrdinaryEveryLevels" /> levels from the sure level
     ///         on roll once, on their first line, for a single one at <see cref="PlatedRewardTuning.AtCompletion" />.
     ///         The chance eases off the further past the sure level the run is
-    ///         (<see cref="PlatedRewardTuning.ChanceHalvedAfterLevels" />), and a hard pity makes the roll sure once
-    ///         <see cref="PlatedRewardTuning.PityLevels" /> levels in a row have gone without one placed, so the late
-    ///         run sees them on the pity's beat. <see cref="PlatedRewardTuning.SureLevel" /> needs no roll and brings
+    ///         (<see cref="PlatedRewardTuning.ChanceHalvedAfterLevels" />), and a soft pity raises it by
+    ///         <see cref="PlatedRewardTuning.ChanceGrowthPerLevel" /> for each level since the last one was placed, so
+    ///         an eased chance never stays low. <see cref="PlatedRewardTuning.SureLevel" /> needs no roll and brings
     ///         its one early (<see cref="PlatedRewardTuning.SureAtCompletion" />), the player's first sight of the
     ///         balloon.
     ///     </para>
@@ -37,7 +37,7 @@ namespace BalloonParty.Balloon.Reward
         // A purple level's lines counted towards the next roll.
         private int _rollLines;
         private bool _alive;
-        // The level the last one was placed on, purple or not, for the hard pity; 0 before the run's first.
+        // The level the last one was placed on, purple or not, for the soft pity; 0 before the run's first.
         private int _lastPlacedLevel;
         // Which placement a leave callback belongs to; a stale one (an earlier balloon, or one from before a run
         // reset) must not clear the flag of the balloon on the board now.
@@ -80,18 +80,20 @@ namespace BalloonParty.Balloon.Reward
             return every > 0 && level > 0 && level >= tuning.SureLevel && level % every == 0;
         }
 
-        // Hyperbolic, so it eases off softly and never reaches 0: half at ChanceHalvedAfterLevels past the sure
-        // level, a third at twice that.
-        internal static float OrdinaryChance(in PlatedRewardTuning tuning, int level)
+        // The ease is hyperbolic, so it never reaches 0: half at ChanceHalvedAfterLevels past the sure level, a third
+        // at twice that. The soft pity adds its growth for each level missed since the last one (or the sure level).
+        internal static float OrdinaryChance(in PlatedRewardTuning tuning, int level, int lastPlacedLevel = 0)
         {
+            var sureLevel = Math.Max(0, tuning.SureLevel);
+            var chance = tuning.OrdinaryChance;
             var halvedAfter = tuning.ChanceHalvedAfterLevels;
-            if (halvedAfter <= 0)
+            if (halvedAfter > 0)
             {
-                return tuning.OrdinaryChance;
+                chance /= 1f + Math.Max(0, level - sureLevel) / (float)halvedAfter;
             }
 
-            var past = Math.Max(0, level - Math.Max(0, tuning.SureLevel));
-            return tuning.OrdinaryChance / (1f + past / (float)halvedAfter);
+            var missed = Math.Max(0, level - Math.Max(lastPlacedLevel, sureLevel) - 1);
+            return Math.Min(1f, chance + Math.Max(0f, tuning.ChanceGrowthPerLevel) * missed);
         }
 
         internal bool Due(
@@ -158,20 +160,14 @@ namespace BalloonParty.Balloon.Reward
             {
                 _ordinaryRolled = true;
                 var sureLevel = levelNumber > 0 && levelNumber == tuning.SureLevel;
-                _ordinaryWon = sureLevel || PityDue(in tuning, levelNumber)
-                                         || (IsOrdinaryLevel(in tuning, levelNumber)
-                                             && _random01() < OrdinaryChance(in tuning, levelNumber));
+                _ordinaryWon = sureLevel
+                               || (IsOrdinaryLevel(in tuning, levelNumber)
+                                   && _random01() < OrdinaryChance(in tuning, levelNumber, _lastPlacedLevel));
                 _ordinaryAt = sureLevel ? tuning.SureAtCompletion : tuning.AtCompletion;
             }
 
             return _ordinaryWon && _placedThisLevel == 0
                                 && LevelCompletion.Of(progress, level.AllowedColors) >= _ordinaryAt;
-        }
-
-        private bool PityDue(in PlatedRewardTuning tuning, int levelNumber)
-        {
-            return tuning.PityLevels > 0 && levelNumber > 0 && levelNumber >= tuning.SureLevel
-                   && levelNumber - _lastPlacedLevel > tuning.PityLevels;
         }
 
         private void Left(int placement)

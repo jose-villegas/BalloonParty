@@ -16,12 +16,9 @@ namespace BalloonParty.Configuration.Balloons
         [SerializeField] [Min(0)] private int _ordinaryGoldenEveryLevels = 1;
 
         [Tooltip("The chance, 0 to 1, that such a level gets its golden balloon, at the sure level. It eases off " +
-                 "the further the run goes (Ordinary Chance Halved After Levels).")]
-        [SerializeField] [Range(0f, 1f)] private float _ordinaryGoldenChance = 0.2f;
-
-        [Tooltip("Hard pity: after this many levels in a row without a golden balloon placed, the next level off " +
-                 "purple from the sure level on brings one with no roll. 0 = none.")]
-        [SerializeField] [Min(0)] private int _goldenPityLevels = 4;
+                 "the further the run goes (Ordinary Chance Halved After Levels), and each level without one raises " +
+                 "it (Ordinary Chance Growth Per Level).")]
+        [SerializeField] [Range(0f, 1f)] private float _ordinaryGoldenChance = 0.1f;
 
         [Tooltip("A level that always brings a single golden balloon, the player's first sight of one, with no " +
                  "roll. 0 for none.")]
@@ -58,13 +55,9 @@ namespace BalloonParty.Configuration.Balloons
                  "disco ball, which comes at Disco At Completion. 1 = every level. 0 turns the roll off.")]
         [SerializeField] [Min(0)] private int _ordinaryDiscoEveryLevels = 1;
 
-        [Tooltip("The chance, 0 to 1, that such a level gets its disco ball, at the sure level. It eases off the " +
-                 "further the run goes (Ordinary Chance Halved After Levels).")]
-        [SerializeField] [Range(0f, 1f)] private float _ordinaryDiscoChance = 0.25f;
-
-        [Tooltip("Hard pity: after this many levels in a row without a disco ball placed, the next level off purple " +
-                 "from the sure level on brings one with no roll. 0 = none.")]
-        [SerializeField] [Min(0)] private int _discoPityLevels = 4;
+        [Tooltip("The chance, 0 to 1, that such a level gets its disco ball, at the sure level. It eases off and " +
+                 "grows as the golden balloon's does.")]
+        [SerializeField] [Range(0f, 1f)] private float _ordinaryDiscoChance = 0.12f;
 
         [Tooltip("A level that always brings a single disco ball, the player's first sight of one, with no roll. " +
                  "After the golden balloon's sure level, so the player already knows only a pierce breaks a plated " +
@@ -84,9 +77,13 @@ namespace BalloonParty.Configuration.Balloons
         [SerializeField] [Range(0f, 1f)] private float[] _purpleDiscoChances = { 1f, 0.25f, 0.15f };
 
         [Tooltip("How the golden balloon's and the disco ball's ordinary chances ease off over a run: each is " +
-                 "halved this many levels past its sure level, a third at twice that, and so on, so the longer the " +
-                 "run the more of them come from the hard pity. 0 = they never ease.")]
+                 "halved this many levels past its sure level, a third at twice that, and so on. 0 = they never ease.")]
         [SerializeField] [Min(0)] private int _ordinaryChanceHalvedAfterLevels = 20;
+
+        [Tooltip("Soft pity for the golden balloon and the disco ball off purple: each level since the last one of " +
+                 "that kind was placed adds this to its ordinary chance, so an eased chance never stays low. At 0.04 " +
+                 "each comes on average every 5 levels, a little more often early in the run than late.")]
+        [SerializeField] [Range(0f, 1f)] private float _ordinaryChanceGrowthPerLevel = 0.04f;
 
         [Tooltip("Chance per spawn line of a heart balloon while one heart is missing, off a purple level. Full " +
                  "hearts never roll one.")]
@@ -101,7 +98,6 @@ namespace BalloonParty.Configuration.Balloons
         public float GoldenAtCompletion => _goldenAtCompletion;
         public int OrdinaryGoldenEveryLevels => _ordinaryGoldenEveryLevels;
         public float OrdinaryGoldenChance => _ordinaryGoldenChance;
-        public int GoldenPityLevels => _goldenPityLevels;
         public int SureGoldenLevel => _sureGoldenLevel;
         public float SureGoldenAtCompletion => _sureGoldenAtCompletion;
         public int PurpleRollEveryLines => Mathf.Max(1, _purpleRollEveryLines);
@@ -111,8 +107,8 @@ namespace BalloonParty.Configuration.Balloons
         public float DiscoAtCompletion => _discoAtCompletion;
         public int OrdinaryDiscoEveryLevels => _ordinaryDiscoEveryLevels;
         public float OrdinaryDiscoChance => _ordinaryDiscoChance;
-        public int DiscoPityLevels => _discoPityLevels;
         public int OrdinaryChanceHalvedAfterLevels => _ordinaryChanceHalvedAfterLevels;
+        public float OrdinaryChanceGrowthPerLevel => _ordinaryChanceGrowthPerLevel;
         public int SureDiscoLevel => _sureDiscoLevel;
         public float SureDiscoAtCompletion => _sureDiscoAtCompletion;
         public float PurpleDiscoAtCompletion => _purpleDiscoAtCompletion;

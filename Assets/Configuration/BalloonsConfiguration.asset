@@ -287,8 +287,7 @@ MonoBehaviour:
   _rewardBalloons:
     _goldenAtCompletion: 0.5
     _ordinaryGoldenEveryLevels: 1
-    _ordinaryGoldenChance: 0.2
-    _goldenPityLevels: 4
+    _ordinaryGoldenChance: 0.1
     _sureGoldenLevel: 5
     _sureGoldenAtCompletion: 0.1
     _purpleRollEveryLines: 6

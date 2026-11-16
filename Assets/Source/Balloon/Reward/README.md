@@ -5,8 +5,9 @@ are rolled every few lines, each further one rarer: the **heart balloon** from t
 even at full hearts, where its pop gives an extra heart past the maximum; the **golden balloon** from 15% done,
 up to three; the **disco ball** from 25% done, the first one sure, up to three. Level 5 always gets a single
 golden one early on, the player's first, and level 8 a single disco ball; after that, any ordinary level may
-get one or the other, likelier early in the run, and a few levels without one make the next one sure. Off a purple level the heart comes to a player who is missing hearts, more often the
-more are missing. At most one of each is on the board. The plans are `Plans/PLAN-RewardBalloons.md` and
+get one or the other, about every 5 levels each: a little likelier early in the run, and likelier the longer
+since the last. Off a purple level the heart comes to a player who is missing hearts, more often the more are
+missing. At most one of each is on the board. The plans are `Plans/PLAN-RewardBalloons.md` and
 `Plans/PLAN-DiscoBalloon.md`. The disco ball's pop paints the board rainbow (see The disco ball's wave).
 
 ## Contents
@@ -69,21 +70,21 @@ has an entry for.
   (0.25), on `PurpleDiscoChances` (100%, 25%, 15%): the first is sure, so every purple level gets one. A line
   brings one balloon at most: the golden first, then the disco ball, then the heart; the others stay due.
 - **Golden, on another level.** A single one. Every `OrdinaryGoldenEveryLevels` (1: every) level that
-  isn't purple rolls once, on its first line, against `OrdinaryGoldenChance` (20%). The chance eases off
+  isn't purple rolls once, on its first line, against `OrdinaryGoldenChance` (10%). The chance eases off
   as the run goes on: it is halved `OrdinaryChanceHalvedAfterLevels` (20) levels past the sure level, a
   third at 40 past, so it never reaches 0. A won level places one golden balloon at `GoldenAtCompletion` (0.5).
   `SureGoldenLevel` (5) needs no roll: it always places its one, and early in the level
   (`SureGoldenAtCompletion`, 10% done), so every player meets a golden balloon with the level still ahead.
   Only levels from the sure level on roll.
-- **Hard pity.** After `GoldenPityLevels` (4) levels in a row without a golden balloon placed (on any level,
-  purple included), the next ordinary level brings one with no roll. So a player never goes more than five
-  levels without one, and late in the run, where the eased chance rarely wins, they come on that beat. A
-  won roll, the sure level and a purple level's golden balloon all start the count over. A level that won
-  one but ended before it was placed doesn't: the count runs on.
+- **Soft pity.** Each level since the last golden balloon was placed (on any level, purple included; from the
+  sure level before the first) adds `OrdinaryChanceGrowthPerLevel` (4%) to the roll, so an eased chance
+  never stays low: early in a run 10%, 14%, 18%... and one comes on average every 5 levels (4.8 early, 5.7
+  past level 45, one gap in a hundred reaching 12 or 13, in a 20,000-run simulation). A placed one starts the
+  count over; a level that won one but ended before it was placed doesn't.
 - **Disco ball, on another level.** The golden balloon's rules on its own numbers, a little more often: every
-  `OrdinaryDiscoEveryLevels` (1) level from `SureDiscoLevel` (8) on, against `OrdinaryDiscoChance` (25%,
-  eased off by the same rule), placed at `DiscoAtCompletion` (0.35), with its own hard pity,
-  `DiscoPityLevels` (4). Level 8 always places its one, at `SureDiscoAtCompletion` (15% done).
+  `OrdinaryDiscoEveryLevels` (1) level from `SureDiscoLevel` (8) on, against `OrdinaryDiscoChance` (12%,
+  eased and grown by the same rules, on its own count), placed at `DiscoAtCompletion` (0.35). Level 8 always
+  places its one, at `SureDiscoAtCompletion` (15% done).
 - **Heart, elsewhere.** A roll per line while a heart is missing: `HeartChanceMissingOne`, or
   `HeartChanceMissingTwo` with two or more missing. After one is placed, `HeartCooldownLines` lines pass
   before the next roll. Each line rolled without one while the player is in need raises the next line's

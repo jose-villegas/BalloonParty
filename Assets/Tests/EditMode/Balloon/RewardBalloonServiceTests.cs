@@ -1135,72 +1135,74 @@ namespace BalloonParty.Tests.Balloon
             Assert.AreEqual(0, _draws);
         }
 
-        // Hard pity: four levels in a row without a golden balloon, and the fifth brings one with no roll.
+        // Soft pity: each level without a golden balloon adds the growth to the next roll, 10% then 15%, 20%, 25%.
         [Test]
-        public void GoldenPity_AfterItsLevelsWithoutOne_TheNextBringsOneWithoutARoll()
+        public void GoldenSoftPity_EachLevelWithoutOne_RaisesTheNextRoll()
         {
-            UseGoldenPity(4);
+            UseGoldenSoftPity(0.05f);
+            _roll = 0.22f;
 
-            for (var level = 6; level <= 9; level++)
+            for (var level = 6; level <= 8; level++)
             {
                 _levelNumber.Value = level;
-                Assert.IsFalse(LinesUntilDue(5), $"level {level}: a lost roll");
+                Assert.IsFalse(LinesUntilDue(5), $"level {level}: under the draw");
             }
 
-            _levelNumber.Value = 10;
-            var draws = _draws;
-            Assert.IsTrue(LinesUntilDue(1), "the fifth level without one");
-            Assert.AreEqual(draws, _draws, "the pity needs no roll");
+            _levelNumber.Value = 9;
+            Assert.IsTrue(LinesUntilDue(1), "25% beats the draw");
         }
 
         [Test]
-        public void GoldenPity_AWonRoll_StartsTheCountOver()
+        public void GoldenSoftPity_APlacedOne_StartsTheCountOver()
         {
-            UseGoldenPity(4);
+            UseGoldenSoftPity(0.05f);
             _levelNumber.Value = 7;
             _roll = 0f;
-            Assert.IsTrue(LinesUntilDue(1), "level 7 wins its roll");
+            Assert.IsTrue(LinesUntilDue(1));
             _service.Placed(BalloonType.Golden)();
 
-            _roll = 0.99f;
-            for (var level = 8; level <= 11; level++)
-            {
-                _levelNumber.Value = level;
-                Assert.IsFalse(LinesUntilDue(5), $"level {level}: counted from level 7");
-            }
-
-            _levelNumber.Value = 12;
-            Assert.IsTrue(LinesUntilDue(1));
+            _levelNumber.Value = 8;
+            _roll = 0.12f;
+            Assert.IsFalse(LinesUntilDue(5), "back to 10%");
         }
 
-        // The pity is each kind's own: the disco ball's comes on its own count, with the golden's off.
+        // Each kind keeps its own count: the disco ball's runs from its own sure level.
         [Test]
-        public void DiscoPity_CountsFromTheLastDiscoBall()
+        public void DiscoSoftPity_CountsFromTheLastDiscoBall()
         {
             UseDisco();
-            _settings.DiscoPityLevels.Returns(2);
-            UseOrdinaryLevel(level: 8, roll: 0.99f);
+            _settings.OrdinaryDiscoEveryLevels.Returns(1);
+            _settings.OrdinaryDiscoChance.Returns(0.12f);
+            _settings.OrdinaryChanceGrowthPerLevel.Returns(0.05f);
+            UseOrdinaryLevel(level: 8, roll: 0.2f);
             SetCompletion(0.9f);
             Assert.AreEqual(1, FirstDueLine(BalloonType.Disco, 1), "the sure level");
             _service.Placed(BalloonType.Disco)();
 
+            _levelNumber.Value = 9;
+            Assert.AreEqual(0, FirstDueLine(BalloonType.Disco, 5), "12%");
             _levelNumber.Value = 10;
-            Assert.AreEqual(0, FirstDueLine(BalloonType.Disco, 5), "two levels without one");
-
+            Assert.AreEqual(0, FirstDueLine(BalloonType.Disco, 5), "17%");
             _levelNumber.Value = 11;
-            Assert.AreEqual(1, FirstDueLine(BalloonType.Disco, 1), "the third");
+            Assert.AreEqual(1, FirstDueLine(BalloonType.Disco, 1), "22%");
         }
 
-        [TestCase(0, 45, 0.2f)]
-        [TestCase(20, 3, 0.2f)]
-        [TestCase(20, 5, 0.2f)]
-        [TestCase(20, 25, 0.1f)]
-        [TestCase(20, 45, 0.2f / 3f)]
-        public void OrdinaryChance_EasesOffSoftlyOverTheRun(int halvedAfter, int level, float expected)
+        [TestCase(0, 0f, 45, 0, 0.2f)]
+        [TestCase(20, 0f, 3, 0, 0.2f)]
+        [TestCase(20, 0f, 5, 0, 0.2f)]
+        [TestCase(20, 0f, 25, 0, 0.1f)]
+        [TestCase(20, 0f, 45, 0, 0.2f / 3f)]
+        [TestCase(0, 0.05f, 6, 5, 0.2f)]
+        [TestCase(0, 0.05f, 8, 5, 0.3f)]
+        [TestCase(0, 0.05f, 8, 0, 0.3f)]
+        [TestCase(20, 0.05f, 25, 22, 0.2f)]
+        [TestCase(0, 0.5f, 20, 5, 1f)]
+        public void OrdinaryChance_EasesOffOverTheRun_AndGrowsWithEachLevelMissed(
+            int halvedAfter, float growth, int level, int lastPlaced, float expected)
         {
-            var tuning = new PlatedRewardTuning(1, 0.2f, 0.5f, 5, 0.1f, 0.15f, null, 0, halvedAfter);
+            var tuning = new PlatedRewardTuning(1, 0.2f, 0.5f, 5, 0.1f, 0.15f, null, halvedAfter, growth);
 
-            Assert.AreEqual(expected, PlatedRewardSchedule.OrdinaryChance(in tuning, level), 1e-5f);
+            Assert.AreEqual(expected, PlatedRewardSchedule.OrdinaryChance(in tuning, level, lastPlaced), 1e-5f);
         }
 
         // Twenty levels past the sure level the 20% roll is 10%: a draw the sure level's chance would win, loses.
@@ -1359,14 +1361,15 @@ namespace BalloonParty.Tests.Balloon
             _roll = roll;
         }
 
-        // A golden balloon rolled on every ordinary level, every roll lost, with the given hard pity; the sure level 5
-        // has placed its one and it is gone.
-        private void UseGoldenPity(int pityLevels)
+        // A golden balloon rolled on every ordinary level at 10%, with the given soft pity; the sure level 5 has placed
+        // its one and it is gone.
+        private void UseGoldenSoftPity(float growth)
         {
             UseOrdinaryGolden(level: 5, roll: 0.99f);
             _settings.OrdinaryGoldenEveryLevels.Returns(1);
+            _settings.OrdinaryGoldenChance.Returns(0.1f);
             _settings.SureGoldenLevel.Returns(5);
-            _settings.GoldenPityLevels.Returns(pityLevels);
+            _settings.OrdinaryChanceGrowthPerLevel.Returns(growth);
             SetCompletion(0.8f);
             Assert.IsTrue(LinesUntilDue(1), "the sure level");
             _service.Placed(BalloonType.Golden)();

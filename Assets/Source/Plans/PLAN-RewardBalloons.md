@@ -18,8 +18,8 @@
    - On purple (extra-colour) levels, placed when the level is about half done (75% at first; moved to 50% after playtests).
      Added after playtests: every fifth level that isn't purple rolls once (40%) for a single golden balloon,
      at the same completion, whose pop rolls for no other. Since 2026-11-16 (the owner: too rare off bonus
-     levels) every such level rolls, at 20% easing off over the run, with a hard pity after four levels
-     without one. Level 5 always gets that single one, with no
+     levels) every such level rolls, at 10% easing off over the run, plus 4% for each level since the last
+     one: on average one every 5 levels. Level 5 always gets that single one, with no
      roll and at 10% completion rather than half: every player sees a golden balloon early, with the
      level still ahead of them. On a purple level its pop used to roll once for another (25%, then 10%);
      since 2026-11-15 (the owner) a purple level rolls for it every 6 lines from 15% done instead, 35%, then
@@ -94,9 +94,9 @@ sequenceDiagram
 | `PurpleGoldenChances` | 0.35, 0.2, 0.1 | Each roll's chance at the next golden balloon on a purple level; the count caps it |
 | `PurpleHeartChances` | 0.4, 0.3, 0.2, 0.12, 0.06 | The same for heart balloons, from the level's start |
 | `OrdinaryGoldenEveryLevels` | 1 | Off a purple level, every this many levels rolls for a single golden balloon (0 is off) |
-| `OrdinaryGoldenChance` | 0.2 | That roll's chance at the sure level |
+| `OrdinaryGoldenChance` | 0.1 | That roll's chance at the sure level |
 | `OrdinaryChanceHalvedAfterLevels` | 20 | How the ordinary chance eases off: halved this many levels past the sure level, a third at twice that (shared with the disco ball) |
-| `GoldenPityLevels` | 4 | Hard pity: after this many levels in a row without a golden balloon, the next ordinary level brings one with no roll (0 is none) |
+| `OrdinaryChanceGrowthPerLevel` | 0.04 | Soft pity: each level since the last golden balloon adds this to the roll (shared with the disco ball) |
 | `SureGoldenLevel` | 5 | A level that always brings a single golden balloon, with no roll (0 for none) |
 | `SureGoldenAtCompletion` | 0.1 | The completion that level's golden balloon comes at |
 | `HeartChanceMissingOne` | 0.04 | Chance per line of a heart balloon while one heart is missing |
