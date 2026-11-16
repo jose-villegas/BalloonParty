@@ -8,6 +8,7 @@ var classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock =
     [ "BreatherBlend", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a27302135e846a67488416839114c7fda", null ],
     [ "BuildPressure", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#ada90ee6b12dafb48650b32beab4d2dcc", null ],
     [ "Dispose", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a3a2957e3af5c7544c1ef0d8be8a733cd", null ],
+    [ "Grant", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#adc15467afb7cbf588affc8d029442154", null ],
     [ "InDanger", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a35fd86ce2d366e05fe8909218dd76b6c", null ],
     [ "IsRunning", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a68cbf55f2f23499013f1cac36a90c0e7", null ],
     [ "LineInterval", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a29ee069e745e2870e4558a1cf65b9955", null ],

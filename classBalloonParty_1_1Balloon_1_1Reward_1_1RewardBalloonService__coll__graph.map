@@ -1,29 +1,35 @@
 <map id="BalloonParty.Balloon.Reward.RewardBalloonService" name="BalloonParty.Balloon.Reward.RewardBalloonService">
-<area shape="rect" id="Node000001" title="Decides when the reward balloons come (PLAN&#45;RewardBalloons, PLAN&#45;DiscoBalloon)." alt="" coords="683,349,894,394"/>
-<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Balloon_1_1Reward_1_1IRewardBalloonRequests.html" title="The reward balloons a spawn line should bring." alt="" coords="312,5,524,50"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="520,53,537,60,604,92,631,112,661,141,703,194,738,252,782,349,776,348,733,255,699,197,657,144,628,116,602,97,535,65,521,58"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="376,74,460,102"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="474,93,537,111,575,128,604,145,661,195,697,234,729,276,777,349,771,348,725,279,693,238,657,199,601,150,573,133,535,115,476,98"/>
-<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="315,125,521,170"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="516,173,537,180,601,204,628,218,661,239,694,265,724,294,772,349,767,349,720,298,690,269,657,243,626,222,599,209,535,185,517,178"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="369,194,466,222"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="481,217,537,230,600,250,660,277,716,312,763,349,758,349,713,316,658,282,598,255,535,236,482,222"/>
-<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html" title="When the reward balloons come (PLAN&#45;RewardBalloons): on a purple level, both rolled every few lines w..." alt="" coords="300,245,536,290"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="530,292,660,326,724,348,719,349,658,332,530,297"/>
-<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html" title="Read surface of the player&#39;s progression through levels." alt="" coords="324,315,512,359"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="527,345,685,361,680,363,527,350"/>
-<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html" title="Single read surface for the live per&#45;level difficulty mix; never read ILevelPacingConfiguration direc..." alt="" coords="324,384,512,429"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="526,394,685,380,680,383,528,399"/>
-<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html" title="Read&#45;only view of the player&#39;s hit&#45;point pool." alt="" coords="320,453,516,498"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="528,447,658,411,723,393,719,396,660,417,530,452"/>
-<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Game_1_1Assist_1_1IPlayerNeed.html" title="How much trouble the player is in right now, 0 (none) to 1 (one mistake from losing the run)." alt="" coords="322,523,514,567"/>
-<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="513,515,535,508,598,488,658,461,712,427,757,396,762,393,715,431,660,466,600,493,537,513,515,520"/>
-<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html" title="The run&#39;s weapon after its upgrade cards: the configured base plus every card held." alt="" coords="311,592,525,637"/>
-<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="531,584,596,559,657,523,693,491,725,456,771,396,775,393,729,459,697,495,661,527,599,564,533,589"/>
-<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Game_1_1Assist_1_1PityRoll.html" title="A chance roll that forgives a player in trouble." alt="" coords="322,661,514,706"/>
-<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="527,662,595,637,628,619,657,597,681,574,702,547,737,491,762,436,778,396,782,392,767,438,741,493,706,551,685,577,661,601,631,624,598,642,529,667"/>
-<area shape="rect" id="Node000013" href="$interfaceBalloonParty_1_1Shared_1_1IPitySettings.html" title="How a chance roll forgives a player in trouble (Game/Assist/PityRoll): each roll it misses while the ..." alt="" coords="5,661,189,706"/>
-<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="204,681,324,683,319,685,204,686"/>
-<area shape="rect" id="Node000014" href="$classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html" title="When one plated reward balloon (the golden balloon, the disco ball) is due, and whether one is on the..." alt="" coords="312,731,524,775"/>
-<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="538,742,601,724,631,709,657,690,689,657,715,618,736,577,752,534,773,454,783,396,787,392,778,455,757,536,740,579,719,621,693,660,661,694,634,714,603,729,539,748"/>
+<area shape="rect" id="Node000001" title="Decides when the reward balloons come (PLAN&#45;RewardBalloons, PLAN&#45;DiscoBalloon)." alt="" coords="711,384,922,429"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Balloon_1_1Reward_1_1IRewardBalloonRequests.html" title="The reward balloons a spawn line should bring." alt="" coords="340,5,552,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="548,53,586,68,623,88,658,112,689,141,734,204,770,272,795,335,811,384,806,383,790,337,765,274,730,206,685,144,655,116,621,92,584,73,549,58"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="404,74,488,102"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="502,93,565,111,604,128,633,145,659,166,689,197,728,245,762,296,808,384,803,383,758,299,724,248,685,200,655,170,630,150,601,133,563,115,504,98"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="343,125,549,170"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="552,173,623,202,657,221,689,243,725,277,757,315,804,384,799,383,753,319,721,281,685,247,654,225,621,206,553,178"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="397,194,494,222"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="509,216,565,230,629,253,688,285,750,334,798,383,792,383,746,338,686,290,627,257,563,236,510,221"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html" title="When the reward balloons come (PLAN&#45;RewardBalloons): on a purple level, both rolled every few lines w..." alt="" coords="328,245,564,290"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="540,292,565,300,627,319,688,341,775,383,769,384,686,346,625,324,563,305,541,298"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html" title="Read surface of the player&#39;s progression through levels." alt="" coords="352,315,540,359"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="555,355,713,386,708,388,555,360"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html" title="Single read surface for the live per&#45;level difficulty mix; never read ILevelPacingConfiguration direc..." alt="" coords="352,384,540,429"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="554,404,713,405,708,407,556,409"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html" title="Read&#45;only view of the player&#39;s hit&#45;point pool." alt="" coords="348,453,544,498"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="558,452,713,425,708,427,560,457"/>
+<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Game_1_1Assist_1_1IPlayerNeed.html" title="How much trouble the player is in right now, 0 (none) to 1 (one mistake from losing the run)." alt="" coords="350,523,542,567"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="539,515,563,508,625,489,686,468,776,428,771,430,688,472,627,494,565,513,541,520"/>
+<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html" title="The run&#39;s weapon after its upgrade cards: the configured base plus every card held." alt="" coords="339,592,553,637"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="543,584,563,577,627,554,686,522,746,474,793,431,797,428,750,478,688,527,629,559,565,582,545,589"/>
+<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Game_1_1Assist_1_1PityRoll.html" title="A chance roll that forgives a player in trouble." alt="" coords="350,661,542,706"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="555,657,623,630,656,612,685,591,725,551,758,506,803,431,807,427,762,509,729,554,689,595,658,617,625,635,557,662"/>
+<area shape="rect" id="Node000013" href="$interfaceBalloonParty_1_1Shared_1_1IPitySettings.html" title="How a chance roll forgives a player in trouble (Game/Assist/PityRoll): each roll it misses while the ..." alt="" coords="19,661,203,706"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="218,681,352,682,348,685,219,686"/>
+<area shape="rect" id="Node000014" href="$classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html" title="When one plated reward balloon (the golden balloon, the disco ball) is due, and whether one is on the..." alt="" coords="340,731,552,775"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="566,739,629,719,659,704,685,685,714,656,738,623,758,587,774,551,797,481,810,431,813,427,802,483,779,553,762,590,742,626,718,660,689,689,661,708,631,724,567,744"/>
+<area shape="rect" id="Node000015" href="$classBalloonParty_1_1Balloon_1_1Reward_1_1NukeSchedule.html" title="When the nuke balloon is due (PLAN&#45;NukeBalloon), and whether one is on the board." alt="" coords="340,800,552,845"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="566,810,630,790,659,775,685,755,719,717,746,674,767,628,783,581,803,493,812,431,816,427,809,494,788,583,772,630,750,677,723,721,689,759,662,779,632,795,567,815"/>
+<area shape="rect" id="Node000016" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeOddsSettings.html" title="When the nuke balloon comes (PLAN&#45;NukeBalloon): a tiny chance on each clock line, raised toward MaxCh..." alt="" coords="9,765,213,810"/>
+<area shape="poly" id="edge15_Node000015_Node000016" title=" " alt="" coords="229,797,342,811,337,812,229,803"/>
+<area shape="rect" id="Node000017" href="$interfaceBalloonParty_1_1Balloon_1_1Reward_1_1INukeOdds.html" title="The nuke balloon&#39;s chance on a clock line (PLAN&#45;NukeBalloon), raised by the trouble the player is in." alt="" coords="5,835,217,879"/>
+<area shape="poly" id="edge16_Node000015_Node000017" title=" " alt="" coords="232,842,342,833,337,834,232,847"/>
 </map>

@@ -142,6 +142,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:ac6069f037cdf5d7b3d5cdb1a2e5dfc82" id="r_ac6069f037cdf5d7b3d5cdb1a2e5dfc82"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac6069f037cdf5d7b3d5cdb1a2e5dfc82">ForHeartTarget</a> (Vector2 position, float radius, <a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html">BalanceProfile</a>? balance=null)</td></tr>
 <tr class="memdesc:ac6069f037cdf5d7b3d5cdb1a2e5dfc82"><td class="mdescLeft">&#160;</td><td class="mdescRight">The heart reward balloon: colourless, scoreless, one hit pops it, the shot's or an item's — mirrors <code>HeartBalloonModel</code>.  <br /></td></tr>
 <tr class="separator:ac6069f037cdf5d7b3d5cdb1a2e5dfc82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae668f67590c42d5103a8a4fc47647e70" id="r_ae668f67590c42d5103a8a4fc47647e70"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae668f67590c42d5103a8a4fc47647e70">ForNukeTarget</a> (Vector2 position, float radius, int hitsRemaining, <a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html">BalanceProfile</a>? balance=null)</td></tr>
+<tr class="memdesc:ae668f67590c42d5103a8a4fc47647e70"><td class="mdescLeft">&#160;</td><td class="mdescRight">The nuke reward balloon: a plated balloon that dents.  <br /></td></tr>
+<tr class="separator:ae668f67590c42d5103a8a4fc47647e70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac0a61d12c30167f287dd79b24044094d" id="r_ac0a61d12c30167f287dd79b24044094d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac0a61d12c30167f287dd79b24044094d">ForRainbowTarget</a> (Vector2 position, float radius, string colorId, int scoreValue, int hitsRemaining, <a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html">BalanceProfile</a>? balance=null, <a class="el" href="structBalloonParty_1_1Solver_1_1ItemProfile.html">ItemProfile</a>? item=null)</td></tr>
 <tr class="memdesc:ac0a61d12c30167f287dd79b24044094d"><td class="mdescLeft">&#160;</td><td class="mdescRight">A poppable rainbow/wildcard target — mirrors a live balloon whose colour is the reserved <code><a class="el" href="classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#ab1c22d1c348537d6dc9985e1c5728746" title="Reserved color id for the &quot;all colors&quot; wildcard (the rainbow balloon).">GamePalette.RainbowColorId</a></code> marker (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#a29a9300265ef19bd0ca54ca7234d0358" title="True if colorId  is the reserved &quot;all colors&quot; wildcard (GamePalette.RainbowColorId).">IGamePalette.IsRainbow</a>).  <br /></td></tr>
 <tr class="separator:ac0a61d12c30167f287dd79b24044094d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -429,6 +432,48 @@ Static Private Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The heart reward balloon: colourless, scoreless, one hit pops it, the shot's or an item's — mirrors <code>HeartBalloonModel</code>. </p>
+
+</div>
+</div>
+<a id="ae668f67590c42d5103a8a4fc47647e70" name="ae668f67590c42d5103a8a4fc47647e70"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae668f67590c42d5103a8a4fc47647e70">&#9670;&#160;</a></span>ForNukeTarget()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a> BalloonParty.Solver.ShotBalloonSnapshot.ForNukeTarget </td>
+          <td>(</td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>position</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>radius</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>hitsRemaining</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html">BalanceProfile</a>?</td>          <td class="paramname"><span class="paramname"><em>balance</em></span><span class="paramdefsep"> = </span><span class="paramdefval">null</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The nuke reward balloon: a plated balloon that dents. </p>
+<p>Only the shot's ordinary hit dents it: it deflects and costs a hit, and the last one arms it instead of popping it. A pierce plows it while it has more than one left and arms it, and a piercing item effect (a bomb's blast, a laser) arms it. Armed, it deflects every ball and stays on the board. Plain item damage never wears it (<code><a class="el" href="classBalloonParty_1_1Solver_1_1ShotSimulator.html#adaa62f76a5abe6f2ce2b9bbc5b21ecbf">ShotSimulator.ApplyEffectHits</a></code>). Mirrors <code>NukeBalloonModel</code>. </p>
 
 </div>
 </div>

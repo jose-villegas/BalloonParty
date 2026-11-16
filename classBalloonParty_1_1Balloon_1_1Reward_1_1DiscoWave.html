@@ -171,8 +171,6 @@ Properties</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a0debb41097e186130e90a810e900d624" id="r_a0debb41097e186130e90a810e900d624"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0debb41097e186130e90a810e900d624">FarthestReach</a> (Vector3 center)</td></tr>
-<tr class="separator:a0debb41097e186130e90a810e900d624"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a43f4b2c0f078b31c99f9cb755714e3e7" id="r_a43f4b2c0f078b31c99f9cb755714e3e7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a43f4b2c0f078b31c99f9cb755714e3e7">Finish</a> ()</td></tr>
 <tr class="separator:a43f4b2c0f078b31c99f9cb755714e3e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac18a0e3f887dd2a73fa2d60eee3599c9" id="r_ac18a0e3f887dd2a73fa2d60eee3599c9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac18a0e3f887dd2a73fa2d60eee3599c9">Reach</a> (Vector2Int slot, <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html">ISlotActor</a> actor)</td></tr>
@@ -222,6 +220,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a7320e0383d52ee64c5f9bdf780a3511f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5252c16779d383ca0444aeb1fc3af6c" id="r_ac5252c16779d383ca0444aeb1fc3af6c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac5252c16779d383ca0444aeb1fc3af6c">_shot</a></td></tr>
 <tr class="separator:ac5252c16779d383ca0444aeb1fc3af6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5aac9124750bd62f70c4632f3e0f503f" id="r_a5aac9124750bd62f70c4632f3e0f503f"><td class="memItemLeft" align="right" valign="top">readonly List&lt; Vector2Int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5aac9124750bd62f70c4632f3e0f503f">_slots</a> = new()</td></tr>
+<tr class="separator:a5aac9124750bd62f70c4632f3e0f503f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a83773ac8c5c0adff6b0ddf2f76800828" id="r_a83773ac8c5c0adff6b0ddf2f76800828"><td class="memItemLeft" align="right" valign="top">readonly CompositeDisposable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a83773ac8c5c0adff6b0ddf2f76800828">_subscriptions</a> = new()</td></tr>
 <tr class="separator:a83773ac8c5c0adff6b0ddf2f76800828"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a318edb776512ad99de843b723ce89bb0" id="r_a318edb776512ad99de843b723ce89bb0"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1View_1_1IDiscoWaveView.html">IDiscoWaveView</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a318edb776512ad99de843b723ce89bb0">_view</a></td></tr>
@@ -346,31 +346,6 @@ Private Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a0debb41097e186130e90a810e900d624" name="a0debb41097e186130e90a810e900d624"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0debb41097e186130e90a810e900d624">&#9670;&#160;</a></span>FarthestReach()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float BalloonParty.Balloon.Reward.DiscoWave.FarthestReach </td>
-          <td>(</td>
-          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>center</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
@@ -973,6 +948,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> BalloonParty.Balloon.Reward.DiscoWave._shot</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5aac9124750bd62f70c4632f3e0f503f" name="a5aac9124750bd62f70c4632f3e0f503f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5aac9124750bd62f70c4632f3e0f503f">&#9670;&#160;</a></span>_slots</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly List&lt;Vector2Int&gt; BalloonParty.Balloon.Reward.DiscoWave._slots = new()</td>
         </tr>
       </table>
   </td>

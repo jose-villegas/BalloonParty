@@ -1,0 +1,40 @@
+<map id="BalloonParty.Balloon.Reward.NukeBlast" name="BalloonParty.Balloon.Reward.NukeBlast">
+<area shape="rect" id="Node000001" title="The nuke going off (PLAN&#45;NukeBalloon), when its fuse runs out (NukeFuse)." alt="" coords="1008,319,1219,363"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Balloon_1_1Reward_1_1INukeDetonator.html" title="Sets an armed nuke off: NukeBlast, called by NukeFuse when the fuse runs out." alt="" coords="642,5,854,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="868,42,930,63,959,78,985,96,1011,121,1034,150,1070,211,1094,271,1109,319,1104,317,1089,273,1065,214,1029,153,1007,125,982,100,956,82,928,68,869,47"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="706,74,790,102"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="805,85,848,88,895,97,942,112,985,135,1009,154,1030,177,1065,228,1091,277,1107,319,1102,317,1086,280,1061,230,1026,180,1005,158,982,139,940,117,893,102,847,94,806,90"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="708,126,788,154"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="802,133,845,134,892,138,940,150,985,169,1027,202,1061,242,1087,283,1105,319,1100,317,1082,286,1056,246,1023,206,982,174,938,155,891,144,845,139,804,138"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,197,212,242"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="226,204,358,194,517,189,689,193,776,201,861,213,926,231,987,258,1041,288,1084,318,1079,318,1038,293,985,263,924,236,860,218,776,206,689,199,517,194,358,199,228,209"/>
+<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html" title="Tracks slots in&#45;transit from balance animations so spawn paths avoid them." alt="" coords="272,228,444,273"/>
+<area shape="poly" id="edge9_Node000009_Node000005" title=" " alt="" coords="226,232,273,238,269,241,228,237"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="699,296,797,324"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="812,313,1010,331,1005,333,813,318"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html" title="Read surface of the player&#39;s progression through levels." alt="" coords="654,348,842,393"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="857,359,1010,349,1005,350,858,364"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" title=" " alt="" coords="662,228,834,273"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="849,271,984,304,1031,318,1026,318,983,309,849,276"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="459,248,664,249,659,252,460,253"/>
+<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html" title="Slot grid layout: size, spacing, and origin offset." alt="" coords="266,297,449,342"/>
+<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="464,298,664,264,659,267,466,303"/>
+<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="268,367,447,411"/>
+<area shape="poly" id="edge11_Node000008_Node000011" title=" " alt="" coords="461,375,538,354,575,338,610,317,617,309,621,301,625,292,634,283,664,269,659,272,637,287,630,295,626,303,622,312,613,321,578,342,539,359,463,379"/>
+<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="19,367,198,411"/>
+<area shape="poly" id="edge12_Node000011_Node000012" title=" " alt="" coords="212,387,270,388,266,390,214,391"/>
+<area shape="rect" id="Node000013" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="268,436,447,481"/>
+<area shape="poly" id="edge13_Node000008_Node000013" title=" " alt="" coords="461,455,501,448,541,436,578,419,609,393,619,381,622,368,621,341,620,313,624,298,633,283,659,268,664,265,637,287,628,300,625,313,626,340,628,368,623,383,613,397,580,423,542,441,502,453,463,460"/>
+<area shape="rect" id="Node000014" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeBlastSettings.html" title="The nuke&#39;s blast (PLAN&#45;NukeBalloon): a disc that grows from the nuke across the board and pops every ..." alt="" coords="646,417,850,462"/>
+<area shape="poly" id="edge14_Node000001_Node000014" title=" " alt="" coords="863,411,983,379,1046,363,1040,365,984,385,864,416"/>
+<area shape="rect" id="Node000015" href="$interfaceBalloonParty_1_1Balloon_1_1Controller_1_1IBalloonPopper.html" title="Pops one balloon outside the hit path: its pop VFX play (unless asked not to), its slot is freed and ..." alt="" coords="635,487,861,531"/>
+<area shape="poly" id="edge15_Node000001_Node000015" title=" " alt="" coords="838,479,860,472,923,453,982,428,1037,395,1081,365,1086,363,1040,399,985,432,924,458,861,477,839,484"/>
+<area shape="rect" id="Node000016" href="$interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1IBreatherGrant.html" title="Starts the spawn clock&#39;s breather on demand, the one a big clear earns: the nuke&#39;s blast (PLAN&#45;NukeBa..." alt="" coords="639,556,857,601"/>
+<area shape="poly" id="edge16_Node000001_Node000016" title=" " alt="" coords="856,548,921,523,982,486,1017,456,1048,423,1095,365,1099,362,1052,426,1021,460,985,491,923,527,857,553"/>
+<area shape="rect" id="Node000017" href="$interfaceBalloonParty_1_1Balloon_1_1View_1_1INukeBlastView.html" title="The nuke&#39;s blast as drawn and felt: a disc grown from the nuke to the radius the blast has reached,..." alt="" coords="651,625,845,670"/>
+<area shape="poly" id="edge17_Node000001_Node000017" title=" " alt="" coords="858,623,923,598,954,581,982,560,1025,512,1060,457,1085,405,1102,366,1106,362,1090,407,1065,460,1030,515,985,564,957,585,925,603,860,628"/>
+<area shape="rect" id="Node000018" href="$interfaceBalloonParty_1_1Balloon_1_1View_1_1IGrowingDiscView.html" title="A disc grown from a pop to the radius its effect has reached." alt="" coords="261,625,454,670"/>
+<area shape="poly" id="edge18_Node000017_Node000018" title=" " alt="" coords="470,645,654,647,648,648,470,650"/>
+<area shape="rect" id="Node000019" href="$interfaceBalloonParty_1_1Balloon_1_1View_1_1INukeCloudView.html" title="The nuke&#39;s mushroom cloud: it rises from where the nuke went off and erodes away on its own." alt="" coords="651,695,845,739"/>
+<area shape="poly" id="edge19_Node000001_Node000019" title=" " alt="" coords="859,698,924,674,955,657,982,636,1010,604,1035,569,1055,530,1071,491,1094,418,1107,366,1110,362,1099,420,1076,493,1060,533,1039,571,1015,608,985,640,958,662,926,679,860,703"/>
+</map>

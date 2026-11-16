@@ -1,13 +1,15 @@
 <map id="BalloonParty.Slots.Capabilities.IHasDurability" name="BalloonParty.Slots.Capabilities.IHasDurability">
-<area shape="rect" id="Node000001" title=" " alt="" coords="276,109,498,154"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="276,144,498,189"/>
 <area shape="rect" id="Node000003" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html" title=" " alt="" coords="565,5,767,50"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="449,100,545,60,584,50,579,51,547,65,450,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="427,132,482,95,545,60,578,49,573,52,547,65,484,100,430,137"/>
 <area shape="rect" id="Node000004" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html" title="At destruction, distributes one ScoreAttribution per remaining bubble to a random palette colour...." alt="" coords="565,75,767,119"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="513,113,567,109,562,110,514,119"/>
-<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html" title=" " alt="" coords="565,144,767,189"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="513,145,567,154,562,154,513,150"/>
-<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1GatekeeperActorModel.html" title=" " alt="" coords="546,213,786,258"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="450,158,547,199,584,213,579,213,545,203,449,163"/>
-<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHitable.html" title=" " alt="" coords="5,109,228,154"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="243,129,278,131,273,132,244,134"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="494,137,576,119,571,121,495,142"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Balloon_1_1Model_1_1NukeBalloonModel.html" title="The nuke reward balloon (PLAN&#45;NukeBalloon): a PlatedBalloonModel that is never popped by a hit." alt="" coords="565,144,767,189"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="513,164,567,166,562,167,514,169"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html" title=" " alt="" coords="565,213,767,258"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="495,190,576,213,571,213,494,196"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1GatekeeperActorModel.html" title=" " alt="" coords="546,283,786,327"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="429,195,484,233,547,268,578,282,573,282,545,273,482,238,428,201"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHitable.html" title=" " alt="" coords="5,144,228,189"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="243,164,278,165,273,167,244,169"/>
 </map>

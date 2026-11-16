@@ -149,8 +149,8 @@ Static Private Member Functions</h2></td></tr>
 <tr class="separator:a5cae8f3bb69413e02681dfe4ce3bb53b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5c44a749d9d3b44d39fdda24a3a654f" id="r_aa5c44a749d9d3b44d39fdda24a3a654f"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa5c44a749d9d3b44d39fdda24a3a654f">ResolveProjectileContactRadius</a> (<a class="el" href="classBalloonParty_1_1Thrower_1_1ThrowerSettings.html">ThrowerSettings</a> settings)</td></tr>
 <tr class="separator:aa5c44a749d9d3b44d39fdda24a3a654f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa7d1c31569781854a70350c9497492ac" id="r_aa7d1c31569781854a70350c9497492ac"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa7d1c31569781854a70350c9497492ac">TryBuildRewardSnapshot</a> (<a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60e">BalloonType</a> type, Vector2 position, float radius, <a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html">BalanceProfile</a> balance, out <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a> snapshot)</td></tr>
-<tr class="separator:aa7d1c31569781854a70350c9497492ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af54f5445c548833dd410a05a3d386847" id="r_af54f5445c548833dd410a05a3d386847"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af54f5445c548833dd410a05a3d386847">TryBuildRewardSnapshot</a> (<a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60e">BalloonType</a> type, Vector2 position, float radius, int hitsRemaining, <a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html">BalanceProfile</a> balance, out <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a> snapshot)</td></tr>
+<tr class="separator:af54f5445c548833dd410a05a3d386847"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ea5fe4c35c8f5d99a13393d7b551b56" id="r_a6ea5fe4c35c8f5d99a13393d7b551b56"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6ea5fe4c35c8f5d99a13393d7b551b56">TryBuildStaticContactSnapshot</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, Vector2Int index, <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHitable.html">IHitable</a> hitable, out <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a> snapshot)</td></tr>
 <tr class="separator:a6ea5fe4c35c8f5d99a13393d7b551b56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a41fa381f338d8cea0c2046b5878371a8" id="r_a41fa381f338d8cea0c2046b5878371a8"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a41fa381f338d8cea0c2046b5878371a8">TryBuildTargetSnapshot</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html">IBalloonsConfiguration</a> balloonsConfig, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html">IGamePalette</a> palette, Vector2Int index, <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html">IWriteableSlotActor</a> actor, out <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a> snapshot)</td></tr>
@@ -613,8 +613,8 @@ Static Private Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aa7d1c31569781854a70350c9497492ac" name="aa7d1c31569781854a70350c9497492ac"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa7d1c31569781854a70350c9497492ac">&#9670;&#160;</a></span>TryBuildRewardSnapshot()</h2>
+<a id="af54f5445c548833dd410a05a3d386847" name="af54f5445c548833dd410a05a3d386847"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af54f5445c548833dd410a05a3d386847">&#9670;&#160;</a></span>TryBuildRewardSnapshot()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -636,6 +636,11 @@ Static Private Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>radius</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>hitsRemaining</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>

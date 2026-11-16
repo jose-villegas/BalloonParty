@@ -40,5 +40,6 @@ var searchData=
   ['groundrevealcurve_2ecs_37',['GroundRevealCurve.cs',['../GroundRevealCurve_8cs.html',1,'']]],
   ['groundrevealplanner_2ecs_38',['GroundRevealPlanner.cs',['../GroundRevealPlanner_8cs.html',1,'']]],
   ['groundsettings_2ecs_39',['GroundSettings.cs',['../GroundSettings_8cs.html',1,'']]],
-  ['groundview_2ecs_40',['GroundView.cs',['../GroundView_8cs.html',1,'']]]
+  ['groundview_2ecs_40',['GroundView.cs',['../GroundView_8cs.html',1,'']]],
+  ['growingdiscview_2ecs_41',['GrowingDiscView.cs',['../GrowingDiscView_8cs.html',1,'']]]
 ];

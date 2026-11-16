@@ -21,6 +21,7 @@ var structBalloonParty_1_1Solver_1_1ShotFlightState =
     [ "IsCruising", "structBalloonParty_1_1Solver_1_1ShotFlightState.html#a5688dea0eb7785546eac79cccdb9f8bc", null ],
     [ "IsPiercing", "structBalloonParty_1_1Solver_1_1ShotFlightState.html#a7b19ece1cdadf6e179052f9fc5fae696", null ],
     [ "LastBouncePosition", "structBalloonParty_1_1Solver_1_1ShotFlightState.html#a219fdc0febaf6797d2669e55ef9a7c1b", null ],
+    [ "NukePops", "structBalloonParty_1_1Solver_1_1ShotFlightState.html#a2bdd441a1d3200b8dd0d1460bd9cb2d0", null ],
     [ "PierceSpeedScale", "structBalloonParty_1_1Solver_1_1ShotFlightState.html#a1487ef45a6da652d21d356a9df9996a3", null ],
     [ "Pops", "structBalloonParty_1_1Solver_1_1ShotFlightState.html#a7e9ce022885325beb1400e388a83b378", null ],
     [ "Position", "structBalloonParty_1_1Solver_1_1ShotFlightState.html#a8de3fbce87f96f91bbb3286f4eacb0dd", null ],

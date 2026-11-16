@@ -1,6 +1,6 @@
 var structBalloonParty_1_1Solver_1_1ShotSimulationResult =
 [
-    [ "ShotSimulationResult", "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a1f6ae20ba426d35b449056cedf2e1d2d", null ],
+    [ "ShotSimulationResult", "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a1d26e191f36660b5140551c8cdecd1ff", null ],
     [ "Absorbed", "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a912b1a1ff3255de9acd1bcfbd1eb712f", null ],
     [ "BoardCleared", "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#ac013727e59d0903d2130030feb0232d7", null ],
     [ "Capped", "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a13d013506632605b32f4a2f2cfebe3fc", null ],
@@ -9,6 +9,7 @@ var structBalloonParty_1_1Solver_1_1ShotSimulationResult =
     [ "Events", "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a7337d1ee8e1b9ec6ffc8e4a18521ee60", null ],
     [ "GoldenPops", "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#af118bad95657ceb9aae91533c84bac8e", null ],
     [ "HeartPops", "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#aa5a491399f7b4457ed099f9a1681af74", null ],
+    [ "NukePops", "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a82e844db64461f26d5b3cbdb59c33c0b", null ],
     [ "Pops", "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#aff4003a39ba14a157101e3ae63cc5888", null ],
     [ "RawScore", "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#adb10de7f3409b86670ccf3ae5be89ede", null ],
     [ "ToughsCleared", "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a11dd18570c10430a11750c2eb568ab2c", null ]

@@ -16,6 +16,8 @@ var classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette =
     [ "DiscoRaysColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a9db84c98ba3bc21ceb5d5953a6278ec5", null ],
     [ "GoldenRaysColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#acf2d85ecede39d07bb66b4a864ea9d3b", null ],
     [ "HeartRaysColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#ab92cb42963458f20d5e276ad7c1ae9da", null ],
+    [ "NukeArmedRaysColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a8a8fb0d9087e9dc325adc70237000417", null ],
+    [ "NukeRaysColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a4b9b07ad23c93ce2c6b5e479f3fee82c", null ],
     [ "PredictionColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a9d25ed70cd0747f4809a7887cd7f2f12", null ],
     [ "ProjectileColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a855a2e34e0fe446574122d182d3909f0", null ],
     [ "RainbowColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#ab1c22d1c348537d6dc9985e1c5728746", null ],

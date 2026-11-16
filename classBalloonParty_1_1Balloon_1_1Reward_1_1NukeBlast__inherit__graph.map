@@ -1,0 +1,13 @@
+<map id="BalloonParty.Balloon.Reward.NukeBlast" name="BalloonParty.Balloon.Reward.NukeBlast">
+<area shape="rect" id="Node000001" title="The nuke going off (PLAN&#45;NukeBalloon), when its fuse runs out (NukeFuse)." alt="" coords="265,117,476,162"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Balloon_1_1Reward_1_1INukeDetonator.html" title="Sets an armed nuke off: NukeBlast, called by NukeFuse when the fuse runs out." alt="" coords="5,5,217,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="200,53,218,60,331,116,326,118,216,65,200,58"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="69,74,153,102"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="168,96,266,117,262,120,169,102"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="71,126,151,154"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="166,137,266,138,262,141,167,142"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="8,177,214,222"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="224,171,273,162,268,164,226,176"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="62,246,160,274"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="174,245,216,232,282,197,337,163,342,161,285,202,218,237,176,250"/>
+</map>

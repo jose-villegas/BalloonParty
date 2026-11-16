@@ -42,5 +42,6 @@ var searchData=
   ['groundrevealframe_39',['GroundRevealFrame',['../structBalloonParty_1_1Scenario_1_1GroundRevealFrame.html',1,'BalloonParty::Scenario']]],
   ['groundrevealplanner_40',['GroundRevealPlanner',['../classBalloonParty_1_1Scenario_1_1GroundRevealPlanner.html',1,'BalloonParty::Scenario']]],
   ['groundsettings_41',['GroundSettings',['../classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html',1,'BalloonParty::Configuration::Effects']]],
-  ['groundview_42',['GroundView',['../classBalloonParty_1_1Scenario_1_1View_1_1GroundView.html',1,'BalloonParty::Scenario::View']]]
+  ['groundview_42',['GroundView',['../classBalloonParty_1_1Scenario_1_1View_1_1GroundView.html',1,'BalloonParty::Scenario::View']]],
+  ['growingdiscview_43',['GrowingDiscView',['../classBalloonParty_1_1Balloon_1_1View_1_1GrowingDiscView.html',1,'BalloonParty::Balloon::View']]]
 ];

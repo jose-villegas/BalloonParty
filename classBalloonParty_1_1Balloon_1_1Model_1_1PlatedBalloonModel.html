@@ -165,9 +165,9 @@ Properties</h2></td></tr>
 <tr class="memitem:a0d8adaf1a03ab6f41b8532b51f31e78a" id="r_a0d8adaf1a03ab6f41b8532b51f31e78a"><td class="memItemLeft" align="right" valign="top">string IBalanceBiasSource.&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a0d8adaf1a03ab6f41b8532b51f31e78a">ColorId</a><code> [get]</code></td></tr>
 <tr class="memdesc:a0d8adaf1a03ab6f41b8532b51f31e78a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Palette color ID, or empty when colorless.  <br /></td></tr>
 <tr class="separator:a0d8adaf1a03ab6f41b8532b51f31e78a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a839d4f0a2d7c25e72a2ae706c09445cb" id="r_a839d4f0a2d7c25e72a2ae706c09445cb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a839d4f0a2d7c25e72a2ae706c09445cb">DeflectsOrdinaryHit</a><code> [get]</code></td></tr>
-<tr class="memdesc:a839d4f0a2d7c25e72a2ae706c09445cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the next ordinary (non-piercing, 1 damage) hit would bounce.  <br /></td></tr>
-<tr class="separator:a839d4f0a2d7c25e72a2ae706c09445cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a805ddf4ea1d7a3564da9acabadedcf2d" id="r_a805ddf4ea1d7a3564da9acabadedcf2d"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a805ddf4ea1d7a3564da9acabadedcf2d">DeflectsOrdinaryHit</a><code> [get]</code></td></tr>
+<tr class="memdesc:a805ddf4ea1d7a3564da9acabadedcf2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the next ordinary (non-piercing, 1 damage) hit would bounce.  <br /></td></tr>
+<tr class="separator:a805ddf4ea1d7a3564da9acabadedcf2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a267172e564bafacd953371094a87ebfc" id="r_a267172e564bafacd953371094a87ebfc"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a267172e564bafacd953371094a87ebfc">DeflectStampScale</a><code> [get]</code></td></tr>
 <tr class="memdesc:a267172e564bafacd953371094a87ebfc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiplier on the BalloonDeflect stamp profile's radius; 0 = no stamp.  <br /></td></tr>
 <tr class="separator:a267172e564bafacd953371094a87ebfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -216,7 +216,7 @@ Properties</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A plated reward balloon (the golden balloon, the disco ball): it takes hits as an unbreakable does. </p>
-<p>The shot's own ordinary hit bounces off it, and any piercing hit pops it: a piercing shot (plowing it and shattering it at the next wall), a bomb's blast beside it, or a laser beam. Colourless and scoreless, so it never counts toward a goal or moves the streak, and it resists paint. Not an <a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html">UnbreakableBalloonModel</a>: that would pull it into formations and roaming. Each subclass differs only in what its pop pays. </p>
+<p>The shot's own ordinary hit bounces off it, and any piercing hit pops it: a piercing shot (plowing it and shattering it at the next wall), a bomb's blast beside it, or a laser beam. Colourless and scoreless, so it never counts toward a goal or moves the streak, and it resists paint. Not an <a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html">UnbreakableBalloonModel</a>: that would pull it into formations and roaming. Each subclass differs in what its pop pays, and the nuke also wears down under ordinary hits (<a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1NukeBalloonModel.html" title="The nuke reward balloon (PLAN-NukeBalloon): a PlatedBalloonModel that is never popped by a hit.">NukeBalloonModel</a>). </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a61092eeab8ba538d4ad94ffd2147b4d2" name="a61092eeab8ba538d4ad94ffd2147b4d2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a61092eeab8ba538d4ad94ffd2147b4d2">&#9670;&#160;</a></span>PlatedBalloonModel()</h2>
@@ -460,8 +460,8 @@ Properties</h2></td></tr>
 
 </div>
 </div>
-<a id="a839d4f0a2d7c25e72a2ae706c09445cb" name="a839d4f0a2d7c25e72a2ae706c09445cb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a839d4f0a2d7c25e72a2ae706c09445cb">&#9670;&#160;</a></span>DeflectsOrdinaryHit</h2>
+<a id="a805ddf4ea1d7a3564da9acabadedcf2d" name="a805ddf4ea1d7a3564da9acabadedcf2d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a805ddf4ea1d7a3564da9acabadedcf2d">&#9670;&#160;</a></span>DeflectsOrdinaryHit</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -470,7 +470,7 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool BalloonParty.Balloon.Model.PlatedBalloonModel.DeflectsOrdinaryHit</td>
+          <td class="memname">virtual bool BalloonParty.Balloon.Model.PlatedBalloonModel.DeflectsOrdinaryHit</td>
         </tr>
       </table>
   </td>

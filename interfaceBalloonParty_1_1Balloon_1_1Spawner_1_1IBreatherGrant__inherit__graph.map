@@ -1,0 +1,5 @@
+<map id="BalloonParty.Balloon.Spawner.IBreatherGrant" name="BalloonParty.Balloon.Spawner.IBreatherGrant">
+<area shape="rect" id="Node000001" title="Starts the spawn clock&#39;s breather on demand, the one a big clear earns: the nuke&#39;s blast (PLAN&#45;NukeBa..." alt="" coords="5,5,223,50"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html" title="Brings balloon lines in on a timer, whatever the player does: one line per ISpawnClockSettings...." alt="" coords="5,98,223,143"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="116,64,116,99,112,97,112,68"/>
+</map>

@@ -1,13 +1,15 @@
 <map id="BalloonParty.Balloon.Spawner.SpawnClock" name="BalloonParty.Balloon.Spawner.SpawnClock">
-<area shape="rect" id="Node000001" title="Brings balloon lines in on a timer, whatever the player does: one line per ISpawnClockSettings...." alt="" coords="271,109,488,154"/>
+<area shape="rect" id="Node000001" title="Brings balloon lines in on a timer, whatever the player does: one line per ISpawnClockSettings...." alt="" coords="271,140,488,184"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="72,5,156,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="171,28,224,43,289,74,346,108,340,109,286,79,222,48,172,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="170,26,224,43,262,65,298,90,357,139,352,139,295,94,259,69,222,48,172,31"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="74,57,154,85"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="169,81,280,107,276,110,169,86"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="168,79,224,94,332,138,327,140,222,99,169,85"/>
 <area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="11,109,217,154"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="232,129,273,130,268,132,233,134"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="232,142,273,148,268,150,233,147"/>
 <area shape="rect" id="Node000005" title=" " alt="" coords="65,177,163,205"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="177,174,280,153,275,155,179,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="177,182,273,172,268,175,179,187"/>
 <area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1ISpawnClock.html" title=" " alt="" coords="5,229,223,274"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="205,221,222,214,285,183,339,155,344,153,287,188,224,219,207,226"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="200,221,222,214,316,184,312,186,224,219,202,226"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1IBreatherGrant.html" title="Starts the spawn clock&#39;s breather on demand, the one a big clear earns: the nuke&#39;s blast (PLAN&#45;NukeBa..." alt="" coords="5,298,223,343"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="210,289,221,284,260,260,296,233,353,186,358,183,299,237,263,264,224,288,212,294"/>
 </map>

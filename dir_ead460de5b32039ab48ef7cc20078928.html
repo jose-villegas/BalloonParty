@@ -135,7 +135,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Help that comes only when the player needs it. A rolled help (a Snipe from the Sharpshooter card, a heart balloon, an item on a wave) keeps a low base chance, so a player doing well rarely sees it. While the player is in trouble, each roll it misses makes the next one likelier, until it hits. Being forgiving where it counts is what lets the base rates stay low. The same need also tilts the picks toward the items and balloons that help, and eases off the threats that come by chance.</p>
-<h1><a class="anchor" id="autotoc_md186"></a>
+<h1><a class="anchor" id="autotoc_md187"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -149,7 +149,7 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>PityRoll</code>   </td><td class="markdownTableBodyNone">One forgiving roll. Each roll it misses adds the need at that moment to its <b>pity</b>, so misses out of trouble add nothing. The chance is <code>base × (1 + GrowthPerMiss × pity × need now)</code>, capped at <code>MaxChance</code> (a base above the cap is kept). Out of trouble that is the base, so the help is there only while it is needed, and pity built earlier comes back with the trouble. A hit clears the pity   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md187"></a>
+<h1><a class="anchor" id="autotoc_md188"></a>
 Where it is used</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -162,7 +162,7 @@ Where it is used</h1>
 <td class="markdownTableBodyNone">Any item on a cadence wave (<code>Item/ItemAssigner.RollWaveCount</code>)   </td><td class="markdownTableBodyNone">The level's item-count curve's chance of more than 0   </td><td class="markdownTableBodyNone"><code>ItemPity</code>: growth 0.5, cap 90%. The curve's draw stands; a wave it gives none is lifted to one item by the share of the raised chance the curve leaves out, so any item comes at the raised chance. The initial board never rolls it, and a level without items builds none   </td></tr>
 </table>
 <p>Each roll keeps its own pity, cleared by a hit and by a run reset. The Snipe's cooldown after a hit still applies, and loads inside it neither roll nor build pity.</p>
-<h1><a class="anchor" id="autotoc_md188"></a>
+<h1><a class="anchor" id="autotoc_md189"></a>
 Other help that follows the need</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -180,10 +180,10 @@ Other help that follows the need</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">A retry's bonus card leans defensive   </td><td class="markdownTableBodyNone"><code>Game/Upgrades/RunUpgrades.BonusDealWeight</code>   </td><td class="markdownTableBodyNone">Each card's deal weight × (1 + <code>IUpgradeCardSettings.RetryDealBoost</code>): Thick Skin 1, so twice as likely. A retry follows a lost run, so it reads full need without asking. The deal stays seeded   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md189"></a>
+<h1><a class="anchor" id="autotoc_md190"></a>
 The other side: pressure</h1>
 <p>Need only ever helps. The push back on a player who is comfortable lives in the spawn clock (<code>Balloon/Spawner/SpawnClock</code>, <code>ISpawnClockSettings.Pressure*</code>). While the board stays under its hold occupancy and the need is low, the clock runs ever faster, up to 2×, until the board climbs. The need slows that build, and on the last heart it builds none. A struggling player never builds it, and a strong build is pushed until its board climbs.</p>
-<h1><a class="anchor" id="autotoc_md190"></a>
+<h1><a class="anchor" id="autotoc_md191"></a>
 Adding a roll</h1>
 <p>Give the roll a <code>PityRoll</code> with its own <code>PitySettings</code> on <code>AssistSettings</code>, read <code>IPlayerNeed.Need</code> when it rolls, and clear the pity on a run reset. A roll with more outcomes than hit or miss (the item wave's count) draws its own result and reports it with <code>PityRoll.Record</code>, reading <code>ChanceFor</code> for the raised chance. A roll that already scales with need (the heart's chance grows with missing hearts) wants a gentler growth than one that doesn't. </p>
 </div><!-- contents -->

@@ -9,7 +9,7 @@ var classBalloonParty_1_1Balloon_1_1Model_1_1DiscoBalloonModel =
     [ "BiasTypeId", "classBalloonParty_1_1Balloon_1_1Model_1_1DiscoBalloonModel.html#a8c3761c788318a9a6e9a675fe237cd2d", null ],
     [ "BiasValue", "classBalloonParty_1_1Balloon_1_1Model_1_1DiscoBalloonModel.html#a699bd10d0ba943b45cf778473bbf5e85", null ],
     [ "ColorId", "classBalloonParty_1_1Balloon_1_1Model_1_1DiscoBalloonModel.html#a0d8adaf1a03ab6f41b8532b51f31e78a", null ],
-    [ "DeflectsOrdinaryHit", "classBalloonParty_1_1Balloon_1_1Model_1_1DiscoBalloonModel.html#a839d4f0a2d7c25e72a2ae706c09445cb", null ],
+    [ "DeflectsOrdinaryHit", "classBalloonParty_1_1Balloon_1_1Model_1_1DiscoBalloonModel.html#a805ddf4ea1d7a3564da9acabadedcf2d", null ],
     [ "DeflectStampScale", "classBalloonParty_1_1Balloon_1_1Model_1_1DiscoBalloonModel.html#a267172e564bafacd953371094a87ebfc", null ],
     [ "DirectBalanceMotion", "classBalloonParty_1_1Balloon_1_1Model_1_1DiscoBalloonModel.html#a23aad630e6dd316a26c31b21063ae9e0", null ],
     [ "HitsRemaining", "classBalloonParty_1_1Balloon_1_1Model_1_1DiscoBalloonModel.html#a37f033fca8c42c486e3755289d518315", null ],

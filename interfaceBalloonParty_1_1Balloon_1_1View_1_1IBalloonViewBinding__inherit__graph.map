@@ -1,17 +1,19 @@
 <map id="BalloonParty.Balloon.View.IBalloonViewBinding" name="BalloonParty.Balloon.View.IBalloonViewBinding">
-<area shape="rect" id="Node000001" title="Implemented by prefab MonoBehaviours that react to model binding; BalloonView discovers and calls the..." alt="" coords="5,213,199,258"/>
+<area shape="rect" id="Node000001" title="Implemented by prefab MonoBehaviours that react to model binding; BalloonView discovers and calls the..." alt="" coords="5,248,199,293"/>
 <area shape="rect" id="Node000002" href="$classBalloonParty_1_1Balloon_1_1Type_1_1DiscoBallLook.html" title="The disco ball&#39;s body (BalloonParty/Balloon/DiscoBall): gives each ball its own turn of the mirror gr..." alt="" coords="251,5,443,50"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="122,199,173,129,207,92,245,60,269,49,266,52,248,65,210,96,177,132,126,202"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,233,138,193,167,146,203,100,245,60,267,49,264,53,248,64,206,104,171,149,143,195,122,235"/>
 <area shape="rect" id="Node000003" href="$classBalloonParty_1_1Balloon_1_1Type_1_1GodRaysLook.html" title="Tints a reward balloon&#39;s god rays from its palette entry (the golden balloon&#39;s GoldenRays,..." alt="" coords="251,75,443,119"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="139,202,189,164,245,129,275,118,271,122,248,134,192,169,143,205"/>
-<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant.html" title="A colourable balloon that starts in rainbow mode and pushes the level&#39;s allowed colours into the band..." alt="" coords="251,144,443,189"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="197,206,267,188,263,191,199,211"/>
-<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html" title="Drives the SoapBubbleCluster shader&#39;s bubble count and float/spin clock; the shader animates itself f..." alt="" coords="251,213,443,258"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="213,233,252,234,248,237,215,238"/>
-<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Balloon_1_1Type_1_1ToughBalloonVariant.html" title=" " alt="" coords="251,283,443,327"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="198,260,268,281,263,283,198,265"/>
-<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html" title="Pushes sphere center/radius and clock phase to every quadrant renderer so the shader computes effects..." alt="" coords="248,352,446,397"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="142,265,192,303,248,337,275,351,270,352,245,342,189,307,141,271"/>
-<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html" title="Turns an unbreakable&#39;s red lights blue while it holds a formation: the core glow sprites,..." alt="" coords="247,421,447,466"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="125,268,177,339,210,375,248,407,270,421,265,421,245,411,207,379,173,342,123,273"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="129,234,180,181,211,153,245,129,271,118,268,122,248,134,215,158,184,185,133,238"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Balloon_1_1Type_1_1NukeFuseView.html" title="The nuke&#39;s fuse on its body (PLAN&#45;NukeBalloon)." alt="" coords="251,144,443,189"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="159,239,246,199,279,188,275,191,248,203,162,243"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant.html" title="A colourable balloon that starts in rainbow mode and pushes the level&#39;s allowed colours into the band..." alt="" coords="251,213,443,258"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="213,252,252,248,248,251,215,257"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html" title="Drives the SoapBubbleCluster shader&#39;s bubble count and float/spin clock; the shader animates itself f..." alt="" coords="251,283,443,327"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="213,284,253,290,248,292,215,289"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Balloon_1_1Type_1_1ToughBalloonVariant.html" title=" " alt="" coords="251,352,443,397"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="161,297,248,337,280,351,274,352,246,342,161,303"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html" title="Pushes sphere center/radius and clock phase to every quadrant renderer so the shader computes effects..." alt="" coords="248,421,446,466"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="132,302,184,356,215,383,248,407,272,421,267,421,245,411,211,387,180,360,131,307"/>
+<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html" title="Turns an unbreakable&#39;s red lights blue while it holds a formation: the core glow sprites,..." alt="" coords="247,491,447,535"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="120,304,143,345,171,391,206,437,248,476,268,490,263,490,245,480,203,440,167,394,138,348,119,310"/>
 </map>

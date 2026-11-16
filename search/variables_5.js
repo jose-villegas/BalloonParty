@@ -1,7 +1,7 @@
 var searchData=
 [
   ['edgefraction_0',['EdgeFraction',['../classBalloonParty_1_1UI_1_1Score_1_1LevelLabel.html#a72a801147764b430979dd023d0cc5ee8',1,'BalloonParty::UI::Score::LevelLabel']]],
-  ['edgemargin_1',['EdgeMargin',['../classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html#a3da3820255e8262912d00181fd58ecbe',1,'BalloonParty::Balloon::View::DiscoWaveView']]],
+  ['edgemargin_1',['EdgeMargin',['../classBalloonParty_1_1Balloon_1_1View_1_1GrowingDiscView.html#a9774b33396a24c61ab6363196ad6e30d',1,'BalloonParty::Balloon::View::GrowingDiscView']]],
   ['edges_2',['Edges',['../classBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1Resolution.html#a1b0f18a1a86ec734a15607befbb563f9',1,'BalloonParty::Balloon::Controller::BalanceDebugRecorder::Resolution']]],
   ['edgeshade_3',['EdgeShade',['../classBalloonParty_1_1Editor_1_1Bush_1_1BushLeafBakeSettings.html#a14de8461c5746fa99503e79d7b850a7e',1,'BalloonParty::Editor::Bush::BushLeafBakeSettings']]],
   ['edgeshadeid_4',['EdgeShadeId',['../classBalloonParty_1_1Editor_1_1Bush_1_1BushLeafBaker.html#ad964b75aecf183dddb4175c9e768c805',1,'BalloonParty::Editor::Bush::BushLeafBaker']]],

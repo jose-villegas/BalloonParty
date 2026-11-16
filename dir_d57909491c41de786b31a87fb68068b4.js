@@ -5,6 +5,7 @@ var dir_d57909491c41de786b31a87fb68068b4 =
     [ "DiscoBallLook.cs", "DiscoBallLook_8cs.html", "DiscoBallLook_8cs" ],
     [ "GodRaysLook.cs", "GodRaysLook_8cs.html", "GodRaysLook_8cs" ],
     [ "IBalloonVariant.cs", "IBalloonVariant_8cs.html", "IBalloonVariant_8cs" ],
+    [ "NukeFuseView.cs", "NukeFuseView_8cs.html", "NukeFuseView_8cs" ],
     [ "RainbowBalloonVariant.cs", "RainbowBalloonVariant_8cs.html", "RainbowBalloonVariant_8cs" ],
     [ "SimpleBalloonVariant.cs", "SimpleBalloonVariant_8cs.html", "SimpleBalloonVariant_8cs" ],
     [ "SoapBubbleClusterVariant.cs", "SoapBubbleClusterVariant_8cs.html", "SoapBubbleClusterVariant_8cs" ],

@@ -125,7 +125,7 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonC
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry__inherit__graph.svg" width="236" height="131"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry__inherit__graph.svg" width="466" height="148"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for BalloonParty.Balloon.Controller.BalloonControllerRegistry:</div>
@@ -141,6 +141,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ae12c581eb948b18190d4e679d39f72e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7aaecafb702ff19cdb4f948875259a67" id="r_a7aaecafb702ff19cdb4f948875259a67"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7aaecafb702ff19cdb4f948875259a67">Start</a> ()</td></tr>
 <tr class="separator:a7aaecafb702ff19cdb4f948875259a67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2aed99c6840f0afc306b67cde9764fe" id="r_ac2aed99c6840f0afc306b67cde9764fe"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac2aed99c6840f0afc306b67cde9764fe">TryPopSingle</a> (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html">IBalloonModel</a> model, bool playPopVfx=true)</td></tr>
+<tr class="memdesc:ac2aed99c6840f0afc306b67cde9764fe"><td class="mdescLeft">&#160;</td><td class="mdescRight"><dl class="section return"><dt>Returns</dt><dd>False when the balloon isn't registered (already leaving the board).</dd></dl>
+ <br /></td></tr>
+<tr class="separator:ac2aed99c6840f0afc306b67cde9764fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
@@ -156,8 +160,6 @@ Package Functions</h2></td></tr>
 <tr class="separator:a126cc751b5194567ddb6c623b717b971"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17ee1887b230c5595de5b879cf4b2d41" id="r_a17ee1887b230c5595de5b879cf4b2d41"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a17ee1887b230c5595de5b879cf4b2d41">Route</a> (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html">ActorHitMessage</a> msg)</td></tr>
 <tr class="separator:a17ee1887b230c5595de5b879cf4b2d41"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac2aed99c6840f0afc306b67cde9764fe" id="r_ac2aed99c6840f0afc306b67cde9764fe"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac2aed99c6840f0afc306b67cde9764fe">TryPopSingle</a> (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html">IBalloonModel</a> model, bool playPopVfx=true)</td></tr>
-<tr class="separator:ac2aed99c6840f0afc306b67cde9764fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a45362ca4052b4dd84ef8309565afb5cb" id="r_a45362ca4052b4dd84ef8309565afb5cb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a45362ca4052b4dd84ef8309565afb5cb">TryResolve</a> (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html">IBalloonModel</a> model, out <a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html">BalloonController</a> controller)</td></tr>
 <tr class="separator:a45362ca4052b4dd84ef8309565afb5cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2e7c935adf9199d4b13c49ced49fcd1" id="r_ab2e7c935adf9199d4b13c49ced49fcd1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab2e7c935adf9199d4b13c49ced49fcd1">Unregister</a> (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableBalloonModel.html">IWriteableBalloonModel</a> model)</td></tr>
@@ -460,9 +462,6 @@ Static Private Attributes</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool BalloonParty.Balloon.Controller.BalloonControllerRegistry.TryPopSingle </td>
@@ -475,12 +474,12 @@ Static Private Attributes</h2></td></tr>
           <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>playPopVfx</em></span><span class="paramdefsep"> = </span><span class="paramdefval">true</span>&#160;)</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
+
+<p><dl class="section return"><dt>Returns</dt><dd>False when the balloon isn't registered (already leaving the board).</dd></dl>
+</p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Controller_1_1IBalloonPopper.html#a1cd12add5b0e81f7015b714834bc79e2">BalloonParty.Balloon.Controller.IBalloonPopper</a>.</p>
 
 </div>
 </div>

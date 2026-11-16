@@ -3,6 +3,7 @@ var classBalloonParty_1_1Solver_1_1ShotSimulator =
     [ "ApplyEffectHits", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#adaa62f76a5abe6f2ce2b9bbc5b21ecbf", null ],
     [ "ApplyItemOutcome", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#ab622d64137e080f1d9e19c9940dc0899", null ],
     [ "ApplyRecolor", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#ac5df1a415170ebd9bbce1b898777d8c6", null ],
+    [ "ArmNuke", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#ac86ceba2aa07577be0604efcecf20c3b", null ],
     [ "ContainsColor", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#ac3f9c8484153e97ecddd8834144d8df8", null ],
     [ "ConvertSideNeighboursToRainbow", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#ad0fcb585d4da51a43e3f0fb55d479b78", null ],
     [ "CopyIntoWorkingSet", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#aeff3f330e00afeaadf9f8f652798ad77", null ],

@@ -1,0 +1,5 @@
+<map id="BalloonParty.Balloon.View.IDiscoWaveView" name="BalloonParty.Balloon.View.IDiscoWaveView">
+<area shape="rect" id="Node000001" title="The disco ball&#39;s wave as drawn: a disc grown from the pop to the radius the wave has reached." alt="" coords="5,98,199,143"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Balloon_1_1View_1_1IGrowingDiscView.html" title="A disc grown from a pop to the radius its effect has reached." alt="" coords="5,5,199,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,64,104,99,100,97,100,68"/>
+</map>

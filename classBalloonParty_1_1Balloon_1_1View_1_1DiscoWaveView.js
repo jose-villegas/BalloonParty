@@ -1,15 +1,16 @@
 var classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView =
 [
-    [ "BuildQuad", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html#a53c237de64f9e7cd5a95ecf52a7d597c", null ],
+    [ "Build", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html#aad5666a147749878d81a9e7b494b1f14", null ],
+    [ "BuildQuad", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html#a7ea619dcc33a8ed952c20c0485bb3156", null ],
     [ "Construct", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html#a3f019c62a7d3bb980f23e679eafa486c", null ],
-    [ "Hide", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html#a942db5362986eb8daca9206fad049580", null ],
-    [ "OnDestroy", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html#acba25581039e72b5e5e9686c6ac24ed9", null ],
-    [ "SetRadius", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html#a8f05de17cc62410877fb3d44ba6a980b", null ],
-    [ "Show", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html#a3189f7bba4ffa8fa3d77920cf0d21467", null ],
-    [ "_block", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html#a60ae7c67aeb9dec1c56bb00c92bf4550", null ],
-    [ "_quad", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html#aa7a0f45e31e1885012dfd15b0c76dd97", null ],
-    [ "_renderer", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html#a375b45605b700e486c3db889c65a7a41", null ],
-    [ "EdgeMargin", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html#a3da3820255e8262912d00181fd58ecbe", null ],
-    [ "ProgressId", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html#adf1138178df317778719b3ca806664ff", null ],
-    [ "RadiusId", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html#ac89cc60e6afe6bd8a26cf5998cf8c06f", null ]
+    [ "Hide", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html#a2d7ae5a0b12bfb97e200c1f4a879b61c", null ],
+    [ "OnDestroy", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html#a3735bdb1291c41d86edba85b124ee78b", null ],
+    [ "SetRadius", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html#a9d9a21e5f741278e631371deacd5986f", null ],
+    [ "Show", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html#a873aedbc4c4c1b2b5a13820e56565fb9", null ],
+    [ "_block", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html#a53c482a59a30b74a099c51d0607a7198", null ],
+    [ "_quad", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html#a8e161ef93ab6d3384872dd08834f1237", null ],
+    [ "_renderer", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html#a13d9fcf8adf1cc583899b52b7126fbbc", null ],
+    [ "EdgeMargin", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html#a9774b33396a24c61ab6363196ad6e30d", null ],
+    [ "ProgressId", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html#a50970c6019ec32d5c652d14538b10269", null ],
+    [ "RadiusId", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html#a3d4eb684b4b7b46b8b24e22af680fd3b", null ]
 ];

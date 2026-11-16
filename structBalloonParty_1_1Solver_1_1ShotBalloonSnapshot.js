@@ -5,6 +5,7 @@ var structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot =
     [ "ForDiscoTarget", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#a26f8a7fb0a3cd9dae0934d4fae2c11a0", null ],
     [ "ForGoldenTarget", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#a947847b185f8db3f3058dfe987127b51", null ],
     [ "ForHeartTarget", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#ac6069f037cdf5d7b3d5cdb1a2e5dfc82", null ],
+    [ "ForNukeTarget", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#ae668f67590c42d5103a8a4fc47647e70", null ],
     [ "ForPlatedTarget", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#aff353a649e17e25b440057a5f9f9e006", null ],
     [ "ForRainbowTarget", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#ac0a61d12c30167f287dd79b24044094d", null ],
     [ "ForStaticContact", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#ac17d2677c674928759ad59ff0110bb2d", null ],

@@ -1,0 +1,5 @@
+<map id="BalloonParty.Configuration.Balloons.NukeBlastSettings" name="BalloonParty.Configuration.Balloons.NukeBlastSettings">
+<area shape="rect" id="Node000001" title=" " alt="" coords="7,98,208,143"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeBlastSettings.html" title="The nuke&#39;s blast (PLAN&#45;NukeBalloon): a disc that grows from the nuke across the board and pops every ..." alt="" coords="5,5,210,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,64,110,99,105,97,106,68"/>
+</map>

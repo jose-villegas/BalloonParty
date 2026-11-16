@@ -208,32 +208,13 @@
 </a>
 </g>
 </g>
-<!-- Node14 -->
-<g id="Node000014" class="node">
-<title>Node14</title>
-<g id="a_Node000014"><a xlink:href="classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="1087.5,-85.5 935.75,-85.5 935.75,-52 1087.5,-52 1087.5,-85.5"/>
-<text xml:space="preserve" text-anchor="start" x="943.75" y="-72" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
-<text xml:space="preserve" text-anchor="middle" x="1011.62" y="-59.25" font-family="Helvetica,sans-Serif" font-size="10.00">ToughBalloonModel</text>
-</a>
-</g>
-</g>
-<!-- Node7&#45;&gt;Node14 -->
-<g id="edge13_Node000007_Node000014" class="edge">
-<title>Node7&#45;&gt;Node14</title>
-<g id="a_edge13_Node000007_Node000014"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M869.04,-124.74C889.18,-115.05 913.45,-103.82 935.75,-94.75 943.14,-91.74 951.03,-88.76 958.81,-85.95"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="867.76,-121.48 860.29,-128.99 870.81,-127.77 867.76,-121.48"/>
-</a>
-</g>
-</g>
 <!-- Node15 -->
 <g id="Node000015" class="node">
 <title>Node15</title>
-<g id="a_Node000015"><a xlink:href="classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="1087.5,-33.5 935.75,-33.5 935.75,0 1087.5,0 1087.5,-33.5"/>
-<text xml:space="preserve" text-anchor="start" x="943.75" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
-<text xml:space="preserve" text-anchor="middle" x="1011.62" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">UnbreakableBalloonModel</text>
+<g id="a_Node000015"><a xlink:href="classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="#666666" points="1087.5,-85.5 935.75,-85.5 935.75,-52 1087.5,-52 1087.5,-85.5"/>
+<text xml:space="preserve" text-anchor="start" x="943.75" y="-72" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
+<text xml:space="preserve" text-anchor="middle" x="1011.62" y="-59.25" font-family="Helvetica,sans-Serif" font-size="10.00">ToughBalloonModel</text>
 </a>
 </g>
 </g>
@@ -241,6 +222,25 @@
 <g id="edge14_Node000007_Node000015" class="edge">
 <title>Node7&#45;&gt;Node15</title>
 <g id="a_edge14_Node000007_Node000015"><a xlink:title=" ">
+<path fill="none" stroke="#63b8ff" d="M869.04,-124.74C889.18,-115.05 913.45,-103.82 935.75,-94.75 943.14,-91.74 951.03,-88.76 958.81,-85.95"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="867.76,-121.48 860.29,-128.99 870.81,-127.77 867.76,-121.48"/>
+</a>
+</g>
+</g>
+<!-- Node16 -->
+<g id="Node000016" class="node">
+<title>Node16</title>
+<g id="a_Node000016"><a xlink:href="classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="#666666" points="1087.5,-33.5 935.75,-33.5 935.75,0 1087.5,0 1087.5,-33.5"/>
+<text xml:space="preserve" text-anchor="start" x="943.75" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
+<text xml:space="preserve" text-anchor="middle" x="1011.62" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">UnbreakableBalloonModel</text>
+</a>
+</g>
+</g>
+<!-- Node7&#45;&gt;Node16 -->
+<g id="edge15_Node000007_Node000016" class="edge">
+<title>Node7&#45;&gt;Node16</title>
+<g id="a_edge15_Node000007_Node000016"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M846.26,-121.32C867.03,-98.04 900.5,-64.06 935.75,-42.75 941.17,-39.47 947.05,-36.54 953.07,-33.92"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="843.9,-118.7 839.94,-128.53 849.16,-123.32 843.9,-118.7"/>
 </a>
@@ -250,9 +250,9 @@
 <g id="Node000012" class="node">
 <title>Node12</title>
 <g id="a_Node000012"><a xlink:href="classBalloonParty_1_1Balloon_1_1Model_1_1DiscoBalloonModel.html" target="_top" xlink:title="The disco ball reward balloon (PLAN&#45;DiscoBalloon): a PlatedBalloonModel whose pop sends a wave across...">
-<polygon fill="white" stroke="#666666" points="1275.25,-163.5 1123.5,-163.5 1123.5,-130 1275.25,-130 1275.25,-163.5"/>
-<text xml:space="preserve" text-anchor="start" x="1131.5" y="-150" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
-<text xml:space="preserve" text-anchor="middle" x="1199.38" y="-137.25" font-family="Helvetica,sans-Serif" font-size="10.00">DiscoBalloonModel</text>
+<polygon fill="white" stroke="#666666" points="1275.25,-189.5 1123.5,-189.5 1123.5,-156 1275.25,-156 1275.25,-189.5"/>
+<text xml:space="preserve" text-anchor="start" x="1131.5" y="-176" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
+<text xml:space="preserve" text-anchor="middle" x="1199.38" y="-163.25" font-family="Helvetica,sans-Serif" font-size="10.00">DiscoBalloonModel</text>
 </a>
 </g>
 </g>
@@ -260,8 +260,8 @@
 <g id="edge11_Node000011_Node000012" class="edge">
 <title>Node11&#45;&gt;Node12</title>
 <g id="a_edge11_Node000011_Node000012"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M1099.21,-132.87C1107.25,-134 1115.36,-135.13 1123.29,-136.24"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="1099.8,-129.42 1089.41,-131.5 1098.83,-136.35 1099.8,-129.42"/>
+<path fill="none" stroke="#63b8ff" d="M1085.28,-141.09C1102.37,-145.87 1120.41,-150.92 1136.95,-155.55"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="1086.25,-137.73 1075.68,-138.4 1084.36,-144.47 1086.25,-137.73"/>
 </a>
 </g>
 </g>
@@ -269,9 +269,9 @@
 <g id="Node000013" class="node">
 <title>Node13</title>
 <g id="a_Node000013"><a xlink:href="classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html" target="_top" xlink:title="The golden reward balloon (PLAN&#45;RewardBalloons): a PlatedBalloonModel whose pop pays a free card (Rew...">
-<polygon fill="white" stroke="#666666" points="1275.25,-111.5 1123.5,-111.5 1123.5,-78 1275.25,-78 1275.25,-111.5"/>
-<text xml:space="preserve" text-anchor="start" x="1131.5" y="-98" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
-<text xml:space="preserve" text-anchor="middle" x="1199.38" y="-85.25" font-family="Helvetica,sans-Serif" font-size="10.00">GoldenBalloonModel</text>
+<polygon fill="white" stroke="#666666" points="1275.25,-137.5 1123.5,-137.5 1123.5,-104 1275.25,-104 1275.25,-137.5"/>
+<text xml:space="preserve" text-anchor="start" x="1131.5" y="-124" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
+<text xml:space="preserve" text-anchor="middle" x="1199.38" y="-111.25" font-family="Helvetica,sans-Serif" font-size="10.00">GoldenBalloonModel</text>
 </a>
 </g>
 </g>
@@ -279,8 +279,27 @@
 <g id="edge12_Node000011_Node000013" class="edge">
 <title>Node11&#45;&gt;Node13</title>
 <g id="a_edge12_Node000011_Node000013"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M1099.21,-108.63C1107.25,-107.5 1115.36,-106.37 1123.29,-105.26"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="1098.83,-105.15 1089.41,-110 1099.8,-112.08 1098.83,-105.15"/>
+<path fill="none" stroke="#63b8ff" d="M1099.21,-120.75C1107.25,-120.75 1115.36,-120.75 1123.29,-120.75"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="1099.42,-117.25 1089.42,-120.75 1099.42,-124.25 1099.42,-117.25"/>
+</a>
+</g>
+</g>
+<!-- Node14 -->
+<g id="Node000014" class="node">
+<title>Node14</title>
+<g id="a_Node000014"><a xlink:href="classBalloonParty_1_1Balloon_1_1Model_1_1NukeBalloonModel.html" target="_top" xlink:title="The nuke reward balloon (PLAN&#45;NukeBalloon): a PlatedBalloonModel that is never popped by a hit.">
+<polygon fill="white" stroke="#666666" points="1275.25,-85.5 1123.5,-85.5 1123.5,-52 1275.25,-52 1275.25,-85.5"/>
+<text xml:space="preserve" text-anchor="start" x="1131.5" y="-72" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
+<text xml:space="preserve" text-anchor="middle" x="1199.38" y="-59.25" font-family="Helvetica,sans-Serif" font-size="10.00">NukeBalloonModel</text>
+</a>
+</g>
+</g>
+<!-- Node11&#45;&gt;Node14 -->
+<g id="edge13_Node000011_Node000014" class="edge">
+<title>Node11&#45;&gt;Node14</title>
+<g id="a_edge13_Node000011_Node000014"><a xlink:title=" ">
+<path fill="none" stroke="#63b8ff" d="M1085.28,-100.41C1102.37,-95.63 1120.41,-90.58 1136.95,-85.95"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="1084.36,-97.03 1075.68,-103.1 1086.25,-103.77 1084.36,-97.03"/>
 </a>
 </g>
 </g>

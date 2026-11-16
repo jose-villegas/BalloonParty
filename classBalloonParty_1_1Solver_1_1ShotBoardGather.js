@@ -12,7 +12,7 @@ var classBalloonParty_1_1Solver_1_1ShotBoardGather =
     [ "ResolveProjectileContactRadius", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#aa5c44a749d9d3b44d39fdda24a3a654f", null ],
     [ "SeedFor", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#a5bb04b6ea6ee0575934b52f762abf92a", null ],
     [ "SimulateAt", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#a47c824d114545792f8154fcb4a8b2443", null ],
-    [ "TryBuildRewardSnapshot", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#aa7d1c31569781854a70350c9497492ac", null ],
+    [ "TryBuildRewardSnapshot", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#af54f5445c548833dd410a05a3d386847", null ],
     [ "TryBuildStaticContactSnapshot", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#a6ea5fe4c35c8f5d99a13393d7b551b56", null ],
     [ "TryBuildTargetSnapshot", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#a41fa381f338d8cea0c2046b5878371a8", null ]
 ];

@@ -1,0 +1,15 @@
+<map id="BalloonParty.Balloon.View.IGrowingDiscView" name="BalloonParty.Balloon.View.IGrowingDiscView">
+<area shape="rect" id="Node000001" title="A disc grown from a pop to the radius its effect has reached." alt="" coords="5,75,199,119"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Balloon_1_1View_1_1GrowingDiscView.html" title="A disc grown from a pop across the board, drawn as a quad centred on the pop and sized to the disc ea..." alt="" coords="247,75,440,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="214,94,249,96,244,98,215,100"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Balloon_1_1View_1_1IDiscoWaveView.html" title="The disco ball&#39;s wave as drawn: a disc grown from the pop to the radius the wave has reached." alt="" coords="247,5,440,50"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="195,67,265,49,260,52,197,72"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Balloon_1_1View_1_1INukeBlastView.html" title="The nuke&#39;s blast as drawn and felt: a disc grown from the nuke to the radius the blast has reached,..." alt="" coords="247,144,440,189"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="197,121,266,143,260,144,196,127"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html" title="Draws the disco ball&#39;s wave on the BalloonParty/Sprite/DiscoWave material, whose shader draws the rai..." alt="" coords="488,23,681,67"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="454,70,490,65,485,66,456,76"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Balloon_1_1View_1_1NukeBlastView.html" title="Draws the nuke&#39;s blast (PLAN&#45;NukeBalloon) on the BalloonParty/Sprite/NukeBlast material: a white floo..." alt="" coords="488,109,681,154"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="455,110,490,118,485,118,455,116"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="455,33,490,38,485,38,456,38"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="455,148,485,146,490,145,456,153"/>
+</map>

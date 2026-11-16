@@ -157,6 +157,12 @@ Static Public Attributes</h2></td></tr>
 <tr class="memitem:ab92cb42963458f20d5e276ad7c1ae9da" id="r_ab92cb42963458f20d5e276ad7c1ae9da"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab92cb42963458f20d5e276ad7c1ae9da">HeartRaysColorId</a> = &quot;HeartRays&quot;</td></tr>
 <tr class="memdesc:ab92cb42963458f20d5e276ad7c1ae9da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Presentation-only palette entry for the fainter god rays behind the heart reward balloon; its alpha is their strength — authored in the palette asset but never a spawnable balloon color.  <br /></td></tr>
 <tr class="separator:ab92cb42963458f20d5e276ad7c1ae9da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a8fb0d9087e9dc325adc70237000417" id="r_a8a8fb0d9087e9dc325adc70237000417"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8a8fb0d9087e9dc325adc70237000417">NukeArmedRaysColorId</a> = &quot;NukeArmedRays&quot;</td></tr>
+<tr class="memdesc:a8a8fb0d9087e9dc325adc70237000417"><td class="mdescLeft">&#160;</td><td class="mdescRight">The red flare behind the nuke once it is armed and its fuse runs; its alpha is its strength.  <br /></td></tr>
+<tr class="separator:a8a8fb0d9087e9dc325adc70237000417"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b9b07ad23c93ce2c6b5e479f3fee82c" id="r_a4b9b07ad23c93ce2c6b5e479f3fee82c"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4b9b07ad23c93ce2c6b5e479f3fee82c">NukeRaysColorId</a> = &quot;NukeRays&quot;</td></tr>
+<tr class="memdesc:a4b9b07ad23c93ce2c6b5e479f3fee82c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Presentation-only palette entry for the green flare behind the nuke while it waits (PLAN-NukeBalloon); its material turns a yellow fan through it.  <br /></td></tr>
+<tr class="separator:a4b9b07ad23c93ce2c6b5e479f3fee82c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d25ed70cd0747f4809a7887cd7f2f12" id="r_a9d25ed70cd0747f4809a7887cd7f2f12"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9d25ed70cd0747f4809a7887cd7f2f12">PredictionColorId</a> = &quot;Prediction&quot;</td></tr>
 <tr class="memdesc:a9d25ed70cd0747f4809a7887cd7f2f12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Presentation-only palette entry tinting the aim-prediction line's optional capsule lights (see <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html#a01944421259cbb4d59441d7170c60211" title="Whether the trace also casts capsule scene-lights (one per leg, mirroring the drawn line) while aimin...">BalloonParty.Shared.IPredictionTraceConfig.LightingEnabled</a>) — authored in the palette asset but never a spawnable balloon color.  <br /></td></tr>
 <tr class="separator:a9d25ed70cd0747f4809a7887cd7f2f12"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -582,6 +588,56 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Presentation-only palette entry for the fainter god rays behind the heart reward balloon; its alpha is their strength — authored in the palette asset but never a spawnable balloon color. </p>
+
+</div>
+</div>
+<a id="a8a8fb0d9087e9dc325adc70237000417" name="a8a8fb0d9087e9dc325adc70237000417"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a8fb0d9087e9dc325adc70237000417">&#9670;&#160;</a></span>NukeArmedRaysColorId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const string BalloonParty.Configuration.Palette.GamePalette.NukeArmedRaysColorId = &quot;NukeArmedRays&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The red flare behind the nuke once it is armed and its fuse runs; its alpha is its strength. </p>
+<p>It sits past the scene-light field's slots (<code><a class="el" href="classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteChannelEncoding.html#af990fd3c49934d353e69b5a21c6636a1" title="Channel slots — also the size of the palette array the shaders declare.">PaletteChannelEncoding.Slots</a></code>), which only lights need. </p>
+
+</div>
+</div>
+<a id="a4b9b07ad23c93ce2c6b5e479f3fee82c" name="a4b9b07ad23c93ce2c6b5e479f3fee82c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b9b07ad23c93ce2c6b5e479f3fee82c">&#9670;&#160;</a></span>NukeRaysColorId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const string BalloonParty.Configuration.Palette.GamePalette.NukeRaysColorId = &quot;NukeRays&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Presentation-only palette entry for the green flare behind the nuke while it waits (PLAN-NukeBalloon); its material turns a yellow fan through it. </p>
+<p>Its alpha is its strength. </p>
 
 </div>
 </div>

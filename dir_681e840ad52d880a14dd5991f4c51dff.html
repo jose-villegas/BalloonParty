@@ -135,7 +135,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>A ribbon of cloth with writing on it, hanging from a spring line: the launch screen's Continue balloon carries one (<code>Game/LaunchContinueView</code>). The line and ribbon are simulated together as points joined by springs, so they swing, stretch a little and flutter as whatever holds the line moves.</p>
-<h1><a class="anchor" id="autotoc_md1134"></a>
+<h1><a class="anchor" id="autotoc_md1147"></a>
 How it moves</h1>
 <p><code>RibbonCloth</code> is the simulation, plain C#. Points carry position and last position (position-based dynamics, at fixed steps of <code>Steps Per Second</code>, at most eight a frame); each step adds the forces, then a few solver passes pull every spring back toward its rest length and push points out of the obstacles.</p>
 <ul>
@@ -148,7 +148,7 @@ How it moves</h1>
 <li><b>Obstacles</b> (<code>KeepOut</code>: a circle, or a capsule) push points out sideways, never in depth.</li>
 </ul>
 <p>Space is the caller's: x right, y up, z toward the viewer. The ribbon's front faces the viewer while it streams to +x. Drawing drops z.</p>
-<h1><a class="anchor" id="autotoc_md1135"></a>
+<h1><a class="anchor" id="autotoc_md1148"></a>
 How it draws</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -161,7 +161,7 @@ How it draws</h1>
 <td class="markdownTableBodyNone"><code>ClothRibbonWriting</code>   </td><td class="markdownTableBodyNone">The line of writing, on both faces: two <code>TMP_Text</code>s laid out flat, then every glyph corner carried onto the cloth where it sits. The back's copy is laid along the ribbon the other way (mirrored), so seen from behind, once the ribbon has swung round, it reads the right way. Each glyph shows on the face turned toward the screen where it sits and fades as that part turns edge on   </td></tr>
 </table>
 <p>All three are simulated in their own local space, so they sit together at the same origin. <code>ClothRibbonWriting.Layout</code> lays the writing out and returns the length of ribbon it needs, which the simulation is built with.</p>
-<h1><a class="anchor" id="autotoc_md1136"></a>
+<h1><a class="anchor" id="autotoc_md1149"></a>
 Settings</h1>
 <p><code>RibbonClothSettings</code> (serialized on the view that owns the ribbon) holds the line's and ribbon's shape, the forces and the solver. Tooltips say what each does. </p>
 </div><!-- contents -->

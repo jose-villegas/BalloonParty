@@ -24,6 +24,9 @@ var searchData=
   ['nudgeamplitude_21',['NudgeAmplitude',['../structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a0e0d8c0e0849643a072ff5ee9fb12851',1,'BalloonParty::Solver::ShotSolveContext']]],
   ['nudgeimpulses_22',['NudgeImpulses',['../classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html#abf557c2c307cb31cdef3c489e36ef5a6',1,'BalloonParty::Solver::ShotSimDynamicActor']]],
   ['nudgeoverrides_23',['NudgeOverrides',['../structBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelConfig.html#a78cae6453ecf42fa44deb945a494e160',1,'BalloonParty.Balloon.Model.BalloonModelConfig.NudgeOverrides'],['../structBalloonParty_1_1Solver_1_1BalanceProfile.html#a5bc782bc30b57819f858e8228a461666',1,'BalloonParty.Solver.BalanceProfile.NudgeOverrides']]],
-  ['number_24',['Number',['../classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Kit.html#acf6749ddbee95d0c0ca0fb896ea6a1ad',1,'BalloonParty::Editor::GameOverLayoutBuilder::Kit']]],
-  ['numbercolwidth_25',['NumberColWidth',['../classBalloonParty_1_1Editor_1_1LevelGenerationPreview.html#adb8df2315451caf8cf8af822d1860de9',1,'BalloonParty::Editor::LevelGenerationPreview']]]
+  ['nukearmedrayscolorid_24',['NukeArmedRaysColorId',['../classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a8a8fb0d9087e9dc325adc70237000417',1,'BalloonParty::Configuration::Palette::GamePalette']]],
+  ['nukepops_25',['NukePops',['../structBalloonParty_1_1Solver_1_1ShotFlightState.html#a2bdd441a1d3200b8dd0d1460bd9cb2d0',1,'BalloonParty.Solver.ShotFlightState.NukePops'],['../structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a82e844db64461f26d5b3cbdb59c33c0b',1,'BalloonParty.Solver.ShotSimulationResult.NukePops']]],
+  ['nukerayscolorid_26',['NukeRaysColorId',['../classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a4b9b07ad23c93ce2c6b5e479f3fee82c',1,'BalloonParty::Configuration::Palette::GamePalette']]],
+  ['number_27',['Number',['../classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Kit.html#acf6749ddbee95d0c0ca0fb896ea6a1ad',1,'BalloonParty::Editor::GameOverLayoutBuilder::Kit']]],
+  ['numbercolwidth_28',['NumberColWidth',['../classBalloonParty_1_1Editor_1_1LevelGenerationPreview.html#adb8df2315451caf8cf8af822d1860de9',1,'BalloonParty::Editor::LevelGenerationPreview']]]
 ];

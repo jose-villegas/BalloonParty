@@ -63,5 +63,8 @@ var searchData=
   ['frustumpadding_60',['FrustumPadding',['../classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicCameraRig.html#a9bae027003046be7fdc761a02ab37772',1,'BalloonParty::Game::Cinematics::CinematicCameraRig']]],
   ['fullalphakeys_61',['FullAlphaKeys',['../classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a9371ae2720a7fd0478b0524188bc4cce',1,'BalloonParty::Prediction::PredictionTraceView']]],
   ['fullholdstarvationmultiplier_62',['FullHoldStarvationMultiplier',['../classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html#a697a2a5410268b653162a3a2c608136d',1,'BalloonParty::Item::Preview::ItemRangePreviewController']]],
-  ['fullyshowndelay_63',['FullyShownDelay',['../classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice.html#afb11b54dcc89b7cdfac42dde23904dc5',1,'BalloonParty::UI::Score::ProgressNotice']]]
+  ['fullyshowndelay_63',['FullyShownDelay',['../classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice.html#afb11b54dcc89b7cdfac42dde23904dc5',1,'BalloonParty::UI::Score::ProgressNotice']]],
+  ['fusearmedid_64',['FuseArmedId',['../classBalloonParty_1_1Balloon_1_1Type_1_1NukeFuseView.html#a8eb69d692731c1a8d8d6055a8b4ab22b',1,'BalloonParty::Balloon::Type::NukeFuseView']]],
+  ['fusebeatid_65',['FuseBeatId',['../classBalloonParty_1_1Balloon_1_1Type_1_1NukeFuseView.html#a84b6df6c5c73d648068b21cb312274e8',1,'BalloonParty::Balloon::Type::NukeFuseView']]],
+  ['fusedigitid_66',['FuseDigitId',['../classBalloonParty_1_1Balloon_1_1Type_1_1NukeFuseView.html#a9812a7324d32ea9efa30430329206c1d',1,'BalloonParty::Balloon::Type::NukeFuseView']]]
 ];

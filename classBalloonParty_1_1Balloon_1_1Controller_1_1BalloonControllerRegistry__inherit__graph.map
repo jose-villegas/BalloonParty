@@ -1,7 +1,9 @@
 <map id="BalloonParty.Balloon.Controller.BalloonControllerRegistry" name="BalloonParty.Balloon.Controller.BalloonControllerRegistry">
-<area shape="rect" id="Node000001" title="Routes each balloon&#39;s hit reaction to its owning controller via a flat&#45;array index,..." alt="" coords="5,81,231,126"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="18,5,103,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="80,44,105,80,100,81,77,48"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="127,5,224,33"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="160,45,135,82,131,78,155,47"/>
+<area shape="rect" id="Node000001" title="Routes each balloon&#39;s hit reaction to its owning controller via a flat&#45;array index,..." alt="" coords="50,98,275,143"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,14,90,42"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="77,49,137,96,132,99,75,54"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="114,14,211,42"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="164,55,165,99,160,96,160,59"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Balloon_1_1Controller_1_1IBalloonPopper.html" title="Pops one balloon outside the hit path: its pop VFX play (unless asked not to), its slot is freed and ..." alt="" coords="235,5,460,50"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="292,57,207,100,205,95,287,58"/>
 </map>

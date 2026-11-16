@@ -6,6 +6,7 @@ var dir_bef882ae5228e70319150cc86f51d598 =
     [ "ItemSightSoundRouter.cs", "ItemSightSoundRouter_8cs.html", "ItemSightSoundRouter_8cs" ],
     [ "ItemSoundRouter.cs", "ItemSoundRouter_8cs.html", "ItemSoundRouter_8cs" ],
     [ "MusicSoundRouter.cs", "MusicSoundRouter_8cs.html", "MusicSoundRouter_8cs" ],
+    [ "NukeSoundRouter.cs", "NukeSoundRouter_8cs.html", "NukeSoundRouter_8cs" ],
     [ "ProgressionSoundRouter.cs", "ProgressionSoundRouter_8cs.html", "ProgressionSoundRouter_8cs" ],
     [ "WindSoundRouter.cs", "WindSoundRouter_8cs.html", "WindSoundRouter_8cs" ]
 ];

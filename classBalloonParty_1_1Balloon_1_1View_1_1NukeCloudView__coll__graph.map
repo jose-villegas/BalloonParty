@@ -1,0 +1,9 @@
+<map id="BalloonParty.Balloon.View.NukeCloudView" name="BalloonParty.Balloon.View.NukeCloudView">
+<area shape="rect" id="Node000001" title="The nuke&#39;s mushroom cloud (PLAN&#45;NukeBalloon) on the BalloonParty/Sprite/NukeCloud material,..." alt="" coords="321,57,514,102"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="46,5,169,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="184,31,323,59,318,62,184,37"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Balloon_1_1View_1_1INukeCloudView.html" title="The nuke&#39;s mushroom cloud: it rises from where the nuke went off and erodes away on its own." alt="" coords="11,57,204,102"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="219,77,323,78,318,80,220,82"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeBlastSettings.html" title="The nuke&#39;s blast (PLAN&#45;NukeBalloon): a disc that grows from the nuke across the board and pops every ..." alt="" coords="5,126,210,171"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="224,120,318,101,323,100,226,125"/>
+</map>

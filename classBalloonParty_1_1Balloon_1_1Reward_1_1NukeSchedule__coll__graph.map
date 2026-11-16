@@ -1,0 +1,7 @@
+<map id="BalloonParty.Balloon.Reward.NukeSchedule" name="BalloonParty.Balloon.Reward.NukeSchedule">
+<area shape="rect" id="Node000001" title="When the nuke balloon is due (PLAN&#45;NukeBalloon), and whether one is on the board." alt="" coords="328,40,539,85"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeOddsSettings.html" title="When the nuke balloon comes (PLAN&#45;NukeBalloon): a tiny chance on each clock line, raised toward MaxCh..." alt="" coords="9,5,213,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="229,38,330,50,325,52,229,43"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Balloon_1_1Reward_1_1INukeOdds.html" title="The nuke balloon&#39;s chance on a clock line (PLAN&#45;NukeBalloon), raised by the trouble the player is in." alt="" coords="5,75,217,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="232,81,330,73,324,74,232,87"/>
+</map>

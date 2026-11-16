@@ -6,6 +6,7 @@ var namespaceBalloonParty_1_1Balloon_1_1Spawner =
     [ "BalloonSpawner", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner" ],
     [ "BoardFill", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BoardFill.html", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BoardFill" ],
     [ "IBoardFill", "interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1IBoardFill.html", "interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1IBoardFill" ],
+    [ "IBreatherGrant", "interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1IBreatherGrant.html", "interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1IBreatherGrant" ],
     [ "InitialLayerPlan", "classBalloonParty_1_1Balloon_1_1Spawner_1_1InitialLayerPlan.html", "classBalloonParty_1_1Balloon_1_1Spawner_1_1InitialLayerPlan" ],
     [ "ISpawnClock", "interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1ISpawnClock.html", "interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1ISpawnClock" ],
     [ "ReinforcementPlan", "classBalloonParty_1_1Balloon_1_1Spawner_1_1ReinforcementPlan.html", "classBalloonParty_1_1Balloon_1_1Spawner_1_1ReinforcementPlan" ],

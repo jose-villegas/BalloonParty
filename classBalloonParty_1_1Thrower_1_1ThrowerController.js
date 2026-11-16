@@ -1,10 +1,11 @@
 var classBalloonParty_1_1Thrower_1_1ThrowerController =
 [
-    [ "ThrowerController", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#aa6c9d0d9311983b256d82924c3061b13", null ],
+    [ "ThrowerController", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a9441701b70b90b816aa091aa790b08da", null ],
     [ "AnnounceReady", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a09f2ce83ee2de61aa7ca8ed288bbd4fe", null ],
     [ "ClampAndQuantizeAimDirection", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#acfc24424de127a8fecc2acf833a7bbfa", null ],
     [ "ClearLoaded", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ae6bf5b80cebe205ab8fa4b438c1416b1", null ],
     [ "ClearPredictionTrace", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ac497d1607399c4a0644aa0ffd0f66c71", null ],
+    [ "DestroyShotsInFlight", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a15fa21544eae925d884eda4217fa37b6", null ],
     [ "Dispose", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ae6a7bc74adb625d310dbf2894b1bb2c5", null ],
     [ "EnsureLoaded", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a7dfc5954baefb5f3e121b4b3a3dc6ad5", null ],
     [ "Fire", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#acf7c3023e29ab76fd5380d26a3896b72", null ],
@@ -32,6 +33,7 @@ var classBalloonParty_1_1Thrower_1_1ThrowerController =
     [ "WarmPoolForCap", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ad0fceef92ce5710e0c0f49e49eb40ca3", null ],
     [ "_aimHistory", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a6d314878533cbfdc6b5df124904c508f", null ],
     [ "_boardClearSubscriber", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ab4556eddb1977a5a50bc4c56621ded51", null ],
+    [ "_clearShotsSubscriber", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a9e450db097f39a1f7ac0a1c073c215b7", null ],
     [ "_deflectorField", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a12c652fed197903c0c5679ec5bade6f4", null ],
     [ "_destroyedSubscriber", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a1a4ffb17683b6de23c92c56b641652d8", null ],
     [ "_direction", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a724af414befd70b081d13131b60aed3a", null ],

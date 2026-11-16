@@ -1,0 +1,5 @@
+<map id="BalloonParty.Configuration.Balloons.NukeFuseSettings" name="BalloonParty.Configuration.Balloons.NukeFuseSettings">
+<area shape="rect" id="Node000001" title=" " alt="" coords="7,98,205,143"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeFuseSettings.html" title="The armed nuke&#39;s fuse (PLAN&#45;NukeBalloon): how long it counts down before it goes off,..." alt="" coords="5,5,207,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="108,64,108,99,104,97,104,68"/>
+</map>

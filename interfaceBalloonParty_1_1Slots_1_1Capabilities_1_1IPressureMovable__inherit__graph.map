@@ -10,12 +10,14 @@
 <area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="493,182,528,180,523,181,494,187"/>
 <area shape="rect" id="Node000006" href="$classBalloonParty_1_1Balloon_1_1Model_1_1PlatedBalloonModel.html" title="A plated reward balloon (the golden balloon, the disco ball): it takes hits as an unbreakable does." alt="" coords="526,213,728,258"/>
 <area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="493,215,528,221,523,222,494,220"/>
-<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html" title=" " alt="" coords="526,283,728,327"/>
-<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="437,228,527,268,559,282,554,282,525,273,437,233"/>
-<area shape="rect" id="Node000010" href="$classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html" title=" " alt="" coords="526,352,728,397"/>
-<area shape="poly" id="edge9_Node000002_Node000010" title=" " alt="" coords="408,232,461,286,493,314,527,337,552,352,546,351,525,342,490,318,457,290,406,237"/>
-<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Balloon_1_1Model_1_1DiscoBalloonModel.html" title="The disco ball reward balloon (PLAN&#45;DiscoBalloon): a PlatedBalloonModel whose pop sends a wave across..." alt="" coords="776,179,979,223"/>
-<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="743,217,779,215,773,216,744,222"/>
-<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html" title="The golden reward balloon (PLAN&#45;RewardBalloons): a PlatedBalloonModel whose pop pays a free card (Rew..." alt="" coords="776,248,979,293"/>
-<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="744,249,779,256,773,256,744,254"/>
+<area shape="rect" id="Node000010" href="$classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html" title=" " alt="" coords="526,283,728,327"/>
+<area shape="poly" id="edge9_Node000002_Node000010" title=" " alt="" coords="437,228,527,268,559,282,554,282,525,273,437,233"/>
+<area shape="rect" id="Node000011" href="$classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html" title=" " alt="" coords="526,352,728,397"/>
+<area shape="poly" id="edge10_Node000002_Node000011" title=" " alt="" coords="408,232,461,286,493,314,527,337,552,352,546,351,525,342,490,318,457,290,406,237"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Balloon_1_1Model_1_1DiscoBalloonModel.html" title="The disco ball reward balloon (PLAN&#45;DiscoBalloon): a PlatedBalloonModel whose pop sends a wave across..." alt="" coords="776,144,979,189"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="725,206,792,190,797,189,726,211"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html" title="The golden reward balloon (PLAN&#45;RewardBalloons): a PlatedBalloonModel whose pop pays a free card (Rew..." alt="" coords="776,213,979,258"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="744,233,779,235,773,236,744,238"/>
+<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Balloon_1_1Model_1_1NukeBalloonModel.html" title="The nuke reward balloon (PLAN&#45;NukeBalloon): a PlatedBalloonModel that is never popped by a hit." alt="" coords="776,283,979,327"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="726,260,797,282,792,282,725,265"/>
 </map>
