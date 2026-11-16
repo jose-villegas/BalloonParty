@@ -66,7 +66,7 @@ namespace BalloonParty.Editor
 
         // The reveal's ribbon cream (CardRevealBuilder), so the ad's prize looks like what a bonus arrives on.
         private static readonly Color RibbonCream = new(0.98f, 0.965f, 0.925f, 1f);
-        private static readonly Color RibbonShadow = Hex(0x1E0B24, 0.35f);
+        private static readonly Color RibbonShadow = Hex(0x1E0B24, 0.45f);
         private static readonly Color Blue = Hex(0x1A86DA);
         private static readonly Color Dim = Hex(0x10233A, 0.6f);
         private static readonly Palette Green = new(Hex(0x6BD94A), Hex(0x1F8A16), Hex(0x155C10));
@@ -463,27 +463,27 @@ namespace BalloonParty.Editor
             layout.childForceExpandWidth = false;
             layout.childForceExpandHeight = false;
 
-            PrizeRibbon(content, kit);
+            PrizeRibbon(content, kit, Plum.Lip);
 
             AdPill(content, kit, Plum.Lip, label);
             Sash(tile.transform, "Boost", kit);
         }
 
-        // A small cream ribbon, swallowtailed like the reveal's, tilted, over its own soft shadow, with a pencilled
-        // "?" on it. The plain UI material draws the ribbon flat (CelRibbon's light is the reveal's).
-        private static void PrizeRibbon(Transform parent, Kit kit)
+        // A cream ribbon, swallowtailed like the reveal's, tilted, over its own soft shadow, with a "?" on it in the
+        // tile's ink. The plain UI material draws the ribbon flat (CelRibbon's light is the reveal's).
+        private static void PrizeRibbon(Transform parent, Kit kit, Color ink)
         {
-            const float width = 36f;
-            const float height = 14f;
+            const float width = 46f;
+            const float height = 18f;
             var ribbon = Node("Ribbon", parent);
             ((RectTransform)ribbon).sizeDelta = new Vector2(width, height);
             Size(ribbon.gameObject, width, height);
             ribbon.localRotation = Quaternion.Euler(0f, 0f, -8f);
 
             var shadow = RibbonStrip(ribbon, "Shadow", RibbonShadow);
-            ((RectTransform)shadow.transform).anchoredPosition = new Vector2(0.8f, -1.6f);
+            ((RectTransform)shadow.transform).anchoredPosition = new Vector2(1f, -2f);
             var face = RibbonStrip(ribbon, "Face", RibbonCream);
-            var mark = Label(face.transform, "Mark", "?", kit.HandFont, null, 13f, Graphite);
+            var mark = Label(face.transform, "Mark", "?", kit.TitleFont, kit.Plain, 14f, ink);
             Stretch((RectTransform)mark.transform, 0f);
         }
 
