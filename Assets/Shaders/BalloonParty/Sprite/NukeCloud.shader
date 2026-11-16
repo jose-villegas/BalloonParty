@@ -48,6 +48,8 @@ Shader "BalloonParty/Sprite/NukeCloud"
         _SmokeAlpha  ("Strength", Range(0, 1)) = 0.88
         // How much of the board the thinnest smoke still hides, as a share of the thickest's.
         _Thinnest    ("Thinnest", Range(0, 1)) = 0.2
+        // How wide the smoke's border fades in, in shares of the cap's height: wider is a softer edge.
+        _EdgeSoftness("Edge Softness", Range(0.1, 3)) = 1.4
         // How much light glows through the thin smoke.
         _Glow        ("Glow Through", Range(0, 1)) = 0.35
         _Dust        ("Dust", Color) = (0.78, 0.68, 0.55, 1)
@@ -122,6 +124,7 @@ Shader "BalloonParty/Sprite/NukeCloud"
             fixed4 _SmokeDark;
             float _SmokeAlpha;
             float _Thinnest;
+            float _EdgeSoftness;
             float _Glow;
             fixed4 _Dust;
             float _DustAlpha;
@@ -240,8 +243,11 @@ Shader "BalloonParty/Sprite/NukeCloud"
                 // Holes open through the noise, gently: the thinning below is what takes it away, all of it by the
                 // end, so nothing is left to vanish at once.
                 float erode = fade * (1.2 * fade + 0.6 * Billow(p * 2.3 + _Time.y * 0.15) + 0.5 * saturate(r / capR));
-                float density = smoothstep(0.02, -0.3, capD + erode);
-                float shadow = smoothstep(0.1, -0.3, shadowD + erode) * (1.0 - density) * _ShadowAlpha * (1.0 - fade);
+                // Fades in over a wide band past where the puffs run out, so the border has no hard line.
+                float density = smoothstep(0.02, -_EdgeSoftness, capD + erode);
+                density *= density;
+                float shadowEdge = smoothstep(0.1, -_EdgeSoftness * 0.3, shadowD + erode);
+                float shadow = shadowEdge * shadowEdge * (1.0 - density) * _ShadowAlpha * (1.0 - fade);
                 dust *= 1.0 - fade;
 
                 // Each puff lit by its own slope toward the light, in the shadow of taller puffs between it and the
