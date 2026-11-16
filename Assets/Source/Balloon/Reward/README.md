@@ -6,7 +6,7 @@ are rolled every few lines, each further one rarer: the **heart balloon** from t
 even at full hearts, where its pop gives an extra heart past the maximum; the **golden balloon** from 15% done,
 up to three; the **disco ball** from 25% done, the first one sure, up to three. Level 5 always gets a single
 golden one early on, the player's first, and level 8 a single disco ball; after that, any ordinary level may
-get one or the other, about every 5 levels each: a little likelier early in the run, and likelier the longer
+get one or the other, about every 3 levels each: a little likelier early in the run, and likelier the longer
 since the last. Off a purple level the heart comes to a player who is missing hearts, more often the more are
 missing. The Party Favors card raises every one of these rolls' chances by 25% a stack (`IWeaponStats.RewardBalloonOdds`,
 `Game/Upgrades/README.md`), the nuke's too. At most one of each is on the board. The plans are
@@ -86,12 +86,12 @@ has an entry for.
   (`SureGoldenAtCompletion`, 10% done), so every player meets a golden balloon with the level still ahead.
   Only levels from the sure level on roll.
 - **Soft pity.** Each level since the last golden balloon was placed (on any level, purple included; from the
-  sure level before the first) adds `OrdinaryChanceGrowthPerLevel` (4%) to the roll, so an eased chance
-  never stays low: early in a run 10%, 14%, 18%... and one comes on average every 5 levels (4.8 early, 5.7
-  past level 45, one gap in a hundred reaching 12 or 13, in a 20,000-run simulation). A placed one starts the
+  sure level before the first) adds `OrdinaryChanceGrowthPerLevel` (12%) to the roll, so an eased chance
+  never stays low: early in a run 20%, 32%, 44%... and one comes on average every 3 levels (3.1 early, 3.6
+  past level 45, one gap in a hundred reaching 7, in a 20,000-run simulation). A placed one starts the
   count over; a level that won one but ended before it was placed doesn't.
 - **Disco ball, on another level.** The golden balloon's rules on its own numbers, a little more often: every
-  `OrdinaryDiscoEveryLevels` (1) level from `SureDiscoLevel` (8) on, against `OrdinaryDiscoChance` (12%,
+  `OrdinaryDiscoEveryLevels` (1) level from `SureDiscoLevel` (8) on, against `OrdinaryDiscoChance` (22%,
   eased and grown by the same rules, on its own count), placed at `DiscoAtCompletion` (0.35). Level 8 always
   places its one, at `SureDiscoAtCompletion` (15% done).
 - **Heart, elsewhere.** A roll per line while a heart is missing: `HeartChanceMissingOne`, or

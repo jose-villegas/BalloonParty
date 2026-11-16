@@ -18,7 +18,7 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("The chance, 0 to 1, that such a level gets its golden balloon, at the sure level. It eases off " +
                  "the further the run goes (Ordinary Chance Halved After Levels), and each level without one raises " +
                  "it (Ordinary Chance Growth Per Level).")]
-        [SerializeField] [Range(0f, 1f)] private float _ordinaryGoldenChance = 0.1f;
+        [SerializeField] [Range(0f, 1f)] private float _ordinaryGoldenChance = 0.2f;
 
         [Tooltip("A level that always brings a single golden balloon, the player's first sight of one, with no " +
                  "roll. 0 for none.")]
@@ -57,7 +57,7 @@ namespace BalloonParty.Configuration.Balloons
 
         [Tooltip("The chance, 0 to 1, that such a level gets its disco ball, at the sure level. It eases off and " +
                  "grows as the golden balloon's does.")]
-        [SerializeField] [Range(0f, 1f)] private float _ordinaryDiscoChance = 0.12f;
+        [SerializeField] [Range(0f, 1f)] private float _ordinaryDiscoChance = 0.22f;
 
         [Tooltip("A level that always brings a single disco ball, the player's first sight of one, with no roll. " +
                  "After the golden balloon's sure level, so the player already knows only a pierce breaks a plated " +
@@ -81,9 +81,9 @@ namespace BalloonParty.Configuration.Balloons
         [SerializeField] [Min(0)] private int _ordinaryChanceHalvedAfterLevels = 20;
 
         [Tooltip("Soft pity for the golden balloon and the disco ball off purple: each level since the last one of " +
-                 "that kind was placed adds this to its ordinary chance, so an eased chance never stays low. At 0.04 " +
-                 "each comes on average every 5 levels, a little more often early in the run than late.")]
-        [SerializeField] [Range(0f, 1f)] private float _ordinaryChanceGrowthPerLevel = 0.04f;
+                 "that kind was placed adds this to its ordinary chance, so an eased chance never stays low. At 0.12 " +
+                 "each comes on average every 3 levels, a little more often early in the run than late.")]
+        [SerializeField] [Range(0f, 1f)] private float _ordinaryChanceGrowthPerLevel = 0.12f;
 
         [Tooltip("Chance per spawn line of a heart balloon while one heart is missing, off a purple level. Full " +
                  "hearts never roll one.")]
