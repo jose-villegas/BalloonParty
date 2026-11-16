@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BalloonParty.UI;
+using BalloonParty.UI.CardReveal;
 using BalloonParty.UI.GameOver;
 using TMPro;
 using UnityEditor;
@@ -62,6 +63,10 @@ namespace BalloonParty.Editor
         private static readonly Color PanelBody = Hex(0x3BB6F4, BodyAlpha);
         private static readonly Color Cream = Hex(0xFFF7E8);
         private static readonly Color Graphite = Hex(0x4A4A52);
+
+        // The reveal's ribbon cream (CardRevealBuilder), so the ad's prize looks like what a bonus arrives on.
+        private static readonly Color RibbonCream = new(0.98f, 0.965f, 0.925f, 1f);
+        private static readonly Color RibbonShadow = Hex(0x1E0B24, 0.35f);
         private static readonly Color Blue = Hex(0x1A86DA);
         private static readonly Color Dim = Hex(0x10233A, 0.6f);
         private static readonly Palette Green = new(Hex(0x6BD94A), Hex(0x1F8A16), Hex(0x155C10));
@@ -437,8 +442,8 @@ namespace BalloonParty.Editor
             return offers.gameObject;
         }
 
-        // The ad's tile, told by pictures: a face-down card with a "?" (a random card) beside a pill with the
-        // play mark and "AD".
+        // The ad's tile, told by pictures: a ribbon with a "?" (a random bonus, as the reveal brings it on a
+        // ribbon) beside a pill with the play mark and "AD".
         private static void StyleAdTile(Button tile, Transform row, Kit kit)
         {
             var label = KeepOnlyLabel(tile);
@@ -458,18 +463,38 @@ namespace BalloonParty.Editor
             layout.childForceExpandWidth = false;
             layout.childForceExpandHeight = false;
 
-            var card = Node("Card", content);
-            var face = card.gameObject.AddComponent<Image>();
-            Rounded(face, kit.Flat, Color.white, 14f);
-            face.raycastTarget = false;
-            ((RectTransform)card).sizeDelta = new Vector2(19f, 25f);
-            Size(card.gameObject, 19f, 25f);
-            card.localRotation = Quaternion.Euler(0f, 0f, -6f);
-            var mark = Label(card, "Mark", "?", kit.TitleFont, kit.Plain, 16f, Plum.Lip);
-            Stretch((RectTransform)mark.transform, 0f);
+            PrizeRibbon(content, kit);
 
             AdPill(content, kit, Plum.Lip, label);
             Sash(tile.transform, "Boost", kit);
+        }
+
+        // A small cream ribbon, swallowtailed like the reveal's, tilted, over its own soft shadow, with a pencilled
+        // "?" on it. The plain UI material draws the ribbon flat (CelRibbon's light is the reveal's).
+        private static void PrizeRibbon(Transform parent, Kit kit)
+        {
+            const float width = 36f;
+            const float height = 14f;
+            var ribbon = Node("Ribbon", parent);
+            ((RectTransform)ribbon).sizeDelta = new Vector2(width, height);
+            Size(ribbon.gameObject, width, height);
+            ribbon.localRotation = Quaternion.Euler(0f, 0f, -8f);
+
+            var shadow = RibbonStrip(ribbon, "Shadow", RibbonShadow);
+            ((RectTransform)shadow.transform).anchoredPosition = new Vector2(0.8f, -1.6f);
+            var face = RibbonStrip(ribbon, "Face", RibbonCream);
+            var mark = Label(face.transform, "Mark", "?", kit.HandFont, null, 13f, Graphite);
+            Stretch((RectTransform)mark.transform, 0f);
+        }
+
+        private static RibbonGraphic RibbonStrip(Transform parent, string name, Color color)
+        {
+            var strip = Node(name, parent);
+            Stretch((RectTransform)strip, 0f);
+            var graphic = strip.gameObject.AddComponent<RibbonGraphic>();
+            graphic.color = color;
+            graphic.raycastTarget = false;
+            return graphic;
         }
 
         // A white pill with the play mark and "AD" in the given ink: the one picture for "this plays an ad".

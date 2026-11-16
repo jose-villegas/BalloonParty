@@ -23,7 +23,7 @@ assigned, `GameLifetimeScope` falls back to a default that has no pops, so no st
 
 | Stage attached | Level-up with a card | Retry's bonus card |
 |---|---|---|
-| No (no pops baked) | Tooltip `Level N: Card` (`UI/LevelUp/LevelUpPopUp`) | Tooltip `Bonus card: Card` (`UI/Tooltip/TooltipBanner`) |
+| No (no pops baked) | Tooltip `Level N: Card` (`UI/LevelUp/LevelUpPopUp`) | Tooltip `Bonus: Card` (`UI/Tooltip/TooltipBanner`) |
 | Yes | Tooltip `Level N`, and the reveal | The reveal only |
 
 The level-up popup checks `HasStage` when it takes the card (at `Pending`), and the reveal is queued

@@ -70,7 +70,7 @@ MonoBehaviour:
       _dealtFirst: 0
     - _kind: 4
       _title: Raise the Bar
-      _description: +1 to every card's limit
+      _description: +1 to every bonus limit
       _amount: 1
       _maxStacks: 2
       _weight: 0.5

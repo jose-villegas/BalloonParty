@@ -30,7 +30,7 @@ namespace BalloonParty.UI.Tooltip
         [SerializeField] [Range(0f, 1f)] private float _visibleAlpha = 0.7f;
 
         [Tooltip("Names a retry's bonus card as play resumes; {0} is the card's title.")]
-        [SerializeField] private string _bonusCardFormat = "Bonus card: {0}";
+        [SerializeField] private string _bonusCardFormat = "Bonus: {0}";
 
         [Inject] private ISubscriber<TooltipMessage> _tooltipSubscriber;
         [Inject] private ISubscriber<BonusCardDealtMessage> _bonusDealtSubscriber;

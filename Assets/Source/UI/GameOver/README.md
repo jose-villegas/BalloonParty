@@ -42,7 +42,7 @@ and the balloons' specular along its rim. The shapes come from `Tools/art/make_u
 | Card | Blue gradient body whose dark edge is blurred, smearing into the board, mostly see-through so the board shows behind the loss (the layers behind it are hollow); the "Game Over" title on a vermilion plaque across its top edge. What's information or an action stays solid |
 | Result | A cream well: the level in white outlined in blue, the points in blue, the best in pencil (white on the bare blue is too faint) |
 | Retry | Green, the largest button, pulsing now and then: the one to press. Hearts pinned across its top edge count the free retries; once they are used, the play-AD pill shows inside it |
-| Offers | Plum tiles sharing the row's width, told by pictures (the ad tile: a "?" card and a play-AD pill) with a ribbon across the corner saying what they give |
+| Offers | Plum tiles sharing the row's width, told by pictures (the ad tile: a cream ribbon with a "?", the way a bonus arrives, and a play-AD pill) with a ribbon across the corner saying what they give |
 | Start Over | Red, shorter than Retry: it throws the run away |
 
 The light follows the time of day, as on the balloons. Each shape's specular is a `UI/TimeOfDaySpecular`,

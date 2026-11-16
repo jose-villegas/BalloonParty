@@ -266,7 +266,7 @@ MonoBehaviour:
   _fadeDuration: 0.3
   _holdDuration: 1.6
   _visibleAlpha: 0.7
-  _bonusCardFormat: 'Bonus card: {0}'
+  _bonusCardFormat: 'Bonus: {0}'
 --- !u!1 &8144384464363206753
 GameObject:
   m_ObjectHideFlags: 0

@@ -86,7 +86,7 @@ namespace BalloonParty.Configuration
             new(UpgradeKind.FasterReload, "Quick Hands", "Reload 15% faster", 0.15f, 4),
             new(UpgradeKind.Shield, "Thick Skin", "+1 shield on every pen", 1f, 3, retryDealBoost: 1f),
             new(UpgradeKind.ItemOdds, "Lucky Find", "More items on the board", 0.1f, 4),
-            new(UpgradeKind.RaiseLimits, "Raise the Bar", "+1 to every card's limit", 1f, 2, 0.5f),
+            new(UpgradeKind.RaiseLimits, "Raise the Bar", "+1 to every bonus limit", 1f, 2, 0.5f),
             new(UpgradeKind.SnipeChance, "Sharpshooter", "Increased Snipe chance", 0.01f, 3, dealtFirst: true),
             new(UpgradeKind.RewardOdds, "Party Favors", "Increased gift balloon chance", 0.25f, 3)
         };
