@@ -12,7 +12,7 @@ var searchData=
   ['4_204_20tutorial_20ui_9',['4.4 Tutorial UI',['../plan_future_ideas.html#autotoc_md506',1,'']]],
   ['4_205_20persistence_10',['4.5 Persistence',['../plan_future_ideas.html#autotoc_md507',1,'']]],
   ['4_20absorber_20consume_20vfx_11',['1.4 Absorber Consume VFX',['../plan_future_ideas.html#autotoc_md487',1,'']]],
-  ['4_20agi_20—_20mali_20fragment_20vs_20bandwidth_12',['4. AGI — Mali fragment vs bandwidth',['../plan_performance_recovery.html#autotoc_md792',1,'']]],
+  ['4_20agi_20—_20mali_20fragment_20vs_20bandwidth_12',['4. AGI — Mali fragment vs bandwidth',['../plan_performance_recovery.html#autotoc_md778',1,'']]],
   ['4_20architecture_13',['4 Architecture',['../plan_card_reveal.html#autotoc_md386',1,'4. Architecture'],['../plan_coins.html#autotoc_md396',1,'4. Architecture']]],
   ['4_20balancer_20changes_14',['8.4 Balancer Changes',['../plan_future_ideas.html#autotoc_md528',1,'']]],
   ['4_20detect_20on_20projected_20progress_20keep_20tipping_20identity_20as_20presentation_15',['4. Detect on projected progress; keep tipping identity as presentation',['../plan_level_up_timing.html#autotoc_md752',1,'']]],
@@ -24,10 +24,10 @@ var searchData=
   ['4_20new_20message_3a_20levelupabandonedmessage_21',['6.4 New message: LevelUpAbandonedMessage',['../plan_level_up_timing.html#autotoc_md758',1,'']]],
   ['4_20passive_20modifier_20ideas_22',['13.4 Passive modifier ideas',['../plan_future_ideas.html#autotoc_md565',1,'']]],
   ['4_20phase_201_3a_20projectile_20identity_20no_20behaviour_20change_23',['4. Phase 1: projectile identity (no behaviour change)',['../plan_fast_paced.html#autotoc_md469',1,'']]],
-  ['4_20phases_24',['4. Phases',['../plan_shot_solver_accuracy.html#autotoc_md843',1,'']]],
+  ['4_20phases_24',['4. Phases',['../plan_shot_solver_accuracy.html#autotoc_md829',1,'']]],
   ['4_20rendering_25',['4. Rendering',['../plan_headsup.html#autotoc_md724',1,'']]],
-  ['4_20tap_20bilinear_20blur_20pass_201_20·_20with_20g6_26',['G3 — 4-tap bilinear blur (Pass 1) · with G6',['../plan_performance_recovery.html#autotoc_md812',1,'']]],
-  ['4_20the_20merge_27',['4. The merge',['../plan_water_scenario.html#autotoc_md915',1,'']]],
+  ['4_20tap_20bilinear_20blur_20pass_201_20·_20with_20g6_26',['G3 — 4-tap bilinear blur (Pass 1) · with G6',['../plan_performance_recovery.html#autotoc_md798',1,'']]],
+  ['4_20the_20merge_27',['4. The merge',['../plan_water_scenario.html#autotoc_md901',1,'']]],
   ['4_20tutorial_20ui_28',['4.4 Tutorial UI',['../plan_future_ideas.html#autotoc_md506',1,'']]],
   ['4_3a_20generated_20levels_29',['7. Phase 4: generated levels',['../plan_fast_paced.html#autotoc_md475',1,'']]]
 ];

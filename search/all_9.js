@@ -9,5 +9,5 @@ var searchData=
   ['9_20open_20questions_6',['9. Open questions',['../plan_coins.html#autotoc_md401',1,'']]],
   ['9_20risks_7',['9 Risks',['../plan_fast_paced.html#autotoc_md479',1,'9. Risks'],['../plan_headsup.html#autotoc_md731',1,'9. Risks']]],
   ['9_20risks_20—_20playtest_20not_20compile_8',['9. Risks — playtest, not compile',['../plan_level_up_timing.html#autotoc_md764',1,'']]],
-  ['90s_20perfetto_20capture_20during_20live_20play_9',['Findings — second pass, 2026-07-23 evening (90s perfetto capture during live play)',['../plan_performance_recovery.html#autotoc_md795',1,'']]]
+  ['90s_20perfetto_20capture_20during_20live_20play_9',['Findings — second pass, 2026-07-23 evening (90s perfetto capture during live play)',['../plan_performance_recovery.html#autotoc_md781',1,'']]]
 ];
