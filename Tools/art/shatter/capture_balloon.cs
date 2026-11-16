@@ -11,6 +11,9 @@
 // __RENDERERS__ comma-separated renderer names to draw (a name ending in * matches as a prefix), e.g. Body,Shine*:
 //               the body and its highlights, not its baked shadow (the sheet bakes its own) or anything around it
 // __OUT__       where to write the PNG (use forward slashes)
+// __FLOATS__    optional, shader floats to set on the drawn renderers for the render, as name=value pairs split by
+//               ';', e.g. _FuseArmed=1;_FuseDigit=1;_FuseBeat=now-0.25 (now is the shader's _Time.y). Leave the
+//               placeholder as it is for none. They go on a copy of each renderer's property block, put back after.
 //
 // The chosen renderers move to a spare layer for one render of a temporary orthographic camera centred on the
 // balloon, then go back, so nothing on the board changes. 1024 px over one world unit: a balloon (about 0.64
@@ -18,6 +21,7 @@
 var modelName = "__MODEL__";
 var rendererNames = "__RENDERERS__".Split(',');
 var outPath = "__OUT__";
+var floats = "__FLOATS__";
 const int Pixels = 1024;
 const float HalfExtent = 0.5f;
 const int SpareLayer = 31;
@@ -67,6 +71,31 @@ if (picked.Count == 0)
     return "none of " + string.Join(",", rendererNames) + " found on the " + modelName;
 }
 
+var liveBlocks = new System.Collections.Generic.List<(UnityEngine.Renderer renderer, UnityEngine.MaterialPropertyBlock block)>();
+if (!floats.StartsWith("__") && floats.Length > 0)
+{
+    foreach (var (go, _) in picked)
+    {
+        var renderer = go.GetComponent<UnityEngine.Renderer>();
+        var live = new UnityEngine.MaterialPropertyBlock();
+        renderer.GetPropertyBlock(live);
+        liveBlocks.Add((renderer, live));
+        var block = new UnityEngine.MaterialPropertyBlock();
+        renderer.GetPropertyBlock(block);
+        foreach (var pair in floats.Split(';'))
+        {
+            var parts = pair.Split('=');
+            var text = parts[1].Trim();
+            var value = text.StartsWith("now")
+                ? UnityEngine.Time.timeSinceLevelLoad + (text.Length > 3 ? float.Parse(text.Substring(3), System.Globalization.CultureInfo.InvariantCulture) : 0f)
+                : float.Parse(text, System.Globalization.CultureInfo.InvariantCulture);
+            block.SetFloat(parts[0].Trim(), value);
+        }
+
+        renderer.SetPropertyBlock(block);
+    }
+}
+
 var camGo = new UnityEngine.GameObject("ShatterSourceCamera");
 var cam = camGo.AddComponent<UnityEngine.Camera>();
 cam.orthographic = true;
@@ -105,6 +134,11 @@ finally
     foreach (var (go, layer) in picked)
     {
         go.layer = layer;
+    }
+
+    foreach (var (renderer, live) in liveBlocks)
+    {
+        renderer.SetPropertyBlock(live);
     }
 
     UnityEngine.Object.DestroyImmediate(camGo);

@@ -12,6 +12,7 @@ Every shatter sheet comes from here, cut from the captures in `sources/`:
 | `Unbreakable/unbreakable_parts.png` | `PSVFX_UnbreakablePop` | the defaults: 9 plates on 3x3 |
 | `Golden/golden_parts.png` | `PSVFX_GoldenPop` | the defaults |
 | `Disco/disco_parts.png` | `PSVFX_DiscoPop` | the defaults; the pop's start sizes are the golden's scaled to the disco ball's wider body (0.72 against 0.64) |
+| `Nuke/nuke_parts.png` | `PSVFX_NukePop` | the defaults, from a capture of the nuke armed (below); the pop is the golden's with its material swapped |
 | `Unbreakable/tough_parts.png` | `PSVFX_ToughBalloonPop` | `--pieces 10 --grid 4x3 --diameter 0.73 --swirl 3` |
 | `Unbreakable/tougher_parts.png` | `PSVFX_TougherBalloonPop` | as the tough's, from the tougher's capture |
 
@@ -37,7 +38,13 @@ The plates (unbreakable, golden) crack straight; the tough balloons' pieces are 
    (`BalloonParty/Particle/SceneLit`) lights them at runtime, at dawn, dusk or night, like the balloon beside
    them. Keep the capture in `sources/`, so the sheet can be baked again without the Editor. A balloon whose
    look depends on its state is captured as it looks on the board: the unbreakable's shell is split open,
-   showing its joints, beside its neighbours.
+   showing its joints, beside its neighbours. The nuke breaks only once armed, so it is captured armed: before
+   the render, `__FLOATS__` sets the fuse on its body: the LED on its last count, the lamp and the seams red a
+   quarter second after a tick. The capture renders without HDR, so the glow clips to plain red in the sheet:
+
+   ```bash
+   sed "s/__MODEL__/Nuke/; s/__RENDERERS__/Body,Shine*/; s/__FLOATS__/_FuseArmed=1;_FuseDigit=1;_FuseBeat=now-0.25/; s#__OUT__#$PWD/Tools/art/shatter/sources/nuke_balloon.png#" Tools/art/shatter/capture_balloon.cs > /tmp/capture.cs
+   ```
 
 2. **Bake the sheet.**
 

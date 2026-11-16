@@ -262,8 +262,10 @@ scene light, so night leaves it dark. It is smoke, not a solid: only the thickes
 thin edges and the folds let it show through, and light glows through the thin parts. Over its last stretch it
 thins, spreads a little and erodes away through the noise, edges first, until nothing is left.
 
-**Its pop.** The nuke's own pop at detonation uses the golden balloon's shatter for now. A `nuke_parts`
-sheet cut from a capture of the balloon by `Tools/art/shatter` is a later polish.
+**Its pop.** The nuke shatters into lead plates: `PSVFX_NukePop`, the golden balloon's shatter on a
+`nuke_parts` sheet cut by `Tools/art/shatter` from a capture of the nuke armed (its red LED on 1, the lamp
+and the seams red), so the shards carry the red seams, bits of the trefoil and the LED. They are lit through
+`Particle/SceneLit` with the balloon's own light knobs.
 
 **Sound.** All layered from clips already in the sound bank, as the other rewards' cues are.
 

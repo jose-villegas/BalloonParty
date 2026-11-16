@@ -172,7 +172,9 @@ the golden balloon. Once armed it deflects every ball and takes no more damage, 
 the golden one's, with a lead-plated body (`Balloon/NukeBalloon.shader`: bolted plates, a radiation mark on a yellow
 placard) whose plates tip and darken as it is dented, and red rays behind it (`NukeRays` palette entry and
 material). `Balloon/Type/NukeFuseView` drives the shader's LED counter and status lamp from the fuse's messages: the
-lamp is green until the nuke is armed and then red, blinking with each beep, and the rays turn red too. Cues: `BalloonDeflectNuke`, a lead clank a
+lamp is green until the nuke is armed and then red, blinking with each beep, and the rays turn red too. It shatters
+into lead plates (`PSVFX_NukePop`, the golden balloon's shatter on the `Sprites/Balloons/Nuke/nuke_parts` sheet, cut
+by `Tools/art/shatter` from a capture of the nuke armed). Cues: `BalloonDeflectNuke`, a lead clank a
 semitone lower on each dent, and `BalloonPopNuke`, a deep boom.
 
 **When it comes.** `NukeSchedule` asks, first on every clock line while the level is played: from
