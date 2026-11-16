@@ -96,8 +96,8 @@ apart. All the tuning lives in `IRewardBalloonSettings`:
 |---|---|---|---|
 | `SureDiscoLevel` | 8 | 5 | Every player meets one with no roll, early in the level (`SureDiscoAtCompletion` 0.15). After the golden balloon's level, so the player already knows only a pierce breaks a plated balloon |
 | `OrdinaryDiscoEveryLevels` | 1 | 1 | Off a purple level, every level from the sure level on rolls once, on its first line. A level before the sure one never rolls, so the sure level is the first sight. Was every 4th (disco) and 5th (golden) at 0.45 and 0.4, about one level in nine and one in twelve: too rare off bonus levels (the owner, 2026-11-16) |
-| `OrdinaryDiscoChance` | 0.22 | 0.2 | The roll's chance at the sure level, halved `OrdinaryChanceHalvedAfterLevels` (20) levels past it, a third at 40 past |
-| `OrdinaryChanceGrowthPerLevel` | 0.12 | 0.12 | Soft pity, shared: each level since the last one of that kind adds this to its chance, so an eased chance never stays low. Each comes on average every 3 levels |
+| `OrdinaryDiscoChance` | 0.17 | 0.15 | The roll's chance at the sure level, halved `OrdinaryChanceHalvedAfterLevels` (20) levels past it, a third at 40 past |
+| `OrdinaryChanceGrowthPerLevel` | 0.11 | 0.11 | Soft pity, shared: each level since the last one of that kind adds this to its chance, so an eased chance never stays low. Each comes on average every 3.4 levels |
 | `DiscoAtCompletion` | 0.35 | 0.5 | Earlier than the golden balloon: the rainbow board pays out goals, and needs goals left to pay (Open questions, 1) |
 | `PurpleDiscoAtCompletion` | 0.25 | 0.15 | On a purple level, rolled every `PurpleRollEveryLines` (6) lines from a quarter done |
 | `PurpleDiscoChances` | 1, 0.25, 0.15 | 0.35, 0.2, 0.1 | The first is sure, so every purple level gets one. The next two are rolls, rarer than the heart's (0.4, 0.3, 0.2, 0.12, 0.06) |
