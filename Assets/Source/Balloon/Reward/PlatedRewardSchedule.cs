@@ -51,11 +51,11 @@ namespace BalloonParty.Balloon.Reward
         /// <summary>
         ///     One counted line towards a purple level's next roll of a kind, and the roll when it's time: the first on
         ///     the first line counted, then every <paramref name="rollEveryLines" />. The chance is the next entry, so the
-        ///     list's length caps the level.
+        ///     list's length caps the level, times <paramref name="odds" /> (Party Favors), up to certain.
         /// </summary>
         internal static bool RollPurple(
             IReadOnlyList<float> chances, int placedThisLevel, ref int linesCounted, int rollEveryLines,
-            Func<float> random01)
+            Func<float> random01, float odds = 1f)
         {
             if (chances == null || placedThisLevel >= chances.Count)
             {
@@ -69,7 +69,7 @@ namespace BalloonParty.Balloon.Reward
             }
 
             linesCounted = 0;
-            var chance = chances[placedThisLevel];
+            var chance = Math.Min(1f, chances[placedThisLevel] * odds);
             return chance >= 1f || random01() < chance;
         }
 
@@ -96,9 +96,13 @@ namespace BalloonParty.Balloon.Reward
             return Math.Min(1f, chance + Math.Max(0f, tuning.ChanceGrowthPerLevel) * missed);
         }
 
+        /// <summary>
+        ///     Whether one is due on this line. <paramref name="odds" /> multiplies every roll's chance (Party Favors,
+        ///     1 without it); a sure one needs no roll.
+        /// </summary>
         internal bool Due(
             in PlatedRewardTuning tuning, ILevelParameters level, int levelNumber, ILevelProgress progress,
-            int rollEveryLines)
+            int rollEveryLines, float odds = 1f)
         {
             if (_alive || level == null)
             {
@@ -107,7 +111,7 @@ namespace BalloonParty.Balloon.Reward
 
             if (!level.IsExtraColorLevel)
             {
-                return OrdinaryDue(in tuning, level, levelNumber, progress);
+                return OrdinaryDue(in tuning, level, levelNumber, progress, odds);
             }
 
             if (_owed)
@@ -120,7 +124,8 @@ namespace BalloonParty.Balloon.Reward
                 return false;
             }
 
-            _owed = RollPurple(tuning.PurpleChances, _placedThisLevel, ref _rollLines, rollEveryLines, _random01);
+            _owed = RollPurple(
+                tuning.PurpleChances, _placedThisLevel, ref _rollLines, rollEveryLines, _random01, odds);
             return _owed;
         }
 
@@ -154,7 +159,8 @@ namespace BalloonParty.Balloon.Reward
 
         // Rolled on the level's first line, where the level's parameters are surely its own.
         private bool OrdinaryDue(
-            in PlatedRewardTuning tuning, ILevelParameters level, int levelNumber, ILevelProgress progress)
+            in PlatedRewardTuning tuning, ILevelParameters level, int levelNumber, ILevelProgress progress,
+            float odds)
         {
             if (!_ordinaryRolled)
             {
@@ -162,7 +168,8 @@ namespace BalloonParty.Balloon.Reward
                 var sureLevel = levelNumber > 0 && levelNumber == tuning.SureLevel;
                 _ordinaryWon = sureLevel
                                || (IsOrdinaryLevel(in tuning, levelNumber)
-                                   && _random01() < OrdinaryChance(in tuning, levelNumber, _lastPlacedLevel));
+                                   && _random01() < Math.Min(
+                                       1f, OrdinaryChance(in tuning, levelNumber, _lastPlacedLevel) * odds));
                 _ordinaryAt = sureLevel ? tuning.SureAtCompletion : tuning.AtCompletion;
             }
 

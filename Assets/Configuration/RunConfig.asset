@@ -78,6 +78,13 @@ MonoBehaviour:
       _maxStacks: 3
       _weight: 1
       _retryDealBoost: 0
+    - _kind: 6
+      _title: Party Favors
+      _description: More golden, heart & disco balloons
+      _amount: 0.25
+      _maxStacks: 3
+      _weight: 1
+      _retryDealBoost: 0
     _snipeCooldownSeconds: 8
   _assist:
     _dangerNeedWeight: 1

@@ -6,6 +6,7 @@ using BalloonParty.Game.Assist;
 using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
+using BalloonParty.Game.Upgrades;
 using BalloonParty.Shared;
 using UniRx;
 using VContainer.Unity;
@@ -29,7 +30,8 @@ namespace BalloonParty.Balloon.Reward
     ///         a roll on every line while a heart is missing, likelier the more are, after a cooldown since the last.
     ///     </para>
     ///     A line brings one at most: the golden balloon first, then the disco ball, then the heart. One that loses the
-    ///     line stays due for the next.
+    ///     line stays due for the next. The Party Favors card (<see cref="IWeaponStats.RewardBalloonOdds" />) raises
+    ///     every roll's chance.
     /// </summary>
     internal sealed class RewardBalloonService : IRewardBalloonRequests, IStartable, IRunResettable, IDisposable
     {
@@ -38,6 +40,7 @@ namespace BalloonParty.Balloon.Reward
         private readonly IActiveLevelParameters _levelParams;
         private readonly IPlayerHealth _health;
         private readonly IPlayerNeed _need;
+        private readonly IWeaponStats _weapon;
         private readonly PityRoll _heartPity;
         private readonly PlatedRewardSchedule _golden;
         private readonly PlatedRewardSchedule _disco;
@@ -60,6 +63,9 @@ namespace BalloonParty.Balloon.Reward
 
         public int ResetOrder => RunResetOrder.Counters;
 
+        // Party Favors' multiplier on every reward roll, read live so a card picked mid-run applies at once.
+        private float Odds => 1f + Math.Max(0f, _weapon.RewardBalloonOdds);
+
         // A seam for tests, as UnbreakableFormationService's.
         internal Func<float> Random01 { get; set; } = () => Random.value;
 
@@ -69,13 +75,15 @@ namespace BalloonParty.Balloon.Reward
             IActiveLevelParameters levelParams,
             IPlayerHealth health,
             IPlayerNeed need,
-            IAssistSettings assist)
+            IAssistSettings assist,
+            IWeaponStats weapon)
         {
             _settings = balloons.RewardBalloons;
             _levelProgress = levelProgress;
             _levelParams = levelParams;
             _health = health;
             _need = need;
+            _weapon = weapon;
             _heartPity = new PityRoll(assist.HeartPity);
             // Through the property each draw, so a test's seam set after construction still reaches the schedules.
             _golden = new PlatedRewardSchedule(() => Random01());
@@ -193,7 +201,7 @@ namespace BalloonParty.Balloon.Reward
         {
             return schedule.Due(
                 in tuning, _levelParams.Current, _levelProgress.Level.Value, _levelProgress,
-                _settings.PurpleRollEveryLines);
+                _settings.PurpleRollEveryLines, Odds);
         }
 
         private void ForgetLevelsRewards()
@@ -225,7 +233,7 @@ namespace BalloonParty.Balloon.Reward
                 {
                     _purpleHeartOwed = PlatedRewardSchedule.RollPurple(
                         _settings.PurpleHeartChances, _heartsThisLevel, ref _heartRollLines,
-                        _settings.PurpleRollEveryLines, Random01);
+                        _settings.PurpleRollEveryLines, Random01, Odds);
                 }
 
                 return _purpleHeartOwed;
@@ -245,7 +253,7 @@ namespace BalloonParty.Balloon.Reward
             }
 
             // Pity forgives the lines rolled without a heart while in trouble (IAssistSettings.HeartPity).
-            var chance = HeartChance(_settings, missing);
+            var chance = Math.Min(1f, HeartChance(_settings, missing) * Odds);
             _heartPending = chance > 0f && _heartPity.Roll(chance, _need.Need, Random01());
             return _heartPending;
         }

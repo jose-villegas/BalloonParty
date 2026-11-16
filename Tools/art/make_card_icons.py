@@ -13,6 +13,7 @@ down, so the edges are soft.
 - ItemOdds      Lucky Find: a four-leaf clover
 - RaiseLimits   Raise the Bar: an arrow up through a bar
 - SnipeChance   Sharpshooter: a crosshair
+- RewardOdds    Party Favors: a gift box with a bow
 
 Usage: python3 Tools/art/make_card_icons.py Assets/Sprites/UI/CardIcons/card_icons.png
 """
@@ -27,7 +28,7 @@ CELL = 128
 SS = 4
 STROKE = 0.085
 WOBBLE = 0.012
-ICONS = ("BallCap", "FasterReload", "Shield", "ItemOdds", "RaiseLimits", "SnipeChance")
+ICONS = ("BallCap", "FasterReload", "Shield", "ItemOdds", "RaiseLimits", "SnipeChance", "RewardOdds")
 
 
 def _densify(points, closed, step=0.006):
@@ -152,6 +153,15 @@ def snipe_chance(pen):
     pen.dot(0.5, 0.5, 0.055)
 
 
+def reward_odds(pen):
+    pen.stroke([(0.18, 0.46), (0.82, 0.46), (0.82, 0.9), (0.18, 0.9)], closed=True)
+    pen.stroke([(0.1, 0.32), (0.9, 0.32), (0.9, 0.46), (0.1, 0.46)], closed=True, weight=0.9)
+    pen.stroke([(0.5, 0.33), (0.5, 0.89)], weight=0.8, overshoot=0.0)
+    for side in (-1, 1):
+        loop = [(0.5, 0.31), (0.5 + side * 0.12, 0.1), (0.5 + side * 0.3, 0.12), (0.5 + side * 0.22, 0.27)]
+        pen.stroke(loop, closed=True, weight=0.85)
+
+
 DRAWERS = {
     "BallCap": ball_cap,
     "FasterReload": faster_reload,
@@ -159,6 +169,7 @@ DRAWERS = {
     "ItemOdds": item_odds,
     "RaiseLimits": raise_limits,
     "SnipeChance": snipe_chance,
+    "RewardOdds": reward_odds,
 }
 
 

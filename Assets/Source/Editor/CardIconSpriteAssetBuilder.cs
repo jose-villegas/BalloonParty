@@ -29,7 +29,7 @@ namespace BalloonParty.Editor
         // The atlas's cells, left to right, as make_card_icons.py lays them out.
         internal static readonly string[] IconNames =
         {
-            "BallCap", "FasterReload", "Shield", "ItemOdds", "RaiseLimits", "SnipeChance"
+            "BallCap", "FasterReload", "Shield", "ItemOdds", "RaiseLimits", "SnipeChance", "RewardOdds"
         };
 
         [MenuItem(MenuPath)]

@@ -32,5 +32,11 @@ namespace BalloonParty.Game.Upgrades
 
         /// <summary>Sharpshooter's chance, 0 to 1, that a ball starts Snipe-armed as the thrower loads it.</summary>
         float SnipeChance { get; }
+
+        /// <summary>
+        ///     Party Favors' boost to the reward balloons: each roll that brings a golden, heart or disco balloon has
+        ///     its chance × (1 + this). 0 without the card.
+        /// </summary>
+        float RewardBalloonOdds { get; }
     }
 }

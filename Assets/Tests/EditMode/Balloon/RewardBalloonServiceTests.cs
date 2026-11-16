@@ -8,6 +8,7 @@ using BalloonParty.Configuration.Level;
 using BalloonParty.Game.Assist;
 using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
+using BalloonParty.Game.Upgrades;
 using BalloonParty.Shared;
 using NSubstitute;
 using NUnit.Framework;
@@ -40,6 +41,7 @@ namespace BalloonParty.Tests.Balloon
         private IPlayerHealth _health;
         private IPlayerNeed _need;
         private IAssistSettings _assist;
+        private IWeaponStats _weapon;
         private RewardBalloonService _service;
         private float _roll;
         private int _draws;
@@ -84,6 +86,7 @@ namespace BalloonParty.Tests.Balloon
             pity.GrowthPerMiss.Returns(0.5f);
             pity.MaxChance.Returns(0.5f);
             _assist = Substitute.For<IAssistSettings>();
+            _weapon = Substitute.For<IWeaponStats>();
             _assist.HeartPity.Returns(pity);
 
             _roll = 1f;
@@ -727,6 +730,53 @@ namespace BalloonParty.Tests.Balloon
             Assert.IsFalse(_service.TryTakeDue(out _));
         }
 
+        // Party Favors: 25% a stack. Each case's draw loses at the plain chance and wins at the raised one.
+        [Test]
+        public void PartyFavors_RaisesAnOrdinaryLevelsRoll()
+        {
+            UseOrdinaryGolden(level: 10, roll: 0.45f);
+            _weapon.RewardBalloonOdds.Returns(0.25f);
+            SetCompletion(0.8f);
+
+            Assert.IsTrue(LinesUntilDue(1), "40% x 1.25 = 50%");
+        }
+
+        [Test]
+        public void PartyFavors_RaisesAPurpleLevelsRoll()
+        {
+            UsePurple(new[] { 0.35f }, Empty);
+            _weapon.RewardBalloonOdds.Returns(0.25f);
+            _roll = 0.4f;
+            SetCompletion(0.8f);
+
+            Assert.IsTrue(_service.TryTakeDue(out var type), "35% x 1.25 = 43.75%");
+            Assert.AreEqual(BalloonType.Golden, type);
+        }
+
+        [Test]
+        public void PartyFavors_RaisesTheHeartsRoll()
+        {
+            _level.IsExtraColorLevel.Returns(false);
+            _hearts.Value = StartingHearts - 1;
+            _weapon.RewardBalloonOdds.Returns(1f);
+            _roll = 0.06f;
+
+            Assert.IsTrue(_service.TryTakeDue(out var type), "4% x 2 = 8%");
+            Assert.AreEqual(BalloonType.Heart, type);
+        }
+
+        [Test]
+        public void PartyFavors_ReadLive_SoACardPickedMidLevelAppliesOnTheNextRoll()
+        {
+            _level.IsExtraColorLevel.Returns(false);
+            _hearts.Value = StartingHearts - 1;
+            _roll = 0.06f;
+            Assert.IsFalse(_service.TryTakeDue(out _), "4%");
+
+            _weapon.RewardBalloonOdds.Returns(1f);
+            Assert.IsTrue(_service.TryTakeDue(out _), "8%");
+        }
+
         [Test]
         public void Heart_MissingOne_RollUnderTheChance_Due()
         {
@@ -1263,7 +1313,7 @@ namespace BalloonParty.Tests.Balloon
             balloons.RewardBalloons.Returns(_settings);
             balloons.Entries.Returns(entries);
 
-            var service = new RewardBalloonService(balloons, _levelProgress, _levelParams, _health, _need, _assist)
+            var service = new RewardBalloonService(balloons, _levelProgress, _levelParams, _health, _need, _assist, _weapon)
             {
                 Random01 = () =>
                 {

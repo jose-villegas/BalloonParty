@@ -70,6 +70,7 @@ namespace BalloonParty.Game.Upgrades
         private int _shieldBonus;
         private float _extraItemChance;
         private float _snipeChance;
+        private float _rewardBalloonOdds;
         private int _limitBonus;
         // Free cards dealt this run, so each deals a different one; a retry winds it back with the cards.
         private int _freeCardsDealt;
@@ -85,6 +86,7 @@ namespace BalloonParty.Game.Upgrades
         public IReadOnlyReactiveProperty<int> ShieldsPerBall => _shieldsPerBall;
         public float ExtraItemChance => _extraItemChance;
         public float SnipeChance => _snipeChance;
+        public float RewardBalloonOdds => _rewardBalloonOdds;
         public IReadOnlyList<IUpgradeCardSettings> Offer => _offer;
         public IUpgradeCardSettings BonusCard => _bonus;
 
@@ -560,6 +562,7 @@ namespace BalloonParty.Game.Upgrades
             _shieldBonus = 0;
             _extraItemChance = 0f;
             _snipeChance = 0f;
+            _rewardBalloonOdds = 0f;
             _limitBonus = 0;
 
             foreach (var (card, count) in _stacks)
@@ -601,6 +604,9 @@ namespace BalloonParty.Game.Upgrades
                     break;
                 case UpgradeKind.SnipeChance:
                     _snipeChance += card.Amount;
+                    break;
+                case UpgradeKind.RewardOdds:
+                    _rewardBalloonOdds += Mathf.Max(0f, card.Amount);
                     break;
             }
         }

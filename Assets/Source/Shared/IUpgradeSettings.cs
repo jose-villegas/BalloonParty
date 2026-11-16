@@ -27,7 +27,13 @@ namespace BalloonParty.Shared
         ///     +<see cref="IUpgradeCardSettings.Amount" /> chance that each ball the thrower loads starts armed as a
         ///     Snipe lance (the total never passes 1).
         /// </summary>
-        SnipeChance
+        SnipeChance,
+
+        /// <summary>
+        ///     The reward balloons (golden, heart, disco) come likelier: every roll that brings one has its chance
+        ///     × (1 + <see cref="IUpgradeCardSettings.Amount" />) per stack, up to certain. A sure one stays sure.
+        /// </summary>
+        RewardOdds
     }
 
     /// <summary>One card the level-up can offer.</summary>

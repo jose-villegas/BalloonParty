@@ -183,6 +183,30 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void Hold_PartyFavors_EachStackAddsItsAmount()
+        {
+            var favors = UpgradeRig.Card(UpgradeKind.RewardOdds, 0.25f);
+            Assert.AreEqual(0f, Upgrades.RewardBalloonOdds);
+
+            _rig.Hold(favors);
+            Assert.AreEqual(0.25f, Upgrades.RewardBalloonOdds, 1e-5f);
+
+            _rig.Hold(favors);
+            Assert.AreEqual(0.5f, Upgrades.RewardBalloonOdds, 1e-5f);
+        }
+
+        [Test]
+        public void ResetRun_FreshRun_DropsPartyFavors()
+        {
+            _rig.Hold(UpgradeRig.Card(UpgradeKind.RewardOdds, 0.25f));
+            _rig.RetryState.RetryLevel.Returns(0);
+
+            Upgrades.ResetRun(1);
+
+            Assert.AreEqual(0f, Upgrades.RewardBalloonOdds);
+        }
+
+        [Test]
         public void ResetRun_FreshRun_DropsTheSnipeChance()
         {
             _rig.Hold(UpgradeRig.Card(UpgradeKind.SnipeChance, 0.15f));
