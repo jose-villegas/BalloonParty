@@ -1,17 +1,5 @@
 var NAVTREEINDEX37 =
 {
-"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#a0c6fb83b708c9c36c95fe90bd578e2ca":[6,0,0,3,29,11],
-"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#a25155cc7dd623de0a20b95170f9af948":[5,0,0,3,29,3],
-"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#a25155cc7dd623de0a20b95170f9af948":[6,0,0,3,29,3],
-"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#a300966b4493d01e678f61f80cb2f8e8c":[5,0,0,3,29,2],
-"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#a300966b4493d01e678f61f80cb2f8e8c":[6,0,0,3,29,2],
-"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#a3eec2815e0036ca347651e91d9feca34":[5,0,0,3,29,10],
-"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#a3eec2815e0036ca347651e91d9feca34":[6,0,0,3,29,10],
-"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#a4874ecf6291970316d5696fbb0a3f2ea":[5,0,0,3,29,12],
-"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#a4874ecf6291970316d5696fbb0a3f2ea":[6,0,0,3,29,12],
-"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#a50492bee6cc02e47406f6b17b0f6f001":[5,0,0,3,29,6],
-"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#a50492bee6cc02e47406f6b17b0f6f001":[6,0,0,3,29,6],
-"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#a65178ee8531fea267bcf270f02d3b1e2":[5,0,0,3,29,14],
 "classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#a65178ee8531fea267bcf270f02d3b1e2":[6,0,0,3,29,14],
 "classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#a87d0794c3e1f3ce1faca3e6d04e26132":[5,0,0,3,29,4],
 "classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#a87d0794c3e1f3ce1faca3e6d04e26132":[6,0,0,3,29,4],
@@ -249,5 +237,17 @@ var NAVTREEINDEX37 =
 "classBalloonParty_1_1Display_1_1CameraShakeView.html#aa374b04d0801581e3417d436e6392e41":[6,0,0,4,2,4],
 "classBalloonParty_1_1Display_1_1CameraShakeView.html#aa7bab0f6c869738a0faaa88eb1f334e8":[5,0,0,4,2,1],
 "classBalloonParty_1_1Display_1_1CameraShakeView.html#aa7bab0f6c869738a0faaa88eb1f334e8":[6,0,0,4,2,1],
-"classBalloonParty_1_1Display_1_1CameraShakeView.html#ae1d731d794951951171c3efc6713d083":[5,0,0,4,2,12]
+"classBalloonParty_1_1Display_1_1CameraShakeView.html#ae1d731d794951951171c3efc6713d083":[5,0,0,4,2,12],
+"classBalloonParty_1_1Display_1_1CameraShakeView.html#ae1d731d794951951171c3efc6713d083":[6,0,0,4,2,12],
+"classBalloonParty_1_1Display_1_1CameraShakeView.html#af7f85b784e7379b3070a52cbb313e360":[5,0,0,4,2,6],
+"classBalloonParty_1_1Display_1_1CameraShakeView.html#af7f85b784e7379b3070a52cbb313e360":[6,0,0,4,2,6],
+"classBalloonParty_1_1Display_1_1EffectsClearingController.html":[5,0,0,4,4],
+"classBalloonParty_1_1Display_1_1EffectsClearingController.html":[6,0,0,4,4],
+"classBalloonParty_1_1Display_1_1EffectsClearingController.html#a0259cb2c607fff42d30be1c58286f561":[5,0,0,4,4,6],
+"classBalloonParty_1_1Display_1_1EffectsClearingController.html#a0259cb2c607fff42d30be1c58286f561":[6,0,0,4,4,6],
+"classBalloonParty_1_1Display_1_1EffectsClearingController.html#a0e4bf7771deb593bcc03126e7643f23e":[5,0,0,4,4,5],
+"classBalloonParty_1_1Display_1_1EffectsClearingController.html#a0e4bf7771deb593bcc03126e7643f23e":[6,0,0,4,4,5],
+"classBalloonParty_1_1Display_1_1EffectsClearingController.html#a293b5ad594c60f577c52ce3b2cb605ec":[5,0,0,4,4,7],
+"classBalloonParty_1_1Display_1_1EffectsClearingController.html#a293b5ad594c60f577c52ce3b2cb605ec":[6,0,0,4,4,7],
+"classBalloonParty_1_1Display_1_1EffectsClearingController.html#a48cb6bdab30bb27730a18ba6bd066bc4":[5,0,0,4,4,3]
 };

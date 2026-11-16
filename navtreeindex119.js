@@ -1,17 +1,5 @@
 var NAVTREEINDEX119 =
 {
-"namespaceBalloonParty_1_1Projectile_1_1Model.html#a51a7cfe4e8f083cd12e30f878834e748a745e3db6a7ffd50e1a72b39482f0882d":[5,0,0,10,2,9,0],
-"namespaceBalloonParty_1_1Projectile_1_1Model.html#a6a63c533c8791904d77d878aa8808865":[5,0,0,10,2,10],
-"namespaceBalloonParty_1_1Projectile_1_1Model.html#a6a63c533c8791904d77d878aa8808865a44877c6aa8e93fa5a91c9361211464fb":[5,0,0,10,2,10,0],
-"namespaceBalloonParty_1_1Projectile_1_1Model.html#a6a63c533c8791904d77d878aa8808865a9218c86c6463e7f24f67a58667707f09":[5,0,0,10,2,10,1],
-"namespaceBalloonParty_1_1Projectile_1_1View.html":[5,0,0,10,3],
-"namespaceBalloonParty_1_1Scenario.html":[5,0,0,11],
-"namespaceBalloonParty_1_1Scenario.html#aa25d25fb5dff53352af120270a2820a8":[5,0,0,11,16],
-"namespaceBalloonParty_1_1Scenario.html#aa25d25fb5dff53352af120270a2820a8a393c3f5ea8ad35c02691d507bdbb31b0":[5,0,0,11,16,2],
-"namespaceBalloonParty_1_1Scenario.html#aa25d25fb5dff53352af120270a2820a8a6adf97f83acf6453d4a6a4b1070f3754":[5,0,0,11,16,0],
-"namespaceBalloonParty_1_1Scenario.html#aa25d25fb5dff53352af120270a2820a8aeb334dca00e390e0d3ebf52d205807d7":[5,0,0,11,16,1],
-"namespaceBalloonParty_1_1Scenario_1_1View.html":[5,0,0,11,0],
-"namespaceBalloonParty_1_1Shared.html":[5,0,0,12],
 "namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523":[5,0,0,12,43],
 "namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523a13306407a9fcc8bf32cafa63c19d150a":[5,0,0,12,43,1],
 "namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523a157bb1886dfdd1d604555497bc3120b2":[5,0,0,12,43,6],
@@ -249,5 +237,17 @@ var NAVTREEINDEX119 =
 "plan_card_reveal.html#autotoc_md385":[3,21,0,0],
 "plan_card_reveal.html#autotoc_md386":[3,21,0,1],
 "plan_card_reveal.html#autotoc_md387":[3,21,0,2],
-"plan_card_reveal.html#autotoc_md388":[3,21,0,3]
+"plan_card_reveal.html#autotoc_md388":[3,21,0,3],
+"plan_card_reveal.html#autotoc_md389":[3,21,0,4],
+"plan_card_reveal.html#autotoc_md390":[3,21,0,5],
+"plan_card_reveal.html#autotoc_md391":[3,21,0,6],
+"plan_card_reveal.html#autotoc_md392":[3,21,0,7],
+"plan_coins.html":[3,20],
+"plan_coins.html#autotoc_md393":[3,20,0],
+"plan_coins.html#autotoc_md395":[3,20,0,0],
+"plan_coins.html#autotoc_md396":[3,20,0,1],
+"plan_coins.html#autotoc_md397":[3,20,0,2],
+"plan_coins.html#autotoc_md398":[3,20,0,3],
+"plan_coins.html#autotoc_md399":[3,20,0,4],
+"plan_coins.html#autotoc_md400":[3,20,0,5]
 };

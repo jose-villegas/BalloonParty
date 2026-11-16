@@ -1,17 +1,5 @@
 var NAVTREEINDEX114 =
 {
-"interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailBehaviour.html#a6bf3381e718b8f103ed7629993e09525":[6,0,0,6,9,0,9,0],
-"interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailReporter.html":[5,0,0,6,9,0,10],
-"interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailReporter.html":[6,0,0,6,9,0,10],
-"interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailReporter.html#ad95bf02acb91bcd2e1a0b19bcd7ebc3b":[5,0,0,6,9,0,10,0],
-"interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailReporter.html#ad95bf02acb91bcd2e1a0b19bcd7ebc3b":[6,0,0,6,9,0,10,0],
-"interfaceBalloonParty_1_1Game_1_1Score_1_1IColorStreak.html":[5,0,0,6,9,3],
-"interfaceBalloonParty_1_1Game_1_1Score_1_1IColorStreak.html":[6,0,0,6,9,3],
-"interfaceBalloonParty_1_1Game_1_1Score_1_1IColorStreak.html#a02b19179ba4fcc1911b3b94513571ff9":[5,0,0,6,9,3,0],
-"interfaceBalloonParty_1_1Game_1_1Score_1_1IColorStreak.html#a02b19179ba4fcc1911b3b94513571ff9":[6,0,0,6,9,3,0],
-"interfaceBalloonParty_1_1Game_1_1Score_1_1IColorStreak.html#a9748e71f60e046c26fd283ae992d053c":[5,0,0,6,9,3,1],
-"interfaceBalloonParty_1_1Game_1_1Score_1_1IColorStreak.html#a9748e71f60e046c26fd283ae992d053c":[6,0,0,6,9,3,1],
-"interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView.html":[5,0,0,6,10,8],
 "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView.html":[6,0,0,6,10,8],
 "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView.html#a0b39fa6b6e370b966a89e1a229f1b6a3":[5,0,0,6,10,8,0],
 "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView.html#a0b39fa6b6e370b966a89e1a229f1b6a3":[6,0,0,6,10,8,0],
@@ -249,5 +237,17 @@ var NAVTREEINDEX114 =
 "interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistryWriter.html#aecc290b9ac174e9ac5597c99ccf3f092":[6,0,0,10,6,13],
 "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileBuffEndCondition.html":[5,0,0,10,2,0],
 "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileBuffEndCondition.html":[6,0,0,10,2,0],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileBuffEndCondition.html#acf40990555fc50d89fad56f625d3101d":[5,0,0,10,2,0,0]
+"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileBuffEndCondition.html#acf40990555fc50d89fad56f625d3101d":[5,0,0,10,2,0,0],
+"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileBuffEndCondition.html#acf40990555fc50d89fad56f625d3101d":[6,0,0,10,2,0,0],
+"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html":[5,0,0,10,2,1],
+"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html":[6,0,0,10,2,1],
+"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#a08eed9c1dbc704ddb9db54bc4619bc52":[5,0,0,10,2,1,5],
+"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#a08eed9c1dbc704ddb9db54bc4619bc52":[6,0,0,10,2,1,5],
+"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#a1f5dc56317f459e0dc1c36366c8f50b9":[5,0,0,10,2,1,6],
+"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#a1f5dc56317f459e0dc1c36366c8f50b9":[6,0,0,10,2,1,6],
+"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#a32072d67aa4bb0d327f2d58909f42d11":[5,0,0,10,2,1,8],
+"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#a32072d67aa4bb0d327f2d58909f42d11":[6,0,0,10,2,1,8],
+"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#a32e532c39b4fee88a28a45d660761bf7":[5,0,0,10,2,1,0],
+"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#a32e532c39b4fee88a28a45d660761bf7":[6,0,0,10,2,1,0],
+"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#a7241c77b83287709308490b40c693745":[5,0,0,10,2,1,4]
 };

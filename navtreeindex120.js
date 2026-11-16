@@ -1,17 +1,5 @@
 var NAVTREEINDEX120 =
 {
-"plan_card_reveal.html#autotoc_md389":[3,21,0,4],
-"plan_card_reveal.html#autotoc_md390":[3,21,0,5],
-"plan_card_reveal.html#autotoc_md391":[3,21,0,6],
-"plan_card_reveal.html#autotoc_md392":[3,21,0,7],
-"plan_coins.html":[3,20],
-"plan_coins.html#autotoc_md393":[3,20,0],
-"plan_coins.html#autotoc_md395":[3,20,0,0],
-"plan_coins.html#autotoc_md396":[3,20,0,1],
-"plan_coins.html#autotoc_md397":[3,20,0,2],
-"plan_coins.html#autotoc_md398":[3,20,0,3],
-"plan_coins.html#autotoc_md399":[3,20,0,4],
-"plan_coins.html#autotoc_md400":[3,20,0,5],
 "plan_coins.html#autotoc_md401":[3,20,0,6],
 "plan_coins.html#autotoc_md402":[3,20,0,7],
 "plan_coins.html#autotoc_md403":[3,20,0,8],
@@ -249,5 +237,17 @@ var NAVTREEINDEX120 =
 "plan_hdr.html#autotoc_md705":[3,6,0,3],
 "plan_hdr.html#autotoc_md706":[3,6,0,3,0],
 "plan_hdr.html#autotoc_md707":[3,6,0,3,1],
-"plan_hdr.html#autotoc_md708":[3,6,0,3,2]
+"plan_hdr.html#autotoc_md708":[3,6,0,3,2],
+"plan_hdr.html#autotoc_md709":[3,6,0,3,3],
+"plan_hdr.html#autotoc_md710":[3,6,0,3,4],
+"plan_hdr.html#autotoc_md711":[3,6,0,3,5],
+"plan_hdr.html#autotoc_md712":[3,6,0,3,6],
+"plan_hdr.html#autotoc_md714":[3,6,0,4],
+"plan_hdr.html#autotoc_md715":[3,6,0,4,0],
+"plan_hdr.html#autotoc_md716":[3,6,0,4,1],
+"plan_hdr.html#autotoc_md717":[3,6,0,4,1,0],
+"plan_hdr.html#autotoc_md718":[3,6,0,4,2],
+"plan_hdr.html#autotoc_md719":[3,6,0,4,3],
+"plan_hdr.html#autotoc_md720":[3,6,0,4,4],
+"plan_hdr.html#autotoc_md722":[3,6,0,5]
 };

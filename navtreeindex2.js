@@ -149,7 +149,6 @@ var NAVTREEINDEX2 =
 "ListExtensions_8cs.html":[7,0,14,4,11],
 "Log_8cs.html":[7,0,14,2,3],
 "LossForecast_8cs.html":[7,0,7,6,4],
-"MemberShuffle_8cs.html":[7,0,1,1,5],
 "MeshHelper_8cs.html":[7,0,14,10,7],
 "MeshRendererBuilder_8cs.html":[7,0,14,10,8],
 "MetricAxis_8cs.html":[7,0,7,10,16],
@@ -249,5 +248,6 @@ var NAVTREEINDEX2 =
 "PlatedBalloonModel_8cs.html":[7,0,1,2,17],
 "PlatedRewardSchedule_8cs.html":[7,0,1,3,10],
 "PlatedRewardTuning_8cs.html":[7,0,1,3,11],
-"PlayerHealthController_8cs.html":[7,0,7,6,5]
+"PlayerHealthController_8cs.html":[7,0,7,6,5],
+"PlayerNeed_8cs.html":[7,0,7,0,4]
 };

@@ -79,7 +79,7 @@ var annotated_dup =
           [ "FormationAssignment", "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html", "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment" ],
           [ "FormationPlanner", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner" ],
           [ "IFormationReinforcements", "interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IFormationReinforcements.html", "interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IFormationReinforcements" ],
-          [ "MemberShuffle", "classBalloonParty_1_1Balloon_1_1Formation_1_1MemberShuffle.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1MemberShuffle" ],
+          [ "SlotMove", "structBalloonParty_1_1Balloon_1_1Formation_1_1SlotMove.html", "structBalloonParty_1_1Balloon_1_1Formation_1_1SlotMove" ],
           [ "SnakeWalk", "classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeWalk.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeWalk" ],
           [ "StandingFormation", "classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation" ],
           [ "UnbreakableFormationService", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService" ]

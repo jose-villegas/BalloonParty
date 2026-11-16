@@ -1,9 +1,5 @@
 var NAVTREEINDEX135 =
 {
-"structBalloonParty_1_1Solver_1_1ShotItemOutcome.html#adf4400444bae8d0da0e593a09efceae5":[5,0,0,14,13,3],
-"structBalloonParty_1_1Solver_1_1ShotItemOutcome.html#adf4400444bae8d0da0e593a09efceae5":[6,0,0,14,13,3],
-"structBalloonParty_1_1Solver_1_1ShotItemOutcome.html#adf87572ec8c94cfe18f265d57232e74f":[5,0,0,14,13,4],
-"structBalloonParty_1_1Solver_1_1ShotItemOutcome.html#adf87572ec8c94cfe18f265d57232e74f":[6,0,0,14,13,4],
 "structBalloonParty_1_1Solver_1_1ShotNudgeImpulse.html":[5,0,0,14,15],
 "structBalloonParty_1_1Solver_1_1ShotNudgeImpulse.html":[6,0,0,14,15],
 "structBalloonParty_1_1Solver_1_1ShotNudgeImpulse.html#a0a2c1a5377aac976a959fdc78c9f4ebb":[5,0,0,14,15,2],
@@ -249,5 +245,9 @@ var NAVTREEINDEX135 =
 "style_guide.html#autotoc_md1027":[1,0,15,0],
 "style_guide.html#autotoc_md1029":[1,0,16],
 "style_guide.html#autotoc_md1031":[1,0,17],
-"style_guide.html#autotoc_md1033":[1,0,18]
+"style_guide.html#autotoc_md1033":[1,0,18],
+"style_guide.html#autotoc_md1034":[1,0,18,0],
+"style_guide.html#autotoc_md1036":[1,0,19],
+"style_guide.html#autotoc_md1038":[1,0,20],
+"style_guide.html#autotoc_md1039":[1,0,20,0]
 };

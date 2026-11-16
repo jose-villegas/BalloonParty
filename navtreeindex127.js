@@ -1,9 +1,5 @@
 var NAVTREEINDEX127 =
 {
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html#a538db5f84e60b0a4a4e8ef98501f21a7":[5,0,0,6,5,2,7],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html#a538db5f84e60b0a4a4e8ef98501f21a7":[6,0,0,6,5,2,7],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html#a7ad86c3dfa9f5d1fa48e08ba91db89f4":[5,0,0,6,5,2,9],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html#a7ad86c3dfa9f5d1fa48e08ba91db89f4":[6,0,0,6,5,2,9],
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html#a82e52ccb139284c043371566b918081f":[5,0,0,6,5,2,3],
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html#a82e52ccb139284c043371566b918081f":[6,0,0,6,5,2,3],
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html#ad52a93511643ea693ad6d7259f0d6dc4":[5,0,0,6,5,2,5],
@@ -249,5 +245,9 @@ var NAVTREEINDEX127 =
 "structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount.html":[5,0,0,6,10,3],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount.html":[6,0,0,6,10,3],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount.html#a36d537a6da2484b955601e4153ff7049":[5,0,0,6,10,3,2],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount.html#a36d537a6da2484b955601e4153ff7049":[6,0,0,6,10,3,2]
+"structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount.html#a36d537a6da2484b955601e4153ff7049":[6,0,0,6,10,3,2],
+"structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount.html#a6d3ab8625506e5ae6ab79881c8d8e1c9":[5,0,0,6,10,3,0],
+"structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount.html#a6d3ab8625506e5ae6ab79881c8d8e1c9":[6,0,0,6,10,3,0],
+"structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount.html#a75821c3fba28f9fb40898223f64da1da":[5,0,0,6,10,3,1],
+"structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount.html#a75821c3fba28f9fb40898223f64da1da":[6,0,0,6,10,3,1]
 };

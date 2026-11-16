@@ -1375,7 +1375,6 @@ var hierarchy =
       [ "BalloonParty.Editor.GradientTextureDrawer", "classBalloonParty_1_1Editor_1_1GradientTextureDrawer.html", null ]
     ] ],
     [ "BalloonParty.Editor.CardRevealBuilder.Materials", "structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html", null ],
-    [ "BalloonParty.Balloon.Formation.MemberShuffle", "classBalloonParty_1_1Balloon_1_1Formation_1_1MemberShuffle.html", null ],
     [ "BalloonParty.Balloon.View.BubbleMergeView.MergeEnds", "classBalloonParty_1_1Balloon_1_1View_1_1BubbleMergeView_1_1MergeEnds.html", null ],
     [ "BalloonParty.Shared.Rendering.MeshHelper", "classBalloonParty_1_1Shared_1_1Rendering_1_1MeshHelper.html", null ],
     [ "BalloonParty.Shared.Rendering.MeshRendererBuilder", "classBalloonParty_1_1Shared_1_1Rendering_1_1MeshRendererBuilder.html", null ],
@@ -1752,6 +1751,7 @@ var hierarchy =
     [ "BalloonParty.Slots.Actor.Cluster.SlotClusterChangedEvent", "structBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterChangedEvent.html", null ],
     [ "BalloonParty.Slots.Grid.SlotGrid", "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html", null ],
     [ "BalloonParty.Slots.Grid.SlotGridChangedEvent", "structBalloonParty_1_1Slots_1_1Grid_1_1SlotGridChangedEvent.html", null ],
+    [ "BalloonParty.Balloon.Formation.SlotMove", "structBalloonParty_1_1Balloon_1_1Formation_1_1SlotMove.html", null ],
     [ "BalloonParty.Slots.Actor.Archetype.SlotRenderData", "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html", null ],
     [ "BalloonParty.Scenario.SmokeFieldResources", "classBalloonParty_1_1Scenario_1_1SmokeFieldResources.html", null ],
     [ "BalloonParty.Balloon.Formation.SnakeWalk", "classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeWalk.html", null ],

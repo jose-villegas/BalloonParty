@@ -1,6 +1,5 @@
 var NAVTREEINDEX3 =
 {
-"PlayerNeed_8cs.html":[7,0,7,0,4],
 "PlayerPrefsRunSave_8cs.html":[7,0,7,8,17],
 "PointFocus_8cs.html":[7,0,7,2,16],
 "PoolChannel_8cs.html":[7,0,14,9,9],
@@ -228,6 +227,7 @@ var NAVTREEINDEX3 =
 "SlotGridPierceItemField_8cs.html":[7,0,15,2,10],
 "SlotGridView_8cs.html":[7,0,15,2,11],
 "SlotGrid_8cs.html":[7,0,15,2,7],
+"SlotMove_8cs.html":[7,0,1,1,5],
 "SlotPlacementMode_8cs.html":[7,0,15,0,20],
 "SmokeFieldResources_8cs.html":[7,0,13,10],
 "SmokeFieldService_8cs.html":[7,0,13,11],

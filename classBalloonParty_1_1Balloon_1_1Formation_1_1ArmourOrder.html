@@ -108,24 +108,15 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Formation_1_1ArmourOrd
 
 <div class="header">
   <div class="summary">
-<a href="#pac-methods">Package Functions</a> &#124;
 <a href="#pac-static-methods">Static Package Functions</a> &#124;
-<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
-<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1Balloon_1_1Formation_1_1ArmourOrder-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">BalloonParty.Balloon.Formation.ArmourOrder Class Reference<span class="mlabels"><span class="mlabel sealed">sealed</span></span></div></div>
+  <div class="headertitle"><div class="title">BalloonParty.Balloon.Formation.ArmourOrder Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>The order of a tough snake, head to tail: the most armour (hits left) leads.  
+<p>The order of the tough snake, head to tail: the most armour (hits left) leads.  
  <a href="#details">More...</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
-Package Functions</h2></td></tr>
-<tr class="memitem:adcbefee0a27d68f501d8bc602d6b92ea" id="r_adcbefee0a27d68f501d8bc602d6b92ea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adcbefee0a27d68f501d8bc602d6b92ea">LineUp</a> (List&lt; <a class="el" href="structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html">FormationAssignment</a> &gt; assignments, bool east)</td></tr>
-<tr class="memdesc:adcbefee0a27d68f501d8bc602d6b92ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Re-pairs a snake's row (<em>assignments</em> , one slot per member) so the most armour takes the slot at the leading end (east or west) and the rest follow by armour.  <br /></td></tr>
-<tr class="separator:adcbefee0a27d68f501d8bc602d6b92ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
 Static Package Functions</h2></td></tr>
 <tr class="memitem:a8579b8f7fa13f39910113bdb9c30c78a" id="r_a8579b8f7fa13f39910113bdb9c30c78a"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8579b8f7fa13f39910113bdb9c30c78a">Of</a> (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html">IWriteableFormationMember</a> member)</td></tr>
@@ -133,95 +124,11 @@ Static Package Functions</h2></td></tr>
 <tr class="memitem:ade31196599fa6b5183e818fef04984fb" id="r_ade31196599fa6b5183e818fef04984fb"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ade31196599fa6b5183e818fef04984fb">StepTowardOrder</a> (List&lt; <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html">IWriteableFormationMember</a> &gt; members)</td></tr>
 <tr class="memdesc:ade31196599fa6b5183e818fef04984fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">One step of <em>members</em>  toward most armour first: from the head down, each member with more armour than the one ahead of it trades places with it.  <br /></td></tr>
 <tr class="separator:ade31196599fa6b5183e818fef04984fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
-Static Private Member Functions</h2></td></tr>
-<tr class="memitem:abdfbccbe0fc03ef2f7334c2cece08f32" id="r_abdfbccbe0fc03ef2f7334c2cece08f32"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abdfbccbe0fc03ef2f7334c2cece08f32">Leads</a> (Vector2Int a, Vector2Int b, bool east)</td></tr>
-<tr class="separator:abdfbccbe0fc03ef2f7334c2cece08f32"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a544fe11f561f81dd0993e928fefa8fcf" id="r_a544fe11f561f81dd0993e928fefa8fcf"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a544fe11f561f81dd0993e928fefa8fcf">Precedes</a> (int armour, Vector2Int slot, <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html">IWriteableFormationMember</a> other, bool east)</td></tr>
-<tr class="separator:a544fe11f561f81dd0993e928fefa8fcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a157659bc758a76af563415189534b54f" id="r_a157659bc758a76af563415189534b54f"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a157659bc758a76af563415189534b54f">SortMembers</a> (List&lt; <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html">IWriteableFormationMember</a> &gt; members, bool east)</td></tr>
-<tr class="separator:a157659bc758a76af563415189534b54f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a854bdfa4cb2bceb683206c169746b607" id="r_a854bdfa4cb2bceb683206c169746b607"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a854bdfa4cb2bceb683206c169746b607">SortSlots</a> (List&lt; Vector2Int &gt; slots, bool east)</td></tr>
-<tr class="separator:a854bdfa4cb2bceb683206c169746b607"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
-Private Attributes</h2></td></tr>
-<tr class="memitem:accabc26aff73bd4978312482db6093ab" id="r_accabc26aff73bd4978312482db6093ab"><td class="memItemLeft" align="right" valign="top">readonly List&lt; <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html">IWriteableFormationMember</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#accabc26aff73bd4978312482db6093ab">_members</a> = new()</td></tr>
-<tr class="separator:accabc26aff73bd4978312482db6093ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a50b0398ebe451483fdf3652fbddd7a1e" id="r_a50b0398ebe451483fdf3652fbddd7a1e"><td class="memItemLeft" align="right" valign="top">readonly List&lt; Vector2Int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a50b0398ebe451483fdf3652fbddd7a1e">_slots</a> = new()</td></tr>
-<tr class="separator:a50b0398ebe451483fdf3652fbddd7a1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The order of a tough snake, head to tail: the most armour (hits left) leads. </p>
-<p>Toughs with equal armour keep the order they stand in. A walking snake moves toward that order one place per step, so a hit or a tough joining at the tail never sends a member leaping along the body. </p>
+<div class="textblock"><p>The order of the tough snake, head to tail: the most armour (hits left) leads. </p>
+<p>Toughs with equal armour keep the order they stand in. The snake moves toward that order one place per step, so a hit or a tough joining at the tail never sends a member leaping along the body. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="abdfbccbe0fc03ef2f7334c2cece08f32" name="abdfbccbe0fc03ef2f7334c2cece08f32"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abdfbccbe0fc03ef2f7334c2cece08f32">&#9670;&#160;</a></span>Leads()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static bool BalloonParty.Balloon.Formation.ArmourOrder.Leads </td>
-          <td>(</td>
-          <td class="paramtype">Vector2Int</td>          <td class="paramname"><span class="paramname"><em>a</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Vector2Int</td>          <td class="paramname"><span class="paramname"><em>b</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>east</em></span>&#160;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="adcbefee0a27d68f501d8bc602d6b92ea" name="adcbefee0a27d68f501d8bc602d6b92ea"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adcbefee0a27d68f501d8bc602d6b92ea">&#9670;&#160;</a></span>LineUp()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void BalloonParty.Balloon.Formation.ArmourOrder.LineUp </td>
-          <td>(</td>
-          <td class="paramtype">List&lt; <a class="el" href="structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html">FormationAssignment</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>assignments</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>east</em></span>&#160;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Re-pairs a snake's row (<em>assignments</em> , one slot per member) so the most armour takes the slot at the leading end (east or west) and the rest follow by armour. </p>
-<p>Ties go to the one nearer the leading end, so a row of equal armour already in place keeps its slots. Leaves the assignments head first. </p>
-
-</div>
-</div>
 <a id="a8579b8f7fa13f39910113bdb9c30c78a" name="a8579b8f7fa13f39910113bdb9c30c78a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8579b8f7fa13f39910113bdb9c30c78a">&#9670;&#160;</a></span>Of()</h2>
 
@@ -241,103 +148,6 @@ Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a544fe11f561f81dd0993e928fefa8fcf" name="a544fe11f561f81dd0993e928fefa8fcf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a544fe11f561f81dd0993e928fefa8fcf">&#9670;&#160;</a></span>Precedes()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static bool BalloonParty.Balloon.Formation.ArmourOrder.Precedes </td>
-          <td>(</td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>armour</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Vector2Int</td>          <td class="paramname"><span class="paramname"><em>slot</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html">IWriteableFormationMember</a></td>          <td class="paramname"><span class="paramname"><em>other</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>east</em></span>&#160;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a157659bc758a76af563415189534b54f" name="a157659bc758a76af563415189534b54f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a157659bc758a76af563415189534b54f">&#9670;&#160;</a></span>SortMembers()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void BalloonParty.Balloon.Formation.ArmourOrder.SortMembers </td>
-          <td>(</td>
-          <td class="paramtype">List&lt; <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html">IWriteableFormationMember</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>members</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>east</em></span>&#160;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a854bdfa4cb2bceb683206c169746b607" name="a854bdfa4cb2bceb683206c169746b607"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a854bdfa4cb2bceb683206c169746b607">&#9670;&#160;</a></span>SortSlots()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void BalloonParty.Balloon.Formation.ArmourOrder.SortSlots </td>
-          <td>(</td>
-          <td class="paramtype">List&lt; Vector2Int &gt;</td>          <td class="paramname"><span class="paramname"><em>slots</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>east</em></span>&#160;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -369,51 +179,6 @@ Private Attributes</h2></td></tr>
 
 <p>One step of <em>members</em>  toward most armour first: from the head down, each member with more armour than the one ahead of it trades places with it. </p>
 <p>No member moves more than one place, so a tough joined at the tail, or one hit at the head, works its way to its place a step at a time, and the one it passes waits a beat beside it. Equal armour never trades. True when anyone moved. </p>
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="accabc26aff73bd4978312482db6093ab" name="accabc26aff73bd4978312482db6093ab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#accabc26aff73bd4978312482db6093ab">&#9670;&#160;</a></span>_members</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">readonly List&lt;<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html">IWriteableFormationMember</a>&gt; BalloonParty.Balloon.Formation.ArmourOrder._members = new()</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a50b0398ebe451483fdf3652fbddd7a1e" name="a50b0398ebe451483fdf3652fbddd7a1e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a50b0398ebe451483fdf3652fbddd7a1e">&#9670;&#160;</a></span>_slots</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">readonly List&lt;Vector2Int&gt; BalloonParty.Balloon.Formation.ArmourOrder._slots = new()</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
 
 </div>
 </div>
