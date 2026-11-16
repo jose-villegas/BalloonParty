@@ -1,0 +1,13 @@
+<map id="BalloonParty.Display.EffectsMapCompositor" name="BalloonParty.Display.EffectsMapCompositor">
+<area shape="rect" id="Node000001" title="An effects map (Effects Layer Clearing) for the camera it sits on." alt="" coords="636,83,836,127"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="56,159,179,187"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,167,354,156,541,137,633,125,638,124,541,142,355,161,195,172"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Display_1_1EffectsClearingMaskView.html" title="The clearing mask (Effects Layer Clearing): a small single&#45;channel target, bound globally as _Effects..." alt="" coords="341,83,541,127"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="194,154,338,126,343,126,195,160"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IEffectsClearingSettings.html" title="Read&#45;only tuning for the effects clearing (see Effects Layer Clearing): how wide a clearing each ball..." alt="" coords="5,5,230,50"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="245,31,317,37,465,55,612,80,638,87,633,87,612,85,464,60,316,42,245,37"/>
+<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="229,52,347,81,342,83,229,57"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="557,102,638,105,633,105,557,108"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Display_1_1IEffectsClearingSource.html" title="Where the clearing mask gets its stamps from." alt="" coords="15,83,220,127"/>
+<area shape="poly" id="edge6_Node000004_Node000005" title=" " alt="" coords="235,102,343,104,338,106,236,108"/>
+</map>

@@ -9,6 +9,8 @@ var classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow =
     [ "DrawPreview", "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#a57fe45805bdb82357dbbf77a1c69b17d", null ],
     [ "DrawRangeControls", "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#af27d2767a932dd2ee2228040a1ef2425", null ],
     [ "EnsureMaterial", "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#adec57467b1c71264202a692d75d98507", null ],
+    [ "FetchClearingMask", "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#a59105b2dfdef5a38d1c57ffefad4ae09", null ],
+    [ "FetchHudEffectsMap", "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#a3616e62b02f2579a674c843297785093", null ],
     [ "FetchLightBuffer", "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#abc0ea4475a46b39df76036c53343c5de", null ],
     [ "HandlePan", "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#a2e71b7518b62ed53c6ac143ab0471cdf", null ],
     [ "HandleZoom", "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#aff6292ec59df6bf7d53b5d40c6658940", null ],

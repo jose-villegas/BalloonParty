@@ -1,0 +1,25 @@
+var classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings =
+[
+    [ "_clearRadius", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a4948ed486c0280cdcc0df2b60598b416", null ],
+    [ "_compositeShader", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a056f2fb9845e4c4c11be00b545f0315c", null ],
+    [ "_edgeHigh", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#aa9aa4b47810e28144572f7eaaf5b8ef8", null ],
+    [ "_edgeLow", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#ac5c20a07e5ef5f30bc219f3bf3086b5a", null ],
+    [ "_enabled", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a6ecf4bbf9f1a2a9a71f06ef021203450", null ],
+    [ "_lingerSeconds", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#aeab976381e012927fba1eb2c26a7f033", null ],
+    [ "_mapDownscale", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a2fcf6e66dd6b2f49f0fd311e35f2a122", null ],
+    [ "_maskDownscale", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#ad0070669bf49bda2aff6eaf3ff392c78", null ],
+    [ "_maskShader", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#ae87dc91c90241d42fa1c01f85a87e81e", null ],
+    [ "_strength", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a5d1c3d8a36f66d087a9aa21559e24dde", null ],
+    [ "_useUnscaledTime", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a4095d9aaa31d9031352dbaf666ca043e", null ],
+    [ "ClearRadius", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a16f39afd1a1ce187a43742a8a68c00d4", null ],
+    [ "CompositeShader", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a61c9ec13fc40e09bf32b9bd49e3f6776", null ],
+    [ "EdgeHigh", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#abbc957a96b08d19af0bae6b81afecf39", null ],
+    [ "EdgeLow", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a52aed2196ec6ffb3dbc4745f8d85cc0a", null ],
+    [ "Enabled", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a475d847adea2c1f3e7965cd4692d1b61", null ],
+    [ "LingerSeconds", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a5d75e423e47651238b32af4c46437ab9", null ],
+    [ "MapDownscale", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a59c0d57c521c787b67f0585e7103c7ab", null ],
+    [ "MaskDownscale", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#ae6c85ec15158a71a4c2afd6af6cdd514", null ],
+    [ "MaskShader", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#adea168a301633e1e2b7a79342f0deb2d", null ],
+    [ "Strength", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a8df62ee99a3492a5ab7f2abf424a6d97", null ],
+    [ "UseUnscaledTime", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a48088ed918785136e6f0847e0929dde5", null ]
+];

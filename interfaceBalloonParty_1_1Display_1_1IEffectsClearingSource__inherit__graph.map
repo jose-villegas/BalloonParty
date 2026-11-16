@@ -1,0 +1,5 @@
+<map id="BalloonParty.Display.IEffectsClearingSource" name="BalloonParty.Display.IEffectsClearingSource">
+<area shape="rect" id="Node000001" title="Where the clearing mask gets its stamps from." alt="" coords="5,5,210,50"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Display_1_1EffectsClearingController.html" title="Feeds the clearing mask from the balls in flight." alt="" coords="7,98,208,143"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,64,110,99,105,97,106,68"/>
+</map>

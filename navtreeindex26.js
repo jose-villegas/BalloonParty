@@ -1,5 +1,13 @@
 var NAVTREEINDEX26 =
 {
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#a0841ed0dc9fb97c24b0d0d7b2c38f8f1":[6,0,0,3,3,2,7],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#a3058956e3713cd1b00aa5b7591dd2f17":[5,0,0,3,3,2,4],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#a3058956e3713cd1b00aa5b7591dd2f17":[6,0,0,3,3,2,4],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#a31136df5a3af22c96c87a102b5e0e4ec":[5,0,0,3,3,2,3],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#a31136df5a3af22c96c87a102b5e0e4ec":[6,0,0,3,3,2,3],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#a37453723a27fb74c988dae1f3cd8cd5c":[5,0,0,3,3,2,6],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#a37453723a27fb74c988dae1f3cd8cd5c":[6,0,0,3,3,2,6],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#a95942406ff2c8320cf6b5e3b0516acb8":[5,0,0,3,3,2,9],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#a95942406ff2c8320cf6b5e3b0516acb8":[6,0,0,3,3,2,9],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#a95a070c501beeb1f8a777b57a6b61898":[5,0,0,3,3,2,5],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#a95a070c501beeb1f8a777b57a6b61898":[6,0,0,3,3,2,5],
@@ -241,13 +249,5 @@ var NAVTREEINDEX26 =
 "classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorNameDrawer.html#ad995ae3a9650b5775efb3f6afc67f32b":[6,0,0,3,4,9,3],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorNameDrawer.html#afd54a7044313b7550aecc38ff9024475":[5,0,0,3,4,9,8],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorNameDrawer.html#afd54a7044313b7550aecc38ff9024475":[6,0,0,3,4,9,8],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteMaskDrawer.html":[5,0,0,3,4,10],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteMaskDrawer.html":[6,0,0,3,4,10],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteMaskDrawer.html#a4ad7825148f16373db35db489cd16c8b":[5,0,0,3,4,10,0],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteMaskDrawer.html#a4ad7825148f16373db35db489cd16c8b":[6,0,0,3,4,10,0],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteMaskDrawer.html#a6331dd049a593d787cf2e0df1b71ad18":[5,0,0,3,4,10,1],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteMaskDrawer.html#a6331dd049a593d787cf2e0df1b71ad18":[6,0,0,3,4,10,1],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteMaskDrawer.html#a80963d948c84b69a8f449f40211aaea2":[5,0,0,3,4,10,3],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteMaskDrawer.html#a80963d948c84b69a8f449f40211aaea2":[6,0,0,3,4,10,3],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteMaskDrawer.html#ace5523be3c4ee1c8b28b440a894043c0":[5,0,0,3,4,10,2]
+"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteMaskDrawer.html":[5,0,0,3,4,10]
 };

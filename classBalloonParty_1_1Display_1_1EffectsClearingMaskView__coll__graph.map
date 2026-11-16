@@ -1,0 +1,9 @@
+<map id="BalloonParty.Display.EffectsClearingMaskView" name="BalloonParty.Display.EffectsClearingMaskView">
+<area shape="rect" id="Node000001" title="The clearing mask (Effects Layer Clearing): a small single&#45;channel target, bound globally as _Effects..." alt="" coords="341,57,541,102"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="56,5,179,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,31,343,59,338,62,194,36"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IEffectsClearingSettings.html" title="Read&#45;only tuning for the effects clearing (see Effects Layer Clearing): how wide a clearing each ball..." alt="" coords="5,57,230,102"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="245,77,343,78,338,80,246,82"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Display_1_1IEffectsClearingSource.html" title="Where the clearing mask gets its stamps from." alt="" coords="15,126,220,171"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="234,121,338,101,343,100,235,126"/>
+</map>

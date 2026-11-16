@@ -1,0 +1,5 @@
+<map id="BalloonParty.Display.EffectsClearingStamper.Track" name="BalloonParty.Display.EffectsClearingStamper.Track">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,115,206,160"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html" title=" " alt="" coords="20,5,191,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,64,108,115,103,114,104,68"/>
+</map>

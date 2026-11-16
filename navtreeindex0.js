@@ -168,6 +168,7 @@ var NAVTREEINDEX0 =
 "CinematicsSettings_8cs.html":[7,0,3,3,2],
 "CircleContact_8cs.html":[7,0,14,14],
 "ClearShotsInFlightMessage_8cs.html":[7,0,14,7,7],
+"ClearingView_8cs.html":[7,0,5,3],
 "ClipPickMode_8cs.html":[7,0,0,0,1],
 "ClipWrapMode_8cs.html":[7,0,0,0,2],
 "ClothRibbonGraphic_8cs.html":[7,0,18,2,0],
@@ -232,6 +233,11 @@ var NAVTREEINDEX0 =
 "EffectPreviewContext_8cs.html":[7,0,6,1,2],
 "EffectViewPreviewPlayer_8cs.html":[7,0,6,1,3],
 "EffectView_8cs.html":[7,0,14,9,1],
+"EffectsClearingController_8cs.html":[7,0,5,4],
+"EffectsClearingMaskView_8cs.html":[7,0,5,5],
+"EffectsClearingSettings_8cs.html":[7,0,3,5,4],
+"EffectsClearingStamper_8cs.html":[7,0,5,6],
+"EffectsMapCompositor_8cs.html":[7,0,5,7],
 "EndRunRequestedMessage_8cs.html":[7,0,14,7,11],
 "EnumIndexedAttribute_8cs.html":[7,0,14,17],
 "EnumIndexedDrawer_8cs.html":[7,0,6,20],
@@ -243,11 +249,5 @@ var NAVTREEINDEX0 =
 "FlightMetricsSnapshot_8cs.html":[7,0,7,10,6],
 "FlightMode_8cs.html":[7,0,8,11],
 "FlightPhase_8cs.html":[7,0,14,9,2],
-"FlightStatsService_8cs.html":[7,0,7,4,0],
-"FlyingTrail_8cs.html":[7,0,18,8,1],
-"FoldRule_8cs.html":[7,0,7,10,7],
-"ForceDestroyProjectileMessage_8cs.html":[7,0,14,7,12],
-"ForceGameOverCheat_8cs.html":[7,0,2,12],
-"ForceRestartCheat_8cs.html":[7,0,2,13],
-"FormationAssignment_8cs.html":[7,0,1,1,1]
+"FlightStatsService_8cs.html":[7,0,7,4,0]
 };
