@@ -1,5 +1,6 @@
 var NAVTREEINDEX25 =
 {
+"classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#aaa28a05e84bad186c52cf88553b94767":[6,0,0,3,2,0,95],
 "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#aafbac6453ded4747411695906eebe1e7":[5,0,0,3,2,0,49],
 "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#aafbac6453ded4747411695906eebe1e7":[6,0,0,3,2,0,49],
 "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#ab0980053078f2329dd8dc00f777df5ff":[5,0,0,3,2,0,99],
@@ -248,6 +249,5 @@ var NAVTREEINDEX25 =
 "classBalloonParty_1_1Configuration_1_1Editor_1_1BalloonPrefabEntryDrawer.html#aa47284371716ab6671d98481103c7ff2":[6,0,0,3,4,1,1],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1BalloonPrefabEntryDrawer.html#ad5aeed29f95914e8473360dc856fe6b5":[5,0,0,3,4,1,0],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1BalloonPrefabEntryDrawer.html#ad5aeed29f95914e8473360dc856fe6b5":[6,0,0,3,4,1,0],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1GameDisplayConfigurationEditor.html":[5,0,0,3,4,2],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1GameDisplayConfigurationEditor.html":[6,0,0,3,4,2]
+"classBalloonParty_1_1Configuration_1_1Editor_1_1GameDisplayConfigurationEditor.html":[5,0,0,3,4,2]
 };

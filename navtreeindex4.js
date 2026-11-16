@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"SpeckField_8cs.html":[7,0,15,0,21],
 "SpeckLookProfile_8cs.html":[7,0,3,5,30],
 "SpeckMotionProfile_8cs.html":[7,0,3,5,31],
 "SpeckMotionSettings_8cs.html":[7,0,3,5,32],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "classBalloonParty_1_1Audio_1_1Configuration_1_1AudioMixerSettings.html#ad8cad34b97b82127445bce9590e075c8":[6,0,0,0,0,0,2],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1AudioMixerSettings.html#aff2e5280fa50062841cadc44b7fc9009":[5,0,0,0,0,0,6],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1AudioMixerSettings.html#aff2e5280fa50062841cadc44b7fc9009":[6,0,0,0,0,0,6],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html":[5,0,0,0,0,3],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html":[6,0,0,0,0,3]
+"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html":[5,0,0,0,0,3]
 };

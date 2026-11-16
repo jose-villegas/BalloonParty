@@ -1,5 +1,6 @@
 var NAVTREEINDEX57 =
 {
+"classBalloonParty_1_1Game_1_1Run_1_1RunController.html#aba6f8e2be2cfa36b982a0e480ee7ae92":[6,0,0,6,8,21,7],
 "classBalloonParty_1_1Game_1_1Run_1_1RunController.html#ad27012b68b13a374f14369c2a392753c":[5,0,0,6,8,21,12],
 "classBalloonParty_1_1Game_1_1Run_1_1RunController.html#ad27012b68b13a374f14369c2a392753c":[6,0,0,6,8,21,12],
 "classBalloonParty_1_1Game_1_1Run_1_1RunController.html#ad5455629dd78e6fb30a255650c28616a":[5,0,0,6,8,21,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX57 =
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html":[6,0,0,6,9,0,4],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html#a07d7473510fe727059b546e6a8ddbfd2":[5,0,0,6,9,0,4,3],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html#a07d7473510fe727059b546e6a8ddbfd2":[6,0,0,6,9,0,4,3],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html#a1b6e651335168edb45088f01127ee634":[5,0,0,6,9,0,4,1],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html#a1b6e651335168edb45088f01127ee634":[6,0,0,6,9,0,4,1]
+"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html#a1b6e651335168edb45088f01127ee634":[5,0,0,6,9,0,4,1]
 };

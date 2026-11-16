@@ -1,5 +1,6 @@
 var NAVTREEINDEX54 =
 {
+"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CombatHeadsUpRouter.html#ac7e6fc2d698407428c0ac0c778e7c6ab":[6,0,0,6,5,0,2,3],
 "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CombatHeadsUpRouter.html#ac8648be1032b742a3e1a56f4917d7366":[5,0,0,6,5,0,2,12],
 "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CombatHeadsUpRouter.html#ac8648be1032b742a3e1a56f4917d7366":[6,0,0,6,5,0,2,12],
 "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CombatHeadsUpRouter.html#ac87d2292e426f284d70426c0e6638b69":[5,0,0,6,5,0,2,16],
@@ -248,6 +249,5 @@ var NAVTREEINDEX54 =
 "classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html#a03f98aeebae8c29bdf7c19b254a8a3e1":[6,0,0,6,7,0,10],
 "classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html#a0c439c7fd82e357925fd0d29206e1eb9":[5,0,0,6,7,0,9],
 "classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html#a0c439c7fd82e357925fd0d29206e1eb9":[6,0,0,6,7,0,9],
-"classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html#a40eaf90aebbd48d836e0a058612fad24":[5,0,0,6,7,0,2],
-"classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html#a40eaf90aebbd48d836e0a058612fad24":[6,0,0,6,7,0,2]
+"classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html#a40eaf90aebbd48d836e0a058612fad24":[5,0,0,6,7,0,2]
 };

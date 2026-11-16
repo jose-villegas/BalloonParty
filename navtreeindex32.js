@@ -1,5 +1,6 @@
 var NAVTREEINDEX32 =
 {
+"classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#ae7340b8c676b75d5b85fbd9991a06994":[6,0,0,3,8,3,25],
 "classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html":[5,0,0,3,8,5],
 "classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html":[6,0,0,3,8,5],
 "classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html#a00e44c704c0264ffa639289a6782a9d6":[5,0,0,3,8,5,6],
@@ -248,6 +249,5 @@ var NAVTREEINDEX32 =
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a2324c783a3e03fa5c22e51423caa8118":[6,0,0,3,9,17,14],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a236a99d087a965689bc7097e386679bb":[5,0,0,3,9,17,5],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a236a99d087a965689bc7097e386679bb":[6,0,0,3,9,17,5],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a23a517a3f17ffacf0eef78c7d7e1c221":[5,0,0,3,9,17,32],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a23a517a3f17ffacf0eef78c7d7e1c221":[6,0,0,3,9,17,32]
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a23a517a3f17ffacf0eef78c7d7e1c221":[5,0,0,3,9,17,32]
 };

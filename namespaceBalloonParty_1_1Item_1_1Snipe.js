@@ -5,6 +5,7 @@ var namespaceBalloonParty_1_1Item_1_1Snipe =
     [ "ISnipeChanceRoll", "interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeChanceRoll.html", "interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeChanceRoll" ],
     [ "ISnipeGuarantee", "interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeGuarantee.html", "interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeGuarantee" ],
     [ "ISnipeLanceArming", "interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeLanceArming.html", "interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeLanceArming" ],
+    [ "SharpshooterSnipeGift", "classBalloonParty_1_1Item_1_1Snipe_1_1SharpshooterSnipeGift.html", "classBalloonParty_1_1Item_1_1Snipe_1_1SharpshooterSnipeGift" ],
     [ "SnipeChanceRoll", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll" ],
     [ "SnipeDischargeBloom", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeDischargeBloom.html", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeDischargeBloom" ],
     [ "SnipeItemHandler", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler" ],

@@ -1,5 +1,6 @@
 var NAVTREEINDEX37 =
 {
+"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a345ecd47c34b9217c085c39c64c6cab5":[6,0,0,3,35,8],
 "classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a4abdf175b2a88d0c4e53d76c10abce01":[5,0,0,3,35,7],
 "classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a4abdf175b2a88d0c4e53d76c10abce01":[6,0,0,3,35,7],
 "classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a50a0e99f27e2552ecaf5ceb81b691fda":[5,0,0,3,35,6],
@@ -248,6 +249,5 @@ var NAVTREEINDEX37 =
 "classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#ab2d2dd720dcf2b63832c8263fe58e70b":[6,0,0,4,7,33],
 "classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#ab3beadc8a263fc71516f885a57689261":[5,0,0,4,7,31],
 "classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#ab3beadc8a263fc71516f885a57689261":[6,0,0,4,7,31],
-"classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#ab96163d5b95d1575123a96b79956f4c2":[5,0,0,4,7,10],
-"classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#ab96163d5b95d1575123a96b79956f4c2":[6,0,0,4,7,10]
+"classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#ab96163d5b95d1575123a96b79956f4c2":[5,0,0,4,7,10]
 };

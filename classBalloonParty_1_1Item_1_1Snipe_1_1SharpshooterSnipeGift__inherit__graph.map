@@ -1,0 +1,9 @@
+<map id="BalloonParty.Item.Snipe.SharpshooterSnipeGift" name="BalloonParty.Item.Snipe.SharpshooterSnipeGift">
+<area shape="rect" id="Node000001" title="Shows the Sharpshooter card at work: the first time the run wins it (a level&#45;up&#39;s pick or a golden ba..." alt="" coords="127,98,306,143"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,14,90,42"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="86,47,179,96,174,99,85,52"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="114,5,320,50"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="219,64,219,99,215,96,215,68"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="344,14,442,42"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="357,48,260,100,258,95,351,49"/>
+</map>

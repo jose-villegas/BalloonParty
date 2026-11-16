@@ -1,0 +1,13 @@
+<map id="BalloonParty.Item.Snipe.SharpshooterSnipeGift" name="BalloonParty.Item.Snipe.SharpshooterSnipeGift">
+<area shape="rect" id="Node000001" title="Shows the Sharpshooter card at work: the first time the run wins it (a level&#45;up&#39;s pick or a golden ba..." alt="" coords="347,117,526,162"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="71,5,156,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="170,28,223,42,313,78,393,116,388,117,311,83,221,47,171,33"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="10,57,217,102"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="232,98,349,121,344,124,232,104"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="65,125,162,153"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="177,137,348,137,344,141,178,142"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeGuarantee.html" title="Makes the next ball the thrower loads a Snipe lance, whatever the Sharpshooter roll would say." alt="" coords="24,177,203,222"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="218,178,322,159,349,156,344,158,323,164,219,183"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryState.html" title="Read&#45;only retry state — how many retries remain this run and the level to retry at (zero when the nex..." alt="" coords="5,246,222,291"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="200,238,221,231,272,215,322,195,392,163,397,161,324,200,274,220,223,236,202,243"/>
+</map>
