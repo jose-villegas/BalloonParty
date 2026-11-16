@@ -145,11 +145,14 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:a974a30d7b351d37fd36247e324319cdf" id="r_a974a30d7b351d37fd36247e324319cdf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a974a30d7b351d37fd36247e324319cdf">SpawnClockSettings</a> (float firstLevelInterval, float intervalDecayPerLevel, float minInterval, float graceSeconds, int linesPerWave=1, float overlapShotPull=0f, float sparseBoardSpeedup=1f, float targetOccupancy=0.5f, float occupancyWeight=0f, float flightSpeedup=1f, float flightPressureSeconds=6f, float lateIntervalDecayPerLevel=1f, float lateMinInterval=0.1f, float breatherClear=0f, float breatherClearWindow=2f, float breatherSeconds=6f, float breatherPace=0.2f, float breatherCooldownSeconds=0f, float breatherShapeCover=0f, float breatherDanger=0f, float pressureSpeedup=1f, float pressureBuildSeconds=120f, float pressureHoldOccupancy=0.85f, float pressureKeptOnHeartLoss=0.5f)</td></tr>
-<tr class="separator:a974a30d7b351d37fd36247e324319cdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7afa1df864afa65469132bb6cd72dad7" id="r_a7afa1df864afa65469132bb6cd72dad7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7afa1df864afa65469132bb6cd72dad7">SpawnClockSettings</a> (float firstLevelInterval, float intervalDecayPerLevel, float minInterval, float graceSeconds, int linesPerWave=1, float overlapShotPull=0f, float sparseBoardSpeedup=1f, float targetOccupancy=0.5f, float occupancyWeight=0f, float flightSpeedup=1f, float flightPressureSeconds=6f, float lateIntervalDecayPerLevel=1f, float lateMinInterval=0.1f, float breatherClear=0f, float breatherClearWindow=2f, float breatherSeconds=6f, float breatherPace=0.2f, float breatherCooldownSeconds=0f, float breatherShapeCover=0f, float breatherDanger=0f, float pressureSpeedup=1f, float pressureBuildSeconds=120f, float pressureHoldOccupancy=0.85f, float pressureKeptOnHeartLoss=0.5f, float breatherChanceLostPerExtraHeart=0f)</td></tr>
+<tr class="separator:a7afa1df864afa65469132bb6cd72dad7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:a6706b78a356bedb05b749e08566ae7ce" id="r_a6706b78a356bedb05b749e08566ae7ce"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6706b78a356bedb05b749e08566ae7ce">BreatherChanceLostPerExtraHeart</a><code> [get]</code></td></tr>
+<tr class="memdesc:a6706b78a356bedb05b749e08566ae7ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Past full hearts, how much each extra heart takes off the chance that a big clear or a shape burst earns its breather: 0.25 = 75% with one extra, none with four.  <br /></td></tr>
+<tr class="separator:a6706b78a356bedb05b749e08566ae7ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adcd0363ff40fa39d00a2c872cdae13e5" id="r_adcd0363ff40fa39d00a2c872cdae13e5"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adcd0363ff40fa39d00a2c872cdae13e5">BreatherClear</a><code> [get]</code></td></tr>
 <tr class="memdesc:adcd0363ff40fa39d00a2c872cdae13e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Share of the board's open slots that, cleared within <a class="el" href="#a012845f9396a0bf135f622392016015a" title="Seconds a clear must happen within to earn a breather.">BreatherClearWindow</a>, earns a breather: the clock slows to <a class="el" href="#a530ba79688c51a1b5571f5fa83de86c7" title="The clock&#39;s pace as a breather starts, as a share of its full pace, 0–1.">BreatherPace</a> and eases back to its full pace over <a class="el" href="#a3f3424ae27983320b8675236bfdabe73" title="Seconds a breather lasts, easing from BreatherPace back to full pace.">BreatherSeconds</a>.  <br /></td></tr>
 <tr class="separator:adcd0363ff40fa39d00a2c872cdae13e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -215,6 +218,8 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:a916e9b228e9581e28cb87af57f8c143e" id="r_a916e9b228e9581e28cb87af57f8c143e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a916e9b228e9581e28cb87af57f8c143e">_breatherChanceLostPerExtraHeart</a> = 0.25f</td></tr>
+<tr class="separator:a916e9b228e9581e28cb87af57f8c143e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea34d028064dbab9441b708581825077" id="r_aea34d028064dbab9441b708581825077"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aea34d028064dbab9441b708581825077">_breatherClear</a> = 0.15f</td></tr>
 <tr class="separator:aea34d028064dbab9441b708581825077"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ce6c9a3d0a0dd706cdb04695532e475" id="r_a1ce6c9a3d0a0dd706cdb04695532e475"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ce6c9a3d0a0dd706cdb04695532e475">_breatherClearWindow</a> = 2.5f</td></tr>
@@ -285,8 +290,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a974a30d7b351d37fd36247e324319cdf" name="a974a30d7b351d37fd36247e324319cdf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a974a30d7b351d37fd36247e324319cdf">&#9670;&#160;</a></span>SpawnClockSettings() <span class="overload">[2/2]</span></h2>
+<a id="a7afa1df864afa65469132bb6cd72dad7" name="a7afa1df864afa65469132bb6cd72dad7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7afa1df864afa65469132bb6cd72dad7">&#9670;&#160;</a></span>SpawnClockSettings() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -412,7 +417,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>pressureKeptOnHeartLoss</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0::5f</span>&#160;)</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>pressureKeptOnHeartLoss</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0::5f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>breatherChanceLostPerExtraHeart</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0f</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -472,6 +482,28 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a916e9b228e9581e28cb87af57f8c143e" name="a916e9b228e9581e28cb87af57f8c143e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a916e9b228e9581e28cb87af57f8c143e">&#9670;&#160;</a></span>_breatherChanceLostPerExtraHeart</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.SpawnClockSettings._breatherChanceLostPerExtraHeart = 0.25f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aea34d028064dbab9441b708581825077" name="aea34d028064dbab9441b708581825077"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aea34d028064dbab9441b708581825077">&#9670;&#160;</a></span>_breatherClear</h2>
 
@@ -1001,6 +1033,33 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Property Documentation</h2>
+<a id="a6706b78a356bedb05b749e08566ae7ce" name="a6706b78a356bedb05b749e08566ae7ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6706b78a356bedb05b749e08566ae7ce">&#9670;&#160;</a></span>BreatherChanceLostPerExtraHeart</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.SpawnClockSettings.BreatherChanceLostPerExtraHeart</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Past full hearts, how much each extra heart takes off the chance that a big clear or a shape burst earns its breather: 0.25 = 75% with one extra, none with four. </p>
+<p>A miss is spent like a breather (the cooldown runs). The danger's breather and the nuke's never roll. 0 = always earned. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#ad7c8f67def6f82bbb286614f77481981">BalloonParty.Configuration.Level.ISpawnClockSettings</a>.</p>
+
+</div>
+</div>
 <a id="adcd0363ff40fa39d00a2c872cdae13e5" name="adcd0363ff40fa39d00a2c872cdae13e5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adcd0363ff40fa39d00a2c872cdae13e5">&#9670;&#160;</a></span>BreatherClear</h2>
 

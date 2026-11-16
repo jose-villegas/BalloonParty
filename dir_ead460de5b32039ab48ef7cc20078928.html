@@ -179,6 +179,8 @@ Other help that follows the need</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">A breather before the line that would cost a heart   </td><td class="markdownTableBodyNone"><code>Balloon/Spawner/SpawnClock</code>, <code>ISpawnClockSettings.BreatherDanger</code> (1)   </td><td class="markdownTableBodyNone">Danger at or above it starts the breather a big clear earns, under the same cooldown: a full board on the last heart. At 0.5 it played too slow: a board left full with two hearts was slowed nearly half the time    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Fewer breathers past full hearts   </td><td class="markdownTableBodyNone"><code>Balloon/Spawner/SpawnClock</code>, <code>ISpawnClockSettings.BreatherChanceLostPerExtraHeart</code> (0.25)   </td><td class="markdownTableBodyNone">The other way round: a big clear or a shape burst earns its breather at 75% with one heart past full, 50% with two, never with four. A player that far ahead gets less of the release    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">A retry's bonus card leans defensive   </td><td class="markdownTableBodyNone"><code>Game/Upgrades/RunUpgrades.BonusDealWeight</code>   </td><td class="markdownTableBodyNone">Each card's deal weight × (1 + <code>IUpgradeCardSettings.RetryDealBoost</code>): Thick Skin 1, so twice as likely. A retry follows a lost run, so it reads full need without asking. The deal stays seeded   </td></tr>
 </table>
 <h1><a class="anchor" id="autotoc_md190"></a>

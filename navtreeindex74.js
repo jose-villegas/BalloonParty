@@ -1,5 +1,17 @@
 var NAVTREEINDEX74 =
 {
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a4977615d332512ae404e93ac5f59275a":[6,0,0,10,1,7,16],
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a4c335ddf2b3d0119c4fd270eff325062":[5,0,0,10,1,7,13],
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a4c335ddf2b3d0119c4fd270eff325062":[6,0,0,10,1,7,13],
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a50cfc8b49903a470d4cccf029323271a":[5,0,0,10,1,7,8],
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a50cfc8b49903a470d4cccf029323271a":[6,0,0,10,1,7,8],
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a747520ff37070e60f7649509048b5757":[5,0,0,10,1,7,9],
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a747520ff37070e60f7649509048b5757":[6,0,0,10,1,7,9],
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a74771b454c72550e5d936d418bc04190":[5,0,0,10,1,7,0],
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a74771b454c72550e5d936d418bc04190":[6,0,0,10,1,7,0],
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a80b738cbb4593f3a726e767b6110c544":[5,0,0,10,1,7,14],
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a80b738cbb4593f3a726e767b6110c544":[6,0,0,10,1,7,14],
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a85e65308080ad993d663501d9ec6849f":[5,0,0,10,1,7,7],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a85e65308080ad993d663501d9ec6849f":[6,0,0,10,1,7,7],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a975c6d6a957d54fe681d5f27dbfeab4a":[5,0,0,10,1,7,4],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a975c6d6a957d54fe681d5f27dbfeab4a":[6,0,0,10,1,7,4],
@@ -237,17 +249,5 @@ var NAVTREEINDEX74 =
 "classBalloonParty_1_1Projectile_1_1ProjectilePoolChannel.html#a82433da39dedd6354e35d4475337d588":[6,0,0,10,8,7],
 "classBalloonParty_1_1Projectile_1_1ProjectilePoolChannel.html#a891852c34f8af3b4dfa80cf8c50bf994":[5,0,0,10,8,6],
 "classBalloonParty_1_1Projectile_1_1ProjectilePoolChannel.html#a891852c34f8af3b4dfa80cf8c50bf994":[6,0,0,10,8,6],
-"classBalloonParty_1_1Projectile_1_1ProjectilePoolChannel.html#a96577299a5d2f03f2b9978df820ac8f6":[5,0,0,10,8,12],
-"classBalloonParty_1_1Projectile_1_1ProjectilePoolChannel.html#a96577299a5d2f03f2b9978df820ac8f6":[6,0,0,10,8,12],
-"classBalloonParty_1_1Projectile_1_1ProjectilePoolChannel.html#a9cc386867b373c4f03217838eadc0224":[5,0,0,10,8,0],
-"classBalloonParty_1_1Projectile_1_1ProjectilePoolChannel.html#a9cc386867b373c4f03217838eadc0224":[6,0,0,10,8,0],
-"classBalloonParty_1_1Projectile_1_1ProjectilePoolChannel.html#abf6c7776bf0af63694707a0f43acee95":[5,0,0,10,8,8],
-"classBalloonParty_1_1Projectile_1_1ProjectilePoolChannel.html#abf6c7776bf0af63694707a0f43acee95":[6,0,0,10,8,8],
-"classBalloonParty_1_1Projectile_1_1ProjectilePoolChannel.html#ac39c3d0ab6c6658fce73ebbec2255756":[5,0,0,10,8,13],
-"classBalloonParty_1_1Projectile_1_1ProjectilePoolChannel.html#ac39c3d0ab6c6658fce73ebbec2255756":[6,0,0,10,8,13],
-"classBalloonParty_1_1Projectile_1_1ProjectilePoolChannel.html#ad37663d2161666a4663a215a7d4f0646":[5,0,0,10,8,14],
-"classBalloonParty_1_1Projectile_1_1ProjectilePoolChannel.html#ad37663d2161666a4663a215a7d4f0646":[6,0,0,10,8,14],
-"classBalloonParty_1_1Projectile_1_1ProjectilePoolChannel.html#ae006ae853c9207bd38289000eaf3f85d":[5,0,0,10,8,9],
-"classBalloonParty_1_1Projectile_1_1ProjectilePoolChannel.html#ae006ae853c9207bd38289000eaf3f85d":[6,0,0,10,8,9],
-"classBalloonParty_1_1Projectile_1_1ProjectilePoolChannel.html#ae735afdc60004ff87ed88481da9c2069":[5,0,0,10,8,11]
+"classBalloonParty_1_1Projectile_1_1ProjectilePoolChannel.html#a96577299a5d2f03f2b9978df820ac8f6":[5,0,0,10,8,12]
 };

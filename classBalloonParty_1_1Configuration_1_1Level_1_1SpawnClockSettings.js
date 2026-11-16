@@ -1,9 +1,10 @@
 var classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings =
 [
     [ "SpawnClockSettings", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#adc7a21c25e3338aedefe03ff6c239c72", null ],
-    [ "SpawnClockSettings", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a974a30d7b351d37fd36247e324319cdf", null ],
+    [ "SpawnClockSettings", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a7afa1df864afa65469132bb6cd72dad7", null ],
     [ "IntervalForLevel", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a64697f030cf1338f753efbfc0d5cc1cc", null ],
     [ "StepsToMinInterval", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a4ad7d504412e5515c1d039db9374fd71", null ],
+    [ "_breatherChanceLostPerExtraHeart", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a916e9b228e9581e28cb87af57f8c143e", null ],
     [ "_breatherClear", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#aea34d028064dbab9441b708581825077", null ],
     [ "_breatherClearWindow", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a1ce6c9a3d0a0dd706cdb04695532e475", null ],
     [ "_breatherCooldownSeconds", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#ac1064b5e0379da73d25aa659dd92b779", null ],
@@ -28,6 +29,7 @@ var classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings =
     [ "_pressureSpeedup", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a9053f05c73d928c51b1654224bf87a7d", null ],
     [ "_sparseBoardSpeedup", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#ace8cfc41cc7809c0e57d89d0922a981e", null ],
     [ "_targetOccupancy", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#aed9c77d5c9a39b4591a7aa1acfddcc05", null ],
+    [ "BreatherChanceLostPerExtraHeart", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a6706b78a356bedb05b749e08566ae7ce", null ],
     [ "BreatherClear", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#adcd0363ff40fa39d00a2c872cdae13e5", null ],
     [ "BreatherClearWindow", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a012845f9396a0bf135f622392016015a", null ],
     [ "BreatherCooldownSeconds", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#ac2acf8cf84c9801c1f8bdd752789bdea", null ],

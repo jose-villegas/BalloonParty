@@ -130,6 +130,9 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:ad7c8f67def6f82bbb286614f77481981" id="r_ad7c8f67def6f82bbb286614f77481981"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad7c8f67def6f82bbb286614f77481981">BreatherChanceLostPerExtraHeart</a><code> [get]</code></td></tr>
+<tr class="memdesc:ad7c8f67def6f82bbb286614f77481981"><td class="mdescLeft">&#160;</td><td class="mdescRight">Past full hearts, how much each extra heart takes off the chance that a big clear or a shape burst earns its breather: 0.25 = 75% with one extra, none with four.  <br /></td></tr>
+<tr class="separator:ad7c8f67def6f82bbb286614f77481981"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5bec4bdbf2e2a88462e66a1dde3eceb6" id="r_a5bec4bdbf2e2a88462e66a1dde3eceb6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5bec4bdbf2e2a88462e66a1dde3eceb6">BreatherClear</a><code> [get]</code></td></tr>
 <tr class="memdesc:a5bec4bdbf2e2a88462e66a1dde3eceb6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Share of the board's open slots that, cleared within <a class="el" href="#a8e4bec5182d84e273a6a9dbc30422e24" title="Seconds a clear must happen within to earn a breather.">BreatherClearWindow</a>, earns a breather: the clock slows to <a class="el" href="#ad33347e74e6f9aaace096faef807dd5c" title="The clock&#39;s pace as a breather starts, as a share of its full pace, 0–1.">BreatherPace</a> and eases back to its full pace over <a class="el" href="#a2fb00c751c93f250fa3631362b39b258" title="Seconds a breather lasts, easing from BreatherPace back to full pace.">BreatherSeconds</a>.  <br /></td></tr>
 <tr class="separator:a5bec4bdbf2e2a88462e66a1dde3eceb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -211,6 +214,33 @@ Properties</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Property Documentation</h2>
+<a id="ad7c8f67def6f82bbb286614f77481981" name="ad7c8f67def6f82bbb286614f77481981"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7c8f67def6f82bbb286614f77481981">&#9670;&#160;</a></span>BreatherChanceLostPerExtraHeart</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.ISpawnClockSettings.BreatherChanceLostPerExtraHeart</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Past full hearts, how much each extra heart takes off the chance that a big clear or a shape burst earns its breather: 0.25 = 75% with one extra, none with four. </p>
+<p>A miss is spent like a breather (the cooldown runs). The danger's breather and the nuke's never roll. 0 = always earned. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a6706b78a356bedb05b749e08566ae7ce">BalloonParty.Configuration.Level.SpawnClockSettings</a>.</p>
+
+</div>
+</div>
 <a id="a5bec4bdbf2e2a88462e66a1dde3eceb6" name="a5bec4bdbf2e2a88462e66a1dde3eceb6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5bec4bdbf2e2a88462e66a1dde3eceb6">&#9670;&#160;</a></span>BreatherClear</h2>
 

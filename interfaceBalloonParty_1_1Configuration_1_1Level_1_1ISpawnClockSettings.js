@@ -1,6 +1,7 @@
 var interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings =
 [
     [ "IntervalForLevel", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a2c396acfe977955ea5d26778f4333bd9", null ],
+    [ "BreatherChanceLostPerExtraHeart", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#ad7c8f67def6f82bbb286614f77481981", null ],
     [ "BreatherClear", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a5bec4bdbf2e2a88462e66a1dde3eceb6", null ],
     [ "BreatherClearWindow", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a8e4bec5182d84e273a6a9dbc30422e24", null ],
     [ "BreatherCooldownSeconds", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a8ed4a84719c76dff6296c798ac179f1a", null ],

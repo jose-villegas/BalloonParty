@@ -1,13 +1,15 @@
 var classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock =
 [
-    [ "SpawnClock", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a3dcbdcfef1ac9e312e9ca536f0471354", null ],
+    [ "SpawnClock", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#ac686ee3b4029ddbe5e92d7a25799993e", null ],
     [ "Advance", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a0fdff0c4fd714ec4ffdaa872eea5ecbd", null ],
     [ "AgeFlights", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a9db27699abea2c79bb4f8a14479b1de8", null ],
     [ "AnotherBallInFlight", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a609377121378f09bc17a5d24c71bccdd", null ],
     [ "BoardFill", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#ad547f013d76961ee804988af447d8585", null ],
     [ "BreatherBlend", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a27302135e846a67488416839114c7fda", null ],
+    [ "BreatherRollPasses", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#aabf4370ec4406cceb913c282740999bd", null ],
     [ "BuildPressure", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#ada90ee6b12dafb48650b32beab4d2dcc", null ],
     [ "Dispose", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a3a2957e3af5c7544c1ef0d8be8a733cd", null ],
+    [ "EarnBreather", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#aab5794e259afe21ab74e6ef91a6eab8d", null ],
     [ "Grant", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#adc15467afb7cbf588affc8d029442154", null ],
     [ "InDanger", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a35fd86ce2d366e05fe8909218dd76b6c", null ],
     [ "IsRunning", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a68cbf55f2f23499013f1cac36a90c0e7", null ],
@@ -31,6 +33,7 @@ var classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock =
     [ "_firedSubscriber", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#affc45ff5f400ee9fc885273e2ba24c34", null ],
     [ "_flightAges", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a08ec7e48aec5d2880ea6fa50e19076e3", null ],
     [ "_flightConfig", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#ae1431ee7c2b1eefe090a696c32085e12", null ],
+    [ "_health", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a271a75d7564c1be088ebb74806662f81", null ],
     [ "_levelParams", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#aa8d8faa4750a3ba4200cfbd861d468ef", null ],
     [ "_levelProgress", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a35c3bc06aee0c0b6343156e8a1fa80ad", null ],
     [ "_linePublisher", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a97c3f25ce790c4493b90e42c65de0621", null ],
@@ -48,6 +51,7 @@ var classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock =
     [ "BreatherSecondsLeft", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a0d8afe230fc085dc495fcf50cf241d7f", null ],
     [ "NextLineProgress", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a920ae1b670b7dcf6ec08aa1da2990e8f", null ],
     [ "Pressure", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a9a86aa00964e1d875f26e8c79ab1cdb1", null ],
+    [ "Random01", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a53b937e4d9314d01701dc309c7055355", null ],
     [ "ResetOrder", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#aafcaf78720cae9cf7e7591efce4d9394", null ],
     [ "SecondsOnLevel", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a737cff70bfdd7095adb9fd6f44537823", null ]
 ];
