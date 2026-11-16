@@ -1,8 +1,10 @@
 using System;
 using BalloonParty.Balloon.Controller;
+using BalloonParty.Balloon.Formation;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration;
+using BalloonParty.Game.Assist;
 using BalloonParty.Projectile;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
@@ -209,6 +211,62 @@ namespace BalloonParty.Tests.Balloon
             LoadFreeProjectile();
 
             Assert.IsTrue(_balancer.TickFlightRebalance(5f), "one ball's doom never freezes the board under the other");
+        }
+
+        [Test]
+        public void SnakeBeat_ADoomedShotHoldsItsClock_RatherThanRestartingIt()
+        {
+            // Nearly every shot ends in a doomed glide; restarting the clock there kept the snakes from ever stepping.
+            var balancer = BalancerWithAToughSnake(out var formations);
+            var shot = LoadFreeProjectile();
+
+            Assert.IsFalse(balancer.TickFlightRebalance(0.6f));
+            shot.IsLastShieldApproach.Value = true;
+            Assert.IsFalse(balancer.TickFlightRebalance(5f), "a doomed glide freezes the board, the snake too");
+            shot.IsLastShieldApproach.Value = false;
+
+            Assert.IsTrue(balancer.TickFlightRebalance(0.5f), "the beat comes 1s of play after the last one");
+            formations.Dispose();
+            balancer.ResetRun(balancer.Generation + 1);
+        }
+
+        [Test]
+        public void SnakeBeat_FallsDue_WhenNothingElseWouldMove()
+        {
+            var balancer = BalancerWithAToughSnake(out var formations);
+
+            Assert.IsFalse(balancer.HasPossibleMove());
+            Assert.IsTrue(balancer.TickFlightRebalance(1f));
+            formations.Dispose();
+            balancer.ResetRun(balancer.Generation + 1);
+        }
+
+        // Three toughs on row 0 of the 3 by 3 board: the wave start makes a snake of the toughest.
+        private BalloonBalancer BalancerWithAToughSnake(out UnbreakableFormationService formations)
+        {
+            var settings = Substitute.For<IUnbreakableFormationSettings>();
+            settings.Enabled.Returns(true);
+            settings.ToughSnakes.Returns(true);
+            settings.MinMembers.Returns(3);
+            settings.MaxMembers.Returns(5);
+            settings.SnakeStepPulses.Returns(1);
+            _balloonsConfig.UnbreakableFormation.Returns(settings);
+            formations = new UnbreakableFormationService(_grid, _balloonsConfig,
+                new ThreatEase(Substitute.For<IPlayerNeed>(), Substitute.For<IAssistSettings>()));
+            formations.Start();
+            for (var col = 0; col < 3; col++)
+            {
+                _grid.Place(new ToughBalloonModel(new BalloonModelConfig(BalloonType.Tough, hitsToPop: col + 1)), null,
+                    new Vector2Int(col, 0));
+            }
+
+            formations.ArrangeAtWaveStart(_ => { });
+            Assert.AreEqual(1, formations.Formations.Count);
+
+            var pathHolder = new BalancePathHolder();
+            return new BalloonBalancer(
+                _grid, new GridBalanceQuery(_grid), _balloonsConfig, pathHolder, CaptureBalanceRequests(),
+                _registry, _pauseService, null, new BalloonMotionTicker(), formations: formations);
         }
 
         // A balloon at (1,1) over an empty (1,0) — unbalanced and free to fall.

@@ -55,9 +55,11 @@ toughest, every other tough falls in behind its tail, and it walks through the b
 ## Snakes
 
 A snake forms as a row, like a horizontal line, of at most `SnakeMaxMembers`. It sets off along the row,
-east or west at random, led by the member at that end. From then on it walks on the board's own beat: the
-balancer's pulse (`FlightRebalanceInterval`, every 4 s), so the player can see each step coming. Every
-`SnakeStepPulses` pulses the balancer asks the service to `StepSnakes`, right before that pulse's race:
+east or west at random, led by the member at that end. From then on it walks on the board's own beat, one
+`FlightRebalanceInterval` (4 s) of play apart, so the player can see each step coming. Every
+`SnakeStepPulses` beats the balancer asks the service to `StepSnakes`, right before that beat's race.
+The beat keeps its own clock beside the balancer's pulse: a pause or a doomed shot's last glide holds it
+where the pulse starts over, since nearly every shot ends in one and the snakes would never step.
 
 - The head steps one slot along the snake's heading (`HexCoordinates.Step`, six directions numbered from
   east, clockwise). When that slot is off the board, below the row clearance, or taken, `SnakeWalk` tries

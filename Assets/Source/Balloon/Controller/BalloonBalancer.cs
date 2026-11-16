@@ -63,6 +63,7 @@ namespace BalloonParty.Balloon.Controller
         private bool _snakeStepDue;
         private int _generation;
         private float _flightRebalanceElapsed;
+        private float _snakeBeatElapsed;
 
         public int ResetOrder => RunResetOrder.Quiesce;
 
@@ -128,6 +129,7 @@ namespace BalloonParty.Balloon.Controller
             _balanceRequested = false;
             _snakeStepDue = false;
             _flightRebalanceElapsed = 0f;
+            _snakeBeatElapsed = 0f;
             _turnSteps.Clear();
             _motionTicker.CancelAllBalanceMoves();
             ReleasePaths();
@@ -230,7 +232,7 @@ namespace BalloonParty.Balloon.Controller
                 RelocateRoamers();
             }
 
-            // A snake's step rides the pulse that called it, before the race, so the board settles around it.
+            // A snake's step rides the beat that called it, before the race, so the board settles around it.
             if (_snakeStepDue)
             {
                 _snakeStepDue = false;
@@ -500,21 +502,33 @@ namespace BalloonParty.Balloon.Controller
                 // Freeze the board while a lone doomed shot glides its last-breath segment: with the spawn clock
                 // already held (SpawnClock) and rebalance stopped here, nothing can drift into the
                 // computed glide path, so the eased traversal is safe for any curve. Resumes when the
-                // shot dies. One ball's doom never freezes the board under other balls.
+                // shot dies. One ball's doom never freezes the board under other balls. The snake's clock only
+                // holds: nearly every shot ends in a doomed glide, so restarting it would stop the snakes for good.
                 _flightRebalanceElapsed = 0f;
                 return false;
             }
 
             _flightRebalanceElapsed += deltaTime;
-            if (_flightRebalanceElapsed < interval)
+            _snakeBeatElapsed += deltaTime;
+            var pulse = _flightRebalanceElapsed >= interval;
+            var snakeBeat = false;
+            if (_snakeBeatElapsed >= interval)
+            {
+                _snakeBeatElapsed = 0f;
+                snakeBeat = _formations != null && _formations.TakeSnakeBeat();
+            }
+
+            if (!pulse && !snakeBeat)
             {
                 return false;
             }
 
-            _flightRebalanceElapsed = 0f;
+            if (pulse)
+            {
+                _flightRebalanceElapsed = 0f;
+            }
 
-            // A snake steps on the pulse even when nothing else would move.
-            var snakeBeat = _formations != null && _formations.TakeSnakeBeat();
+            // A snake steps on its beat even when nothing else would move.
             _snakeStepDue |= snakeBeat;
             if (!snakeBeat && !HasPossibleMove())
             {
