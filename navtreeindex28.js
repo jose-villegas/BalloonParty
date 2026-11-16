@@ -1,5 +1,9 @@
 var NAVTREEINDEX28 =
 {
+"classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html#aa64c33ead62baa1abae747f315b7f35c":[6,0,0,3,5,3,23],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html#ab1db79f99cd69bc7f9e09863993499e4":[5,0,0,3,5,3,32],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html#ab1db79f99cd69bc7f9e09863993499e4":[6,0,0,3,5,3,32],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html#abbd7ad17299024b66dc94709439d0aaf":[5,0,0,3,5,3,4],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html#abbd7ad17299024b66dc94709439d0aaf":[6,0,0,3,5,3,4],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html#abdc5e77e2b7dcbdf25ba4ea7699e0e14":[5,0,0,3,5,3,9],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html#abdc5e77e2b7dcbdf25ba4ea7699e0e14":[6,0,0,3,5,3,9],
@@ -245,9 +249,5 @@ var NAVTREEINDEX28 =
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#af8b34960ffeb7db2410e1c57deae2bdd":[6,0,0,3,5,25,14],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#afe36be33dfd9107afa3e5bf40fd1c459":[5,0,0,3,5,25,1],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#afe36be33dfd9107afa3e5bf40fd1c459":[6,0,0,3,5,25,1],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1PuffCloudSettings.html":[5,0,0,3,5,26],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1PuffCloudSettings.html":[6,0,0,3,5,26],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1PuffCloudSettings.html#a03bb8baf0a1d08605cded709ecd448cb":[5,0,0,3,5,26,3],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1PuffCloudSettings.html#a03bb8baf0a1d08605cded709ecd448cb":[6,0,0,3,5,26,3],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1PuffCloudSettings.html#a0d6b81adc11fee5947cb435dd21ed878":[5,0,0,3,5,26,4]
+"classBalloonParty_1_1Configuration_1_1Effects_1_1PuffCloudSettings.html":[5,0,0,3,5,26]
 };

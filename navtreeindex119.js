@@ -1,5 +1,9 @@
 var NAVTREEINDEX119 =
 {
+"plan_card_reveal.html#autotoc_md387":[3,21,0,2],
+"plan_card_reveal.html#autotoc_md388":[3,21,0,3],
+"plan_card_reveal.html#autotoc_md389":[3,21,0,4],
+"plan_card_reveal.html#autotoc_md390":[3,21,0,5],
 "plan_card_reveal.html#autotoc_md391":[3,21,0,6],
 "plan_card_reveal.html#autotoc_md392":[3,21,0,7],
 "plan_coins.html":[3,20],
@@ -245,9 +249,5 @@ var NAVTREEINDEX119 =
 "plan_hdr.html#autotoc_md698":[3,6,0,5],
 "plan_hdr.html#autotoc_md699":[3,6,0,5,0],
 "plan_hdr_color_pipeline.html":[3,8],
-"plan_hdr_color_pipeline.html#autotoc_md700":[3,8,0],
-"plan_hdr_color_pipeline.html#autotoc_md702":[3,8,0,0],
-"plan_hdr_color_pipeline.html#autotoc_md703":[3,8,0,1],
-"plan_hdr_color_pipeline.html#autotoc_md704":[3,8,0,2],
-"plan_hdr_color_pipeline.html#autotoc_md705":[3,8,0,2,0]
+"plan_hdr_color_pipeline.html#autotoc_md700":[3,8,0]
 };

@@ -1,5 +1,9 @@
 var NAVTREEINDEX26 =
 {
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#a95942406ff2c8320cf6b5e3b0516acb8":[6,0,0,3,3,2,9],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#a95a070c501beeb1f8a777b57a6b61898":[5,0,0,3,3,2,5],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#a95a070c501beeb1f8a777b57a6b61898":[6,0,0,3,3,2,5],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#ad5207f6d9b7a0cc494cbfbe3a906b5e8":[5,0,0,3,3,2,0],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#ad5207f6d9b7a0cc494cbfbe3a906b5e8":[6,0,0,3,3,2,0],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#ae4cc13ea2a43bfeaf783c7bf5e4b7430":[5,0,0,3,3,2,1],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#ae4cc13ea2a43bfeaf783c7bf5e4b7430":[6,0,0,3,3,2,1],
@@ -245,9 +249,5 @@ var NAVTREEINDEX26 =
 "classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteMaskDrawer.html#a6331dd049a593d787cf2e0df1b71ad18":[6,0,0,3,4,10,1],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteMaskDrawer.html#a80963d948c84b69a8f449f40211aaea2":[5,0,0,3,4,10,3],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteMaskDrawer.html#a80963d948c84b69a8f449f40211aaea2":[6,0,0,3,4,10,3],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteMaskDrawer.html#ace5523be3c4ee1c8b28b440a894043c0":[5,0,0,3,4,10,2],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteMaskDrawer.html#ace5523be3c4ee1c8b28b440a894043c0":[6,0,0,3,4,10,2],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1ProjectileFlightConfigEditor.html":[5,0,0,3,4,11],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1ProjectileFlightConfigEditor.html":[6,0,0,3,4,11],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1ProjectileFlightConfigEditor.html#a08911aa5d05c16a27b854559f34551b0":[5,0,0,3,4,11,1]
+"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteMaskDrawer.html#ace5523be3c4ee1c8b28b440a894043c0":[5,0,0,3,4,10,2]
 };

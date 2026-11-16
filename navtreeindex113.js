@@ -1,5 +1,9 @@
 var NAVTREEINDEX113 =
 {
+"interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailBehaviour.html#a13937858d1bec71f4795be2407db7c8e":[6,0,0,6,9,0,9,1],
+"interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailBehaviour.html#a6bf3381e718b8f103ed7629993e09525":[5,0,0,6,9,0,9,0],
+"interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailBehaviour.html#a6bf3381e718b8f103ed7629993e09525":[6,0,0,6,9,0,9,0],
+"interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailReporter.html":[5,0,0,6,9,0,10],
 "interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailReporter.html":[6,0,0,6,9,0,10],
 "interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailReporter.html#ad95bf02acb91bcd2e1a0b19bcd7ebc3b":[5,0,0,6,9,0,10,0],
 "interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailReporter.html#ad95bf02acb91bcd2e1a0b19bcd7ebc3b":[6,0,0,6,9,0,10,0],
@@ -245,9 +249,5 @@ var NAVTREEINDEX113 =
 "interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistryWriter.html#ae3b116150c6419dd98dbb4f73f8a3519":[6,0,0,10,6,11],
 "interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistryWriter.html#aecc290b9ac174e9ac5597c99ccf3f092":[5,0,0,10,6,13],
 "interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistryWriter.html#aecc290b9ac174e9ac5597c99ccf3f092":[6,0,0,10,6,13],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileBuffEndCondition.html":[5,0,0,10,2,0],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileBuffEndCondition.html":[6,0,0,10,2,0],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileBuffEndCondition.html#acf40990555fc50d89fad56f625d3101d":[5,0,0,10,2,0,0],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileBuffEndCondition.html#acf40990555fc50d89fad56f625d3101d":[6,0,0,10,2,0,0],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html":[5,0,0,10,2,1]
+"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileBuffEndCondition.html":[5,0,0,10,2,0]
 };

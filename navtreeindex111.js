@@ -1,5 +1,9 @@
 var NAVTREEINDEX111 =
 {
+"interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html#a6d4953e7c17848bb429e56686dc6c097":[6,0,0,3,16,4],
+"interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html#a89d8715cc2f5b605726cac09c4068b14":[5,0,0,3,16,2],
+"interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html#a89d8715cc2f5b605726cac09c4068b14":[6,0,0,3,16,2],
+"interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html#a979087f59690aa44f9e79793b9dfa873":[5,0,0,3,16,1],
 "interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html#a979087f59690aa44f9e79793b9dfa873":[6,0,0,3,16,1],
 "interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html":[5,0,0,3,17],
 "interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html":[6,0,0,3,17],
@@ -245,9 +249,5 @@ var NAVTREEINDEX111 =
 "interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IPaletteColorMasked.html":[6,0,0,3,10,3],
 "interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IPaletteColorMasked.html#ac1c174fb9eeda55c0684df79315d5b58":[5,0,0,3,10,3,0],
 "interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IPaletteColorMasked.html#ac1c174fb9eeda55c0684df79315d5b58":[6,0,0,3,10,3,0],
-"interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html":[5,0,0,3,11,0],
-"interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html":[6,0,0,3,11,0],
-"interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html#a13349dcb9c5c3c426078b3f9bf04ad37":[5,0,0,3,11,0,2],
-"interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html#a13349dcb9c5c3c426078b3f9bf04ad37":[6,0,0,3,11,0,2],
-"interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html#a216e6b95d0a04ed08408b2c7642e60d3":[5,0,0,3,11,0,3]
+"interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html":[5,0,0,3,11,0]
 };

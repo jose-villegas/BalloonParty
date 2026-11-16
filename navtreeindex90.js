@@ -1,5 +1,9 @@
 var NAVTREEINDEX90 =
 {
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#abffac52da70a44ce362f585628eaac75":[6,0,0,13,0,0,19,1],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#ad242f9ff8f4570b3441e6f30a9f861db":[5,0,0,13,0,0,19,21],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#ad242f9ff8f4570b3441e6f30a9f861db":[6,0,0,13,0,0,19,21],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#add676f460bc40a09686be3dc727ba98f":[5,0,0,13,0,0,19,20],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#add676f460bc40a09686be3dc727ba98f":[6,0,0,13,0,0,19,20],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#ae9c7fb3cb8b6261fe3b7564951150945":[5,0,0,13,0,0,19,9],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#ae9c7fb3cb8b6261fe3b7564951150945":[6,0,0,13,0,0,19,9],
@@ -245,9 +249,5 @@ var NAVTREEINDEX90 =
 "classBalloonParty_1_1Slots_1_1Actor_1_1GridActorHitController.html#affc98b3edc61ff940b5f9a418d237ddd":[6,0,0,13,0,3,3],
 "classBalloonParty_1_1Slots_1_1Actor_1_1RandomSlotSelectionStrategy.html":[5,0,0,13,0,16],
 "classBalloonParty_1_1Slots_1_1Actor_1_1RandomSlotSelectionStrategy.html":[6,0,0,13,0,16],
-"classBalloonParty_1_1Slots_1_1Actor_1_1RandomSlotSelectionStrategy.html#aa42416b7433bb2fad13f2c43e5f5b3da":[5,0,0,13,0,16,0],
-"classBalloonParty_1_1Slots_1_1Actor_1_1RandomSlotSelectionStrategy.html#aa42416b7433bb2fad13f2c43e5f5b3da":[6,0,0,13,0,16,0],
-"classBalloonParty_1_1Slots_1_1Actor_1_1RandomSlotSelectionStrategy.html#ae9e1a8e4ba67084f257e565e64827871":[5,0,0,13,0,16,1],
-"classBalloonParty_1_1Slots_1_1Actor_1_1RandomSlotSelectionStrategy.html#ae9e1a8e4ba67084f257e565e64827871":[6,0,0,13,0,16,1],
-"classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html":[5,0,0,13,0,17]
+"classBalloonParty_1_1Slots_1_1Actor_1_1RandomSlotSelectionStrategy.html#aa42416b7433bb2fad13f2c43e5f5b3da":[5,0,0,13,0,16,0]
 };

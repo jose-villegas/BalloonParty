@@ -1,5 +1,9 @@
 var NAVTREEINDEX50 =
 {
+"classBalloonParty_1_1Game_1_1Assist_1_1ArmourNeed.html":[6,0,0,6,0,0],
+"classBalloonParty_1_1Game_1_1Assist_1_1ArmourNeed.html#a0914dcaaf00463a632af2e7ed78ad211":[5,0,0,6,0,0,0],
+"classBalloonParty_1_1Game_1_1Assist_1_1ArmourNeed.html#a0914dcaaf00463a632af2e7ed78ad211":[6,0,0,6,0,0,0],
+"classBalloonParty_1_1Game_1_1Assist_1_1ArmourNeed.html#a10fc760c6ce73e6d1ab9552989436c1b":[5,0,0,6,0,0,15],
 "classBalloonParty_1_1Game_1_1Assist_1_1ArmourNeed.html#a10fc760c6ce73e6d1ab9552989436c1b":[6,0,0,6,0,0,15],
 "classBalloonParty_1_1Game_1_1Assist_1_1ArmourNeed.html#a13bedef0a299bb28b81f0c92ee13962d":[5,0,0,6,0,0,8],
 "classBalloonParty_1_1Game_1_1Assist_1_1ArmourNeed.html#a13bedef0a299bb28b81f0c92ee13962d":[6,0,0,6,0,0,8],
@@ -245,9 +249,5 @@ var NAVTREEINDEX50 =
 "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#af621aa488ebba9103b8d2090632f85ec":[6,0,0,6,1,1,20],
 "classBalloonParty_1_1Game_1_1CardReveal_1_1RevealedCard.html":[5,0,0,6,1,3],
 "classBalloonParty_1_1Game_1_1CardReveal_1_1RevealedCard.html":[6,0,0,6,1,3],
-"classBalloonParty_1_1Game_1_1CardReveal_1_1RevealedCard.html#a14e7df03799f2de7266b3507ccedee61":[5,0,0,6,1,3,1],
-"classBalloonParty_1_1Game_1_1CardReveal_1_1RevealedCard.html#a14e7df03799f2de7266b3507ccedee61":[6,0,0,6,1,3,1],
-"classBalloonParty_1_1Game_1_1CardReveal_1_1RevealedCard.html#a40e6a78c7ef470fa82f006879328f2c5":[5,0,0,6,1,3,0],
-"classBalloonParty_1_1Game_1_1CardReveal_1_1RevealedCard.html#a40e6a78c7ef470fa82f006879328f2c5":[6,0,0,6,1,3,0],
-"classBalloonParty_1_1Game_1_1CardReveal_1_1RevealedCard.html#a7338f46ae17a97f3f314c04f6e44a6d2":[5,0,0,6,1,3,2]
+"classBalloonParty_1_1Game_1_1CardReveal_1_1RevealedCard.html#a14e7df03799f2de7266b3507ccedee61":[5,0,0,6,1,3,1]
 };

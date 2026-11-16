@@ -1,5 +1,9 @@
 var NAVTREEINDEX108 =
 {
+"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeOddsSettings.html#ab0a8fec625472ff938f7ae17be6f1f7b":[6,0,0,3,0,12,5],
+"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeOddsSettings.html#adcdc4e81d1cc8964783b3b001ba3d433":[5,0,0,3,0,12,1],
+"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeOddsSettings.html#adcdc4e81d1cc8964783b3b001ba3d433":[6,0,0,3,0,12,1],
+"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeOddsSettings.html#aedee0018349c9969394e4db827716f69":[5,0,0,3,0,12,14],
 "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeOddsSettings.html#aedee0018349c9969394e4db827716f69":[6,0,0,3,0,12,14],
 "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html":[5,0,0,3,0,13],
 "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html":[6,0,0,3,0,13],
@@ -245,9 +249,5 @@ var NAVTREEINDEX108 =
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html#a077c59a8089b268a9c8a28db5e3014ae":[6,0,0,3,5,6,28],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html#a0a18727cf28afef648286544d560ce3e":[5,0,0,3,5,6,4],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html#a0a18727cf28afef648286544d560ce3e":[6,0,0,3,5,6,4],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html#a0a5222f95669f6e4cba9ad734f295e22":[5,0,0,3,5,6,13],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html#a0a5222f95669f6e4cba9ad734f295e22":[6,0,0,3,5,6,13],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html#a10146fb3681d8d55b4a4f3c91e966505":[5,0,0,3,5,6,21],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html#a10146fb3681d8d55b4a4f3c91e966505":[6,0,0,3,5,6,21],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html#a2a3ac8de96b2d6213d04b3d4935a8f1f":[5,0,0,3,5,6,16]
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html#a0a5222f95669f6e4cba9ad734f295e22":[5,0,0,3,5,6,13]
 };
