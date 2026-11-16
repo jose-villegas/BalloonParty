@@ -44,6 +44,7 @@ namespace BalloonParty.Game
         [SerializeField] private Audio.View.AudioSourceVoice _sfxVoicePrefab;
         [SerializeField] private Audio.Configuration.AudioMixerSettings _audioMixerSettings;
         [SerializeField] private ProjectileFlightConfig _projectileFlightConfig;
+        [SerializeField] private EffectsClearingSettings _effectsClearingSettings;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -74,6 +75,13 @@ namespace BalloonParty.Game
             builder.RegisterComponentInHierarchy<CameraBackgroundTint>();
             builder.RegisterComponentInHierarchy<CinematicCameraView>();
             builder.RegisterComponentInHierarchy<CameraShakeView>();
+
+            // The effects clearing (PLAN-EffectsLayerClearing): the mask on the main camera and the HUD camera's
+            // effects map. The run-scoped controller that feeds the mask from the balls in flight lives in the
+            // Game scope.
+            builder.RegisterInstance<IEffectsClearingSettings>(_effectsClearingSettings);
+            builder.RegisterComponentInHierarchy<EffectsClearingMaskView>();
+            builder.RegisterComponentInHierarchy<EffectsMapCompositor>();
 
             // The interactive backdrop fields — camera-independent, global-shader-driven. Hoisted here (out of
             // the Game scope) so the launcher's live/pokeable clouds are a first-class app-root guarantee

@@ -26,7 +26,8 @@ until then.
 | `Place(type, col, row, item, replace)` | A balloon in a slot, through the Spawn Balloon cheat's own `SpawnAt`, whole and at rest at once (its scale-in finished, its trails cleared of the line from where the pool last had it). With `replace`, what's there is popped and the new one spawned in the same frame, before anything below can float up into the slot |
 | `Pop(target)` | Pops a balloon for real, its own effect and all. A target is a balloon type (the first on the board) or `col,row` |
 | `FreezePop(target, seconds, options)` | The balloon's own pop effect, stopped `seconds` in from a fixed random seed, so two runs throw the same particles. Options can hide the balloon, move the effect off it, and swap the shards' sheet, first-frame range, shader (by name, or a `.shader` file compiled on the spot) or material floats, all on copies |
-| `ClearEffects()` | Removes the frozen pops and shows the balloons they hid |
+| `Ball(x, y, fromPoint, seconds)` | A ball in flight at a world point, held still, so a capture shows the effects cleared around it (`Plans/PLAN-EffectsLayerClearing.md`). With `fromPoint` ("x,y") and `seconds`, it flies there in a straight line over that much game time first (under `Advance`), so the clearing behind it has decayed as in a shot. Only the ball's look (the prefab built under an inactive parent and stripped of scripts and physics), put on `IProjectileRegistryWriter`'s in-flight list, which is what the clearing follows |
+| `ClearEffects()` | Removes the frozen pops and the staged balls (retired from the registry), and shows the balloons the pops hid |
 | `Capture(path, around, size)` | Renders the main camera straight to a texture (fresh even while the Editor is unfocused): the frame, or a square around a balloon or a world point |
 
 A `.shader` file passed to `FreezePop` is compiled without importing it, its relative includes rewritten

@@ -394,6 +394,7 @@ namespace BalloonParty.Game
             // scope resolves those from the parent. Only the run-scoped shake CONTROLLER lives here — it
             // drives the App-owned CameraShakeView and holds the gameplay subscriptions that reset per run.
             builder.RegisterEntryPoint<CameraShakeController>();
+            builder.RegisterEntryPoint<EffectsClearingController>();
             builder.RegisterComponentInHierarchy<SpeckField>();
             builder.RegisterComponentInHierarchy<WallNetView>();
             builder.RegisterComponentInHierarchy<SmokeFieldView>();

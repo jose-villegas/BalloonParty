@@ -382,6 +382,29 @@ namespace BalloonParty.Editor.Maps
             return service != null ? service.LightTexture : null;
         }
 
+        private static Texture FetchClearingMask()
+        {
+            if (!Application.isPlaying)
+            {
+                return null;
+            }
+
+            // Ping-ponged like the light buffer, so re-resolved on every repaint.
+            var mask = UnityEngine.Object.FindAnyObjectByType<EffectsClearingMaskView>();
+            return mask != null ? mask.MaskTexture : null;
+        }
+
+        private static Texture FetchHudEffectsMap()
+        {
+            if (!Application.isPlaying)
+            {
+                return null;
+            }
+
+            var compositor = UnityEngine.Object.FindAnyObjectByType<EffectsMapCompositor>();
+            return compositor != null ? compositor.MapTexture : null;
+        }
+
         private static MapDescriptor[] BuildDescriptors()
         {
             return new[]
@@ -453,6 +476,26 @@ namespace BalloonParty.Editor.Maps
                     "Blended paint color — green channel.",
                     "Blended paint color — blue channel.",
                     "Opacity — [0,1] stamp strength, decays linearly over time toward 0."),
+
+                new MapDescriptor(
+                    "Effects Clearing Mask",
+                    FetchClearingMask,
+                    "No clearing mask yet — it's made the first time a ball flies.",
+                    "Clearing — 1 on a ball's path, falling off to 0 at the clearing radius; decays to 0 over " +
+                    "the linger time, so a clearing shrinks inward behind the ball. Effects fade between edge low and " +
+                    "edge high.",
+                    "Unused (R8 map).",
+                    "Unused (R8 map).",
+                    "Unused (R8 map)."),
+
+                new MapDescriptor(
+                    "HUD Effects Map",
+                    FetchHudEffectsMap,
+                    "No effects map yet — it's made the first time a ball flies, and only renders while a clearing is open.",
+                    "Score shapes, trails and heads-ups, premultiplied — red.",
+                    "Score shapes, trails and heads-ups, premultiplied — green.",
+                    "Score shapes, trails and heads-ups, premultiplied — blue.",
+                    "Coverage — how much of the frame the effects hide at each pixel."),
 
                 new MapDescriptor("Custom…", null, null, null, null, null, null),
             };

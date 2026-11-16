@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8014592811555505257}
   - component: {fileID: 7789801538843072292}
   - component: {fileID: 1945301853794475904}
+  - component: {fileID: 3906618124570482216}
   m_Layer: 0
   m_Name: HUD Camera
   m_TagString: Untagged
@@ -162,6 +163,7 @@ GameObject:
   - component: {fileID: 4698789767988275823}
   - component: {fileID: 9034052619022030905}
   - component: {fileID: 977641122217208972}
+  - component: {fileID: 5813402267195573151}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -399,3 +401,35 @@ MonoBehaviour:
   _gameMask:
     serializedVersion: 2
     m_Bits: 4294967071
+--- !u!114 &5813402267195573151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4370083120234301038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58f82f091bc44637b7ee91396ca9b796, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Display.EffectsClearingMaskView
+--- !u!114 &3906618124570482216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1369418441874471140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38fd8966528545c29346b81d50b5068d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Display.EffectsMapCompositor
+  _effectLayers:
+    serializedVersion: 2
+    m_Bits: 128
+  _stackBase: {fileID: 9161632677401763229}
+  _hdr: 0
+  _compositeLayerName: UI
+  _sortingLayerName: UI
+  _sortingOrder: 3300

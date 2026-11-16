@@ -17,6 +17,8 @@ using BalloonParty.Configuration.Palette;
 using BalloonParty.Game;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
+using BalloonParty.Projectile;
+using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pause;
@@ -47,14 +49,21 @@ namespace BalloonParty.Editor.Staging
     {
         private const int DefaultSeed = 4242;
         private const int ScenarioSearchLevels = 500;
+        private const string ProjectilePrefabPath = "Assets/Prefabs/Projectile/Projectile.prefab";
 
         private static readonly Regex RelativeInclude = new("#include\\s+\"((?:\\.\\./|\\./)[^\"]+)\"");
 
         private static readonly List<GameObject> Effects = new();
         private static readonly List<Object> Scratch = new();
         private static readonly List<Renderer> Hidden = new();
+        private static readonly List<(ProjectileModel Model, GameObject Look)> Balls = new();
 
         private static float _advanceUntil = -1f;
+        private static Transform _flyingBall;
+        private static Vector3 _flightFrom;
+        private static Vector3 _flightTo;
+        private static float _flightStart;
+        private static float _flightSeconds;
 
         /// <summary>
         ///     Where things stand: <c>off</c> (no Play mode), <c>launch</c>, <c>loading</c>, or
@@ -448,10 +457,69 @@ namespace BalloonParty.Editor.Staging
                 }
             }
 
+            EditorApplication.update -= FlyTick;
+            _flyingBall = null;
+            if (Balls.Count > 0)
+            {
+                var registry = Resolve<IProjectileRegistryWriter>();
+                foreach (var (model, look) in Balls)
+                {
+                    registry.Retire(model);
+                    if (look != null)
+                    {
+                        Object.DestroyImmediate(look);
+                    }
+                }
+
+                removed += Balls.Count;
+            }
+
             Effects.Clear();
             Hidden.Clear();
             Scratch.Clear();
+            Balls.Clear();
             return $"removed {removed}";
+        }
+
+        /// <summary>
+        ///     Puts a ball in flight at (<paramref name="x" />, <paramref name="y" />), still, so a capture shows the
+        ///     effects cleared around it (PLAN-EffectsLayerClearing). With <paramref name="fromPoint" /> ("x,y") and
+        ///     <paramref name="seconds" />, it flies there in a straight line over that much game time first, then holds,
+        ///     leaving the clearing it opened behind it to close up. It's the ball's look only (its sprite and trail, no
+        ///     flight or hits) on the registry's in-flight list, which is what the clearing follows. <see cref="ClearEffects" />
+        ///     takes it away.
+        /// </summary>
+        public static string Ball(float x, float y, string fromPoint = "", float seconds = 0f)
+        {
+            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(ProjectilePrefabPath);
+            if (prefab == null)
+            {
+                return $"error: no prefab at {ProjectilePrefabPath}";
+            }
+
+            var to = new Vector3(x, y, 0f);
+            var start = string.IsNullOrEmpty(fromPoint) ? to : WorldPoint(fromPoint.Replace(',', ';'));
+            var look = BallLook(prefab, start);
+            var model = new ProjectileModel();
+            var registry = Resolve<IProjectileRegistryWriter>();
+            registry.Load(model, look.transform);
+            registry.Launch(model);
+            Balls.Add((model, look));
+
+            if (seconds <= 0f || start == to)
+            {
+                return $"ball at {x:0.##},{y:0.##}";
+            }
+
+            _flyingBall = look.transform;
+            _flightFrom = start;
+            _flightTo = to;
+            _flightStart = Time.time;
+            _flightSeconds = seconds;
+            EditorApplication.update -= FlyTick;
+            EditorApplication.update += FlyTick;
+            Advance(seconds);
+            return $"ball flying to {x:0.##},{y:0.##} over {seconds:0.##} s";
         }
 
         /// <summary>
@@ -594,6 +662,54 @@ namespace BalloonParty.Editor.Staging
             EditorApplication.update -= AdvanceTick;
             _advanceUntil = -1f;
             Hold();
+        }
+
+        // Moves the staged ball along its line by game time, so the clearing decays behind it as it would in a shot.
+        private static void FlyTick()
+        {
+            if (!EditorApplication.isPlaying || _flyingBall == null)
+            {
+                EditorApplication.update -= FlyTick;
+                _flyingBall = null;
+                return;
+            }
+
+            var t = Mathf.Clamp01((Time.time - _flightStart) / _flightSeconds);
+            _flyingBall.position = Vector3.Lerp(_flightFrom, _flightTo, t);
+            if (t >= 1f)
+            {
+                EditorApplication.update -= FlyTick;
+                _flyingBall = null;
+            }
+        }
+
+        // The ball's look without its behaviour: a copy of the prefab built under an inactive parent, so none of its
+        // scripts wake up (they'd want injecting and a flight), then stripped of scripts and physics.
+        private static GameObject BallLook(GameObject prefab, Vector3 position)
+        {
+            var holder = new GameObject("StagedBallHolder");
+            holder.SetActive(false);
+            var look = Object.Instantiate(prefab, position, Quaternion.identity, holder.transform);
+            look.name = "StagedBall";
+            foreach (var behaviour in look.GetComponentsInChildren<MonoBehaviour>(true))
+            {
+                Object.DestroyImmediate(behaviour);
+            }
+
+            foreach (var collider in look.GetComponentsInChildren<Collider2D>(true))
+            {
+                Object.DestroyImmediate(collider);
+            }
+
+            foreach (var body in look.GetComponentsInChildren<Rigidbody2D>(true))
+            {
+                Object.DestroyImmediate(body);
+            }
+
+            look.transform.SetParent(null, true);
+            Object.DestroyImmediate(holder);
+            look.SetActive(true);
+            return look;
         }
 
         // A placed balloon appears whole and at rest: its spawn scale-in finished (held time would leave it at 0),

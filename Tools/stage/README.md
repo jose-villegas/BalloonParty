@@ -38,7 +38,8 @@ and only `advance`, `clear`, `pop --settle` and dealing a board let game time ru
 | `place TYPE col,row [--item X]` | A balloon of a `BalloonType` in that slot, holding an item; whatever was there is popped first |
 | `pop TARGET [--settle S]` | Pops a balloon for real, with its own effect. `TARGET` is a type (the first on the board) or `col,row` |
 | `freeze-pop TARGET SECONDS [...]` | The balloon's pop effect stopped `SECONDS` in, from a fixed seed so runs match. `--hide` hides the balloon; `--dx`/`--dy` move the effect off it; `--seed`; `--texture PNG` swaps the shards' sheet and `--start-frame F` their first-frame range (0..1 of the sheet); `--shader NAME` or `--shader-file PATH` (compiled on the spot, so a worktree's shader can be tried before it's merged) and `--set _Name=value` change their material. Swaps go on copies; no asset changes |
-| `clear-effects` | Removes the frozen pops and shows the balloons they hid |
+| `ball x,y [--from x,y] [--seconds S]` | A ball in flight at a world point, held still, with the effects above the board cleared around it. With `--from`, it flies there over `S` seconds of game time first (default 0.5), so the clearing it leaves behind has closed up as it would in a shot |
+| `clear-effects` | Removes the frozen pops and the staged balls, and shows the balloons the pops hid |
 | `capture PATH [--around TARGET] [--size N]` | Renders the camera to a PNG: the whole frame, or an `N`-pixel square around a balloon or a world point `x;y` |
 | `end` | Clears the frozen pops and leaves Play mode, giving the game back its clock, level-ups and balloons (leaving Play mode any other way does too) |
 

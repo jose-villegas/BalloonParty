@@ -73,15 +73,16 @@ camera, both read through the same mask.
 
 | Family | Today | In the map |
 |---|---|---|
-| Score shapes, score trails (`ShapeFormationTicker`, `FlyingTrail`, `ScoreTrail.prefab`) | `Trail` layer, UI 100 / ScoreTrail 0 | yes |
-| Heart trail, highlight trail, item-preview pens | `Trail` layer, ScoreTrail 0/1 | yes |
-| Heads-ups (`HeadsUps.prefab`) | `UI` layer, UI 0/1 | yes. Their GameObjects move from `UI` to `Trail` (a prefab edit) |
+| Score shapes, score trails (`ShapeFormationTicker`, `FlyingTrail`, `ScoreTrail.prefab`) | `Trail` layer, UI 3300 (set by `ScoreTrailService`) | yes |
+| Heart trail, highlight trail, item-preview pens | `Trail` layer, UI 100 (`FlyingTrail`'s default) / ScoreTrail 0–1 | yes |
+| Heads-ups (`HeadsUps.prefab`) | `UI` layer, UI 0/1 | **not yet**: open question 4 |
 | Game canvas, hearts counter, launcher canvas | `UI` layer | **no**: that's the HUD, not effects |
 
-The `Trail` layer already holds exactly the HUD's effects, so this phase needs no new physics layer. The
-composite quad draws at UI 100, where the score trails draw today: above the canvases, so trails still fly
-over the score bar. Inside the map the effects keep their own order. The heads-ups' sorting order is raised to
-match (UI 99) permanently, so they draw in the same place whether the map is live or idle (see below).
+The `Trail` layer already holds the HUD's trails, so this phase needs no new physics layer. The composite
+quad draws at UI 3300, where the score trails draw today: above the canvases and popups (UI 3000), so trails
+still fly over the score bar, and under the card reveal (UI 31998). Inside the map the effects keep their own
+order. While the map runs, a heart or highlight trail sorts at 3300 instead of 100: over a popup, if one is
+open while a clearing is.
 
 ### Main effects map (phase 3, open)
 
@@ -113,7 +114,7 @@ One low-resolution, single-channel target: `R8`, screen size divided by `MaskDow
 URP's RenderGraph, as `Display/README.md` requires), one blit:
 
 1. **Decay**: `mask = max(0, previous − Δt / LingerSeconds)`.
-2. **Stamp**: for each of up to `MaxStamps` capsules (default 8),
+2. **Stamp**: for each of up to `MaxStamps` capsules (8, the shader's fixed array),
    `mask = max(mask, profile(d / Radius))`, where `d` is the distance from the fragment to the capsule's
    segment, and `profile(x) = 1 − x²` inside the radius, 0 outside.
 
@@ -139,7 +140,7 @@ How the stamps are fed:
 - Δt is **game time** (`Time.deltaTime`): slow-mo stretches a clearing along with the ball, and a pause holds
   it. `UseUnscaledTime` is a setting in case that reads wrong.
 
-`MaxStamps` caps the uniform array. More balls than that in flight (a split shot, say) keep the nearest
+`MaxStamps` caps the uniform array. It's a constant, not a setting: a shader array's size is fixed when it compiles. More balls than that in flight (a split shot, say) keep the nearest
 `MaxStamps` to the screen's centre. Nothing in today's shots comes close.
 
 ---
@@ -209,7 +210,7 @@ Each phase follows the per-phase review protocol: implement, review, curate, own
 
 - `IEffectsClearingSettings` + `EffectsClearingSettings` SO (under `Configuration/Effects/`), registered in
   `AppLifetimeScope`: `Enabled`, `ClearRadius`, `LingerSeconds`, `EdgeLow`, `EdgeHigh`, `Strength`,
-  `MaskDownscale`, `MapDownscale`, `MaxStamps`, `UseUnscaledTime`, mask and composite shaders.
+  `MaskDownscale`, `MapDownscale`, `UseUnscaledTime`, mask and composite shaders.
 - `EffectsClearingStamper` (pure) + EditMode tests: a first sighting stamps a disc, a moving ball a capsule
   from its last position, retired balls drop out, the radius scales with orthographic size, the cap keeps the
   most central balls.
@@ -220,12 +221,23 @@ Each phase follows the per-phase review protocol: implement, review, curate, own
 ### Phase 2: the HUD effects map
 
 - `EffectsMapCompositor` + `EffectsMapComposite` shader, on the HUD camera, reading the `Trail` layer.
-- `HeadsUps.prefab` moves from the `UI` to the `Trail` layer, with its sorting order at UI 99.
-- An alpha audit of the HUD map's materials. Score trails, heart trails, highlight trails and heads-up TMP
-  are checked in an in-editor A/B with the mask forced empty: the frame must match the one without a map.
-- A `stage.py` command to hold a ball mid-flight (`ball x,y --heading deg`), so a still can show a ball
-  inside a burst of score shapes, with the clearing on and off.
+- An alpha audit of the HUD map's materials, then an in-editor A/B with the mask forced empty: the frame
+  must match the one without a map.
+- A `stage.py` command to hold a ball mid-flight (`ball x,y --from x,y --seconds s`), so a still can show a
+  ball inside a burst of score shapes, with the clearing on and off.
 - A phone check: does the shot read now? And a profile of the cost.
+
+### As built (phases 1 and 2)
+
+- **Alpha audit.** The HUD map draws `Sprites/Default` (the trail heads; premultiplied, correct coverage),
+  URP `Unlit` set to alpha blending with `One OneMinusSrcAlpha` on alpha (the highlight trail) and the
+  project's `PencilLine` (premultiplied). The score trail's ribbon material (`TrailMaterial_ScoreTrail`) was
+  on the built-in `Mobile/Particles/Alpha Blended`, which writes no correct coverage. It moved to
+  `Sprites/Default`, which draws the same colour (texture × vertex colour, the material's tint white) and
+  writes its coverage, so it looks the same drawn straight in.
+- **Heads-ups stayed on the `UI` layer.** Moving them to `Trail` would also put them in the GI scene capture,
+  which renders `Trail`: heads-up text would start to shade the board under it. Open question 4.
+- **The composite sorts at UI 3300**, where the score trails are set, not at 100 as first planned.
 
 ### Phase 3: the main effects map (gated)
 
@@ -241,7 +253,7 @@ leaves `Effects` out. Its alpha audit covers the particle shaders.
 - Anything that moves, bends or fades individual objects. That approach was tried and removed.
 - Clearing the HUD itself: the canvases, the score bar and the hearts counter.
 - Clearing board pieces: clouds, bushes, puffs, danger walls, the wall net.
-- Sorting-layer reshuffles beyond the heads-ups' order.
+- Sorting-layer reshuffles.
 - Other sources of clearings (impacts, items going off). The stamp list is the seam for them later.
 - Per-device resolution tiers for the maps. `MapDownscale` is a single setting for now.
 
@@ -252,7 +264,11 @@ leaves `Effects` out. Its alpha audit covers the particle shaders.
 1. **Pops.** Balloon pops draw over the balloons, so they hide what the ball just hit, but they are also the
    feedback that it hit. Should pops (and the pop-like nuke cloud, disc wave and merge cue) clear around the
    ball, or stay?
-2. **Phase 3 at all.** The score shapes, trails and heads-ups are the HUD map. Should item VFX, range
+2. **Phase 3 at all.** The score shapes and trails are the HUD map. Should item VFX, range
    previews, shield VFX and the dust specks clear as well, at roughly twice the HUD map's cost?
 3. **How clear is clear.** Should effects vanish inside a clearing (`Strength` 1), or keep a faint trace
    (about 0.85) so the burst still reads as being there?
+4. **Heads-ups.** They are on the `UI` layer with the canvases, so the HUD map can't take them alone. One
+   way is an `Effects`-style physics layer for them, which you'd add in the Editor (the same one phase 3
+   needs). The other is the `Trail` layer, which needs no new layer but puts their text into the GI capture,
+   so it shades the board a little under each line. Which one, or should they stay as they are?

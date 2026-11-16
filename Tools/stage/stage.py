@@ -192,6 +192,16 @@ class Stage:
         options.update(floats or {})
         return self.call("FreezePop", target, float(seconds), ";".join(f"{k}={v}" for k, v in options.items()))
 
+    def ball(self, at, start=None, seconds=0.0):
+        """Puts a ball in flight at world point `at` (x, y), held still; with `start` and `seconds`, it flies there
+        from `start` over that much game time first, and this returns once it has. The effects clear around it."""
+        start_text = f"{start[0]},{start[1]}" if start else ""
+        result = self.call("Ball", float(at[0]), float(at[1]), start_text, float(seconds))
+        if start and seconds > 0:
+            while "advancing" in self._quiet("Status"):
+                time.sleep(POLL_SECONDS)
+        return result
+
     def clear_effects(self):
         return self.call("ClearEffects")
 
@@ -268,7 +278,11 @@ def main():
     freeze.add_argument("--shader-file", help="a .shader file, compiled on the spot (one not yet merged)")
     freeze.add_argument("--set", action="append", default=[], metavar="_NAME=VALUE",
                         help="a material float, e.g. _AmbientHue=0.25")
-    sub.add_parser("clear-effects", help="remove frozen pops and show the balloons they hid")
+    ball = sub.add_parser("ball", help="put a ball in flight at a world point, held still")
+    ball.add_argument("at", help="x,y")
+    ball.add_argument("--from", dest="start", help="x,y: fly there from here first")
+    ball.add_argument("--seconds", type=float, default=0.5, help="how long the flight from --from takes")
+    sub.add_parser("clear-effects", help="remove frozen pops and staged balls, and show the balloons the pops hid")
     capture = sub.add_parser("capture", help="render the camera to a PNG")
     capture.add_argument("path")
     capture.add_argument("--around", default="", help="a balloon type, col,row, or a world point x;y")
@@ -313,6 +327,8 @@ def main():
             stage.freeze_pop(args.target, args.seconds, args.hide, args.dx, args.dy, args.seed, args.texture,
                              args.start_frame, args.shader, args.shader_file,
                              dict(item.split("=", 1) for item in args.set))
+        elif args.command == "ball":
+            stage.ball(pair(args.at), pair(args.start) if args.start else None, args.seconds if args.start else 0.0)
         elif args.command == "capture":
             stage.capture(args.path, args.around, args.size)
         elif args.command == "end":

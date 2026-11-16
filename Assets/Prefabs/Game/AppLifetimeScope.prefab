@@ -66,6 +66,8 @@ MonoBehaviour:
     type: 2}
   _projectileFlightConfig: {fileID: 11400000, guid: 4f8bcc06cbc44ce9ad22dac2d15559c7,
     type: 2}
+  _effectsClearingSettings: {fileID: 11400000, guid: 684f556a19c54c1eb7f45b3ed5db95fe,
+    type: 2}
 --- !u!1001 &5010516512641034158
 PrefabInstance:
   m_ObjectHideFlags: 0
