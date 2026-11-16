@@ -93,51 +93,6 @@ namespace BalloonParty.Game.Score.Behaviours
             }
         }
 
-        /// <summary>
-        ///     Pushes each of the first <paramref name="count" /> formations out of every fixed circle (the
-        ///     balls' clear circles): the circles never give way, so the formation takes the whole
-        ///     correction. Each formation's offset this call is capped at <paramref name="maxPush" /> world
-        ///     units, a distance rather than a share of its radius, so a shape still blooming from a point
-        ///     can still slide off a ball. XY only, like <see cref="Resolve" />; a circle of radius 0 pushes
-        ///     nothing.
-        /// </summary>
-        internal static void ResolveAgainstFixed(
-            Vector3[] centers,
-            float[] radii,
-            float[] paddings,
-            int count,
-            Vector2[] fixedCenters,
-            float[] fixedRadii,
-            int fixedCount,
-            float maxPush,
-            Vector3[] offsets)
-        {
-            for (var i = 0; i < count; i++)
-            {
-                offsets[i] = Vector3.zero;
-                for (var j = 0; j < fixedCount; j++)
-                {
-                    if (fixedRadii[j] <= DistanceEpsilon)
-                    {
-                        continue;
-                    }
-
-                    var minDist = radii[i] + fixedRadii[j] + paddings[i];
-                    var delta = new Vector3(centers[i].x - fixedCenters[j].x, centers[i].y - fixedCenters[j].y, 0f);
-                    var dist = delta.magnitude;
-                    if (dist >= minDist)
-                    {
-                        continue;
-                    }
-
-                    var direction = dist > DistanceEpsilon ? delta / dist : FallbackDirection(j, count + i);
-                    offsets[i] += direction * (minDist - dist);
-                }
-
-                offsets[i] = Vector3.ClampMagnitude(offsets[i], maxPush);
-            }
-        }
-
         // Deterministic separation axis for near-coincident centers (e.g. two formations launched at the
         // exact same origin this frame) — index-derived, so it's stable frame to frame instead of jittering
         // the way a per-frame Random pick would while the pair is still settling apart. Always in the XY

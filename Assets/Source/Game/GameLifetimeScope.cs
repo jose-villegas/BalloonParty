@@ -58,7 +58,6 @@ namespace BalloonParty.Game
         [SerializeField] private ThermalGovernorSettings _thermalGovernorSettings;
         [SerializeField] private HeadsUpSettings _headsUpSettings;
         [SerializeField] private CardRevealSettings _cardRevealSettings;
-        [SerializeField] private ClearanceSettings _clearanceSettings;
         [SerializeField] private SoundBankConfiguration _soundBank;
         [SerializeField] private AudioMixerSettings _audioMixerSettings;
         [SerializeField] private ProjectileView _projectilePrefab;
@@ -176,8 +175,6 @@ namespace BalloonParty.Game
                     : ScriptableObject.CreateInstance<ItemPreviewConfig>());
             builder.RegisterInstance<IHeadsUpSettings>(
                 _headsUpSettings != null ? _headsUpSettings : ScriptableObject.CreateInstance<HeadsUpSettings>());
-            builder.RegisterInstance<IClearanceSettings>(
-                _clearanceSettings != null ? _clearanceSettings : ScriptableObject.CreateInstance<ClearanceSettings>());
             builder.RegisterInstance<ICardRevealSettings>(
                 _cardRevealSettings != null
                     ? _cardRevealSettings

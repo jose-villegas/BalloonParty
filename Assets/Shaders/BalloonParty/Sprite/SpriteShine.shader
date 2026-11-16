@@ -8,9 +8,6 @@
          [PerRendererData] _MainTex("Sprite Texture", 2D) = "white" {}
          _Color("Tint", Color) = (1,1,1,1)
          [HideInInspector] _RendererColor("Renderer Color", Color) = (1,1,1,1)
-         // Thins the effect out inside the clear circle round each ball in flight (Include/Clearance.cginc),
-         // so it never buries the ball. For effects drawn over the ball only.
-         [Toggle(_CLEARANCE_FADE)] _ClearanceFade("Fade Round Balls", Float) = 0
          _ShineLocation("ShineLocation", Range(0,1)) = 0
          _ShineWidth("ShineWidth", Range(0,1)) = 0
          _ShineSpeed("ShineSpeed", Float) = 0
@@ -48,11 +45,9 @@
  #pragma target 3.5
  #pragma multi_compile _ PIXELSNAP_ON
  #pragma multi_compile_instancing
- #pragma shader_feature_local _CLEARANCE_FADE
  #include "UnityCG.cginc"
  #include "../Include/SceneLight.cginc"
  #include "../Include/ShineSweep.cginc"
- #include "../Include/Clearance.cginc"
 
      struct appdata_t
      {
@@ -71,9 +66,6 @@
          // stay coherent across the whole quad — the PaintBlob pattern.
          float2 lightDir  : TEXCOORD1;
          float3 lightTint : TEXCOORD2;
- #ifdef _CLEARANCE_FADE
-         float2 worldXY   : TEXCOORD3;
- #endif
          UNITY_VERTEX_INPUT_INSTANCE_ID
      };
 
@@ -102,9 +94,6 @@
          float2 spriteCenterWorld = float2(unity_ObjectToWorld._m03, unity_ObjectToWorld._m13);
          OUT.lightDir  = SceneLightDirectionAtLOD(spriteCenterWorld);
          OUT.lightTint = SceneLightTintAtLOD(spriteCenterWorld);
- #ifdef _CLEARANCE_FADE
-         OUT.worldXY = mul(unity_ObjectToWorld, IN.vertex).xy;
- #endif
  #ifdef PIXELSNAP_ON
          OUT.vertex = UnityPixelSnap(OUT.vertex);
  #endif
@@ -155,9 +144,6 @@
          UNITY_SETUP_INSTANCE_ID(IN);
          half4 c = SampleSpriteTexture(IN.texcoord, IN.lightDir, IN.lightTint) * IN.color;
          c.rgb *= c.a;
- #ifdef _CLEARANCE_FADE
-         c *= ClearanceAlpha(IN.worldXY);
- #endif
 
      return c;
      }

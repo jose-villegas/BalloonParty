@@ -141,12 +141,6 @@ The discharge fires at the **next wall bounce** after the shot plows at least on
 
 **Tunneling safety net** — at high cruise/pierce speeds the projectile can tunnel through balloons (Unity's `OnTriggerEnter2D` fires per-fixed-step and can skip thin colliders). On every wall bounce while piercing, `SweepPierceMisses` runs a `CircleCastAll` from the segment's start to the wall hit. Any tough balloon in the swept path that wasn't already registered via trigger is added to `PendingPierceHits` before the discharge resolves — guaranteeing every tough in the flight line is shattered.
 
-## Clear circles (`Clearance/`)
-
-Every ball in flight carries a clear circle that score formations slide out of and the effects drawn over
-the ball fade inside, so the player can always see the ball. `ClearanceFieldTicker` follows the registry's
-balls in flight into `IClearanceField`; see `Clearance/README.md`.
-
 ## Buffs (`Buffs/`)
 
 A **projectile buff** is a temporary stat modifier on one ball following the
@@ -176,6 +170,17 @@ The two abstractions live in `Model/`, the service in `Buffs/`:
 - **`ProjectileBuffService`** — `IStartable` owning storage + lifecycle: keeps buffs per ball: `Apply` names the ball (a buff for a ball no longer held or in flight is dropped), and a buff is dropped the first time its `EndCondition.Expired` fires or when `IProjectileRegistry.Retired` fires for its ball (after the ball's Destroyed dispatch, so every subscriber still sees its buffs). Knows nothing about any buff's effect or end-condition — it only observes the exposed signal. Publishes `ProjectileBuffGainedMessage` when a ball takes on a kind of buff it didn't hold (and the buff outlived its own `Apply`), so another buff of a kind already held stays quiet.
 
 The model stores buffs in a plain list exposed via `HasBuff(ProjectileBuffId)` (read), `ComputeBuffedValue(id, baseValue)` (aggregated stat query), and `AddBuff`/`RemoveBuff` (write); a fresh `ProjectileModel` per throw resets them for free.
+
+## Draw order
+
+The ball draws above every effect on the board, so the player can always see it however busy the board
+gets. Its renderers sit on the `ScoreTrail` sorting layer at orders 99 to 115, their old relative orders
+lifted by 100, and the shield's gain, lose and bounce bursts sit at 120. Under it: power-up bursts,
+lightning, laser and paint on `PowerUps`, puff clouds and bushes on `GridActors`, and the score trails
+and shapes on `ScoreTrail` itself (orders up to 1). Only `BakedShadow` stays on the `Projectile` layer,
+under the effects, because it lies on the ground. The `Sky` layer (dust, the scene light, the card
+reveal) and `UI` still draw over the ball. The aim lines (`TraceDrawer`, `SnipeLanceLine`) and the
+thrower stay on `Projectile`.
 
 ## How it works
 

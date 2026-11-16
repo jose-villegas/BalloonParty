@@ -131,7 +131,7 @@ Composable plain-C# helpers for trail orb services. Pick the level that matches 
 
 ### `TrailSpawner`
 
-Spawn-and-forget: handles pool get → position → setup → return on arrival. Accepts an optional `sortingOrder` to override the trail's sorting layer (used by fill trails at `3200`), and an optional `IClearanceField` (`Projectile/Clearance/`): every trail it spawns on a flight bends round the balls' clear circles. `ScoreTrailService` passes it; a spawner without one flies its trails straight. `Acquire` (a caller-driven formation pen) never bends.
+Spawn-and-forget: handles pool get → position → setup → return on arrival. Accepts an optional `sortingOrder` to override the trail's sorting layer (used by fill trails at `3200`).
 
 ```csharp
 var spawner = new TrailSpawner(poolManager, "MyTrail", prefab);                       // common case: pools via SimplePoolChannel

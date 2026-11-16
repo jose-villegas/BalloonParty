@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Configuration;
-using BalloonParty.Configuration.Effects;
-using BalloonParty.Projectile.Clearance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
 using BalloonParty.UI.Score;
@@ -123,19 +121,6 @@ namespace BalloonParty.Game.Score.Behaviours
         // high spin speed from snapping the ribbons with a big rotation delta on the first ticks.
         private const float SpinRampRate = 2f;
 
-        // The clear-circle push is a velocity, not a per-frame jump: the speed a formation wants is its overlap
-        // covered in ClearanceResponseTime (capped at FormationPushSpeed), and its actual speed eases toward that
-        // at ClearanceEaseRate a second. A shape a ball runs into speeds up out of the way and coasts to a stop,
-        // instead of lurching a frame-capped step and flipping direction as the ball passes; its pens' ribbons
-        // stay smooth because no single frame moves it far. The response time is also how deep a ball can sink
-        // into a shape it crosses (about its relative speed x the response time), so keep it short. A hitch frame
-        // integrates at most ClearanceMaxStepDt, so a long frame can't throw the shape a long way at once.
-        private const float ClearanceResponseTime = 0.1f;
-        private const float ClearanceEaseRate = 12f;
-        private const float ClearanceMaxStepDt = 1f / 30f;
-
-        private readonly IClearanceField _clearance;
-        private readonly IClearanceSettings _clearanceSettings;
         private readonly List<FormationState> _states = new(16);
         private readonly Stack<FormationState> _pool = new(16);
         private readonly Stack<Transform> _anchorPool = new(8);
@@ -152,10 +137,6 @@ namespace BalloonParty.Game.Score.Behaviours
         // enter the SAME overlap-resolve call as _pending, always at weight 0 — immovable, never committed by
         // Pass C (their Center/LastScale are already stable, that's what "frozen"/"fading" means).
         private readonly List<FormationState> _stationary = new(8);
-
-        // The clear circles, copied out of the field once a tick for the resolver's plain arrays.
-        private readonly Vector2[] _clearanceCenters = new Vector2[ClearanceCircle.MaxCircles];
-        private readonly float[] _clearanceRadii = new float[ClearanceCircle.MaxCircles];
 
         // Grow-only scratch for FormationOverlapResolver.Resolve's O(n²) pass — resized only when too small
         // (mirrors FlyingTrail._ribbonScratch / BigScoreTrailBehaviour._dpPieces), never shrunk.
@@ -181,12 +162,6 @@ namespace BalloonParty.Game.Score.Behaviours
             }
         }
 
-        internal ShapeFormationTicker(IClearanceField clearance, IClearanceSettings clearanceSettings)
-        {
-            _clearance = clearance;
-            _clearanceSettings = clearanceSettings;
-        }
-
         public void LateTick()
         {
             var dt = Time.deltaTime;
@@ -209,11 +184,6 @@ namespace BalloonParty.Game.Score.Behaviours
             // passively relax it back toward zero — see ResolveOverlaps for why this needs to persist
             // across ticks instead of being recomputed fresh from CandidateCenter alone every frame.
             ResolveOverlaps(_pending, _stationary, dt);
-
-            // Pass B2: after the packing and its relax, slide every moving formation out of the balls' clear
-            // circles at an eased speed, into the same persistent offset — so the shape keeps sliding clear
-            // over the following frames, and the relax brings it back onto its path once the ball has passed.
-            PushOutOfClearance(_pending, dt);
 
             // Pass C: commit each pending formation to its corrected center — rotation/ribbon reframe/pen
             // placement/guide/anchor/report, same math the old single-pass AdvanceFormation did, just fed the
@@ -487,62 +457,6 @@ namespace BalloonParty.Game.Score.Behaviours
             }
         }
 
-        // Every pending formation at full weight, the principal included: its damping steadies the level-up
-        // camera against other formations, but a ball matters more, and a principal the cinematic has taken
-        // is Paused (stationary), never pending. Runs with no circles too, so a formation still moving out of
-        // a circle that just faded coasts to a stop instead of halting dead.
-        private void PushOutOfClearance(IReadOnlyList<FormationState> pending, float dt)
-        {
-            if (pending.Count == 0)
-            {
-                return;
-            }
-
-            // Switched off, the shape sees no circles, so it coasts to a stop like a ball that just landed.
-            var circles = _clearanceSettings.PushFormations ? _clearance.Count : 0;
-            var stepDt = Mathf.Min(dt, ClearanceMaxStepDt);
-            for (var j = 0; j < circles; j++)
-            {
-                var circle = _clearance.CircleAt(j);
-                _clearanceCenters[j] = circle.Center;
-                _clearanceRadii[j] = circle.Radius;
-            }
-
-            EnsureCorrectionCapacity(pending.Count);
-            for (var i = 0; i < pending.Count; i++)
-            {
-                var state = pending[i];
-                _correctionCenters[i] = state.CandidateCenter + state.SeparationOffset;
-                _correctionRadii[i] = state.FormationRadius * state.CandidateScale;
-                _correctionPadding[i] = state.Group.Settings.OverlapPadding;
-                _correctionOffsets[i] = Vector3.zero;
-            }
-
-            if (circles > 0)
-            {
-                // Uncapped: the whole overlap, which SmoothClearanceVelocity turns into a speed.
-                FormationOverlapResolver.ResolveAgainstFixed(
-                    _correctionCenters, _correctionRadii, _correctionPadding, pending.Count,
-                    _clearanceCenters, _clearanceRadii, circles, float.PositiveInfinity, _correctionOffsets);
-            }
-
-            for (var i = 0; i < pending.Count; i++)
-            {
-                var state = pending[i];
-                state.ClearanceVelocity = SmoothClearanceVelocity(state.ClearanceVelocity, _correctionOffsets[i],
-                    _clearanceSettings.FormationPushSpeed, stepDt);
-                state.ClearanceStep = state.ClearanceVelocity * stepDt;
-                state.SeparationOffset += state.ClearanceStep;
-            }
-        }
-
-        // The formation's push velocity for this frame, from last frame's and the overlap still to clear.
-        internal static Vector3 SmoothClearanceVelocity(Vector3 velocity, Vector3 overlap, float maxSpeed, float dt)
-        {
-            var desired = Vector3.ClampMagnitude(overlap / ClearanceResponseTime, maxSpeed);
-            return Vector3.Lerp(velocity, desired, 1f - Mathf.Exp(-ClearanceEaseRate * dt));
-        }
-
         private void EnsureCorrectionCapacity(int count)
         {
             if (_correctionCenters.Length >= count)
@@ -563,8 +477,6 @@ namespace BalloonParty.Game.Score.Behaviours
         // TransformRibbon is already generic to arbitrary translation, so feeding it the corrected center
         // instead of the raw travel one needs no changes there; state.Guide rides the corrected center too —
         // it's documented as drawing the formation's ACTUAL path, so showing the corrected wiggle is the point.
-        // The one exception is the clear-circle push: the guide's ink is carried along by that step, so a
-        // shape stepping aside for a ball doesn't kink its comet line.
         private void FinishAdvance(FormationState state, float dt)
         {
             var settings = state.Group.Settings;
@@ -597,11 +509,6 @@ namespace BalloonParty.Game.Score.Behaviours
 
             if (state.Guide != null)
             {
-                if (state.ClearanceStep != Vector3.zero)
-                {
-                    state.Guide.TransformRibbon(oldCenter, oldCenter + state.ClearanceStep, Quaternion.identity, 1f);
-                }
-
                 state.Guide.transform.position = newCenter;
             }
 
@@ -964,11 +871,6 @@ namespace BalloonParty.Game.Score.Behaviours
             // so a formation still eventually converges back onto — and lands at — its intended target.
             internal Vector3 SeparationOffset;
 
-            // The clear-circle push as a velocity (see SmoothClearanceVelocity) and this tick's share of it,
-            // already added to SeparationOffset; Pass C carries the guide's ink by the step.
-            internal Vector3 ClearanceVelocity;
-            internal Vector3 ClearanceStep;
-
             // Set by Pass C when the formation's travel finished this tick; drained by Pass D's dedicated
             // release sweep — never removed from _states mid-Pass-C, where a recorded index could go stale.
             internal bool PendingRelease;
@@ -1006,8 +908,6 @@ namespace BalloonParty.Game.Score.Behaviours
                 Frozen = false;
                 PendingRelease = false;
                 SeparationOffset = Vector3.zero;
-                ClearanceVelocity = Vector3.zero;
-                ClearanceStep = Vector3.zero;
             }
         }
     }

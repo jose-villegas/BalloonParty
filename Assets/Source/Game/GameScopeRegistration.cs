@@ -46,7 +46,6 @@ using BalloonParty.Nudge;
 using BalloonParty.Prediction;
 using BalloonParty.Projectile;
 using BalloonParty.Projectile.Buffs;
-using BalloonParty.Projectile.Clearance;
 using BalloonParty.Projectile.Controller;
 using BalloonParty.Scenario;
 using BalloonParty.Scenario.View;
@@ -193,8 +192,6 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<ProjectileDoomedTimeScaleController>();
             builder.Register<ProjectileRegistry>(Lifetime.Singleton)
                 .As<IProjectileRegistry>().As<IProjectileRegistryWriter>();
-            builder.Register<ClearanceField>(Lifetime.Singleton).AsSelf().As<IClearanceField>();
-            builder.RegisterEntryPoint<ClearanceFieldTicker>();
             // Game scope, not the thrower's: ItemAssigner plans shield chains from it and cannot
             // reach into a child scope for ThrowerView.
             builder.Register<ThrowerOriginProvider>(Lifetime.Singleton);

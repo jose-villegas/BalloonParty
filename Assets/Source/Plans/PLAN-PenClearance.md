@@ -7,7 +7,10 @@
 > paint blobs) thin out inside it, so the player can always see what their ball is doing, however busy
 > the board gets.
 >
-> **No changes until this plan is actioned.**
+> **Dropped (2026-11-16).** Phases 1 to 3 were built and played on the phone, and the owner found they
+> didn't help at all: a circle a little wider than the ball moved too little and faded too little to keep
+> the ball readable. The code was reverted. The ball now draws above every effect instead (see "Draw
+> order" in `Projectile/README.md`). This page stays as the record of the idea.
 
 ---
 
@@ -123,15 +126,11 @@ each moving formation out of every clearance circle:
   because the level-up camera follows it. A ball matters more, so the clearance pass gives every formation
   full weight. Once the level-up cinematic takes the principal it is `Paused`, and paused formations are
   never moved.
-- The formation pass caps each frame's push at a share of the formation's radius. That is no use here: a
-  shape still blooming from a point has almost no radius, and a ball at about 10 world units a second would
-  cross a full-size shape before a radius-scaled push moved it. The clearance pass caps its push by a
-  speed instead, `FormationPushSpeed` (world units a second, faster than a ball), so a shape slides out of
-  the way smoothly at any frame rate, and one born on the ball slides off it while it blooms.
-- The push is a velocity that eases toward the speed the overlap asks for, not a capped step each frame.
-  The first build stepped, and in playtest a ball passing through a shape made it lurch and flip direction,
-  which dragged its pens' ribbons into long straight streaks. Eased, the shape speeds up out of the way and
-  coasts to a stop. The guide's comet line is carried along by each frame's push, so it doesn't kink.
+- A ball flies at about 10 world units a second and a formation's radius is up to about 0.9, so the
+  per-frame cap the formation pass uses (half the formation's radius) would let a ball cross a shape before
+  it got out of the way. The clearance pass has its own cap, `FormationPushFraction`.
+- A formation still blooming from a point has almost no radius, so the push it can take grows with it: a
+  shape born on the ball grows out to one side of it rather than jumping away.
 
 ### Trails bend round the rim
 
@@ -141,26 +140,21 @@ position absolutely each frame: DOTween writes `Lerp(start, end, ease(t))` in `U
 tween has moved it, a flying trail replaces its position with `IClearanceField.Deflect(position)`. The
 ribbon records the bent position, so the curve round the ball is drawn into the trail itself.
 
-`Deflect` (`ClearanceGeometry.Deflect`) pushes a point radially out of a circle. Its soft band lies just
-outside the circle, out to radius × (1 + `RimSoftness`): everything inside that band's outer edge is
-squeezed into the band, so a bent trail never enters the circle itself, while the effect fade's soft edge
-lies just inside it, so a bent trail is never also faded. The map is smooth and monotonic and meets the
-identity at the band's edge with a matching slope, so a trail beside a circle bends gently and one passing
-through never snaps. Overlapping circles apply in turn.
+`Deflect` moves a point inside a circle (or in its soft rim) radially out with a smooth, monotonic
+falloff, so a trail beside a circle bends gently and one passing through never snaps. Overlapping circles
+apply in turn.
 
-Which trails bend: the one-per-point score trails (`ScoreTrailService`'s spawners). Which don't:
+Which trails bend: the one-per-point score trails, the heart trail (`UI/Health/HeartTrailController`), and
+any other `FlyingTrail` on a tween or follow path. Which don't:
 
 - **Formation pens** are placed by `ShapeFormationTicker` every frame, rigid in the shape's own frame, and
   never run a tween. The whole formation moves round the circle instead (above); bending each pen would
   shear the drawn figure.
 - **Range pens** (`Item/Preview/HighlightTrail`, a separate class) draw where an item will strike. Bending
   them would draw the range wrong.
-- **The heart trail** (`UI/Health/HeartTrailController`) is a pencil whose flight ends in a scribble across
-  the doomed line; it marks that line, and a bend would move where the mark starts.
-- **The level-up popup's fill trails** fly on the popup's canvas, not over the board.
 
-The field reaches each trail through `TrailSpawner`, which hands it to every trail it spawns on a flight;
-a spawner built without one (or with `BendTrails` off) hands over null, and that trail doesn't bend.
+The field reaches each trail through `TrailSpawner`, which hands it over on spawn. A trail with no field
+(edit-mode previews, the level-up popup's trails) doesn't bend.
 
 ### Effects thin out inside the circle
 
@@ -179,17 +173,16 @@ half ClearanceAlpha(float2 worldXY);
 
 The loop runs to `_ClearanceCount` (usually 1 to 3), and with no ball in flight it costs one compare. Each
 shader below includes it and multiplies its output by `ClearanceAlpha(worldPos.xy)`: the whole colour for
-the premultiplied ones, alpha alone for straight alpha. Each takes a `_CLEARANCE_FADE` material toggle ("Fade Round
-Balls"), so only the materials of effects drawn over the ball fade, not the balloons and pickups that share a shader.
+the premultiplied ones, alpha alone for straight alpha.
 
 | Shader | Effects | Work |
 |---|---|---|
 | `Grid/PuffCloud.shader` | Puff clouds | World position already in the fragment; fade every return (body and shadow) |
 | `Particle/Glow.shader` | Laser beams, lightning bolts | Add a world-position interpolator (`mul(unity_ObjectToWorld, v.vertex)`); it is world space already for LineRenderers |
-| `Sprite/SpriteShine.shader` | Laser shine and shadow | Fade its output. `Shine` and `LaserShadow` are shared with the tough balloon and the laser pickup, so the laser effect gets its own copies, `LaserRangeShine` and `LaserRangeShadow`, with the fade on |
-| `Paint/PaintBlob.shader` | Paint blobs | Its world position only exists with the cloud-fade shadow on, so the fade carries its own. On for the flying blobs (`PaintFlyingBlob`); the paint pickup's `PaintBlob` stays off |
-| `Particle/Glow.shader` again | Bomb burst, paint splash particles, score trail ribbons | These used Unity's built-in Mobile/Particles/Alpha Blended, which can't take the include. `Glow` at `_HdrBoost` 1 with `_SrcBlend` SrcAlpha, `_DstBlend` OneMinusSrcAlpha and `_ColorMask` RGB is the same look (texture × vertex colour, alpha blended, no alpha written), so they moved onto it with the fade on; no new shader |
-| `Grid/BushLeaf.shader`, `Grid/BushBranch.shader` | Bushes | Left alone. `BushView` draws them with `Graphics.DrawMesh`, which takes no sorting layer, so they land on Default, under the ball (`BushSettings.SortingLayerId` is read by nothing) |
+| `Sprite/SpriteShine.shader` | Laser shine and shadow | Fade its output; check its other users first, and gate it behind a material toggle if any must not fade |
+| `Paint/PaintBlob.shader` | Paint blobs | World position already in the fragment |
+| New `Particle/ParticleClearance.shader` | Bomb burst, paint splash and drip particles, score trail ribbons | These use Unity's built-in legacy particle shader, which can't take the include. A small replacement that matches its look (texture × vertex colour, alpha blended) and fades; swapped onto their materials |
+| `Grid/BushLeaf.shader`, `Grid/BushBranch.shader` | Bushes | **Only if** the Frame Debugger shows them drawing over the ball. The leaf shader needs one interpolator |
 
 The floor is an alpha, not zero: a laser over the ball still reads as a laser, a cloud as a cloud, but the
 ball shows through. 0.3 to start; tuned on the phone.
@@ -207,8 +200,8 @@ sweeps onto it), the ribbon thins out rather than crossing over.
 | `FadeIn` | 0.15 s | No circle pops in at launch |
 | `FadeOut` | 0.4 s | The last pop's site stays clear while its effects start |
 | `EffectFloorAlpha` | 0.3 | How much of an effect is left at the ball |
-| `FormationPushSpeed` | 14 world units/s | Top speed a formation slides out of a circle at: faster than a ball (about 10 u/s), so one can't overrun a shape |
-| `PushFormations` / `BendTrails` / `FadeEffects` | on | Each consumer can be switched off on its own, to compare in a playtest (`FadeEffects` off publishes no circles to the shaders) |
+| `FormationPushFraction` | 1.5 | Per-frame push cap for formations, as a share of their radius: fast enough to clear a ball at 10 u/s |
+| `PushFormations` / `BendTrails` / `FadeEffects` | on | Each consumer can be switched off on its own, to compare in a playtest (`FadeEffects` off sets the floor to 1) |
 
 `ClearanceSettings` is a new SO under `Assets/Configuration/`, bound as `IClearanceSettings` in
 `GameLifetimeScope` like the other effect settings.
@@ -244,6 +237,7 @@ Each phase goes through the review protocol (reviewer every phase; architect and
 
 1. **Should the circle show?** This plan draws nothing for the circle itself: the clearance is felt through
    what moves and fades around it. A faint ring could come later if the owner wants one.
-
-Settled: the owner's "lighting" meant lightning (2026-11-15), so the screen-space light overlay is left
-alone.
+2. **"Lighting".** The owner wrote "lighting". Lightning is covered above. If it meant the light and
+   shadow over the board (the screen-space light overlay, which darkens the ball at night), the overlay
+   could ease towards neutral inside the circle, a soft spotlight that follows each ball. It changes the
+   night's look, so it is left out unless the owner wants it.

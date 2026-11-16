@@ -20,9 +20,6 @@ Shader "BalloonParty/Grid/PuffCloud"
     {
         _Color              ("Tint",               Color)              = (0.85, 0.95, 1.0, 1.0)
         [HideInInspector] _RendererColor ("Renderer Color", Color) = (1, 1, 1, 1)
-        // Thins the effect out inside the clear circle round each ball in flight (Include/Clearance.cginc),
-        // so it never buries the ball. For effects drawn over the ball only.
-        [Toggle(_CLEARANCE_FADE)] _ClearanceFade ("Fade Round Balls", Float) = 0
 
         [Header(Noise)]
         // Renders the raw CloudNoise field as grayscale (ignores thresholds/lighting/density).
@@ -106,11 +103,9 @@ Shader "BalloonParty/Grid/PuffCloud"
             #pragma shader_feature _DENSITY_ON
             #pragma shader_feature _NOISE_DEBUG
             #pragma multi_compile_local _ _LOW_QUALITY_CLOUD
-            #pragma shader_feature_local _CLEARANCE_FADE
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
             #include "../Include/CloudNoise.cginc"
-            #include "../Include/Clearance.cginc"
 
             // Max slot centers for merged clusters (P3); P1 uses 1.
             #define MAX_SLOTS 16
@@ -330,8 +325,9 @@ Shader "BalloonParty/Grid/PuffCloud"
                 return OUT;
             }
 
-            fixed4 CloudFrag(v2f IN)
+            fixed4 frag(v2f IN) : SV_Target
             {
+
                 float2 wpOrig = IN.worldPos;
                 // Occupancy mask is evaluated in object space so the cloud shape follows this
                 // transform (and its parent). At rest the object origin equals the bounds center,
@@ -503,15 +499,6 @@ Shader "BalloonParty/Grid/PuffCloud"
 
                 return fixed4(mainRgb * mainAlpha, mainAlpha);
                 #endif
-            }
-
-            fixed4 frag(v2f IN) : SV_Target
-            {
-                fixed4 color = CloudFrag(IN);
-                #ifdef _CLEARANCE_FADE
-                color *= ClearanceAlpha(IN.worldPos);
-                #endif
-                return color;
             }
             ENDCG
         }
