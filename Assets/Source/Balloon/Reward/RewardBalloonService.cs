@@ -35,7 +35,7 @@ namespace BalloonParty.Balloon.Reward
     ///     </para>
     ///     A line brings one at most: the nuke first, then the golden balloon, the disco ball and the heart. One that
     ///     loses the line stays due for the next. The Party Favors card (<see cref="IWeaponStats.RewardBalloonOdds" />)
-    ///     raises every roll's chance but the nuke's, which follows trouble rather than a build.
+    ///     raises every roll's chance, the nuke's too: that one still only rises with trouble.
     /// </summary>
     internal sealed class RewardBalloonService : IRewardBalloonRequests, IStartable, IRunResettable, IDisposable
     {
@@ -118,7 +118,7 @@ namespace BalloonParty.Balloon.Reward
             }
 
             _linesSinceHeart++;
-            if (_nukePlaceable && _nuke.Due(_levelProgress.Level.Value))
+            if (_nukePlaceable && _nuke.Due(_levelProgress.Level.Value, Odds))
             {
                 type = BalloonType.Nuke;
                 return true;

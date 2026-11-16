@@ -9,7 +9,7 @@ golden one early on, the player's first, and level 8 a single disco ball; after 
 get one or the other, about every 5 levels each: a little likelier early in the run, and likelier the longer
 since the last. Off a purple level the heart comes to a player who is missing hearts, more often the more are
 missing. The Party Favors card raises every one of these rolls' chances by 25% a stack (`IWeaponStats.RewardBalloonOdds`,
-`Game/Upgrades/README.md`), all but the nuke's. At most one of each is on the board. The plans are
+`Game/Upgrades/README.md`), the nuke's too. At most one of each is on the board. The plans are
 `Plans/PLAN-RewardBalloons.md` and `Plans/PLAN-DiscoBalloon.md`; the nuke's is `Plans/PLAN-NukeBalloon.md`. The disco
 ball's pop paints the board rainbow (see The disco ball's wave).
 
@@ -183,7 +183,7 @@ for sure on `SureLevel` (10), `SureAfterLines` (10) lines in, past the odds and 
 roll's chance is `BaseChance` raised toward `MaxChance` by the weighted sum of four signals (`NukeOdds`), capped
 at 1: the board's fill (`FillFrom` to `FillFull`), the spawn clock's pressure, `PlayerNeed.HeartsNeed` (full hearts
 to the last one), and hearts lost recently (each `WaveDamageMessage` adds its loss, and each line keeps
-`LossKeptPerLine` of the sum). Party Favors does not raise it. The settings are `IBalloonsConfiguration.NukeOdds`.
+`LossKeptPerLine` of the sum). Party Favors multiplies it, so it still only rises in trouble. The settings are `IBalloonsConfiguration.NukeOdds`.
 
 **The fuse.** When the nuke is armed, `NukeFuse` publishes `NukeArmedMessage` and counts down
 `INukeFuseSettings.Seconds` (`IBalloonsConfiguration.NukeFuse`, 3 s), publishing a `NukeCountdownMessage` with the

@@ -1007,16 +1007,27 @@ namespace BalloonParty.Tests.Balloon
             Assert.AreEqual(BalloonType.Golden, type);
         }
 
-        // Party Favors raises the other rewards' rolls, not the nuke's: it follows trouble, not a build.
+        // Party Favors raises the nuke's roll like the others'. Its chance comes from trouble, so calm stays near 0.
         [Test]
-        public void Nuke_PartyFavors_LeavesItsChanceAlone()
+        public void Nuke_PartyFavors_RaisesItsChance()
         {
             UseNuke();
+            _nukeOdds.Chance.Returns(0.3f);
+            _roll = 0.45f;
             _weapon.RewardBalloonOdds.Returns(1f);
+
+            Assert.IsTrue(_service.TryTakeDue(out var type), "0.45 is under 0.3 doubled");
+            Assert.AreEqual(BalloonType.Nuke, type);
+        }
+
+        [Test]
+        public void Nuke_WithoutPartyFavors_TheSameDrawMisses()
+        {
+            UseNuke();
             _nukeOdds.Chance.Returns(0.3f);
             _roll = 0.45f;
 
-            Assert.IsFalse(_service.TryTakeDue(out _), "0.45 misses 0.3, doubled or not");
+            Assert.IsFalse(_service.TryTakeDue(out _), "0.45 misses 0.3");
         }
 
         // The default catalogue has no Nuke entry: the odds are never read, so a game without one draws as before.

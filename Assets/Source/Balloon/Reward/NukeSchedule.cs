@@ -34,8 +34,11 @@ namespace BalloonParty.Balloon.Reward
             ResetRun();
         }
 
-        /// <summary>One clock line: whether it brings a nuke. Asked once per line while the level is played.</summary>
-        internal bool Due(int levelNumber)
+        /// <summary>
+        ///     One clock line: whether it brings a nuke. Asked once per line while the level is played.
+        ///     <paramref name="odds" /> multiplies the roll's chance (Party Favors, 1 without it), up to certain.
+        /// </summary>
+        internal bool Due(int levelNumber, float odds = 1f)
         {
             if (_linesSinceLast < int.MaxValue)
             {
@@ -44,7 +47,7 @@ namespace BalloonParty.Balloon.Reward
 
             _linesThisLevel++;
 
-            var due = Roll(levelNumber);
+            var due = Roll(levelNumber, odds);
             _odds.LinePassed();
             return due;
         }
@@ -75,7 +78,7 @@ namespace BalloonParty.Balloon.Reward
             ForgetLevel();
         }
 
-        private bool Roll(int levelNumber)
+        private bool Roll(int levelNumber, float odds)
         {
             if (_alive)
             {
@@ -103,7 +106,7 @@ namespace BalloonParty.Balloon.Reward
                 return false;
             }
 
-            var chance = _odds.Chance;
+            var chance = Math.Min(1f, _odds.Chance * odds);
             _owed = chance > 0f && (chance >= 1f || _random01() < chance);
             return _owed;
         }

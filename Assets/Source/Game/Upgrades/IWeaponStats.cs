@@ -34,8 +34,8 @@ namespace BalloonParty.Game.Upgrades
         float SnipeChance { get; }
 
         /// <summary>
-        ///     Party Favors' boost to the reward balloons: each roll that brings a golden, heart or disco balloon has
-        ///     its chance × (1 + this). 0 without the card.
+        ///     Party Favors' boost to the reward balloons: each roll that brings a golden, heart, disco or nuke balloon
+        ///     has its chance × (1 + this). 0 without the card.
         /// </summary>
         float RewardBalloonOdds { get; }
     }

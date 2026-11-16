@@ -87,6 +87,17 @@ namespace BalloonParty.Tests.Balloon
             Assert.AreEqual(1, _draws);
         }
 
+        [TestCase(1f, 0.5f, true)]
+        [TestCase(1f, 0.7f, false)]
+        [TestCase(5f, 0.99f, true)]
+        public void Due_Odds_MultiplyTheChanceUpToCertain(float odds, float roll, bool due)
+        {
+            _odds.Chance.Returns(0.3f);
+            _roll = roll;
+
+            Assert.AreEqual(due, _schedule.Due(FromLevel, 1f + odds));
+        }
+
         [Test]
         public void Due_ALostRoll_RollsAgainOnTheNextLine()
         {
