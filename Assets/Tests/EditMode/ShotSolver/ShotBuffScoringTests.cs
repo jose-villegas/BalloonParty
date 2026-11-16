@@ -250,15 +250,16 @@ namespace BalloonParty.Tests.ShotSolver
         }
 
         [Test]
-        public void ResolveBalloonContact_Wash_FiresOnAMereDeflectContact_ThenTheNextRainbowStartsAFreshStreak()
+        public void ResolveBalloonContact_Wash_OnAMereDeflectContact_KeepsTheStreak_SoTheNextRainbowClimbsIt()
         {
             // Ordering pin (memo: wash -> adopt -> record -> refund; ProjectileHitResolver.cs:154,
             // 169-176): pop a real "Red" first (adopts), then dead-centre deflect off a washing
             // 2-hit tough (ProjectileHitResolver.cs:193-201's wash fires on the DEFLECT outcome, not
             // just a pop) — reused from ShotSimulatorTests.Simulate_ToughTwoTouch's bounce-back trick
             // (bottom wall close, dead-on-centre hit reflects straight back). If wash didn't fire on
-            // the deflect, the rainbow below would climb the still-standing "Red" streak instead of
-            // starting a fresh one — scoring 6 instead of 3.
+            // the deflect, the shot would still be "Red". Either way the wash only takes the shot's
+            // colour, not its streak, so the rainbow below climbs the standing "Red" streak to x2: a
+            // rainbow climbs whether or not the shot has a colour.
             var walls = new Vector4(1000f, 1000f, -1f, -1000f);
             var board = new[]
             {
@@ -272,8 +273,8 @@ namespace BalloonParty.Tests.ShotSolver
                 board, walls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
                 workingSet: workingSet, allowedColors: new[] { "Red" });
 
-            // green(2*1) + rainbow on a washed streak(3*1, NOT 3*2) + washer's tough pop(7)
-            Assert.AreEqual(2 + 3 + 7, result.RawScore);
+            // green(2*1) + rainbow climbing the kept streak(3*2) + washer's tough pop(7)
+            Assert.AreEqual(2 + 6 + 7, result.RawScore);
             Assert.AreEqual(3, result.Pops);
             Assert.AreEqual(1, result.ToughsCleared, "only the washer's final (colourless) pop is a tough pop");
             Assert.IsTrue(result.BoardCleared);

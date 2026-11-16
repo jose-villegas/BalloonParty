@@ -111,6 +111,7 @@ namespace BalloonParty.Tests.Game
             // A colourless shot's rainbow pops build a streak with no colour yet: a reset really discards it.
             var streak = _tracker.For(Fly());
             streak.RecordWildcard();
+            _published.Clear();
 
             streak.Reset();
 
