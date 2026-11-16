@@ -1,5 +1,7 @@
 var NAVTREEINDEX114 =
 {
+"namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6a63d72051e901c069f8aa1b32aa0c43bb":[5,0,0,12,5,14,1],
+"namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6a8f347bc7cebca9fa6d97e70c6bc29eb3":[5,0,0,12,5,14,3],
 "namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6a9506f0fd0f7f1b07960b15b4c9e68d1a":[5,0,0,12,5,14,0],
 "namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6ae7c8e9e1f90eadea8b03762d9e9215c7":[5,0,0,12,5,14,2],
 "namespaceBalloonParty_1_1Shared_1_1GameState.html#aadf066414424aff953d1b79f327952bb":[5,0,0,12,5,13],
@@ -247,7 +249,5 @@ var NAVTREEINDEX114 =
 "plan_content_production.html#autotoc_md446":[3,4,0,4],
 "plan_content_production.html#autotoc_md448":[3,4,0,5],
 "plan_content_production.html#autotoc_md450":[3,4,0,6],
-"plan_disco_balloon.html":[3,23],
-"plan_disco_balloon.html#autotoc_md451":[3,23,0],
-"plan_disco_balloon.html#autotoc_md453":[3,23,0,0]
+"plan_disco_balloon.html":[3,23]
 };

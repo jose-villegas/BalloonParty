@@ -1,5 +1,9 @@
 var NAVTREEINDEX42 =
 {
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a53942d2e43613fc9d1e96efbdd0ff7a8":[6,0,0,5,28,69],
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a53bbf4e532ccd553836906ef8e286295":[5,0,0,5,28,49],
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a53bbf4e532ccd553836906ef8e286295":[6,0,0,5,28,49],
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a54a9362de10a395a49b5144e4c5c3cfa":[5,0,0,5,28,93],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a54a9362de10a395a49b5144e4c5c3cfa":[6,0,0,5,28,93],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a55abe66bd3bb42c2733514aea970916d":[5,0,0,5,28,68],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a55abe66bd3bb42c2733514aea970916d":[6,0,0,5,28,68],
@@ -245,9 +249,5 @@ var NAVTREEINDEX42 =
 "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a4c42ad70c9e1c4dfb1fa1d90cfab641f":[6,0,0,5,3,0,0,3],
 "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a59f787f122750d993b9d9f36a566e234":[5,0,0,5,3,0,0,7],
 "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a59f787f122750d993b9d9f36a566e234":[6,0,0,5,3,0,0,7],
-"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a5c31e0a30357c160024ea9934cd18e93":[5,0,0,5,3,0,0,5],
-"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a5c31e0a30357c160024ea9934cd18e93":[6,0,0,5,3,0,0,5],
-"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a69a34de0dd25a23538b54fbca8ff71cc":[5,0,0,5,3,0,0,12],
-"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a69a34de0dd25a23538b54fbca8ff71cc":[6,0,0,5,3,0,0,12],
-"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a74d02cfee5db6f8f00ccdba6dce3cbe4":[5,0,0,5,3,0,0,2]
+"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a5c31e0a30357c160024ea9934cd18e93":[5,0,0,5,3,0,0,5]
 };

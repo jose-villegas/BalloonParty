@@ -1,5 +1,7 @@
 var NAVTREEINDEX130 =
 {
+"structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html#a8b4b3c20ad880e05e4fe345f735312df":[5,0,0,16,2,2,1],
+"structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html#a8b4b3c20ad880e05e4fe345f735312df":[6,0,0,16,2,2,1],
 "structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html#abbbe73fa7220e10e4674be7baf0d3c0a":[5,0,0,16,2,2,9],
 "structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html#abbbe73fa7220e10e4674be7baf0d3c0a":[6,0,0,16,2,2,9],
 "structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html#abd86b4bd78b6539b58dd6dbc10426798":[5,0,0,16,2,2,8],

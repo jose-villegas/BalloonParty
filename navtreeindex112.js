@@ -1,5 +1,7 @@
 var NAVTREEINDEX112 =
 {
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasColor.html":[6,0,0,13,1,2],
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasColor.html#aae22fdafdb5b1ed0de2e7e131b0fa82a":[5,0,0,13,1,2,0],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasColor.html#aae22fdafdb5b1ed0de2e7e131b0fa82a":[6,0,0,13,1,2,0],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasDeflectStamp.html":[5,0,0,13,1,3],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasDeflectStamp.html":[6,0,0,13,1,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX112 =
 "namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56dad8f3658e1be8bbf0ae20fdbd26574569":[5,0,0,3,7,6,9],
 "namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56dae38f161f104780d651e487674b3130ac":[5,0,0,3,7,6,4],
 "namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56dae7d31fc0602fb2ede144d18cdffd816b":[5,0,0,3,7,6,0],
-"namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56daf4bb7b4d64f470dc5e5aca7aa1cfe624":[5,0,0,3,7,6,5],
-"namespaceBalloonParty_1_1Configuration_1_1Items.html":[5,0,0,3,8],
-"namespaceBalloonParty_1_1Configuration_1_1Items.html#a099921060840def79dc9111a19107f2b":[5,0,0,3,8,9]
+"namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56daf4bb7b4d64f470dc5e5aca7aa1cfe624":[5,0,0,3,7,6,5]
 };

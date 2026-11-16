@@ -1,5 +1,7 @@
 var NAVTREEINDEX115 =
 {
+"plan_disco_balloon.html#autotoc_md451":[3,23,0],
+"plan_disco_balloon.html#autotoc_md453":[3,23,0,0],
 "plan_disco_balloon.html#autotoc_md454":[3,23,0,1],
 "plan_disco_balloon.html#autotoc_md455":[3,23,0,2],
 "plan_disco_balloon.html#autotoc_md456":[3,23,0,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX115 =
 "plan_level_up_timing.html#autotoc_md750":[3,16,0,2],
 "plan_level_up_timing.html#autotoc_md751":[3,16,0,3],
 "plan_level_up_timing.html#autotoc_md752":[3,16,0,4],
-"plan_level_up_timing.html#autotoc_md753":[3,16,0,5],
-"plan_level_up_timing.html#autotoc_md754":[3,16,0,6],
-"plan_level_up_timing.html#autotoc_md755":[3,16,0,6,0]
+"plan_level_up_timing.html#autotoc_md753":[3,16,0,5]
 };

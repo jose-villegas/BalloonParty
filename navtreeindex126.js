@@ -1,5 +1,7 @@
 var NAVTREEINDEX126 =
 {
+"structBalloonParty_1_1Shared_1_1Messages_1_1EndRunRequestedMessage.html":[5,0,0,12,7,10],
+"structBalloonParty_1_1Shared_1_1Messages_1_1EndRunRequestedMessage.html":[6,0,0,12,7,10],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ForceDestroyProjectileMessage.html":[5,0,0,12,7,11],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ForceDestroyProjectileMessage.html":[6,0,0,12,7,11],
 "structBalloonParty_1_1Shared_1_1Messages_1_1GameOverDismissedMessage.html":[5,0,0,12,7,12],
@@ -247,7 +249,5 @@ var NAVTREEINDEX126 =
 "structBalloonParty_1_1Shared_1_1Messages_1_1SpeckSpawnRequestMessage.html#ae703c66e261993934d8bf9bf8bf646ce":[5,0,0,12,7,45,2],
 "structBalloonParty_1_1Shared_1_1Messages_1_1SpeckSpawnRequestMessage.html#ae703c66e261993934d8bf9bf8bf646ce":[6,0,0,12,7,45,2],
 "structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html":[5,0,0,12,7,46],
-"structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html":[6,0,0,12,7,46],
-"structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html#a20df3af33d145e471ab1b67786360d34":[5,0,0,12,7,46,0],
-"structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html#a20df3af33d145e471ab1b67786360d34":[6,0,0,12,7,46,0]
+"structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html":[6,0,0,12,7,46]
 };

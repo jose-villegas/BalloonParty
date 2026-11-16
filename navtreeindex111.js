@@ -1,5 +1,7 @@
 var NAVTREEINDEX111 =
 {
+"interfaceBalloonParty_1_1Shared_1_1IShieldChainSettings.html#a7fdc9e70fc6c771ba8656e92af66be45":[6,0,0,12,30,0],
+"interfaceBalloonParty_1_1Shared_1_1IShieldChainSettings.html#a8bde72839aa389457893e63e91bbc555":[5,0,0,12,30,5],
 "interfaceBalloonParty_1_1Shared_1_1IShieldChainSettings.html#a8bde72839aa389457893e63e91bbc555":[6,0,0,12,30,5],
 "interfaceBalloonParty_1_1Shared_1_1IShieldChainSettings.html#aa0227cf7206d1493ec7701e964c92fea":[5,0,0,12,30,2],
 "interfaceBalloonParty_1_1Shared_1_1IShieldChainSettings.html#aa0227cf7206d1493ec7701e964c92fea":[6,0,0,12,30,2],
@@ -247,7 +249,5 @@ var NAVTREEINDEX111 =
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IDeflectsShots.html":[6,0,0,13,1,1],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IDeflectsShots.html#a26ae8779b24cb7ba2f2f4f3d063c47b6":[5,0,0,13,1,1,0],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IDeflectsShots.html#a26ae8779b24cb7ba2f2f4f3d063c47b6":[6,0,0,13,1,1,0],
-"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasColor.html":[5,0,0,13,1,2],
-"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasColor.html":[6,0,0,13,1,2],
-"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasColor.html#aae22fdafdb5b1ed0de2e7e131b0fa82a":[5,0,0,13,1,2,0]
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasColor.html":[5,0,0,13,1,2]
 };

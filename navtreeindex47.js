@@ -1,5 +1,9 @@
 var NAVTREEINDEX47 =
 {
+"classBalloonParty_1_1Game_1_1Assist_1_1PityRoll.html#ab48dd1815292d6aa049f696352400999":[6,0,0,6,0,3,4],
+"classBalloonParty_1_1Game_1_1Assist_1_1PlayerNeed.html":[5,0,0,6,0,4],
+"classBalloonParty_1_1Game_1_1Assist_1_1PlayerNeed.html":[6,0,0,6,0,4],
+"classBalloonParty_1_1Game_1_1Assist_1_1PlayerNeed.html#a3abe0fd09e3a3e40fa0cb8caefc44990":[5,0,0,6,0,4,0],
 "classBalloonParty_1_1Game_1_1Assist_1_1PlayerNeed.html#a3abe0fd09e3a3e40fa0cb8caefc44990":[6,0,0,6,0,4,0],
 "classBalloonParty_1_1Game_1_1Assist_1_1PlayerNeed.html#a7c617378e74d953299949ce7fc111b0b":[5,0,0,6,0,4,4],
 "classBalloonParty_1_1Game_1_1Assist_1_1PlayerNeed.html#a7c617378e74d953299949ce7fc111b0b":[6,0,0,6,0,4,4],
@@ -245,9 +249,5 @@ var NAVTREEINDEX47 =
 "classBalloonParty_1_1Game_1_1Cinematics_1_1BoardPopWave.html#a82b86066022fbe9538f64d57e28a0a3b":[6,0,0,6,2,1,6],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1BoardPopWave.html#aa06f379df155241bbf4c100471a0f2a4":[5,0,0,6,2,1,10],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1BoardPopWave.html#aa06f379df155241bbf4c100471a0f2a4":[6,0,0,6,2,1,10],
-"classBalloonParty_1_1Game_1_1Cinematics_1_1BoardPopWave.html#ac3b0a0df56888b873bbd7000e0773745":[5,0,0,6,2,1,9],
-"classBalloonParty_1_1Game_1_1Cinematics_1_1BoardPopWave.html#ac3b0a0df56888b873bbd7000e0773745":[6,0,0,6,2,1,9],
-"classBalloonParty_1_1Game_1_1Cinematics_1_1BoardPopWave.html#acd63f65b82eb714f6b00e3309301164c":[5,0,0,6,2,1,5],
-"classBalloonParty_1_1Game_1_1Cinematics_1_1BoardPopWave.html#acd63f65b82eb714f6b00e3309301164c":[6,0,0,6,2,1,5],
-"classBalloonParty_1_1Game_1_1Cinematics_1_1BoardPopWave.html#ad18dfe615c5cc7846761ae17edc7b3ee":[5,0,0,6,2,1,4]
+"classBalloonParty_1_1Game_1_1Cinematics_1_1BoardPopWave.html#ac3b0a0df56888b873bbd7000e0773745":[5,0,0,6,2,1,9]
 };

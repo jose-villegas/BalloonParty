@@ -1,5 +1,7 @@
 var NAVTREEINDEX116 =
 {
+"plan_level_up_timing.html#autotoc_md754":[3,16,0,6],
+"plan_level_up_timing.html#autotoc_md755":[3,16,0,6,0],
 "plan_level_up_timing.html#autotoc_md756":[3,16,0,6,1],
 "plan_level_up_timing.html#autotoc_md757":[3,16,0,6,2],
 "plan_level_up_timing.html#autotoc_md758":[3,16,0,6,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX116 =
 "structBalloonParty_1_1Audio_1_1VoicePlayback.html#a7911e8ddfbf18d83dbdb3995183560d1":[5,0,0,0,19,2],
 "structBalloonParty_1_1Audio_1_1VoicePlayback.html#a7911e8ddfbf18d83dbdb3995183560d1":[6,0,0,0,19,2],
 "structBalloonParty_1_1Audio_1_1VoicePlayback.html#ae6db35d64462ca2faaa20b87913099ad":[5,0,0,0,19,0],
-"structBalloonParty_1_1Audio_1_1VoicePlayback.html#ae6db35d64462ca2faaa20b87913099ad":[6,0,0,0,19,0],
-"structBalloonParty_1_1Audio_1_1VoicePlayback.html#ae729c974556ec22a32dbcb1854b9e4c8":[5,0,0,0,19,3],
-"structBalloonParty_1_1Audio_1_1VoicePlayback.html#ae729c974556ec22a32dbcb1854b9e4c8":[6,0,0,0,19,3]
+"structBalloonParty_1_1Audio_1_1VoicePlayback.html#ae6db35d64462ca2faaa20b87913099ad":[6,0,0,0,19,0]
 };
