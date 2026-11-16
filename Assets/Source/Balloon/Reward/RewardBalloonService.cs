@@ -72,6 +72,8 @@ namespace BalloonParty.Balloon.Reward
         // Party Favors' multiplier on every reward roll, read live so a card picked mid-run applies at once.
         private float Odds => 1f + Math.Max(0f, _weapon.RewardBalloonOdds);
 
+        private int LevelNumber => _levelProgress.Level.Value;
+
         // A seam for tests, as UnbreakableFormationService's.
         internal Func<float> Random01 { get; set; } = () => Random.value;
 
@@ -202,6 +204,16 @@ namespace BalloonParty.Balloon.Reward
             return missingHearts == 1 ? settings.HeartChanceMissingOne : settings.HeartChanceMissingTwo;
         }
 
+        /// <summary>
+        ///     What every heart balloon roll is multiplied by on <paramref name="level" />: 1 on the first, half
+        ///     <see cref="IRewardBalloonSettings.HeartChanceHalvedAfterLevels" /> in, a third at twice that.
+        /// </summary>
+        internal static float HeartRunEase(IRewardBalloonSettings settings, int level)
+        {
+            var halvedAfter = settings.HeartChanceHalvedAfterLevels;
+            return halvedAfter > 0 ? 1f / (1f + Math.Max(0, level - 1) / (float)halvedAfter) : 1f;
+        }
+
         private static bool HasEntry(IBalloonsConfiguration balloons, BalloonType type)
         {
             foreach (var entry in balloons.Entries)
@@ -252,7 +264,7 @@ namespace BalloonParty.Balloon.Reward
                 {
                     _purpleHeartOwed = PlatedRewardSchedule.RollPurple(
                         _settings.PurpleHeartChances, _heartsThisLevel, ref _heartRollLines,
-                        _settings.PurpleRollEveryLines, Random01, Odds);
+                        _settings.PurpleRollEveryLines, Random01, Odds * HeartRunEase(_settings, LevelNumber));
                 }
 
                 return _purpleHeartOwed;
@@ -272,7 +284,7 @@ namespace BalloonParty.Balloon.Reward
             }
 
             // Pity forgives the lines rolled without a heart while in trouble (IAssistSettings.HeartPity).
-            var chance = Math.Min(1f, HeartChance(_settings, missing) * Odds);
+            var chance = Math.Min(1f, HeartChance(_settings, missing) * Odds * HeartRunEase(_settings, LevelNumber));
             _heartPending = chance > 0f && _heartPity.Roll(chance, _need.Need, Random01());
             return _heartPending;
         }

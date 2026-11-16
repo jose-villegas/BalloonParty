@@ -93,7 +93,7 @@ sequenceDiagram
 | `PurpleRollEveryLines` | 6 | Lines between a purple level's reward rolls, each kind on its own count |
 | `PurpleGoldenAtCompletion` | 0.15 | The completion from which a purple level rolls for golden balloons |
 | `PurpleGoldenChances` | 0.35, 0.2, 0.1 | Each roll's chance at the next golden balloon on a purple level; the count caps it |
-| `PurpleHeartChances` | 0.4, 0.3, 0.2, 0.12, 0.06 | The same for heart balloons, from the level's start |
+| `PurpleHeartChances` | 0.3, 0.15, 0.06 | The same for heart balloons, from the level's start |
 | `OrdinaryGoldenEveryLevels` | 1 | Off a purple level, every this many levels rolls for a single golden balloon (0 is off) |
 | `OrdinaryGoldenChance` | 0.15 | That roll's chance at the sure level |
 | `OrdinaryChanceHalvedAfterLevels` | 20 | How the ordinary chance eases off: halved this many levels past the sure level, a third at twice that (shared with the disco ball) |
@@ -103,6 +103,7 @@ sequenceDiagram
 | `HeartChanceMissingOne` | 0.04 | Chance per line of a heart balloon while one heart is missing |
 | `HeartChanceMissingTwo` | 0.12 | The same with two missing (one heart left) |
 | `HeartCooldownLines` | 12 | Lines after a heart balloon before another can come |
+| `HeartChanceHalvedAfterLevels` | 12 | Every heart roll, a purple level's too, eases off over the run: halved this many levels in, a third at twice that |
 | At most one of each on the board | | A second one waits until the first is gone |
 
 Off a purple level, full hearts never roll one, so the heart balloon is help, not loot. A purple level

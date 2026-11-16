@@ -2,7 +2,7 @@
 
 Four balloons are not threats, and no level's mix brings them. Three are rewards; the fourth, the nuke, is a
 rescue (see The nuke). On a purple level all three rewards
-are rolled every few lines, each further one rarer: the **heart balloon** from the level's start, up to five,
+are rolled every few lines, each further one rarer: the **heart balloon** from the level's start, up to three,
 even at full hearts, where its pop gives an extra heart past the maximum; the **golden balloon** from 15% done,
 up to three; the **disco ball** from 25% done, the first one sure, up to three. Level 5 always gets a single
 golden one early on, the player's first, and level 8 a single disco ball; after that, any ordinary level may
@@ -70,7 +70,7 @@ has an entry for.
   on its own count, and each kind's first roll is on the first line it can. Lines while one of that kind is on
   the board don't count. Each roll's chance is the next entry of the kind's list, so each further one is rarer
   and the list's length caps the level: `PurpleGoldenChances` (35%, 20%, 10%: three at most) and
-  `PurpleHeartChances` (40%, 30%, 20%, 12%, 6%: five at most). The golden rolls only once `LevelCompletion`
+  `PurpleHeartChances` (30%, 15%, 6%: three at most). The golden rolls only once `LevelCompletion`
   reaches `PurpleGoldenAtCompletion` (0.15; each colour's points, capped at the goal, over all the goals); the
   heart from the level's first line, at full hearts too, and the roll while hurt (below) is off there. A won
   roll stays due until it is placed (a line with no room for it passes it on). A new level starts both counts
@@ -100,6 +100,9 @@ has an entry for.
   chance (`IAssistSettings.HeartPity`, a `Game/Assist/PityRoll`: on the last heart 12%, 18%, 24%…). A heart
   rolled for a line with no room for it is owed to the next line, unless the player has healed to full in
   between. Extra hearts past the maximum count as full.
+- **Hearts grow rarer over a run.** Every heart roll, a purple level's too, is multiplied by
+  1 / (1 + (level − 1) / `HeartChanceHalvedAfterLevels`) (12): half at level 13, a third at level 25. A player
+  that far in should be holding the board, not leaning on refills.
 
 The tuning is `IRewardBalloonSettings`, a block on `BalloonsConfiguration`.
 

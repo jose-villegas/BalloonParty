@@ -1158,6 +1158,44 @@ namespace BalloonParty.Tests.Balloon
             Assert.AreEqual(expected, RewardBalloonService.HeartChance(_settings, missing), 1e-5f);
         }
 
+        [TestCase(12, 1, 1f)]
+        [TestCase(12, 13, 0.5f)]
+        [TestCase(12, 25, 1f / 3f)]
+        [TestCase(0, 25, 1f)]
+        public void HeartRunEase_ByLevel(int halvedAfter, int level, float expected)
+        {
+            _settings.HeartChanceHalvedAfterLevels.Returns(halvedAfter);
+
+            Assert.AreEqual(expected, RewardBalloonService.HeartRunEase(_settings, level), 1e-5f);
+        }
+
+        // 4% missing one heart, halved twelve levels in.
+        [TestCase(0.019f, true)]
+        [TestCase(0.02f, false)]
+        public void Heart_LateInARun_TheRollIsEased(float roll, bool due)
+        {
+            _settings.HeartChanceHalvedAfterLevels.Returns(12);
+            _levelNumber.Value = 13;
+            _level.IsExtraColorLevel.Returns(false);
+            _hearts.Value = StartingHearts - 1;
+            _roll = roll;
+
+            Assert.AreEqual(due, _service.TryTakeDue(out _));
+        }
+
+        // The purple list's first 40%, halved twelve levels in.
+        [TestCase(0.19f, true)]
+        [TestCase(0.2f, false)]
+        public void PurpleHeart_LateInARun_TheRollIsEased(float roll, bool due)
+        {
+            _settings.HeartChanceHalvedAfterLevels.Returns(12);
+            _levelNumber.Value = 13;
+            UsePurple(Empty, HeartChances);
+            _roll = roll;
+
+            Assert.AreEqual(due, _service.TryTakeDue(out _));
+        }
+
         [Test]
         public void LevelCompletion_CapsEachColourAtItsGoal()
         {

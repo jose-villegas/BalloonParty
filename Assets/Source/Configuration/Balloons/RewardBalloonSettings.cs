@@ -44,7 +44,7 @@ namespace BalloonParty.Configuration.Balloons
                  "there goes past the maximum): the chance each roll brings the next one, the first entry for the " +
                  "first. The count caps the level's heart balloons. The roll while hurt and its cooldown are off on a " +
                  "purple level. Never more than one on the board.")]
-        [SerializeField] [Range(0f, 1f)] private float[] _purpleHeartChances = { 0.4f, 0.3f, 0.2f, 0.12f, 0.06f };
+        [SerializeField] [Range(0f, 1f)] private float[] _purpleHeartChances = { 0.3f, 0.15f, 0.06f };
 
         [Tooltip("The disco ball (PLAN-DiscoBalloon) follows the golden balloon's rules with its own numbers, a little " +
                  "more often than the golden and less than the heart. The level's completion from which an " +
@@ -95,6 +95,10 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("Spawn lines after a heart balloon is placed before another can roll.")]
         [SerializeField] [Min(0)] private int _heartCooldownLines = 12;
 
+        [Tooltip("How every heart balloon's chance eases off over a run, a purple level's too: halved this many " +
+                 "levels in, a third at twice that. 0 is never.")]
+        [SerializeField] [Min(0)] private int _heartChanceHalvedAfterLevels = 12;
+
         public float GoldenAtCompletion => _goldenAtCompletion;
         public int OrdinaryGoldenEveryLevels => _ordinaryGoldenEveryLevels;
         public float OrdinaryGoldenChance => _ordinaryGoldenChance;
@@ -116,5 +120,6 @@ namespace BalloonParty.Configuration.Balloons
         public float HeartChanceMissingOne => _heartChanceMissingOne;
         public float HeartChanceMissingTwo => _heartChanceMissingTwo;
         public int HeartCooldownLines => _heartCooldownLines;
+        public int HeartChanceHalvedAfterLevels => _heartChanceHalvedAfterLevels;
     }
 }

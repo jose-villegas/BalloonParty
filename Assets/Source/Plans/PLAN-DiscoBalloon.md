@@ -100,7 +100,7 @@ apart. All the tuning lives in `IRewardBalloonSettings`:
 | `OrdinaryChanceGrowthPerLevel` | 0.11 | 0.11 | Soft pity, shared: each level since the last one of that kind adds this to its chance, so an eased chance never stays low. Each comes on average every 3.4 levels |
 | `DiscoAtCompletion` | 0.35 | 0.5 | Earlier than the golden balloon: the rainbow board pays out goals, and needs goals left to pay (Open questions, 1) |
 | `PurpleDiscoAtCompletion` | 0.25 | 0.15 | On a purple level, rolled every `PurpleRollEveryLines` (6) lines from a quarter done |
-| `PurpleDiscoChances` | 1, 0.25, 0.15 | 0.35, 0.2, 0.1 | The first is sure, so every purple level gets one. The next two are rolls, rarer than the heart's (0.4, 0.3, 0.2, 0.12, 0.06) |
+| `PurpleDiscoChances` | 1, 0.25, 0.15 | 0.35, 0.2, 0.1 | The first is sure, so every purple level gets one. The next two are rolls; the heart's are 0.3, 0.15, 0.06 |
 
 When more than one reward is due on the same line, the golden balloon goes first (it already beats the
 heart), then the disco balloon, then the heart. A reward that is due but finds no room on its line stays

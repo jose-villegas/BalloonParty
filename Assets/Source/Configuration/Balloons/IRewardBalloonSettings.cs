@@ -109,5 +109,11 @@ namespace BalloonParty.Configuration.Balloons
 
         /// <summary>Spawn lines after a heart balloon is placed before another can roll.</summary>
         int HeartCooldownLines { get; }
+
+        /// <summary>
+        ///     How every heart balloon's chance eases off over a run, a purple level's too: halved this many levels
+        ///     in, a third at twice that. 0 is never.
+        /// </summary>
+        int HeartChanceHalvedAfterLevels { get; }
     }
 }
