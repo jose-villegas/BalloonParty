@@ -32,6 +32,10 @@ namespace BalloonParty.Configuration
             "lands.")]
         [SerializeField] [Min(1f)] private float _armourSecondsForFull = 30f;
 
+        [Tooltip("Bounces off the run's first golden balloon after which the next pen loaded is a Snipe lance, " +
+            "whatever the Sharpshooter roll, so the player learns what pops it. Once a run. 0 = never.")]
+        [SerializeField] [Min(0)] private int _firstGoldenSnipeAfterDeflects = 3;
+
         [Tooltip("The heart balloon's roll on an ordinary level: each line rolled without one while in need raises " +
             "the next line's chance. Its base chance already grows with the hearts missing, so its growth is gentler.")]
         [SerializeField] private PitySettings _heartPity = new(0.5f, 0.5f);
@@ -51,6 +55,7 @@ namespace BalloonParty.Configuration
         public float ArmourNeedWeight => _armourNeedWeight;
         public float ArmourCountForFull => _armourCountForFull;
         public float ArmourSecondsForFull => _armourSecondsForFull;
+        public int FirstGoldenSnipeAfterDeflects => _firstGoldenSnipeAfterDeflects;
         public IPitySettings HeartPity => _heartPity;
         public IPitySettings ItemPity => _itemPity;
         public float ThreatEaseAtFullNeed => Mathf.Clamp01(_threatEaseAtFullNeed);

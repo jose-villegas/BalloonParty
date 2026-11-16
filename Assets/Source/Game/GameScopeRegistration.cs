@@ -359,7 +359,9 @@ namespace BalloonParty.Game
             builder.Register<PaintItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<SnipeItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<SnipeLanceLines>(Lifetime.Singleton).AsImplementedInterfaces();
-            builder.Register<SnipeChanceRoll>(Lifetime.Singleton).As<ISnipeChanceRoll>().As<IRunResettable>();
+            builder.Register<SnipeChanceRoll>(Lifetime.Singleton).As<ISnipeChanceRoll>().As<ISnipeGuarantee>()
+                .As<IRunResettable>();
+            builder.RegisterEntryPoint<GoldenSnipeGift>().As<IRunResettable>();
             builder.RegisterEntryPoint<SnipeDischargeBloom>();
             builder.RegisterEntryPoint<ItemSightTracker>().AsSelf();
 

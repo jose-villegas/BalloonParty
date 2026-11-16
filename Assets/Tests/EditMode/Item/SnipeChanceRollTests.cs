@@ -256,6 +256,66 @@ namespace BalloonParty.Tests.Item
             Assert.IsTrue(_roll.TryArm(new ProjectileModel()), "no cooldown carried over from the last run");
         }
 
+        [Test]
+        public void GuaranteeNext_ArmsTheNextLoad_WithNoCardAndNoDraw()
+        {
+            _weapon.SnipeChance.Returns(0f);
+            Draw(1f);
+            var ball = new ProjectileModel();
+
+            _roll.GuaranteeNext();
+
+            Assert.IsTrue(_roll.TryArm(ball));
+            Assert.AreEqual(0, _draws);
+            _armer.Received(1).Arm(ball);
+        }
+
+        [Test]
+        public void GuaranteeNext_ArmsOnlyOnce()
+        {
+            _weapon.SnipeChance.Returns(0f);
+            _roll.GuaranteeNext();
+            _roll.TryArm(new ProjectileModel());
+
+            Assert.IsFalse(_roll.TryArm(new ProjectileModel()));
+        }
+
+        [Test]
+        public void GuaranteeNext_IgnoresTheCooldown()
+        {
+            _settings.SnipeCooldownSeconds.Returns(8f);
+            _weapon.SnipeChance.Returns(1f);
+            Assert.IsTrue(_roll.TryArm(new ProjectileModel()));
+            _roll.Now = () => 1f;
+
+            _roll.GuaranteeNext();
+
+            Assert.IsTrue(_roll.TryArm(new ProjectileModel()), "1 s into an 8 s cooldown");
+        }
+
+        [Test]
+        public void GuaranteeNext_APiercingBall_LeavesItForTheNextLoad()
+        {
+            _weapon.SnipeChance.Returns(0f);
+            _roll.GuaranteeNext();
+            var piercing = new ProjectileModel();
+            piercing.IsPiercing.Value = true;
+
+            Assert.IsFalse(_roll.TryArm(piercing));
+            Assert.IsTrue(_roll.TryArm(new ProjectileModel()));
+        }
+
+        [Test]
+        public void ResetRun_DropsAGuarantee()
+        {
+            _weapon.SnipeChance.Returns(0f);
+            _roll.GuaranteeNext();
+
+            _roll.ResetRun(1);
+
+            Assert.IsFalse(_roll.TryArm(new ProjectileModel()));
+        }
+
         private void Draw(float value)
         {
             _roll.Random01 = () =>

@@ -21,6 +21,12 @@ on its own so `RunUpgrades` depends on the deck alone): `CardEveryLevels` (2), `
 and `Cards`, each with a kind, title, description, a per-stack `Amount`, `MaxStacks` and a deal
 `Weight`.
 
+The run's first card is the deck's `DealtFirst` card, Sharpshooter, whatever deals it: the first
+level-up's hand leads with it (in its first slot, the one the level-up takes), a golden balloon's free
+card is it, and a bought retry's bonus card lends it. It goes by the cards the run holds, not by which
+deal comes first: while the run holds none, every deal brings it, so a lent bonus card leaves the next
+level-up to deal it again. Once the run holds a card, every deal is by weight. A fresh run starts over.
+
 ## The cards
 
 | Kind | What one stack does | Read by |
@@ -42,6 +48,12 @@ the sprite asset by Tools > BalloonParty > Upgrades > Build Card Icons (`CardIco
 new kind needs its icon drawn and named there too; an EditMode test fails until it is.
 
 ### Sharpshooter
+
+The run's first golden balloon teaches it: once that balloon has turned away
+`IAssistSettings.FirstGoldenSnipeAfterDeflects` (3) of the shot's hits, the next ball loaded is a Snipe
+lance whatever the card's chance, with no cooldown in the way (`Item/Snipe/GoldenSnipeGift` calls
+`ISnipeGuarantee.GuaranteeNext` on `SnipeChanceRoll`). The player sees the lance pop what bounced their
+shots. It counts only that first golden balloon, comes once a run, and a retry keeps it given.
 
 The roll happens once per ball, the moment the thrower loads it (`SnipeChanceRoll.TryArm`), which is also
 when its reload starts. After a hit no load rolls for `IUpgradeSettings.SnipeCooldownSeconds` (8 s of game

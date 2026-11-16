@@ -29,6 +29,12 @@ namespace BalloonParty.Shared
         /// <summary>Seconds of game time an armoured balloon stands before it counts in full; it counts from 0 as it lands.</summary>
         float ArmourSecondsForFull { get; }
 
+        /// <summary>
+        ///     Bounces off the run's first golden balloon after which the next ball loaded is a Snipe lance, whatever
+        ///     the Sharpshooter roll, so the player learns what pops it. Once a run. 0 = never.
+        /// </summary>
+        int FirstGoldenSnipeAfterDeflects { get; }
+
         /// <summary>The heart balloon's roll on an ordinary level.</summary>
         IPitySettings HeartPity { get; }
 

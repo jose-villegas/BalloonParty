@@ -26,6 +26,10 @@ balloons that help, and eases off the threats that come by chance.
 Each roll keeps its own pity, cleared by a hit and by a run reset. The Snipe's cooldown after a hit still
 applies, and loads inside it neither roll nor build pity.
 
+One Snipe needs no roll at all: once the run's first golden balloon has turned away
+`FirstGoldenSnipeAfterDeflects` (3) hits, the next ball loaded is a lance (`Item/Snipe/GoldenSnipeGift`, see
+`Game/Upgrades/README.md`'s Sharpshooter).
+
 ## Other help that follows the need
 
 | Help | Where | How |

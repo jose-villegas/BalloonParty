@@ -25,9 +25,10 @@ namespace BalloonParty.Item.Snipe
     ///     chance is low; pity (<see cref="IAssistSettings.SnipePity" />) raises it for each ball loaded without a
     ///     Snipe while the player is in trouble (<see cref="IPlayerNeed" />) or armour has stood on the board too long
     ///     (<see cref="IArmourNeed" />), whichever is the more. After a hit, no load rolls for
-    ///     <see cref="IUpgradeSettings.SnipeCooldownSeconds" />, so rapid fire can't chain lances.
+    ///     <see cref="IUpgradeSettings.SnipeCooldownSeconds" />, so rapid fire can't chain lances. A guaranteed
+    ///     load (<see cref="ISnipeGuarantee" />, the first golden balloon's lesson) arms with no roll and no cooldown.
     /// </summary>
-    internal sealed class SnipeChanceRoll : ISnipeChanceRoll, IRunResettable
+    internal sealed class SnipeChanceRoll : ISnipeChanceRoll, ISnipeGuarantee, IRunResettable
     {
         private readonly IWeaponStats _weapon;
         private readonly ISnipeArmer _armer;
@@ -37,6 +38,7 @@ namespace BalloonParty.Item.Snipe
         private readonly PityRoll _pity;
 
         private float _lastArmedAt = float.NegativeInfinity;
+        private bool _guaranteed;
 
         // Tests replace the draw to pin the roll, and the clock to step through the cooldown.
         internal Func<float> Random01 { get; set; } = () => Random.value;
@@ -56,13 +58,26 @@ namespace BalloonParty.Item.Snipe
 
         public bool TryArm(IWriteableProjectileModel loaded)
         {
-            var chance = _weapon.SnipeChance;
-            if (loaded == null || chance <= 0f || loaded.IsPiercing.Value)
+            if (loaded == null || loaded.IsPiercing.Value)
             {
                 return false;
             }
 
             var now = Now();
+            if (_guaranteed)
+            {
+                _guaranteed = false;
+                _lastArmedAt = now;
+                _armer.Arm(loaded);
+                return true;
+            }
+
+            var chance = _weapon.SnipeChance;
+            if (chance <= 0f)
+            {
+                return false;
+            }
+
             if (now - _lastArmedAt < _settings.SnipeCooldownSeconds)
             {
                 return false;
@@ -79,10 +94,16 @@ namespace BalloonParty.Item.Snipe
             return true;
         }
 
-        // A new run starts with no pity and no cooldown left over from the last.
+        public void GuaranteeNext()
+        {
+            _guaranteed = true;
+        }
+
+        // A new run starts with no pity, no cooldown and no guarantee left over from the last.
         public void ResetRun(int generation)
         {
             _lastArmedAt = float.NegativeInfinity;
+            _guaranteed = false;
             _pity.Clear();
         }
     }
