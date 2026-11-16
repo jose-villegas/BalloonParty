@@ -1,9 +1,0 @@
-<map id="BalloonParty.Projectile.Clearance.ClearanceField" name="BalloonParty.Projectile.Clearance.ClearanceField">
-<area shape="rect" id="Node000001" title="Fixed&#45;capacity circle slots, one per ball, keyed by the ball&#39;s reference." alt="" coords="313,75,499,119"/>
-<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Projectile_1_1Clearance_1_1IClearanceField.html" title="The clear circles around the balls in flight, plus the fading ones balls left behind." alt="" coords="8,5,199,50"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="214,50,315,75,310,77,214,56"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IClearanceSettings.html" title="Read&#45;only tuning for the clear circle every ball in flight carries (see Projectile/Clearance)." alt="" coords="5,75,202,119"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="217,94,315,96,310,98,218,100"/>
-<area shape="rect" id="Node000004" href="$structBalloonParty_1_1Projectile_1_1Clearance_1_1ClearanceCircle.html" title="One ball&#39;s clear circle this frame, in the board&#39;s XY plane." alt="" coords="7,144,200,189"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="214,138,309,119,315,118,216,143"/>
-</map>

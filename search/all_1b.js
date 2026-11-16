@@ -5,7 +5,7 @@ var searchData=
   ['quadrendererbuilder_2ecs_2',['QuadRendererBuilder.cs',['../QuadRendererBuilder_8cs.html',1,'']]],
   ['qualifyingcolor_3',['QualifyingColor',['../classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#aca120322334c34c932c50ae21e8b6943',1,'BalloonParty::Editor::ShotSolver::ShotSolverWindow']]],
   ['quality_4',['Animation Quality',['../plan_future_ideas.html#autotoc_md544',1,'']]],
-  ['quality_20constraints_5',['Code Quality Constraints',['../style_guide.html#autotoc_md994',1,'']]],
+  ['quality_20constraints_5',['Code Quality Constraints',['../style_guide.html#autotoc_md989',1,'']]],
   ['quality_20settings_20system_6',['9 — Quality Settings System',['../plan_future_ideas.html#autotoc_md535',1,'']]],
   ['quality_20sign_20off_20perf_20sanity_7',['A-gate — parity/quality sign-off + perf sanity',['../plan_hdr_color_pipeline.html#autotoc_md708',1,'']]],
   ['quality_20tiers_20adpf_20·_20strong_20opus_20strong_20—_20required_20for_20ship_20promoted_20earlier_8',['A4 — Quality tiers + ADPF · &lt;strong&gt;opus&lt;/strong&gt; — required for ship, promoted earlier',['../plan_performance_recovery.html#autotoc_md818',1,'']]],
@@ -22,6 +22,6 @@ var searchData=
   ['queuefor_19',['QueueFor',['../classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#afa9c95ec80101b4324a8692454836078',1,'BalloonParty::Balloon::Spawner::RejectedBalloonEffect']]],
   ['queuestamp_20',['QueueStamp',['../classBalloonParty_1_1Scenario_1_1SmokeFieldService.html#a15b3f30c0f1c2129e668e4242c983dad',1,'BalloonParty::Scenario::SmokeFieldService']]],
   ['quick_20links_21',['Quick Links',['../index.html#autotoc_md303',1,'']]],
-  ['quick_20reference_22',['Quick reference',['../style_guide.html#autotoc_md1021',1,'']]],
+  ['quick_20reference_22',['Quick reference',['../style_guide.html#autotoc_md1016',1,'']]],
   ['quiesce_23',['Quiesce',['../classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder.html#a2642e704750e459bb8e344a1ff936279',1,'BalloonParty::Game::Run::RunResetOrder']]]
 ];

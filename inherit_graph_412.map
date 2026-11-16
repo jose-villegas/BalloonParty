@@ -1,5 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Shared_1_1IDeflectorField.html" title="The deflectors the aim telegraph must bounce off, in the geometry the projectile will actually meet." alt="" coords="5,5,223,50"/>
-<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGridDeflectorField.html" title="Every occupied slot whose actor would turn an ordinary shot away, as circles." alt="" coords="271,5,443,50"/>
-<area shape="poly" id="edge613_Node000000_Node000001" title=" " alt="" coords="238,25,273,28,267,28,238,30"/>
+<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Shared_1_1IPitySettings.html" title="How a chance roll forgives a player in trouble (Game/Assist/PityRoll): each roll it misses while the ..." alt="" coords="5,5,189,50"/>
+<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Configuration_1_1PitySettings.html" title="Inspector&#45;authored IPitySettings, one per chance roll in AssistSettings." alt="" coords="237,5,433,50"/>
+<area shape="poly" id="edge609_Node000000_Node000001" title=" " alt="" coords="204,25,239,27,234,28,205,30"/>
 </map>

@@ -88,8 +88,6 @@ var hierarchy =
     [ "BalloonParty.Game.Cinematics.CinematicScene", "classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicScene.html", null ],
     [ "BalloonParty.Configuration.Cinematics.CinematicStateEntry", "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicStateEntry.html", null ],
     [ "BalloonParty.Shared.CircleContact", "classBalloonParty_1_1Shared_1_1CircleContact.html", null ],
-    [ "BalloonParty.Projectile.Clearance.ClearanceCircle", "structBalloonParty_1_1Projectile_1_1Clearance_1_1ClearanceCircle.html", null ],
-    [ "BalloonParty.Projectile.Clearance.ClearanceGeometry", "classBalloonParty_1_1Projectile_1_1Clearance_1_1ClearanceGeometry.html", null ],
     [ "BalloonParty.Editor.CloudNoiseTextureGenerator", "classBalloonParty_1_1Editor_1_1CloudNoiseTextureGenerator.html", null ],
     [ "BalloonParty.Slots.Actor.ClusterSlotSelectionStrategy.ClusterFill", "classBalloonParty_1_1Slots_1_1Actor_1_1ClusterSlotSelectionStrategy_1_1ClusterFill.html", null ],
     [ "BalloonParty.Shared.Extensions.ColorableRendererExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1ColorableRendererExtensions.html", null ],
@@ -335,12 +333,6 @@ var hierarchy =
     [ "BalloonParty.Shared.GameState.ICinematicState", "interfaceBalloonParty_1_1Shared_1_1GameState_1_1ICinematicState.html", [
       [ "BalloonParty.Shared.GameState.CinematicStateService", "classBalloonParty_1_1Shared_1_1GameState_1_1CinematicStateService.html", null ]
     ] ],
-    [ "BalloonParty.Projectile.Clearance.IClearanceField", "interfaceBalloonParty_1_1Projectile_1_1Clearance_1_1IClearanceField.html", [
-      [ "BalloonParty.Projectile.Clearance.ClearanceField", "classBalloonParty_1_1Projectile_1_1Clearance_1_1ClearanceField.html", null ]
-    ] ],
-    [ "BalloonParty.Configuration.Effects.IClearanceSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IClearanceSettings.html", [
-      [ "BalloonParty.Configuration.Effects.ClearanceSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1ClearanceSettings.html", null ]
-    ] ],
     [ "BalloonParty.Slots.Actor.Cluster.IClusterViewSettings", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1IClusterViewSettings.html", [
       [ "BalloonParty.Configuration.Effects.IBushSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html", [
         [ "BalloonParty.Configuration.Effects.BushSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html", null ]
@@ -468,7 +460,6 @@ var hierarchy =
       [ "BalloonParty.Item.Snipe.SnipeLanceLines", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html", null ],
       [ "BalloonParty.Prediction.PredictionTraceLights", "classBalloonParty_1_1Prediction_1_1PredictionTraceLights.html", null ],
       [ "BalloonParty.Projectile.Buffs.ProjectileBuffService", "classBalloonParty_1_1Projectile_1_1Buffs_1_1ProjectileBuffService.html", null ],
-      [ "BalloonParty.Projectile.Clearance.ClearanceFieldTicker", "classBalloonParty_1_1Projectile_1_1Clearance_1_1ClearanceFieldTicker.html", null ],
       [ "BalloonParty.Projectile.Controller.ActiveProjectilePierce", "classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce.html", null ],
       [ "BalloonParty.Projectile.Controller.DeflectChainController", "classBalloonParty_1_1Projectile_1_1Controller_1_1DeflectChainController.html", null ],
       [ "BalloonParty.Projectile.Controller.PierceDischargeEffects", "classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html", null ],
@@ -1108,7 +1099,6 @@ var hierarchy =
       [ "BalloonParty.Item.Snipe.SnipeLanceLines", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html", null ],
       [ "BalloonParty.Nudge.NudgeService", "classBalloonParty_1_1Nudge_1_1NudgeService.html", null ],
       [ "BalloonParty.Projectile.Buffs.ProjectileBuffService", "classBalloonParty_1_1Projectile_1_1Buffs_1_1ProjectileBuffService.html", null ],
-      [ "BalloonParty.Projectile.Clearance.ClearanceFieldTicker", "classBalloonParty_1_1Projectile_1_1Clearance_1_1ClearanceFieldTicker.html", null ],
       [ "BalloonParty.Projectile.Controller.ActiveProjectilePierce", "classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce.html", null ],
       [ "BalloonParty.Projectile.Controller.DeflectChainController", "classBalloonParty_1_1Projectile_1_1Controller_1_1DeflectChainController.html", null ],
       [ "BalloonParty.Projectile.Controller.PierceDischargeEffects", "classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html", null ],
@@ -1174,7 +1164,6 @@ var hierarchy =
       [ "BalloonParty.Game.Level.TimeOfDayCycle", "classBalloonParty_1_1Game_1_1Level_1_1TimeOfDayCycle.html", null ],
       [ "BalloonParty.Game.Run.RunResumeController", "classBalloonParty_1_1Game_1_1Run_1_1RunResumeController.html", null ],
       [ "BalloonParty.Item.Snipe.SnipeLanceLines", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html", null ],
-      [ "BalloonParty.Projectile.Clearance.ClearanceFieldTicker", "classBalloonParty_1_1Projectile_1_1Clearance_1_1ClearanceFieldTicker.html", null ],
       [ "BalloonParty.Projectile.Controller.ProjectileDoomedTimeScaleController", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html", null ],
       [ "BalloonParty.Scenario.BackgroundFieldService", "classBalloonParty_1_1Scenario_1_1BackgroundFieldService.html", null ],
       [ "BalloonParty.Scenario.SmokeFieldService", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html", null ],
@@ -1583,7 +1572,6 @@ var hierarchy =
       [ "BalloonParty.Configuration.Effects.BackgroundFieldSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html", null ],
       [ "BalloonParty.Configuration.Effects.BushSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html", null ],
       [ "BalloonParty.Configuration.Effects.BushVariantData", "classBalloonParty_1_1Configuration_1_1Effects_1_1BushVariantData.html", null ],
-      [ "BalloonParty.Configuration.Effects.ClearanceSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1ClearanceSettings.html", null ],
       [ "BalloonParty.Configuration.Effects.DisturbanceFieldSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html", null ],
       [ "BalloonParty.Configuration.Effects.GroundSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html", null ],
       [ "BalloonParty.Configuration.Effects.ProjectileVisualConfig", "classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html", null ],
