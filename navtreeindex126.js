@@ -1,5 +1,16 @@
 var NAVTREEINDEX126 =
 {
+"structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveAdvancedMessage.html#a8ff662b7183aa5c4a286d903628a7231":[6,0,0,12,7,8,1],
+"structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveAdvancedMessage.html#ae6deca5c9a25227564e8530f9441d985":[5,0,0,12,7,8,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveAdvancedMessage.html#ae6deca5c9a25227564e8530f9441d985":[6,0,0,12,7,8,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveReachedMessage.html":[5,0,0,12,7,9],
+"structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveReachedMessage.html":[6,0,0,12,7,9],
+"structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveReachedMessage.html#a30d4c9e352229caac4eff1aef4fce305":[5,0,0,12,7,9,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveReachedMessage.html#a30d4c9e352229caac4eff1aef4fce305":[6,0,0,12,7,9,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveReachedMessage.html#a412a7fbc13cc1aafe73efba71578ff6f":[5,0,0,12,7,9,2],
+"structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveReachedMessage.html#a412a7fbc13cc1aafe73efba71578ff6f":[6,0,0,12,7,9,2],
+"structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveReachedMessage.html#a9515c972b85f65b95d6538609ddd86d4":[5,0,0,12,7,9,1],
+"structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveReachedMessage.html#a9515c972b85f65b95d6538609ddd86d4":[6,0,0,12,7,9,1],
 "structBalloonParty_1_1Shared_1_1Messages_1_1EndRunRequestedMessage.html":[5,0,0,12,7,10],
 "structBalloonParty_1_1Shared_1_1Messages_1_1EndRunRequestedMessage.html":[6,0,0,12,7,10],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ForceDestroyProjectileMessage.html":[5,0,0,12,7,11],
@@ -238,16 +249,5 @@ var NAVTREEINDEX126 =
 "structBalloonParty_1_1Shared_1_1Messages_1_1SpawnBalloonLineMessage.html#a4595a956efe18d5cc942028549e8e5bd":[6,0,0,12,7,44,1],
 "structBalloonParty_1_1Shared_1_1Messages_1_1SpawnBalloonLineMessage.html#a804f618f907ddf3f6e6fd2b1ec662583":[5,0,0,12,7,44,0],
 "structBalloonParty_1_1Shared_1_1Messages_1_1SpawnBalloonLineMessage.html#a804f618f907ddf3f6e6fd2b1ec662583":[6,0,0,12,7,44,0],
-"structBalloonParty_1_1Shared_1_1Messages_1_1SpeckSpawnRequestMessage.html":[5,0,0,12,7,45],
-"structBalloonParty_1_1Shared_1_1Messages_1_1SpeckSpawnRequestMessage.html":[6,0,0,12,7,45],
-"structBalloonParty_1_1Shared_1_1Messages_1_1SpeckSpawnRequestMessage.html#a34409f0733dd505dc3949b907c46b25d":[5,0,0,12,7,45,0],
-"structBalloonParty_1_1Shared_1_1Messages_1_1SpeckSpawnRequestMessage.html#a34409f0733dd505dc3949b907c46b25d":[6,0,0,12,7,45,0],
-"structBalloonParty_1_1Shared_1_1Messages_1_1SpeckSpawnRequestMessage.html#a79a6e4550b2123cbfcd6d836e471f78b":[5,0,0,12,7,45,1],
-"structBalloonParty_1_1Shared_1_1Messages_1_1SpeckSpawnRequestMessage.html#a79a6e4550b2123cbfcd6d836e471f78b":[6,0,0,12,7,45,1],
-"structBalloonParty_1_1Shared_1_1Messages_1_1SpeckSpawnRequestMessage.html#ac0956f14ff564d8481fd7d5d6c111cb4":[5,0,0,12,7,45,3],
-"structBalloonParty_1_1Shared_1_1Messages_1_1SpeckSpawnRequestMessage.html#ac0956f14ff564d8481fd7d5d6c111cb4":[6,0,0,12,7,45,3],
-"structBalloonParty_1_1Shared_1_1Messages_1_1SpeckSpawnRequestMessage.html#ae703c66e261993934d8bf9bf8bf646ce":[5,0,0,12,7,45,2],
-"structBalloonParty_1_1Shared_1_1Messages_1_1SpeckSpawnRequestMessage.html#ae703c66e261993934d8bf9bf8bf646ce":[6,0,0,12,7,45,2],
-"structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html":[5,0,0,12,7,46],
-"structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html":[6,0,0,12,7,46]
+"structBalloonParty_1_1Shared_1_1Messages_1_1SpeckSpawnRequestMessage.html":[5,0,0,12,7,45]
 };

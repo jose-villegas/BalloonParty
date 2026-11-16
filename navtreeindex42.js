@@ -1,5 +1,9 @@
 var NAVTREEINDEX42 =
 {
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a5207ac8d55d396379348a7093451e62a":[6,0,0,5,28,91],
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a53137f86ad919660d085fddb68f957ae":[5,0,0,5,28,22],
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a53137f86ad919660d085fddb68f957ae":[6,0,0,5,28,22],
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a53942d2e43613fc9d1e96efbdd0ff7a8":[5,0,0,5,28,69],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a53942d2e43613fc9d1e96efbdd0ff7a8":[6,0,0,5,28,69],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a53bbf4e532ccd553836906ef8e286295":[5,0,0,5,28,49],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a53bbf4e532ccd553836906ef8e286295":[6,0,0,5,28,49],
@@ -245,9 +249,5 @@ var NAVTREEINDEX42 =
 "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a17944ed864770454e2e56bdff72314a2":[6,0,0,5,3,0,0,6],
 "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a1dd239687a53f36910ff6f2310afdb82":[5,0,0,5,3,0,0,10],
 "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a1dd239687a53f36910ff6f2310afdb82":[6,0,0,5,3,0,0,10],
-"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a4c42ad70c9e1c4dfb1fa1d90cfab641f":[5,0,0,5,3,0,0,3],
-"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a4c42ad70c9e1c4dfb1fa1d90cfab641f":[6,0,0,5,3,0,0,3],
-"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a59f787f122750d993b9d9f36a566e234":[5,0,0,5,3,0,0,7],
-"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a59f787f122750d993b9d9f36a566e234":[6,0,0,5,3,0,0,7],
-"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a5c31e0a30357c160024ea9934cd18e93":[5,0,0,5,3,0,0,5]
+"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a4c42ad70c9e1c4dfb1fa1d90cfab641f":[5,0,0,5,3,0,0,3]
 };

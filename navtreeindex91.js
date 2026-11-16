@@ -1,5 +1,13 @@
 var NAVTREEINDEX91 =
 {
+"classBalloonParty_1_1Solver_1_1ShotSimulator.html#aad797543d79449b745d506edf8115ce3":[6,0,0,14,23,44],
+"classBalloonParty_1_1Solver_1_1ShotSimulator.html#ab622d64137e080f1d9e19c9940dc0899":[5,0,0,14,23,1],
+"classBalloonParty_1_1Solver_1_1ShotSimulator.html#ab622d64137e080f1d9e19c9940dc0899":[6,0,0,14,23,1],
+"classBalloonParty_1_1Solver_1_1ShotSimulator.html#abddbc25be561ac0790e5d217be3e22e2":[5,0,0,14,23,12],
+"classBalloonParty_1_1Solver_1_1ShotSimulator.html#abddbc25be561ac0790e5d217be3e22e2":[6,0,0,14,23,12],
+"classBalloonParty_1_1Solver_1_1ShotSimulator.html#ac3f9c8484153e97ecddd8834144d8df8":[5,0,0,14,23,3],
+"classBalloonParty_1_1Solver_1_1ShotSimulator.html#ac3f9c8484153e97ecddd8834144d8df8":[6,0,0,14,23,3],
+"classBalloonParty_1_1Solver_1_1ShotSimulator.html#ac5df1a415170ebd9bbce1b898777d8c6":[5,0,0,14,23,2],
 "classBalloonParty_1_1Solver_1_1ShotSimulator.html#ac5df1a415170ebd9bbce1b898777d8c6":[6,0,0,14,23,2],
 "classBalloonParty_1_1Solver_1_1ShotSimulator.html#ac60330e468efd1a326f8281f05d0ffc1":[5,0,0,14,23,40],
 "classBalloonParty_1_1Solver_1_1ShotSimulator.html#ac60330e468efd1a326f8281f05d0ffc1":[6,0,0,14,23,40],
@@ -241,13 +249,5 @@ var NAVTREEINDEX91 =
 "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a8ab4bb3f739f99fda7f6a8f3caa99051":[6,0,0,15,2,12],
 "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a8c3750a461fb7b77d7c57f704d5364c7":[5,0,0,15,2,46],
 "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a8c3750a461fb7b77d7c57f704d5364c7":[6,0,0,15,2,46],
-"classBalloonParty_1_1Thrower_1_1ThrowerController.html#a8ec10410bc6d1ad249410f8cf0891488":[5,0,0,15,2,10],
-"classBalloonParty_1_1Thrower_1_1ThrowerController.html#a8ec10410bc6d1ad249410f8cf0891488":[6,0,0,15,2,10],
-"classBalloonParty_1_1Thrower_1_1ThrowerController.html#a9224a8ef01db5bb0d9b64ec8f6c5d60f":[5,0,0,15,2,21],
-"classBalloonParty_1_1Thrower_1_1ThrowerController.html#a9224a8ef01db5bb0d9b64ec8f6c5d60f":[6,0,0,15,2,21],
-"classBalloonParty_1_1Thrower_1_1ThrowerController.html#aa21bf7386f544bd4ddc85a778cd1d6a2":[5,0,0,15,2,77],
-"classBalloonParty_1_1Thrower_1_1ThrowerController.html#aa21bf7386f544bd4ddc85a778cd1d6a2":[6,0,0,15,2,77],
-"classBalloonParty_1_1Thrower_1_1ThrowerController.html#aa6c9d0d9311983b256d82924c3061b13":[5,0,0,15,2,0],
-"classBalloonParty_1_1Thrower_1_1ThrowerController.html#aa6c9d0d9311983b256d82924c3061b13":[6,0,0,15,2,0],
-"classBalloonParty_1_1Thrower_1_1ThrowerController.html#aadf06e2db35f396fc78810ecfec3bf0b":[5,0,0,15,2,19]
+"classBalloonParty_1_1Thrower_1_1ThrowerController.html#a8ec10410bc6d1ad249410f8cf0891488":[5,0,0,15,2,10]
 };

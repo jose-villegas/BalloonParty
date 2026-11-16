@@ -1,5 +1,9 @@
 var NAVTREEINDEX31 =
 {
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a5c20579427e7cbb656783d28894b38b2":[6,0,0,3,9,21,16],
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a5e11f6bfb48fcebf9f2025ee86e65602":[5,0,0,3,9,21,8],
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a5e11f6bfb48fcebf9f2025ee86e65602":[6,0,0,3,9,21,8],
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a5e8b79d0962e3ea8001a88acfc9588ec":[5,0,0,3,9,21,0],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a5e8b79d0962e3ea8001a88acfc9588ec":[6,0,0,3,9,21,0],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a630634ca2853fdd53870999fa78601c7":[5,0,0,3,9,21,25],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a630634ca2853fdd53870999fa78601c7":[6,0,0,3,9,21,25],
@@ -245,9 +249,5 @@ var NAVTREEINDEX31 =
 "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a4428c805552e2d4ff39b91351d15873b":[6,0,0,3,9,33,16],
 "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a4ad7d504412e5515c1d039db9374fd71":[5,0,0,3,9,33,3],
 "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a4ad7d504412e5515c1d039db9374fd71":[6,0,0,3,9,33,3],
-"classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a4d2f7447147617b1d526c55b6e1860b1":[5,0,0,3,9,33,37],
-"classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a4d2f7447147617b1d526c55b6e1860b1":[6,0,0,3,9,33,37],
-"classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a530ba79688c51a1b5571f5fa83de86c7":[5,0,0,3,9,33,32],
-"classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a530ba79688c51a1b5571f5fa83de86c7":[6,0,0,3,9,33,32],
-"classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a5998c743f39e1e857d4f5b68c4cf5ed0":[5,0,0,3,9,33,46]
+"classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a4d2f7447147617b1d526c55b6e1860b1":[5,0,0,3,9,33,37]
 };

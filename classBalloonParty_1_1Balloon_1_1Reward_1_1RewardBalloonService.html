@@ -138,8 +138,8 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloo
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:adc09f5b8ff14e0c05ecea0bae96c6a0f" id="r_adc09f5b8ff14e0c05ecea0bae96c6a0f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adc09f5b8ff14e0c05ecea0bae96c6a0f">RewardBalloonService</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html">IBalloonsConfiguration</a> balloons, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html">ILevelProgress</a> levelProgress, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html">IActiveLevelParameters</a> levelParams, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html">IPlayerHealth</a> health, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Assist_1_1IPlayerNeed.html">IPlayerNeed</a> need, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IAssistSettings.html">IAssistSettings</a> assist)</td></tr>
-<tr class="separator:adc09f5b8ff14e0c05ecea0bae96c6a0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63ea99cabf3d3d5266b7a761aa18bc03" id="r_a63ea99cabf3d3d5266b7a761aa18bc03"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a63ea99cabf3d3d5266b7a761aa18bc03">RewardBalloonService</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html">IBalloonsConfiguration</a> balloons, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html">ILevelProgress</a> levelProgress, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html">IActiveLevelParameters</a> levelParams, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html">IPlayerHealth</a> health, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Assist_1_1IPlayerNeed.html">IPlayerNeed</a> need, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IAssistSettings.html">IAssistSettings</a> assist, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html">IWeaponStats</a> weapon)</td></tr>
+<tr class="separator:a63ea99cabf3d3d5266b7a761aa18bc03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3843213df88171061130bd894f8fc69" id="r_ad3843213df88171061130bd894f8fc69"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3843213df88171061130bd894f8fc69">Dispose</a> ()</td></tr>
 <tr class="separator:ad3843213df88171061130bd894f8fc69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a199b35f6a164e895144350892302c761" id="r_a199b35f6a164e895144350892302c761"><td class="memItemLeft" align="right" valign="top">Action&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a199b35f6a164e895144350892302c761">Placed</a> (<a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60e">BalloonType</a> type)</td></tr>
@@ -168,6 +168,8 @@ Static Package Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:a872ca71934b86eb663bdc08340e8ad6f" id="r_a872ca71934b86eb663bdc08340e8ad6f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a872ca71934b86eb663bdc08340e8ad6f">Odds</a><code> [get]</code></td></tr>
+<tr class="separator:a872ca71934b86eb663bdc08340e8ad6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afefb190136bac91ad6c7ce0e50aef0ed" id="r_afefb190136bac91ad6c7ce0e50aef0ed"><td class="memItemLeft" align="right" valign="top">Func&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afefb190136bac91ad6c7ce0e50aef0ed">Random01</a> = () =&gt; Random.value<code> [get, set]</code></td></tr>
 <tr class="separator:afefb190136bac91ad6c7ce0e50aef0ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a792f0a70d2bf552fd036e72f3352ff7a" id="r_a792f0a70d2bf552fd036e72f3352ff7a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a792f0a70d2bf552fd036e72f3352ff7a">ResetOrder</a><code> [get]</code></td></tr>
@@ -231,16 +233,18 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a2c1e1cc079819ec95f80bee8a4a7e5e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2231ffbfa5ed73b71115fc772ade5ba9" id="r_a2231ffbfa5ed73b71115fc772ade5ba9"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html">IRewardBalloonSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2231ffbfa5ed73b71115fc772ade5ba9">_settings</a></td></tr>
 <tr class="separator:a2231ffbfa5ed73b71115fc772ade5ba9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a80606d69e2b6c368f298134fc0d4bfe0" id="r_a80606d69e2b6c368f298134fc0d4bfe0"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html">IWeaponStats</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a80606d69e2b6c368f298134fc0d4bfe0">_weapon</a></td></tr>
+<tr class="separator:a80606d69e2b6c368f298134fc0d4bfe0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Decides when the reward balloons come (PLAN-RewardBalloons, PLAN-DiscoBalloon). </p>
 <p>At most one of each on the board, and only a type the catalogue has an entry for. </p>
 <p>The plated ones, the golden balloon and the disco ball, share their rules (<a class="el" href="classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html" title="When one plated reward balloon (the golden balloon, the disco ball) is due, and whether one is on the...">PlatedRewardSchedule</a>) and differ only in their numbers: on a purple level, rolled every <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#a3f308b2112f2bbf2cdf6f163a091f2d6" title="Spawn lines between a purple level&#39;s reward rolls, golden and heart each on its own count.">IRewardBalloonSettings.PurpleRollEveryLines</a> lines from a share of the level done, each further one rarer; elsewhere, now and then a single one, likelier early in the run and the longer since the last, and always one on its sure level. The disco ball's first on a purple level is sure. </p>
 <p>The heart, on a purple level, is rolled every few lines from the level's start (at full hearts too), each further one rarer (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#a63d3deeed89176797eedbea50c6fc0a4" title="A purple level&#39;s heart balloons, rolled from the level&#39;s start, at full hearts too: the chance each r...">IRewardBalloonSettings.PurpleHeartChances</a>). Elsewhere it comes from a roll on every line while a heart is missing, likelier the more are, after a cooldown since the last. </p>
-<p>A line brings one at most: the golden balloon first, then the disco ball, then the heart. One that loses the line stays due for the next. </p>
+<p>A line brings one at most: the golden balloon first, then the disco ball, then the heart. One that loses the line stays due for the next. The Party Favors card (<a class="el" href="interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#a7314de42c8dd30d9821dc616288cad37" title="Party Favors&#39; boost to the reward balloons: each roll that brings a golden, heart or disco balloon ha...">IWeaponStats.RewardBalloonOdds</a>) raises every roll's chance. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="adc09f5b8ff14e0c05ecea0bae96c6a0f" name="adc09f5b8ff14e0c05ecea0bae96c6a0f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adc09f5b8ff14e0c05ecea0bae96c6a0f">&#9670;&#160;</a></span>RewardBalloonService()</h2>
+<a id="a63ea99cabf3d3d5266b7a761aa18bc03" name="a63ea99cabf3d3d5266b7a761aa18bc03"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63ea99cabf3d3d5266b7a761aa18bc03">&#9670;&#160;</a></span>RewardBalloonService()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -273,7 +277,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IAssistSettings.html">IAssistSettings</a></td>          <td class="paramname"><span class="paramname"><em>assist</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IAssistSettings.html">IAssistSettings</a></td>          <td class="paramname"><span class="paramname"><em>assist</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html">IWeaponStats</a></td>          <td class="paramname"><span class="paramname"><em>weapon</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -994,7 +1003,51 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a80606d69e2b6c368f298134fc0d4bfe0" name="a80606d69e2b6c368f298134fc0d4bfe0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a80606d69e2b6c368f298134fc0d4bfe0">&#9670;&#160;</a></span>_weapon</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html">IWeaponStats</a> BalloonParty.Balloon.Reward.RewardBalloonService._weapon</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Property Documentation</h2>
+<a id="a872ca71934b86eb663bdc08340e8ad6f" name="a872ca71934b86eb663bdc08340e8ad6f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a872ca71934b86eb663bdc08340e8ad6f">&#9670;&#160;</a></span>Odds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Balloon.Reward.RewardBalloonService.Odds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="afefb190136bac91ad6c7ce0e50aef0ed" name="afefb190136bac91ad6c7ce0e50aef0ed"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afefb190136bac91ad6c7ce0e50aef0ed">&#9670;&#160;</a></span>Random01</h2>
 

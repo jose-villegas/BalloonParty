@@ -1,15 +1,15 @@
 var classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule =
 [
     [ "PlatedRewardSchedule", "classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#a876d8f4d17060d4d07ddc7aa7591fc2e", null ],
-    [ "Due", "classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#afe59c873a1363f818f00c17f942b8218", null ],
+    [ "Due", "classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#a699e5fb5a3756ad954627d4102b1a126", null ],
     [ "ForgetLevel", "classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#aa1eb4170cbad0641db22ee0d330bc31b", null ],
     [ "IsOrdinaryLevel", "classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#aaa2bb4800e500511ee9b04a6bbff72bb", null ],
     [ "Left", "classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#aebef058157c19dff70f00d4f77df04c0", null ],
     [ "OrdinaryChance", "classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#a8ea10dbd02d8b3df8104d649102f3239", null ],
-    [ "OrdinaryDue", "classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#a371a2b2f86097518c148874fb6cbe2af", null ],
+    [ "OrdinaryDue", "classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#af8ad5eeea0d00d07334bf753a040b816", null ],
     [ "Placed", "classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#a865038994d540bffdbf72d7547100bc0", null ],
     [ "ResetRun", "classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#a9b378d21b02e7a869190225ba253d063", null ],
-    [ "RollPurple", "classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#a27096482b961db5c4904511c07be2bdd", null ],
+    [ "RollPurple", "classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#ac48600a6a115bfcb49281823b76f0b51", null ],
     [ "_alive", "classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#a54d3547473cc132af026a69ef87f09d6", null ],
     [ "_lastPlacedLevel", "classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#aa21f8371e9ec5f230c0add56ac34612e", null ],
     [ "_ordinaryAt", "classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#a016a50d4a7bfccd1677eaefcee3e5eaf", null ],

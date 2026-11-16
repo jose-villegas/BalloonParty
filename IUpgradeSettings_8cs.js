@@ -8,6 +8,7 @@ var IUpgradeSettings_8cs =
       [ "BalloonParty.Shared.UpgradeKind.Shield", "namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523a970da5f1f2e32aeb9e488dd017160ab4", null ],
       [ "BalloonParty.Shared.UpgradeKind.ItemOdds", "namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523acf271677f22958bc28853c01ef5e5079", null ],
       [ "BalloonParty.Shared.UpgradeKind.RaiseLimits", "namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523aa4642f39b6a749350f1edc4cd03517ee", null ],
-      [ "BalloonParty.Shared.UpgradeKind.SnipeChance", "namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523af210f104048eb74ed397b391dea7c920", null ]
+      [ "BalloonParty.Shared.UpgradeKind.SnipeChance", "namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523af210f104048eb74ed397b391dea7c920", null ],
+      [ "BalloonParty.Shared.UpgradeKind.RewardOdds", "namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523a157bb1886dfdd1d604555497bc3120b2", null ]
     ] ]
 ];

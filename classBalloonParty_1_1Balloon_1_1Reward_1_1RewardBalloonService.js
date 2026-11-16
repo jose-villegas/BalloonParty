@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService =
 [
-    [ "RewardBalloonService", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#adc09f5b8ff14e0c05ecea0bae96c6a0f", null ],
+    [ "RewardBalloonService", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a63ea99cabf3d3d5266b7a761aa18bc03", null ],
     [ "Dispose", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#ad3843213df88171061130bd894f8fc69", null ],
     [ "ForgetHeartsLevel", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a4e04961198f9ffea812f620614dcd48f", null ],
     [ "ForgetLevelsRewards", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a0f5787372c09f1ad7541afd32e89e2b3", null ],
@@ -32,6 +32,8 @@ var classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService =
     [ "_need", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#ab7055d57354fcfc4dbc202b1d2a31c27", null ],
     [ "_purpleHeartOwed", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a2c1e1cc079819ec95f80bee8a4a7e5e6", null ],
     [ "_settings", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a2231ffbfa5ed73b71115fc772ade5ba9", null ],
+    [ "_weapon", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a80606d69e2b6c368f298134fc0d4bfe0", null ],
+    [ "Odds", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a872ca71934b86eb663bdc08340e8ad6f", null ],
     [ "Random01", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#afefb190136bac91ad6c7ce0e50aef0ed", null ],
     [ "ResetOrder", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a792f0a70d2bf552fd036e72f3352ff7a", null ]
 ];
