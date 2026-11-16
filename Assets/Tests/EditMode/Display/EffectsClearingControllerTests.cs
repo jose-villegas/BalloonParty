@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using BalloonParty.Configuration.Effects;
 using BalloonParty.Display;
 using BalloonParty.Projectile;
 using BalloonParty.Projectile.Model;
@@ -22,6 +23,7 @@ namespace BalloonParty.Tests.Display
         private static readonly ClearingView View = new(new Vector2(1f, 2f), 5f, 0.5f);
 
         private IProjectileRegistry _registry;
+        private IEffectsClearingSettings _settings;
         private Subject<IProjectileModel> _retired;
         private GameObject _host;
         private EffectsClearingMaskView _mask;
@@ -31,6 +33,7 @@ namespace BalloonParty.Tests.Display
         {
             _retired = new Subject<IProjectileModel>();
             _registry = Substitute.For<IProjectileRegistry>();
+            _settings = Substitute.For<IEffectsClearingSettings>();
             _registry.Retired.Returns(_retired);
             _host = new GameObject("ClearingMask", typeof(Camera));
             _mask = _host.AddComponent<EffectsClearingMaskView>();
@@ -48,7 +51,7 @@ namespace BalloonParty.Tests.Display
         [Test]
         public void Start_BindsTheMaskToItself()
         {
-            var controller = new EffectsClearingController(_registry, _mask);
+            var controller = new EffectsClearingController(_registry, _mask, _settings);
 
             ((IStartable)controller).Start();
 
@@ -58,7 +61,7 @@ namespace BalloonParty.Tests.Display
         [Test]
         public void Dispose_UnbindsItself()
         {
-            var controller = new EffectsClearingController(_registry, _mask);
+            var controller = new EffectsClearingController(_registry, _mask, _settings);
             ((IStartable)controller).Start();
 
             ((IDisposable)controller).Dispose();
@@ -69,8 +72,8 @@ namespace BalloonParty.Tests.Display
         [Test]
         public void Dispose_AfterANewerControllerBound_LeavesTheNewerBound()
         {
-            var older = new EffectsClearingController(_registry, _mask);
-            var newer = new EffectsClearingController(_registry, _mask);
+            var older = new EffectsClearingController(_registry, _mask, _settings);
+            var newer = new EffectsClearingController(_registry, _mask, _settings);
             ((IStartable)older).Start();
             ((IStartable)newer).Start();
 
@@ -82,7 +85,7 @@ namespace BalloonParty.Tests.Display
         [Test]
         public void Dispose_MaskAlreadyDestroyed_DoesNotThrow()
         {
-            var controller = new EffectsClearingController(_registry, _mask);
+            var controller = new EffectsClearingController(_registry, _mask, _settings);
             ((IStartable)controller).Start();
             Object.DestroyImmediate(_host);
 
@@ -92,17 +95,17 @@ namespace BalloonParty.Tests.Display
         [Test]
         public void Retired_ForgetsTheBallsLastPosition()
         {
-            var controller = new EffectsClearingController(_registry, _mask);
+            var controller = new EffectsClearingController(_registry, _mask, _settings);
             ((IStartable)controller).Start();
             var source = (IEffectsClearingSource)controller;
             var ball = Substitute.For<IProjectileModel>();
             var stamps = new Vector4[EffectsClearingStamper.MaxStamps];
             InFlight(ball, new Vector2(1f, 2f));
-            source.FillStamps(View, stamps);
+            source.FillStamps(View, stamps, new float[stamps.Length]);
 
             _retired.OnNext(ball);
             InFlight(ball, new Vector2(1f, 3f));
-            source.FillStamps(View, stamps);
+            source.FillStamps(View, stamps, new float[stamps.Length]);
 
             // A disc (start == end), not a capsule trailing from the retired ball's old spot.
             Assert.AreEqual(stamps[0].x, stamps[0].z, 1e-5f);
@@ -112,18 +115,18 @@ namespace BalloonParty.Tests.Display
         [Test]
         public void Dispose_StopsListeningForRetired()
         {
-            var controller = new EffectsClearingController(_registry, _mask);
+            var controller = new EffectsClearingController(_registry, _mask, _settings);
             ((IStartable)controller).Start();
             var source = (IEffectsClearingSource)controller;
             var ball = Substitute.For<IProjectileModel>();
             var stamps = new Vector4[EffectsClearingStamper.MaxStamps];
             InFlight(ball, new Vector2(1f, 2f));
-            source.FillStamps(View, stamps);
+            source.FillStamps(View, stamps, new float[stamps.Length]);
             ((IDisposable)controller).Dispose();
 
             _retired.OnNext(ball);
             InFlight(ball, new Vector2(1f, 3f));
-            source.FillStamps(View, stamps);
+            source.FillStamps(View, stamps, new float[stamps.Length]);
 
             // Still a capsule: the disposed controller no longer reacts to retirements.
             Assert.Greater(Mathf.Abs(stamps[0].w - stamps[0].y), 1e-3f);

@@ -1,4 +1,5 @@
 using System;
+using BalloonParty.Configuration.Effects;
 using BalloonParty.Projectile;
 using UniRx;
 using UnityEngine;
@@ -14,14 +15,16 @@ namespace BalloonParty.Display
     {
         private readonly IProjectileRegistry _registry;
         private readonly EffectsClearingMaskView _mask;
-        private readonly EffectsClearingStamper _stamper = new();
+        private readonly EffectsClearingStamper _stamper;
 
         private IDisposable _retiredSubscription;
 
-        public EffectsClearingController(IProjectileRegistry registry, EffectsClearingMaskView mask)
+        public EffectsClearingController(
+            IProjectileRegistry registry, EffectsClearingMaskView mask, IEffectsClearingSettings settings)
         {
             _registry = registry;
             _mask = mask;
+            _stamper = new EffectsClearingStamper(settings);
         }
 
         void IStartable.Start()
@@ -39,9 +42,9 @@ namespace BalloonParty.Display
             }
         }
 
-        int IEffectsClearingSource.FillStamps(in ClearingView view, Vector4[] stamps)
+        int IEffectsClearingSource.FillStamps(in ClearingView view, Vector4[] stamps, float[] radii)
         {
-            return _stamper.Fill(_registry, view, stamps);
+            return _stamper.Fill(_registry, view, stamps, radii);
         }
     }
 }

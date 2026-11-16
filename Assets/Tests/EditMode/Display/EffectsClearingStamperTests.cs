@@ -1,8 +1,10 @@
+using BalloonParty.Configuration.Effects;
 using BalloonParty.Display;
 using BalloonParty.Projectile;
 using BalloonParty.Projectile.Model;
 using NSubstitute;
 using NUnit.Framework;
+using UniRx;
 using UnityEngine;
 
 namespace BalloonParty.Tests.Display
@@ -11,6 +13,9 @@ namespace BalloonParty.Tests.Display
     public class EffectsClearingStamperTests
     {
         private const float Tolerance = 1e-5f;
+        private const float MinRadius = 0.48f;
+        private const float MaxRadius = 1.2f;
+        private const int ShieldsForMax = 10;
 
         // A 2:1 portrait view of 10 world units' height, centred on (1, 2).
         private static readonly ClearingView View = new(new Vector2(1f, 2f), 5f, 0.5f);
@@ -18,13 +23,19 @@ namespace BalloonParty.Tests.Display
         private IProjectileRegistry _registry;
         private EffectsClearingStamper _stamper;
         private Vector4[] _stamps;
+        private float[] _radii;
 
         [SetUp]
         public void SetUp()
         {
             _registry = Substitute.For<IProjectileRegistry>();
-            _stamper = new EffectsClearingStamper();
+            var settings = Substitute.For<IEffectsClearingSettings>();
+            settings.MinClearRadius.Returns(MinRadius);
+            settings.MaxClearRadius.Returns(MaxRadius);
+            settings.ShieldsForMaxRadius.Returns(ShieldsForMax);
+            _stamper = new EffectsClearingStamper(settings);
             _stamps = new Vector4[EffectsClearingStamper.MaxStamps];
+            _radii = new float[EffectsClearingStamper.MaxStamps];
         }
 
         [Test]
@@ -54,28 +65,28 @@ namespace BalloonParty.Tests.Display
         {
             InFlight();
 
-            Assert.AreEqual(0, _stamper.Fill(_registry, View, _stamps));
+            Assert.AreEqual(0, _stamper.Fill(_registry, View, _stamps, _radii));
         }
 
         [Test]
         public void Fill_FirstSighting_StampsADisc()
         {
-            var ball = Substitute.For<IProjectileModel>();
+            var ball = Ball();
             InFlight((ball, new Vector2(1f, 2f)));
 
-            Assert.AreEqual(1, _stamper.Fill(_registry, View, _stamps));
+            Assert.AreEqual(1, _stamper.Fill(_registry, View, _stamps, _radii));
             AssertStamp(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), _stamps[0]);
         }
 
         [Test]
         public void Fill_NextFrame_StampsCapsuleFromLastPosition()
         {
-            var ball = Substitute.For<IProjectileModel>();
+            var ball = Ball();
             InFlight((ball, new Vector2(1f, 2f)));
-            _stamper.Fill(_registry, View, _stamps);
+            _stamper.Fill(_registry, View, _stamps, _radii);
 
             InFlight((ball, new Vector2(1f, 3f)));
-            _stamper.Fill(_registry, View, _stamps);
+            _stamper.Fill(_registry, View, _stamps, _radii);
 
             AssertStamp(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.6f), _stamps[0]);
         }
@@ -83,15 +94,15 @@ namespace BalloonParty.Tests.Display
         [Test]
         public void Fill_AfterAFrameOutOfFlight_StampsADiscAgain()
         {
-            var ball = Substitute.For<IProjectileModel>();
+            var ball = Ball();
             InFlight((ball, new Vector2(1f, 2f)));
-            _stamper.Fill(_registry, View, _stamps);
+            _stamper.Fill(_registry, View, _stamps, _radii);
             InFlight();
-            _stamper.Fill(_registry, View, _stamps);
+            _stamper.Fill(_registry, View, _stamps, _radii);
 
             // Back in flight elsewhere: no corridor across the gap.
             InFlight((ball, new Vector2(1f, 3f)));
-            _stamper.Fill(_registry, View, _stamps);
+            _stamper.Fill(_registry, View, _stamps, _radii);
 
             AssertStamp(new Vector2(0.5f, 0.6f), new Vector2(0.5f, 0.6f), _stamps[0]);
         }
@@ -99,13 +110,13 @@ namespace BalloonParty.Tests.Display
         [Test]
         public void Forget_DropsLastPosition()
         {
-            var ball = Substitute.For<IProjectileModel>();
+            var ball = Ball();
             InFlight((ball, new Vector2(1f, 2f)));
-            _stamper.Fill(_registry, View, _stamps);
+            _stamper.Fill(_registry, View, _stamps, _radii);
 
             _stamper.Forget(ball);
             InFlight((ball, new Vector2(1f, 3f)));
-            _stamper.Fill(_registry, View, _stamps);
+            _stamper.Fill(_registry, View, _stamps, _radii);
 
             AssertStamp(new Vector2(0.5f, 0.6f), new Vector2(0.5f, 0.6f), _stamps[0]);
         }
@@ -113,14 +124,14 @@ namespace BalloonParty.Tests.Display
         [Test]
         public void Fill_TwoBalls_TrackEachOnItsOwn()
         {
-            var first = Substitute.For<IProjectileModel>();
-            var second = Substitute.For<IProjectileModel>();
+            var first = Ball();
+            var second = Ball();
             InFlight((first, new Vector2(1f, 2f)), (second, new Vector2(1f, 4f)));
-            _stamper.Fill(_registry, View, _stamps);
+            _stamper.Fill(_registry, View, _stamps, _radii);
 
             InFlight((first, new Vector2(1f, 3f)), (second, new Vector2(1f, 5f)));
 
-            Assert.AreEqual(2, _stamper.Fill(_registry, View, _stamps));
+            Assert.AreEqual(2, _stamper.Fill(_registry, View, _stamps, _radii));
             AssertStamp(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.6f), _stamps[0]);
             AssertStamp(new Vector2(0.5f, 0.7f), new Vector2(0.5f, 0.8f), _stamps[1]);
         }
@@ -133,17 +144,70 @@ namespace BalloonParty.Tests.Display
             for (var i = 0; i < balls.Length; i++)
             {
                 // Each further from the centre than the last, the last two the furthest.
-                balls[i] = (Substitute.For<IProjectileModel>(), new Vector2(1f, 2f + 0.25f * i));
+                balls[i] = (Ball(), new Vector2(1f, 2f + 0.25f * i));
             }
 
             InFlight(balls);
 
-            Assert.AreEqual(EffectsClearingStamper.MaxStamps, _stamper.Fill(_registry, View, _stamps));
+            Assert.AreEqual(EffectsClearingStamper.MaxStamps, _stamper.Fill(_registry, View, _stamps, _radii));
             var furthestKept = View.ToUv(balls[EffectsClearingStamper.MaxStamps - 1].Item2).y;
             for (var i = 0; i < EffectsClearingStamper.MaxStamps; i++)
             {
                 Assert.LessOrEqual(_stamps[i].w, furthestKept + Tolerance);
             }
+        }
+
+        // A view 10 units high, so a radius in view heights is a tenth of its world radius. Evenly from 0.48 at
+        // one shield to 1.2 at ten.
+        [TestCase(1, 0.048f)]
+        [TestCase(4, 0.072f)]
+        [TestCase(10, 0.12f)]
+        public void Fill_RadiusGrowsEvenlyWithShields(int shields, float expected)
+        {
+            InFlight((Ball(shields), new Vector2(1f, 2f)));
+
+            _stamper.Fill(_registry, View, _stamps, _radii);
+
+            Assert.AreEqual(expected, _radii[0], Tolerance);
+        }
+
+        [Test]
+        public void Fill_NoShieldsLeft_ClearsAsOneShield()
+        {
+            InFlight((Ball(0), new Vector2(1f, 2f)));
+
+            _stamper.Fill(_registry, View, _stamps, _radii);
+
+            Assert.AreEqual(View.ToUvHeight(MinRadius), _radii[0], Tolerance);
+        }
+
+        [Test]
+        public void Fill_MoreShieldsThanForMax_CapsAtMaxRadius()
+        {
+            InFlight((Ball(25), new Vector2(1f, 2f)));
+
+            _stamper.Fill(_registry, View, _stamps, _radii);
+
+            Assert.AreEqual(View.ToUvHeight(MaxRadius), _radii[0], Tolerance);
+        }
+
+        [Test]
+        public void Fill_TwoBalls_EachGetsItsOwnRadius()
+        {
+            InFlight((Ball(1), new Vector2(1f, 2f)), (Ball(2), new Vector2(1f, 4f)));
+
+            _stamper.Fill(_registry, View, _stamps, _radii);
+
+            Assert.AreEqual(View.ToUvHeight(MinRadius), _radii[0], Tolerance);
+            Assert.AreEqual(View.ToUvHeight(MinRadius + (MaxRadius - MinRadius) / (ShieldsForMax - 1)), _radii[1],
+                Tolerance);
+        }
+
+        private static IProjectileModel Ball(int shields = 1)
+        {
+            var ball = Substitute.For<IProjectileModel>();
+            ball.ShieldsRemaining.Returns(new ReactiveProperty<int>(shields));
+            return ball;
         }
 
         private void InFlight(params (IProjectileModel Model, Vector2 Position)[] balls)

@@ -6,10 +6,11 @@ using VContainer;
 namespace BalloonParty.Display
 {
     /// <summary>
-    ///     The clearing mask (@ref plan_effects_layer_clearing): a small single-channel target, bound globally as
-    ///     <c>_EffectsClearMask</c>, that says how cleared each point of the screen is. Once a frame one blit decays
-    ///     last frame's mask and stamps each ball in flight on it. A stamp peaks on the ball's path, so as it decays
-    ///     the cleared area shrinks inward. Goes idle (no blit, mask black) once nothing has stamped for a full
+    ///     The clearing mask (@ref plan_effects_layer_clearing): a small two-channel target, bound globally as
+    ///     <c>_EffectsClearMask</c>, that says how cleared each point of the screen is (red) and how wide the dome
+    ///     there is (green, its radius in view heights). Once a frame one blit decays last frame's mask and stamps
+    ///     each ball in flight on it. A stamp peaks on the ball's path, so as it decays the cleared area shrinks
+    ///     inward. Goes idle (no blit, mask black) once nothing has stamped for a full
     ///     linger time.
     /// </summary>
     [RequireComponent(typeof(Camera))]
@@ -22,15 +23,17 @@ namespace BalloonParty.Display
 
         private static readonly int MaskTexId = Shader.PropertyToID("_EffectsClearMask");
         private static readonly int ClearParamsId = Shader.PropertyToID("_EffectsClearParams");
+        private static readonly int ClearLensId = Shader.PropertyToID("_EffectsClearLens");
         private static readonly int DecayId = Shader.PropertyToID("_Decay");
         private static readonly int StampsId = Shader.PropertyToID("_Stamps");
         private static readonly int StampCountId = Shader.PropertyToID("_StampCount");
-        private static readonly int RadiusId = Shader.PropertyToID("_Radius");
+        private static readonly int RadiiId = Shader.PropertyToID("_Radii");
         private static readonly int AspectId = Shader.PropertyToID("_Aspect");
 
         [Inject] private IEffectsClearingSettings _settings;
 
         private readonly Vector4[] _stamps = new Vector4[EffectsClearingStamper.MaxStamps];
+        private readonly float[] _radii = new float[EffectsClearingStamper.MaxStamps];
 
         private Camera _camera;
         private Material _material;
@@ -61,7 +64,7 @@ namespace BalloonParty.Display
             }
 
             var view = new ClearingView(_camera.transform.position, _camera.orthographicSize, _camera.aspect);
-            var count = _source != null ? _source.FillStamps(view, _stamps) : 0;
+            var count = _source != null ? _source.FillStamps(view, _stamps, _radii) : 0;
             // Game time while a ball flies, so slow-mo stretches its clearing and a pause holds it. Real time once
             // nothing stamps: a freeze that starts after the shot (the level-up) must not hold the hole open.
             var deltaTime = count > 0 && !_settings.UseUnscaledTime ? Time.deltaTime : Time.unscaledDeltaTime;
@@ -88,7 +91,7 @@ namespace BalloonParty.Display
             _material.SetFloat(DecayId, deltaTime / _settings.LingerSeconds);
             _material.SetVectorArray(StampsId, _stamps);
             _material.SetFloat(StampCountId, count);
-            _material.SetFloat(RadiusId, view.ToUvHeight(_settings.ClearRadius));
+            _material.SetFloatArray(RadiiId, _radii);
             _material.SetFloat(AspectId, _camera.aspect);
 
             // Outside the render loop on purpose: URP's RenderGraph rejects a mid-render Graphics.Blit.
@@ -98,7 +101,9 @@ namespace BalloonParty.Display
 
             Shader.SetGlobalTexture(MaskTexId, _front);
             Shader.SetGlobalVector(ClearParamsId,
-                new Vector4(_settings.EdgeLow, _settings.EdgeHigh, _settings.Strength, 0f));
+                new Vector4(_settings.EdgeLow, _settings.EdgeHigh, _settings.Strength, _camera.aspect));
+            Shader.SetGlobalVector(ClearLensId, new Vector4(_settings.LensRefraction, 1f / _front.height,
+                _settings.LensDispersion, _settings.LensHighlight));
         }
 
         private void OnDestroy()
@@ -191,9 +196,13 @@ namespace BalloonParty.Display
 
         private static RenderTexture CreateTarget(int width, int height, string name)
         {
-            var format = SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.R8)
-                ? RenderTextureFormat.R8
-                : RenderTextureFormat.ARGB32;
+            // Half floats where the device has them: the composite reads the mask's slope as the glass's surface,
+            // and 8-bit steps show there as ripples.
+            var format = SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.RGHalf)
+                ? RenderTextureFormat.RGHalf
+                : SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.ARGBHalf)
+                    ? RenderTextureFormat.ARGBHalf
+                    : RenderTextureFormat.ARGB32;
 
             return new RenderTexture(width, height, 0, format)
             {

@@ -109,14 +109,17 @@ PowerUps draw under bushes and puffs (GridActors) today, and would draw over the
 
 ## The clearing mask
 
-One low-resolution, single-channel target: `R8`, screen size divided by `MaskDownscale` (default 8, so
-135 × 300 on a 1080 × 2400 phone). Two of them ping-pong. Once a frame, from `LateUpdate` (blits stay outside
+One low-resolution, two-channel target: `RGHalf` (`ARGBHalf`, then `ARGB32`, where a device lacks it),
+screen size divided by `MaskDownscale` (default 4, so 270 × 600 on a 1080 × 2400 phone; the glass below
+reads its slope, which shows steps at 8 bits or past 4). Red is how cleared a point is; green is the radius
+of the stamp that set it, so the glass knows how big the dome under each point is. Two of them ping-pong. Once a frame, from `LateUpdate` (blits stay outside
 URP's RenderGraph, as `Display/README.md` requires), one blit:
 
 1. **Decay**: `mask = max(0, previous − Δt / LingerSeconds)`.
 2. **Stamp**: for each of up to `MaxStamps` capsules (8, the shader's fixed array),
    `mask = max(mask, profile(d / Radius))`, where `d` is the distance from the fragment to the capsule's
-   segment, and `profile(x) = 1 − x²` inside the radius, 0 outside.
+   segment, `Radius` that stamp's own, and `profile(x) = 1 − x²` inside the radius, 0 outside. Green takes
+   the radius of whichever stamp, or last frame's value, won.
 
 The composite reads the mask bilinearly and fades the map by
 `fade = 1 − Strength × smoothstep(EdgeLow, EdgeHigh, mask)`. Because the stamp peaks at the centre and the
@@ -125,6 +128,28 @@ decaying radius. The clearing's visible radius at age `t` is about
 \f$R\sqrt{1 - E - t/L}\f$, with \f$E\f$ the edge and \f$L\f$ the linger time, so it closes up at
 \f$t = L(1 - E)\f$.
 
+### The glass
+
+The cut alone read too strong to the owner, so the clearing is drawn as a dome of thick glass over each ball.
+A stamp's profile, 1 − (d/R)², is a dome's height, so the composite takes the mask's slope (four more mask
+taps, a few texels apart) as the glass's surface:
+
+- **Refraction.** The map is sampled toward the top of the dome, by `LensRefraction` of the dome's radius at
+  a fresh rim, so what lies under the glass reads magnified and spreads away from the ball, and a small dome
+  is the same glass as a big one. The bend eases in over
+  the glass's outer edge, so the rim meets what lies outside it without a tear.
+- **Dispersion.** Red and blue sample a little further and nearer than green (`LensDispersion`, a fraction
+  of the bend): a colour fringe where the glass is steep.
+- **Fade.** Effects under the glass fade from the rim in: `EdgeLow` 0 and `EdgeHigh` 0.9 spread the fade
+  over the whole dome, so they thin slowly from the rim and are near gone only over the ball, which stays
+  readable.
+- **Glint.** A mirror highlight off the dome's normal and a thin bright rim (`LensHighlight`) are added
+  light, so the dome shows over the board too, not only over effects.
+
+Decay subtracts evenly, so an older part of the dome keeps its slope and shrinks inward: the corridor behind
+a ball is a glass tube that narrows and closes. Outside the glass the composite branches to one plain map
+tap. The glass bends only the effects map. The ball and the board under it stay sharp, which is the point.
+
 How the stamps are fed:
 
 - `EffectsClearingController` loops `IProjectileRegistry.InFlightCount` / `InFlightPositionAt(i)` every
@@ -132,11 +157,12 @@ How the stamps are fed:
 - `EffectsClearingStamper` remembers each ball's last position, keyed by its registry model, so a stamp is a
   capsule from last frame's position to this frame's. A fast ball leaves an unbroken corridor instead of a
   row of dots. A ball seen for the first time stamps a disc. A ball that retired drops out.
-- Positions go to viewport space through the main camera. The radius is in world units
-  (`ClearRadius`) and converted with the camera's orthographic size, so a cinematic zoom scales the clearing
-  with the board.
-- The radius is deliberately large: the default is about two balloon widths, to be tuned on the phone. The
-  rejected attempt used a circle a little wider than the ball, and it read as nothing.
+- Positions go to viewport space through the main camera. The radius is in world units and converted with
+  the camera's orthographic size, so a cinematic zoom scales the clearing with the board.
+- **The radius follows the ball's shields**, as the owner asked: `MinClearRadius` (0.48) at one shield,
+  growing evenly with each shield to `MaxClearRadius` (1.2) at `ShieldsForMaxRadius` (10), and no wider past
+  it. A ball with no shields left, on its last leg, clears as one. The rejected attempt used a circle a little wider than the ball, and it read as nothing, so one
+  shield is still about a balloon wide.
 - Δt is **game time** (`Time.deltaTime`) while a ball flies: slow-mo stretches a clearing along with the
   ball, and a pause holds it. Once no ball is in flight it's real time, so a freeze that starts after the
   shot can't hold a clearing open. `UseUnscaledTime` puts the flight on real time too.
@@ -181,8 +207,9 @@ this table.
 
 | Item | Per frame while live | Notes |
 |---|---|---|
-| Mask blit | 40 k fragments, 8 capsule tests each | negligible |
-| Mask sample in the composite | 1 bilinear tap per pixel from a 40 kB texture | stays in cache |
+| Mask blit | 160 k fragments, 8 capsule tests each | negligible |
+| Mask sample in the composite | 1 bilinear tap per pixel from a 650 kB texture | stays in cache |
+| The glass | 4 more mask taps and 3 map taps (not 1) per pixel under a dome | a few balls' worth of the screen |
 | HUD map, `ARGB32` | about 10 MB stored + 10 MB read back ≈ 1.2 GB/s | `MapDownscale` 2 quarters it, at the cost of softer lines. Default 1 |
 | Main map, `ARGBHalf` | about 2.4 GB/s at full size | the expensive one, which is one reason phase 3 is gated |
 | Extra camera per map | one cull and one RenderGraph setup on the CPU | effect layers only, so few renderers |
@@ -210,7 +237,8 @@ Each phase follows the per-phase review protocol: implement, review, curate, own
 ### Phase 1: the clearing mask
 
 - `IEffectsClearingSettings` + `EffectsClearingSettings` SO (under `Configuration/Effects/`), registered in
-  `AppLifetimeScope`: `Enabled`, `ClearRadius`, `LingerSeconds`, `EdgeLow`, `EdgeHigh`, `Strength`,
+  `AppLifetimeScope`: `Enabled`, `MinClearRadius`, `MaxClearRadius`, `ShieldsForMaxRadius`,
+  `LingerSeconds`, `EdgeLow`, `EdgeHigh`, `Strength`, `LensRefraction`, `LensDispersion`, `LensHighlight`,
   `MaskDownscale`, `MapDownscale`, `UseUnscaledTime`, mask and composite shaders.
 - `EffectsClearingStamper` (pure) + EditMode tests: a first sighting stamps a disc, a moving ball a capsule
   from its last position, retired balls drop out, the radius scales with orthographic size, the cap keeps the
@@ -280,8 +308,9 @@ minus the claims. The compositor's mask writes are already in one method, `Suppr
    ball, or stay?
 2. **Phase 3 at all.** The score shapes and trails are the HUD map. Should item VFX, range
    previews, shield VFX and the dust specks clear as well, at roughly twice the HUD map's cost?
-3. **How clear is clear.** Should effects vanish inside a clearing (`Strength` 1), or keep a faint trace
-   (about 0.85) so the burst still reads as being there?
+3. **How clear is clear.** Answered: a hard cut near the rim read too strong. The clearing is now the
+   glass dome above, its effects thinning slowly from the rim to near nothing over the ball, with the lens
+   the owner picked from stills (refraction 0.5, dispersion 0.15). It still needs a look in play.
 4. **Heads-ups.** They are on the `UI` layer with the canvases, so the HUD map can't take them alone. One
    way is an `Effects`-style physics layer for them, which you'd add in the Editor (the same one phase 3
    needs). The other is the `Trail` layer, which needs no new layer but puts their text into the GI capture,

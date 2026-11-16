@@ -11,8 +11,15 @@ namespace BalloonParty.Configuration.Effects
     {
         bool Enabled { get; }
 
-        /// <summary>World units from the ball's path to the clearing's edge, before it starts to close.</summary>
-        float ClearRadius { get; }
+        /// <summary>Clearing radius in world units for a ball with one shield; one with none left clears as one.</summary>
+        float MinClearRadius { get; }
+
+        /// <summary>Clearing radius in world units for a ball with <see cref="ShieldsForMaxRadius" /> shields or
+        /// more; between the two it grows evenly with each shield.</summary>
+        float MaxClearRadius { get; }
+
+        /// <summary>The shield count at which a clearing reaches <see cref="MaxClearRadius" />.</summary>
+        int ShieldsForMaxRadius { get; }
 
         /// <summary>Seconds a stamp takes to decay from full to nothing.</summary>
         float LingerSeconds { get; }
@@ -25,6 +32,16 @@ namespace BalloonParty.Configuration.Effects
 
         /// <summary>How much of the effects a full clearing removes: 1 hides them, below 1 leaves a trace.</summary>
         float Strength { get; }
+
+        /// <summary>How far the glass dome over a ball bends the effects under its rim, as a fraction of its radius;
+        /// 0 for none.</summary>
+        float LensRefraction { get; }
+
+        /// <summary>How far the dome's colours split apart, as a fraction of its bend.</summary>
+        float LensDispersion { get; }
+
+        /// <summary>Brightness of the glint and rim on the dome; 0 hides the glass.</summary>
+        float LensHighlight { get; }
 
         /// <summary>Decay on real time even while a ball flies; once none does, it always is.</summary>
         bool UseUnscaledTime { get; }

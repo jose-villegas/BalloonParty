@@ -486,10 +486,10 @@ namespace BalloonParty.Editor.Staging
         ///     effects cleared around it (PLAN-EffectsLayerClearing). With <paramref name="fromPoint" /> ("x,y") and
         ///     <paramref name="seconds" />, it flies there in a straight line over that much game time first, then holds,
         ///     leaving the clearing it opened behind it to close up. It's the ball's look only (its sprite and trail, no
-        ///     flight or hits) on the registry's in-flight list, which is what the clearing follows. <see cref="ClearEffects" />
-        ///     takes it away.
+        ///     flight or hits) on the registry's in-flight list, which is what the clearing follows, carrying
+        ///     <paramref name="shields" />, which size its clearing. <see cref="ClearEffects" /> takes it away.
         /// </summary>
-        public static string Ball(float x, float y, string fromPoint = "", float seconds = 0f)
+        public static string Ball(float x, float y, string fromPoint = "", float seconds = 0f, int shields = 1)
         {
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(ProjectilePrefabPath);
             if (prefab == null)
@@ -501,6 +501,7 @@ namespace BalloonParty.Editor.Staging
             var start = string.IsNullOrEmpty(fromPoint) ? to : WorldPoint(fromPoint.Replace(',', ';'));
             var look = BallLook(prefab, start);
             var model = new ProjectileModel();
+            model.ShieldsRemaining.Value = shields;
             var registry = Resolve<IProjectileRegistryWriter>();
             registry.Load(model, look.transform);
             registry.Launch(model);

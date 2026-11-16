@@ -192,11 +192,12 @@ class Stage:
         options.update(floats or {})
         return self.call("FreezePop", target, float(seconds), ";".join(f"{k}={v}" for k, v in options.items()))
 
-    def ball(self, at, start=None, seconds=0.0):
+    def ball(self, at, start=None, seconds=0.0, shields=1):
         """Puts a ball in flight at world point `at` (x, y), held still; with `start` and `seconds`, it flies there
-        from `start` over that much game time first, and this returns once it has. The effects clear around it."""
+        from `start` over that much game time first, and this returns once it has. The effects clear around it, as
+        wide as its `shields` make the clearing."""
         start_text = f"{start[0]},{start[1]}" if start else ""
-        result = self.call("Ball", float(at[0]), float(at[1]), start_text, float(seconds))
+        result = self.call("Ball", float(at[0]), float(at[1]), start_text, float(seconds), int(shields))
         if start and seconds > 0:
             while "advancing" in self._quiet("Status"):
                 time.sleep(POLL_SECONDS)
@@ -282,6 +283,7 @@ def main():
     ball.add_argument("at", help="x,y")
     ball.add_argument("--from", dest="start", help="x,y: fly there from here first")
     ball.add_argument("--seconds", type=float, default=0.5, help="how long the flight from --from takes")
+    ball.add_argument("--shields", type=int, default=1, help="the ball's shields, which size its clearing")
     sub.add_parser("clear-effects", help="remove frozen pops and staged balls, and show the balloons the pops hid")
     capture = sub.add_parser("capture", help="render the camera to a PNG")
     capture.add_argument("path")
@@ -328,7 +330,8 @@ def main():
                              args.start_frame, args.shader, args.shader_file,
                              dict(item.split("=", 1) for item in args.set))
         elif args.command == "ball":
-            stage.ball(pair(args.at), pair(args.start) if args.start else None, args.seconds if args.start else 0.0)
+            stage.ball(pair(args.at), pair(args.start) if args.start else None, args.seconds if args.start else 0.0,
+                       args.shields)
         elif args.command == "capture":
             stage.capture(args.path, args.around, args.size)
         elif args.command == "end":

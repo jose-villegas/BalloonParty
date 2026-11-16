@@ -712,7 +712,7 @@ Tests per-id and global concurrent-voice accounting and the priority steal/drop 
 | `Release` on an invalid id is a no-op | 1 | Negative/out-of-range id corrupts state |
 | `Clear` restores full capacity | 1 | Stale slots block every id after a reset |
 
-### Effects clearing (`EffectsClearingStamperTests`, `EffectsClearingControllerTests`, `EffectsClearingSettingsTests`, `ShippedEffectsClearingTests`) — 23 tests
+### Effects clearing (`EffectsClearingStamperTests`, `EffectsClearingControllerTests`, `EffectsClearingSettingsTests`, `ShippedEffectsClearingTests`) — 29 tests
 
 The clearing mask's stamps (`Plans/PLAN-EffectsLayerClearing.md`): what each ball in flight stamps, and the wiring that keeps it fed.
 
@@ -721,6 +721,7 @@ The clearing mask's stamps (`Plans/PLAN-EffectsLayerClearing.md`): what each bal
 | `ClearingView` world → mask UV, lengths in view heights | 3 | A wrong aspect or zoom puts the clearing beside the ball, or the wrong size |
 | Stamps: none, first sighting a disc, then a capsule from last frame, a disc again after a gap or a retire, balls tracked apart | 6 | A corridor drawn across the screen from a stale position |
 | More balls than the shader's 8 stamps keep the most central | 1 | The cap drops the ball the player is watching |
+| Radius by shields: grows evenly from one shield to ten, none clears as one, past ten capped at the max, two balls each their own | 6 | A ball on its last leg stamping nothing, or a stacked ball clearing the whole board |
 | Controller binds the mask for the run, unbinds only itself, forgets retired balls, stops listening when disposed | 6 | A new run's source dropped by the old run's teardown, or a disposed run still feeding the mask |
 | `EdgeHigh` always above `EdgeLow` | 4 | The composite's `smoothstep` with equal edges |
 | Shipped wiring: both shaders on the settings asset, both components on the Main Camera prefab, the settings on the app scope | 3 | A shader only found by name, stripped from a device build |

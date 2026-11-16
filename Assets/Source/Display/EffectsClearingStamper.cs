@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BalloonParty.Configuration.Effects;
 using BalloonParty.Projectile;
 using BalloonParty.Projectile.Model;
 using UnityEngine;
@@ -10,12 +11,14 @@ namespace BalloonParty.Display
     ///     Turns the balls in flight into the clearing mask's stamps: one capsule per ball, from where it was last
     ///     frame to where it is now, in mask UV (<c>xy</c> the start, <c>zw</c> the end). A capsule rather than a
     ///     disc so a fast ball leaves an unbroken corridor. A ball not stamped last frame (just fired, or back in
-    ///     flight after a gap) stamps a disc.
+    ///     flight after a gap) stamps a disc. Each stamp's radius grows with its ball's shields.
     /// </summary>
     internal sealed class EffectsClearingStamper
     {
         /// <summary>The mask shader's stamp array size.</summary>
         internal const int MaxStamps = 8;
+
+        private readonly IEffectsClearingSettings _settings;
 
         // A handful of balls at most, so linear scans beat a keyed structure and allocate nothing.
         private readonly List<Track> _tracks = new();
@@ -23,9 +26,14 @@ namespace BalloonParty.Display
 
         private int _frame;
 
-        /// <summary>Writes this frame's stamps and returns how many. Past <see cref="MaxStamps" /> balls, the ones
-        /// nearest the view's centre win.</summary>
-        internal int Fill(IProjectileRegistry registry, in ClearingView view, Vector4[] stamps)
+        internal EffectsClearingStamper(IEffectsClearingSettings settings)
+        {
+            _settings = settings;
+        }
+
+        /// <summary>Writes this frame's stamps, and each one's radius in view heights, and returns how many. Past
+        /// <see cref="MaxStamps" /> balls, the ones nearest the view's centre win.</summary>
+        internal int Fill(IProjectileRegistry registry, in ClearingView view, Vector4[] stamps, float[] radii)
         {
             _frame++;
             _candidates.Clear();
@@ -54,10 +62,11 @@ namespace BalloonParty.Display
                 var start = view.ToUv(from);
                 var end = view.ToUv(position);
                 var offset = new Vector2((end.x - 0.5f) * view.Aspect, end.y - 0.5f);
-                _candidates.Add(new Candidate(new Vector4(start.x, start.y, end.x, end.y), offset.sqrMagnitude));
+                var radius = view.ToUvHeight(RadiusOf(model));
+                _candidates.Add(new Candidate(new Vector4(start.x, start.y, end.x, end.y), radius, offset.sqrMagnitude));
             }
 
-            var count = Mathf.Min(_candidates.Count, Mathf.Min(MaxStamps, stamps.Length));
+            var count = Mathf.Min(_candidates.Count, Mathf.Min(MaxStamps, Mathf.Min(stamps.Length, radii.Length)));
             if (_candidates.Count > count)
             {
                 _candidates.Sort();
@@ -66,6 +75,7 @@ namespace BalloonParty.Display
             for (var i = 0; i < count; i++)
             {
                 stamps[i] = _candidates[i].Stamp;
+                radii[i] = _candidates[i].Radius;
             }
 
             return count;
@@ -79,6 +89,13 @@ namespace BalloonParty.Display
             {
                 _tracks.RemoveAt(index);
             }
+        }
+
+        // A ball on its last leg has no shields left but still needs to be seen, so it clears as one.
+        private float RadiusOf(IProjectileModel model)
+        {
+            var growth = (model.ShieldsRemaining.Value - 1f) / (_settings.ShieldsForMaxRadius - 1f);
+            return Mathf.Lerp(_settings.MinClearRadius, _settings.MaxClearRadius, growth);
         }
 
         private int IndexOf(IProjectileModel model)
@@ -111,11 +128,13 @@ namespace BalloonParty.Display
         private readonly struct Candidate : IComparable<Candidate>
         {
             internal readonly Vector4 Stamp;
+            internal readonly float Radius;
             private readonly float _distanceFromCenter;
 
-            internal Candidate(Vector4 stamp, float distanceFromCenter)
+            internal Candidate(Vector4 stamp, float radius, float distanceFromCenter)
             {
                 Stamp = stamp;
+                Radius = radius;
                 _distanceFromCenter = distanceFromCenter;
             }
 

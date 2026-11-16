@@ -13,13 +13,18 @@ MonoBehaviour:
   m_Name: EffectsClearingSettings
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Configuration.Effects.EffectsClearingSettings
   _enabled: 1
-  _clearRadius: 1.2
+  _minClearRadius: 0.48
+  _maxClearRadius: 1.2
+  _shieldsForMaxRadius: 10
   _lingerSeconds: 0.6
-  _edgeLow: 0.05
-  _edgeHigh: 0.35
+  _edgeLow: 0
+  _edgeHigh: 0.9
   _strength: 1
+  _lensRefraction: 0.4
+  _lensDispersion: 0.15
+  _lensHighlight: 0.6
   _useUnscaledTime: 0
-  _maskDownscale: 8
+  _maskDownscale: 4
   _mapDownscale: 1
   _maskShader: {fileID: 4800000, guid: b6ccd38396c64e55aa1ebc768dfa936a, type: 3}
   _compositeShader: {fileID: 4800000, guid: a38c88e6c07744c9a217eae63b9503cf, type: 3}

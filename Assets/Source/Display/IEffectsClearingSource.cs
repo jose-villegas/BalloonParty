@@ -8,7 +8,8 @@ namespace BalloonParty.Display
     /// </summary>
     internal interface IEffectsClearingSource
     {
-        /// <summary>Writes this frame's stamps (capsules in mask UV) and returns how many.</summary>
-        int FillStamps(in ClearingView view, Vector4[] stamps);
+        /// <summary>Writes this frame's stamps (capsules in mask UV) and their radii (in view heights) and returns
+        /// how many.</summary>
+        int FillStamps(in ClearingView view, Vector4[] stamps, float[] radii);
     }
 }
