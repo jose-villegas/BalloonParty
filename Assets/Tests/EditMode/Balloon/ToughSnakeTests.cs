@@ -14,8 +14,8 @@ using UnityEngine;
 
 namespace BalloonParty.Tests.Balloon
 {
-    // The board's toughs are one snake of their own, head to tail by armour (hits left), walking like an unbreakable
-    // snake; every other tough joins at its tail.
+    // The board's toughs are one snake of their own, head to tail by armour (hits left). It starts from the toughest
+    // where it stands, every other tough joins at its tail, and it walks through the balloons in its way.
     [TestFixture]
     public class ToughSnakeTests
     {
@@ -28,6 +28,7 @@ namespace BalloonParty.Tests.Balloon
         [SetUp]
         public void SetUp()
         {
+            // 7 by 8 with a clearance of 2: a snake walks rows 0 to 5.
             var gridConfig = Substitute.For<ISlotGridConfig>();
             gridConfig.SlotsSize.Returns(new Vector2Int(7, 8));
             gridConfig.SlotSeparation.Returns(new Vector2(0.5f, 0.85f));
@@ -67,7 +68,7 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void FewerToughsThanTheMinimum_NeverSnake()
+        public void FewerToughsThanTheMinimum_StartNoSnake()
         {
             AddTough(new Vector2Int(0, 0), 3);
             AddTough(new Vector2Int(6, 4), 2);
@@ -92,166 +93,79 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void ScatteredToughs_LineUpAsASnake_MostArmourAtTheHead()
+        public void AToughStillLanding_DoesntCountToStartIt()
         {
             AddTough(new Vector2Int(0, 0), 1);
             AddTough(new Vector2Int(6, 4), 3);
+            AddTough(new Vector2Int(3, 5), 2).IsStable.Value = false;
+
+            Arrange();
+
+            Assert.AreEqual(0, _service.Formations.Count);
+        }
+
+        [Test]
+        public void TheSnake_StartsFromTheToughest_WhereItStands()
+        {
+            AddTough(new Vector2Int(0, 0), 1);
+            var toughest = AddTough(new Vector2Int(6, 4), 3);
             AddTough(new Vector2Int(3, 5), 2);
 
             Arrange();
 
             var snake = SingleSnake();
-            CollectionAssert.AreEqual(new[] { 3, 2, 1 }, Armour(snake), "head to tail by armour");
-            Assert.AreEqual(0, snake.Heading, "heading east");
-            var slots = snake.Members.Select(m => m.SlotIndex.Value).ToList();
-            for (var i = 1; i < slots.Count; i++)
-            {
-                Assert.AreEqual(slots[0].y, slots[i].y, "one row");
-                Assert.AreEqual(slots[i - 1].x - 1, slots[i].x, "the head at the east end, each behind it one west");
-            }
-
-            Assert.IsTrue(_toughs.All(t => t.IsAnchored && t.InFormation.Value), "anchored while in the snake");
-            Assert.IsTrue(_toughs.All(t => _grid.At(t.SlotIndex.Value) == t), "every tough is on its slot");
-        }
-
-        [Test]
-        public void ToughsInARow_InTheWrongOrder_TradePlacesIntoArmourOrder()
-        {
-            // Each one's slot in the armour order is held by another: they swap round in a ring.
-            var three = AddTough(new Vector2Int(0, 2), 3);
-            var one = AddTough(new Vector2Int(1, 2), 1);
-            var two = AddTough(new Vector2Int(2, 2), 2);
-
-            Arrange();
-
-            var snake = SingleSnake();
-            CollectionAssert.AreEqual(new[] { 3, 2, 1 }, Armour(snake));
-            Assert.AreEqual(new Vector2Int(2, 2), three.SlotIndex.Value, "the toughest leads, at the east end");
-            Assert.AreEqual(new Vector2Int(1, 2), two.SlotIndex.Value);
-            Assert.AreEqual(new Vector2Int(0, 2), one.SlotIndex.Value);
-            Assert.IsTrue(_toughs.All(t => _grid.At(t.SlotIndex.Value) == t), "the grid holds each where it ended");
-        }
-
-        [Test]
-        public void ToughsInARow_WithEqualArmour_StayWhereTheyStand()
-        {
-            AddTough(new Vector2Int(0, 2), 2);
-            AddTough(new Vector2Int(1, 2), 2);
-            AddTough(new Vector2Int(2, 2), 2);
-
-            Arrange();
-
-            SingleSnake();
-            Assert.AreEqual(0, _relocations, "already a line in armour order");
-        }
-
-        [Test]
-        public void AToughSnakeStep_MovesTheHeadOn_AndEachMemberIntoTheSlotAhead()
-        {
-            var snake = FormRowSnake(3, 2, 1);
-            var before = snake.Members.Select(m => m.SlotIndex.Value).ToList();
-
-            _service.StepSnakes(Relocate);
-
-            var after = snake.Members.Select(m => m.SlotIndex.Value).ToList();
-            Assert.AreEqual(HexCoordinates.Step(before[0], 0), after[0], "the head steps east");
-            for (var i = 1; i < after.Count; i++)
-            {
-                Assert.AreEqual(before[i - 1], after[i], "each member takes the slot the one ahead left");
-            }
-
-            Assert.IsTrue(snake.Members.All(m => m.Walking && m is IBalanceAnchor { IsAnchored: true }));
-        }
-
-        [Test]
-        public void AToughHit_FallsBehindTheToughersAtTheNextStep()
-        {
-            var snake = FormRowSnake(3, 2, 1);
-            var head = (ToughBalloonModel)snake.Members[0];
-            var middle = (ToughBalloonModel)snake.Members[1];
-            var tail = (ToughBalloonModel)snake.Members[2];
-            var headWas = head.SlotIndex.Value;
-            var middleWas = middle.SlotIndex.Value;
-            head.HitsRemaining.Value = 1;
-
-            _service.StepSnakes(Relocate);
-
-            CollectionAssert.AreEqual(new[] { 2, 1, 1 }, Armour(snake), "the hit one drops back; equal armour keeps its order");
-            Assert.AreSame(middle, snake.Members[0], "the tougher one leads now");
-            Assert.AreEqual(HexCoordinates.Step(headWas, 0), middle.SlotIndex.Value, "into the slot ahead");
-            Assert.AreEqual(headWas, head.SlotIndex.Value, "the hit one holds its slot, now second");
-            Assert.AreEqual(middleWas, tail.SlotIndex.Value);
-            Assert.IsTrue(_toughs.All(t => _grid.At(t.SlotIndex.Value) == t));
-        }
-
-        [Test]
-        public void AToughSnake_BoxedIn_TurnsRound_AndTheToughestWorksBackToTheFront()
-        {
-            var snake = FormRowSnake(3, 2, 1);
-            var toughest = snake.Members[0];
-            var weakest = snake.Members[2];
-            var tailWas = weakest.SlotIndex.Value;
-            for (var direction = 0; direction < HexCoordinates.Directions; direction++)
-            {
-                var slot = HexCoordinates.Step(toughest.SlotIndex.Value, direction);
-                if (_grid.InBounds(slot) && _grid.IsEmpty(slot.x, slot.y))
-                {
-                    _grid.Place(new BalloonModel(), null, slot);
-                }
-            }
-
-            _service.StepSnakes(Relocate);
-
-            // Turned round it runs 1, 2, 3; one place per step, the 2 passes the 1 at once.
-            CollectionAssert.AreEqual(new[] { 2, 1, 3 }, Armour(snake));
-            Assert.AreEqual(1, HexCoordinates.Distance(tailWas, snake.Members[0].SlotIndex.Value),
-                "the new head took the step past the old tail");
-            Assert.AreEqual(tailWas, weakest.SlotIndex.Value, "the one passed waits a beat");
-            Assert.IsTrue(_toughs.All(t => _grid.At(t.SlotIndex.Value) == t));
-
-            _service.StepSnakes(Relocate);
-            CollectionAssert.AreEqual(new[] { 2, 3, 1 }, Armour(snake));
-
-            _service.StepSnakes(Relocate);
-            CollectionAssert.AreEqual(new[] { 3, 2, 1 }, Armour(snake), "the toughest is back at the front");
+            Assert.AreEqual(1, snake.Members.Count);
             Assert.AreSame(toughest, snake.Members[0]);
+            Assert.AreEqual(new Vector2Int(6, 4), toughest.SlotIndex.Value, "it starts where it stands");
+            Assert.AreEqual(0, _relocations);
+            Assert.IsTrue(toughest.IsAnchored);
+            Assert.AreEqual(0, snake.Heading, "heading east");
         }
 
         [Test]
-        public void TheToughs_AreOneBody_AndTheRestJoinAtTheTail()
+        public void TheHead_IsNeverOneInTheBottomRows()
         {
-            _settings.SnakeMaxMembers.Returns(3);
-            var far = AddTough(new Vector2Int(6, 5), 1);
-            var near = AddTough(new Vector2Int(0, 5), 1);
-            AddTough(new Vector2Int(4, 5), 1);
-            var snake = FormRowSnake(3, 2, 1);
-            var tailWas = snake.Members[2].SlotIndex.Value;
+            AddTough(new Vector2Int(0, 7), 3);
+            var head = AddTough(new Vector2Int(2, 3), 2);
+            AddTough(new Vector2Int(4, 1), 1);
 
-            Assert.AreEqual(3, snake.Members.Count, "three free toughs start no second snake");
+            Arrange();
+
+            Assert.AreSame(head, SingleSnake().Members[0], "the toughest within the rows a snake walks");
+        }
+
+        [Test]
+        public void TheRest_JoinAtTheTail_OnePerStep_TheNearestFirst()
+        {
+            var head = AddTough(new Vector2Int(1, 2), 3);
+            var near = AddTough(new Vector2Int(1, 4), 2);
+            var far = AddTough(new Vector2Int(5, 5), 1);
+            Arrange();
+            var snake = SingleSnake();
 
             _service.StepSnakes(Relocate);
 
-            Assert.AreEqual(1, _service.Formations.Count);
-            Assert.AreEqual(4, snake.Members.Count);
-            Assert.AreSame(near, snake.Members[3], "the free tough nearest the tail joins first");
-            Assert.AreEqual(tailWas, near.SlotIndex.Value, "into the slot the tail just left");
+            CollectionAssert.AreEqual(new[] { head, near }, snake.Members);
+            Assert.AreEqual(new Vector2Int(2, 2), head.SlotIndex.Value, "the head steps east");
+            Assert.AreEqual(new Vector2Int(1, 2), near.SlotIndex.Value, "into the slot the tail just left");
             Assert.IsTrue(near.IsAnchored && near.Walking);
             Assert.IsFalse(far.IsAnchored, "one joins per step");
-            Assert.AreEqual(4, _service.Members.Count);
+            Assert.AreEqual(2, _service.Members.Count);
 
             _service.StepSnakes(Relocate);
-            _service.StepSnakes(Relocate);
 
-            Assert.AreEqual(6, snake.Members.Count);
-            Assert.IsTrue(_toughs.All(t => t.IsAnchored && _grid.At(t.SlotIndex.Value) == t));
+            CollectionAssert.AreEqual(new[] { head, near, far }, snake.Members);
+            CollectionAssert.AreEqual(
+                new[] { new Vector2Int(3, 2), new Vector2Int(2, 2), new Vector2Int(1, 2) },
+                snake.Members.Select(m => m.SlotIndex.Value).ToList(), "one line");
+            Assert.IsTrue(AllOnTheirSlots());
         }
 
         [Test]
         public void AToughStillLanding_WaitsToJoin()
         {
-            _settings.SnakeMaxMembers.Returns(3);
-            var landing = AddTough(new Vector2Int(0, 5), 1);
-            var snake = FormRowSnake(3, 2, 1);
+            var snake = GrowSnake(3, 2, 1);
+            var landing = AddTough(new Vector2Int(6, 5), 1);
             landing.IsStable.Value = false;
 
             _service.StepSnakes(Relocate);
@@ -266,11 +180,84 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void TheHead_WalksThroughABalloon_WhichGoesRoundToTheTail()
+        {
+            var snake = GrowSnake(3, 2, 1);
+            var before = snake.Members.Select(m => m.SlotIndex.Value).ToList();
+            var ahead = HexCoordinates.Step(before[0], 0);
+            var balloon = new BalloonModel();
+            _grid.Place(balloon, null, ahead);
+
+            _service.StepSnakes(Relocate);
+
+            Assert.AreEqual(0, snake.Heading, "a balloon is no reason to turn");
+            Assert.AreEqual(ahead, snake.Members[0].SlotIndex.Value);
+            Assert.AreEqual(before[0], snake.Members[1].SlotIndex.Value);
+            Assert.AreEqual(before[1], snake.Members[2].SlotIndex.Value);
+            Assert.AreEqual(before[2], balloon.SlotIndex.Value, "the balloon takes the slot the tail left");
+            Assert.AreSame(balloon, _grid.At(before[2]));
+            Assert.IsTrue(AllOnTheirSlots());
+        }
+
+        [Test]
+        public void WhenAToughJoins_TheBalloonPassedTakesItsSlot()
+        {
+            var head = AddTough(new Vector2Int(1, 2), 3);
+            AddTough(new Vector2Int(0, 0), 1);
+            AddTough(new Vector2Int(6, 0), 1);
+            Arrange();
+            var joinerSlot = new Vector2Int(0, 0);
+            var joiner = _grid.At(joinerSlot);
+            var balloon = new BalloonModel();
+            _grid.Place(balloon, null, new Vector2Int(2, 2));
+
+            _service.StepSnakes(Relocate);
+
+            Assert.AreEqual(new Vector2Int(2, 2), head.SlotIndex.Value);
+            Assert.AreSame(joiner, _grid.At(new Vector2Int(1, 2)), "the joiner falls in behind the head");
+            Assert.AreEqual(joinerSlot, balloon.SlotIndex.Value, "and the balloon passed takes its slot");
+            Assert.IsTrue(AllOnTheirSlots());
+        }
+
+        [Test]
+        public void AnyFormationMember_OrAnAnchoredActor_BlocksTheWay()
+        {
+            var snake = GrowSnake(3, 2, 1);
+            var head = snake.Members[0].SlotIndex.Value;
+            _grid.Place(new UnbreakableBalloonModel(new BalloonModelConfig()), null, HexCoordinates.Step(head, 0));
+
+            _service.StepSnakes(Relocate);
+
+            Assert.AreEqual(1, snake.Heading, "east is blocked: it turns south-east");
+            Assert.AreEqual(HexCoordinates.Step(head, 1), snake.Members[0].SlotIndex.Value);
+        }
+
+        [Test]
+        public void AToughHit_FallsBackOnePlace_AtTheNextStep()
+        {
+            var snake = GrowSnake(3, 2, 1);
+            var head = (ToughBalloonModel)snake.Members[0];
+            var middle = (ToughBalloonModel)snake.Members[1];
+            var tail = (ToughBalloonModel)snake.Members[2];
+            var headWas = head.SlotIndex.Value;
+            var middleWas = middle.SlotIndex.Value;
+            head.HitsRemaining.Value = 1;
+
+            _service.StepSnakes(Relocate);
+
+            CollectionAssert.AreEqual(new[] { 2, 1, 1 }, Armour(snake), "equal armour keeps its order");
+            Assert.AreSame(middle, snake.Members[0], "the tougher one leads now");
+            Assert.AreEqual(HexCoordinates.Step(headWas, 0), middle.SlotIndex.Value, "into the slot ahead");
+            Assert.AreEqual(headWas, head.SlotIndex.Value, "the hit one waits a beat, now second");
+            Assert.AreEqual(middleWas, tail.SlotIndex.Value);
+            Assert.IsTrue(AllOnTheirSlots());
+        }
+
+        [Test]
         public void ATougherJoiner_WorksItsWayForward_OnePlacePerStep()
         {
-            _settings.SnakeMaxMembers.Returns(3);
-            var tougher = AddTough(new Vector2Int(0, 5), 3);
-            var snake = FormRowSnake(3, 2, 1);
+            var snake = GrowSnake(3, 2, 1);
+            var tougher = AddTough(new Vector2Int(6, 5), 3);
 
             _service.StepSnakes(Relocate);
             CollectionAssert.AreEqual(new[] { 3, 2, 1, 3 }, Armour(snake), "it joins at the tail");
@@ -281,10 +268,39 @@ namespace BalloonParty.Tests.Balloon
             _service.StepSnakes(Relocate);
             CollectionAssert.AreEqual(new[] { 3, 3, 2, 1 }, Armour(snake));
             Assert.AreSame(tougher, snake.Members[1], "equal armour never trades, so it stays second");
+            Assert.IsTrue(AllOnTheirSlots());
+        }
+
+        [Test]
+        public void ASnakeBoxedIn_TurnsRound_AndTheToughestWorksBackToTheFront()
+        {
+            var snake = GrowSnake(3, 2, 1);
+            var toughest = snake.Members[0];
+            var weakest = snake.Members[2];
+            var tailWas = weakest.SlotIndex.Value;
+            for (var direction = 0; direction < HexCoordinates.Directions; direction++)
+            {
+                var slot = HexCoordinates.Step(toughest.SlotIndex.Value, direction);
+                if (_grid.InBounds(slot) && _grid.IsEmpty(slot.x, slot.y))
+                {
+                    _grid.Place(new UnbreakableBalloonModel(new BalloonModelConfig()), null, slot);
+                }
+            }
 
             _service.StepSnakes(Relocate);
-            CollectionAssert.AreEqual(new[] { 3, 3, 2, 1 }, Armour(snake));
-            Assert.IsTrue(_toughs.All(t => _grid.At(t.SlotIndex.Value) == t));
+
+            // Turned round it runs 1, 2, 3; one place per step, the 2 passes the 1 at once.
+            CollectionAssert.AreEqual(new[] { 2, 1, 3 }, Armour(snake));
+            Assert.AreEqual(1, HexCoordinates.Distance(tailWas, snake.Members[0].SlotIndex.Value),
+                "the new head took the step past the old tail");
+            Assert.AreEqual(tailWas, weakest.SlotIndex.Value, "the one passed waits a beat");
+
+            _service.StepSnakes(Relocate);
+            _service.StepSnakes(Relocate);
+
+            CollectionAssert.AreEqual(new[] { 3, 2, 1 }, Armour(snake), "the toughest is back at the front");
+            Assert.AreSame(toughest, snake.Members[0]);
+            Assert.IsTrue(AllOnTheirSlots());
         }
 
         [Test]
@@ -306,19 +322,16 @@ namespace BalloonParty.Tests.Balloon
             Arrange();
 
             Assert.AreEqual(2, _service.Formations.Count);
-            var toughSnake = _service.Formations.Single(f => f.Armoured);
-            var unbreakableFormation = _service.Formations.Single(f => !f.Armoured);
-            Assert.AreEqual(FormationShape.Snake, toughSnake.Shape);
-            Assert.IsTrue(toughSnake.Members.All(m => m is ToughBalloonModel));
-            Assert.IsTrue(unbreakableFormation.Members.All(m => m is UnbreakableBalloonModel));
+            Assert.IsTrue(_service.Formations.Single(f => f.Armoured).Members.All(m => m is ToughBalloonModel));
+            Assert.IsTrue(_service.Formations.Single(f => !f.Armoured).Members.All(m => m is UnbreakableBalloonModel));
             Assert.IsTrue(unbreakables.All(u => u.IsAnchored));
         }
 
         [Test]
-        public void AToughSnake_KeepsWalking_AndCallsNoReinforcements()
+        public void TheSnake_KeepsWalking_AndCallsNoReinforcements()
         {
             _settings.ReinforcementChance.Returns(1f);
-            var snake = FormRowSnake(3, 2, 1);
+            var snake = GrowSnake(3, 2, 1);
             var members = snake.Members.ToList();
 
             for (var wave = 0; wave < 6; wave++)
@@ -332,39 +345,52 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void AToughSnake_PoppedBelowTheMinimum_Breaks()
+        public void TheSnake_WalksOnWithWhoeverIsLeft_UntilTheLastPops()
         {
-            var snake = FormRowSnake(3, 2, 1);
-            var popped = snake.Members[1];
+            var snake = GrowSnake(3, 2, 1);
+            var last = (ToughBalloonModel)snake.Members[0];
 
-            _grid.Remove(popped.SlotIndex.Value);
+            _grid.Remove(snake.Members[2].SlotIndex.Value);
+            _grid.Remove(snake.Members[1].SlotIndex.Value);
+
+            Assert.AreSame(snake, SingleSnake());
+            Assert.AreEqual(1, snake.Members.Count);
+            Assert.IsTrue(last.IsAnchored);
+
+            _grid.Remove(last.SlotIndex.Value);
 
             Assert.AreEqual(0, _service.Formations.Count);
-            Assert.IsFalse(_toughs.Where(t => t != popped).Any(t => t.IsAnchored || t.InFormation.Value));
+            Assert.IsFalse(last.InFormation.Value);
         }
 
         [Test]
-        public void AToughSnake_GetsTheSnakeBeat()
+        public void TheSnake_GetsTheSnakeBeat()
         {
             Assert.IsFalse(_service.TakeSnakeBeat(), "no snake, no beat");
 
-            FormRowSnake(3, 2, 1);
+            GrowSnake(3, 2, 1);
 
             Assert.IsTrue(_service.TakeSnakeBeat());
         }
 
-        // Three toughs along row 2 from the west edge, already in armour order for a snake heading east (the
-        // toughest farthest east), so it forms where they stand.
-        private StandingFormation FormRowSnake(params int[] armourHeadFirst)
+        // A snake of the given armour, head first, grown the way the game grows it: the head starts at the west end
+        // of row 2 heading east, and the rest join at its tail one per step, nearest first, from row 5.
+        private StandingFormation GrowSnake(params int[] armourHeadFirst)
         {
-            for (var i = 0; i < armourHeadFirst.Length; i++)
+            AddTough(new Vector2Int(0, 2), armourHeadFirst[0]);
+            for (var i = 1; i < armourHeadFirst.Length; i++)
             {
-                AddTough(new Vector2Int(armourHeadFirst.Length - 1 - i, 2), armourHeadFirst[i]);
+                AddTough(new Vector2Int(i - 1, 5), armourHeadFirst[i]);
             }
 
             Arrange();
             var snake = SingleSnake();
-            Assert.AreEqual(0, _relocations, "formed in place");
+            for (var i = 1; i < armourHeadFirst.Length; i++)
+            {
+                _service.StepSnakes(Relocate);
+            }
+
+            CollectionAssert.AreEqual(armourHeadFirst, Armour(snake));
             return snake;
         }
 
@@ -382,16 +408,29 @@ namespace BalloonParty.Tests.Balloon
             return snake.Members.Select(m => ((IArmouredFormationMember)m).Armour).ToList();
         }
 
+        private bool AllOnTheirSlots()
+        {
+            return _toughs.All(t => _grid.At(t.SlotIndex.Value) == t);
+        }
+
         private void Arrange()
         {
             _service.ArrangeAtWaveStart(Relocate);
         }
 
-        private void Relocate(IWriteableDynamicSlotActor actor, Vector2Int target)
+        // As the balancer does it: every actor leaves its slot before any lands.
+        private void Relocate(IReadOnlyList<SlotMove> moves)
         {
-            _relocations++;
-            _grid.Remove(actor.SlotIndex.Value);
-            _grid.Place(actor, null, target);
+            _relocations += moves.Count;
+            foreach (var move in moves)
+            {
+                _grid.Remove(move.Actor.SlotIndex.Value);
+            }
+
+            foreach (var move in moves)
+            {
+                _grid.Place(move.Actor, null, move.Target);
+            }
         }
 
         private ToughBalloonModel AddTough(Vector2Int slot, int armour)

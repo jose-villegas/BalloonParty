@@ -755,11 +755,19 @@ namespace BalloonParty.Tests.Balloon
             _service.ArrangeAtWaveStart(Relocate);
         }
 
-        private void Relocate(IWriteableDynamicSlotActor actor, Vector2Int target)
+        // As the balancer does it: every actor leaves its slot before any lands.
+        private void Relocate(IReadOnlyList<SlotMove> moves)
         {
-            _relocations++;
-            _grid.Remove(actor.SlotIndex.Value);
-            _grid.Place(actor, null, target);
+            _relocations += moves.Count;
+            foreach (var move in moves)
+            {
+                _grid.Remove(move.Actor.SlotIndex.Value);
+            }
+
+            foreach (var move in moves)
+            {
+                _grid.Place(move.Actor, null, move.Target);
+            }
         }
 
         private void AddUnbreakables(params Vector2Int[] slots)

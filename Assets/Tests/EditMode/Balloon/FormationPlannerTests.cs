@@ -202,28 +202,6 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void AToughSnake_MayFinishARowOtherUnbreakablesHalfHold()
-        {
-            // As above, but toughs: a tough gives way to enough hits, so a row of them walls nothing.
-            _settings.SnakeMaxMembers.Returns(3);
-            BuildGrid(7, 6);
-            FillRow(0);
-            FillRow(1);
-            FillRow(3);
-            FillWithOutsiders(2, 0, 3);
-            foreach (var slot in new[] { new Vector2Int(0, 4), new Vector2Int(2, 4), new Vector2Int(4, 5) })
-            {
-                var tough = new ToughBalloonModel(new BalloonModelConfig(hitsToPop: 3));
-                _grid.Place(tough, null, slot);
-                _candidates.Add(tough);
-            }
-
-            Assert.IsTrue(Plan(FormationShape.Snake));
-            CollectionAssert.AreEquivalent(
-                new[] { new Vector2Int(4, 2), new Vector2Int(5, 2), new Vector2Int(6, 2) }, Targets());
-        }
-
-        [Test]
         public void Horizontal_BesideOtherUnbreakables_LeavesTheRowAGap()
         {
             _settings.HorizontalMaxMembers.Returns(3);

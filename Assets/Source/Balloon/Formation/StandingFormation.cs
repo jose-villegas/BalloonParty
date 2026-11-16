@@ -28,8 +28,8 @@ namespace BalloonParty.Balloon.Formation
 
         /// <summary>
         ///     The snake of toughs (<see cref="IArmouredFormationMember" />), one at most: it runs head to tail by
-        ///     armour, takes every other tough in at its tail, walks until it breaks, and never changes shape or
-        ///     calls reinforcements.
+        ///     armour, takes every other tough in at its tail, walks through the balloons in its way until its last
+        ///     member pops, and never changes shape or calls reinforcements.
         /// </summary>
         internal bool Armoured { get; set; }
 

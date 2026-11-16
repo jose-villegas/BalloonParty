@@ -48,6 +48,8 @@ namespace BalloonParty.Balloon.Controller
         private readonly BalancePlanner _balancePlanner;
         private readonly UnbreakableFormationService _formations;
         private readonly Action<IWriteableDynamicSlotActor, Vector2Int> _relocateActor;
+        private readonly Action<IReadOnlyList<SlotMove>> _relocateActors;
+        private readonly List<ISlotActorView> _liftedViews = new();
         private readonly Dictionary<IWriteableDynamicSlotActor, List<Vector3>> _paths = new();
         private readonly List<PressurePropagation.Move> _pressureMoves = new();
         private readonly List<BalanceMove> _balanceMoves = new();
@@ -100,6 +102,7 @@ namespace BalloonParty.Balloon.Controller
             _balancePlanner = new BalancePlanner(grid, balanceQuery);
             _formations = formations;
             _relocateActor = RelocateActor;
+            _relocateActors = RelocateActors;
         }
 
         public void Start()
@@ -223,7 +226,7 @@ namespace BalloonParty.Balloon.Controller
                 _turnSteps.Clear();
 
                 // Formations go first, so the roamers see the formation's slots as taken.
-                _formations?.ArrangeAtWaveStart(_relocateActor);
+                _formations?.ArrangeAtWaveStart(_relocateActors);
                 RelocateRoamers();
             }
 
@@ -231,7 +234,7 @@ namespace BalloonParty.Balloon.Controller
             if (_snakeStepDue)
             {
                 _snakeStepDue = false;
-                _formations?.StepSnakes(_relocateActor, afterArranging: atWaveStart);
+                _formations?.StepSnakes(_relocateActors, afterArranging: atWaveStart);
             }
 
             _balanceMoves.Clear();
@@ -317,6 +320,32 @@ namespace BalloonParty.Balloon.Controller
             actor.IsStable.Value = false;
 
             RecordPath(actor, _grid.IndexToWorldPosition(target));
+        }
+
+        // A batch of formation moves at once: every actor leaves its slot before any lands, so the batch may trade
+        // slots among its actors (a tough snake walking into a balloon sends it round to the slot its tail leaves).
+        private void RelocateActors(IReadOnlyList<SlotMove> moves)
+        {
+            _liftedViews.Clear();
+            for (var i = 0; i < moves.Count; i++)
+            {
+                var actor = moves[i].Actor;
+                var from = actor.SlotIndex.Value;
+                _liftedViews.Add(_grid.ViewAt(from));
+                _balancePathHolder.Reserve(actor, from);
+                _balancePathHolder.Reserve(actor, moves[i].Target);
+                _grid.Remove(from);
+            }
+
+            for (var i = 0; i < moves.Count; i++)
+            {
+                var actor = moves[i].Actor;
+                _grid.Place(actor, _liftedViews[i], moves[i].Target);
+                actor.IsStable.Value = false;
+                RecordPath(actor, _grid.IndexToWorldPosition(moves[i].Target));
+            }
+
+            _liftedViews.Clear();
         }
 
         // Empty slots that need no further settling (row 0 or fully supported) — legal roam destinations.
