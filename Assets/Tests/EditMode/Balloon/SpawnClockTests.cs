@@ -3,6 +3,7 @@ using BalloonParty.Balloon.Spawner;
 using BalloonParty.Configuration.Level;
 using BalloonParty.Game.Assist;
 using BalloonParty.Game.Danger;
+using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Score.Behaviours;
 using BalloonParty.Projectile;
@@ -36,6 +37,9 @@ namespace BalloonParty.Tests.Balloon
         private ReactiveProperty<float> _danger;
         private IDangerLevel _dangerLevel;
         private IPlayerNeed _need;
+        private IPlayerHealth _health;
+        private ReactiveProperty<int> _hearts;
+        private int _draws;
         private ISubscriber<WaveDamageMessage> _damageSubscriber;
         private IMessageHandler<WaveDamageMessage> _damageHandler;
         private SpawnClock _clock;
@@ -85,6 +89,11 @@ namespace BalloonParty.Tests.Balloon
             _dangerLevel = Substitute.For<IDangerLevel>();
             _dangerLevel.Level.Returns(_danger);
             _need = Substitute.For<IPlayerNeed>();
+            _hearts = new ReactiveProperty<int>(3);
+            _health = Substitute.For<IPlayerHealth>();
+            _health.Current.Returns(_hearts);
+            _health.Max.Returns(3);
+            _draws = 0;
             _damageSubscriber = Substitute.For<ISubscriber<WaveDamageMessage>>();
             _damageSubscriber
                 .Subscribe(
@@ -1012,6 +1021,71 @@ namespace BalloonParty.Tests.Balloon
             Assert.AreEqual(0, _lines, "two full pulls would take 4s off the wait and land the line at once");
         }
 
+        // Past full hearts a big clear only may earn its breather: 0.25 off per extra heart, so 5 hearts is 50%.
+        [TestCase(0.49f, true)]
+        [TestCase(0.5f, false)]
+        public void Breather_TwoExtraHearts_RollsHalfAChance(float draw, bool earned)
+        {
+            UseHeartRolledBreather(draw);
+            _hearts.Value = 5;
+            ClearTheBoard();
+
+            Assert.AreEqual(earned, _clock.BreatherSecondsLeft > 0f);
+        }
+
+        [Test]
+        public void Breather_AMissedRoll_SpendsTheCooldown()
+        {
+            UseHeartRolledBreather(0.99f);
+            _hearts.Value = 4;
+            ClearTheBoard();
+            Assert.AreEqual(0f, _clock.BreatherSecondsLeft, "a 75% roll missed");
+
+            _clock.Random01 = () => 0f;
+            _boardFill.Occupancy.Returns(1f);
+            Run(0.5f);
+            _boardFill.Occupancy.Returns(0.4f);
+            Run(0.5f);
+
+            Assert.AreEqual(0f, _clock.BreatherSecondsLeft, "the miss ran the 5s cooldown, as a breather would");
+        }
+
+        [Test]
+        public void Breather_FourExtraHearts_NeverEarned()
+        {
+            UseHeartRolledBreather(0f);
+            _hearts.Value = 7;
+            ClearTheBoard();
+
+            Assert.AreEqual(0f, _clock.BreatherSecondsLeft);
+        }
+
+        [Test]
+        public void Breather_FullHearts_EarnedWithoutARoll()
+        {
+            UseHeartRolledBreather(0.99f);
+            ClearTheBoard();
+
+            Assert.Greater(_clock.BreatherSecondsLeft, 0f);
+            Assert.AreEqual(0, _draws);
+        }
+
+        [Test]
+        public void Breather_Danger_NeverRolls()
+        {
+            BuildClock(new SpawnClockSettings(3f, 0.5f, 1f, 4f, breatherSeconds: 4f, breatherPace: 0f,
+                breatherDanger: 0.5f, breatherChanceLostPerExtraHeart: 0.25f));
+            _clock.Random01 = CountedDraw(0.99f);
+            _hearts.Value = 7;
+            Run(1f);
+
+            _danger.Value = 0.5f;
+            Run(0.5f);
+
+            Assert.Greater(_clock.BreatherSecondsLeft, 0f);
+            Assert.AreEqual(0, _draws);
+        }
+
         [Test]
         public void Breather_EndsWithTheLevel()
         {
@@ -1033,7 +1107,7 @@ namespace BalloonParty.Tests.Balloon
             pacing.SpawnClock.Returns(settings);
             _clock = new SpawnClock(pacing, _progress, _pauseService, _registry, _boardFill, _publisher,
                 _firedSubscriber, levelParams ?? UsualLevel(), _shapeCover, _flightConfig, _dangerLevel, _need,
-                _damageSubscriber);
+                _damageSubscriber, _health);
             _clock.Start();
         }
 
@@ -1082,6 +1156,31 @@ namespace BalloonParty.Tests.Balloon
         }
 
         // Only danger starts a breather here: 0.5 or more starts a 4s one at a standstill.
+        private void UseHeartRolledBreather(float draw)
+        {
+            BuildClock(new SpawnClockSettings(3f, 0.5f, 1f, 4f, breatherClear: 0.5f, breatherClearWindow: 1f,
+                breatherSeconds: 4f, breatherPace: 0f, breatherCooldownSeconds: 5f,
+                breatherChanceLostPerExtraHeart: 0.25f));
+            _clock.Random01 = CountedDraw(draw);
+        }
+
+        private Func<float> CountedDraw(float value)
+        {
+            return () =>
+            {
+                _draws++;
+                return value;
+            };
+        }
+
+        // A full board, then 60% of it gone at once: a big clear.
+        private void ClearTheBoard()
+        {
+            Run(1f);
+            _boardFill.Occupancy.Returns(0.4f);
+            Run(0.05f);
+        }
+
         private void UseDangerBreather()
         {
             BuildClock(new SpawnClockSettings(3f, 0.5f, 1f, 4f, breatherSeconds: 4f, breatherPace: 0f,

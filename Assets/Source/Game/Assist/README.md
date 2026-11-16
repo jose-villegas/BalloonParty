@@ -39,6 +39,7 @@ One Snipe needs no roll at all: once the run's first golden balloon has turned a
 | Fewer extra balloons from pops | `BalloonSpawner`, `IBalloonsConfiguration.PopSpawnChance` | Eased by `ThreatEase` |
 | Fewer reinforcement calls | `Balloon/Formation/UnbreakableFormationService`, `ReinforcementChance` | Eased by `ThreatEase` |
 | A breather before the line that would cost a heart | `Balloon/Spawner/SpawnClock`, `ISpawnClockSettings.BreatherDanger` (1) | Danger at or above it starts the breather a big clear earns, under the same cooldown: a full board on the last heart. At 0.5 it played too slow: a board left full with two hearts was slowed nearly half the time |
+| Fewer breathers past full hearts | `Balloon/Spawner/SpawnClock`, `ISpawnClockSettings.BreatherChanceLostPerExtraHeart` (0.25) | The other way round: a big clear or a shape burst earns its breather at 75% with one heart past full, 50% with two, never with four. A player that far ahead gets less of the release |
 | A retry's bonus card leans defensive | `Game/Upgrades/RunUpgrades.BonusDealWeight` | Each card's deal weight × (1 + `IUpgradeCardSettings.RetryDealBoost`): Thick Skin 1, so twice as likely. A retry follows a lost run, so it reads full need without asking. The deal stays seeded |
 
 ## The other side: pressure

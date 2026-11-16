@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BalloonParty.Configuration.Level;
 using BalloonParty.Game.Assist;
 using BalloonParty.Game.Danger;
+using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
 using BalloonParty.Game.Score.Behaviours;
@@ -59,6 +60,7 @@ namespace BalloonParty.Balloon.Spawner
         private readonly IProjectileFlightConfig _flightConfig;
         private readonly IDangerLevel _danger;
         private readonly IPlayerNeed _need;
+        private readonly IPlayerHealth _health;
         private readonly ISubscriber<WaveDamageMessage> _damageSubscriber;
         private readonly CompositeDisposable _subscriptions = new();
 
@@ -83,6 +85,9 @@ namespace BalloonParty.Balloon.Spawner
         public float BreatherSecondsLeft => _breatherLeft;
         public float Pressure => _pressure;
 
+        // Tests replace the draw to pin an earned breather's roll.
+        internal Func<float> Random01 { get; set; } = () => UnityEngine.Random.value;
+
         [Inject]
         internal SpawnClock(
             ILevelPacingConfiguration pacing,
@@ -97,10 +102,12 @@ namespace BalloonParty.Balloon.Spawner
             IProjectileFlightConfig flightConfig,
             IDangerLevel danger,
             IPlayerNeed need,
-            ISubscriber<WaveDamageMessage> damageSubscriber)
+            ISubscriber<WaveDamageMessage> damageSubscriber,
+            IPlayerHealth health)
         {
             _danger = danger;
             _need = need;
+            _health = health;
             _damageSubscriber = damageSubscriber;
             _levelParams = levelParams;
             _shapeCover = shapeCover;
@@ -258,9 +265,15 @@ namespace BalloonParty.Balloon.Spawner
                 return;
             }
 
-            if (ShapesCoverTheBoard() || InDanger())
+            if (InDanger())
             {
                 StartBreather(occupancy);
+                return;
+            }
+
+            if (ShapesCoverTheBoard())
+            {
+                EarnBreather(occupancy);
                 return;
             }
 
@@ -274,8 +287,35 @@ namespace BalloonParty.Balloon.Spawner
             _recentPeakOccupancy = Mathf.Max(occupancy, _recentPeakOccupancy - fall);
             if (_recentPeakOccupancy - occupancy >= clear)
             {
-                StartBreather(occupancy);
+                EarnBreather(occupancy);
             }
+        }
+
+        // A big clear or a shape burst earns a breather, likelier to pass the more hearts the player has past full: a
+        // miss is spent as one would be (the cooldown runs), so the same clear can't roll again on the next frame.
+        private void EarnBreather(float occupancy)
+        {
+            if (BreatherRollPasses())
+            {
+                StartBreather(occupancy);
+                return;
+            }
+
+            _recentPeakOccupancy = occupancy;
+            _cooldownLeft = _settings.BreatherCooldownSeconds;
+        }
+
+        private bool BreatherRollPasses()
+        {
+            var extra = _health.Current.Value - _health.Max;
+            var lost = _settings.BreatherChanceLostPerExtraHeart;
+            if (extra <= 0 || lost <= 0f)
+            {
+                return true;
+            }
+
+            var chance = 1f - lost * extra;
+            return chance > 0f && Random01() < chance;
         }
 
         private void StartBreather(float occupancy)

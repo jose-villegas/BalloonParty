@@ -79,6 +79,13 @@ namespace BalloonParty.Configuration.Level
         float BreatherDanger { get; }
 
         /// <summary>
+        ///     Past full hearts, how much each extra heart takes off the chance that a big clear or a shape burst
+        ///     earns its breather: 0.25 = 75% with one extra, none with four. A miss is spent like a breather (the
+        ///     cooldown runs). The danger's breather and the nuke's never roll. 0 = always earned.
+        /// </summary>
+        float BreatherChanceLostPerExtraHeart { get; }
+
+        /// <summary>
         ///     How much faster the clock runs at full pressure (1 = never). Pressure is the push back on a comfortable
         ///     player: it builds while the board stays under <see cref="PressureHoldOccupancy" /> and the player
         ///     is not in need, holds above it, and partly goes when a line costs a heart.

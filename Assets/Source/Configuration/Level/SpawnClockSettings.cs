@@ -107,6 +107,12 @@ namespace BalloonParty.Configuration.Level
                  "second to last. 0 = never.")]
         [SerializeField] [Range(0f, 1f)] private float _breatherDanger = 1f;
 
+        [Tooltip("Past full hearts, how much each extra heart (a purple level's heart balloons) takes off the chance " +
+                 "that a big clear or a shape burst earns its breather: 0.25 = 75% with one extra, none with four. A " +
+                 "miss is spent like a breather (the cooldown runs). The danger's and the nuke's never roll. " +
+                 "0 = always earned.")]
+        [SerializeField] [Range(0f, 1f)] private float _breatherChanceLostPerExtraHeart = 0.25f;
+
         [Tooltip("How much faster the clock runs at full pressure, the push back on a player who is comfortable: " +
                  "pressure builds while the board stays under the hold occupancy and the hearts are healthy, so " +
                  "a strong build is pushed until its board climbs. A struggling player never builds it. " +
@@ -141,6 +147,7 @@ namespace BalloonParty.Configuration.Level
         public float BreatherCooldownSeconds => Mathf.Max(0f, _breatherCooldownSeconds);
         public float BreatherShapeCover => Mathf.Clamp01(_breatherShapeCover);
         public float BreatherDanger => Mathf.Clamp01(_breatherDanger);
+        public float BreatherChanceLostPerExtraHeart => Mathf.Clamp01(_breatherChanceLostPerExtraHeart);
         public float PressureSpeedup => Mathf.Max(1f, _pressureSpeedup);
         public float PressureBuildSeconds => Mathf.Max(1f, _pressureBuildSeconds);
         public float PressureHoldOccupancy => Mathf.Clamp(_pressureHoldOccupancy, 0.05f, 1f);
@@ -157,8 +164,10 @@ namespace BalloonParty.Configuration.Level
             float breatherClear = 0f, float breatherClearWindow = 2f, float breatherSeconds = 6f,
             float breatherPace = 0.2f, float breatherCooldownSeconds = 0f, float breatherShapeCover = 0f,
             float breatherDanger = 0f, float pressureSpeedup = 1f, float pressureBuildSeconds = 120f,
-            float pressureHoldOccupancy = 0.85f, float pressureKeptOnHeartLoss = 0.5f)
+            float pressureHoldOccupancy = 0.85f, float pressureKeptOnHeartLoss = 0.5f,
+            float breatherChanceLostPerExtraHeart = 0f)
         {
+            _breatherChanceLostPerExtraHeart = breatherChanceLostPerExtraHeart;
             _pressureSpeedup = pressureSpeedup;
             _pressureBuildSeconds = pressureBuildSeconds;
             _pressureHoldOccupancy = pressureHoldOccupancy;
