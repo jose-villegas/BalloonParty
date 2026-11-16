@@ -32,3 +32,4 @@ Working design plans and roadmaps for upcoming features.
 - @subpage plan_reward_balloons
 - @subpage plan_disco_balloon
 - @subpage plan_nuke_balloon
+- @subpage plan_effects_layer_clearing
