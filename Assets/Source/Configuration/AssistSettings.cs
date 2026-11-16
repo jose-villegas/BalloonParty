@@ -19,6 +19,19 @@ namespace BalloonParty.Configuration
             "pen's chance.")]
         [SerializeField] private PitySettings _snipePity = new(4f, 0.5f);
 
+        [Tooltip("How much armour left standing counts toward the Snipe roll's need, 0 to 1: at full armour (Armour " +
+            "Count For Full toughs or unbreakables, each Armour Seconds For Full on the board) the roll reads this " +
+            "much need, so its pity builds even at full hearts. The roll takes the larger of this and the player's " +
+            "need. 0 = armour never counts.")]
+        [SerializeField] [Range(0f, 1f)] private float _armourNeedWeight = 0.4f;
+
+        [Tooltip("How many armoured balloons (toughs, unbreakables), each standing its full age, make full armour.")]
+        [SerializeField] [Min(1f)] private float _armourCountForFull = 6f;
+
+        [Tooltip("Seconds of game time an armoured balloon stands before it counts in full; it counts from 0 as it " +
+            "lands.")]
+        [SerializeField] [Min(1f)] private float _armourSecondsForFull = 30f;
+
         [Tooltip("The heart balloon's roll on an ordinary level: each line rolled without one while in need raises " +
             "the next line's chance. Its base chance already grows with the hearts missing, so its growth is gentler.")]
         [SerializeField] private PitySettings _heartPity = new(0.5f, 0.5f);
@@ -35,6 +48,9 @@ namespace BalloonParty.Configuration
 
         public float DangerNeedWeight => _dangerNeedWeight;
         public IPitySettings SnipePity => _snipePity;
+        public float ArmourNeedWeight => _armourNeedWeight;
+        public float ArmourCountForFull => _armourCountForFull;
+        public float ArmourSecondsForFull => _armourSecondsForFull;
         public IPitySettings HeartPity => _heartPity;
         public IPitySettings ItemPity => _itemPity;
         public float ThreatEaseAtFullNeed => Mathf.Clamp01(_threatEaseAtFullNeed);

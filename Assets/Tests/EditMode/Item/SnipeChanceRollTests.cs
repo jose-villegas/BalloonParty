@@ -20,6 +20,7 @@ namespace BalloonParty.Tests.Item
         private ISnipeArmer _armer;
         private IUpgradeSettings _settings;
         private IPlayerNeed _need;
+        private IArmourNeed _armour;
         private IAssistSettings _assist;
         private SnipeChanceRoll _roll;
         private int _draws;
@@ -31,12 +32,13 @@ namespace BalloonParty.Tests.Item
             _armer = Substitute.For<ISnipeArmer>();
             _settings = Substitute.For<IUpgradeSettings>();
             _need = Substitute.For<IPlayerNeed>();
+            _armour = Substitute.For<IArmourNeed>();
             var pity = Substitute.For<IPitySettings>();
             pity.GrowthPerMiss.Returns(4f);
             pity.MaxChance.Returns(0.5f);
             _assist = Substitute.For<IAssistSettings>();
             _assist.SnipePity.Returns(pity);
-            _roll = new SnipeChanceRoll(_weapon, _armer, _settings, _need, _assist) { Now = () => 0f };
+            _roll = new SnipeChanceRoll(_weapon, _armer, _settings, _need, _armour, _assist) { Now = () => 0f };
             _draws = 0;
         }
 
@@ -105,7 +107,7 @@ namespace BalloonParty.Tests.Item
             // Two stacks of 0.15 from the real card arithmetic: a draw of 0.25 misses one stack, hits two.
             var rig = new UpgradeRig(Substitute.For<IProjectileFlightConfig>());
             var card = UpgradeRig.Card(UpgradeKind.SnipeChance, 0.15f);
-            var roll = new SnipeChanceRoll(rig.Upgrades, _armer, rig.Settings, _need, _assist)
+            var roll = new SnipeChanceRoll(rig.Upgrades, _armer, rig.Settings, _need, _armour, _assist)
             {
                 Random01 = () => 0.25f,
                 Now = () => 0f
@@ -165,6 +167,32 @@ namespace BalloonParty.Tests.Item
 
             Assert.IsFalse(_roll.TryArm(new ProjectileModel()), "1%");
             Assert.IsFalse(_roll.TryArm(new ProjectileModel()), "5%");
+            Assert.IsTrue(_roll.TryArm(new ProjectileModel()), "9%");
+        }
+
+        [Test]
+        public void TryArm_FullHearts_ArmourLeftStanding_RaisesTheNextOnesChance()
+        {
+            // The board's armour builds pity as trouble does, at its own need: 1%, then 1% x (1 + 4 x 0.5 x 0.5).
+            _weapon.SnipeChance.Returns(0.01f);
+            _armour.Need.Returns(0.5f);
+            Draw(0.025f);
+
+            Assert.IsFalse(_roll.TryArm(new ProjectileModel()), "1%");
+            Assert.IsFalse(_roll.TryArm(new ProjectileModel()), "2%");
+            Assert.IsTrue(_roll.TryArm(new ProjectileModel()), "3%");
+        }
+
+        [Test]
+        public void TryArm_ReadsTheLargerOfThePlayersNeedAndTheArmours()
+        {
+            _weapon.SnipeChance.Returns(0.01f);
+            _need.Need.Returns(1f);
+            _armour.Need.Returns(0.4f);
+            Draw(0.08f);
+
+            Assert.IsFalse(_roll.TryArm(new ProjectileModel()), "1%");
+            Assert.IsFalse(_roll.TryArm(new ProjectileModel()), "5%: the last heart's need, not the armour's");
             Assert.IsTrue(_roll.TryArm(new ProjectileModel()), "9%");
         }
 

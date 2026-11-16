@@ -11,6 +11,7 @@ balloons that help, and eases off the threats that come by chance.
 | File | What it does |
 |---|---|
 | `IPlayerNeed` / `PlayerNeed` | How much trouble the player is in, 0 to 1, read when a roll asks. It is the larger of two needs. The hearts' is 0 at full and 1 on the last heart, linear between (2 of 3 hearts is 0.5); hearts past full count as full. The board's is `IDangerLevel.Level` (1 when the next line would cost a heart) times `IAssistSettings.DangerNeedWeight` (1). A run of one heart reads no need from its hearts |
+| `IArmourNeed` / `ArmourNeed` | A need of the board's armour, read only by the Snipe roll, since a lance is what clears armour. Each tough (or tougher) and unbreakable balloon counts from 0 as it lands to 1 once it has stood `IAssistSettings.ArmourSecondsForFull` (30 s of game time); `ArmourCountForFull` (6) such balloons at full age are full armour. The need is that share times `ArmourNeedWeight` (0.4). A balloon moved between slots keeps its age; a popped one is forgotten |
 | `ThreatEase` | Scales a threat's chance down by `IAssistSettings.ThreatEaseAtFullNeed` (0.5) times the need: half as likely on the last heart, unchanged at full health. Also hands the need to the balloon pick |
 | `PityRoll` | One forgiving roll. Each roll it misses adds the need at that moment to its **pity**, so misses out of trouble add nothing. The chance is `base × (1 + GrowthPerMiss × pity × need now)`, capped at `MaxChance` (a base above the cap is kept). Out of trouble that is the base, so the help is there only while it is needed, and pity built earlier comes back with the trouble. A hit clears the pity |
 
@@ -18,7 +19,7 @@ balloons that help, and eases off the threats that come by chance.
 
 | Roll | Base chance | Pity (`RunConfig`, `_assist` block) |
 |---|---|---|
-| Sharpshooter's Snipe (`Item/Snipe/SnipeChanceRoll`), once per ball loaded | The card's: 1% a stack, 3 stacks | `SnipePity`: growth 4, cap 50%. On the last heart, one stack goes 1%, 5%, 9%… a ball; three stacks 3%, 15%, 27%… |
+| Sharpshooter's Snipe (`Item/Snipe/SnipeChanceRoll`), once per ball loaded | The card's: 1% a stack, 3 stacks | `SnipePity`: growth 4, cap 50%. On the last heart, one stack goes 1%, 5%, 9%… a ball; three stacks 3%, 15%, 27%… It reads the larger of the player's need and the armour's, so armour left standing too long builds pity at full hearts too, gentler: at full armour (need 0.4) one stack goes 1%, 1.6%, 2.3%… a ball, 7.4% after ten |
 | Heart balloon off a purple level (`Balloon/Reward/RewardBalloonService`), once per line while a heart is missing | `HeartChanceMissingOne` (4%) / `HeartChanceMissingTwo` (12%) | `HeartPity`: growth 0.5, cap 50%. On the last heart: 12%, 18%, 24%… a line |
 | Any item on a cadence wave (`Item/ItemAssigner.RollWaveCount`) | The level's item-count curve's chance of more than 0 | `ItemPity`: growth 0.5, cap 90%. The curve's draw stands; a wave it gives none is lifted to one item by the share of the raised chance the curve leaves out, so any item comes at the raised chance. The initial board never rolls it, and a level without items builds none |
 

@@ -23,7 +23,8 @@ namespace BalloonParty.Item.Snipe
     ///     The Sharpshooter card's roll, once per ball the thrower loads. A hit arms the ball through the Snipe's own
     ///     path (<see cref="ISnipeArmer" />), so it is a Snipe lance in every way, pencil line included. The card's
     ///     chance is low; pity (<see cref="IAssistSettings.SnipePity" />) raises it for each ball loaded without a
-    ///     Snipe while the player is in trouble (<see cref="IPlayerNeed" />). After a hit, no load rolls for
+    ///     Snipe while the player is in trouble (<see cref="IPlayerNeed" />) or armour has stood on the board too long
+    ///     (<see cref="IArmourNeed" />), whichever is the more. After a hit, no load rolls for
     ///     <see cref="IUpgradeSettings.SnipeCooldownSeconds" />, so rapid fire can't chain lances.
     /// </summary>
     internal sealed class SnipeChanceRoll : ISnipeChanceRoll, IRunResettable
@@ -32,6 +33,7 @@ namespace BalloonParty.Item.Snipe
         private readonly ISnipeArmer _armer;
         private readonly IUpgradeSettings _settings;
         private readonly IPlayerNeed _need;
+        private readonly IArmourNeed _armour;
         private readonly PityRoll _pity;
 
         private float _lastArmedAt = float.NegativeInfinity;
@@ -42,12 +44,13 @@ namespace BalloonParty.Item.Snipe
         public int ResetOrder => RunResetOrder.Counters;
 
         internal SnipeChanceRoll(IWeaponStats weapon, ISnipeArmer armer, IUpgradeSettings settings, IPlayerNeed need,
-            IAssistSettings assist)
+            IArmourNeed armour, IAssistSettings assist)
         {
             _weapon = weapon;
             _armer = armer;
             _settings = settings;
             _need = need;
+            _armour = armour;
             _pity = new PityRoll(assist.SnipePity);
         }
 
@@ -65,7 +68,8 @@ namespace BalloonParty.Item.Snipe
                 return false;
             }
 
-            if (!_pity.Roll(chance, _need.Need, Random01()))
+            var need = Mathf.Max(_need.Need, _armour.Need);
+            if (!_pity.Roll(chance, need, Random01()))
             {
                 return false;
             }

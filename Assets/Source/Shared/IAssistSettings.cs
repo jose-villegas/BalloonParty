@@ -15,6 +15,20 @@ namespace BalloonParty.Shared
         /// <summary>The Sharpshooter card's Snipe roll.</summary>
         IPitySettings SnipePity { get; }
 
+        /// <summary>
+        ///     How much armour left standing counts toward the Snipe roll's need, 0 to 1: at full armour
+        ///     (<see cref="ArmourCountForFull" /> toughs or unbreakables, each <see cref="ArmourSecondsForFull" /> on the
+        ///     board) the roll reads this much need, so its pity builds even while the hearts are full. The roll takes
+        ///     the larger of this and the player's need. 0 = armour never counts.
+        /// </summary>
+        float ArmourNeedWeight { get; }
+
+        /// <summary>How many armoured balloons, each standing its full age, make full armour.</summary>
+        float ArmourCountForFull { get; }
+
+        /// <summary>Seconds of game time an armoured balloon stands before it counts in full; it counts from 0 as it lands.</summary>
+        float ArmourSecondsForFull { get; }
+
         /// <summary>The heart balloon's roll on an ordinary level.</summary>
         IPitySettings HeartPity { get; }
 
