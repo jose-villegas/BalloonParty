@@ -109,9 +109,9 @@ Shader "BalloonParty/Balloon/NukeBalloon"
         _SeamWidth     ("Line Half Width", Range(0, 0.1)) = 0.028
         _SeamHalo      ("Halo", Range(0, 1)) = 0.4
         [HDR] _SeamGreen ("Waiting", Color) = (0.5, 3.2, 0.8, 1)
-        [HDR] _SeamRed   ("Armed Count", Color) = (4.5, 0.35, 0.15, 1)
+        [HDR] _SeamRed   ("Armed Count", Color) = (9.0, 0.6, 0.25, 1)
         // How bright the red line stays between counts, as a share of its flare on a count.
-        _SeamArmedIdle ("Armed Between Counts", Range(0, 1)) = 0.12
+        _SeamArmedIdle ("Armed Between Counts", Range(0, 1)) = 0.025
         [HideInInspector] _FuseArmed ("Armed", Float) = 0
         [HideInInspector] _FuseDigit ("Digit", Float) = 3
         [HideInInspector] _FuseBeat  ("Last Count", Float) = -100
@@ -468,7 +468,7 @@ Shader "BalloonParty/Balloon/NukeBalloon"
                 float  la = max(fwidth(r), 0.02);
                 float  waiting = 0.55 + 0.45 * sin(_Time.y * 3.0);
                 float  flash = exp(-max(_Time.y - _FuseBeat, 0.0) * 5.0);
-                half3  light = lerp(_LampGreen.rgb * waiting, _LampRed.rgb * (0.45 + 0.9 * flash), _FuseArmed);
+                half3  light = lerp(_LampGreen.rgb * waiting, _LampRed.rgb * (0.2 + 1.6 * flash), _FuseArmed);
                 float  lamp = 1.0 - smoothstep(1.0 - la, 1.0 + la, r);
                 float  spot = pow(saturate(1.0 - length(l - float2(-0.35, 0.4)) * 1.8), 3.0);
                 float  inner = smoothstep(1.0, 0.75, r);
