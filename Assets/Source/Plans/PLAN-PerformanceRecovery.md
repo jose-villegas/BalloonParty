@@ -337,20 +337,48 @@ Other findings:
 | `DangerGradientView` skips its re-apply under an unchanged light | About 35 native calls a frame |
 | `PaintDripOverlay` sleeps until it plays | One Update call per balloon per frame |
 
-### Candidates, by expected size (3 is built, the rest not started)
+### What each part costs on a device
+
+Measured on a Lenovo Legion Tab (Snapdragon 8 Elite Gen 5, 120 fps, thermal status 0) with
+`device_perf.py --off <part>`: one self-played session with the part switched off, against the mean of four
+normal sessions (6.85 million cycles per frame on the main thread). Sessions differ by about 7% from one to
+the next, and the first after an install runs high, so read this as a ranking.
+
+| Part switched off | Main thread work saved | All threads' work saved |
+|---|---|---|
+| Scene capture (the camera that feeds the bounce light and soft shadows) | about 23% | about 28% |
+| The effects lens (mask, both maps, composites) | about 18% | about 21% |
+| Post-processing on the main camera | about 16% | about 21% |
+| Balloon idle-sway Animators | about 12% | about 15% |
+| HUD drawing | about 9% | about 13% |
+| The HUD's lens map alone (inside the lens row) | about 7% | about 12% |
+
+The game's own frame rate on a phone is the other half of the picture: `ThermalFrameRateGovernor` steps a
+warm Pixel 9 Pro to 80 and then 60, so less work on every thread is what keeps it at 120.
+
+### Changes after the measurements
+
+| Change | Commit | Measured |
+|---|---|---|
+| A lens map's camera renders only while its layer has something alive (`LayerPresence`); the glint stays with the clearing | `ddb76d469` | Editor bot run: main-map renders down 50%, HUD-map renders down 37%. Tablet: about 2% on the main thread, inside the noise |
+| Plain balloons sway from `BalloonSwayTicker` instead of an Animator each (31 of 37; the armoured and reward balloons keep theirs). Matches a real Animator to 0.005 degrees, frame for frame | `d8b70ce14` | Tablet: about 5% less main-thread and all-thread work (6.54 against 6.89 million cycles per frame, first session after install left out) |
+| Tough-snake springs lost their drop shadow and write their line only on a change | `6a76c4307` | Not measured alone |
+
+Rejected: `allowHDR = false` on the main effects-map camera. An audit called it free; read back from the map
+during bot play, the peak went from about 3.0 to exactly 1.0, so lightning and the laser would have lost
+their HDR. The camera's HDR flag is what keeps the map's values over 1.
+
+### Candidates, by expected size
 
 | # | Change | Kind | Fidelity |
 |---|---|---|---|
-| 1 | Skip an effects-map camera while its layer has nothing alive (the HUD map between score trails; the main map before a shot's first pop) | Code | Identical; needs a presence count per layer |
-| 2 | `allowHDR = false` on the main effects-map camera: URP adds an intermediate half-float target and a copy that the map's own format makes redundant | Code | Identical in theory; check a lightning still for values above 1 |
-| 3 | Balloon idle sway from one ticker instead of 37 Animators. **Built:** `BalloonSwayTicker` plays the plain balloons' sway from curves and crossfade times baked out of `Balloon.controller`; tough, unbreakable and the plated reward balloons keep their Animators, which animate more than a sway (`Balloon/README.md`, *Idle sway*). Its tests have not been run in the Editor yet and the saving has not been measured on a device | Code | Must match the two clips and their crossfade: `BalloonSwayAnimatorParityPlayModeTests` compares it with a real Animator frame for frame |
-| 4 | Sleep HUD Animators that sit in a finished clip | Code | Identical if the last pose is kept |
-| 5 | Port the per-balloon shaders to the SRP Batcher and drop their property blocks, or measure first with a Frame Debugger dump | Shaders, Editor | A/B stills |
-| 6 | Post-processing volume update "via scripting" on the HUD, capture and map cameras | Code and one prefab field | Identical |
-| 7 | Gate the grass wake's field copy and the water ripple's clear on a change | Code | Identical |
-| 8 | Aim trace pushed to its line renderers only when it changed; springs set positions in one call | Code | Identical |
-| 9 | Memory: memoryless depth on the effects maps and capture (9 to 15 MB), Blit Type Never (9 to 29 MB and a full-screen copy a frame), part sheets at 1024 (16 MB), long audio streamed (29 MB of RAM) | Code, ProjectSettings, import settings | Identical except the part sheets (eye check) |
-| 10 | Build: ARM64 only, strip engine code, incremental GC | ProjectSettings | Identical |
+| 1 | Take the scene capture from the main camera's frame instead of drawing the scene a second time (A2 below, no longer parked: the device says it is the largest cost). In progress | Renderer feature | Needs before/after stills of the capture and the lit frame |
+| 2 | Sleep HUD Animators that sit in a finished clip | Code | Identical if the last pose is kept |
+| 3 | Port the per-balloon shaders to the SRP Batcher and drop their property blocks, or measure first with a Frame Debugger dump: every camera that draws the board pays for 7 or more unbatched sprites per balloon | Shaders, Editor | A/B stills |
+| 4 | Gate the grass wake's field copy and the water ripple's clear on a change | Code | Identical |
+| 5 | Aim trace pushed to its line renderers only when it changed | Code | Identical |
+| 6 | Memory: memoryless depth on the effects maps and capture (9 to 15 MB), Blit Type Never (9 to 29 MB and a full-screen copy a frame), part sheets at 1024 (16 MB), long audio streamed (29 MB of RAM) | Code, ProjectSettings, import settings | Identical except the part sheets (eye check) |
+| 7 | Build: ARM64 only, strip engine code, incremental GC | ProjectSettings | Identical |
 
 ## Tier 0: Free / Near-Free Wins
 
