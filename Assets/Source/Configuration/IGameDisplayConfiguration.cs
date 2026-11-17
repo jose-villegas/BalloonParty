@@ -6,7 +6,6 @@ namespace BalloonParty.Configuration
         float ReferenceWorldHeight { get; }
         int SceneCaptureDownscale { get; }
         int SceneCaptureFrameInterval { get; }
-        bool SceneCaptureInFrame { get; }
         float GetOrthogonalSize();
     }
 }

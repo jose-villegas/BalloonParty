@@ -3,17 +3,12 @@ using BalloonParty.Shared.Cadence;
 using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Rendering;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using VContainer;
 
 namespace BalloonParty.Display
 {
-    /// <summary>
-    ///     Shared low-res scene capture, bound globally as <c>_SceneCaptureTex</c>. Drawn by a capture camera of its
-    ///     own, or, with <see cref="IGameDisplayConfiguration.SceneCaptureInFrame" />, inside the main camera's frame
-    ///     (<see cref="SceneCaptureFramePass" />), where the capture camera only describes it.
-    /// </summary>
+    /// <summary>Shared low-res scene capture, bound globally as <c>_SceneCaptureTex</c>.</summary>
     [RequireComponent(typeof(Camera))]
     public class SceneCaptureService : MonoBehaviour, ICadencedEffect
     {
@@ -42,29 +37,12 @@ namespace BalloonParty.Display
         private int _consumers;
         private float _captureAccumulator;
         private bool _volumesFrozen;
-        private SceneCaptureFramePass _framePass;
-        private bool _framePending;
-        private bool _framed;
 
         internal RenderTexture CaptureTexture => _texture;
 
         // Bumped once per unique capture; consumers gate rebuild work on this instead of
         // re-deriving from their own cadence.
         internal int ContentVersion { get; private set; }
-
-        private bool InFrame
-        {
-            get
-            {
-#if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
-                if (BalloonParty.Cheats.CheatState.SceneCaptureInFrame is { } inFrame)
-                {
-                    return inFrame;
-                }
-#endif
-                return _displayConfig.SceneCaptureInFrame;
-            }
-        }
 
         private void Awake()
         {
@@ -79,11 +57,6 @@ namespace BalloonParty.Display
             CreateCaptureCamera();
         }
 
-        private void OnEnable()
-        {
-            RenderPipelineManager.beginCameraRendering += DrawInFrame;
-        }
-
         private void LateUpdate()
         {
             // The capture camera renders during the render phase, i.e. after last frame's
@@ -93,13 +66,10 @@ namespace BalloonParty.Display
             // LateUpdate ordering between this component and its consumers; worst case a
             // consumer sees a new version one frame late, the same staleness the smear already
             // tolerates when reading CaptureTexture.
-            // The in-frame pass is the same: it drew during last frame's render if _framed.
-            if (_captureCamera.enabled || _framed)
+            if (_captureCamera.enabled)
             {
                 ContentVersion++;
             }
-
-            _framed = false;
 
             _captureAccumulator += Time.unscaledDeltaTime;
 
@@ -128,20 +98,11 @@ namespace BalloonParty.Display
                 _volumesFrozen = _volumesFrozen || CameraVolumes.TryFreeze(_captureCamera);
             }
 
-            var inFrame = InFrame;
-            _captureCamera.enabled = shouldRender && !inFrame;
-            _framePending = shouldRender && inFrame;
-        }
-
-        private void OnDisable()
-        {
-            RenderPipelineManager.beginCameraRendering -= DrawInFrame;
+            _captureCamera.enabled = shouldRender;
         }
 
         private void OnDestroy()
         {
-            _framePass?.Dispose();
-
             if (_texture != null)
             {
                 _texture.Release();
@@ -165,23 +126,6 @@ namespace BalloonParty.Display
         internal void Release()
         {
             _consumers = Mathf.Max(0, _consumers - 1);
-        }
-
-        // Culls with the idle capture camera's parameters, so the cull sees its layers (the score trails, and the
-        // effects the lens claims off the main camera) and its frustum, then hands the main camera's renderer the
-        // pass that draws them. The first main camera render after a LateUpdate that asked for a capture takes it.
-        private void DrawInFrame(ScriptableRenderContext context, Camera camera)
-        {
-            if (!_framePending || camera != _mainCamera || !_captureCamera.TryGetCullingParameters(out var culling))
-            {
-                return;
-            }
-
-            _framePending = false;
-            _framePass ??= new SceneCaptureFramePass(_captureCamera);
-            _framePass.Setup(context.Cull(ref culling), _texture);
-            _mainCamera.GetUniversalAdditionalCameraData().scriptableRenderer.EnqueuePass(_framePass);
-            _framed = true;
         }
 
         private void CreateCaptureCamera()

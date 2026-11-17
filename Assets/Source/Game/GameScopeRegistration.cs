@@ -531,7 +531,6 @@ namespace BalloonParty.Game
             builder.Register<AwardScorePopCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<BlockLevelUpCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<ToughSnakeSpringsCheat>(Lifetime.Singleton).AsImplementedInterfaces();
-            builder.Register<SceneCaptureInFrameCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<ForceGameOverCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<ForceRestartCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<FireBestShotCheat>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
@@ -580,7 +579,6 @@ namespace BalloonParty.Game
 
             // Before any view starts, so each reads the switch from its first frame.
             CheatState.PerfOff = settings.Off;
-            CheatState.SceneCaptureInFrame = settings.CaptureInFrame;
 
             // The same levels and, as far as the frame timing allows, the same draws in every seeded session.
             if (settings.Seed.HasValue)

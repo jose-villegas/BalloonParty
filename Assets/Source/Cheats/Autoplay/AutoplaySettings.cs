@@ -7,7 +7,7 @@ namespace BalloonParty.Cheats.Autoplay
     ///     How the in-game autoplay plays: the playtest bot's two players (<c>Tools/playtest/README.md</c>), read
     ///     from a launch argument so a phone or an emulator can play itself. The spec is space-separated
     ///     <c>key=value</c> pairs: <c>player=human|best seconds=420 restart=0|1 floor=0.25 mean=0.6 aim=4
-    ///     wild=0.05 seed=7 capture=camera|frame</c>. Any pair left out keeps its default (the average human).
+    ///     wild=0.05 seed=7</c>. Any pair left out keeps its default (the average human).
     /// </summary>
     internal sealed class AutoplaySettings
     {
@@ -25,10 +25,6 @@ namespace BalloonParty.Cheats.Autoplay
 
         /// <summary>Parts of the game switched off for this session, to measure what each costs.</summary>
         public PerfOff Off { get; private set; }
-
-        /// <summary>Which way the scene capture is drawn this session (true inside the main camera's frame), or
-        /// null as configured.</summary>
-        public bool? CaptureInFrame { get; private set; }
 
         /// <summary>
         ///     False for an empty spec (no autoplay asked for) and for a malformed one: a typo would otherwise
@@ -110,9 +106,6 @@ namespace BalloonParty.Cheats.Autoplay
 
                     Off = off;
                     return true;
-                case "capture":
-                    CaptureInFrame = text == "frame";
-                    return text == "frame" || text == "camera";
                 case "fps":
                     var hasFps = int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out var fps);
                     Fps = hasFps && fps > 0 ? fps : 0;
