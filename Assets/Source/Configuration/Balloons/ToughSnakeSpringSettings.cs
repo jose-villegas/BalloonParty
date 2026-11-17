@@ -52,9 +52,9 @@ namespace BalloonParty.Configuration.Balloons
                  "and sinks into the clouds as theirs do). One more thin line drawn a spring.")]
         [SerializeField] private bool _shadow = true;
 
-        [Tooltip("The shadow's colour: the balloons' baked shadow's, which their own colour tints; a white " +
-                 "spring leaves it as it is.")]
-        [SerializeField] private Color _shadowColour = new(0.753f, 0.753f, 0.753f, 0.627f);
+        [Tooltip("The shadow's colour. A dark blue-grey: the balloons' baked shadow grey (0.75) is darkened by their " +
+                 "own colour, which a white spring hasn't got, so it would wash the balloons under it out instead.")]
+        [SerializeField] private Color _shadowColour = new(0.12f, 0.14f, 0.22f, 0.4f);
 
         [Tooltip("World units the shadow's edge fades over, either side of the spring's width.")]
         [SerializeField] [Min(0f)] private float _shadowSoftness = 0.025f;
