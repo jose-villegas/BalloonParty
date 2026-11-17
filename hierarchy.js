@@ -1295,6 +1295,7 @@ var hierarchy =
       [ "BalloonParty.Item.LaserItemRotation", "classBalloonParty_1_1Item_1_1LaserItemRotation.html", null ]
     ] ],
     [ "BalloonParty.Slots.Actor.ITransitionOutgoingContent", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1ITransitionOutgoingContent.html", [
+      [ "BalloonParty.Balloon.View.ToughSnakeSpringView", "classBalloonParty_1_1Balloon_1_1View_1_1ToughSnakeSpringView.html", null ],
       [ "BalloonParty.Game.Score.ScoreTrailService", "classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html", null ],
       [ "BalloonParty.Scenario.View.GroundView", "classBalloonParty_1_1Scenario_1_1View_1_1GroundView.html", null ],
       [ "BalloonParty.Slots.Actor.Cluster.ClusterViewController< TModel, TView, TSettings >", "classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterViewController-3-g.html", null ]

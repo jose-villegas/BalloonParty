@@ -7,7 +7,8 @@ var searchData=
   ['vertexdisplacer_4',['VertexDisplacer',['../namespaceBalloonParty_1_1Game_1_1Score_1_1Behaviours.html#a33bff20e5951e5e2eee9701fe3db921a',1,'BalloonParty::Game::Score::Behaviours']]],
   ['victim_5',['Victim',['../classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html#a158503cbb47e29c7c200c37f40a5e3d8',1,'BalloonParty::Game::HeadsUp::HeadsUpQueue']]],
   ['viewat_6',['ViewAt',['../classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a076fe38496de37cd9c047710149a1e36',1,'BalloonParty::Slots::Grid::SlotGrid']]],
-  ['viewrect_7',['ViewRect',['../classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpPacking.html#aca077434b1d702637407aa139995bffc',1,'BalloonParty::UI::HeadsUp::HeadsUpPacking']]],
-  ['voicelimiter_8',['VoiceLimiter',['../classBalloonParty_1_1Audio_1_1VoiceLimiter.html#af5af0ef1951b7d299b431f75d9a9589f',1,'BalloonParty::Audio::VoiceLimiter']]],
-  ['voiceplayback_9',['VoicePlayback',['../structBalloonParty_1_1Audio_1_1VoicePlayback.html#ae6db35d64462ca2faaa20b87913099ad',1,'BalloonParty::Audio::VoicePlayback']]]
+  ['viewof_7',['ViewOf',['../classBalloonParty_1_1Balloon_1_1View_1_1ToughSnakeSpringView.html#a38dfd0840937c9d903f2aff3a6a2dcf3',1,'BalloonParty::Balloon::View::ToughSnakeSpringView']]],
+  ['viewrect_8',['ViewRect',['../classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpPacking.html#aca077434b1d702637407aa139995bffc',1,'BalloonParty::UI::HeadsUp::HeadsUpPacking']]],
+  ['voicelimiter_9',['VoiceLimiter',['../classBalloonParty_1_1Audio_1_1VoiceLimiter.html#af5af0ef1951b7d299b431f75d9a9589f',1,'BalloonParty::Audio::VoiceLimiter']]],
+  ['voiceplayback_10',['VoicePlayback',['../structBalloonParty_1_1Audio_1_1VoicePlayback.html#ae6db35d64462ca2faaa20b87913099ad',1,'BalloonParty::Audio::VoicePlayback']]]
 ];

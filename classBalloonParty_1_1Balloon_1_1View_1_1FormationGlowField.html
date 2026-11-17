@@ -161,8 +161,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:aeb5fe0f7e594d4b1d464927b7fe4f2a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d33fb8ec78fa2fabd8c9df48db70169" id="r_a0d33fb8ec78fa2fabd8c9df48db70169"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0d33fb8ec78fa2fabd8c9df48db70169">Match</a> (IReadOnlyList&lt; <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1View_1_1IFormationGlowSource.html">IFormationGlowSource</a> &gt; sources, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html">IFormationGlowSettings</a> settings)</td></tr>
 <tr class="separator:a0d33fb8ec78fa2fabd8c9df48db70169"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af7cf879e604ff1a5d19fc9a4cadd8712" id="r_af7cf879e604ff1a5d19fc9a4cadd8712"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField_1_1Ring.html">Ring</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af7cf879e604ff1a5d19fc9a4cadd8712">Rent</a> (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1View_1_1IFormationGlowSource.html">IFormationGlowSource</a> source)</td></tr>
-<tr class="separator:af7cf879e604ff1a5d19fc9a4cadd8712"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0be3676983b07adff2dc3cf5f6bd5d0" id="r_ac0be3676983b07adff2dc3cf5f6bd5d0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField_1_1Ring.html">Ring</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac0be3676983b07adff2dc3cf5f6bd5d0">Rent</a> (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1View_1_1IFormationGlowSource.html">IFormationGlowSource</a> source, float target)</td></tr>
+<tr class="separator:ac0be3676983b07adff2dc3cf5f6bd5d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56c886e32f89a9a4c9c3a4cc5c472225" id="r_a56c886e32f89a9a4c9c3a4cc5c472225"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a56c886e32f89a9a4c9c3a4cc5c472225">Write</a> (Vector4[] points, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html">IFormationGlowSettings</a> settings, out Rect bounds)</td></tr>
 <tr class="separator:a56c886e32f89a9a4c9c3a4cc5c472225"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -177,7 +177,7 @@ Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Which rings the formation glow draws (<code>FormationGlow</code> shader), how brightly, and how far each has dissolved. </p>
-<p>A ring is connected while its member is in a formation with a fellow member within <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html#afd284355139d437f85a549f661378a98" title="A member this far from every other glows not at all.">IFormationGlowSettings.FadeDistance</a>: its brightness follows how close the nearest fellow is, full at <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html#ac912e5acfaa578540e3768cb4cfb4c61" title="A member this close to another (world units) glows fully.">IFormationGlowSettings.FullDistance</a>. Disconnected for any reason (out of formation, left alone, popped, cleared with the board), the ring stays where its member was last and dissolves over <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html#a957ef19397b8683a5c8951ca90d98ac0" title="Seconds a ring takes to dissolve once its member is disconnected (out of formation,...">IFormationGlowSettings.DissolveSeconds</a> at the brightness it had, instead of vanishing. </p>
+<p>A ring is connected while its member is in a formation with a fellow member within <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html#afd284355139d437f85a549f661378a98" title="A member this far from every other glows not at all.">IFormationGlowSettings.FadeDistance</a>: its brightness follows how close the nearest fellow is, full at <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html#ac912e5acfaa578540e3768cb4cfb4c61" title="A member this close to another (world units) glows fully.">IFormationGlowSettings.FullDistance</a>. Disconnected for any reason (out of formation, left alone, popped, cleared with the board), the ring stays where its member was last and dissolves over <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html#a957ef19397b8683a5c8951ca90d98ac0" title="Seconds a ring takes to dissolve once its member is disconnected (out of formation,...">IFormationGlowSettings.DissolveSeconds</a> at the brightness it had, instead of vanishing. A ring connecting dissolves in the same way, over the same time. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a35ed52ad8a5dd2daa279dbdf2f087d02" name="a35ed52ad8a5dd2daa279dbdf2f087d02"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a35ed52ad8a5dd2daa279dbdf2f087d02">&#9670;&#160;</a></span>Advance()</h2>
@@ -334,8 +334,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="af7cf879e604ff1a5d19fc9a4cadd8712" name="af7cf879e604ff1a5d19fc9a4cadd8712"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af7cf879e604ff1a5d19fc9a4cadd8712">&#9670;&#160;</a></span>Rent()</h2>
+<a id="ac0be3676983b07adff2dc3cf5f6bd5d0" name="ac0be3676983b07adff2dc3cf5f6bd5d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0be3676983b07adff2dc3cf5f6bd5d0">&#9670;&#160;</a></span>Rent()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -346,8 +346,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField_1_1Ring.html">Ring</a> BalloonParty.Balloon.View.FormationGlowField.Rent </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Balloon_1_1View_1_1IFormationGlowSource.html">IFormationGlowSource</a></td>          <td class="paramname"><span class="paramname"><em>source</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Balloon_1_1View_1_1IFormationGlowSource.html">IFormationGlowSource</a></td>          <td class="paramname"><span class="paramname"><em>source</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>target</em></span>&#160;)</td>
         </tr>
       </table>
   </td>

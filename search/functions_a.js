@@ -13,6 +13,5 @@ var searchData=
   ['killrevealtweens_10',['KillRevealTweens',['../classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#acdbfa294b0793b5888dbe07b667e314e',1,'BalloonParty::UI::LevelUp::LevelUpPopUp']]],
   ['killtimescaletween_11',['KillTimeScaleTween',['../classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematic.html#aa51f7d3b49f24cc1e5368a7455ebe4b5',1,'BalloonParty::Game::Cinematics::CameraRigCinematic']]],
   ['killtween_12',['KillTween',['../classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicCameraRig.html#acbe52b3e18489ef5089ad6ddbf587b7f',1,'BalloonParty::Game::Cinematics::CinematicCameraRig']]],
-  ['knot_13',['Knot',['../classBalloonParty_1_1Game_1_1LaunchContinueView.html#a47697cde665bb266615215d13348b10e',1,'BalloonParty::Game::LaunchContinueView']]],
-  ['knotof_14',['KnotOf',['../classBalloonParty_1_1Balloon_1_1View_1_1ToughSnakeSpringView.html#a3de022c498554cf8c214b731e54e3bdb',1,'BalloonParty::Balloon::View::ToughSnakeSpringView']]]
+  ['knot_13',['Knot',['../classBalloonParty_1_1Game_1_1LaunchContinueView.html#a47697cde665bb266615215d13348b10e',1,'BalloonParty::Game::LaunchContinueView']]]
 ];

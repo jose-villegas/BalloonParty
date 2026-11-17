@@ -1,13 +1,15 @@
 <map id="BalloonParty.Slots.Actor.ITransitionOutgoingContent" name="BalloonParty.Slots.Actor.ITransitionOutgoingContent">
-<area shape="rect" id="Node000001" title="Keeps outgoing visuals on screen during a level transition so the Ascent&#39;s board clear doesn&#39;t blink ..." alt="" coords="5,75,204,119"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html" title=" " alt="" coords="266,5,454,50"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="203,68,277,49,273,52,205,73"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Scenario_1_1View_1_1GroundView.html" title="The ground backdrop shown on ground levels, between the sky scatter and the cloud backdrop: a station..." alt="" coords="260,75,460,119"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="219,94,262,96,257,98,220,100"/>
-<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterViewController-3-g.html" title="Manages a single TView &#160;rendering all clusters of TModel &#160;actors." alt="" coords="252,144,468,205"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="196,122,258,142,253,143,195,127"/>
-<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushViewController.html" title="Adds gap&#45;fill circles at midpoints between adjacent bush slots so the rendered shape spans the gaps." alt="" coords="531,117,750,162"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="483,156,533,153,528,154,484,162"/>
-<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudViewController.html" title="Provides the cloud prefab from IPuffCloudSettings." alt="" coords="516,187,765,231"/>
-<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="483,187,518,194,513,194,483,192"/>
+<area shape="rect" id="Node000001" title="Keeps outgoing visuals on screen during a level transition so the Ascent&#39;s board clear doesn&#39;t blink ..." alt="" coords="5,109,204,154"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Balloon_1_1View_1_1ToughSnakeSpringView.html" title="A trial look (IToughSnakeSpringSettings): a spring between each pair of neighbours in the tough snake..." alt="" coords="263,5,456,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="162,100,251,60,286,49,282,52,253,65,165,104"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html" title=" " alt="" coords="266,75,454,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="218,114,268,109,263,111,220,119"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Scenario_1_1View_1_1GroundView.html" title="The ground backdrop shown on ground levels, between the sky scatter and the cloud backdrop: a station..." alt="" coords="260,144,460,189"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="219,145,262,152,257,153,220,150"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterViewController-3-g.html" title="Manages a single TView &#160;rendering all clusters of TModel &#160;actors." alt="" coords="252,213,468,274"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="166,159,253,199,281,212,276,212,251,203,165,164"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushViewController.html" title="Adds gap&#45;fill circles at midpoints between adjacent bush slots so the rendered shape spans the gaps." alt="" coords="531,187,750,231"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="483,226,533,222,528,223,484,231"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudViewController.html" title="Provides the cloud prefab from IPuffCloudSettings." alt="" coords="516,256,765,301"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="483,256,518,263,513,263,483,262"/>
 </map>
