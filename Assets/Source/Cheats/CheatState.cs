@@ -51,6 +51,12 @@ namespace BalloonParty.Cheats
         /// with any of them set; nothing but a measurement sets them.</summary>
         public static PerfOff PerfOff;
 
+        /// <summary>Which way the scene capture is drawn, over what the config says
+        /// (<c>IGameDisplayConfiguration.SceneCaptureInFrame</c>): true inside the main camera's frame, false by its
+        /// own camera, null as configured. Set by <see cref="SceneCaptureInFrameCheat" /> and the autoplay's
+        /// <c>capture</c> key (<c>Tools/perf/device_perf.py --capture</c>), to compare the two.</summary>
+        public static bool? SceneCaptureInFrame;
+
         /// <summary>While true, <c>ScoreTrailService</c> resolves each score group INSTANTLY — it publishes the
         /// arrival immediately with the group's full points instead of spawning flying pen-trails. Set only for
         /// the span of a bulk progress fill (see <see cref="ScoreCheatHelper.FillColor" />): filling a whole
@@ -131,6 +137,7 @@ namespace BalloonParty.Cheats
             AnyCheatUsed = false;
             KeepRunSeed = false;
             ScenarioGradeOff = false;
+            SceneCaptureInFrame = null;
             SetUrpNeutralTonemap(false);
 #if UNITY_EDITOR
             // Pick up (and consume) the "play from here" level the pacing window stashed before entering play.

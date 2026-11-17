@@ -15,10 +15,16 @@ namespace BalloonParty.Configuration
         [Tooltip("Render the capture every Nth frame; skipped frames keep the last capture.")]
         [SerializeField, Range(1, 4)] private int _sceneCaptureFrameInterval = 2;
 
+        [Tooltip("Draw the capture inside the main camera's frame, from the capture camera's cull, instead of " +
+                 "rendering the capture camera: the same picture without a second camera's pass through the " +
+                 "pipeline. Off renders the capture camera, as before.")]
+        [SerializeField] private bool _sceneCaptureInFrame;
+
         public float ReferenceWorldWidth => _referenceWorldWidth;
         public float ReferenceWorldHeight => _referenceWorldHeight;
         public int SceneCaptureDownscale => _sceneCaptureDownscale;
         public int SceneCaptureFrameInterval => _sceneCaptureFrameInterval;
+        public bool SceneCaptureInFrame => _sceneCaptureInFrame;
 
         public float GetOrthogonalSize()
         {

@@ -42,6 +42,15 @@ namespace BalloonParty.Tests.Cheats
             Assert.That(settings.Seconds, Is.EqualTo(240f));
             Assert.That(settings.Restart, Is.False);
             Assert.That(settings.Seed, Is.Null);
+            Assert.That(settings.CaptureInFrame, Is.Null, "the scene capture is drawn as the build is configured");
+        }
+
+        [TestCase("capture=frame", true)]
+        [TestCase("capture=camera", false)]
+        public void TryParse_TheCaptureKey_PicksHowTheSceneCaptureIsDrawn(string spec, bool inFrame)
+        {
+            Assert.That(AutoplaySettings.TryParse(spec, out var settings), Is.True);
+            Assert.That(settings.CaptureInFrame, Is.EqualTo(inFrame));
         }
 
         [TestCase("player=robot")]
@@ -51,6 +60,7 @@ namespace BalloonParty.Tests.Cheats
         [TestCase("wild=1.5")]
         [TestCase("aim=-1")]
         [TestCase("seed=x")]
+        [TestCase("capture=gpu")]
         [TestCase("speed=2")]
         [TestCase("player")]
         [TestCase("=human")]

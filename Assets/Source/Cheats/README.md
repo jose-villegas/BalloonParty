@@ -38,7 +38,9 @@ ships.
   `seed` and an optional `fps`, which holds the frame rate for the session (`ThermalFrameRateGovernor.Pin`)
   so a performance run isn't stepped down as the phone warms, and an optional `off`, which switches parts
   of the game off for the session (`CheatState.PerfOff`: `lens`, `hudmap`, `capture`, `animators`, `post`,
-  `hud`, joined by `+`) so a run can measure what each costs. The game looks wrong with any of them off. A malformed spec is refused with a warning rather than played wrong.
+  `hud`, joined by `+`) so a run can measure what each costs. The game looks wrong with any of them off. An
+  optional `capture=camera|frame` picks how the scene capture is drawn (`CheatState.SceneCaptureInFrame`), to
+  compare its two paths. A malformed spec is refused with a warning rather than played wrong.
 - `AutoplayController` (Game scope) presses Play on the launch screen, fires as the chosen player once the
   cannon is ready (the best angle from `FireBestShotCheat.TryFindBestAngle`, plus `AutoplayDice`'s reaction
   time and aim error for a human), presses Restart on game over or ends there, and quits the app when the
@@ -99,4 +101,5 @@ A cheat that needs inputs (dropdowns, counters) also implements `ICheatControls.
 | Stamp Disturbance | Grid | Toggle on, then mouse-drag to stamp disturbances into the shared disturbance field. Uses `DisturbanceFieldService.Stamp()` at the mouse world position with drag direction |
 | Place Light | Lighting | Toggle on, pick a palette colour from the dropdown, then tap the board to drop a light into the shared light field there; "Clear" removes every light placed so far |
 | Scenario Grade | Lighting | Toggle — turns the per-scenario colour grade (`ScenarioGradeView`) off and on, to compare the scenes with and without it. Sets the dev-only `CheatState.ScenarioGradeOff` flag |
+| Scene Capture In Frame | Rendering | Toggle — draws the scene capture inside the main camera's frame or by its own camera, against the config's `SceneCaptureInFrame`, to compare the two (they should look the same). Sets the dev-only `CheatState.SceneCaptureInFrame` |
 | Time of Day | Lighting | Scrub the day/night angle directly (drives whichever source is active) — the slider tints the arc that counts as night — and set how fast the Realtime source advances it (Freeze/1x/8x/30x presets) |

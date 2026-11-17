@@ -60,4 +60,16 @@ python3 Tools/perf/device_perf.py --serial <serial> --label no-lens --off lens
 
 Join several with `+`. The switches live in `CheatState.PerfOff` and compile out of a shipping build.
 
+## Comparing two ways of drawing the same thing
+
+`--capture camera|frame` picks how the scene capture is drawn for the session, whatever the build's config says:
+by its own camera, or inside the main camera's frame (`CheatState.SceneCaptureInFrame`, `Display/README.md`).
+Both look the same and make the same draws, so the difference between two runs is what the second camera's own
+pass through the pipeline costs:
+
+```bash
+python3 Tools/perf/device_perf.py --serial <serial> --label capture-camera --capture camera
+python3 Tools/perf/device_perf.py --serial <serial> --label capture-frame --capture frame
+```
+
 Reports go to `Logs/perf/<stamp>-<label>/` (`report.md`, `samples.csv`), which git ignores.

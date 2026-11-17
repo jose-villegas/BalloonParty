@@ -65,7 +65,7 @@ on-device captures.
 | G5 gradient skip | **opus**, deferred | Two-shader temporal-coupling change (see spec — riskier than it looks) |
 | A4 quality tiers + ADPF | **opus** | New subsystem, package integration |
 | A1 RG prototype | **opus** | Novel RenderGraph interop, go/no-go experiment |
-| A2 capture feature | parked | Behind A1 evidence |
+| A2 capture feature | built, behind a setting | November pass: *The scene capture inside the main camera's frame* |
 | Per-wave review | **fable** (reviewer + optimizer agents) | User mandate |
 | Docs per wave | scribe agent | Existing pipeline |
 | Tests (G1 `IBlitBudget` is pure C# — unit-testable) | test-everything agent | Existing pipeline |
@@ -372,13 +372,67 @@ their HDR. The camera's HDR flag is what keeps the map's values over 1.
 
 | # | Change | Kind | Fidelity |
 |---|---|---|---|
-| 1 | Take the scene capture from the main camera's frame instead of drawing the scene a second time (A2 below, no longer parked: the device says it is the largest cost). In progress | Renderer feature | Needs before/after stills of the capture and the lit frame |
+| 1 | Take the scene capture from the main camera's frame instead of drawing the scene a second time (A2 below, no longer parked: the device says it is the largest cost). Built behind a setting, off: the same picture, no saving in the Editor, the device A/B to come (below) | Code | The capture bit-identical in nine stills |
 | 2 | Sleep HUD Animators that sit in a finished clip | Code | Identical if the last pose is kept |
 | 3 | Port the per-balloon shaders to the SRP Batcher and drop their property blocks, or measure first with a Frame Debugger dump: every camera that draws the board pays for 7 or more unbatched sprites per balloon | Shaders, Editor | A/B stills |
 | 4 | Gate the grass wake's field copy and the water ripple's clear on a change | Code | Identical |
 | 5 | Aim trace pushed to its line renderers only when it changed | Code | Identical |
 | 6 | Memory: memoryless depth on the effects maps and capture (9 to 15 MB), Blit Type Never (9 to 29 MB and a full-screen copy a frame), part sheets at 1024 (16 MB), long audio streamed (29 MB of RAM) | Code, ProjectSettings, import settings | Identical except the part sheets (eye check) |
 | 7 | Build: ARM64 only, strip engine code, incremental GC | ProjectSettings | Identical |
+
+### The scene capture inside the main camera's frame (A2, built behind a setting)
+
+A device run with the capture switched off (`--off capture`) saved about 23% of the main thread's work and 28% of
+all threads': the largest single cost. Its work is the capture camera's own pass through the pipeline (culling, the
+2D renderer's per-camera setup, a render graph recorded, compiled and run) plus drawing the board's ten layers
+again, about 380 renderers.
+
+**Built:** with `IGameDisplayConfiguration.SceneCaptureInFrame` (off by default) the capture camera never renders.
+On the main camera's `beginCameraRendering`, `SceneCaptureService` culls with the idle capture camera's own culling
+parameters and enqueues `SceneCaptureFramePass` on the main camera's renderer, which draws that cull into the same
+capture texture first thing in the main camera's frame, with the capture camera's properties
+(`Display/README.md`). What it can save is the second camera's own pass through the pipeline; the cull of the
+capture's layers and the draws stay.
+
+**Measured in the Editor, it saves nothing.** A held full board, four rounds of 5 s on each path, main-thread time
+per frame: camera path, main camera 4.79 ms + capture camera 1.97 ms = 6.76 ms; in-frame, main camera 6.76 ms, of
+which the pass is 2.0 ms. The pass alone costs what the whole capture camera did, so the camera's own overhead is
+within noise there, and the capture's cost is its draws (about 380 sprites, at most 60 times a second). A device has
+a different split (Vulkan, a phone's CPU, the render graph compiled per camera), so the device A/B decides; if it
+shows no saving either, the in-frame path should go, and the saving is in drawing less: cheaper draws (candidate 3,
+the board's unbatched sprites, which the capture draws a second time), or fewer layers, fewer renderers or a slower
+cadence, each of those a change to the picture and the user's call.
+
+What was settled, and why:
+
+- **Not a copy of the main camera's colour.** That was the cheaper idea, and it can't give the same picture: the
+  smear reads the capture's alpha as sprite coverage (the shadow casters), and the main camera's colour has none, the
+  sky being drawn opaque under everything; its background is the live sky, clouds and meadow, where the capture
+  clears to the flat background colour the bounce is measured against, so open sky would no longer net to neutral;
+  the main camera never draws the score trails (the HUD camera does), and while the lens is open its effects are
+  claimed off it, so a copy would lose the bounce of exactly the pops and lightning that light the board; and it is
+  HDR, where the capture clips at white. Each is structural. Redrawing the capture's own layers from its own cull
+  keeps them all as they were.
+- **Same picture.** Same layer mask, frustum, view and projection (the capture camera's, through
+  `SetupCameraProperties`), same 8-bit target, clear (the background colour, re-tinted each capture, with alpha 0),
+  mips (generated as the target is let go, as before), shader passes and sort. The SSL overlay (TransparentFX) and the
+  lens composites (Default and UI) stay out of it, as before.
+- **Same cadence:** 60 Hz on unscaled time. The draws still cost, so every frame at 120 Hz would double them.
+  `ContentVersion` is stamped the same way, and `PerfOff.Capture` still stops it.
+- **Same latency:** one frame. The capture is drawn during frame N's render (the camera rendered before the main
+  camera, the pass runs first in its frame) and the smear reads it in frame N+1's `LateUpdate`.
+- **Switchable on a device:** the *Scene Capture In Frame* cheat, the autoplay's `capture=camera|frame`, and
+  `device_perf.py --capture camera|frame`.
+
+**Stills (Editor, the second checkout):** day, dusk and night on a full board (with a disco and an unbreakable
+balloon, which sample the capture), a lightning, a laser, a nuke cloud, water and meadow levels, and the level-up
+zoom. Each held still, the capture was read back after the camera path, after the camera path again (the noise
+floor), and after the in-frame path, each time after painting it magenta, so a path that left it untouched couldn't
+pass. In every scene the capture is **bit-identical** across the two paths, at mip 0 and mip 3, in all four
+channels. The final frames differ by at most 2 levels of 255 per channel, the same as the camera path against
+itself (URP's dither). Not measured yet: the saving on a device, and whether the mips generate on Vulkan as they do
+in the Editor's D3D11 (they would show as hard-edged shadows if they didn't). The level-up's ceremony card
+settled after the hold began, so its camera path was read from a second dump once still.
 
 ## Tier 0: Free / Near-Free Wins
 
@@ -754,7 +808,11 @@ RT is small — the delta may be within noise; if so, **do not migrate the rest*
 effort goes to A4 + overdraw instead. Reminder of the audit: RG pass *merging* can never
 apply here (different-sized persistent RTs); DontCare/scheduling is the only prize.
 
-### A2 — SceneCapture → Renderer Feature · **parked** behind A1
+### A2 — SceneCapture → Renderer Feature · **built behind a setting** (November pass)
+
+Superseded: built without a renderer feature on the asset, without A1, and without reusing the main cull (the capture
+needs layers the main camera never draws). See *The scene capture inside the main camera's frame*. The original
+note:
 
 Still a second full camera render per cadence tick (weight 3, heaviest consumer;
 `12df3c37` only gated the downstream smear). A feature pass on the main camera would reuse

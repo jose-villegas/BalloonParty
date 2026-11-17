@@ -16,3 +16,4 @@ MonoBehaviour:
   _referenceWorldHeight: 9.6
   _sceneCaptureDownscale: 7
   _sceneCaptureFrameInterval: 1
+  _sceneCaptureInFrame: 0
