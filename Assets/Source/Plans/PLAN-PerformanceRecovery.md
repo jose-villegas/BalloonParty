@@ -401,10 +401,10 @@ without first making the draws cheaper.
   pass alone cost what the whole capture camera did (about 380 sprites, at most 60 times a second).
 - **Tablet** (Legion Tab, 120 fps, seed 7, 150 s sessions alternating, the first after install left out), million
   cycles per frame, main / render / all threads: camera path 6.04 / 4.39 / 12.59 (mean of four), in-frame
-  6.19 / 4.74 / 12.89 (mean of three). The in-frame path was 2 to 8% higher, inside the session noise. One of four
-  in-frame launches crashed about 11 s in (SIGSEGV in `libunity.so` on the main thread); none of five camera-path
-  sessions did. Not investigated. A guess: the pass wrapped the capture's native colour buffer once and kept that
-  handle while the texture object stayed the same, so storage recreated under it would leave the handle dangling.
+  6.19 / 4.74 / 12.89 (mean of three). The in-frame path was 2 to 8% higher, inside the session noise: that is
+  why it was removed. One in-frame launch crashed during the comparison, but the crash is not the in-frame path's:
+  the phone shows the same stack from before the path existed (Unity's allocator finding a free list corrupted by a
+  write to freed native memory). It is an older crash, tracked down separately.
 
 The saving is in drawing less: cheaper draws (candidate 3, the board's unbatched sprites, which the capture draws a
 second time), or fewer layers, fewer renderers or a slower cadence, each of those a change to the picture and the
