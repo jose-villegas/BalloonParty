@@ -1,5 +1,7 @@
 <map id="BalloonParty.Balloon.View.IFormationGlowSource" name="BalloonParty.Balloon.View.IFormationGlowSource">
-<area shape="rect" id="Node000001" title="A balloon that can light the formation glow: an unbreakable&#39;s formation look." alt="" coords="9,5,202,50"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html" title="Turns an unbreakable&#39;s red lights blue while it holds a formation: the core glow sprites,..." alt="" coords="5,98,206,143"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,64,108,99,103,97,104,68"/>
+<area shape="rect" id="Node000001" title="A balloon that can light the formation glow: an unbreakable&#39;s formation look." alt="" coords="5,40,199,85"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html" title="Turns an unbreakable&#39;s red lights blue while it holds a formation: the core glow sprites,..." alt="" coords="274,5,474,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="213,45,276,40,270,41,214,51"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowSources_1_1Registration.html" title=" " alt="" coords="247,75,501,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="214,74,249,81,243,81,214,79"/>
 </map>

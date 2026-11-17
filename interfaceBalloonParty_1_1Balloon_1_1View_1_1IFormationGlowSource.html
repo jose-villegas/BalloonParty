@@ -121,7 +121,7 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Balloon_1_1View_1_1IFormation
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="interfaceBalloonParty_1_1Balloon_1_1View_1_1IFormationGlowSource__inherit__graph.svg" width="211" height="148"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="interfaceBalloonParty_1_1Balloon_1_1View_1_1IFormationGlowSource__inherit__graph.svg" width="507" height="126"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
@@ -129,9 +129,9 @@ Properties</h2></td></tr>
 <tr class="memitem:ae6b657d1e597a090b8643a0b7e19b644" id="r_ae6b657d1e597a090b8643a0b7e19b644"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae6b657d1e597a090b8643a0b7e19b644">GlowCentre</a><code> [get]</code></td></tr>
 <tr class="memdesc:ae6b657d1e597a090b8643a0b7e19b644"><td class="mdescLeft">&#160;</td><td class="mdescRight">World centre of the balloon.  <br /></td></tr>
 <tr class="separator:ae6b657d1e597a090b8643a0b7e19b644"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af197f7a83cbf0ce8b411975fc1b47193" id="r_af197f7a83cbf0ce8b411975fc1b47193"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af197f7a83cbf0ce8b411975fc1b47193">GlowMembership</a><code> [get]</code></td></tr>
-<tr class="memdesc:af197f7a83cbf0ce8b411975fc1b47193"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far into its formation it is: 0 out, 1 in, easing between as it joins and leaves.  <br /></td></tr>
-<tr class="separator:af197f7a83cbf0ce8b411975fc1b47193"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba83a3be36abc51e855825bd50387175" id="r_aba83a3be36abc51e855825bd50387175"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aba83a3be36abc51e855825bd50387175">GlowsInFormation</a><code> [get]</code></td></tr>
+<tr class="memdesc:aba83a3be36abc51e855825bd50387175"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether it is in a formation now, gliding to its slot or there.  <br /></td></tr>
+<tr class="separator:aba83a3be36abc51e855825bd50387175"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A balloon that can light the formation glow: an unbreakable's formation look. </p>
@@ -158,12 +158,12 @@ Properties</h2></td></tr>
 
 <p>World centre of the balloon. </p>
 
-<p>Implemented in <a class="el" href="classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a89d30d06e1d89569a1505e950dc0103d">BalloonParty.Balloon.Type.UnbreakableFormationLook</a>.</p>
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a89d30d06e1d89569a1505e950dc0103d">BalloonParty.Balloon.Type.UnbreakableFormationLook</a>, and <a class="el" href="classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowSources_1_1Registration.html#a81652d837d9110640327798b9a93cec2">BalloonParty.Balloon.View.FormationGlowSources.Registration</a>.</p>
 
 </div>
 </div>
-<a id="af197f7a83cbf0ce8b411975fc1b47193" name="af197f7a83cbf0ce8b411975fc1b47193"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af197f7a83cbf0ce8b411975fc1b47193">&#9670;&#160;</a></span>GlowMembership</h2>
+<a id="aba83a3be36abc51e855825bd50387175" name="aba83a3be36abc51e855825bd50387175"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba83a3be36abc51e855825bd50387175">&#9670;&#160;</a></span>GlowsInFormation</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -172,7 +172,7 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float BalloonParty.Balloon.View.IFormationGlowSource.GlowMembership</td>
+          <td class="memname">bool BalloonParty.Balloon.View.IFormationGlowSource.GlowsInFormation</td>
         </tr>
       </table>
   </td>
@@ -182,9 +182,9 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>How far into its formation it is: 0 out, 1 in, easing between as it joins and leaves. </p>
+<p>Whether it is in a formation now, gliding to its slot or there. </p>
 
-<p>Implemented in <a class="el" href="classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#ada3bc36a5f3b9c04dd884cb98882e594">BalloonParty.Balloon.Type.UnbreakableFormationLook</a>.</p>
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a0ece311e12ae5395968c2340bc24d87f">BalloonParty.Balloon.Type.UnbreakableFormationLook</a>, and <a class="el" href="classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowSources_1_1Registration.html#a347bbe8aa9679a51a20d72a354bf4d77">BalloonParty.Balloon.View.FormationGlowSources.Registration</a>.</p>
 
 </div>
 </div>

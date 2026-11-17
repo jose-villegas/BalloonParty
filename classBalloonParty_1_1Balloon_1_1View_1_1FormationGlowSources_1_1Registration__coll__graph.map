@@ -1,0 +1,8 @@
+<map id="BalloonParty.Balloon.View.FormationGlowSources.Registration" name="BalloonParty.Balloon.View.FormationGlowSources.Registration">
+<area shape="rect" id="Node000001" title=" " alt="" coords="19,115,273,160"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Balloon_1_1View_1_1IFormationGlowSource.html" title="A balloon that can light the formation glow: an unbreakable&#39;s formation look." alt="" coords="5,5,199,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,63,123,90,135,115,130,114,118,92,110,68"/>
+<area shape="poly" id="edge3_Node000001_Node000002" title=" " alt="" coords="118,63,140,115,134,114,115,67"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="223,14,320,42"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="247,51,173,117,170,112,242,52"/>
+</map>

@@ -440,6 +440,7 @@ var hierarchy =
       [ "BalloonParty.Balloon.Reward.RewardBalloonService", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html", null ],
       [ "BalloonParty.Balloon.Spawner.BalloonSpawner", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html", null ],
       [ "BalloonParty.Balloon.Spawner.SpawnClock", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html", null ],
+      [ "BalloonParty.Balloon.View.FormationGlowSources.Registration", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowSources_1_1Registration.html", null ],
       [ "BalloonParty.Display.CameraShakeController", "classBalloonParty_1_1Display_1_1CameraShakeController.html", null ],
       [ "BalloonParty.Display.EffectsClearingController", "classBalloonParty_1_1Display_1_1EffectsClearingController.html", null ],
       [ "BalloonParty.Game.Assist.ArmourNeed", "classBalloonParty_1_1Game_1_1Assist_1_1ArmourNeed.html", null ],
@@ -583,7 +584,8 @@ var hierarchy =
       [ "BalloonParty.Configuration.Balloons.FormationGlowSettings", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html", null ]
     ] ],
     [ "BalloonParty.Balloon.View.IFormationGlowSource", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IFormationGlowSource.html", [
-      [ "BalloonParty.Balloon.Type.UnbreakableFormationLook", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html", null ]
+      [ "BalloonParty.Balloon.Type.UnbreakableFormationLook", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html", null ],
+      [ "BalloonParty.Balloon.View.FormationGlowSources.Registration", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowSources_1_1Registration.html", null ]
     ] ],
     [ "BalloonParty.Balloon.Model.IFormationMember", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember.html", [
       [ "BalloonParty.Balloon.Model.IWriteableFormationMember", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html", [
@@ -1654,6 +1656,7 @@ var hierarchy =
     [ "BalloonParty.Balloon.Reward.RewardBalloonPop", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPop.html", null ],
     [ "BalloonParty.UI.ClothRibbon.RibbonCloth", "classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonCloth.html", null ],
     [ "BalloonParty.UI.ClothRibbon.RibbonClothSettings", "classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonClothSettings.html", null ],
+    [ "BalloonParty.Balloon.View.FormationGlowField.Ring", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField_1_1Ring.html", null ],
     [ "BalloonParty.Balloon.Controller.BalloonBalancer.RoamCandidate", "structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer_1_1RoamCandidate.html", null ],
     [ "BalloonParty.Balloon.Controller.RoamRests", "classBalloonParty_1_1Balloon_1_1Controller_1_1RoamRests.html", null ],
     [ "BalloonParty.Shared.Messages.RunResetMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1RunResetMessage.html", null ],

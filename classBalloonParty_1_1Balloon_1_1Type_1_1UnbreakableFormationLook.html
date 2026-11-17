@@ -152,9 +152,9 @@ Properties</h2></td></tr>
 <tr class="memitem:a89d30d06e1d89569a1505e950dc0103d" id="r_a89d30d06e1d89569a1505e950dc0103d"><td class="memItemLeft" align="right" valign="top">Vector2 IFormationGlowSource.&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a89d30d06e1d89569a1505e950dc0103d">GlowCentre</a><code> [get]</code></td></tr>
 <tr class="memdesc:a89d30d06e1d89569a1505e950dc0103d"><td class="mdescLeft">&#160;</td><td class="mdescRight">World centre of the balloon.  <br /></td></tr>
 <tr class="separator:a89d30d06e1d89569a1505e950dc0103d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada3bc36a5f3b9c04dd884cb98882e594" id="r_ada3bc36a5f3b9c04dd884cb98882e594"><td class="memItemLeft" align="right" valign="top">float IFormationGlowSource.&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ada3bc36a5f3b9c04dd884cb98882e594">GlowMembership</a><code> [get]</code></td></tr>
-<tr class="memdesc:ada3bc36a5f3b9c04dd884cb98882e594"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far into its formation it is: 0 out, 1 in, easing between as it joins and leaves.  <br /></td></tr>
-<tr class="separator:ada3bc36a5f3b9c04dd884cb98882e594"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ece311e12ae5395968c2340bc24d87f" id="r_a0ece311e12ae5395968c2340bc24d87f"><td class="memItemLeft" align="right" valign="top">bool IFormationGlowSource.&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0ece311e12ae5395968c2340bc24d87f">GlowsInFormation</a><code> [get]</code></td></tr>
+<tr class="memdesc:a0ece311e12ae5395968c2340bc24d87f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether it is in a formation now, gliding to its slot or there.  <br /></td></tr>
+<tr class="separator:a0ece311e12ae5395968c2340bc24d87f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -193,8 +193,6 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a56542739ea0c0632d377ab45210fe255"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7fdbff8925ed7f85b2f63a65f2e3e013" id="r_a7fdbff8925ed7f85b2f63a65f2e3e013"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7fdbff8925ed7f85b2f63a65f2e3e013">_glitterAlpha</a> = 1f</td></tr>
 <tr class="separator:a7fdbff8925ed7f85b2f63a65f2e3e013"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad0392acf25154ccc14d7f9fe09fa34c0" id="r_ad0392acf25154ccc14d7f9fe09fa34c0"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad0392acf25154ccc14d7f9fe09fa34c0">_glowMembership</a></td></tr>
-<tr class="separator:ad0392acf25154ccc14d7f9fe09fa34c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a665589af399dd79de751d38e60e4eb66" id="r_a665589af399dd79de751d38e60e4eb66"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowSources.html">FormationGlowSources</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a665589af399dd79de751d38e60e4eb66">_glowSources</a></td></tr>
 <tr class="separator:a665589af399dd79de751d38e60e4eb66"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f29e335d08c5f27b14a462da16399d0" id="r_a1f29e335d08c5f27b14a462da16399d0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html">IBalloonModel</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1f29e335d08c5f27b14a462da16399d0">_model</a></td></tr>
@@ -651,28 +649,6 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ad0392acf25154ccc14d7f9fe09fa34c0" name="ad0392acf25154ccc14d7f9fe09fa34c0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad0392acf25154ccc14d7f9fe09fa34c0">&#9670;&#160;</a></span>_glowMembership</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float BalloonParty.Balloon.Type.UnbreakableFormationLook._glowMembership</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a665589af399dd79de751d38e60e4eb66" name="a665589af399dd79de751d38e60e4eb66"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a665589af399dd79de751d38e60e4eb66">&#9670;&#160;</a></span>_glowSources</h2>
 
@@ -986,8 +962,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ada3bc36a5f3b9c04dd884cb98882e594" name="ada3bc36a5f3b9c04dd884cb98882e594"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ada3bc36a5f3b9c04dd884cb98882e594">&#9670;&#160;</a></span>GlowMembership</h2>
+<a id="a0ece311e12ae5395968c2340bc24d87f" name="a0ece311e12ae5395968c2340bc24d87f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ece311e12ae5395968c2340bc24d87f">&#9670;&#160;</a></span>GlowsInFormation</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -996,7 +972,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float IFormationGlowSource. BalloonParty.Balloon.Type.UnbreakableFormationLook.GlowMembership</td>
+          <td class="memname">bool IFormationGlowSource. BalloonParty.Balloon.Type.UnbreakableFormationLook.GlowsInFormation</td>
         </tr>
       </table>
   </td>
@@ -1006,9 +982,9 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>How far into its formation it is: 0 out, 1 in, easing between as it joins and leaves. </p>
+<p>Whether it is in a formation now, gliding to its slot or there. </p>
 
-<p>Implements <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1View_1_1IFormationGlowSource.html#af197f7a83cbf0ce8b411975fc1b47193">BalloonParty.Balloon.View.IFormationGlowSource</a>.</p>
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1View_1_1IFormationGlowSource.html#aba83a3be36abc51e855825bd50387175">BalloonParty.Balloon.View.IFormationGlowSource</a>.</p>
 
 </div>
 </div>

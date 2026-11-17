@@ -18,7 +18,6 @@ var classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook =
     [ "_fadeDuration", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a44f865cb2d3208cf82a263ff85848564", null ],
     [ "_glitter", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a56542739ea0c0632d377ab45210fe255", null ],
     [ "_glitterAlpha", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a7fdbff8925ed7f85b2f63a65f2e3e013", null ],
-    [ "_glowMembership", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#ad0392acf25154ccc14d7f9fe09fa34c0", null ],
     [ "_glowSources", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a665589af399dd79de751d38e60e4eb66", null ],
     [ "_model", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a1f29e335d08c5f27b14a462da16399d0", null ],
     [ "_palette", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a3d0ff39555166250c671e980eb43a904", null ],
@@ -33,5 +32,5 @@ var classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook =
     [ "RimColorId", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#af452fcc8f4de879a6dcdef797f9b1d42", null ],
     [ "TrailTailWhiten", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a83abcf7976828fa036d2cff32c14c95d", null ],
     [ "GlowCentre", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a89d30d06e1d89569a1505e950dc0103d", null ],
-    [ "GlowMembership", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#ada3bc36a5f3b9c04dd884cb98882e594", null ]
+    [ "GlowsInFormation", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a0ece311e12ae5395968c2340bc24d87f", null ]
 ];

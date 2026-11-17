@@ -1,5 +1,7 @@
 var interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings =
 [
+    [ "DissolveNoiseScale", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html#a1b107fecb63ba1616169096c3ce85b8c", null ],
+    [ "DissolveSeconds", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html#a957ef19397b8683a5c8951ca90d98ac0", null ],
     [ "Enabled", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html#af7fcefa6010a82e76f9a9cf2af2759fb", null ],
     [ "FadeDistance", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html#afd284355139d437f85a549f661378a98", null ],
     [ "Fill", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html#a33324968aafada48edaaa12937a985db", null ],

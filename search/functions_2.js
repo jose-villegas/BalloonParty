@@ -108,7 +108,7 @@ var searchData=
   ['close_105',['Close',['../classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#ab26a9bc397fa46068a859d13817bd543',1,'BalloonParty::UI::LevelUp::LevelUpPopUp']]],
   ['closegaps_106',['CloseGaps',['../classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a20d8acfe64044b99126cdb826c84991f',1,'BalloonParty::Balloon::Formation::UnbreakableFormationService']]],
   ['closehand_107',['CloseHand',['../classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a919051b87f3e35bd6398c8931cc9419d',1,'BalloonParty::Game::Upgrades::RunUpgrades']]],
-  ['closeness_108',['Closeness',['../classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField.html#ae3e65ecfe409164ab206c4212c84d690',1,'BalloonParty::Balloon::View::FormationGlowField']]],
+  ['closeness_108',['Closeness',['../classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField.html#a4e6d85c9768dc66cb16eaa799cc09d35',1,'BalloonParty::Balloon::View::FormationGlowField']]],
   ['closeswall_109',['ClosesWall',['../classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#a7d9eef2c87bbcba185621b39c1a9855f',1,'BalloonParty.Balloon.Formation.FormationPlanner.ClosesWall()'],['../classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeWalk.html#a82b358d80986c6ffb08b70d5affed2a0',1,'BalloonParty.Balloon.Formation.SnakeWalk.ClosesWall()']]],
   ['clothindex_110',['ClothIndex',['../classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonCloth.html#a548252a9b3f2ffa8167da55f62010ddb',1,'BalloonParty::UI::ClothRibbon::RibbonCloth']]],
   ['clothpoint_111',['ClothPoint',['../classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonCloth.html#a47c83533a506f1ffb306e2e426c27926',1,'BalloonParty::UI::ClothRibbon::RibbonCloth']]],

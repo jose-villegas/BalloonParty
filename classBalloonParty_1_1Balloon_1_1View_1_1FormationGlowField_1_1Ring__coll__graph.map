@@ -1,0 +1,5 @@
+<map id="BalloonParty.Balloon.View.FormationGlowField.Ring" name="BalloonParty.Balloon.View.FormationGlowField.Ring">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,115,199,160"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Balloon_1_1View_1_1IFormationGlowSource.html" title="A balloon that can light the formation glow: an unbreakable&#39;s formation look." alt="" coords="5,5,199,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,64,105,115,99,114,100,68"/>
+</map>

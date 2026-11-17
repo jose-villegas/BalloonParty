@@ -1,5 +1,7 @@
 var classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings =
 [
+    [ "_dissolveNoiseScale", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#a8afe675365e5f04c18de122a40830634", null ],
+    [ "_dissolveSeconds", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#a59487962d0468f49e3ced70a674b4171", null ],
     [ "_enabled", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#aecfc78ba9a1416e89a53ee6a745e543b", null ],
     [ "_fadeDistance", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#ac3b42e4ac871bcaa977d75a74b2917c6", null ],
     [ "_fill", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#a1a0684e36076203f168ba0e51bab5f13", null ],
@@ -11,6 +13,8 @@ var classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings =
     [ "_shader", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#ab36f5419eaa918b49f7169773aed6185", null ],
     [ "_sortingLayerName", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#ad1b73a7f600c05b18f86f265a60593fb", null ],
     [ "_sortingOrder", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#aa58fbc59a875cb6a4a68110b51b39a46", null ],
+    [ "DissolveNoiseScale", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#a7750e283984386eff83b7e6186125a0b", null ],
+    [ "DissolveSeconds", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#a7110e0ac6386921801c06d497d44fefc", null ],
     [ "Enabled", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#a832816eb6bc232bf1dc530d5f19bb381", null ],
     [ "FadeDistance", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#a5d3400723437087afbf8a9468edb6429", null ],
     [ "Fill", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#ab49f618e23523f83a678cc9e9ebf8b09", null ],

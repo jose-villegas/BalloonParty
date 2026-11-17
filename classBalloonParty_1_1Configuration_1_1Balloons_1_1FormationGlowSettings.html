@@ -131,6 +131,12 @@ $(function(){initNavTree('classBalloonParty_1_1Configuration_1_1Balloons_1_1Form
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:a7750e283984386eff83b7e6186125a0b" id="r_a7750e283984386eff83b7e6186125a0b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7750e283984386eff83b7e6186125a0b">DissolveNoiseScale</a><code> [get]</code></td></tr>
+<tr class="memdesc:a7750e283984386eff83b7e6186125a0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Grains per world unit of the noise a dissolving ring erodes along.  <br /></td></tr>
+<tr class="separator:a7750e283984386eff83b7e6186125a0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7110e0ac6386921801c06d497d44fefc" id="r_a7110e0ac6386921801c06d497d44fefc"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7110e0ac6386921801c06d497d44fefc">DissolveSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:a7110e0ac6386921801c06d497d44fefc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds a ring takes to dissolve once its member is disconnected (out of formation, alone, popped or cleared), and to grow in once it's connected.  <br /></td></tr>
+<tr class="separator:a7110e0ac6386921801c06d497d44fefc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a832816eb6bc232bf1dc530d5f19bb381" id="r_a832816eb6bc232bf1dc530d5f19bb381"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a832816eb6bc232bf1dc530d5f19bb381">Enabled</a><code> [get]</code></td></tr>
 <tr class="separator:a832816eb6bc232bf1dc530d5f19bb381"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d3400723437087afbf8a9468edb6429" id="r_a5d3400723437087afbf8a9468edb6429"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5d3400723437087afbf8a9468edb6429">FadeDistance</a><code> [get]</code></td></tr>
@@ -164,6 +170,10 @@ Properties</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:a8afe675365e5f04c18de122a40830634" id="r_a8afe675365e5f04c18de122a40830634"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8afe675365e5f04c18de122a40830634">_dissolveNoiseScale</a> = 7f</td></tr>
+<tr class="separator:a8afe675365e5f04c18de122a40830634"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59487962d0468f49e3ced70a674b4171" id="r_a59487962d0468f49e3ced70a674b4171"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a59487962d0468f49e3ced70a674b4171">_dissolveSeconds</a> = 0.6f</td></tr>
+<tr class="separator:a59487962d0468f49e3ced70a674b4171"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aecfc78ba9a1416e89a53ee6a745e543b" id="r_aecfc78ba9a1416e89a53ee6a745e543b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aecfc78ba9a1416e89a53ee6a745e543b">_enabled</a> = true</td></tr>
 <tr class="separator:aecfc78ba9a1416e89a53ee6a745e543b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac3b42e4ac871bcaa977d75a74b2917c6" id="r_ac3b42e4ac871bcaa977d75a74b2917c6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac3b42e4ac871bcaa977d75a74b2917c6">_fadeDistance</a> = 2.2f</td></tr>
@@ -188,6 +198,50 @@ Private Attributes</h2></td></tr>
 <tr class="separator:aa58fbc59a875cb6a4a68110b51b39a46"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a8afe675365e5f04c18de122a40830634" name="a8afe675365e5f04c18de122a40830634"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8afe675365e5f04c18de122a40830634">&#9670;&#160;</a></span>_dissolveNoiseScale</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.FormationGlowSettings._dissolveNoiseScale = 7f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a59487962d0468f49e3ced70a674b4171" name="a59487962d0468f49e3ced70a674b4171"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a59487962d0468f49e3ced70a674b4171">&#9670;&#160;</a></span>_dissolveSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.FormationGlowSettings._dissolveSeconds = 0.6f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aecfc78ba9a1416e89a53ee6a745e543b" name="aecfc78ba9a1416e89a53ee6a745e543b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aecfc78ba9a1416e89a53ee6a745e543b">&#9670;&#160;</a></span>_enabled</h2>
 
@@ -431,6 +485,58 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Property Documentation</h2>
+<a id="a7750e283984386eff83b7e6186125a0b" name="a7750e283984386eff83b7e6186125a0b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7750e283984386eff83b7e6186125a0b">&#9670;&#160;</a></span>DissolveNoiseScale</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.FormationGlowSettings.DissolveNoiseScale</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Grains per world unit of the noise a dissolving ring erodes along. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html#a1b107fecb63ba1616169096c3ce85b8c">BalloonParty.Configuration.Balloons.IFormationGlowSettings</a>.</p>
+
+</div>
+</div>
+<a id="a7110e0ac6386921801c06d497d44fefc" name="a7110e0ac6386921801c06d497d44fefc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7110e0ac6386921801c06d497d44fefc">&#9670;&#160;</a></span>DissolveSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.FormationGlowSettings.DissolveSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds a ring takes to dissolve once its member is disconnected (out of formation, alone, popped or cleared), and to grow in once it's connected. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html#a957ef19397b8683a5c8951ca90d98ac0">BalloonParty.Configuration.Balloons.IFormationGlowSettings</a>.</p>
+
+</div>
+</div>
 <a id="a832816eb6bc232bf1dc530d5f19bb381" name="a832816eb6bc232bf1dc530d5f19bb381"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a832816eb6bc232bf1dc530d5f19bb381">&#9670;&#160;</a></span>Enabled</h2>
 
