@@ -31,57 +31,57 @@ var NAVTREE =
       [ "Quick Links", "index.html#autotoc_md306", null ]
     ] ],
     [ "Code Style Guide", "style_guide.html", [
-      [ "Code Style Guide", "style_guide.html#autotoc_md979", [
-        [ "Architecture — MVC", "style_guide.html#autotoc_md981", null ],
-        [ "Stack", "style_guide.html#autotoc_md983", null ],
-        [ "Dependency Injection — VContainer", "style_guide.html#autotoc_md985", [
-          [ "Scopes", "style_guide.html#autotoc_md986", null ],
-          [ "Instantiating prefabs with child scopes", "style_guide.html#autotoc_md987", null ],
-          [ "Eager creation for RegisterComponentOnNewGameObject", "style_guide.html#autotoc_md988", null ],
-          [ "Injection timing", "style_guide.html#autotoc_md989", null ]
+      [ "Code Style Guide", "style_guide.html#autotoc_md984", [
+        [ "Architecture — MVC", "style_guide.html#autotoc_md986", null ],
+        [ "Stack", "style_guide.html#autotoc_md988", null ],
+        [ "Dependency Injection — VContainer", "style_guide.html#autotoc_md990", [
+          [ "Scopes", "style_guide.html#autotoc_md991", null ],
+          [ "Instantiating prefabs with child scopes", "style_guide.html#autotoc_md992", null ],
+          [ "Eager creation for RegisterComponentOnNewGameObject", "style_guide.html#autotoc_md993", null ],
+          [ "Injection timing", "style_guide.html#autotoc_md994", null ]
         ] ],
-        [ "Reactive Programming — UniRx", "style_guide.html#autotoc_md991", null ],
-        [ "Messaging — MessagePipe", "style_guide.html#autotoc_md993", [
-          [ "Message design rules", "style_guide.html#autotoc_md994", null ]
+        [ "Reactive Programming — UniRx", "style_guide.html#autotoc_md996", null ],
+        [ "Messaging — MessagePipe", "style_guide.html#autotoc_md998", [
+          [ "Message design rules", "style_guide.html#autotoc_md999", null ]
         ] ],
-        [ "Async — UniTask", "style_guide.html#autotoc_md996", null ],
-        [ "Navigation State", "style_guide.html#autotoc_md998", [
-          [ "States", "style_guide.html#autotoc_md999", null ],
-          [ "Scene preloading flow", "style_guide.html#autotoc_md1000", null ],
-          [ "Editor standalone play", "style_guide.html#autotoc_md1001", null ]
+        [ "Async — UniTask", "style_guide.html#autotoc_md1001", null ],
+        [ "Navigation State", "style_guide.html#autotoc_md1003", [
+          [ "States", "style_guide.html#autotoc_md1004", null ],
+          [ "Scene preloading flow", "style_guide.html#autotoc_md1005", null ],
+          [ "Editor standalone play", "style_guide.html#autotoc_md1006", null ]
         ] ],
-        [ "Cinematic State", "style_guide.html#autotoc_md1002", [
-          [ "States", "style_guide.html#autotoc_md1003", null ],
-          [ "Pause Integration", "style_guide.html#autotoc_md1004", null ]
+        [ "Cinematic State", "style_guide.html#autotoc_md1007", [
+          [ "States", "style_guide.html#autotoc_md1008", null ],
+          [ "Pause Integration", "style_guide.html#autotoc_md1009", null ]
         ] ],
-        [ "Object Pooling", "style_guide.html#autotoc_md1006", null ],
-        [ "Configuration — Single Source of Truth", "style_guide.html#autotoc_md1008", null ],
-        [ "Animation", "style_guide.html#autotoc_md1010", null ],
-        [ "Unity Project Settings", "style_guide.html#autotoc_md1012", null ],
-        [ "Code Quality Constraints", "style_guide.html#autotoc_md1014", [
-          [ "Comments", "style_guide.html#autotoc_md1015", null ],
-          [ "Naming & Readability", "style_guide.html#autotoc_md1016", null ],
-          [ "Visibility", "style_guide.html#autotoc_md1017", null ],
-          [ "Architecture & Reuse", "style_guide.html#autotoc_md1018", null ],
-          [ "Formatting", "style_guide.html#autotoc_md1019", null ]
+        [ "Object Pooling", "style_guide.html#autotoc_md1011", null ],
+        [ "Configuration — Single Source of Truth", "style_guide.html#autotoc_md1013", null ],
+        [ "Animation", "style_guide.html#autotoc_md1015", null ],
+        [ "Unity Project Settings", "style_guide.html#autotoc_md1017", null ],
+        [ "Code Quality Constraints", "style_guide.html#autotoc_md1019", [
+          [ "Comments", "style_guide.html#autotoc_md1020", null ],
+          [ "Naming & Readability", "style_guide.html#autotoc_md1021", null ],
+          [ "Visibility", "style_guide.html#autotoc_md1022", null ],
+          [ "Architecture & Reuse", "style_guide.html#autotoc_md1023", null ],
+          [ "Formatting", "style_guide.html#autotoc_md1024", null ]
         ] ],
-        [ "Member Ordering", "style_guide.html#autotoc_md1021", [
-          [ "Fields & Properties", "style_guide.html#autotoc_md1022", null ],
-          [ "Methods", "style_guide.html#autotoc_md1023", null ],
-          [ "Canonical Example", "style_guide.html#autotoc_md1024", null ]
+        [ "Member Ordering", "style_guide.html#autotoc_md1026", [
+          [ "Fields & Properties", "style_guide.html#autotoc_md1027", null ],
+          [ "Methods", "style_guide.html#autotoc_md1028", null ],
+          [ "Canonical Example", "style_guide.html#autotoc_md1029", null ]
         ] ],
-        [ "Model Interface Pattern — Read/Write Separation", "style_guide.html#autotoc_md1026", null ],
-        [ "UI Scope Architecture", "style_guide.html#autotoc_md1028", [
-          [ "Dynamically instantiated prefab scopes", "style_guide.html#autotoc_md1029", null ]
+        [ "Model Interface Pattern — Read/Write Separation", "style_guide.html#autotoc_md1031", null ],
+        [ "UI Scope Architecture", "style_guide.html#autotoc_md1033", [
+          [ "Dynamically instantiated prefab scopes", "style_guide.html#autotoc_md1034", null ]
         ] ],
-        [ "Cheat Console", "style_guide.html#autotoc_md1031", null ],
-        [ "Logging", "style_guide.html#autotoc_md1033", null ],
-        [ "Gizmos & Editor Drawing", "style_guide.html#autotoc_md1035", [
-          [ "Build-stripping rules", "style_guide.html#autotoc_md1036", null ]
+        [ "Cheat Console", "style_guide.html#autotoc_md1036", null ],
+        [ "Logging", "style_guide.html#autotoc_md1038", null ],
+        [ "Gizmos & Editor Drawing", "style_guide.html#autotoc_md1040", [
+          [ "Build-stripping rules", "style_guide.html#autotoc_md1041", null ]
         ] ],
-        [ "Living Documentation", "style_guide.html#autotoc_md1038", null ],
-        [ "Enforcement Tooling", "style_guide.html#autotoc_md1040", [
-          [ "Quick reference", "style_guide.html#autotoc_md1041", null ]
+        [ "Living Documentation", "style_guide.html#autotoc_md1043", null ],
+        [ "Enforcement Tooling", "style_guide.html#autotoc_md1045", [
+          [ "Quick reference", "style_guide.html#autotoc_md1046", null ]
         ] ]
       ] ]
     ] ],
@@ -222,54 +222,54 @@ var NAVTREEINDEX =
 "classBalloonParty_1_1Shared_1_1Pool_1_1TrailFlightRegistry-1-g.html",
 "classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldResources.html#a483367da04fbcac1a8065981a08e30a5",
 "classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayService.html#a7934c9cf77898c60ebf56873bd13c295",
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRustleController.html#a9bf5ad4752935ac979a168ed706fa654",
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1GatekeeperActorModel.html#a96098b89cc73c3b6776c53cc5e0324e0",
-"classBalloonParty_1_1Slots_1_1Actor_1_1ClusterSlotSelectionStrategy.html#a8b942b9b0445f910e88085f97197e2a5",
-"classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a0d39365860f9d87f63247b33abbe6b04",
-"classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#a89ea0ca42ea7e26c8c45ccb921e4b5d8",
-"classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html",
-"classBalloonParty_1_1Solver_1_1ShotSimEffectBoard.html#a898cd9fa84859d08a6a642f023409c03",
-"classBalloonParty_1_1Thrower_1_1ThrowerController.html#a25ccc0063d67848a63390339579857b3",
-"classBalloonParty_1_1Thrower_1_1ThrowerView.html#ae80b62d359efd40be729f6189df1b82e",
-"classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealView.html#ae59c3eb1f7a1e3a1884c63136f0f36b1",
-"classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonCloth.html#a0b34fa899737852e32e79505a40a0830",
-"classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#a9141b2356cb09aefb754c8006d4367ba",
-"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a2bd55460b318b4fc3c9ad88655f0a093",
-"classBalloonParty_1_1UI_1_1Health_1_1HealthCounterLabel.html#af568f2e3c4d675c241a6a63e43190abd",
-"classBalloonParty_1_1UI_1_1ReactiveCounterLabel.html#a8d5793b443106b64e922677277a8ab28",
-"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a63483803ad2a8b2bdcd86335a481c0ea",
-"classBalloonParty_1_1UI_1_1Score_1_1ProgressNoticePresenter.html#af0ed3235d3589a13cd5195e746f39e02",
-"classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html#a1567879e530550a4381505000034d3ca",
-"functions_prop_l.html",
-"interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonViewBinding.html",
-"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeOddsSettings.html#a31b52edcaf7a229aa88d90a5189884fe",
-"interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ac17f89205e8769e5d969849e47b12daa",
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html#a6fb9572e78235e74f339d5797cc013bd",
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckAppearanceSettings.html#ab38cf746ea4f050d3e92b1436a7f139d",
-"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html",
-"interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html#a159727142782959ad45581142f7bcb4b",
-"interfaceBalloonParty_1_1Item_1_1Paint_1_1ISplashEffect.html#a53eade0fe8699893cfb167f407ba62ec",
-"interfaceBalloonParty_1_1Shared_1_1IDeflectorField.html",
-"interfaceBalloonParty_1_1Shared_1_1SceneLight_1_1ITimeOfDayNight.html",
-"namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a5336ad98defcb67c0b4465d92c35399c",
-"namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eb",
-"namespaceBalloonParty_1_1Slots_1_1Capabilities.html#ac1d521bee5fff8ee83685d6d74a1068bab45a250cc9aa404d55c358be677b84dc",
-"plan_future_ideas.html#autotoc_md564",
-"plan_reward_balloons.html#autotoc_md860",
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer_1_1RoamCandidate.html",
-"structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html#a67f3c5c1905caa09c9194ce721a4193a",
-"structBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyle.html#aceb626e9f51680c78b4a8885c4f30d15",
-"structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a146c08a9e0be4480f1e680885374bfab",
-"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html#aa3e8ca64a0db06d08d23e7660e14fe76",
-"structBalloonParty_1_1Game_1_1Health_1_1WaveDeficit.html#ae8450cf991507fbb40dd5c01404c1f4a",
-"structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#ac448d8c158f936af3fae38e3b2aafe02",
-"structBalloonParty_1_1Item_1_1Paint_1_1PaintTriangle.html#a8b3a6702e48efb7d10c64a9040361fd7",
-"structBalloonParty_1_1Scenario_1_1GroundRevealDecision.html#a6287552e34423d8012d1ebb3c53295ca",
-"structBalloonParty_1_1Shared_1_1Messages_1_1BubbleMergedMessage.html",
-"structBalloonParty_1_1Shared_1_1Messages_1_1ScoreLevelUpMessage.html#a5a183fb7d135213880a8bf7b0bb36104",
-"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html",
-"structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a365a3b3a9ef13e8f357513103da901a6",
-"structBalloonParty_1_1Solver_1_1ShotSlotLattice.html"
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRustleController.html#a73f5c19177b9614cdf536b69c19bda56",
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1GatekeeperActorModel.html#a4828ffce1efec2dea335d9639aee99dc",
+"classBalloonParty_1_1Slots_1_1Actor_1_1ClusterSlotSelectionStrategy.html#a4d023bbfbd1ba672865cad76c90b707d",
+"classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a0b3aba2d2f908d18dd8c0d2034d9a2dd",
+"classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#a7714be865e41770498d1e0b62f0927b1",
+"classBalloonParty_1_1Slots_1_1Spawner_1_1GridSpawnerCoordinator.html#ad587d19385cf7d56693588357f89fbbc",
+"classBalloonParty_1_1Solver_1_1ShotSimEffectBoard.html#a37e39edeefe54d409502ed7cdf65d6b9",
+"classBalloonParty_1_1Thrower_1_1ThrowerController.html#a212ef8bc11064806c7a2f894ef28f6ef",
+"classBalloonParty_1_1Thrower_1_1ThrowerView.html#ad1b0c64b2978e7e14f76dff7ce361f44",
+"classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealView.html#ada78bb1aa514a7ce519745ced9baf9e4",
+"classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonCloth.html#a0784e0a37cfc1ef76d60167a6b332469",
+"classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#a85859aa45e25c08d2c0bcbef130529b9",
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a26adedb3e29072f0592af0aa29e1571b",
+"classBalloonParty_1_1UI_1_1Health_1_1HealthCounterLabel.html#adc9b5dd707cd81c86b1f0b0cedd59a1a",
+"classBalloonParty_1_1UI_1_1ReactiveCounterLabel.html#a56288ac071b175c68ac46f376fee791f",
+"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a61a81a14cdb79101d9cd6687c9057e24",
+"classBalloonParty_1_1UI_1_1Score_1_1ProgressNoticePresenter.html#ad1e06f00e40169e6b64743cf404d3e73",
+"classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html",
+"functions_prop_h.html",
+"interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonMotionView.html",
+"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeOddsSettings.html#a1c0334bc37b26ba76ae3ae6ad415460e",
+"interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#aba63742e62a7e1d45d69d29c39992db9",
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html#a6a2af8eeda86946947baa1cd31aa8eda",
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckAppearanceSettings.html#a84efccfbefae534fe5c90703bb426858",
+"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#ad862b1390b2758345251f0a76a6768d2",
+"interfaceBalloonParty_1_1Game_1_1Level_1_1IBonusLevelCue.html#af4caf6fcd3a07fe1faf205ca9242fb3a",
+"interfaceBalloonParty_1_1Item_1_1Lightning_1_1IChainEffect.html#af8e7133f427752ee83e8e8fb5cb8cf62",
+"interfaceBalloonParty_1_1Shared_1_1IAssistSettings.html#aeff452b6337811b0e406e4225a28e39e",
+"interfaceBalloonParty_1_1Shared_1_1SceneLight_1_1ISceneLightRuntime.html#aaf44c4053f0b97198ffd63d921def87c",
+"namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a4057bfc60a5980587f7c86b52c14e014",
+"namespaceBalloonParty_1_1Game_1_1Telemetry.html#a634f9537c09ea241a0544abc34bd93bca71c7ae294b7abd866b3fb295b3b9e4a4",
+"namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675ae1ff6a7360e99cb46db6bb5d3ff8e2eb",
+"plan_future_ideas.html#autotoc_md558",
+"plan_performance_recovery.html#autotoc_md854",
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner_1_1PassCandidate.html",
+"structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html#a3f56cf4b4c981a110587e1e1049ea595",
+"structBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyle.html#a4d123ebfc6d12e761a4667ec21674fe3",
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html",
+"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html#a4372dc8727c3e8a7a4be42d31055bf12",
+"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html#afd177696079acd0ce177c29a0b15bfa0",
+"structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#a94ed8e052936db5429e37145321d3fb2",
+"structBalloonParty_1_1Item_1_1Paint_1_1PaintTriangle.html#a30cce5240df3cf3880d22de4b749b4d8",
+"structBalloonParty_1_1Projectile_1_1ProjectileRegistry_1_1Entry.html#a466b55453083271bf2565c31b5137b89",
+"structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html#a1a5b6cb75c05fb08093a3821aba1580b",
+"structBalloonParty_1_1Shared_1_1Messages_1_1RunResetMessage.html#a2bdd6de2c39a24e3c0b233830f52f398",
+"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafTier.html#a288310c6167d5929fbcd17a1a601964d",
+"structBalloonParty_1_1Solver_1_1ShotBalloonState.html#af79f854257f6fa26e3181d4bf8ea897e",
+"structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#ac013727e59d0903d2130030feb0232d7"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

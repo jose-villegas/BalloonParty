@@ -145,6 +145,9 @@ Public Member Functions</h2></td></tr>
 Package Functions</h2></td></tr>
 <tr class="memitem:a299dfd0979626195d09e48636c9ff611" id="r_a299dfd0979626195d09e48636c9ff611"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a299dfd0979626195d09e48636c9ff611">Advance</a> (float dt)</td></tr>
 <tr class="separator:a299dfd0979626195d09e48636c9ff611"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66174cd4e3c12b090d891114283ce220" id="r_a66174cd4e3c12b090d891114283ce220"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a66174cd4e3c12b090d891114283ce220">Pin</a> (int fps)</td></tr>
+<tr class="memdesc:a66174cd4e3c12b090d891114283ce220"><td class="mdescLeft">&#160;</td><td class="mdescRight">Holds the frame rate at <em>fps</em>  whatever the phone's temperature, until the app quits.  <br /></td></tr>
+<tr class="separator:a66174cd4e3c12b090d891114283ce220"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -174,6 +177,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:aedae6f8281bd13d0577945123735e309"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e0266b367edf1855b2b52040a56a6fb" id="r_a4e0266b367edf1855b2b52040a56a6fb"><td class="memItemLeft" align="right" valign="top">readonly int[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4e0266b367edf1855b2b52040a56a6fb">_ladder</a></td></tr>
 <tr class="separator:a4e0266b367edf1855b2b52040a56a6fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4acf6f478f7386157e47bf55d863c564" id="r_a4acf6f478f7386157e47bf55d863c564"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4acf6f478f7386157e47bf55d863c564">_pinned</a></td></tr>
+<tr class="separator:a4acf6f478f7386157e47bf55d863c564"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a24b48013b9ba96315ea966090013fa53" id="r_a24b48013b9ba96315ea966090013fa53"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a24b48013b9ba96315ea966090013fa53">_pollAccumulator</a></td></tr>
 <tr class="separator:a24b48013b9ba96315ea966090013fa53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad498af721fdb80b80e0b7ed51aa71314" id="r_ad498af721fdb80b80e0b7ed51aa71314"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad498af721fdb80b80e0b7ed51aa71314">_rungIndex</a></td></tr>
@@ -265,6 +270,34 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a66174cd4e3c12b090d891114283ce220" name="a66174cd4e3c12b090d891114283ce220"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66174cd4e3c12b090d891114283ce220">&#9670;&#160;</a></span>Pin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Shared.Thermal.ThermalFrameRateGovernor.Pin </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>fps</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Holds the frame rate at <em>fps</em>  whatever the phone's temperature, until the app quits. </p>
+<p>For performance runs: two builds can only be compared at the same rate. </p>
 
 </div>
 </div>
@@ -430,6 +463,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly int [] BalloonParty.Shared.Thermal.ThermalFrameRateGovernor._ladder</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4acf6f478f7386157e47bf55d863c564" name="a4acf6f478f7386157e47bf55d863c564"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4acf6f478f7386157e47bf55d863c564">&#9670;&#160;</a></span>_pinned</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Shared.Thermal.ThermalFrameRateGovernor._pinned</td>
         </tr>
       </table>
   </td>

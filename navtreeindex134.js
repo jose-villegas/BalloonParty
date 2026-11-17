@@ -1,5 +1,14 @@
 var NAVTREEINDEX134 =
 {
+"structBalloonParty_1_1Projectile_1_1ProjectileRegistry_1_1Entry.html#a466b55453083271bf2565c31b5137b89":[5,0,0,10,9,0,0],
+"structBalloonParty_1_1Projectile_1_1ProjectileRegistry_1_1Entry.html#a466b55453083271bf2565c31b5137b89":[6,0,0,10,9,0,0],
+"structBalloonParty_1_1Projectile_1_1ProjectileRegistry_1_1Entry.html#a4f1d1b12f14026b3a6850256d990e326":[5,0,0,10,9,0,1],
+"structBalloonParty_1_1Projectile_1_1ProjectileRegistry_1_1Entry.html#a4f1d1b12f14026b3a6850256d990e326":[6,0,0,10,9,0,1],
+"structBalloonParty_1_1Projectile_1_1ProjectileRegistry_1_1Entry.html#ae30850915299f7b602da48bbf47801dc":[5,0,0,10,9,0,2],
+"structBalloonParty_1_1Projectile_1_1ProjectileRegistry_1_1Entry.html#ae30850915299f7b602da48bbf47801dc":[6,0,0,10,9,0,2],
+"structBalloonParty_1_1Scenario_1_1GroundRevealDecision.html":[5,0,0,11,5],
+"structBalloonParty_1_1Scenario_1_1GroundRevealDecision.html":[6,0,0,11,5],
+"structBalloonParty_1_1Scenario_1_1GroundRevealDecision.html#a6287552e34423d8012d1ebb3c53295ca":[5,0,0,11,5,0],
 "structBalloonParty_1_1Scenario_1_1GroundRevealDecision.html#a6287552e34423d8012d1ebb3c53295ca":[6,0,0,11,5,0],
 "structBalloonParty_1_1Scenario_1_1GroundRevealDecision.html#a6bff843d9ec77a232103ee2495b06623":[5,0,0,11,5,2],
 "structBalloonParty_1_1Scenario_1_1GroundRevealDecision.html#a6bff843d9ec77a232103ee2495b06623":[6,0,0,11,5,2],
@@ -240,14 +249,5 @@ var NAVTREEINDEX134 =
 "structBalloonParty_1_1Shared_1_1Messages_1_1BoardDepletedMessage.html":[5,0,0,12,7,4],
 "structBalloonParty_1_1Shared_1_1Messages_1_1BoardDepletedMessage.html":[6,0,0,12,7,4],
 "structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html":[5,0,0,12,7,5],
-"structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html":[6,0,0,12,7,5],
-"structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html#a1a5b6cb75c05fb08093a3821aba1580b":[5,0,0,12,7,5,1],
-"structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html#a1a5b6cb75c05fb08093a3821aba1580b":[6,0,0,12,7,5,1],
-"structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html#ab494a2079fbea98efb848505178ec22e":[5,0,0,12,7,5,2],
-"structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html#ab494a2079fbea98efb848505178ec22e":[6,0,0,12,7,5,2],
-"structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html#ae91a9b00a1446efecdf08078f5e60c8c":[5,0,0,12,7,5,0],
-"structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html#ae91a9b00a1446efecdf08078f5e60c8c":[6,0,0,12,7,5,0],
-"structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html#af667ba77744a0b7ad053ce9c9f5757ce":[5,0,0,12,7,5,3],
-"structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html#af667ba77744a0b7ad053ce9c9f5757ce":[6,0,0,12,7,5,3],
-"structBalloonParty_1_1Shared_1_1Messages_1_1BubbleMergedMessage.html":[5,0,0,12,7,6]
+"structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html":[6,0,0,12,7,5]
 };

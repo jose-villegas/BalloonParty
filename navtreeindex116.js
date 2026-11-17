@@ -1,5 +1,9 @@
 var NAVTREEINDEX116 =
 {
+"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#ad862b1390b2758345251f0a76a6768d2":[6,0,0,3,9,9,9],
+"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#af8180a7c80ff7448293ca03438f90c67":[5,0,0,3,9,9,2],
+"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#af8180a7c80ff7448293ca03438f90c67":[6,0,0,3,9,9,2],
+"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html":[5,0,0,3,9,10],
 "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html":[6,0,0,3,9,10],
 "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#a17461a491eb0534886f81b4a1889c85f":[5,0,0,3,9,10,10],
 "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#a17461a491eb0534886f81b4a1889c85f":[6,0,0,3,9,10,10],
@@ -245,9 +249,5 @@ var NAVTREEINDEX116 =
 "interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html#ad47ae9a0a6075b903bc54ecbe58eb2e1":[6,0,0,6,7,1,0],
 "interfaceBalloonParty_1_1Game_1_1Level_1_1IBonusLevelCue.html":[5,0,0,6,7,2],
 "interfaceBalloonParty_1_1Game_1_1Level_1_1IBonusLevelCue.html":[6,0,0,6,7,2],
-"interfaceBalloonParty_1_1Game_1_1Level_1_1IBonusLevelCue.html#af4caf6fcd3a07fe1faf205ca9242fb3a":[5,0,0,6,7,2,0],
-"interfaceBalloonParty_1_1Game_1_1Level_1_1IBonusLevelCue.html#af4caf6fcd3a07fe1faf205ca9242fb3a":[6,0,0,6,7,2,0],
-"interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html":[5,0,0,6,7,3],
-"interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html":[6,0,0,6,7,3],
-"interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html#a159727142782959ad45581142f7bcb4b":[5,0,0,6,7,3,3]
+"interfaceBalloonParty_1_1Game_1_1Level_1_1IBonusLevelCue.html#af4caf6fcd3a07fe1faf205ca9242fb3a":[5,0,0,6,7,2,0]
 };

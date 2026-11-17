@@ -1,5 +1,14 @@
 var NAVTREEINDEX138 =
 {
+"structBalloonParty_1_1Solver_1_1ShotBalloonState.html#af79f854257f6fa26e3181d4bf8ea897e":[5,0,0,14,4,1],
+"structBalloonParty_1_1Solver_1_1ShotBalloonState.html#af79f854257f6fa26e3181d4bf8ea897e":[6,0,0,14,4,1],
+"structBalloonParty_1_1Solver_1_1ShotBalloonState.html#af81944253f912ab978653780d366029f":[5,0,0,14,4,5],
+"structBalloonParty_1_1Solver_1_1ShotBalloonState.html#af81944253f912ab978653780d366029f":[6,0,0,14,4,5],
+"structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html":[5,0,0,14,7],
+"structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html":[6,0,0,14,7],
+"structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a0e6a24ff33d96c776ac6b46c68b5163b":[5,0,0,14,7,9],
+"structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a0e6a24ff33d96c776ac6b46c68b5163b":[6,0,0,14,7,9],
+"structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a365a3b3a9ef13e8f357513103da901a6":[5,0,0,14,7,1],
 "structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a365a3b3a9ef13e8f357513103da901a6":[6,0,0,14,7,1],
 "structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a3b95fc46b3359fb8eeb71fcb79bcb24c":[5,0,0,14,7,3],
 "structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a3b95fc46b3359fb8eeb71fcb79bcb24c":[6,0,0,14,7,3],
@@ -240,14 +249,5 @@ var NAVTREEINDEX138 =
 "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a912b1a1ff3255de9acd1bcfbd1eb712f":[5,0,0,14,22,1],
 "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a912b1a1ff3255de9acd1bcfbd1eb712f":[6,0,0,14,22,1],
 "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#aa5a491399f7b4457ed099f9a1681af74":[5,0,0,14,22,8],
-"structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#aa5a491399f7b4457ed099f9a1681af74":[6,0,0,14,22,8],
-"structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#ac013727e59d0903d2130030feb0232d7":[5,0,0,14,22,2],
-"structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#ac013727e59d0903d2130030feb0232d7":[6,0,0,14,22,2],
-"structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#adb10de7f3409b86670ccf3ae5be89ede":[5,0,0,14,22,11],
-"structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#adb10de7f3409b86670ccf3ae5be89ede":[6,0,0,14,22,11],
-"structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#af118bad95657ceb9aae91533c84bac8e":[5,0,0,14,22,7],
-"structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#af118bad95657ceb9aae91533c84bac8e":[6,0,0,14,22,7],
-"structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#aff4003a39ba14a157101e3ae63cc5888":[5,0,0,14,22,10],
-"structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#aff4003a39ba14a157101e3ae63cc5888":[6,0,0,14,22,10],
-"structBalloonParty_1_1Solver_1_1ShotSlotLattice.html":[5,0,0,14,24]
+"structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#aa5a491399f7b4457ed099f9a1681af74":[6,0,0,14,22,8]
 };

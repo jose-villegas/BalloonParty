@@ -1,5 +1,9 @@
 var NAVTREEINDEX115 =
 {
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckAppearanceSettings.html#a84efccfbefae534fe5c90703bb426858":[6,0,0,3,5,20,9],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckAppearanceSettings.html#a8b8e653daa529b1dac686073b0173938":[5,0,0,3,5,20,2],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckAppearanceSettings.html#a8b8e653daa529b1dac686073b0173938":[6,0,0,3,5,20,2],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckAppearanceSettings.html#ab38cf746ea4f050d3e92b1436a7f139d":[5,0,0,3,5,20,1],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckAppearanceSettings.html#ab38cf746ea4f050d3e92b1436a7f139d":[6,0,0,3,5,20,1],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckAppearanceSettings.html#ab588a6b8af69f73d03500ae871552e10":[5,0,0,3,5,20,10],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckAppearanceSettings.html#ab588a6b8af69f73d03500ae871552e10":[6,0,0,3,5,20,10],
@@ -245,9 +249,5 @@ var NAVTREEINDEX115 =
 "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#ac3d5e189612ba74d4d859ae5955fe896":[6,0,0,3,9,9,1],
 "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#acb9d4e6cb5b4c8093a33ff6ea5be0956":[5,0,0,3,9,9,4],
 "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#acb9d4e6cb5b4c8093a33ff6ea5be0956":[6,0,0,3,9,9,4],
-"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#ad862b1390b2758345251f0a76a6768d2":[5,0,0,3,9,9,9],
-"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#ad862b1390b2758345251f0a76a6768d2":[6,0,0,3,9,9,9],
-"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#af8180a7c80ff7448293ca03438f90c67":[5,0,0,3,9,9,2],
-"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#af8180a7c80ff7448293ca03438f90c67":[6,0,0,3,9,9,2],
-"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html":[5,0,0,3,9,10]
+"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#ad862b1390b2758345251f0a76a6768d2":[5,0,0,3,9,9,9]
 };
