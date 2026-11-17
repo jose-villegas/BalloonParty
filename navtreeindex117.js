@@ -1,5 +1,15 @@
 var NAVTREEINDEX117 =
 {
+"interfaceBalloonParty_1_1Configuration_1_1HeadsUp_1_1IHeadsUpSettings.html#a488be540f92d4fd2b5c8dc021d321040":[5,0,0,3,7,5,0],
+"interfaceBalloonParty_1_1Configuration_1_1HeadsUp_1_1IHeadsUpSettings.html#a488be540f92d4fd2b5c8dc021d321040":[6,0,0,3,7,5,0],
+"interfaceBalloonParty_1_1Configuration_1_1HeadsUp_1_1IHeadsUpSettings.html#a8e44360abb8be7cd19ad43ebd2b0f192":[5,0,0,3,7,5,1],
+"interfaceBalloonParty_1_1Configuration_1_1HeadsUp_1_1IHeadsUpSettings.html#a8e44360abb8be7cd19ad43ebd2b0f192":[6,0,0,3,7,5,1],
+"interfaceBalloonParty_1_1Configuration_1_1IBombPreviewSettings.html":[5,0,0,3,15],
+"interfaceBalloonParty_1_1Configuration_1_1IBombPreviewSettings.html":[6,0,0,3,15],
+"interfaceBalloonParty_1_1Configuration_1_1IBombPreviewSettings.html#a71a2b823cc00d5616eb8dfa53c859c24":[5,0,0,3,15,0],
+"interfaceBalloonParty_1_1Configuration_1_1IBombPreviewSettings.html#a71a2b823cc00d5616eb8dfa53c859c24":[6,0,0,3,15,0],
+"interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html":[5,0,0,3,16],
+"interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html":[6,0,0,3,16],
 "interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html#a24b3485233af39086d1d8bea2d38880a":[5,0,0,3,16,0],
 "interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html#a24b3485233af39086d1d8bea2d38880a":[6,0,0,3,16,0],
 "interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html#a4d69e56c0203b8c03e54c5ef8f541dff":[5,0,0,3,16,3],
@@ -239,15 +249,5 @@ var NAVTREEINDEX117 =
 "interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#a19b50c8c7aeee2c70ff42610550b606a":[5,0,0,3,10,2,1],
 "interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#a19b50c8c7aeee2c70ff42610550b606a":[6,0,0,3,10,2,1],
 "interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#a29a9300265ef19bd0ca54ca7234d0358":[5,0,0,3,10,2,3],
-"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#a29a9300265ef19bd0ca54ca7234d0358":[6,0,0,3,10,2,3],
-"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#a3bc858fda6725edb210ac19ebafa98dc":[5,0,0,3,10,2,2],
-"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#a3bc858fda6725edb210ac19ebafa98dc":[6,0,0,3,10,2,2],
-"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#a7226ac114b3040766db46ac419d5607d":[5,0,0,3,10,2,4],
-"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#a7226ac114b3040766db46ac419d5607d":[6,0,0,3,10,2,4],
-"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#abb63ed32834590aaff82f62949b7906f":[5,0,0,3,10,2,5],
-"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#abb63ed32834590aaff82f62949b7906f":[6,0,0,3,10,2,5],
-"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#ac60a5e06ad3460836cccdf8585d33e54":[5,0,0,3,10,2,6],
-"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#ac60a5e06ad3460836cccdf8585d33e54":[6,0,0,3,10,2,6],
-"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#adf02c370c7c1fc9a247daf4630beaf0e":[5,0,0,3,10,2,0],
-"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#adf02c370c7c1fc9a247daf4630beaf0e":[6,0,0,3,10,2,0]
+"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#a29a9300265ef19bd0ca54ca7234d0358":[6,0,0,3,10,2,3]
 };

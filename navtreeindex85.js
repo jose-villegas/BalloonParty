@@ -1,5 +1,13 @@
 var NAVTREEINDEX85 =
 {
+"classBalloonParty_1_1Scenario_1_1View_1_1WaterRippleBuffer.html#ac7bd2a81b6f3974a093e55497b9e50ca":[5,0,0,11,0,8,25],
+"classBalloonParty_1_1Scenario_1_1View_1_1WaterRippleBuffer.html#ac7bd2a81b6f3974a093e55497b9e50ca":[6,0,0,11,0,8,25],
+"classBalloonParty_1_1Scenario_1_1View_1_1WaterRippleBuffer.html#ad59efa18b9c65c66eefb8af923ceec45":[5,0,0,11,0,8,1],
+"classBalloonParty_1_1Scenario_1_1View_1_1WaterRippleBuffer.html#ad59efa18b9c65c66eefb8af923ceec45":[6,0,0,11,0,8,1],
+"classBalloonParty_1_1Scenario_1_1View_1_1WaterRippleBuffer.html#ae14a30180ea95798ec1257ea6861f9b3":[5,0,0,11,0,8,20],
+"classBalloonParty_1_1Scenario_1_1View_1_1WaterRippleBuffer.html#ae14a30180ea95798ec1257ea6861f9b3":[6,0,0,11,0,8,20],
+"classBalloonParty_1_1Scenario_1_1View_1_1WaterRippleBuffer.html#ae28127fa48a089be587099a7d3c1fbe2":[5,0,0,11,0,8,18],
+"classBalloonParty_1_1Scenario_1_1View_1_1WaterRippleBuffer.html#ae28127fa48a089be587099a7d3c1fbe2":[6,0,0,11,0,8,18],
 "classBalloonParty_1_1Scenario_1_1View_1_1WaterRippleBuffer.html#aeb3552672ae888a37c5a08f620977ade":[5,0,0,11,0,8,5],
 "classBalloonParty_1_1Scenario_1_1View_1_1WaterRippleBuffer.html#aeb3552672ae888a37c5a08f620977ade":[6,0,0,11,0,8,5],
 "classBalloonParty_1_1Scenario_1_1View_1_1WaterRippleBuffer.html#af0e6a76dd8b0798a57393a2485c7126b":[5,0,0,11,0,8,8],
@@ -241,13 +249,5 @@ var NAVTREEINDEX85 =
 "classBalloonParty_1_1Shared_1_1Diagnostics_1_1FPSCounter.html#ab473badfcbe91eb7ae94464864813a9d":[5,0,0,12,2,1,2],
 "classBalloonParty_1_1Shared_1_1Diagnostics_1_1FPSCounter.html#ab473badfcbe91eb7ae94464864813a9d":[6,0,0,12,2,1,2],
 "classBalloonParty_1_1Shared_1_1Diagnostics_1_1FPSCounter.html#ad92fee598ae63736cf23ca71ee668bee":[5,0,0,12,2,1,5],
-"classBalloonParty_1_1Shared_1_1Diagnostics_1_1FPSCounter.html#ad92fee598ae63736cf23ca71ee668bee":[6,0,0,12,2,1,5],
-"classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html":[5,0,0,12,2,2],
-"classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html":[6,0,0,12,2,2],
-"classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html#a0da9f0d71e7354dd28a4b772ff5b72ed":[5,0,0,12,2,2,2],
-"classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html#a0da9f0d71e7354dd28a4b772ff5b72ed":[6,0,0,12,2,2,2],
-"classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html#a37df79c299b3e57c6b867d5d8e11556c":[5,0,0,12,2,2,3],
-"classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html#a37df79c299b3e57c6b867d5d8e11556c":[6,0,0,12,2,2,3],
-"classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html#a5d52f235947f76c63ad6bb4c29612be9":[5,0,0,12,2,2,4],
-"classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html#a5d52f235947f76c63ad6bb4c29612be9":[6,0,0,12,2,2,4]
+"classBalloonParty_1_1Shared_1_1Diagnostics_1_1FPSCounter.html#ad92fee598ae63736cf23ca71ee668bee":[6,0,0,12,2,1,5]
 };

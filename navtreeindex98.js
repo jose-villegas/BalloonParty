@@ -1,5 +1,13 @@
 var NAVTREEINDEX98 =
 {
+"classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a2d9633a9ed5907004244bae74c54d339":[5,0,0,13,2,7,14],
+"classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a2d9633a9ed5907004244bae74c54d339":[6,0,0,13,2,7,14],
+"classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a3c0e4ff80fe2d52fc25365dc3f8a6115":[5,0,0,13,2,7,10],
+"classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a3c0e4ff80fe2d52fc25365dc3f8a6115":[6,0,0,13,2,7,10],
+"classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a40cc2cc519142490a721946c7f2e0d5e":[5,0,0,13,2,7,17],
+"classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a40cc2cc519142490a721946c7f2e0d5e":[6,0,0,13,2,7,17],
+"classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a4ca8de50cf843754e2ab8211763888e3":[5,0,0,13,2,7,18],
+"classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a4ca8de50cf843754e2ab8211763888e3":[6,0,0,13,2,7,18],
 "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a5260414784faa7763acd5421fde06b19":[5,0,0,13,2,7,15],
 "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a5260414784faa7763acd5421fde06b19":[6,0,0,13,2,7,15],
 "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a56c3d97a65440cfb4a78ff028540218d":[5,0,0,13,2,7,21],
@@ -241,13 +249,5 @@ var NAVTREEINDEX98 =
 "classBalloonParty_1_1Solver_1_1ShotItemLayer.html#aff760f401bd863e0194b602cfbb3fcd2":[5,0,0,14,12,8],
 "classBalloonParty_1_1Solver_1_1ShotItemLayer.html#aff760f401bd863e0194b602cfbb3fcd2":[6,0,0,14,12,8],
 "classBalloonParty_1_1Solver_1_1ShotMotionMath.html":[5,0,0,14,14],
-"classBalloonParty_1_1Solver_1_1ShotMotionMath.html":[6,0,0,14,14],
-"classBalloonParty_1_1Solver_1_1ShotMotionMath.html#a8e6edd3d27ea0118bce4ac5a0aa22054":[5,0,0,14,14,4],
-"classBalloonParty_1_1Solver_1_1ShotMotionMath.html#a8e6edd3d27ea0118bce4ac5a0aa22054":[6,0,0,14,14,4],
-"classBalloonParty_1_1Solver_1_1ShotMotionMath.html#ac018f1c22686e3065ee0722a43293108":[5,0,0,14,14,0],
-"classBalloonParty_1_1Solver_1_1ShotMotionMath.html#ac018f1c22686e3065ee0722a43293108":[6,0,0,14,14,0],
-"classBalloonParty_1_1Solver_1_1ShotMotionMath.html#accc4cb0aa93ba1f33e0f80aeedb8f79d":[5,0,0,14,14,1],
-"classBalloonParty_1_1Solver_1_1ShotMotionMath.html#accc4cb0aa93ba1f33e0f80aeedb8f79d":[6,0,0,14,14,1],
-"classBalloonParty_1_1Solver_1_1ShotMotionMath.html#ae8663275de562b36ffa78b86358d133d":[5,0,0,14,14,2],
-"classBalloonParty_1_1Solver_1_1ShotMotionMath.html#ae8663275de562b36ffa78b86358d133d":[6,0,0,14,14,2]
+"classBalloonParty_1_1Solver_1_1ShotMotionMath.html":[6,0,0,14,14]
 };

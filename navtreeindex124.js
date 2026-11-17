@@ -1,5 +1,15 @@
 var NAVTREEINDEX124 =
 {
+"namespaceBalloonParty_1_1Prediction.html#a254a3b76e2281f08bf6f5a0b1024809ba694d154d83bf9e21a5dccd5cbf861add":[5,0,0,9,8,0],
+"namespaceBalloonParty_1_1Prediction.html#a254a3b76e2281f08bf6f5a0b1024809ba94e8a499539d1a472f3b5dbbb85508c0":[5,0,0,9,8,1],
+"namespaceBalloonParty_1_1Projectile.html":[5,0,0,10],
+"namespaceBalloonParty_1_1Projectile_1_1Buffs.html":[5,0,0,10,0],
+"namespaceBalloonParty_1_1Projectile_1_1Controller.html":[5,0,0,10,1],
+"namespaceBalloonParty_1_1Projectile_1_1Controller.html#a269c35de6ac7d821e1a397646dd92704":[5,0,0,10,1,14],
+"namespaceBalloonParty_1_1Projectile_1_1Controller.html#a269c35de6ac7d821e1a397646dd92704a43ec9846892f6095cd124df606a773eb":[5,0,0,10,1,14,0],
+"namespaceBalloonParty_1_1Projectile_1_1Controller.html#a269c35de6ac7d821e1a397646dd92704aac99ec9411052e84cbfc32ebfcf75c02":[5,0,0,10,1,14,1],
+"namespaceBalloonParty_1_1Projectile_1_1Controller.html#a269c35de6ac7d821e1a397646dd92704ae0010a0a1a3259ab5c06a19bad532851":[5,0,0,10,1,14,2],
+"namespaceBalloonParty_1_1Projectile_1_1Controller.html#ac2f91b5b592a9fafc9ba1d5f2a395649":[5,0,0,10,1,13],
 "namespaceBalloonParty_1_1Projectile_1_1Controller.html#ac2f91b5b592a9fafc9ba1d5f2a395649a6592f349ddfe64e333b3c4f1d17161af":[5,0,0,10,1,13,1],
 "namespaceBalloonParty_1_1Projectile_1_1Controller.html#ac2f91b5b592a9fafc9ba1d5f2a395649a95bfdefaaf01553cbf21ccd942855c69":[5,0,0,10,1,13,0],
 "namespaceBalloonParty_1_1Projectile_1_1Controller.html#ac2f91b5b592a9fafc9ba1d5f2a395649aaefbd0597f1bc2493bbc18898243513b":[5,0,0,10,1,13,2],
@@ -239,15 +249,5 @@ var NAVTREEINDEX124 =
 "plan_audio.html#autotoc_md354":[3,13,0,10],
 "plan_bubble_cluster_hit_feedback.html":[3,2],
 "plan_bubble_cluster_hit_feedback.html#autotoc_md355":[3,2,0],
-"plan_bubble_cluster_hit_feedback.html#autotoc_md357":[3,2,0,0],
-"plan_bubble_cluster_hit_feedback.html#autotoc_md359":[3,2,0,1],
-"plan_bubble_cluster_hit_feedback.html#autotoc_md361":[3,2,0,2],
-"plan_bubble_cluster_hit_feedback.html#autotoc_md363":[3,2,0,3],
-"plan_bubble_cluster_hit_feedback.html#autotoc_md364":[3,2,0,3,0],
-"plan_bubble_cluster_hit_feedback.html#autotoc_md365":[3,2,0,3,1],
-"plan_bubble_cluster_hit_feedback.html#autotoc_md366":[3,2,0,3,2],
-"plan_bubble_cluster_hit_feedback.html#autotoc_md368":[3,2,0,4],
-"plan_bubble_cluster_hit_feedback.html#autotoc_md369":[3,2,0,4,0],
-"plan_bubble_cluster_hit_feedback.html#autotoc_md370":[3,2,0,4,1],
-"plan_bubble_cluster_hit_feedback.html#autotoc_md371":[3,2,0,4,2]
+"plan_bubble_cluster_hit_feedback.html#autotoc_md357":[3,2,0,0]
 };

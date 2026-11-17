@@ -141,6 +141,8 @@ Static Package Attributes</h2></td></tr>
 <tr class="separator:a6ad96cb828a38068515d4624530a85f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7349efc5d73a25fd7c305a79e0a62d0f" id="r_a7349efc5d73a25fd7c305a79e0a62d0f"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7349efc5d73a25fd7c305a79e0a62d0f">JointTurnDegrees</a> = 20f</td></tr>
 <tr class="separator:a7349efc5d73a25fd7c305a79e0a62d0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ab8a604e5c5c3d0b1b26fca4b626115" id="r_a6ab8a604e5c5c3d0b1b26fca4b626115"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6ab8a604e5c5c3d0b1b26fca4b626115">Layers</a> = 3</td></tr>
+<tr class="separator:a6ab8a604e5c5c3d0b1b26fca4b626115"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af536258abc5af4d2f990702c5ce8af24" id="r_af536258abc5af4d2f990702c5ce8af24"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af536258abc5af4d2f990702c5ce8af24">MaxArcStepDegrees</a> = 6f</td></tr>
 <tr class="separator:af536258abc5af4d2f990702c5ce8af24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade69c4a0cf101b21d196d9738aab6e3d" id="r_ade69c4a0cf101b21d196d9738aab6e3d"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ade69c4a0cf101b21d196d9738aab6e3d">RibbonKind</a> = 0f</td></tr>
@@ -186,7 +188,7 @@ UV2, ribbon: the walk's next point past this end (xyz), for the corner, and whet
 <li>
 UV3, ribbon: the segment's other end's distance along the walk (x), so a pixel past the end of a stroke that runs on beyond its corner still knows the corner's distance. </li>
 </ul>
-<p>Straight edges are one segment each. Arc edges are cut so no piece turns more than <a class="el" href="#af536258abc5af4d2f990702c5ce8af24">MaxArcStepDegrees</a>, at points a pen passes through (<a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationShape.html#a8ddb1cfbae05674c5eaaf467907ce194" title="The point distance  along a closed walk, by LOCAL arc length (so a pen moving at a steady distance pe...">FormationShape.PointOnWalk</a>). The mesh has two submeshes with the same triangles: the view draws the shape's far half with one and its near half with the other, so the near side lies over the far side. </p>
+<p>Straight edges are one segment each. Arc edges are cut so no piece turns more than <a class="el" href="#af536258abc5af4d2f990702c5ce8af24">MaxArcStepDegrees</a>, at points a pen passes through (<a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationShape.html#a8ddb1cfbae05674c5eaaf467907ce194" title="The point distance  along a closed walk, by LOCAL arc length (so a pen moving at a steady distance pe...">FormationShape.PointOnWalk</a>). The mesh has <a class="el" href="#a6ab8a604e5c5c3d0b1b26fca4b626115">Layers</a> submeshes with the same triangles, one for each time the view draws it: the drop shadow, then the shape's far half, then its near half over that. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a94bb103a9105d5b870a2571bdbd2cd53" name="a94bb103a9105d5b870a2571bdbd2cd53"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a94bb103a9105d5b870a2571bdbd2cd53">&#9670;&#160;</a></span>AddBalls()</h2>
@@ -429,6 +431,28 @@ UV3, ribbon: the segment's other end's distance along the walk (x), so a pixel p
       <table class="memname">
         <tr>
           <td class="memname">const float BalloonParty.Game.Score.Behaviours.ShapeInkMeshBuilder.JointTurnDegrees = 20f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6ab8a604e5c5c3d0b1b26fca4b626115" name="a6ab8a604e5c5c3d0b1b26fca4b626115"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ab8a604e5c5c3d0b1b26fca4b626115">&#9670;&#160;</a></span>Layers</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int BalloonParty.Game.Score.Behaviours.ShapeInkMeshBuilder.Layers = 3</td>
         </tr>
       </table>
   </td>

@@ -140,9 +140,9 @@ Package Functions</h2></td></tr>
 <tr class="separator:a942b13840c749c0fc72ebdab5deefeae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a60d9569ec352c12584e3893d7590c77b" id="r_a60d9569ec352c12584e3893d7590c77b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a60d9569ec352c12584e3893d7590c77b">Hide</a> ()</td></tr>
 <tr class="separator:a60d9569ec352c12584e3893d7590c77b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6142e7e292fd0c09b7a39526b3f82386" id="r_a6142e7e292fd0c09b7a39526b3f82386"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6142e7e292fd0c09b7a39526b3f82386">Show</a> (Mesh mesh, Material[] halves, Color color, Vector3 size, <a class="el" href="classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html">FlyingTrail</a> sortLike)</td></tr>
-<tr class="memdesc:a6142e7e292fd0c09b7a39526b3f82386"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes the shape to draw.  <br /></td></tr>
-<tr class="separator:a6142e7e292fd0c09b7a39526b3f82386"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f0bab2d613fdbeab5a74f717907bc48" id="r_a2f0bab2d613fdbeab5a74f717907bc48"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2f0bab2d613fdbeab5a74f717907bc48">Show</a> (Mesh mesh, Material[] layers, Color color, Vector3 size, <a class="el" href="classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html">FlyingTrail</a> sortLike)</td></tr>
+<tr class="memdesc:a2f0bab2d613fdbeab5a74f717907bc48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes the shape to draw.  <br /></td></tr>
+<tr class="separator:a2f0bab2d613fdbeab5a74f717907bc48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -172,6 +172,8 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:a093dddd55bfa64593cd37c4e01cf62db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28e27b5fdaed92caf60f99dbb5b09c4a" id="r_a28e27b5fdaed92caf60f99dbb5b09c4a"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a28e27b5fdaed92caf60f99dbb5b09c4a">MeshReach</a> = 1.5f</td></tr>
 <tr class="separator:a28e27b5fdaed92caf60f99dbb5b09c4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6cc5418fea5b2cc6b1efd20f7b0707ca" id="r_a6cc5418fea5b2cc6b1efd20f7b0707ca"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6cc5418fea5b2cc6b1efd20f7b0707ca">ShadowRoom</a> = 0.2f</td></tr>
+<tr class="separator:a6cc5418fea5b2cc6b1efd20f7b0707ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Draws one score shape as a single mesh: the shape's baked wire mesh with the ink shader (<code>BalloonParty/Sprite/ShapeInk</code>), which places the pens and paints the ink behind them from the numbers written here each frame. </p>
@@ -252,8 +254,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a6142e7e292fd0c09b7a39526b3f82386" name="a6142e7e292fd0c09b7a39526b3f82386"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6142e7e292fd0c09b7a39526b3f82386">&#9670;&#160;</a></span>Show()</h2>
+<a id="a2f0bab2d613fdbeab5a74f717907bc48" name="a2f0bab2d613fdbeab5a74f717907bc48"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f0bab2d613fdbeab5a74f717907bc48">&#9670;&#160;</a></span>Show()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -269,7 +271,7 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Material[]</td>          <td class="paramname"><span class="paramname"><em>halves</em></span>, </td>
+          <td class="paramtype">Material[]</td>          <td class="paramname"><span class="paramname"><em>layers</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -295,7 +297,7 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Takes the shape to draw. </p>
-<p><em>halves</em>  are the materials for the mesh's two submeshes, the far half's first. <em>size</em>  is the mesh ribbon's half-width (x) and the ink's half-width at its widest (y) and at the pen (z), in world units. The ink sorts where <em>sortLike</em> 's ribbon does. </p>
+<p><em>layers</em>  are the materials for the mesh's submeshes, in the order they draw: the shadow, the far half, the near half. <em>size</em>  is the mesh ribbon's half-width (x) and the ink's half-width at its widest (y) and at the pen (z), in world units. The ink sorts where <em>sortLike</em> 's ribbon does. </p>
 
 </div>
 </div>
@@ -487,6 +489,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">const float BalloonParty.UI.Score.ShapeInkView.MeshReach = 1.5f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6cc5418fea5b2cc6b1efd20f7b0707ca" name="a6cc5418fea5b2cc6b1efd20f7b0707ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6cc5418fea5b2cc6b1efd20f7b0707ca">&#9670;&#160;</a></span>ShadowRoom</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float BalloonParty.UI.Score.ShapeInkView.ShadowRoom = 0.2f</td>
         </tr>
       </table>
   </td>

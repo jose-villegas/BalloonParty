@@ -12,6 +12,7 @@ var classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkMeshBuilder =
     [ "GapSlack", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkMeshBuilder.html#af6d40bd5d667515d6bf21f71f481f2ca", null ],
     [ "JointKind", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkMeshBuilder.html#a6ad96cb828a38068515d4624530a85f1", null ],
     [ "JointTurnDegrees", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkMeshBuilder.html#a7349efc5d73a25fd7c305a79e0a62d0f", null ],
+    [ "Layers", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkMeshBuilder.html#a6ab8a604e5c5c3d0b1b26fca4b626115", null ],
     [ "MaxArcStepDegrees", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkMeshBuilder.html#af536258abc5af4d2f990702c5ce8af24", null ],
     [ "RibbonKind", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkMeshBuilder.html#ade69c4a0cf101b21d196d9738aab6e3d", null ],
     [ "WidestArcDegrees", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkMeshBuilder.html#adc325415277af6fa95e858ad27dd2019", null ]

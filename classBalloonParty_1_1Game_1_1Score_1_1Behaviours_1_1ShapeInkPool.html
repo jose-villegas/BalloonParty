@@ -167,7 +167,7 @@ Static Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a9e57e209ccd50a53e3859b13a999e695" id="r_a9e57e209ccd50a53e3859b13a999e695"><td class="memItemLeft" align="right" valign="top">readonly Stack&lt; <a class="el" href="classBalloonParty_1_1UI_1_1Score_1_1ShapeInkView.html">ShapeInkView</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9e57e209ccd50a53e3859b13a999e695">_free</a> = new()</td></tr>
 <tr class="separator:a9e57e209ccd50a53e3859b13a999e695"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab5203aa776110d5b5b4efaf587f9f24c" id="r_ab5203aa776110d5b5b4efaf587f9f24c"><td class="memItemLeft" align="right" valign="top">readonly Material[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab5203aa776110d5b5b4efaf587f9f24c">_materials</a> = new Material[2]</td></tr>
+<tr class="memitem:ab5203aa776110d5b5b4efaf587f9f24c" id="r_ab5203aa776110d5b5b4efaf587f9f24c"><td class="memItemLeft" align="right" valign="top">readonly Material[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab5203aa776110d5b5b4efaf587f9f24c">_materials</a> = new Material[<a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkMeshBuilder.html#a6ab8a604e5c5c3d0b1b26fca4b626115">ShapeInkMeshBuilder.Layers</a>]</td></tr>
 <tr class="separator:ab5203aa776110d5b5b4efaf587f9f24c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4cf79e60fd7187bd0ab75d2e62e33a72" id="r_a4cf79e60fd7187bd0ab75d2e62e33a72"><td class="memItemLeft" align="right" valign="top">readonly Dictionary&lt; <a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationShape.html">FormationShape</a>, Mesh &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4cf79e60fd7187bd0ab75d2e62e33a72">_meshes</a> = new()</td></tr>
 <tr class="separator:a4cf79e60fd7187bd0ab75d2e62e33a72"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -190,16 +190,22 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:ab8f05b26a97dbef08ae72e7c5f2ba546"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8760d663e48fa218c6e3c1e3bbcd5103" id="r_a8760d663e48fa218c6e3c1e3bbcd5103"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8760d663e48fa218c6e3c1e3bbcd5103">InkRampId</a> = Shader.PropertyToID(&quot;_InkRamp&quot;)</td></tr>
 <tr class="separator:a8760d663e48fa218c6e3c1e3bbcd5103"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac57282010c31508e792918e9d702cb22" id="r_ac57282010c31508e792918e9d702cb22"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac57282010c31508e792918e9d702cb22">InkShadowId</a> = Shader.PropertyToID(&quot;_InkShadow&quot;)</td></tr>
+<tr class="separator:ac57282010c31508e792918e9d702cb22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad2b5595633ed813790a88cf10d702220" id="r_ad2b5595633ed813790a88cf10d702220"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad2b5595633ed813790a88cf10d702220">PenHandId</a> = Shader.PropertyToID(&quot;_PenHand&quot;)</td></tr>
 <tr class="separator:ad2b5595633ed813790a88cf10d702220"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0bff1f63c9332ecbfbd66fc743bea941" id="r_a0bff1f63c9332ecbfbd66fc743bea941"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0bff1f63c9332ecbfbd66fc743bea941">RimPadding</a> = 0.01f</td></tr>
 <tr class="separator:a0bff1f63c9332ecbfbd66fc743bea941"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a069070d3fe9b6b34002697d5e2e2d57f" id="r_a069070d3fe9b6b34002697d5e2e2d57f"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a069070d3fe9b6b34002697d5e2e2d57f">ShadowStencilCompId</a> = Shader.PropertyToID(&quot;_ShadowStencilComp&quot;)</td></tr>
+<tr class="separator:a069070d3fe9b6b34002697d5e2e2d57f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6412b31068420623c02e91d73def5da0" id="r_a6412b31068420623c02e91d73def5da0"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6412b31068420623c02e91d73def5da0">ShadowStencilPassId</a> = Shader.PropertyToID(&quot;_ShadowStencilPass&quot;)</td></tr>
+<tr class="separator:a6412b31068420623c02e91d73def5da0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace0ebfcb80d8e0c340a8dd68660eeb6b" id="r_ace0ebfcb80d8e0c340a8dd68660eeb6b"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace0ebfcb80d8e0c340a8dd68660eeb6b">SketchId</a> = Shader.PropertyToID(&quot;_Sketch&quot;)</td></tr>
 <tr class="separator:ace0ebfcb80d8e0c340a8dd68660eeb6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Hands <a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html" title="Pooled, zero-allocation per-frame driver for every in-flight shape formation.">ShapeFormationTicker</a> a <a class="el" href="classBalloonParty_1_1UI_1_1Score_1_1ShapeInkView.html" title="Draws one score shape as a single mesh: the shape&#39;s baked wire mesh with the ink shader (BalloonParty...">ShapeInkView</a> for each shape in flight and takes it back when the shape is done. </p>
-<p>Owns what the views share: each shape's baked mesh, built the first time that shape flies, and two copies of the ink material carrying the ink ramp, one drawing the half of a shape behind its centre and one, after it, the half in front. </p>
+<p>Owns what the views share: each shape's baked mesh, built the first time that shape flies, and three copies of the ink material carrying the ink ramp, drawn in turn: the shape's drop shadow, the half of it behind its centre, and the half in front. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a69e6b04e7e8b4ca291f4a71c85b68f52" name="a69e6b04e7e8b4ca291f4a71c85b68f52"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a69e6b04e7e8b4ca291f4a71c85b68f52">&#9670;&#160;</a></span>Acquire()</h2>
@@ -417,7 +423,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">readonly Material [] BalloonParty.Game.Score.Behaviours.ShapeInkPool._materials = new Material[2]</td>
+          <td class="memname">readonly Material [] BalloonParty.Game.Score.Behaviours.ShapeInkPool._materials = new Material[<a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkMeshBuilder.html#a6ab8a604e5c5c3d0b1b26fca4b626115">ShapeInkMeshBuilder.Layers</a>]</td>
         </tr>
       </table>
   </td>
@@ -627,6 +633,28 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ac57282010c31508e792918e9d702cb22" name="ac57282010c31508e792918e9d702cb22"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac57282010c31508e792918e9d702cb22">&#9670;&#160;</a></span>InkShadowId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Game.Score.Behaviours.ShapeInkPool.InkShadowId = Shader.PropertyToID(&quot;_InkShadow&quot;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ad2b5595633ed813790a88cf10d702220" name="ad2b5595633ed813790a88cf10d702220"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad2b5595633ed813790a88cf10d702220">&#9670;&#160;</a></span>PenHandId</h2>
 
@@ -660,6 +688,50 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">const float BalloonParty.Game.Score.Behaviours.ShapeInkPool.RimPadding = 0.01f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a069070d3fe9b6b34002697d5e2e2d57f" name="a069070d3fe9b6b34002697d5e2e2d57f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a069070d3fe9b6b34002697d5e2e2d57f">&#9670;&#160;</a></span>ShadowStencilCompId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Game.Score.Behaviours.ShapeInkPool.ShadowStencilCompId = Shader.PropertyToID(&quot;_ShadowStencilComp&quot;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6412b31068420623c02e91d73def5da0" name="a6412b31068420623c02e91d73def5da0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6412b31068420623c02e91d73def5da0">&#9670;&#160;</a></span>ShadowStencilPassId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Game.Score.Behaviours.ShapeInkPool.ShadowStencilPassId = Shader.PropertyToID(&quot;_ShadowStencilPass&quot;)</td>
         </tr>
       </table>
   </td>

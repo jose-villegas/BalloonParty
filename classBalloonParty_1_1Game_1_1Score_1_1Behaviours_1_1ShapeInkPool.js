@@ -18,7 +18,10 @@ var classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkPool =
     [ "InkHalfId", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkPool.html#a8a7dfd87a3f11c0f346486e78f4b5652", null ],
     [ "InkLookId", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkPool.html#ab8f05b26a97dbef08ae72e7c5f2ba546", null ],
     [ "InkRampId", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkPool.html#a8760d663e48fa218c6e3c1e3bbcd5103", null ],
+    [ "InkShadowId", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkPool.html#ac57282010c31508e792918e9d702cb22", null ],
     [ "PenHandId", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkPool.html#ad2b5595633ed813790a88cf10d702220", null ],
     [ "RimPadding", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkPool.html#a0bff1f63c9332ecbfbd66fc743bea941", null ],
+    [ "ShadowStencilCompId", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkPool.html#a069070d3fe9b6b34002697d5e2e2d57f", null ],
+    [ "ShadowStencilPassId", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkPool.html#a6412b31068420623c02e91d73def5da0", null ],
     [ "SketchId", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkPool.html#ace0ebfcb80d8e0c340a8dd68660eeb6b", null ]
 ];
