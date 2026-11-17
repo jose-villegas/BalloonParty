@@ -363,6 +363,7 @@ warm Pixel 9 Pro to 80 and then 60, so less work on every thread is what keeps i
 | A lens map's camera renders only while its layer has something alive (`LayerPresence`); the glint stays with the clearing | `ddb76d469` | Editor bot run: main-map renders down 50%, HUD-map renders down 37%. Tablet: about 2% on the main thread, inside the noise |
 | Plain balloons sway from `BalloonSwayTicker` instead of an Animator each (31 of 37; the armoured and reward balloons keep theirs). Matches a real Animator to 0.005 degrees, frame for frame | `d8b70ce14` | Tablet: about 5% less main-thread and all-thread work (6.54 against 6.89 million cycles per frame, first session after install left out) |
 | Tough-snake springs lost their drop shadow and write their line only on a change | `6a76c4307` | Not measured alone |
+| Score shapes are one baked mesh each, drawn by a shader (`ShapeInk`), in place of a pooled trail per pen (a 100-point shape was 100 trail objects, each with its ribbon copied out and back every frame). The look changed with it, to a pen on paper | `1ed1e9347` to `4e40d7cfd` | Tablet, four sessions each on the same seed: main thread 5.91 against 6.04 million cycles per frame, all threads 12.18 against 12.59. About 2 to 3% less, inside the noise: shapes fly for a small part of a session |
 
 Rejected: `allowHDR = false` on the main effects-map camera. An audit called it free; read back from the map
 during bot play, the peak went from about 3.0 to exactly 1.0, so lightning and the laser would have lost
