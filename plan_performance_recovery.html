@@ -382,7 +382,9 @@ Changes after the measurements</h3>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Plain balloons sway from <code>BalloonSwayTicker</code> instead of an Animator each (31 of 37; the armoured and reward balloons keep theirs). Matches a real Animator to 0.005 degrees, frame for frame   </td><td class="markdownTableBodyNone"><code>d8b70ce14</code>   </td><td class="markdownTableBodyNone">Tablet: about 5% less main-thread and all-thread work (6.54 against 6.89 million cycles per frame, first session after install left out)    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Tough-snake springs lost their drop shadow and write their line only on a change   </td><td class="markdownTableBodyNone"><code>6a76c4307</code>   </td><td class="markdownTableBodyNone">Not measured alone   </td></tr>
+<td class="markdownTableBodyNone">Tough-snake springs lost their drop shadow and write their line only on a change   </td><td class="markdownTableBodyNone"><code>6a76c4307</code>   </td><td class="markdownTableBodyNone">Not measured alone    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Score shapes are one baked mesh each, drawn by a shader (<code>ShapeInk</code>), in place of a pooled trail per pen (a 100-point shape was 100 trail objects, each with its ribbon copied out and back every frame). The look changed with it, to a pen on paper   </td><td class="markdownTableBodyNone"><code>1ed1e9347</code> to <code>4e40d7cfd</code>   </td><td class="markdownTableBodyNone">Tablet, four sessions each on the same seed: main thread 5.91 against 6.04 million cycles per frame, all threads 12.18 against 12.59. About 2 to 3% less, inside the noise: shapes fly for a small part of a session   </td></tr>
 </table>
 <p>Rejected: <code>allowHDR = false</code> on the main effects-map camera. An audit called it free; read back from the map during bot play, the peak went from about 3.0 to exactly 1.0, so lightning and the laser would have lost their HDR. The camera's HDR flag is what keeps the map's values over 1.</p>
 <h3><a class="anchor" id="autotoc_md834"></a>
