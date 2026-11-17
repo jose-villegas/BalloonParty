@@ -27,11 +27,19 @@ namespace BalloonParty.Balloon.View
     ///     each drops once either balloon is popped or pooled.
     ///     It's drawn in a checker of two colours (<see cref="IToughSnakeSpringSettings.Colour" /> and
     ///     <see cref="IToughSnakeSpringSettings.CheckerColour" />) tiled along the line, so it reads as textured.
+    ///     Each casts a drop shadow (<see cref="IToughSnakeSpringSettings.Shadow" />): a second, softer line on a
+    ///     copy of the balloons' baked shadow material, anchored at the spring's middle, so the shader places it
+    ///     down-light as it places theirs and it swings with them as the time of day moves the light.
     /// </summary>
     internal sealed class ToughSnakeSpringView : MonoBehaviour, ITransitionOutgoingContent
     {
         // Within this share of the gap between neighbouring slots, the one behind has arrived.
         private const float ArrivedShare = 1.15f;
+
+        // Texels across the shadow's soft profile.
+        private const int ProfileTexels = 32;
+
+        private static readonly int OrbitDistanceId = Shader.PropertyToID("_OrbitDistance");
 
         [Inject] private IToughSnakeBody _snake;
         [Inject] private SlotGrid _grid;
@@ -47,6 +55,10 @@ namespace BalloonParty.Balloon.View
         private Texture2D _checker;
         private Color _checkerA;
         private Color _checkerB;
+        private Material _shadowMaterial;
+        private Texture2D _shadowProfile;
+        private float _profileWidth;
+        private float _profileSoftness;
 
         private void LateUpdate()
         {
@@ -100,6 +112,8 @@ namespace BalloonParty.Balloon.View
         {
             Destroy(_material);
             Destroy(_checker);
+            Destroy(_shadowMaterial);
+            Destroy(_shadowProfile);
         }
 
         // The board is handed off: the tied links stay with the balloons they tie, the rest go.
@@ -234,7 +248,16 @@ namespace BalloonParty.Balloon.View
             line.numCapVertices = 2;
             line.textureMode = LineTextureMode.Tile;
             line.positionCount = settings.Segments + 1;
-            return new Link(new SpringChain(settings.Segments), line);
+
+            // Local space, anchored at the spring's middle: the shadow shader reads the light at its object's
+            // origin, as it does at a balloon's.
+            var shadow = new GameObject("Shadow").AddComponent<LineRenderer>();
+            shadow.transform.SetParent(line.transform, false);
+            shadow.useWorldSpace = false;
+            shadow.numCapVertices = 2;
+            shadow.textureMode = LineTextureMode.Stretch;
+            shadow.positionCount = settings.Segments + 1;
+            return new Link(new SpringChain(settings.Segments), line, shadow);
         }
 
         // Grows a link not yet tied, once the link ahead has tied on, no further than the one behind has closed in.
@@ -272,6 +295,7 @@ namespace BalloonParty.Balloon.View
             {
                 // Hidden, it waits in the knot ahead, to grow out of it.
                 line.enabled = false;
+                link.Shadow.enabled = false;
                 link.Chain.Place(ahead.transform.position, ahead.transform.position);
                 return;
             }
@@ -295,6 +319,37 @@ namespace BalloonParty.Balloon.View
             for (var i = 0; i < link.Chain.Points; i++)
             {
                 line.SetPosition(i, link.Chain.Point(i));
+            }
+
+            DrawShadow(link, settings);
+        }
+
+        private void DrawShadow(Link link, IToughSnakeSpringSettings settings)
+        {
+            var shadow = link.Shadow;
+            var aheadShadow = link.AheadView != null ? link.AheadView.BakedShadow : null;
+            var behindShadow = link.BehindView != null ? link.BehindView.BakedShadow : null;
+            if (!settings.Shadow || aheadShadow == null || behindShadow == null)
+            {
+                shadow.enabled = false;
+                return;
+            }
+
+            shadow.enabled = true;
+            shadow.sharedMaterial = ShadowMaterial(aheadShadow, settings);
+            shadow.gameObject.layer = aheadShadow.gameObject.layer;
+            shadow.sortingLayerID = aheadShadow.sortingLayerID;
+            shadow.sortingOrder = Mathf.Min(aheadShadow.sortingOrder, behindShadow.sortingOrder);
+            shadow.widthMultiplier = settings.Width + 2f * settings.ShadowSoftness;
+            shadow.startColor = settings.ShadowColour;
+            shadow.endColor = settings.ShadowColour;
+
+            var last = link.Chain.Points - 1;
+            var anchor = shadow.transform;
+            anchor.position = (link.Chain.Point(0) + link.Chain.Point(last)) * 0.5f;
+            for (var i = 0; i <= last; i++)
+            {
+                shadow.SetPosition(i, anchor.InverseTransformPoint(link.Chain.Point(i)));
             }
         }
 
@@ -329,6 +384,55 @@ namespace BalloonParty.Balloon.View
             }
 
             return _material;
+        }
+
+        // The balloons' baked shadow material, so the spring's shadow takes the same light, fade and clouds, with a
+        // soft line for its texture; its down-light offset is in the shadow's own world scale, so it carries the
+        // balloon's scale over to the line's.
+        private Material ShadowMaterial(SpriteRenderer bakedShadow, IToughSnakeSpringSettings settings)
+        {
+            if (_shadowMaterial == null)
+            {
+                _shadowProfile = new Texture2D(1, ProfileTexels, TextureFormat.RGBA32, false)
+                {
+                    name = "ToughSnakeSpringShadowProfile",
+                    filterMode = FilterMode.Bilinear,
+                    wrapMode = TextureWrapMode.Clamp,
+                };
+                var source = bakedShadow.sharedMaterial;
+                _shadowMaterial = new Material(source) { name = "ToughSnakeSpringShadow", mainTexture = _shadowProfile };
+                _shadowMaterial.SetFloat(OrbitDistanceId,
+                    source.GetFloat(OrbitDistanceId) * bakedShadow.transform.lossyScale.x);
+                _profileWidth = -1f;
+            }
+
+            Reprofile(settings);
+            return _shadowMaterial;
+        }
+
+        // Redraws the shadow's profile across the line when its width or softness change: solid over the spring's
+        // width, fading out over the softness either side.
+        private void Reprofile(IToughSnakeSpringSettings settings)
+        {
+            if (Mathf.Approximately(_profileWidth, settings.Width)
+                && Mathf.Approximately(_profileSoftness, settings.ShadowSoftness))
+            {
+                return;
+            }
+
+            _profileWidth = settings.Width;
+            _profileSoftness = settings.ShadowSoftness;
+            var half = _profileWidth * 0.5f + _profileSoftness;
+            var pixels = new Color[ProfileTexels];
+            for (var i = 0; i < ProfileTexels; i++)
+            {
+                var across = Mathf.Abs(((i + 0.5f) / ProfileTexels - 0.5f) * 2f * half);
+                var alpha = _profileSoftness > 0f ? Mathf.Clamp01((half - across) / _profileSoftness) : 1f;
+                pixels[i] = new Color(1f, 1f, 1f, Mathf.SmoothStep(0f, 1f, alpha));
+            }
+
+            _shadowProfile.SetPixels(pixels);
+            _shadowProfile.Apply(false);
         }
 
         // Repaints the checker when its colours change, so they can be tuned in play.
@@ -374,6 +478,7 @@ namespace BalloonParty.Balloon.View
         {
             internal readonly SpringChain Chain;
             internal readonly LineRenderer Line;
+            internal readonly LineRenderer Shadow;
 
             internal object Ahead;
             internal object Behind;
@@ -384,10 +489,11 @@ namespace BalloonParty.Balloon.View
             internal float Reach;
             internal bool Tied;
 
-            internal Link(SpringChain chain, LineRenderer line)
+            internal Link(SpringChain chain, LineRenderer line, LineRenderer shadow)
             {
                 Chain = chain;
                 Line = line;
+                Shadow = shadow;
             }
         }
     }

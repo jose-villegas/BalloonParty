@@ -46,6 +46,19 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("Checks a world unit along the spring; the checker follows the spring, not the screen.")]
         [SerializeField] [Min(0.5f)] private float _checksPerUnit = 14f;
 
+        [Header("Shadow")]
+        [Tooltip("A drop shadow under each spring, cast away from the scene light the way the balloons' baked " +
+                 "shadows are (it takes their material, so it falls the same way and as far, fades with the light " +
+                 "and sinks into the clouds as theirs do). One more thin line drawn a spring.")]
+        [SerializeField] private bool _shadow = true;
+
+        [Tooltip("The shadow's colour: the balloons' baked shadow's, which their own colour tints; a white " +
+                 "spring leaves it as it is.")]
+        [SerializeField] private Color _shadowColour = new(0.753f, 0.753f, 0.753f, 0.627f);
+
+        [Tooltip("World units the shadow's edge fades over, either side of the spring's width.")]
+        [SerializeField] [Min(0f)] private float _shadowSoftness = 0.025f;
+
         [Header("Reveal")]
         [Tooltip("Seconds one spring takes to grow from the knot ahead and tie on behind. A snake's springs reveal " +
                  "head to tail, each once the one ahead has tied on.")]
@@ -68,6 +81,9 @@ namespace BalloonParty.Configuration.Balloons
         public Color Colour => _colour;
         public Color CheckerColour => _checkerColour;
         public float ChecksPerUnit => Mathf.Max(0.5f, _checksPerUnit);
+        public bool Shadow => _shadow;
+        public Color ShadowColour => _shadowColour;
+        public float ShadowSoftness => Mathf.Max(0f, _shadowSoftness);
         public float RevealSeconds => Mathf.Max(0.01f, _revealSeconds);
         public float AttachDistance => Mathf.Max(0.1f, _attachDistance);
     }

@@ -42,6 +42,15 @@ namespace BalloonParty.Configuration.Balloons
         /// <summary>Checks a world unit along the spring.</summary>
         float ChecksPerUnit { get; }
 
+        /// <summary>Whether each spring casts a drop shadow away from the scene light, as the balloons do.</summary>
+        bool Shadow { get; }
+
+        /// <summary>The drop shadow's colour.</summary>
+        Color ShadowColour { get; }
+
+        /// <summary>World units the drop shadow's edge fades over, either side of the spring's width.</summary>
+        float ShadowSoftness { get; }
+
         /// <summary>
         ///     Seconds one spring takes to grow from the knot ahead and tie on behind; a snake's springs reveal head
         ///     to tail, each once the one ahead has tied on.

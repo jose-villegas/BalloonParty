@@ -63,6 +63,10 @@ namespace BalloonParty.Balloon.View
         [Tooltip("The knot under the body: where the tough snake's springs tie on. Only toughs show it.")]
         [SerializeField] private SpriteRenderer _knot;
 
+        [Tooltip("The baked drop shadow: the tough snake's springs cast theirs with its material, so they fall " +
+                 "the same way.")]
+        [SerializeField] private SpriteRenderer _bakedShadow;
+
         [Header("Sorting")] [SerializeField] private int _baseSortingLayer;
 
         [Inject] private IBalloonsConfiguration _balloonsConfig;
@@ -112,6 +116,7 @@ namespace BalloonParty.Balloon.View
 
         internal ITransformCapture TransformCapture => _itemService?.TransformCapture;
         internal SpriteRenderer Knot => _knot;
+        internal SpriteRenderer BakedShadow => _bakedShadow;
 
         // The same component TransformCapture exposes, narrowed to its non-destructive read-only face —
         // the aim telegraph must be able to read a Laser's angle without CaptureSnapshot stopping its spin.
