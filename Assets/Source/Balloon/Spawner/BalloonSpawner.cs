@@ -69,7 +69,9 @@ namespace BalloonParty.Balloon.Spawner
         private readonly List<int> _fillCapacityDiag = new();
         private readonly List<BalloonPrefabEntry> _layerHeavies = new();
         private readonly List<BalloonPrefabEntry> _layerLights = new();
+        private readonly List<Vector2Int> _toughAnchors = new();
         private readonly Comparison<int> _byColumnKey;
+        private readonly Func<int, int?> _probeEntryRow;
         private readonly Action _releaseReinforcement;
         // The catalogue's bubble, which water lines bring whatever the level generator withholds; null without one.
         private readonly BalloonPrefabEntry _bubbleEntry;
@@ -163,6 +165,7 @@ namespace BalloonParty.Balloon.Spawner
 
             // Cached to avoid a per-sort delegate allocation.
             _byColumnKey = CompareColumnKeys;
+            _probeEntryRow = ProbeEntryRow;
             _releaseReinforcement = ReleaseReinforcement;
         }
 
@@ -490,6 +493,8 @@ namespace BalloonParty.Balloon.Spawner
             // balloon is visible to the next column's resolution.
             OrderColumnsByDepth();
             PutToughRunFirst(line);
+            PutToughsBesideToughs(line);
+
             var rejectIndex = 0;
 
             for (var i = 0; i < _lineColumns.Count; i++)
@@ -778,6 +783,60 @@ namespace BalloonParty.Balloon.Spawner
                 _lineColumns.Remove(column);
                 _lineColumns.Insert(i, column);
             }
+        }
+
+        // With tough snakes on, a clock line's toughs rise beside the toughs already on the board (ToughLanding),
+        // so they arrive next to the snake's body and fall in at once, not wherever the line's depth order sends
+        // them. They go first in the line's share of the batch, after the reward, which keeps the first column.
+        // line: as for SpawnLineInternal; the initial fill's toughs have their run instead.
+        private void PutToughsBesideToughs(int line)
+        {
+            var settings = _balloonsConfig.UnbreakableFormation;
+            if (line >= 0 || settings == null || !settings.Enabled || !settings.ToughSnakes)
+            {
+                return;
+            }
+
+            var start = _batchCursor < _spawnBatch.Count && _spawnBatch[_batchCursor] == _batchReward ? 1 : 0;
+            var toughs = 0;
+            for (var i = _batchCursor + start; i < _spawnBatch.Count; i++)
+            {
+                var entry = _spawnBatch[i];
+                if (entry.BalloonType is BalloonType.Tough or BalloonType.Tougher)
+                {
+                    _spawnBatch.RemoveAt(i);
+                    _spawnBatch.Insert(_batchCursor + start + toughs, entry);
+                    toughs++;
+                }
+            }
+
+            if (toughs == 0)
+            {
+                return;
+            }
+
+            CollectToughAnchors();
+            ToughLanding.PutNearest(_lineColumns, start, toughs, _probeEntryRow, _toughAnchors);
+        }
+
+        private void CollectToughAnchors()
+        {
+            _toughAnchors.Clear();
+            for (var col = 0; col < _grid.Columns; col++)
+            {
+                for (var row = 0; row < _grid.Rows; row++)
+                {
+                    if (!_grid.IsEmpty(col, row) && _grid.At(new Vector2Int(col, row)) is IArmouredFormationMember)
+                    {
+                        _toughAnchors.Add(new Vector2Int(col, row));
+                    }
+                }
+            }
+        }
+
+        private int? ProbeEntryRow(int column)
+        {
+            return _placement.ProbeEntryRow(column);
         }
 
         private BalloonPrefabEntry NextBatchEntry()
