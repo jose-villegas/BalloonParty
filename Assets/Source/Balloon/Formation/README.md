@@ -186,7 +186,9 @@ reaches for it as it closes in, and ties on as it arrives. Each spring is drawn 
 scene capture sees it as it sees the balloons: it casts the soft shadow and takes the bounce light
 (`Display/README.md`). When a level hands its board off, the level-up's ascent or the loss restart's pop
 wave, the tied springs stay with the balloons they tie and ride out with them (the view is outgoing
-content, `ITransitionOutgoingContent`); each drops once either balloon is popped or pooled.
+content, `ITransitionOutgoingContent`); each drops once either balloon is popped or pooled. A spring is white
+with a faint checker along it (`Colour` and `Checker Colour`, `Checks Per Unit`), so it reads as textured; the
+checker is tiled along the line, so it follows the spring as it swings, not the screen.
 
 ## Reinforcements
 

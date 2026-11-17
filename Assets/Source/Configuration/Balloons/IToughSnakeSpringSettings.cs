@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace BalloonParty.Configuration.Balloons
 {
     /// <summary>
@@ -31,8 +33,14 @@ namespace BalloonParty.Configuration.Balloons
         /// <summary>The line's thickness, in world units.</summary>
         float Width { get; }
 
-        /// <summary>How much of the knots' colour the line takes; the rest is <see cref="UnityEngine.Color.black" />.</summary>
-        float KnotTint { get; }
+        /// <summary>The spring's colour, one of the two in its checker.</summary>
+        Color Colour { get; }
+
+        /// <summary>The checker's other colour, alternating with <see cref="Colour" /> along the spring and across it.</summary>
+        Color CheckerColour { get; }
+
+        /// <summary>Checks a world unit along the spring.</summary>
+        float ChecksPerUnit { get; }
 
         /// <summary>
         ///     Seconds one spring takes to grow from the knot ahead and tie on behind; a snake's springs reveal head

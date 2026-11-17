@@ -25,6 +25,8 @@ namespace BalloonParty.Balloon.View
     ///     soft shadow and takes the bounce light. When a level hands its board off (the level-up's ascent, the
     ///     loss restart's pop wave), the tied links stay with the balloons they tie, riding out with them, and
     ///     each drops once either balloon is popped or pooled.
+    ///     It's drawn in a checker of two colours (<see cref="IToughSnakeSpringSettings.Colour" /> and
+    ///     <see cref="IToughSnakeSpringSettings.CheckerColour" />) tiled along the line, so it reads as textured.
     /// </summary>
     internal sealed class ToughSnakeSpringView : MonoBehaviour, ITransitionOutgoingContent
     {
@@ -41,6 +43,10 @@ namespace BalloonParty.Balloon.View
 
         private float _neighbourGap;
         private Camera _camera;
+        private Material _material;
+        private Texture2D _checker;
+        private Color _checkerA;
+        private Color _checkerB;
 
         private void LateUpdate()
         {
@@ -88,6 +94,12 @@ namespace BalloonParty.Balloon.View
                     Retire(i);
                 }
             }
+        }
+
+        private void OnDestroy()
+        {
+            Destroy(_material);
+            Destroy(_checker);
         }
 
         // The board is handed off: the tied links stay with the balloons they tie, the rest go.
@@ -195,7 +207,7 @@ namespace BalloonParty.Balloon.View
             link.Reach = 0f;
             link.Tied = false;
             link.Chain.Place(aheadKnot.transform.position, aheadKnot.transform.position);
-            link.Line.sharedMaterial = aheadKnot.sharedMaterial;
+            link.Line.sharedMaterial = CheckerMaterial(aheadKnot, settings);
             link.Line.gameObject.layer = aheadKnot.gameObject.layer;
             link.Line.gameObject.SetActive(true);
             _links.Add(link);
@@ -220,7 +232,7 @@ namespace BalloonParty.Balloon.View
             line.transform.SetParent(transform, false);
             line.useWorldSpace = true;
             line.numCapVertices = 2;
-            line.textureMode = LineTextureMode.Stretch;
+            line.textureMode = LineTextureMode.Tile;
             line.positionCount = settings.Segments + 1;
             return new Link(new SpringChain(settings.Segments), line);
         }
@@ -272,8 +284,11 @@ namespace BalloonParty.Balloon.View
                 link.Tied ? 1f : link.Reach);
 
             line.widthMultiplier = settings.Width;
-            line.startColor = Shade(ahead.color, settings.KnotTint);
-            line.endColor = Shade(behind.color, settings.KnotTint);
+            // The checker carries the colour; a 2x2 texture is two checks along it, so half as many repeats.
+            line.startColor = Color.white;
+            line.endColor = Color.white;
+            line.textureScale = new Vector2(settings.ChecksPerUnit * 0.5f, 1f);
+            Recolour(settings);
             line.sortingLayerID = ahead.sortingLayerID;
             // Under both knots, so it ties on behind them.
             line.sortingOrder = Mathf.Min(ahead.sortingOrder, behind.sortingOrder) - 1;
@@ -296,9 +311,38 @@ namespace BalloonParty.Balloon.View
             return _neighbourGap;
         }
 
-        private static Color Shade(Color knot, float tint)
+        // The knot's own material (so the line draws and is captured as the knots are), with the checker for its
+        // texture; one for every link.
+        private Material CheckerMaterial(SpriteRenderer knot, IToughSnakeSpringSettings settings)
         {
-            return new Color(knot.r * tint, knot.g * tint, knot.b * tint, knot.a);
+            if (_material == null)
+            {
+                _checker = new Texture2D(2, 2, TextureFormat.RGBA32, false)
+                {
+                    name = "ToughSnakeSpringChecker",
+                    filterMode = FilterMode.Point,
+                    wrapMode = TextureWrapMode.Repeat,
+                };
+                _material = new Material(knot.sharedMaterial) { name = "ToughSnakeSpring", mainTexture = _checker };
+                _checkerA = _checkerB = Color.clear;
+                Recolour(settings);
+            }
+
+            return _material;
+        }
+
+        // Repaints the checker when its colours change, so they can be tuned in play.
+        private void Recolour(IToughSnakeSpringSettings settings)
+        {
+            if (_checker == null || (settings.Colour == _checkerA && settings.CheckerColour == _checkerB))
+            {
+                return;
+            }
+
+            _checkerA = settings.Colour;
+            _checkerB = settings.CheckerColour;
+            _checker.SetPixels(new[] { _checkerA, _checkerB, _checkerB, _checkerA });
+            _checker.Apply(false);
         }
 
         private void RetireAll()

@@ -35,8 +35,16 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("The line's thickness, in world units.")]
         [SerializeField] [Min(0.001f)] private float _width = 0.035f;
 
-        [Tooltip("How much of the knots' colour the line takes; the rest is black, so it reads as a darker string.")]
-        [SerializeField] [Range(0f, 1f)] private float _knotTint = 0.6f;
+        [Header("Look")]
+        [Tooltip("The spring's colour: one of the two in its checker.")]
+        [SerializeField] private Color _colour = Color.white;
+
+        [Tooltip("The checker's other colour, alternating with Colour along the spring and across it, so the line " +
+                 "reads as textured. Set it to Colour for a plain spring.")]
+        [SerializeField] private Color _checkerColour = new(0.82f, 0.82f, 0.82f, 1f);
+
+        [Tooltip("Checks a world unit along the spring; the checker follows the spring, not the screen.")]
+        [SerializeField] [Min(0.5f)] private float _checksPerUnit = 14f;
 
         [Header("Reveal")]
         [Tooltip("Seconds one spring takes to grow from the knot ahead and tie on behind. A snake's springs reveal " +
@@ -57,7 +65,9 @@ namespace BalloonParty.Configuration.Balloons
         public float Damping => _damping;
         public float StepsPerSecond => Mathf.Max(15f, _stepsPerSecond);
         public float Width => _width;
-        public float KnotTint => _knotTint;
+        public Color Colour => _colour;
+        public Color CheckerColour => _checkerColour;
+        public float ChecksPerUnit => Mathf.Max(0.5f, _checksPerUnit);
         public float RevealSeconds => Mathf.Max(0.01f, _revealSeconds);
         public float AttachDistance => Mathf.Max(0.1f, _attachDistance);
     }
