@@ -232,7 +232,7 @@ var searchData=
   ['allowedlicenses_229',['AllowedLicenses',['../structBalloonParty_1_1Audio_1_1Editor_1_1SfxFetchRequest.html#adeefea6987aa91b5d1c213a9c0739838',1,'BalloonParty::Audio::Editor::SfxFetchRequest']]],
   ['allowedoverlap_230',['AllowedOverlap',['../classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpPacking.html#a58597fbf5f270ffa4b9224450bd17faa',1,'BalloonParty::UI::HeadsUp::HeadsUpPacking']]],
   ['allslots_231',['AllSlots',['../classBalloonParty_1_1Game_1_1Telemetry_1_1MetricCatalog.html#a8b829f9e482c9dbcfc33f89c45f44cad',1,'BalloonParty::Game::Telemetry::MetricCatalog']]],
-  ['allslotsfree_232',['AllSlotsFree',['../classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#a30d37fd19fd082eb30b5d18deaea40b0',1,'BalloonParty::Balloon::Formation::FormationPlanner']]],
+  ['allslotsopen_232',['AllSlotsOpen',['../classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#ae0b766c11bc3ecf6704d1aba8c07747c',1,'BalloonParty::Balloon::Formation::FormationPlanner']]],
   ['alone_20or_20watch_20for_20damage_233',['Tier 3 — leave alone, or watch for damage',['../plan_hdr.html#autotoc_md705',1,'']]],
   ['alongfor_234',['AlongFor',['../classBalloonParty_1_1UI_1_1ClothRibbon_1_1ClothRibbonWriting.html#a8343ccce475e54b304b19f0f944df253',1,'BalloonParty::UI::ClothRibbon::ClothRibbonWriting']]],
   ['alonghit_235',['AlongHit',['../classBalloonParty_1_1Configuration_1_1Balloons_1_1HitVfxOverride.html#a6c0ce0fd7761390ab2a8ef20f0dfbd70',1,'BalloonParty::Configuration::Balloons::HitVfxOverride']]],

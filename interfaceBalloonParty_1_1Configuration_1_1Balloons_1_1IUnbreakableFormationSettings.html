@@ -178,6 +178,9 @@ Properties</h2></td></tr>
 <tr class="memitem:a9049ea6657189c05859a740e6f67a8f8" id="r_a9049ea6657189c05859a740e6f67a8f8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9049ea6657189c05859a740e6f67a8f8">SnakeMaxMembers</a><code> [get]</code></td></tr>
 <tr class="memdesc:a9049ea6657189c05859a740e6f67a8f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Most unbreakables in a snake, the line that walks the board.  <br /></td></tr>
 <tr class="separator:a9049ea6657189c05859a740e6f67a8f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49e6a58cddddba66cf379f3644d90baa" id="r_a49e6a58cddddba66cf379f3644d90baa"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a49e6a58cddddba66cf379f3644d90baa">SnakeStepsPerBeat</a><code> [get]</code></td></tr>
+<tr class="memdesc:a49e6a58cddddba66cf379f3644d90baa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Steps an unbreakable snake takes each beat, evenly spaced: 2 steps on the beat and the off-beat.  <br /></td></tr>
+<tr class="separator:a49e6a58cddddba66cf379f3644d90baa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7da097d9ad46cdaf9471eb941d324602" id="r_a7da097d9ad46cdaf9471eb941d324602"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7da097d9ad46cdaf9471eb941d324602">SnakeWeight</a><code> [get]</code></td></tr>
 <tr class="memdesc:a7da097d9ad46cdaf9471eb941d324602"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pick weight of a snake.  <br /></td></tr>
 <tr class="separator:a7da097d9ad46cdaf9471eb941d324602"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -221,7 +224,7 @@ Properties</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Seconds of play between the unbreakables' beats. </p>
-<p>An unbreakable snake steps on every beat; every <a class="el" href="#a02cca91833529db2620546083d03cf68" title="Beats in one cycle.">BeatsPerCycle</a> beats make a cycle, the clock formations form, hold and change shape on and a lone unbreakable moves on. </p>
+<p>An unbreakable snake steps <a class="el" href="#a49e6a58cddddba66cf379f3644d90baa" title="Steps an unbreakable snake takes each beat, evenly spaced: 2 steps on the beat and the off-beat.">SnakeStepsPerBeat</a> times a beat; every <a class="el" href="#a02cca91833529db2620546083d03cf68" title="Beats in one cycle.">BeatsPerCycle</a> beats make a cycle, the clock formations form, hold and change shape on and a lone unbreakable moves on. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#af1faf93d863550ddbded0b8b84a960d0">BalloonParty.Configuration.Balloons.UnbreakableFormationSettings</a>.</p>
 
@@ -663,6 +666,32 @@ Properties</h2></td></tr>
 <p>Most unbreakables in a snake, the line that walks the board. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a81c3c54e098f5754dfc34f1201278e50">BalloonParty.Configuration.Balloons.UnbreakableFormationSettings</a>.</p>
+
+</div>
+</div>
+<a id="a49e6a58cddddba66cf379f3644d90baa" name="a49e6a58cddddba66cf379f3644d90baa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49e6a58cddddba66cf379f3644d90baa">&#9670;&#160;</a></span>SnakeStepsPerBeat</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings.SnakeStepsPerBeat</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Steps an unbreakable snake takes each beat, evenly spaced: 2 steps on the beat and the off-beat. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a52279ea02f60cb70611b285616a8a3be">BalloonParty.Configuration.Balloons.UnbreakableFormationSettings</a>.</p>
 
 </div>
 </div>

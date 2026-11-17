@@ -76,7 +76,7 @@ var searchData=
   ['allocateandplay_73',['AllocateAndPlay',['../classBalloonParty_1_1Audio_1_1SfxService.html#afcaa2b696df7cbb3617a597e542ab33a',1,'BalloonParty::Audio::SfxService']]],
   ['alloccupiedslots_74',['AllOccupiedSlots',['../classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a8e3ee84f28a0273bd3c83e634fe3defb',1,'BalloonParty::Slots::Grid::SlotGrid']]],
   ['allowed_75',['Allowed',['../classBalloonParty_1_1Game_1_1BalloonWander.html#a106bd473abffff421ff2c1b451cf7498',1,'BalloonParty::Game::BalloonWander']]],
-  ['allslotsfree_76',['AllSlotsFree',['../classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#a30d37fd19fd082eb30b5d18deaea40b0',1,'BalloonParty::Balloon::Formation::FormationPlanner']]],
+  ['allslotsopen_76',['AllSlotsOpen',['../classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#ae0b766c11bc3ecf6704d1aba8c07747c',1,'BalloonParty::Balloon::Formation::FormationPlanner']]],
   ['alongfor_77',['AlongFor',['../classBalloonParty_1_1UI_1_1ClothRibbon_1_1ClothRibbonWriting.html#a8343ccce475e54b304b19f0f944df253',1,'BalloonParty::UI::ClothRibbon::ClothRibbonWriting']]],
   ['angle01_78',['Angle01',['../classBalloonParty_1_1Shared_1_1Extensions_1_1VectorMathExtensions.html#a8f9b47f5ef2f845475ea83483b9b71b2',1,'BalloonParty::Shared::Extensions::VectorMathExtensions']]],
   ['angleat_79',['AngleAt',['../classBalloonParty_1_1Editor_1_1ShieldChains_1_1ShieldChainWindow.html#a7fcdef5ddb20299991faae5133a0a2b9',1,'BalloonParty::Editor::ShieldChains::ShieldChainWindow']]],

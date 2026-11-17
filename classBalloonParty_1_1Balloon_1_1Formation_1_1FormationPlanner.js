@@ -5,7 +5,7 @@ var classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner =
     [ "Spot", "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Spot.html", "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Spot" ],
     [ "SpotByCost", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1SpotByCost.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1SpotByCost" ],
     [ "AddCoverSlots", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#af571487f64b8ebbda2da79989b8b9268", null ],
-    [ "AllSlotsFree", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#a30d37fd19fd082eb30b5d18deaea40b0", null ],
+    [ "AllSlotsOpen", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#ae0b766c11bc3ecf6704d1aba8c07747c", null ],
     [ "Assign", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#a40b09e1e0afdade18d90db396e688395", null ],
     [ "BuildSlots", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#a77c930473c87b499e48971b73c33767e", null ],
     [ "ClosesWall", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#a7d9eef2c87bbcba185621b39c1a9855f", null ],
@@ -32,5 +32,6 @@ var classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner =
     [ "_walledBefore", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#a8eff9a950c14391ce288f62d05de5d4b", null ],
     [ "CoverMembers", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#a5dadd543520a4c59da548e035e4f54a7", null ],
     [ "CoverMinMembers", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#aed7e5ae6e33605002e730546e7345aee", null ],
-    [ "CoverOrders", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#a0cc826f5b26e8458f932a1118081cf21", null ]
+    [ "CoverOrders", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#a0cc826f5b26e8458f932a1118081cf21", null ],
+    [ "DisplacedBalloonCost", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#a49ef572f30d5352ae8e911db6b5ef169", null ]
 ];
