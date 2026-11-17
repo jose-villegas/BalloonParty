@@ -14,9 +14,20 @@ namespace BalloonParty.Shared.SceneLight
     ///     them both as globals and through <see cref="ISceneLightRuntime"/> for the CPU-side consumers
     ///     (sky tint, GI) that can't read the globals. Replaces the ambient push formerly bolted onto
     ///     <see cref="SceneLightFieldService"/>, which now owns only the local light field.
+    ///
+    ///     The shader globals follow the direction exactly. What <see cref="ISceneLightRuntime"/> hands the
+    ///     CPU-side readers moves in steps too small to see (<see cref="ReaderStepDegrees"/>,
+    ///     <see cref="ReaderColorStep"/>): the wall-clock source turns the light a few thousandths of a degree
+    ///     every frame, and a reader that compares against last frame's value (the UI tints and speculars,
+    ///     which rebuild canvas meshes on a change) would otherwise redo its work on every one of them.
     /// </summary>
     internal sealed class TimeOfDayService : IStartable, ITickable, ISceneLightRuntime, ITimeOfDayNight
     {
+        // A quarter degree moves a UI highlight by a fraction of a pixel; half an 8-bit step is below what a
+        // vertex colour can hold. Either one passed and the readers see the new light.
+        internal const float ReaderStepDegrees = 0.25f;
+        internal const float ReaderColorStep = 0.5f / 255f;
+
         private static readonly int SceneLightDirId = Shader.PropertyToID("_SceneLightDir");
         private static readonly int SceneLightColorId = Shader.PropertyToID("_SceneLightColor");
         private static readonly int SceneLightIntensityId = Shader.PropertyToID("_SceneLightIntensity");
@@ -25,9 +36,11 @@ namespace BalloonParty.Shared.SceneLight
         private readonly ITimeOfDaySettings _timeOfDay;
 
         private Vector2 _currentDirection;
+        private Vector2 _readerDirection;
+        private Color _readerColor;
 
-        public Vector2 CurrentDirection => _currentDirection;
-        public Color CurrentColor => _settings.EvaluateColor(_currentDirection);
+        public Vector2 CurrentDirection => _readerDirection;
+        public Color CurrentColor => _readerColor;
         public float CurrentIntensity => _settings.Intensity;
         public float ShadowStrengthScale => _timeOfDay.NightModeEnabled ? EvaluateShadowScale() : 1f;
         public bool IsNight => _timeOfDay.NightModeEnabled
@@ -42,6 +55,8 @@ namespace BalloonParty.Shared.SceneLight
             // Awake/OnEnable in the same frame, and CameraBackgroundTint reads CurrentColor from OnEnable —
             // a Start-only seed would let it sample the gradient at the wrong direction for one frame.
             _currentDirection = _settings.LightDirection;
+            _readerDirection = _currentDirection;
+            _readerColor = _settings.EvaluateColor(_currentDirection);
         }
 
         void IStartable.Start()
@@ -81,9 +96,25 @@ namespace BalloonParty.Shared.SceneLight
             // Alpha = 1 is the "owner has pushed" validity flag: shaders fall back to a neutral tint
             // when it's 0 (edit time without this service running).
             var color = _settings.EvaluateColor(_currentDirection);
+            StepReaders(color);
             color.a = 1f;
             Shader.SetGlobalColor(SceneLightColorId, color);
             Shader.SetGlobalFloat(SceneLightIntensityId, _settings.Intensity);
+        }
+
+        private void StepReaders(Color color)
+        {
+            if (Vector2.Angle(_readerDirection, _currentDirection) < ReaderStepDegrees
+                && Mathf.Abs(color.r - _readerColor.r) < ReaderColorStep
+                && Mathf.Abs(color.g - _readerColor.g) < ReaderColorStep
+                && Mathf.Abs(color.b - _readerColor.b) < ReaderColorStep
+                && Mathf.Abs(color.a - _readerColor.a) < ReaderColorStep)
+            {
+                return;
+            }
+
+            _readerDirection = _currentDirection;
+            _readerColor = color;
         }
 
         // True inside the night arc [endAngle, startAngle]; the ternary also covers a window authored to

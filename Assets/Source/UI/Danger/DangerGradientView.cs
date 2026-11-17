@@ -49,6 +49,7 @@ namespace BalloonParty.UI.Danger
         private Vector3 _bottomContainerRest;
         private float _currentLevel;
         private float _targetLevel;
+        private Color _appliedLight;
         private IDisposable _subscription;
 
         private void Awake()
@@ -82,7 +83,9 @@ namespace BalloonParty.UI.Danger
                 }
             }
 
-            if (!levelSettled || _tintByTimeOfDay)
+            // The light moves in small steps (TimeOfDayService), so a settled level under an unchanged light
+            // has nothing new to draw.
+            if (!levelSettled || (_tintByTimeOfDay && _lightRuntime != null && _lightRuntime.CurrentColor != _appliedLight))
             {
                 ApplyVisual(_currentLevel);
             }
@@ -114,7 +117,8 @@ namespace BalloonParty.UI.Danger
 
             if (_tintByTimeOfDay && _lightRuntime != null)
             {
-                color = Color.Lerp(color, color * _lightRuntime.CurrentColor, _timeOfDayIntensity);
+                _appliedLight = _lightRuntime.CurrentColor;
+                color = Color.Lerp(color, color * _appliedLight, _timeOfDayIntensity);
             }
 
             _targets.SetColor(color);
