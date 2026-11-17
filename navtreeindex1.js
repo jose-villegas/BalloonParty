@@ -1,15 +1,14 @@
 var NAVTREEINDEX1 =
 {
-"FlyingTrail_8cs.html":[7,0,18,8,1],
 "FoldRule_8cs.html":[7,0,7,10,7],
 "ForceDestroyProjectileMessage_8cs.html":[7,0,14,7,12],
 "ForceGameOverCheat_8cs.html":[7,0,2,12],
 "ForceRestartCheat_8cs.html":[7,0,2,13],
-"FormationAssignment_8cs.html":[7,0,1,1,1],
+"FormationAssignment_8cs.html":[7,0,1,1,0],
 "FormationMembership_8cs.html":[7,0,1,2,7],
 "FormationOverlapResolver_8cs.html":[7,0,7,9,0,3],
-"FormationPlanner_8cs.html":[7,0,1,1,2],
-"FormationShape_8cs.html":[7,0,1,1,3],
+"FormationPlanner_8cs.html":[7,0,1,1,1],
+"FormationShape_8cs.html":[7,0,1,1,2],
 "FormattedLabel_8cs.html":[7,0,18,16],
 "FrameDebuggerDumper_8cs.html":[7,0,6,2,0],
 "FrameDebuggerEventReader_8cs.html":[7,0,6,2,1],
@@ -154,7 +153,7 @@ var NAVTREEINDEX1 =
 "IFlightStatsWriter_8cs.html":[7,0,7,4,4],
 "IFlightStats_8cs.html":[7,0,7,4,2],
 "IFormationMember_8cs.html":[7,0,1,2,12],
-"IFormationReinforcements_8cs.html":[7,0,1,1,4],
+"IFormationReinforcements_8cs.html":[7,0,1,1,3],
 "IFreeCardGrant_8cs.html":[7,0,7,11,0],
 "IGameDisplayConfiguration_8cs.html":[7,0,3,14],
 "IGamePalette_8cs.html":[7,0,3,10,2],
@@ -249,5 +248,6 @@ var NAVTREEINDEX1 =
 "IScoreShapeCover_8cs.html":[7,0,7,9,0,4],
 "IScoreTrailBehaviourConfiguration_8cs.html":[7,0,3,17],
 "IScoreTrailBehaviour_8cs.html":[7,0,7,9,0,5],
-"IScoreTrailConfig_8cs.html":[7,0,14,28]
+"IScoreTrailConfig_8cs.html":[7,0,14,28],
+"IScoreTrailReporter_8cs.html":[7,0,7,9,0,6]
 };

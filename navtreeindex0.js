@@ -15,7 +15,6 @@ var NAVTREEINDEX0 =
 "AnimatorGameEntryGate_8cs.html":[7,0,18,12],
 "AppLifetimeScope_8cs.html":[7,0,7,12],
 "ArmourNeed_8cs.html":[7,0,7,0,0],
-"ArmourOrder_8cs.html":[7,0,1,1,0],
 "AssemblyInfo_8cs.html":[7,0,19],
 "AssistSettings_8cs.html":[7,0,3,12],
 "AttributionLedger_8cs.html":[7,0,0,1,0],
@@ -249,5 +248,6 @@ var NAVTREEINDEX0 =
 "FlightMetricsSnapshot_8cs.html":[7,0,7,10,6],
 "FlightMode_8cs.html":[7,0,8,11],
 "FlightPhase_8cs.html":[7,0,14,9,2],
-"FlightStatsService_8cs.html":[7,0,7,4,0]
+"FlightStatsService_8cs.html":[7,0,7,4,0],
+"FlyingTrail_8cs.html":[7,0,18,8,1]
 };

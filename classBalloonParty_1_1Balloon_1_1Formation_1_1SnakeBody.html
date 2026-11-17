@@ -124,19 +124,16 @@ Static Package Functions</h2></td></tr>
 <tr class="memitem:ad5830f325083b5ebdb5eb5f1595a92a9" id="r_ad5830f325083b5ebdb5eb5f1595a92a9"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad5830f325083b5ebdb5eb5f1595a92a9">Extend</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, Vector2Int tail, int direction, int lastRow, int count, List&lt; Vector2Int &gt; line)</td></tr>
 <tr class="memdesc:ad5830f325083b5ebdb5eb5f1595a92a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Up to <em>count</em>  slots into <em>line</em> , the first a neighbour of <em>tail</em>  in <em>direction</em>  or the gentlest turn from it, each after it a neighbour of the one before.  <br /></td></tr>
 <tr class="separator:ad5830f325083b5ebdb5eb5f1595a92a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a01b9b5b19ef00e8f60764b13ca4e3f92" id="r_a01b9b5b19ef00e8f60764b13ca4e3f92"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a01b9b5b19ef00e8f60764b13ca4e3f92">IsFreeLandedTough</a> (<a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html">IWriteableSlotActor</a> occupant)</td></tr>
-<tr class="memdesc:a01b9b5b19ef00e8f60764b13ca4e3f92"><td class="mdescLeft">&#160;</td><td class="mdescRight">A tough no snake holds that has landed: one free to fall in.  <br /></td></tr>
-<tr class="separator:a01b9b5b19ef00e8f60764b13ca4e3f92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adabbd2b36e26ef2f7b3ad091955cdd23" id="r_adabbd2b36e26ef2f7b3ad091955cdd23"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adabbd2b36e26ef2f7b3ad091955cdd23">IsFreeTough</a> (<a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html">IWriteableSlotActor</a> occupant)</td></tr>
-<tr class="memdesc:adabbd2b36e26ef2f7b3ad091955cdd23"><td class="mdescLeft">&#160;</td><td class="mdescRight">A tough no snake holds, landed or still gliding in.  <br /></td></tr>
+<tr class="memdesc:adabbd2b36e26ef2f7b3ad091955cdd23"><td class="mdescLeft">&#160;</td><td class="mdescRight">A tough no snake holds, landed or still gliding in: one free to fall in.  <br /></td></tr>
 <tr class="separator:adabbd2b36e26ef2f7b3ad091955cdd23"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
 <tr class="memitem:aaf8b0660472a7f74df88c1a4ccdf5230" id="r_aaf8b0660472a7f74df88c1a4ccdf5230"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaf8b0660472a7f74df88c1a4ccdf5230">Takes</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, Vector2Int slot)</td></tr>
 <tr class="separator:aaf8b0660472a7f74df88c1a4ccdf5230"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c4b7fb62abcc79cd374868dd40bd83a" id="r_a9c4b7fb62abcc79cd374868dd40bd83a"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9c4b7fb62abcc79cd374868dd40bd83a">TryNext</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, Vector2Int end, int direction, int lastRow, List&lt; Vector2Int &gt; line, out Vector2Int next, out int turned)</td></tr>
-<tr class="separator:a9c4b7fb62abcc79cd374868dd40bd83a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa08d2f2187473c1ef2933bf82195ef5e" id="r_aa08d2f2187473c1ef2933bf82195ef5e"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa08d2f2187473c1ef2933bf82195ef5e">TryNext</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, Vector2Int end, int direction, int lastRow, IReadOnlyCollection&lt; Vector2Int &gt; line, out Vector2Int next, out int turned)</td></tr>
+<tr class="separator:aa08d2f2187473c1ef2933bf82195ef5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
@@ -145,7 +142,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Where the tough snake's free toughs fall in: a line of slots on from its tail, away from the body, that they take in one batch. </p>
-<p>A slot on the line may be empty, hold a free tough that has landed, or hold a balloon the snake can walk through (<a class="el" href="classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeWalk.html#ab66444997071a82cc86b0f24ae2f1473" title="Whether the tough snake may walk into occupant &#39;s slot, sending it to the slot its tail leaves: a bal...">SnakeWalk.CanPassThrough</a>), which moves out to a slot a gathered tough leaves. </p>
+<p>A slot on the line may be empty, hold a free tough (landed or still gliding in), or hold a balloon the snake can walk through (<a class="el" href="classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeWalk.html#ab66444997071a82cc86b0f24ae2f1473" title="Whether the tough snake may walk into occupant &#39;s slot, sending it to the slot its tail leaves: a bal...">SnakeWalk.CanPassThrough</a>), which moves out to a slot a gathered tough leaves. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="ad5830f325083b5ebdb5eb5f1595a92a9" name="ad5830f325083b5ebdb5eb5f1595a92a9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad5830f325083b5ebdb5eb5f1595a92a9">&#9670;&#160;</a></span>Extend()</h2>
@@ -199,33 +196,6 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a01b9b5b19ef00e8f60764b13ca4e3f92" name="a01b9b5b19ef00e8f60764b13ca4e3f92"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a01b9b5b19ef00e8f60764b13ca4e3f92">&#9670;&#160;</a></span>IsFreeLandedTough()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static bool BalloonParty.Balloon.Formation.SnakeBody.IsFreeLandedTough </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html">IWriteableSlotActor</a></td>          <td class="paramname"><span class="paramname"><em>occupant</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>A tough no snake holds that has landed: one free to fall in. </p>
-
-</div>
-</div>
 <a id="adabbd2b36e26ef2f7b3ad091955cdd23" name="adabbd2b36e26ef2f7b3ad091955cdd23"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adabbd2b36e26ef2f7b3ad091955cdd23">&#9670;&#160;</a></span>IsFreeTough()</h2>
 
@@ -249,7 +219,8 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>A tough no snake holds, landed or still gliding in. </p>
+<p>A tough no snake holds, landed or still gliding in: one free to fall in. </p>
+<p>A gliding one counts at the slot it is heading for. </p>
 
 </div>
 </div>
@@ -282,8 +253,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a9c4b7fb62abcc79cd374868dd40bd83a" name="a9c4b7fb62abcc79cd374868dd40bd83a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9c4b7fb62abcc79cd374868dd40bd83a">&#9670;&#160;</a></span>TryNext()</h2>
+<a id="aa08d2f2187473c1ef2933bf82195ef5e" name="aa08d2f2187473c1ef2933bf82195ef5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa08d2f2187473c1ef2933bf82195ef5e">&#9670;&#160;</a></span>TryNext()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -314,7 +285,7 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">List&lt; Vector2Int &gt;</td>          <td class="paramname"><span class="paramname"><em>line</em></span>, </td>
+          <td class="paramtype">IReadOnlyCollection&lt; Vector2Int &gt;</td>          <td class="paramname"><span class="paramname"><em>line</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>

@@ -1,6 +1,5 @@
 var namespaceBalloonParty_1_1Balloon_1_1Formation =
 [
-    [ "ArmourOrder", "classBalloonParty_1_1Balloon_1_1Formation_1_1ArmourOrder.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1ArmourOrder" ],
     [ "FormationAssignment", "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html", "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment" ],
     [ "FormationPlanner", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner" ],
     [ "IFormationReinforcements", "interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IFormationReinforcements.html", "interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IFormationReinforcements" ],

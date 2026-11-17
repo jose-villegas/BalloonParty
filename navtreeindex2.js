@@ -1,6 +1,5 @@
 var NAVTREEINDEX2 =
 {
-"IScoreTrailReporter_8cs.html":[7,0,7,9,0,6],
 "IScreenSpaceLightSettings_8cs.html":[7,0,3,5,16],
 "ISealedMetrics_8cs.html":[7,0,7,10,11],
 "ISfxProvider_8cs.html":[7,0,0,1,6],
@@ -249,5 +248,6 @@ var NAVTREEINDEX2 =
 "PlatedRewardSchedule_8cs.html":[7,0,1,3,10],
 "PlatedRewardTuning_8cs.html":[7,0,1,3,11],
 "PlayerHealthController_8cs.html":[7,0,7,6,5],
-"PlayerNeed_8cs.html":[7,0,7,0,4]
+"PlayerNeed_8cs.html":[7,0,7,0,4],
+"PlayerPrefsRunSave_8cs.html":[7,0,7,8,17]
 };

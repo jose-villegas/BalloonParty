@@ -22,7 +22,7 @@ var searchData=
   ['navigationtrigger_19',['NavigationTrigger',['../classBalloonParty_1_1Shared_1_1GameState_1_1NavigationTrigger.html',1,'BalloonParty::Shared::GameState']]],
   ['navigationtrigger_2ecs_20',['NavigationTrigger.cs',['../NavigationTrigger_8cs.html',1,'']]],
   ['near_20free_20wins_21',['Tier 0: Free / Near-Free Wins',['../plan_performance_recovery.html#autotoc_md825',1,'']]],
-  ['nearest_22',['Nearest',['../structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html#a1e6dd4d7d3c040d6055fe6cde4091e8a',1,'BalloonParty::UI::ClothRibbon::KeepOut']]],
+  ['nearest_22',['Nearest',['../classBalloonParty_1_1Balloon_1_1Spawner_1_1ToughLanding.html#a8ae203a64246f8bf1be55b6e75083139',1,'BalloonParty.Balloon.Spawner.ToughLanding.Nearest()'],['../structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html#a1e6dd4d7d3c040d6055fe6cde4091e8a',1,'BalloonParty.UI.ClothRibbon.KeepOut.Nearest()']]],
   ['nearestblob_23',['NearestBlob',['../classBalloonParty_1_1Item_1_1Paint_1_1PaintItemHandler.html#a1cfd52d3d3bee36509dee2ab065cfcc8',1,'BalloonParty.Item.Paint.PaintItemHandler.NearestBlob()'],['../classBalloonParty_1_1Item_1_1Paint_1_1PaintSpread.html#a8fde3dccc72557b34e36c7a774e504f2',1,'BalloonParty.Item.Paint.PaintSpread.NearestBlob()']]],
   ['nearestsametypesqrdistance_24',['NearestSameTypeSqrDistance',['../classBalloonParty_1_1Shared_1_1Extensions_1_1BalanceBiasExtensions.html#ae45a8a9f3a9361a4956eb7422199a259',1,'BalloonParty::Shared::Extensions::BalanceBiasExtensions']]],
   ['nearlevelupcheat_2ecs_25',['NearLevelUpCheat.cs',['../NearLevelUpCheat_8cs.html',1,'']]],

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.13.2"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>BalloonParty: BalloonParty.Balloon.Formation.ArmourOrder Class Reference</title>
+<title>BalloonParty: BalloonParty.Balloon.Spawner.ToughLanding Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -81,7 +81,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
-$(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Formation_1_1ArmourOrder.html',''); initResizable(true); });
+$(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Spawner_1_1ToughLanding.html',''); initResizable(true); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -109,28 +109,31 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Formation_1_1ArmourOrd
 <div class="header">
   <div class="summary">
 <a href="#pac-static-methods">Static Package Functions</a> &#124;
-<a href="classBalloonParty_1_1Balloon_1_1Formation_1_1ArmourOrder-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">BalloonParty.Balloon.Formation.ArmourOrder Class Reference</div></div>
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
+<a href="classBalloonParty_1_1Balloon_1_1Spawner_1_1ToughLanding-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">BalloonParty.Balloon.Spawner.ToughLanding Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>The order of the tough snake, head to tail: the most armour (hits left) leads.  
+<p>Where a clock line's toughs rise when they walk as one snake: into the columns whose landing slots lie nearest the toughs already on the board, each one after the first beside the one before too, so they arrive next to the snake's body rather than wherever the line's depth order sends them.  
  <a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
 Static Package Functions</h2></td></tr>
-<tr class="memitem:a8579b8f7fa13f39910113bdb9c30c78a" id="r_a8579b8f7fa13f39910113bdb9c30c78a"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8579b8f7fa13f39910113bdb9c30c78a">Of</a> (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html">IWriteableFormationMember</a> member)</td></tr>
-<tr class="separator:a8579b8f7fa13f39910113bdb9c30c78a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade31196599fa6b5183e818fef04984fb" id="r_ade31196599fa6b5183e818fef04984fb"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ade31196599fa6b5183e818fef04984fb">StepTowardOrder</a> (List&lt; <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html">IWriteableFormationMember</a> &gt; members)</td></tr>
-<tr class="memdesc:ade31196599fa6b5183e818fef04984fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">One step of <em>members</em>  toward most armour first: from the head down, each member with more armour than the one ahead of it trades places with it.  <br /></td></tr>
-<tr class="separator:ade31196599fa6b5183e818fef04984fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7312629df3ba6b73fe928c8fd1d68645" id="r_a7312629df3ba6b73fe928c8fd1d68645"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7312629df3ba6b73fe928c8fd1d68645">PutNearest</a> (List&lt; int &gt; columns, int start, int count, Func&lt; int, int?&gt; landingRow, List&lt; Vector2Int &gt; anchors)</td></tr>
+<tr class="memdesc:a7312629df3ba6b73fe928c8fd1d68645"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves up to <em>count</em>  columns to the front of <em>columns</em> , from <em>start</em>  on: each time the one, of those not yet moved, whose landing slot (its <em>landingRow</em> , or none when it takes nothing) is nearest any of <em>anchors</em> , which then gains that slot.  <br /></td></tr>
+<tr class="separator:a7312629df3ba6b73fe928c8fd1d68645"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:a8ae203a64246f8bf1be55b6e75083139" id="r_a8ae203a64246f8bf1be55b6e75083139"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8ae203a64246f8bf1be55b6e75083139">Nearest</a> (IReadOnlyList&lt; Vector2Int &gt; anchors, Vector2Int slot)</td></tr>
+<tr class="separator:a8ae203a64246f8bf1be55b6e75083139"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The order of the tough snake, head to tail: the most armour (hits left) leads. </p>
-<p>Toughs with equal armour keep the order they stand in. The snake moves toward that order one place per step, so a hit or a tough joining at the tail never sends a member leaping along the body. </p>
+<div class="textblock"><p>Where a clock line's toughs rise when they walk as one snake: into the columns whose landing slots lie nearest the toughs already on the board, each one after the first beside the one before too, so they arrive next to the snake's body rather than wherever the line's depth order sends them. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a8579b8f7fa13f39910113bdb9c30c78a" name="a8579b8f7fa13f39910113bdb9c30c78a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8579b8f7fa13f39910113bdb9c30c78a">&#9670;&#160;</a></span>Of()</h2>
+<a id="a8ae203a64246f8bf1be55b6e75083139" name="a8ae203a64246f8bf1be55b6e75083139"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ae203a64246f8bf1be55b6e75083139">&#9670;&#160;</a></span>Nearest()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -139,10 +142,58 @@ Static Package Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static int BalloonParty.Balloon.Formation.ArmourOrder.Of </td>
+          <td class="memname">static int BalloonParty.Balloon.Spawner.ToughLanding.Nearest </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html">IWriteableFormationMember</a></td>          <td class="paramname"><span class="paramname"><em>member</em></span></td><td>)</td>
+          <td class="paramtype">IReadOnlyList&lt; Vector2Int &gt;</td>          <td class="paramname"><span class="paramname"><em>anchors</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">Vector2Int</td>          <td class="paramname"><span class="paramname"><em>slot</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7312629df3ba6b73fe928c8fd1d68645" name="a7312629df3ba6b73fe928c8fd1d68645"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7312629df3ba6b73fe928c8fd1d68645">&#9670;&#160;</a></span>PutNearest()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int BalloonParty.Balloon.Spawner.ToughLanding.PutNearest </td>
+          <td>(</td>
+          <td class="paramtype">List&lt; int &gt;</td>          <td class="paramname"><span class="paramname"><em>columns</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>start</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>count</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Func&lt; int, int?&gt;</td>          <td class="paramname"><span class="paramname"><em>landingRow</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">List&lt; Vector2Int &gt;</td>          <td class="paramname"><span class="paramname"><em>anchors</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -152,45 +203,20 @@ Static Package Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-</div>
-</div>
-<a id="ade31196599fa6b5183e818fef04984fb" name="ade31196599fa6b5183e818fef04984fb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ade31196599fa6b5183e818fef04984fb">&#9670;&#160;</a></span>StepTowardOrder()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static bool BalloonParty.Balloon.Formation.ArmourOrder.StepTowardOrder </td>
-          <td>(</td>
-          <td class="paramtype">List&lt; <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html">IWriteableFormationMember</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>members</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>One step of <em>members</em>  toward most armour first: from the head down, each member with more armour than the one ahead of it trades places with it. </p>
-<p>No member moves more than one place, so a tough joined at the tail, or one hit at the head, works its way to its place a step at a time, and the one it passes waits a beat beside it. Equal armour never trades. True when anyone moved. </p>
+<p>Moves up to <em>count</em>  columns to the front of <em>columns</em> , from <em>start</em>  on: each time the one, of those not yet moved, whose landing slot (its <em>landingRow</em> , or none when it takes nothing) is nearest any of <em>anchors</em> , which then gains that slot. </p>
+<p>With no anchors the first keeps its place. Returns how many it moved. </p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>Balloon/Formation/<a class="el" href="ArmourOrder_8cs.html">ArmourOrder.cs</a></li>
+<li>Balloon/Spawner/<a class="el" href="ToughLanding_8cs.html">ToughLanding.cs</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespaceBalloonParty.html">BalloonParty</a></li><li class="navelem"><a class="el" href="namespaceBalloonParty_1_1Balloon.html">Balloon</a></li><li class="navelem"><a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Formation.html">Formation</a></li><li class="navelem"><a class="el" href="classBalloonParty_1_1Balloon_1_1Formation_1_1ArmourOrder.html">ArmourOrder</a></li>
+    <li class="navelem"><a class="el" href="namespaceBalloonParty.html">BalloonParty</a></li><li class="navelem"><a class="el" href="namespaceBalloonParty_1_1Balloon.html">Balloon</a></li><li class="navelem"><a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Spawner.html">Spawner</a></li><li class="navelem"><a class="el" href="classBalloonParty_1_1Balloon_1_1Spawner_1_1ToughLanding.html">ToughLanding</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
   </ul>
 </div>

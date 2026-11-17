@@ -111,6 +111,7 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonB
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pac-methods">Package Functions</a> &#124;
+<a href="#pac-static-methods">Static Package Functions</a> &#124;
 <a href="#properties">Properties</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-static-methods">Static Private Member Functions</a> &#124;
@@ -173,6 +174,11 @@ Package Functions</h2></td></tr>
 <tr class="memitem:aaa1ba61e118579e39cdb5ac191ae3be4" id="r_aaa1ba61e118579e39cdb5ac191ae3be4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaa1ba61e118579e39cdb5ac191ae3be4">TryRelievePressure</a> (int column)</td></tr>
 <tr class="separator:aaa1ba61e118579e39cdb5ac191ae3be4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
+Static Package Functions</h2></td></tr>
+<tr class="memitem:ab99565165f76c01a61fccf6ccbc19d93" id="r_ab99565165f76c01a61fccf6ccbc19d93"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab99565165f76c01a61fccf6ccbc19d93">TickStepClock</a> (ref float elapsed, float interval, bool walking, bool ready, float deltaTime)</td></tr>
+<tr class="separator:ab99565165f76c01a61fccf6ccbc19d93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
 <tr class="memitem:aaf60042bdce13d2911f4b5851ae83d2a" id="r_aaf60042bdce13d2911f4b5851ae83d2a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaf60042bdce13d2911f4b5851ae83d2a">Generation</a><code> [get]</code></td></tr>
@@ -196,6 +202,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a476238f07fc7785aedd5dcf7d65aae63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5d708098897a4a77a6b630b08b7e593" id="r_ab5d708098897a4a77a6b630b08b7e593"><td class="memItemLeft" align="right" valign="top">Vector3[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab5d708098897a4a77a6b630b08b7e593">FinalWaypointBuffer</a> (Vector3 currentPosition, IReadOnlyList&lt; Vector3 &gt; path)</td></tr>
 <tr class="separator:ab5d708098897a4a77a6b630b08b7e593"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5f015ca75abf408d25c42c21cd15b54" id="r_aa5f015ca75abf408d25c42c21cd15b54"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa5f015ca75abf408d25c42c21cd15b54">FormToughsInTheLevelTransition</a> ()</td></tr>
+<tr class="separator:aa5f015ca75abf408d25c42c21cd15b54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad33e052b37f7847538c00c4ed2079143" id="r_ad33e052b37f7847538c00c4ed2079143"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad33e052b37f7847538c00c4ed2079143">RecordPath</a> (<a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableDynamicSlotActor.html">IWriteableDynamicSlotActor</a> actor, Vector3 targetPosition)</td></tr>
 <tr class="separator:ad33e052b37f7847538c00c4ed2079143"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a48af30113fbf4ccd811f9c48fb358f4d" id="r_a48af30113fbf4ccd811f9c48fb358f4d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a48af30113fbf4ccd811f9c48fb358f4d">ReleasePaths</a> ()</td></tr>
@@ -210,10 +218,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a6bb43d593342b493fe03b116aff3ca02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae46d6363e746207ecc98620a7ddeb989" id="r_ae46d6363e746207ecc98620a7ddeb989"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae46d6363e746207ecc98620a7ddeb989">StartBalanceMove</a> (<a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableDynamicSlotActor.html">IWriteableDynamicSlotActor</a> actor, List&lt; Vector3 &gt; path, <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html">ISlotActorView</a> view)</td></tr>
 <tr class="separator:ae46d6363e746207ecc98620a7ddeb989"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a907783e89ab84b00da60a11538930907" id="r_a907783e89ab84b00da60a11538930907"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a907783e89ab84b00da60a11538930907">TickSnakeBeat</a> (float deltaTime, float interval)</td></tr>
-<tr class="separator:a907783e89ab84b00da60a11538930907"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a79664c81eb51b8a9ece296d6aee967f3" id="r_a79664c81eb51b8a9ece296d6aee967f3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a79664c81eb51b8a9ece296d6aee967f3">TickToughSnake</a> (float deltaTime)</td></tr>
-<tr class="separator:a79664c81eb51b8a9ece296d6aee967f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e65ec4f5eea9f00f3ca50c0f7ca3974" id="r_a2e65ec4f5eea9f00f3ca50c0f7ca3974"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2e65ec4f5eea9f00f3ca50c0f7ca3974">TickFormations</a> (float deltaTime)</td></tr>
+<tr class="separator:a2e65ec4f5eea9f00f3ca50c0f7ca3974"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b84d6c31bc0e2c3434c1aac7ebaa3a6" id="r_a4b84d6c31bc0e2c3434c1aac7ebaa3a6"><td class="memItemLeft" align="right" valign="top">Vector3[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4b84d6c31bc0e2c3434c1aac7ebaa3a6">WaypointBuffer</a> (Vector3 currentPosition, IReadOnlyList&lt; Vector3 &gt; path)</td></tr>
 <tr class="separator:a4b84d6c31bc0e2c3434c1aac7ebaa3a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -557,6 +563,31 @@ Static Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">IReadOnlyList&lt; Vector3 &gt;</td>          <td class="paramname"><span class="paramname"><em>path</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa5f015ca75abf408d25c42c21cd15b54" name="aa5f015ca75abf408d25c42c21cd15b54"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5f015ca75abf408d25c42c21cd15b54">&#9670;&#160;</a></span>FormToughsInTheLevelTransition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Balloon.Controller.BalloonBalancer.FormToughsInTheLevelTransition </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
         </tr>
       </table>
   </td>
@@ -925,8 +956,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a907783e89ab84b00da60a11538930907" name="a907783e89ab84b00da60a11538930907"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a907783e89ab84b00da60a11538930907">&#9670;&#160;</a></span>TickSnakeBeat()</h2>
+<a id="a2e65ec4f5eea9f00f3ca50c0f7ca3974" name="a2e65ec4f5eea9f00f3ca50c0f7ca3974"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e65ec4f5eea9f00f3ca50c0f7ca3974">&#9670;&#160;</a></span>TickFormations()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -935,14 +966,10 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool BalloonParty.Balloon.Controller.BalloonBalancer.TickSnakeBeat </td>
+          <td class="memname">bool BalloonParty.Balloon.Controller.BalloonBalancer.TickFormations </td>
           <td>(</td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>deltaTime</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>deltaTime</em></span></td><td>)</td>
           <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>interval</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -954,8 +981,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a79664c81eb51b8a9ece296d6aee967f3" name="a79664c81eb51b8a9ece296d6aee967f3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a79664c81eb51b8a9ece296d6aee967f3">&#9670;&#160;</a></span>TickToughSnake()</h2>
+<a id="ab99565165f76c01a61fccf6ccbc19d93" name="ab99565165f76c01a61fccf6ccbc19d93"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab99565165f76c01a61fccf6ccbc19d93">&#9670;&#160;</a></span>TickStepClock()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -964,15 +991,34 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool BalloonParty.Balloon.Controller.BalloonBalancer.TickToughSnake </td>
+          <td class="memname">static bool BalloonParty.Balloon.Controller.BalloonBalancer.TickStepClock </td>
           <td>(</td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>deltaTime</em></span></td><td>)</td>
+          <td class="paramtype">ref float</td>          <td class="paramname"><span class="paramname"><em>elapsed</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>interval</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>walking</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>ready</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>deltaTime</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

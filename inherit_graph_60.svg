@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Balloon_1_1Reward_1_1BoardDisc.html" target="_top" xlink:title="The shape shared by the disco ball&#39;s wave and the nuke&#39;s blast: a disc fixed where the pop was,...">
+<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Balloon_1_1Reward_1_1NukeSchedule.html" target="_top" xlink:title="When the nuke balloon is due (PLAN&#45;NukeBalloon), and whether one is on the board.">
 <polygon fill="white" stroke="#666666" points="158.5,-33.5 0,-33.5 0,0 158.5,0 158.5,-33.5"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Reward.</text>
-<text xml:space="preserve" text-anchor="middle" x="79.25" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">BoardDisc</text>
+<text xml:space="preserve" text-anchor="middle" x="79.25" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">NukeSchedule</text>
 </a>
 </g>
 </g>

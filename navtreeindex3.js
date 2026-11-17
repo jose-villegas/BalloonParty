@@ -1,6 +1,5 @@
 var NAVTREEINDEX3 =
 {
-"PlayerPrefsRunSave_8cs.html":[7,0,7,8,17],
 "PointFocus_8cs.html":[7,0,7,2,16],
 "PoolChannel_8cs.html":[7,0,14,9,9],
 "PoolManagerExtensions_8cs.html":[7,0,14,4,13],
@@ -227,14 +226,14 @@ var NAVTREEINDEX3 =
 "SlotGridPierceItemField_8cs.html":[7,0,15,2,10],
 "SlotGridView_8cs.html":[7,0,15,2,11],
 "SlotGrid_8cs.html":[7,0,15,2,7],
-"SlotMove_8cs.html":[7,0,1,1,5],
+"SlotMove_8cs.html":[7,0,1,1,4],
 "SlotPlacementMode_8cs.html":[7,0,15,0,20],
 "SmokeFieldResources_8cs.html":[7,0,13,10],
 "SmokeFieldService_8cs.html":[7,0,13,11],
 "SmokeFieldSettings_8cs.html":[7,0,3,5,29],
 "SmokeFieldView_8cs.html":[7,0,13,0,4],
-"SnakeBody_8cs.html":[7,0,1,1,6],
-"SnakeWalk_8cs.html":[7,0,1,1,7],
+"SnakeBody_8cs.html":[7,0,1,1,5],
+"SnakeWalk_8cs.html":[7,0,1,1,6],
 "SnipeChanceRoll_8cs.html":[7,0,8,7,5],
 "SnipeDischargeBloom_8cs.html":[7,0,8,7,6],
 "SnipeItemHandler_8cs.html":[7,0,8,7,7],
@@ -249,5 +248,6 @@ var NAVTREEINDEX3 =
 "SortingHelper_8cs.html":[7,0,14,10,11],
 "SortingLayerNameAttribute_8cs.html":[7,0,14,35],
 "SortingLayerNameDrawer_8cs.html":[7,0,6,49],
-"SoundBankClipAssigner_8cs.html":[7,0,0,1,12]
+"SoundBankClipAssigner_8cs.html":[7,0,0,1,12],
+"SoundBankConfigurationEditor_8cs.html":[7,0,0,1,13]
 };

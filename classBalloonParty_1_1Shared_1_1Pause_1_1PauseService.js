@@ -3,6 +3,7 @@ var classBalloonParty_1_1Shared_1_1Pause_1_1PauseService =
     [ "PauseService", "classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html#ad72d7698a4f6b1a4fb529e233e040174", null ],
     [ "AnyPaused", "classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html#af8a1c5fb5e961a67b7c307318e84442d", null ],
     [ "IsPaused", "classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html#ac723113a9ab976cd54ce7a3d27d1fbd0", null ],
+    [ "IsPausedOnlyBy", "classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html#a8595aeb28e8f1d1d16323a1526545354", null ],
     [ "Pause", "classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html#a723ee34d31cec761b6f59fa23fbf3c1d", null ],
     [ "ResetRun", "classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html#ad640359c8b64ed9282fbd6cec1f2fbca", null ],
     [ "Resume", "classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html#ad322b1100b5bd316e7b77151bc22f347", null ],
