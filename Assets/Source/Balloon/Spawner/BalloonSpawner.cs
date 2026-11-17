@@ -34,6 +34,8 @@ namespace BalloonParty.Balloon.Spawner
         private static readonly Comparison<BalloonPrefabEntry> BySpawnWeightAscending =
             (a, b) => a.SpawnWeight - b.SpawnWeight;
 
+        private static readonly Comparison<BalloonPrefabEntry> ByHitsDescending = (a, b) => b.HitsToPop - a.HitsToPop;
+
         private readonly Dictionary<string, int> _activeCounts = new();
         private readonly Dictionary<string, int> _waveQuotas = new();
         private readonly BalloonBalancer _balancer;
@@ -80,6 +82,8 @@ namespace BalloonParty.Balloon.Spawner
         private readonly Dictionary<BalloonType, BalloonPrefabEntry> _rewardEntries = new();
 
         private int[] _columnSortKeys;
+        // The initial fill's tough run while it is dealt; None otherwise.
+        private ToughRunPlan _toughRun = ToughRunPlan.None;
         // Lines spawned this level; waves (ISpawnClockSettings.LinesPerWave) are counted from it.
         private int _linesThisLevel;
         private int _batchCursor;
@@ -323,9 +327,10 @@ namespace BalloonParty.Balloon.Spawner
 
             for (var i = 0; i < lines; i++)
             {
-                SpawnLineInternal(PlacementReach.Rehome);
+                SpawnLineInternal(PlacementReach.Rehome, i);
             }
 
+            _toughRun = ToughRunPlan.None;
             LogInitialFillDiagnostics(lines);
             ReleaseUnspawnedBatch();
         }
@@ -479,12 +484,14 @@ namespace BalloonParty.Balloon.Spawner
             _balancePublisher.Publish(default);
         }
 
-        private void SpawnLineInternal(PlacementReach reach)
+        // line: the initial fill's line index, for its tough run; -1 for a clock line.
+        private void SpawnLineInternal(PlacementReach reach, int line = -1)
         {
             // Shallowest columns first: consuming the ascending (light→heavy) batch in depth order pairs
             // the heaviest entries with the lowest slots. Resolve + spawn stay sequential, so each placed
             // balloon is visible to the next column's resolution.
             OrderColumnsByDepth();
+            PutToughRunFirst(line);
             var rejectIndex = 0;
 
             for (var i = 0; i < _lineColumns.Count; i++)
@@ -571,7 +578,11 @@ namespace BalloonParty.Balloon.Spawner
                 _spawnBatch.Add(entry);
             }
 
-            if (isInitial && _balloonsConfig.ToughLayerSpacing >= 2)
+            if (isInitial && ArrangeToughRun(lineCount))
+            {
+                // The toughs walk as one snake, so they rise side by side and land as one body.
+            }
+            else if (isInitial && _balloonsConfig.ToughLayerSpacing >= 2)
             {
                 ArrangeInitialLayers(lineCount, _balloonsConfig.ToughLayerSpacing);
             }
@@ -692,6 +703,83 @@ namespace BalloonParty.Balloon.Spawner
             while (heavyCursor < _layerHeavies.Count)
             {
                 _spawnBatch.Add(_layerHeavies[heavyCursor++]);
+            }
+        }
+
+        // With tough snakes on, the initial fill deals every tough into one run (ToughRunPlan) instead of layers:
+        // side by side on the deepest line a snake walks, most hits at the run's west end, where the snake's
+        // head starts, so the toughs land already lined up as its body. False leaves the batch to the layering:
+        // tough snakes off, or too few toughs to start one.
+        private bool ArrangeToughRun(int lineCount)
+        {
+            var settings = _balloonsConfig.UnbreakableFormation;
+            if (settings == null || !settings.Enabled || !settings.ToughSnakes)
+            {
+                return false;
+            }
+
+            _layerHeavies.Clear();
+            _layerLights.Clear();
+            foreach (var entry in _spawnBatch)
+            {
+                (entry.BalloonType is BalloonType.Tough or BalloonType.Tougher ? _layerHeavies : _layerLights).Add(entry);
+            }
+
+            if (_layerHeavies.Count < settings.MinMembers)
+            {
+                return false;
+            }
+
+            _toughRun = ToughRunPlan.For(_layerHeavies.Count, lineCount, _grid.Columns,
+                SnakeWalk.LastRow(_grid.Rows, settings), UnityEngine.Random.value);
+            if (_toughRun.Line < 0)
+            {
+                return false;
+            }
+
+            _layerHeavies.Sort(ByHitsDescending);
+            _layerLights.Sort(BySpawnWeightAscending);
+            _spawnBatch.Clear();
+            var heavyCursor = 0;
+            var lightCursor = 0;
+            for (var line = 0; line < lineCount; line++)
+            {
+                var toughsHere = _toughRun.CountOn(line);
+                for (var i = 0; i < toughsHere; i++)
+                {
+                    _spawnBatch.Add(_layerHeavies[heavyCursor++]);
+                }
+
+                for (var i = toughsHere; i < _grid.Columns && lightCursor < _layerLights.Count; i++)
+                {
+                    _spawnBatch.Add(_layerLights[lightCursor++]);
+                }
+            }
+
+            // Toughs past two full lines sink to the bottom, and they join the snake as they land.
+            while (heavyCursor < _layerHeavies.Count)
+            {
+                _spawnBatch.Add(_layerHeavies[heavyCursor++]);
+            }
+
+            while (lightCursor < _layerLights.Count)
+            {
+                _spawnBatch.Add(_layerLights[lightCursor++]);
+            }
+
+            return true;
+        }
+
+        // The run's columns lead the line, in run order, so its toughs, first in the line's share of the batch, take
+        // them side by side.
+        private void PutToughRunFirst(int line)
+        {
+            var count = line >= 0 ? _toughRun.CountOn(line) : 0;
+            for (var i = 0; i < count; i++)
+            {
+                var column = _toughRun.ColumnAt(line, i, _grid.Columns);
+                _lineColumns.Remove(column);
+                _lineColumns.Insert(i, column);
             }
         }
 

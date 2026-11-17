@@ -38,22 +38,39 @@ namespace BalloonParty.Balloon.Formation
         /// <summary>A tough no snake holds that has landed: one free to fall in.</summary>
         internal static bool IsFreeLandedTough(IWriteableSlotActor occupant)
         {
-            return occupant is IArmouredFormationMember tough
-                   && tough is not IBalanceAnchor { IsAnchored: true }
-                   && tough.IsStable.Value;
+            return IsFreeTough(occupant) && ((IArmouredFormationMember)occupant).IsStable.Value;
         }
 
+        /// <summary>A tough no snake holds, landed or still gliding in.</summary>
+        internal static bool IsFreeTough(IWriteableSlotActor occupant)
+        {
+            return occupant is IArmouredFormationMember tough && tough is not IBalanceAnchor { IsAnchored: true };
+        }
+
+        // A free tough beside the end first, whichever way it lies, so the line follows the toughs where they stand
+        // and moves as few as it can; then the gentlest turn that takes one.
         private static bool TryNext(
             SlotGrid grid, Vector2Int end, int direction, int lastRow, List<Vector2Int> line, out Vector2Int next,
             out int turned)
         {
-            for (var i = 0; i < Turns.Length; i++)
+            for (var pass = 0; pass < 2; pass++)
             {
-                turned = HexCoordinates.Turn(direction, Turns[i]);
-                next = HexCoordinates.Step(end, turned);
-                if (grid.InBounds(next) && next.y <= lastRow && !line.Contains(next) && Takes(grid, next))
+                for (var i = 0; i < Turns.Length; i++)
                 {
-                    return true;
+                    turned = HexCoordinates.Turn(direction, Turns[i]);
+                    next = HexCoordinates.Step(end, turned);
+                    if (!grid.InBounds(next) || next.y > lastRow || line.Contains(next))
+                    {
+                        continue;
+                    }
+
+                    var takes = pass == 0
+                        ? !grid.IsEmpty(next.x, next.y) && IsFreeLandedTough(grid.At(next))
+                        : Takes(grid, next);
+                    if (takes)
+                    {
+                        return true;
+                    }
                 }
             }
 

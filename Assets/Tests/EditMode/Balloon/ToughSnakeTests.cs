@@ -95,26 +95,64 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void AToughStillLanding_CountsToStartIt_ButCantLeadIt_AndFallsInOnceItLands()
+        public void AToughStillGlidingIn_HoldsTheStart_ThenAllFormAtOnce()
         {
-            var head = AddTough(new Vector2Int(0, 0), 1);
+            AddTough(new Vector2Int(0, 0), 1);
             var landing = AddTough(new Vector2Int(6, 4), 3);
             landing.IsStable.Value = false;
-            AddTough(new Vector2Int(3, 5), 2).IsStable.Value = false;
+            AddTough(new Vector2Int(3, 5), 2);
+
+            Arrange();
+
+            Assert.AreEqual(0, _service.Formations.Count, "toughs rising together land together, so it waits");
+            Assert.IsFalse(_service.ToughsDueToGather());
+
+            landing.IsStable.Value = true;
+
+            Assert.IsTrue(_service.ToughsDueToGather(), "the moment the last lands");
+            _service.GatherToughSnake(Relocate);
+            var snake = SingleSnake();
+            Assert.AreSame(landing, snake.Members[0]);
+            Assert.AreEqual(3, snake.Members.Count);
+            Assert.IsTrue(IsOneLine(snake));
+        }
+
+        [Test]
+        public void ToughsThatLandSideBySide_AreTheBody_AsTheyStand()
+        {
+            var head = AddTough(new Vector2Int(1, 3), 3);
+            var second = AddTough(new Vector2Int(2, 3), 3);
+            var third = AddTough(new Vector2Int(3, 3), 2);
+            var fourth = AddTough(new Vector2Int(4, 3), 2);
 
             Arrange();
 
             var snake = SingleSnake();
-            Assert.AreSame(head, snake.Members[0], "the toughest that has landed");
-            Assert.AreEqual(1, _service.Members.Count);
-            Assert.IsFalse(_service.ToughsDueToGather(), "nobody else has landed");
+            CollectionAssert.AreEqual(new IWriteableFormationMember[] { head, second, third, fourth }, snake.Members);
+            Assert.AreEqual(0, _relocations, "nobody moves");
+            Assert.AreEqual(3, snake.Heading, "it heads away from its body");
+        }
 
-            landing.IsStable.Value = true;
+        [Test]
+        public void TheBody_BendsRoundTheToughs_WhereTheyStand()
+        {
+            // Two rows of a run, joined at the east end, as the initial fill deals more toughs than a line holds.
+            var row = new List<ToughBalloonModel>();
+            for (var col = 0; col < 7; col++)
+            {
+                row.Add(AddTough(new Vector2Int(col, 5), 3));
+            }
 
-            Assert.IsTrue(_service.ToughsDueToGather(), "it falls in the moment it lands");
-            _service.GatherToughSnake(Relocate);
-            Assert.AreSame(landing, snake.Members[1]);
-            Assert.IsTrue(IsOneLine(snake));
+            for (var col = 6; col >= 5; col--)
+            {
+                row.Add(AddTough(new Vector2Int(col, 4), 3));
+            }
+
+            Arrange();
+
+            var snake = SingleSnake();
+            CollectionAssert.AreEqual(row, snake.Members);
+            Assert.AreEqual(0, _relocations, "nobody moves");
         }
 
         [Test]

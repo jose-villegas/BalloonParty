@@ -1,4 +1,5 @@
 using BalloonParty.Balloon.Model;
+using BalloonParty.Configuration.Balloons;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
 using UnityEngine;
@@ -41,6 +42,15 @@ namespace BalloonParty.Balloon.Formation
 
             direction = heading;
             return false;
+        }
+
+        /// <summary>
+        ///     The deepest row a snake walks on a board of <paramref name="rows" />: it keeps a horizontal line's
+        ///     rows, never in the bottom <see cref="IUnbreakableFormationSettings.HorizontalBottomClearance" />.
+        /// </summary>
+        internal static int LastRow(int rows, IUnbreakableFormationSettings settings)
+        {
+            return rows - 1 - Mathf.Max(settings.HorizontalBottomClearance, settings.BottomClearance);
         }
 
         /// <summary>

@@ -83,18 +83,20 @@ The board's toughs and toughers (`ToughBalloonModel`, an `IArmouredFormationMemb
 single snake of their own, walking on the same beat and with the same `SnakeWalk` as an unbreakable snake.
 Toughs never join an unbreakable formation, and unbreakables never join theirs.
 
-- **Starting as one body.** With no tough snake on the board, once `MinMembers` toughs are on it, the
-  toughest that has landed (`IsStable`: not still gliding in from a spawn line) starts it, where it stands.
-  Ties go to the higher row. The head is never one in the bottom `HorizontalBottomClearance` rows, which
-  a snake never walks. It heads toward the nearer edge, so its body has room behind it, and every other
-  tough that has landed lines up behind it at once (`SnakeBody`): a line of slots on from the head, away
-  from its heading, bending as little as it can. A balloon on that line moves out to a slot one of the
-  toughs left. The balancer asks every frame (`ToughsDueToGather`), so the snake forms the moment it can,
-  not at a wave start or on a beat, and takes its first step on the next beat.
-- **Falling in at the tail.** A tough that lands later, or one still gliding in when the snake formed,
-  falls in behind the tail the moment it lands, the same way. Where nothing on from the tail can take a
-  tough (toughs, unbreakables, anchored actors and anything static block the line), it waits until
-  something on the board changes and tries again.
+- **Starting as one body.** The initial fill deals the toughs side by side on one line, most hits at
+  the west end (`Balloon/Spawner/README.md`), so they rise together and land as the snake's body. The
+  toughs form up once none is still gliding in: with no tough snake and `MinMembers` toughs on the board,
+  the toughest (`IsStable`: landed) starts it, where it stands. Ties go to the higher row, then farther
+  west. The head is never one in the bottom `HorizontalBottomClearance` rows, which a snake never walks.
+  It heads away from a free tough beside it, so toughs that landed side by side are its body as they
+  stand; with none beside it, it heads toward the nearer edge, so its body has room behind it. Every
+  other tough then lines up behind it at once (`SnakeBody`): a line of slots on from the head, following
+  the toughs where they stand and otherwise bending as little as it can. A balloon on that line moves out
+  to a slot one of the toughs left. The balancer asks every frame (`ToughsDueToGather`), so the snake
+  forms the moment it can, not at a wave start or on a beat, and takes its first step on the next beat.
+- **Falling in at the tail.** A tough that lands later falls in behind the tail the moment it lands, the
+  same way. Where nothing on from the tail can take a tough (toughs, unbreakables, anchored actors and
+  anything static block the line), it waits until something on the board changes and tries again.
 - **Walking through the board.** A board in play is nearly full, so a snake that only steps into empty
   slots would hardly move. The tough snake walks through balloons instead: its head may step into a slot
   held by a balloon that moves and is held by nothing (`SnakeWalk.CanPassThrough`), and that balloon
