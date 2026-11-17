@@ -122,21 +122,21 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeWalk
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
 Static Package Functions</h2></td></tr>
 <tr class="memitem:ab66444997071a82cc86b0f24ae2f1473" id="r_ab66444997071a82cc86b0f24ae2f1473"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab66444997071a82cc86b0f24ae2f1473">CanPassThrough</a> (<a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html">IWriteableSlotActor</a> occupant)</td></tr>
-<tr class="memdesc:ab66444997071a82cc86b0f24ae2f1473"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the tough snake may walk into <em>occupant</em> 's slot, sending it to the slot its tail leaves: a balloon that moves, held by nothing.  <br /></td></tr>
+<tr class="memdesc:ab66444997071a82cc86b0f24ae2f1473"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether a snake may walk into <em>occupant</em> 's slot, sending it to the slot its tail leaves: a balloon that moves, held by nothing.  <br /></td></tr>
 <tr class="separator:ab66444997071a82cc86b0f24ae2f1473"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4682f624612296b42a3a7c54ac086391" id="r_a4682f624612296b42a3a7c54ac086391"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4682f624612296b42a3a7c54ac086391">LastRow</a> (int rows, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html">IUnbreakableFormationSettings</a> settings)</td></tr>
 <tr class="memdesc:a4682f624612296b42a3a7c54ac086391"><td class="mdescLeft">&#160;</td><td class="mdescRight">The deepest row a snake walks on a board of <em>rows</em> : it keeps a horizontal line's rows, never in the bottom <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a29d6af280feaabfa6fc0601541bd818c" title="Bottom rows a horizontal line never uses, at least BottomClearance, so a wall across the board stands...">IUnbreakableFormationSettings.HorizontalBottomClearance</a>.  <br /></td></tr>
 <tr class="separator:a4682f624612296b42a3a7c54ac086391"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a16310e11c558e387fb79f96f1d4c1fc2" id="r_a16310e11c558e387fb79f96f1d4c1fc2"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a16310e11c558e387fb79f96f1d4c1fc2">TryStep</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, Vector2Int head, Vector2Int tail, int heading, int lastRow, <a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1ShotWall.html">ShotWall</a> wall, out int direction, bool passThrough=false)</td></tr>
-<tr class="memdesc:a16310e11c558e387fb79f96f1d4c1fc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">The direction the head at <em>head</em> , walking <em>heading</em> , steps in.  <br /></td></tr>
-<tr class="separator:a16310e11c558e387fb79f96f1d4c1fc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d2326aed94c62ecd1e8e6305b9f5505" id="r_a7d2326aed94c62ecd1e8e6305b9f5505"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7d2326aed94c62ecd1e8e6305b9f5505">TryStep</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, Vector2Int head, Vector2Int tail, int heading, int lastRow, <a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1ShotWall.html">ShotWall</a> wall, out int direction)</td></tr>
+<tr class="memdesc:a7d2326aed94c62ecd1e8e6305b9f5505"><td class="mdescLeft">&#160;</td><td class="mdescRight">The direction the head at <em>head</em> , walking <em>heading</em> , steps in.  <br /></td></tr>
+<tr class="separator:a7d2326aed94c62ecd1e8e6305b9f5505"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
 <tr class="memitem:a82b358d80986c6ffb08b70d5affed2a0" id="r_a82b358d80986c6ffb08b70d5affed2a0"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a82b358d80986c6ffb08b70d5affed2a0">ClosesWall</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1ShotWall.html">ShotWall</a> wall, Vector2Int next, Vector2Int tail)</td></tr>
 <tr class="separator:a82b358d80986c6ffb08b70d5affed2a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa1b44a22d5eae15c38a85f74cc52f1ba" id="r_aa1b44a22d5eae15c38a85f74cc52f1ba"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa1b44a22d5eae15c38a85f74cc52f1ba">IsOpen</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, Vector2Int slot, bool passThrough)</td></tr>
-<tr class="separator:aa1b44a22d5eae15c38a85f74cc52f1ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2fe3bcff87776671f4cb5dcc98a17bb0" id="r_a2fe3bcff87776671f4cb5dcc98a17bb0"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2fe3bcff87776671f4cb5dcc98a17bb0">IsOpen</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, Vector2Int slot)</td></tr>
+<tr class="separator:a2fe3bcff87776671f4cb5dcc98a17bb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
@@ -145,7 +145,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Where a snake's head steps next: on along its heading when that slot is open, else the gentlest open turn, right before left. </p>
-<p>It never turns back, and its own body fills the slots behind it, so it never walks over itself. Nor does it step where its body would link the board's unbreakables side to side. </p>
+<p>A slot is open when empty or held by a balloon the snake trades places with (<a class="el" href="#ab66444997071a82cc86b0f24ae2f1473" title="Whether a snake may walk into occupant &#39;s slot, sending it to the slot its tail leaves: a balloon tha...">CanPassThrough</a>). It never turns back, and its own body fills the slots behind it, so it never walks over itself. Nor does it step where its body would link the board's unbreakables side to side. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="ab66444997071a82cc86b0f24ae2f1473" name="ab66444997071a82cc86b0f24ae2f1473"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab66444997071a82cc86b0f24ae2f1473">&#9670;&#160;</a></span>CanPassThrough()</h2>
@@ -170,7 +170,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Whether the tough snake may walk into <em>occupant</em> 's slot, sending it to the slot its tail leaves: a balloon that moves, held by nothing. </p>
+<p>Whether a snake may walk into <em>occupant</em> 's slot, sending it to the slot its tail leaves: a balloon that moves, held by nothing. </p>
 <p>A formation member (a tough or an unbreakable, free or not), an anchored actor and anything static stand in its way. </p>
 
 </div>
@@ -209,8 +209,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aa1b44a22d5eae15c38a85f74cc52f1ba" name="aa1b44a22d5eae15c38a85f74cc52f1ba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa1b44a22d5eae15c38a85f74cc52f1ba">&#9670;&#160;</a></span>IsOpen()</h2>
+<a id="a2fe3bcff87776671f4cb5dcc98a17bb0" name="a2fe3bcff87776671f4cb5dcc98a17bb0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2fe3bcff87776671f4cb5dcc98a17bb0">&#9670;&#160;</a></span>IsOpen()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -226,12 +226,7 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Vector2Int</td>          <td class="paramname"><span class="paramname"><em>slot</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>passThrough</em></span>&#160;)</td>
+          <td class="paramtype">Vector2Int</td>          <td class="paramname"><span class="paramname"><em>slot</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -274,8 +269,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a16310e11c558e387fb79f96f1d4c1fc2" name="a16310e11c558e387fb79f96f1d4c1fc2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a16310e11c558e387fb79f96f1d4c1fc2">&#9670;&#160;</a></span>TryStep()</h2>
+<a id="a7d2326aed94c62ecd1e8e6305b9f5505" name="a7d2326aed94c62ecd1e8e6305b9f5505"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d2326aed94c62ecd1e8e6305b9f5505">&#9670;&#160;</a></span>TryStep()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -316,12 +311,7 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">out int</td>          <td class="paramname"><span class="paramname"><em>direction</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>passThrough</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
+          <td class="paramtype">out int</td>          <td class="paramname"><span class="paramname"><em>direction</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -332,7 +322,7 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The direction the head at <em>head</em> , walking <em>heading</em> , steps in. </p>
-<p>False when every slot ahead is off the board, below <em>lastRow</em> , taken, or would close <em>wall</em>  once the head is there and the slot of <em>tail</em>  is free. A null wall (the board already walled by something else) checks nothing. <em>passThrough</em>  (the tough snake): a slot holding a balloon it can trade places with (<a class="el" href="#ab66444997071a82cc86b0f24ae2f1473" title="Whether the tough snake may walk into occupant &#39;s slot, sending it to the slot its tail leaves: a bal...">CanPassThrough</a>) is open too. </p>
+<p>False when every slot ahead is off the board, below <em>lastRow</em> , taken, or would close <em>wall</em>  once the head is there and the slot of <em>tail</em>  is free. A null wall (the board already walled by something else) checks nothing. </p>
 
 </div>
 </div>

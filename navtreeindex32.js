@@ -1,5 +1,9 @@
 var NAVTREEINDEX32 =
 {
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckMotionSettings.html#afd496a93c93c265d981dfbad0f0b78a9":[6,0,0,3,5,39,16],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckSpawnSettings.html":[5,0,0,3,5,40],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckSpawnSettings.html":[6,0,0,3,5,40],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckSpawnSettings.html#a076fa0ebe8d8ca84f1a029aa05d4e826":[5,0,0,3,5,40,4],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckSpawnSettings.html#a076fa0ebe8d8ca84f1a029aa05d4e826":[6,0,0,3,5,40,4],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckSpawnSettings.html#a2e38c485c8844d8089ba4c81eb1a78eb":[5,0,0,3,5,40,2],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckSpawnSettings.html#a2e38c485c8844d8089ba4c81eb1a78eb":[6,0,0,3,5,40,2],
@@ -245,9 +249,5 @@ var NAVTREEINDEX32 =
 "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig_1_1BombPreviewSettings.html#a832ea8a103c65b702a899486f1f34150":[6,0,0,3,22,0,1],
 "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig_1_1PaintPreviewSettings.html":[5,0,0,3,22,1],
 "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig_1_1PaintPreviewSettings.html":[6,0,0,3,22,1],
-"classBalloonParty_1_1Configuration_1_1ItemPreviewConfig_1_1PaintPreviewSettings.html#a3ef05842d458b5679c99a32d032c9525":[5,0,0,3,22,1,0],
-"classBalloonParty_1_1Configuration_1_1ItemPreviewConfig_1_1PaintPreviewSettings.html#a3ef05842d458b5679c99a32d032c9525":[6,0,0,3,22,1,0],
-"classBalloonParty_1_1Configuration_1_1ItemPreviewConfig_1_1PaintPreviewSettings.html#ac629bf5f7d0755c9007e0eee3cc313f0":[5,0,0,3,22,1,1],
-"classBalloonParty_1_1Configuration_1_1ItemPreviewConfig_1_1PaintPreviewSettings.html#ac629bf5f7d0755c9007e0eee3cc313f0":[6,0,0,3,22,1,1],
-"classBalloonParty_1_1Configuration_1_1ItemPreviewConfig_1_1ShieldPreviewSettings.html":[5,0,0,3,22,2]
+"classBalloonParty_1_1Configuration_1_1ItemPreviewConfig_1_1PaintPreviewSettings.html#a3ef05842d458b5679c99a32d032c9525":[5,0,0,3,22,1,0]
 };

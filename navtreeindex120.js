@@ -1,5 +1,9 @@
 var NAVTREEINDEX120 =
 {
+"namespaceBalloonParty_1_1Prediction.html#a254a3b76e2281f08bf6f5a0b1024809ba68e6202e50e4806f18d28cab574e0d82":[5,0,0,9,8,2],
+"namespaceBalloonParty_1_1Prediction.html#a254a3b76e2281f08bf6f5a0b1024809ba694d154d83bf9e21a5dccd5cbf861add":[5,0,0,9,8,0],
+"namespaceBalloonParty_1_1Prediction.html#a254a3b76e2281f08bf6f5a0b1024809ba94e8a499539d1a472f3b5dbbb85508c0":[5,0,0,9,8,1],
+"namespaceBalloonParty_1_1Projectile.html":[5,0,0,10],
 "namespaceBalloonParty_1_1Projectile_1_1Buffs.html":[5,0,0,10,0],
 "namespaceBalloonParty_1_1Projectile_1_1Controller.html":[5,0,0,10,1],
 "namespaceBalloonParty_1_1Projectile_1_1Controller.html#a269c35de6ac7d821e1a397646dd92704":[5,0,0,10,1,14],
@@ -245,9 +249,5 @@ var NAVTREEINDEX120 =
 "plan_audio.html#autotoc_md350":[3,13,0,9],
 "plan_audio.html#autotoc_md352":[3,13,0,10],
 "plan_bubble_cluster_hit_feedback.html":[3,2],
-"plan_bubble_cluster_hit_feedback.html#autotoc_md353":[3,2,0],
-"plan_bubble_cluster_hit_feedback.html#autotoc_md355":[3,2,0,0],
-"plan_bubble_cluster_hit_feedback.html#autotoc_md357":[3,2,0,1],
-"plan_bubble_cluster_hit_feedback.html#autotoc_md359":[3,2,0,2],
-"plan_bubble_cluster_hit_feedback.html#autotoc_md361":[3,2,0,3]
+"plan_bubble_cluster_hit_feedback.html#autotoc_md353":[3,2,0]
 };

@@ -1,5 +1,9 @@
 var NAVTREEINDEX51 =
 {
+"classBalloonParty_1_1Editor_1_1TextureAuditWindow.html#a0efdcdf3a9488422c814b85304bc4e08":[6,0,0,5,48,20],
+"classBalloonParty_1_1Editor_1_1TextureAuditWindow.html#a113fc09dddf6368910804b985b2615b9":[5,0,0,5,48,11],
+"classBalloonParty_1_1Editor_1_1TextureAuditWindow.html#a113fc09dddf6368910804b985b2615b9":[6,0,0,5,48,11],
+"classBalloonParty_1_1Editor_1_1TextureAuditWindow.html#a18c046b8f374b0be52d77262b29162d2":[5,0,0,5,48,23],
 "classBalloonParty_1_1Editor_1_1TextureAuditWindow.html#a18c046b8f374b0be52d77262b29162d2":[6,0,0,5,48,23],
 "classBalloonParty_1_1Editor_1_1TextureAuditWindow.html#a429777fa30171f0230b59720c0ab6160":[5,0,0,5,48,6],
 "classBalloonParty_1_1Editor_1_1TextureAuditWindow.html#a429777fa30171f0230b59720c0ab6160":[6,0,0,5,48,6],
@@ -245,9 +249,5 @@ var NAVTREEINDEX51 =
 "classBalloonParty_1_1Game_1_1Assist_1_1ArmourNeed.html#ae5d894c45e8c71aaa5c54ef8f4ef70a8":[6,0,0,6,0,0,4],
 "classBalloonParty_1_1Game_1_1Assist_1_1ArmourNeed.html#af8acf7e4269ba9dee795c7fb51435671":[5,0,0,6,0,0,3],
 "classBalloonParty_1_1Game_1_1Assist_1_1ArmourNeed.html#af8acf7e4269ba9dee795c7fb51435671":[6,0,0,6,0,0,3],
-"classBalloonParty_1_1Game_1_1Assist_1_1PityRoll.html":[5,0,0,6,0,3],
-"classBalloonParty_1_1Game_1_1Assist_1_1PityRoll.html":[6,0,0,6,0,3],
-"classBalloonParty_1_1Game_1_1Assist_1_1PityRoll.html#a22ec535bf6302f881a084a1198e3e506":[5,0,0,6,0,3,6],
-"classBalloonParty_1_1Game_1_1Assist_1_1PityRoll.html#a22ec535bf6302f881a084a1198e3e506":[6,0,0,6,0,3,6],
-"classBalloonParty_1_1Game_1_1Assist_1_1PityRoll.html#a344b16e9801b96192c2ae3df9cda34c2":[5,0,0,6,0,3,1]
+"classBalloonParty_1_1Game_1_1Assist_1_1PityRoll.html":[5,0,0,6,0,3]
 };

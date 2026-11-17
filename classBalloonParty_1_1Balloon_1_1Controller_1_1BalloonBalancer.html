@@ -206,6 +206,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:ab5d708098897a4a77a6b630b08b7e593"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5f015ca75abf408d25c42c21cd15b54" id="r_aa5f015ca75abf408d25c42c21cd15b54"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa5f015ca75abf408d25c42c21cd15b54">FormToughsInTheLevelTransition</a> ()</td></tr>
 <tr class="separator:aa5f015ca75abf408d25c42c21cd15b54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8916ef62da3a96882ab2ff85f4dbaaea" id="r_a8916ef62da3a96882ab2ff85f4dbaaea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8916ef62da3a96882ab2ff85f4dbaaea">KeepTheBeatThroughADoomedGlide</a> (float deltaTime)</td></tr>
+<tr class="separator:a8916ef62da3a96882ab2ff85f4dbaaea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad33e052b37f7847538c00c4ed2079143" id="r_ad33e052b37f7847538c00c4ed2079143"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad33e052b37f7847538c00c4ed2079143">RecordPath</a> (<a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableDynamicSlotActor.html">IWriteableDynamicSlotActor</a> actor, Vector3 targetPosition)</td></tr>
 <tr class="separator:ad33e052b37f7847538c00c4ed2079143"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a48af30113fbf4ccd811f9c48fb358f4d" id="r_a48af30113fbf4ccd811f9c48fb358f4d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a48af30113fbf4ccd811f9c48fb358f4d">ReleasePaths</a> ()</td></tr>
@@ -220,6 +222,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a6bb43d593342b493fe03b116aff3ca02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae46d6363e746207ecc98620a7ddeb989" id="r_ae46d6363e746207ecc98620a7ddeb989"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae46d6363e746207ecc98620a7ddeb989">StartBalanceMove</a> (<a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableDynamicSlotActor.html">IWriteableDynamicSlotActor</a> actor, List&lt; Vector3 &gt; path, <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html">ISlotActorView</a> view)</td></tr>
 <tr class="separator:ae46d6363e746207ecc98620a7ddeb989"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5975f055d51656d9521eb112bac183c" id="r_ad5975f055d51656d9521eb112bac183c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad5975f055d51656d9521eb112bac183c">TickBeat</a> (float deltaTime)</td></tr>
+<tr class="separator:ad5975f055d51656d9521eb112bac183c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e65ec4f5eea9f00f3ca50c0f7ca3974" id="r_a2e65ec4f5eea9f00f3ca50c0f7ca3974"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2e65ec4f5eea9f00f3ca50c0f7ca3974">TickFormations</a> (float deltaTime)</td></tr>
 <tr class="separator:a2e65ec4f5eea9f00f3ca50c0f7ca3974"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b84d6c31bc0e2c3434c1aac7ebaa3a6" id="r_a4b84d6c31bc0e2c3434c1aac7ebaa3a6"><td class="memItemLeft" align="right" valign="top">Vector3[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4b84d6c31bc0e2c3434c1aac7ebaa3a6">WaypointBuffer</a> (Vector3 currentPosition, IReadOnlyList&lt; Vector3 &gt; path)</td></tr>
@@ -661,6 +665,31 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a8916ef62da3a96882ab2ff85f4dbaaea" name="a8916ef62da3a96882ab2ff85f4dbaaea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8916ef62da3a96882ab2ff85f4dbaaea">&#9670;&#160;</a></span>KeepTheBeatThroughADoomedGlide()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Balloon.Controller.BalloonBalancer.KeepTheBeatThroughADoomedGlide </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>deltaTime</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aa741bdd232c05b3082979e2f4dbc89f7" name="aa741bdd232c05b3082979e2f4dbc89f7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa741bdd232c05b3082979e2f4dbc89f7">&#9670;&#160;</a></span>PolylineSqrLength()</h2>
 
@@ -964,6 +993,31 @@ Static Private Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad5975f055d51656d9521eb112bac183c" name="ad5975f055d51656d9521eb112bac183c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad5975f055d51656d9521eb112bac183c">&#9670;&#160;</a></span>TickBeat()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Balloon.Controller.BalloonBalancer.TickBeat </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>deltaTime</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

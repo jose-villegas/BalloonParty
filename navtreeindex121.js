@@ -1,5 +1,9 @@
 var NAVTREEINDEX121 =
 {
+"plan_bubble_cluster_hit_feedback.html#autotoc_md355":[3,2,0,0],
+"plan_bubble_cluster_hit_feedback.html#autotoc_md357":[3,2,0,1],
+"plan_bubble_cluster_hit_feedback.html#autotoc_md359":[3,2,0,2],
+"plan_bubble_cluster_hit_feedback.html#autotoc_md361":[3,2,0,3],
 "plan_bubble_cluster_hit_feedback.html#autotoc_md362":[3,2,0,3,0],
 "plan_bubble_cluster_hit_feedback.html#autotoc_md363":[3,2,0,3,1],
 "plan_bubble_cluster_hit_feedback.html#autotoc_md364":[3,2,0,3,2],
@@ -245,9 +249,5 @@ var NAVTREEINDEX121 =
 "plan_grid_actor_expansion.html#autotoc_md672":[3,3,0,2,5,0],
 "plan_grid_actor_expansion.html#autotoc_md673":[3,3,0,2,5,1],
 "plan_grid_actor_expansion.html#autotoc_md675":[3,3,0,2,6],
-"plan_grid_actor_expansion.html#autotoc_md676":[3,3,0,2,6,0],
-"plan_grid_actor_expansion.html#autotoc_md677":[3,3,0,2,6,1],
-"plan_grid_actor_expansion.html#autotoc_md678":[3,3,0,2,6,2],
-"plan_grid_actor_expansion.html#autotoc_md679":[3,3,0,2,6,3],
-"plan_grid_actor_expansion.html#autotoc_md680":[3,3,0,2,6,4]
+"plan_grid_actor_expansion.html#autotoc_md676":[3,3,0,2,6,0]
 };
