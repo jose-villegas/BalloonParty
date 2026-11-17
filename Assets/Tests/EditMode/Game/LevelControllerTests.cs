@@ -947,19 +947,43 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void FlightEnded_BeforeBeatCurveEnds_StillPresentsLevelUp()
+        public void FlightEnded_BeforeBeatCurveEnds_PresentsWhenTheBeatEnds()
         {
-            // Edge case: projectile dies very quickly, before the cinematic beat finishes.
+            // The last ball dies inside the beat, as a Snipe lance does when its discharge at the death wall
+            // completes the level: the slow-mo plays out before the level-up presents.
             _thresholds.PointsRequiredForLevel(1).Returns(1);
             ScoreColor(Red, 1);
             ScoreColor(Blue, 1);
             Assert.AreEqual(LevelUpPhase.Completing, _controller.Phase.Value);
 
-            // Don't advance elapsed — beat is still playing.
-            FireFlightEnded();
+            LandMidBeat(_registry.InFlightAt(0));
+            SetField("_completingElapsed", 0.1f);
+            _controller.Tick();
+
+            Assert.AreEqual(LevelUpPhase.Completing, _controller.Phase.Value, "the beat is still playing");
+            _levelUpPublisher.DidNotReceive().Publish(Arg.Any<ScoreLevelUpMessage>());
+
+            EndBeat();
 
             Assert.AreEqual(LevelUpPhase.Pending, _controller.Phase.Value);
             _levelUpPublisher.Received(1).Publish(Arg.Any<ScoreLevelUpMessage>());
+            _timeScale.Received(1).ReleaseExclusive(TimeScaleSource.LevelUpCeremony);
+            _timeScale.DidNotReceive().Claim(TimeScaleSource.LevelUpCeremony, 1f);
+        }
+
+        [Test]
+        public void FlightEnded_BeforeBeatCurveEnds_RunLeftGameplay_AbandonsWhenTheBeatEnds()
+        {
+            _thresholds.PointsRequiredForLevel(1).Returns(1);
+            ScoreColor(Red, 1);
+            ScoreColor(Blue, 1);
+            LandMidBeat(_registry.InFlightAt(0));
+            _navState.Value = NavigationState.GameOver;
+
+            EndBeat();
+
+            Assert.AreEqual(LevelUpPhase.Playing, _controller.Phase.Value);
+            _levelUpPublisher.DidNotReceive().Publish(Arg.Any<ScoreLevelUpMessage>());
         }
 
         [Test]
@@ -1039,8 +1063,18 @@ namespace BalloonParty.Tests.Game
             _registry.Launch(ball);
         }
 
-        // As a dying ball does it: it leaves the registry's flights, then its Destroyed goes out.
+        // As a dying ball does it: it leaves the registry's flights, then its Destroyed goes out. When it was the
+        // last ball of a completed level, the beat then plays out, as it would in play, so the level-up presents.
         private void Land(IProjectileModel ball)
+        {
+            LandMidBeat(ball);
+            if (_controller.Phase.Value == LevelUpPhase.Completing && _registry.InFlightCount == 0)
+            {
+                EndBeat();
+            }
+        }
+
+        private void LandMidBeat(IProjectileModel ball)
         {
             if (ball != null)
             {

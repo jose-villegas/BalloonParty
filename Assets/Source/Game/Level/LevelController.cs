@@ -274,6 +274,13 @@ namespace BalloonParty.Game.Level
                 {
                     var t = _beatDuration > 0f ? Mathf.Clamp01(_completingElapsed / _beatDuration) : 1f;
 
+                    if (t >= 1f && _projectiles.InFlightCount == 0)
+                    {
+                        // The last ball died inside the beat (OnFlightEnded waited for it): present now.
+                        PresentOrAbandon();
+                        return;
+                    }
+
                     if (t >= 1f)
                     {
                         _windowAOpen = false;
@@ -488,6 +495,19 @@ namespace BalloonParty.Game.Level
                 return;
             }
 
+            // A ball that dies inside the beat (a Snipe lance discharging at its death wall completes the level
+            // as it dies) would cut the slow-mo short and the camera would arrive at an empty wall. The beat
+            // plays out instead, the dead ball held there by the thrower, and Tick presents at its end.
+            if (_windowAOpen)
+            {
+                return;
+            }
+
+            PresentOrAbandon();
+        }
+
+        private void PresentOrAbandon()
+        {
             // The run leaving gameplay wins over the level it completed — evaluated ONCE, here, instead of
             // racing a forecast. LossImminent is deliberately NOT the test: it is a prediction, and gating
             // on it is the bug this plan removes.

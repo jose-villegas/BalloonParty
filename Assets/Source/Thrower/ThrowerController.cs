@@ -72,6 +72,9 @@ namespace BalloonParty.Thrower
         // Every shot that has left the thrower and not yet died, oldest first. The registry mirrors
         // these for readers; the thrower keeps the views because only it pools them.
         private readonly List<ProjectileView> _inFlight = new();
+        // Balls that died during a level's completion, held where they died until the level-up presents, so
+        // the ceremony's slow-mo focus finds the ball and not an empty wall.
+        private readonly List<ProjectileView> _heldDead = new();
 
         // Reused so killing every shot (whose deaths edit _inFlight) never iterates the live list.
         private readonly List<ProjectileView> _killBuffer = new();
@@ -208,6 +211,10 @@ namespace BalloonParty.Thrower
             // fire); this only reloads an empty thrower, and never during a level-up, whose new ball
             // arrives with the new level (LevelTransitionCompleted).
             _destroyedSubscriber.Subscribe(HandleProjectileDestroyed).AddTo(_subscriptions);
+            _levelProgress.Phase
+                .Where(phase => phase != LevelUpPhase.Completing)
+                .Subscribe(_ => ReleaseHeldDead())
+                .AddTo(_subscriptions);
 
             // Completing was abandoned (run ending/restarting), so the skipped reload happens now or the
             // thrower stays empty forever.
@@ -470,7 +477,14 @@ namespace BalloonParty.Thrower
             {
                 var view = _inFlight[index];
                 _inFlight.RemoveAt(index);
-                ScaleAway(view);
+                if (_levelProgress.Phase.Value == LevelUpPhase.Completing)
+                {
+                    _heldDead.Add(view);
+                }
+                else
+                {
+                    ScaleAway(view);
+                }
             }
             else if (_loadedView != null && message.Projectile == _loadedProjectile)
             {
@@ -520,6 +534,7 @@ namespace BalloonParty.Thrower
         // restart). No Destroyed is published, so Clear retires them all.
         private void ScaleAwayAllProjectiles()
         {
+            ReleaseHeldDead();
             _lanceCarried = false;
             foreach (var view in _inFlight)
             {
@@ -543,6 +558,16 @@ namespace BalloonParty.Thrower
         {
             _registry.Land(view.Model);
             view.PlayDisappear(() => _poolManager.Return(_projectilePoolKey, view));
+        }
+
+        private void ReleaseHeldDead()
+        {
+            foreach (var view in _heldDead)
+            {
+                ScaleAway(view);
+            }
+
+            _heldDead.Clear();
         }
 
         private void ClearLoaded()
