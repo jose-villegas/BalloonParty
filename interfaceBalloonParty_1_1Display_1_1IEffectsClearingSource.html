@@ -109,6 +109,7 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Display_1_1IEffectsClearingSo
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#properties">Properties</a> &#124;
 <a href="interfaceBalloonParty_1_1Display_1_1IEffectsClearingSource-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Display.IEffectsClearingSource Interface Reference</div></div>
 </div><!--header-->
@@ -126,16 +127,22 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Display_1_1IEffectsClearingSo
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ab148884b161cfec8e68909632aa55954" id="r_ab148884b161cfec8e68909632aa55954"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab148884b161cfec8e68909632aa55954">FillStamps</a> (in <a class="el" href="structBalloonParty_1_1Display_1_1ClearingView.html">ClearingView</a> view, Vector4[] stamps, float[] radii)</td></tr>
-<tr class="memdesc:ab148884b161cfec8e68909632aa55954"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes this frame's stamps (capsules in mask UV) and their radii (in view heights) and returns how many.  <br /></td></tr>
-<tr class="separator:ab148884b161cfec8e68909632aa55954"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3188b4dee51c6ebd35ba1ee94bc9f09" id="r_aa3188b4dee51c6ebd35ba1ee94bc9f09"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa3188b4dee51c6ebd35ba1ee94bc9f09">FillStamps</a> (in <a class="el" href="structBalloonParty_1_1Display_1_1ClearingView.html">ClearingView</a> view, float deltaTime, <a class="el" href="classBalloonParty_1_1Display_1_1EffectsClearingStamps.html">EffectsClearingStamps</a> stamps)</td></tr>
+<tr class="memdesc:aa3188b4dee51c6ebd35ba1ee94bc9f09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes this frame's stamps into <em>stamps</em>  and returns how many; <em>deltaTime</em>  moves the fading ones on.  <br /></td></tr>
+<tr class="separator:aa3188b4dee51c6ebd35ba1ee94bc9f09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
+Properties</h2></td></tr>
+<tr class="memitem:a2b71b50a1e79322d6232a36f57169159" id="r_a2b71b50a1e79322d6232a36f57169159"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2b71b50a1e79322d6232a36f57169159">AnyInFlight</a><code> [get]</code></td></tr>
+<tr class="memdesc:a2b71b50a1e79322d6232a36f57169159"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether any ball is in flight, which puts the clearing's clock on game time.  <br /></td></tr>
+<tr class="separator:a2b71b50a1e79322d6232a36f57169159"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Where the clearing mask gets its stamps from. </p>
 <p>The mask view lives on the persistent camera and pulls once a frame, so the run-scoped source never races its <code>LateUpdate</code>. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="ab148884b161cfec8e68909632aa55954" name="ab148884b161cfec8e68909632aa55954"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab148884b161cfec8e68909632aa55954">&#9670;&#160;</a></span>FillStamps()</h2>
+<a id="aa3188b4dee51c6ebd35ba1ee94bc9f09" name="aa3188b4dee51c6ebd35ba1ee94bc9f09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3188b4dee51c6ebd35ba1ee94bc9f09">&#9670;&#160;</a></span>FillStamps()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -148,19 +155,46 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Vector4[]</td>          <td class="paramname"><span class="paramname"><em>stamps</em></span>, </td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>deltaTime</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float[]</td>          <td class="paramname"><span class="paramname"><em>radii</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Display_1_1EffectsClearingStamps.html">EffectsClearingStamps</a></td>          <td class="paramname"><span class="paramname"><em>stamps</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Writes this frame's stamps (capsules in mask UV) and their radii (in view heights) and returns how many. </p>
+<p>Writes this frame's stamps into <em>stamps</em>  and returns how many; <em>deltaTime</em>  moves the fading ones on. </p>
 
-<p>Implemented in <a class="el" href="classBalloonParty_1_1Display_1_1EffectsClearingController.html#a6938c28ace97f9269f801bb170baea9a">BalloonParty.Display.EffectsClearingController</a>.</p>
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Display_1_1EffectsClearingController.html#a7f6f6dd7bef89ee011b17246f15e1c06">BalloonParty.Display.EffectsClearingController</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Property Documentation</h2>
+<a id="a2b71b50a1e79322d6232a36f57169159" name="a2b71b50a1e79322d6232a36f57169159"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b71b50a1e79322d6232a36f57169159">&#9670;&#160;</a></span>AnyInFlight</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Display.IEffectsClearingSource.AnyInFlight</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Whether any ball is in flight, which puts the clearing's clock on game time. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Display_1_1EffectsClearingController.html#ab0ac0103d299df2c2db94589cf7d70d8">BalloonParty.Display.EffectsClearingController</a>.</p>
 
 </div>
 </div>

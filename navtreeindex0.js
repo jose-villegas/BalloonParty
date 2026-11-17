@@ -236,7 +236,8 @@ var NAVTREEINDEX0 =
 "EffectsClearingMaskView_8cs.html":[7,0,5,5],
 "EffectsClearingSettings_8cs.html":[7,0,3,5,4],
 "EffectsClearingStamper_8cs.html":[7,0,5,6],
-"EffectsMapCompositor_8cs.html":[7,0,5,7],
+"EffectsClearingStamps_8cs.html":[7,0,5,7],
+"EffectsMapCompositor_8cs.html":[7,0,5,8],
 "EndRunRequestedMessage_8cs.html":[7,0,14,7,11],
 "EnumIndexedAttribute_8cs.html":[7,0,14,17],
 "EnumIndexedDrawer_8cs.html":[7,0,6,20],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "FlightMetricsSnapshot_8cs.html":[7,0,7,10,6],
 "FlightMode_8cs.html":[7,0,8,11],
 "FlightPhase_8cs.html":[7,0,14,9,2],
-"FlightStatsService_8cs.html":[7,0,7,4,0],
-"FlyingTrail_8cs.html":[7,0,18,8,1]
+"FlightStatsService_8cs.html":[7,0,7,4,0]
 };

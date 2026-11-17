@@ -1,5 +1,6 @@
 var NAVTREEINDEX36 =
 {
+"classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a3f3424ae27983320b8675236bfdabe73":[6,0,0,3,9,33,35],
 "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a4059149f542b128119dcca5004581e83":[5,0,0,3,9,33,43],
 "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a4059149f542b128119dcca5004581e83":[6,0,0,3,9,33,43],
 "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a4428c805552e2d4ff39b91351d15873b":[5,0,0,3,9,33,17],
@@ -248,6 +249,5 @@ var NAVTREEINDEX36 =
 "classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#a8616a35c96051f5e0b21cd801c9e932d":[6,0,0,3,26,11],
 "classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#a8971ab52a6fac59420cdbf1a22075ee9":[5,0,0,3,26,12],
 "classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#a8971ab52a6fac59420cdbf1a22075ee9":[6,0,0,3,26,12],
-"classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#aa30221dbc57938d05b665e768539e833":[5,0,0,3,26,14],
-"classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#aa30221dbc57938d05b665e768539e833":[6,0,0,3,26,14]
+"classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#aa30221dbc57938d05b665e768539e833":[5,0,0,3,26,14]
 };

@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"SoundBankClipAssigner_8cs.html":[7,0,0,1,12],
 "SoundBankConfigurationEditor_8cs.html":[7,0,0,1,13],
 "SoundBankConfiguration_8cs.html":[7,0,0,0,8],
 "SoundHandle_8cs.html":[7,0,0,16],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "classBalloonParty_1_1Audio_1_1Configuration_1_1AudioMixerSettings.html":[6,0,0,0,0,0],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1AudioMixerSettings.html#a1111a35d664c9cfa6e0405f7e9580823":[5,0,0,0,0,0,4],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1AudioMixerSettings.html#a1111a35d664c9cfa6e0405f7e9580823":[6,0,0,0,0,0,4],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1AudioMixerSettings.html#a74e02d91abef00ce1b07d7c04c92f037":[5,0,0,0,0,0,5],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1AudioMixerSettings.html#a74e02d91abef00ce1b07d7c04c92f037":[6,0,0,0,0,0,5]
+"classBalloonParty_1_1Audio_1_1Configuration_1_1AudioMixerSettings.html#a74e02d91abef00ce1b07d7c04c92f037":[5,0,0,0,0,0,5]
 };

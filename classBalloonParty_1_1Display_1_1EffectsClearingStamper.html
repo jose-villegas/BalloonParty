@@ -132,6 +132,8 @@ $(function(){initNavTree('classBalloonParty_1_1Display_1_1EffectsClearingStamper
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Display_1_1EffectsClearingStamper_1_1Candidate.html">Candidate</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Display_1_1EffectsClearingStamper_1_1Fade.html">Fade</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Display_1_1EffectsClearingStamper_1_1Track.html">Track</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -139,9 +141,9 @@ Classes</h2></td></tr>
 Package Functions</h2></td></tr>
 <tr class="memitem:a1ec76e92b057af0318920432ba014a62" id="r_a1ec76e92b057af0318920432ba014a62"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ec76e92b057af0318920432ba014a62">EffectsClearingStamper</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IEffectsClearingSettings.html">IEffectsClearingSettings</a> settings)</td></tr>
 <tr class="separator:a1ec76e92b057af0318920432ba014a62"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac58e7fe0d5c2bd2f6e7b09b6e10dacc9" id="r_ac58e7fe0d5c2bd2f6e7b09b6e10dacc9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac58e7fe0d5c2bd2f6e7b09b6e10dacc9">Fill</a> (<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html">IProjectileRegistry</a> registry, in <a class="el" href="structBalloonParty_1_1Display_1_1ClearingView.html">ClearingView</a> view, Vector4[] stamps, float[] radii)</td></tr>
-<tr class="memdesc:ac58e7fe0d5c2bd2f6e7b09b6e10dacc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes this frame's stamps, and each one's radius in view heights, and returns how many.  <br /></td></tr>
-<tr class="separator:ac58e7fe0d5c2bd2f6e7b09b6e10dacc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2bf9365be9b0dbfac1a9f25e1395dab0" id="r_a2bf9365be9b0dbfac1a9f25e1395dab0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2bf9365be9b0dbfac1a9f25e1395dab0">Fill</a> (<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html">IProjectileRegistry</a> registry, in <a class="el" href="structBalloonParty_1_1Display_1_1ClearingView.html">ClearingView</a> view, float deltaTime, <a class="el" href="classBalloonParty_1_1Display_1_1EffectsClearingStamps.html">EffectsClearingStamps</a> stamps)</td></tr>
+<tr class="memdesc:a2bf9365be9b0dbfac1a9f25e1395dab0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes this frame's stamps into <em>stamps</em>  and returns how many.  <br /></td></tr>
+<tr class="separator:a2bf9365be9b0dbfac1a9f25e1395dab0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5742b6c211590e6eaac233bc1300195" id="r_af5742b6c211590e6eaac233bc1300195"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af5742b6c211590e6eaac233bc1300195">Forget</a> (<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> model)</td></tr>
 <tr class="memdesc:af5742b6c211590e6eaac233bc1300195"><td class="mdescLeft">&#160;</td><td class="mdescRight">Drops a ball's last position; called when the registry retires it.  <br /></td></tr>
 <tr class="separator:af5742b6c211590e6eaac233bc1300195"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -154,6 +156,12 @@ Static Package Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:ab53482f91903a0aeca0a171697e1d8be" id="r_ab53482f91903a0aeca0a171697e1d8be"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab53482f91903a0aeca0a171697e1d8be">AddCandidate</a> (in <a class="el" href="structBalloonParty_1_1Display_1_1ClearingView.html">ClearingView</a> view, Vector2 from, Vector2 to, float radius, float fade)</td></tr>
+<tr class="separator:ab53482f91903a0aeca0a171697e1d8be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf53662b8b9e4e733ab94352146c0cf1" id="r_abf53662b8b9e4e733ab94352146c0cf1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abf53662b8b9e4e733ab94352146c0cf1">AdvanceFades</a> (in <a class="el" href="structBalloonParty_1_1Display_1_1ClearingView.html">ClearingView</a> view, float deltaTime)</td></tr>
+<tr class="separator:abf53662b8b9e4e733ab94352146c0cf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa572c6f67de00cd1cfd323fc859057ed" id="r_aa572c6f67de00cd1cfd323fc859057ed"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa572c6f67de00cd1cfd323fc859057ed">FadeTracksGoneFromFlight</a> (in <a class="el" href="structBalloonParty_1_1Display_1_1ClearingView.html">ClearingView</a> view)</td></tr>
+<tr class="separator:aa572c6f67de00cd1cfd323fc859057ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13e398d4024563fd9fa27312f3b77d7a" id="r_a13e398d4024563fd9fa27312f3b77d7a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a13e398d4024563fd9fa27312f3b77d7a">IndexOf</a> (<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> model)</td></tr>
 <tr class="separator:a13e398d4024563fd9fa27312f3b77d7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3edc11455211fd76e6e73046fc6be2cf" id="r_a3edc11455211fd76e6e73046fc6be2cf"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3edc11455211fd76e6e73046fc6be2cf">RadiusOf</a> (<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> model)</td></tr>
@@ -163,6 +171,8 @@ Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a832f69547d85768c11ee10c7c7f9be52" id="r_a832f69547d85768c11ee10c7c7f9be52"><td class="memItemLeft" align="right" valign="top">readonly List&lt; <a class="el" href="structBalloonParty_1_1Display_1_1EffectsClearingStamper_1_1Candidate.html">Candidate</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a832f69547d85768c11ee10c7c7f9be52">_candidates</a> = new()</td></tr>
 <tr class="separator:a832f69547d85768c11ee10c7c7f9be52"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa188abf23df26738ecd9ab32dc09247f" id="r_aa188abf23df26738ecd9ab32dc09247f"><td class="memItemLeft" align="right" valign="top">readonly List&lt; <a class="el" href="structBalloonParty_1_1Display_1_1EffectsClearingStamper_1_1Fade.html">Fade</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa188abf23df26738ecd9ab32dc09247f">_fades</a> = new()</td></tr>
+<tr class="separator:aa188abf23df26738ecd9ab32dc09247f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad53a9bafaebd881e0c5a03e6f0f7a587" id="r_ad53a9bafaebd881e0c5a03e6f0f7a587"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad53a9bafaebd881e0c5a03e6f0f7a587">_frame</a></td></tr>
 <tr class="separator:ad53a9bafaebd881e0c5a03e6f0f7a587"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1daf00a6a9da10a51ab092c27f09c5d7" id="r_a1daf00a6a9da10a51ab092c27f09c5d7"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IEffectsClearingSettings.html">IEffectsClearingSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1daf00a6a9da10a51ab092c27f09c5d7">_settings</a></td></tr>
@@ -172,7 +182,7 @@ Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Turns the balls in flight into the clearing mask's stamps: one capsule per ball, from where it was last frame to where it is now, in mask UV (<code>xy</code> the start, <code>zw</code> the end). </p>
-<p>A capsule rather than a disc so a fast ball leaves an unbroken corridor. A ball not stamped last frame (just fired, or back in flight after a gap) stamps a disc, and so does every ball while the clearing has no trail. Each stamp's radius grows with its ball's shields. </p>
+<p>A capsule rather than a disc so a fast ball leaves an unbroken corridor. A ball not stamped last frame (just fired, or back in flight after a gap) stamps a disc, and so does every ball while the clearing has no trail. Each stamp's radius grows with its ball's shields. Without a trail the mask holds only this frame's stamps, so a ball that leaves flight (retired, or its last glide over) leaves a disc where it was last seen that fades over <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IEffectsClearingSettings.html#aa9776d444efdec0a586363f04734c551" title="Seconds a stamp takes to decay from full to nothing: with a trail, the corridor behind a ball; withou...">IEffectsClearingSettings.LingerSeconds</a>, its dome shrinking inward to nothing. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a1ec76e92b057af0318920432ba014a62" name="a1ec76e92b057af0318920432ba014a62"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1ec76e92b057af0318920432ba014a62">&#9670;&#160;</a></span>EffectsClearingStamper()</h2>
@@ -200,8 +210,106 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ac58e7fe0d5c2bd2f6e7b09b6e10dacc9" name="ac58e7fe0d5c2bd2f6e7b09b6e10dacc9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac58e7fe0d5c2bd2f6e7b09b6e10dacc9">&#9670;&#160;</a></span>Fill()</h2>
+<a id="ab53482f91903a0aeca0a171697e1d8be" name="ab53482f91903a0aeca0a171697e1d8be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab53482f91903a0aeca0a171697e1d8be">&#9670;&#160;</a></span>AddCandidate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Display.EffectsClearingStamper.AddCandidate </td>
+          <td>(</td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Display_1_1ClearingView.html">ClearingView</a></td>          <td class="paramname"><span class="paramname"><em>view</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>from</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>to</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>radius</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>fade</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abf53662b8b9e4e733ab94352146c0cf1" name="abf53662b8b9e4e733ab94352146c0cf1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf53662b8b9e4e733ab94352146c0cf1">&#9670;&#160;</a></span>AdvanceFades()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Display.EffectsClearingStamper.AdvanceFades </td>
+          <td>(</td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Display_1_1ClearingView.html">ClearingView</a></td>          <td class="paramname"><span class="paramname"><em>view</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>deltaTime</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa572c6f67de00cd1cfd323fc859057ed" name="aa572c6f67de00cd1cfd323fc859057ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa572c6f67de00cd1cfd323fc859057ed">&#9670;&#160;</a></span>FadeTracksGoneFromFlight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Display.EffectsClearingStamper.FadeTracksGoneFromFlight </td>
+          <td>(</td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Display_1_1ClearingView.html">ClearingView</a></td>          <td class="paramname"><span class="paramname"><em>view</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2bf9365be9b0dbfac1a9f25e1395dab0" name="a2bf9365be9b0dbfac1a9f25e1395dab0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2bf9365be9b0dbfac1a9f25e1395dab0">&#9670;&#160;</a></span>Fill()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -222,12 +330,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Vector4[]</td>          <td class="paramname"><span class="paramname"><em>stamps</em></span>, </td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>deltaTime</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float[]</td>          <td class="paramname"><span class="paramname"><em>radii</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Display_1_1EffectsClearingStamps.html">EffectsClearingStamps</a></td>          <td class="paramname"><span class="paramname"><em>stamps</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -237,8 +345,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Writes this frame's stamps, and each one's radius in view heights, and returns how many. </p>
-<p>Past <a class="el" href="#a28fd5f656d4be042e15e061a2bf90020" title="The mask shader&#39;s stamp array size.">MaxStamps</a> balls, the ones nearest the view's centre win. </p>
+<p>Writes this frame's stamps into <em>stamps</em>  and returns how many. </p>
+<p>Past <a class="el" href="#a28fd5f656d4be042e15e061a2bf90020" title="The mask shader&#39;s stamp array size.">MaxStamps</a>, the ones nearest the view's centre win. <em>deltaTime</em>  is how far the fading discs of balls gone from flight move on. </p>
 
 </div>
 </div>
@@ -266,6 +374,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Drops a ball's last position; called when the registry retires it. </p>
+<p>Without a trail, its disc starts to fade where the ball was last seen. </p>
 
 </div>
 </div>
@@ -331,6 +440,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly List&lt;<a class="el" href="structBalloonParty_1_1Display_1_1EffectsClearingStamper_1_1Candidate.html">Candidate</a>&gt; BalloonParty.Display.EffectsClearingStamper._candidates = new()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa188abf23df26738ecd9ab32dc09247f" name="aa188abf23df26738ecd9ab32dc09247f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa188abf23df26738ecd9ab32dc09247f">&#9670;&#160;</a></span>_fades</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly List&lt;<a class="el" href="structBalloonParty_1_1Display_1_1EffectsClearingStamper_1_1Fade.html">Fade</a>&gt; BalloonParty.Display.EffectsClearingStamper._fades = new()</td>
         </tr>
       </table>
   </td>

@@ -1,5 +1,6 @@
 var NAVTREEINDEX33 =
 {
+"classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html#a7eb877e63600a435d39fe0ce48827170":[6,0,0,3,8,0,4],
 "classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html#a81b79e95027e7f2e248b530147846e14":[5,0,0,3,8,0,10],
 "classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html#a81b79e95027e7f2e248b530147846e14":[6,0,0,3,8,0,10],
 "classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html#a93b6f47bbe9ccf1d03ac0575a9f05a43":[5,0,0,3,8,0,15],
@@ -248,6 +249,5 @@ var NAVTREEINDEX33 =
 "classBalloonParty_1_1Configuration_1_1Items_1_1SnipeSettings.html#affa68e3a7dbd4a1187569456ce903edf":[6,0,0,3,8,8,3],
 "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseCurve.html":[5,0,0,3,9,1],
 "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseCurve.html":[6,0,0,3,9,1],
-"classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseCurve.html#a0cfe58078993581b87d63077bf805ad5":[5,0,0,3,9,1,0],
-"classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseCurve.html#a0cfe58078993581b87d63077bf805ad5":[6,0,0,3,9,1,0]
+"classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseCurve.html#a0cfe58078993581b87d63077bf805ad5":[5,0,0,3,9,1,0]
 };

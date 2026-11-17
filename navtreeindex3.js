@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"PlayerPrefsRunSave_8cs.html":[7,0,7,8,17],
 "PointFocus_8cs.html":[7,0,7,2,16],
 "PoolChannel_8cs.html":[7,0,14,9,9],
 "PoolManagerExtensions_8cs.html":[7,0,14,4,13],
@@ -126,7 +127,7 @@ var NAVTREEINDEX3 =
 "ScenarioShift_8cs.html":[7,0,13,8],
 "ScenarioStretch_8cs.html":[7,0,3,9,31],
 "SceneCaptureServiceEditor_8cs.html":[7,0,6,42],
-"SceneCaptureService_8cs.html":[7,0,5,12],
+"SceneCaptureService_8cs.html":[7,0,5,13],
 "SceneDrawingHelper_8cs.html":[7,0,6,43],
 "SceneExtensions_8cs.html":[7,0,14,4,15],
 "SceneLightFieldResources_8cs.html":[7,0,14,11,3],
@@ -151,7 +152,7 @@ var NAVTREEINDEX3 =
 "ScoreUILifetimeScope_8cs.html":[7,0,18,8,7],
 "ScoringControlPoint_8cs.html":[7,0,3,9,32],
 "ScreenSpaceLightServiceEditor_8cs.html":[7,0,6,44],
-"ScreenSpaceLightService_8cs.html":[7,0,5,13],
+"ScreenSpaceLightService_8cs.html":[7,0,5,14],
 "ScriptReferenceRemap_8cs.html":[7,0,6,45],
 "ScriptSearchPopup_8cs.html":[7,0,6,46],
 "SegmentMode_8cs.html":[7,0,3,9,33],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "SoapBubbleClusterVariant_8cs.html":[7,0,1,5,8],
 "SortingHelper_8cs.html":[7,0,14,10,11],
 "SortingLayerNameAttribute_8cs.html":[7,0,14,35],
-"SortingLayerNameDrawer_8cs.html":[7,0,6,49],
-"SoundBankClipAssigner_8cs.html":[7,0,0,1,12]
+"SortingLayerNameDrawer_8cs.html":[7,0,6,49]
 };

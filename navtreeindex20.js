@@ -1,5 +1,6 @@
 var NAVTREEINDEX20 =
 {
+"classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#a82d1f3318f110b8c36464d9f76e829c4":[6,0,0,1,5,7,25],
 "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#a85f3460412cb502358037bef10e455fd":[5,0,0,1,5,7,26],
 "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#a85f3460412cb502358037bef10e455fd":[6,0,0,1,5,7,26],
 "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#a886b82832d29d2d107a2842add73cb53":[5,0,0,1,5,7,12],
@@ -248,6 +249,5 @@ var NAVTREEINDEX20 =
 "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#a00a36a4bc68d8c5696497f74f89d5486":[6,0,0,1,6,1,45],
 "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#a031442eb9ebd931c7ec8c3bd6efb7f19":[5,0,0,1,6,1,44],
 "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#a031442eb9ebd931c7ec8c3bd6efb7f19":[6,0,0,1,6,1,44],
-"classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#a0761ff60f9163e14f05883d0f4ae7d26":[5,0,0,1,6,1,56],
-"classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#a0761ff60f9163e14f05883d0f4ae7d26":[6,0,0,1,6,1,56]
+"classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#a0761ff60f9163e14f05883d0f4ae7d26":[5,0,0,1,6,1,56]
 };

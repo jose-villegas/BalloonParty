@@ -1,5 +1,6 @@
 var NAVTREEINDEX26 =
 {
+"classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#aa00710d8cf1395502d13048bb80903af":[6,0,0,3,2,0,36],
 "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#aa0bb48e24ee32d98fb29c69ef1ea9576":[5,0,0,3,2,0,56],
 "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#aa0bb48e24ee32d98fb29c69ef1ea9576":[6,0,0,3,2,0,56],
 "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#aa181ed11103cd5718caf6604d697e458":[5,0,0,3,2,0,20],
@@ -248,6 +249,5 @@ var NAVTREEINDEX26 =
 "classBalloonParty_1_1Configuration_1_1Editor_1_1AimFanSceneOverlay.html#ad8009bbb3e11ef0b60cdca91f6635e69":[6,0,0,3,4,0,0],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1BalloonPrefabEntryDrawer.html":[5,0,0,3,4,1],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1BalloonPrefabEntryDrawer.html":[6,0,0,3,4,1],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1BalloonPrefabEntryDrawer.html#a02bdcb229f08fde0a784b6aa3e52f12d":[5,0,0,3,4,1,7],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1BalloonPrefabEntryDrawer.html#a02bdcb229f08fde0a784b6aa3e52f12d":[6,0,0,3,4,1,7]
+"classBalloonParty_1_1Configuration_1_1Editor_1_1BalloonPrefabEntryDrawer.html#a02bdcb229f08fde0a784b6aa3e52f12d":[5,0,0,3,4,1,7]
 };

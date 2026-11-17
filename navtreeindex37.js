@@ -1,5 +1,6 @@
 var NAVTREEINDEX37 =
 {
+"classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#aa30221dbc57938d05b665e768539e833":[6,0,0,3,26,14],
 "classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#aa80d54e4bf728d37ae0096d735fc85c0":[5,0,0,3,26,4],
 "classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#aa80d54e4bf728d37ae0096d735fc85c0":[6,0,0,3,26,4],
 "classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#abaa95f19a425b4b44d6c42f8e6247acb":[5,0,0,3,26,16],
@@ -248,6 +249,5 @@ var NAVTREEINDEX37 =
 "classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html#ae382e2d8175aba6101f721e82ad5a609":[6,0,0,3,31,7],
 "classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html#aecb1333da0eb63b2976bcc4567e33e18":[5,0,0,3,31,0],
 "classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html#aecb1333da0eb63b2976bcc4567e33e18":[6,0,0,3,31,0],
-"classBalloonParty_1_1Configuration_1_1SlotGridConfig.html":[5,0,0,3,32],
-"classBalloonParty_1_1Configuration_1_1SlotGridConfig.html":[6,0,0,3,32]
+"classBalloonParty_1_1Configuration_1_1SlotGridConfig.html":[5,0,0,3,32]
 };

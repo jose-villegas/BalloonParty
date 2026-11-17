@@ -13,7 +13,7 @@ var searchData=
   ['cancelallbalancemoves_10',['CancelAllBalanceMoves',['../classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker.html#a72cbf7301f46f5291669ee02005032aa',1,'BalloonParty::Balloon::Controller::BalloonMotionTicker']]],
   ['cancelanddispose_11',['CancelAndDispose',['../classBalloonParty_1_1Shared_1_1Extensions_1_1LifecycleHelper.html#ab9802d223186ce9d223d9fc63acae143',1,'BalloonParty::Shared::Extensions::LifecycleHelper']]],
   ['canceloffer_12',['CancelOffer',['../classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html#a38fcf372872d334fee93dcb53638a20f',1,'BalloonParty::UI::GameOver::GameOverScreen']]],
-  ['candidate_13',['Candidate',['../structBalloonParty_1_1Display_1_1EffectsClearingStamper_1_1Candidate.html#aac593f366ebab14fe28858f027d7f446',1,'BalloonParty::Display::EffectsClearingStamper::Candidate']]],
+  ['candidate_13',['Candidate',['../structBalloonParty_1_1Display_1_1EffectsClearingStamper_1_1Candidate.html#a4bd5ee6c00bea28df636db40975f833a',1,'BalloonParty::Display::EffectsClearingStamper::Candidate']]],
   ['canlaunch_14',['CanLaunch',['../classBalloonParty_1_1Thrower_1_1ThrowerReload.html#adf5d803fb16606b1acf9100859cbe295',1,'BalloonParty::Thrower::ThrowerReload']]],
   ['cannonheadsuprouter_15',['CannonHeadsUpRouter',['../classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CannonHeadsUpRouter.html#a716b75fd0db0182aa8e5b363bee4de8f',1,'BalloonParty::Game::HeadsUp::Routing::CannonHeadsUpRouter']]],
   ['canpassthrough_16',['CanPassThrough',['../classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeWalk.html#ab66444997071a82cc86b0f24ae2f1473',1,'BalloonParty::Balloon::Formation::SnakeWalk']]],

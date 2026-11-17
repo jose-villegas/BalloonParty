@@ -9,11 +9,12 @@ var searchData=
   ['effectsclearingmaskview_2ecs_6',['EffectsClearingMaskView.cs',['../EffectsClearingMaskView_8cs.html',1,'']]],
   ['effectsclearingsettings_2ecs_7',['EffectsClearingSettings.cs',['../EffectsClearingSettings_8cs.html',1,'']]],
   ['effectsclearingstamper_2ecs_8',['EffectsClearingStamper.cs',['../EffectsClearingStamper_8cs.html',1,'']]],
-  ['effectsmapcompositor_2ecs_9',['EffectsMapCompositor.cs',['../EffectsMapCompositor_8cs.html',1,'']]],
-  ['effectview_2ecs_10',['EffectView.cs',['../EffectView_8cs.html',1,'']]],
-  ['effectviewpreviewplayer_2ecs_11',['EffectViewPreviewPlayer.cs',['../EffectViewPreviewPlayer_8cs.html',1,'']]],
-  ['endrunrequestedmessage_2ecs_12',['EndRunRequestedMessage.cs',['../EndRunRequestedMessage_8cs.html',1,'']]],
-  ['enumindexedattribute_2ecs_13',['EnumIndexedAttribute.cs',['../EnumIndexedAttribute_8cs.html',1,'']]],
-  ['enumindexeddrawer_2ecs_14',['EnumIndexedDrawer.cs',['../EnumIndexedDrawer_8cs.html',1,'']]],
-  ['extracolorlevelsettings_2ecs_15',['ExtraColorLevelSettings.cs',['../ExtraColorLevelSettings_8cs.html',1,'']]]
+  ['effectsclearingstamps_2ecs_9',['EffectsClearingStamps.cs',['../EffectsClearingStamps_8cs.html',1,'']]],
+  ['effectsmapcompositor_2ecs_10',['EffectsMapCompositor.cs',['../EffectsMapCompositor_8cs.html',1,'']]],
+  ['effectview_2ecs_11',['EffectView.cs',['../EffectView_8cs.html',1,'']]],
+  ['effectviewpreviewplayer_2ecs_12',['EffectViewPreviewPlayer.cs',['../EffectViewPreviewPlayer_8cs.html',1,'']]],
+  ['endrunrequestedmessage_2ecs_13',['EndRunRequestedMessage.cs',['../EndRunRequestedMessage_8cs.html',1,'']]],
+  ['enumindexedattribute_2ecs_14',['EnumIndexedAttribute.cs',['../EnumIndexedAttribute_8cs.html',1,'']]],
+  ['enumindexeddrawer_2ecs_15',['EnumIndexedDrawer.cs',['../EnumIndexedDrawer_8cs.html',1,'']]],
+  ['extracolorlevelsettings_2ecs_16',['ExtraColorLevelSettings.cs',['../ExtraColorLevelSettings_8cs.html',1,'']]]
 ];

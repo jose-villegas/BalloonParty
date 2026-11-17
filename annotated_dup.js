@@ -391,6 +391,7 @@ var annotated_dup =
         [ "EffectsClearingController", "classBalloonParty_1_1Display_1_1EffectsClearingController.html", "classBalloonParty_1_1Display_1_1EffectsClearingController" ],
         [ "EffectsClearingMaskView", "classBalloonParty_1_1Display_1_1EffectsClearingMaskView.html", "classBalloonParty_1_1Display_1_1EffectsClearingMaskView" ],
         [ "EffectsClearingStamper", "classBalloonParty_1_1Display_1_1EffectsClearingStamper.html", "classBalloonParty_1_1Display_1_1EffectsClearingStamper" ],
+        [ "EffectsClearingStamps", "classBalloonParty_1_1Display_1_1EffectsClearingStamps.html", "classBalloonParty_1_1Display_1_1EffectsClearingStamps" ],
         [ "EffectsMapCompositor", "classBalloonParty_1_1Display_1_1EffectsMapCompositor.html", "classBalloonParty_1_1Display_1_1EffectsMapCompositor" ],
         [ "HudCamera", "classBalloonParty_1_1Display_1_1HudCamera.html", "classBalloonParty_1_1Display_1_1HudCamera" ],
         [ "IEffectsClearingSource", "interfaceBalloonParty_1_1Display_1_1IEffectsClearingSource.html", "interfaceBalloonParty_1_1Display_1_1IEffectsClearingSource" ],
