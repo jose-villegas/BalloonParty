@@ -1,8 +1,10 @@
 using System;
+using BalloonParty.Balloon.Spawner;
 using BalloonParty.Game.Health;
 using BalloonParty.Slots.Grid;
 using UniRx;
 using UnityEngine;
+using VContainer;
 using VContainer.Unity;
 
 namespace BalloonParty.Game.Danger
@@ -11,23 +13,29 @@ namespace BalloonParty.Game.Danger
     internal class SpaceDanger : IStartable, ILateTickable, IDisposable, IDangerLevel
     {
         private readonly SlotGrid _grid;
+        private readonly IObjectResolver _resolver;
         private readonly IPlayerHealth _health;
         private readonly ReactiveProperty<float> _level = new(0f);
         private readonly ReactiveProperty<int> _heartsAtRisk = new(0);
         private readonly CompositeDisposable _subscriptions = new();
         private bool _dirty;
+        private BalloonPlacementResolver _placement;
 
         public IReadOnlyReactiveProperty<float> Level => _level;
         public IReadOnlyReactiveProperty<int> HeartsAtRisk => _heartsAtRisk;
 
-        public SpaceDanger(SlotGrid grid, IPlayerHealth health)
+        public SpaceDanger(SlotGrid grid, IObjectResolver resolver, IPlayerHealth health)
         {
             _grid = grid;
+            _resolver = resolver;
             _health = health;
         }
 
         public void Start()
         {
+            // Resolved here, not taken in the constructor: the placement needs the balancer, which needs the
+            // formations, whose threat ease reads the player's need, which reads this danger.
+            _placement = _resolver.Resolve<BalloonPlacementResolver>();
             // A bomb pop or balance sweep can fire OnChanged a dozen+ times in one frame; only the
             // settled end-of-frame state matters, so mark dirty here and recompute once in LateTick.
             _grid.OnChanged.Subscribe(_ => _dirty = true).AddTo(_subscriptions);
@@ -73,7 +81,8 @@ namespace BalloonParty.Game.Danger
 
             // The spawn clock brings one line per tick.
             var columns = _grid.Columns;
-            var availableSpace = _grid.CountEmpty();
+            // As the spawner counts it: empty slots sealed off from every line are no room.
+            var availableSpace = _placement.LineHasRoom() ? _grid.CountEmpty() : 0;
 
             _level.Value = Evaluate(_health.Current.Value, availableSpace, columns, columns);
             _heartsAtRisk.Value = WaveDeficitCalculator.Calculate(availableSpace, columns, columns).HeartsLost;

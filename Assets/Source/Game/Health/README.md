@@ -46,6 +46,9 @@ BalloonSpawner (wave start)
 - `deficit = neededSlots - availableSpace` (clamped ≥ 0)
 - `heartsLost = deficit / rowLength` (integer division — only full lines count)
 - Partial remainders (< one full line) are simply not spawned, costing no heart.
+- `availableSpace` is the board's empty slots when the line has room, and 0 when it has none
+  (`BalloonPlacementResolver.LineHasRoom`): empty slots no line can reach, sealed above a wall such as a tough
+  snake lying across the board, would otherwise forgive every line for as long as the wall stood.
 
 Example (6 columns, 4 spawn lines = 24 needed):
 - 18 available → deficit 6 → 1 heart lost

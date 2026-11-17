@@ -34,8 +34,11 @@ gradient so the player can feel the board getting dangerous before they actually
 
 Two inputs are deliberately simple heuristics and double as tuning knobs:
 
-- **`availableSpace`** = the empty-slot count. Re-home + pressure balance fill nearly every empty, so
-  this approximates "how many balloons the board can still take" without re-deriving reachability.
+- **`availableSpace`** = the empty-slot count, or 0 when a line has no room at all
+  (`BalloonPlacementResolver.LineHasRoom`, the spawner's own test). Re-home + pressure balance fill nearly every
+  reachable empty, so the count approximates "how many balloons the board can still take"; the room test covers
+  the case it misses, empty slots sealed off from every line (above a tough snake lying across the board, a
+  formation or bushes), which would otherwise keep the danger at 0 on a board that costs a heart each line.
 - **`spawnPerLine`** = `Columns`: the spawn clock (`Balloon/Spawner/`) brings exactly one line per tick, so that is the most the board is ever asked to take at once. Because a line only overflows once the board is completely full, the signal is 0 until then and warns about one clock interval ahead.
 
 ## Consumers

@@ -39,7 +39,9 @@ Lines group into **waves** of `ISpawnClockSettings.LinesPerWave` (3). Counting r
 - A wave's **last line** publishes `ItemCheckMessage(Wave)` over that line's balloons only (earlier lines' balloons may already be popped); `ItemAssigner` counts waves against `ItemCadence`. Other lines drop their new-balloon list without a check.
 - Every line ends by publishing `BalanceBalloonsMessage` so the balancer settles the grid.
 
-A doomed line (one the board has no room for) still spawns: `BeginDoomedLine` / `EndDoomedLine` tag its overflow balloons so they wait for the strikethrough, and `WaveDamageMessage` goes out after them. `SpaceDanger` assumes this one-line-per-tick shape. The line hold while the doomed ball flies alone lives in `SpawnClock`, not here (`Projectile/README.md`).
+A line is doomed when the board has no room for any of it: no column's entry is open and pressure can't shove
+one open (`BalloonPlacementResolver.LineHasRoom`, which moves nothing). Empty slots no line can reach, sealed above
+a tough snake lying across the board, a formation or bushes, don't count as room. A doomed line still spawns: `BeginDoomedLine` / `EndDoomedLine` tag its overflow balloons so they wait for the strikethrough, and `WaveDamageMessage` goes out after them. `SpaceDanger` assumes this one-line-per-tick shape. The line hold while the doomed ball flies alone lives in `SpawnClock`, not here (`Projectile/README.md`).
 
 ### Reinforcements
 
@@ -100,7 +102,7 @@ overrides the gradient with vertical layering (`ArrangeInitialLayers` + the pure
 
 ## Interactions
 
-- **SlotGrid** — queried for empty slots (`CountEmpty()`); all placed balloons registered here
+- **SlotGrid** — queried for empty slots (`CountEmpty()`, counted only when the line has room); all placed balloons registered here
 - **WaveDeficitCalculator** — called before each line to determine hearts lost (pure static function in `Game/Health/`)
 - **WaveDamageMessage** — published after doomed lines are spawned, carrying `HeartsLost`
 - **BalloonBalancer** — notified via `BalanceBalloonsMessage` after each line; `Balance(atWaveStart)` before it
