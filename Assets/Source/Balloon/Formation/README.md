@@ -188,11 +188,7 @@ scene capture sees it as it sees the balloons: it casts the soft shadow and take
 wave, the tied springs stay with the balloons they tie and ride out with them (the view is outgoing
 content, `ITransitionOutgoingContent`); each drops once either balloon is popped or pooled. A spring is white
 with a faint checker along it (`Colour` and `Checker Colour`, `Checks Per Unit`), so it reads as textured; the
-checker is tiled along the line, so it follows the spring as it swings, not the screen. Each spring casts a
-drop shadow (`Shadow`, on): a second, softer line on a copy of the balloons' baked shadow material, anchored at
-the spring's middle, so the shader places it down-light by the balloons' own offset and it swings with their
-shadows as the time of day moves the light, fades with the light and sinks into the clouds as theirs do. It
-costs one more line a spring: one draw and about 22 vertices.
+checker is tiled along the line, so it follows the spring as it swings, not the screen.
 
 ## Reinforcements
 
