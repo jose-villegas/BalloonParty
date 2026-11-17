@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Game_1_1Telemetry_1_1TimerCatalog.html" target="_top" xlink:title=" ">
+<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="161.5,-33.5 0,-33.5 0,0 161.5,0 161.5,-33.5"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Game.Telemetry.</text>
-<text xml:space="preserve" text-anchor="middle" x="80.75" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">TimerCatalog</text>
+<text xml:space="preserve" text-anchor="middle" x="80.75" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">MetricScope</text>
 </a>
 </g>
 </g>

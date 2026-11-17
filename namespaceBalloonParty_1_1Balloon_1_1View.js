@@ -9,6 +9,7 @@ var namespaceBalloonParty_1_1Balloon_1_1View =
     [ "FormationGlowView", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView" ],
     [ "GrowingDiscView", "classBalloonParty_1_1Balloon_1_1View_1_1GrowingDiscView.html", "classBalloonParty_1_1Balloon_1_1View_1_1GrowingDiscView" ],
     [ "IBalloonMotionView", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonMotionView.html", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonMotionView" ],
+    [ "IBalloonSwayView", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonSwayView.html", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonSwayView" ],
     [ "IBalloonViewBinding", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonViewBinding.html", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonViewBinding" ],
     [ "IBubbleMergeReactive", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IBubbleMergeReactive.html", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IBubbleMergeReactive" ],
     [ "IDiscoWaveView", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IDiscoWaveView.html", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IDiscoWaveView" ],

@@ -155,6 +155,9 @@ Properties</h2></td></tr>
 <tr class="separator:ae2e27e106c4d1c253819d31079552389"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed954c312f254977a817018f3222725e" id="r_aed954c312f254977a817018f3222725e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html">IFormationGlowSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aed954c312f254977a817018f3222725e">FormationGlow</a><code> [get]</code></td></tr>
 <tr class="separator:aed954c312f254977a817018f3222725e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc15a279893dc59ea5af10775175216e" id="r_acc15a279893dc59ea5af10775175216e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonIdleSwaySettings.html">IBalloonIdleSwaySettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acc15a279893dc59ea5af10775175216e">IdleSway</a><code> [get]</code></td></tr>
+<tr class="memdesc:acc15a279893dc59ea5af10775175216e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The plain balloon's idle sway, baked from its Animator controller.  <br /></td></tr>
+<tr class="separator:acc15a279893dc59ea5af10775175216e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6316ed954ea6b1387e0b684e943b86df" id="r_a6316ed954ea6b1387e0b684e943b86df"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6316ed954ea6b1387e0b684e943b86df">MoveSpeedVariation</a><code> [get]</code></td></tr>
 <tr class="memdesc:a6316ed954ea6b1387e0b684e943b86df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fractional ± spread applied once per balloon at spawn to its resolved move speed, so a wave of identical balloons drifts in at slightly different paces.  <br /></td></tr>
 <tr class="separator:a6316ed954ea6b1387e0b684e943b86df"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -222,6 +225,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a55593e62a166c2a24d4d65e73a5de307"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31ff5191d0b3661c58b30bfdeacfedd1" id="r_a31ff5191d0b3661c58b30bfdeacfedd1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html">FormationGlowSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31ff5191d0b3661c58b30bfdeacfedd1">_formationGlow</a> = new()</td></tr>
 <tr class="separator:a31ff5191d0b3661c58b30bfdeacfedd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8dcaaf2f5ee41cd45b385dcc17c3837" id="r_ab8dcaaf2f5ee41cd45b385dcc17c3837"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonIdleSwaySettings.html">BalloonIdleSwaySettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab8dcaaf2f5ee41cd45b385dcc17c3837">_idleSway</a> = new()</td></tr>
+<tr class="separator:ab8dcaaf2f5ee41cd45b385dcc17c3837"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6f23644fcc0e4e4712618171d27af337" id="r_a6f23644fcc0e4e4712618171d27af337"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6f23644fcc0e4e4712618171d27af337">_moveSpeedVariation</a> = 0.15f</td></tr>
 <tr class="separator:a6f23644fcc0e4e4712618171d27af337"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a62f8606598e997d05a109c044c1482d4" id="r_a62f8606598e997d05a109c044c1482d4"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a62f8606598e997d05a109c044c1482d4">_nudgeDistance</a> = 0.3f</td></tr>
@@ -449,6 +454,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html">FormationGlowSettings</a> BalloonParty.Configuration.Balloons.BalloonsConfiguration._formationGlow = new()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab8dcaaf2f5ee41cd45b385dcc17c3837" name="ab8dcaaf2f5ee41cd45b385dcc17c3837"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8dcaaf2f5ee41cd45b385dcc17c3837">&#9670;&#160;</a></span>_idleSway</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonIdleSwaySettings.html">BalloonIdleSwaySettings</a> BalloonParty.Configuration.Balloons.BalloonsConfiguration._idleSway = new()</td>
         </tr>
       </table>
   </td>
@@ -1105,6 +1132,32 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#adc5a531ca687820ae9ed697db2be6c72">BalloonParty.Configuration.Balloons.IBalloonsConfiguration</a>.</p>
+
+</div>
+</div>
+<a id="acc15a279893dc59ea5af10775175216e" name="acc15a279893dc59ea5af10775175216e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc15a279893dc59ea5af10775175216e">&#9670;&#160;</a></span>IdleSway</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonIdleSwaySettings.html">IBalloonIdleSwaySettings</a> BalloonParty.Configuration.Balloons.BalloonsConfiguration.IdleSway</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The plain balloon's idle sway, baked from its Animator controller. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#aaff13869be066c6a8d5de72fc0df7760">BalloonParty.Configuration.Balloons.IBalloonsConfiguration</a>.</p>
 
 </div>
 </div>

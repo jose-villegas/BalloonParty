@@ -1,0 +1,5 @@
+<map id="BalloonParty.Configuration.Balloons.BalloonIdleSwaySettings" name="BalloonParty.Configuration.Balloons.BalloonIdleSwaySettings">
+<area shape="rect" id="Node000001" title="Baked, not typed in: every value here comes from Source and its clips, written by the idle sway baker..." alt="" coords="7,98,250,143"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonIdleSwaySettings.html" title="The plain balloon&#39;s idle sway, baked from its Animator controller so one ticker (BalloonSwayTicker) p..." alt="" coords="5,5,252,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="130,64,131,99,126,97,127,68"/>
+</map>

@@ -1,14 +1,18 @@
 var dir_b802e883bf617d79d7ac9e8dff132809 =
 [
+    [ "BalloonIdleSwaySettings.cs", "BalloonIdleSwaySettings_8cs.html", "BalloonIdleSwaySettings_8cs" ],
     [ "BalloonMoveSpeedExtensions.cs", "BalloonMoveSpeedExtensions_8cs.html", "BalloonMoveSpeedExtensions_8cs" ],
     [ "BalloonPrefabEntry.cs", "BalloonPrefabEntry_8cs.html", "BalloonPrefabEntry_8cs" ],
     [ "BalloonsConfiguration.cs", "BalloonsConfiguration_8cs.html", "BalloonsConfiguration_8cs" ],
+    [ "BalloonSwayLoop.cs", "BalloonSwayLoop_8cs.html", "BalloonSwayLoop_8cs" ],
     [ "BalloonTypeWeight.cs", "BalloonTypeWeight_8cs.html", "BalloonTypeWeight_8cs" ],
     [ "BubbleMergeCueSettings.cs", "BubbleMergeCueSettings_8cs.html", "BubbleMergeCueSettings_8cs" ],
     [ "DiscoWaveSettings.cs", "DiscoWaveSettings_8cs.html", "DiscoWaveSettings_8cs" ],
     [ "FormationGlowSettings.cs", "FormationGlowSettings_8cs.html", "FormationGlowSettings_8cs" ],
     [ "HitVfxOverride.cs", "HitVfxOverride_8cs.html", "HitVfxOverride_8cs" ],
+    [ "IBalloonIdleSwaySettings.cs", "IBalloonIdleSwaySettings_8cs.html", "IBalloonIdleSwaySettings_8cs" ],
     [ "IBalloonsConfiguration.cs", "IBalloonsConfiguration_8cs.html", "IBalloonsConfiguration_8cs" ],
+    [ "IBalloonSwayLoop.cs", "IBalloonSwayLoop_8cs.html", "IBalloonSwayLoop_8cs" ],
     [ "IBubbleMergeCueSettings.cs", "IBubbleMergeCueSettings_8cs.html", "IBubbleMergeCueSettings_8cs" ],
     [ "IDiscoWaveSettings.cs", "IDiscoWaveSettings_8cs.html", "IDiscoWaveSettings_8cs" ],
     [ "IFormationGlowSettings.cs", "IFormationGlowSettings_8cs.html", "IFormationGlowSettings_8cs" ],

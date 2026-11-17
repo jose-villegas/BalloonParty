@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation.html" target="_top" xlink:title="One standing formation: its members, its shape, and how long it holds that shape.">
+<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeBody.html" target="_top" xlink:title="Where the tough snake&#39;s free toughs fall in: a line of slots on from its tail, away from the body,...">
 <polygon fill="white" stroke="#666666" points="171.25,-33.5 0,-33.5 0,0 171.25,0 171.25,-33.5"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Formation.</text>
-<text xml:space="preserve" text-anchor="middle" x="85.62" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">StandingFormation</text>
+<text xml:space="preserve" text-anchor="middle" x="85.62" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">SnakeBody</text>
 </a>
 </g>
 </g>

@@ -27,6 +27,7 @@ var hierarchy =
     [ "BalloonParty.Balloon.Controller.BalloonControllerContext", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerContext.html", null ],
     [ "BalloonParty.Shared.Messages.BalloonDeflectedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1BalloonDeflectedMessage.html", null ],
     [ "BalloonParty.Balloon.Spawner.BalloonFactory", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonFactory.html", null ],
+    [ "BalloonParty.Editor.BalloonIdleSwayBaker", "classBalloonParty_1_1Editor_1_1BalloonIdleSwayBaker.html", null ],
     [ "BalloonParty.Balloon.Model.BalloonModelConfig", "structBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelConfig.html", null ],
     [ "BalloonParty.Shared.Extensions.BalloonModelExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1BalloonModelExtensions.html", null ],
     [ "BalloonParty.Balloon.Model.BalloonModelFactory", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelFactory.html", null ],
@@ -35,6 +36,7 @@ var hierarchy =
     [ "BalloonParty.Balloon.Spawner.BalloonPlacementResolver", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonPlacementResolver.html", null ],
     [ "BalloonParty.Balloon.Controller.BalloonPopPresenter", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonPopPresenter.html", null ],
     [ "BalloonParty.Configuration.Balloons.BalloonPrefabEntry", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html", null ],
+    [ "BalloonParty.Balloon.Controller.BalloonSwayPlayback", "structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonSwayPlayback.html", null ],
     [ "BalloonParty.Game.Telemetry.BalloonTypeCount", "structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount.html", null ],
     [ "BalloonParty.Shared.Extensions.BalloonTypeExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1BalloonTypeExtensions.html", null ],
     [ "BalloonParty.Configuration.Balloons.BalloonTypeWeight", "structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html", null ],
@@ -153,6 +155,7 @@ var hierarchy =
     [ "BalloonParty.Display.EffectsClearingStamps", "classBalloonParty_1_1Display_1_1EffectsClearingStamps.html", null ],
     [ "BalloonParty.Editor.EffectPreview.EffectViewPreviewPlayer", "classBalloonParty_1_1Editor_1_1EffectPreview_1_1EffectViewPreviewPlayer.html", null ],
     [ "BalloonParty.Shared.Messages.EndRunRequestedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1EndRunRequestedMessage.html", null ],
+    [ "BalloonParty.Balloon.Controller.BalloonSwayTicker.Entry", "structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonSwayTicker_1_1Entry.html", null ],
     [ "BalloonParty.Editor.MetricBindingDrawer.Entry", "structBalloonParty_1_1Editor_1_1MetricBindingDrawer_1_1Entry.html", null ],
     [ "BalloonParty.Game.Score.Behaviours.ScoreTrailBehaviourResolver.Entry", "structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailBehaviourResolver_1_1Entry.html", null ],
     [ "BalloonParty.Game.Telemetry.MetricCatalog.Entry", "structBalloonParty_1_1Game_1_1Telemetry_1_1MetricCatalog_1_1Entry.html", null ],
@@ -268,6 +271,9 @@ var hierarchy =
       [ "BalloonParty.Balloon.Model.BalloonModelBase", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html", null ],
       [ "BalloonParty.Solver.ShotSimDynamicActor", "classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html", null ]
     ] ],
+    [ "BalloonParty.Configuration.Balloons.IBalloonIdleSwaySettings", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonIdleSwaySettings.html", [
+      [ "BalloonParty.Configuration.Balloons.BalloonIdleSwaySettings", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonIdleSwaySettings.html", null ]
+    ] ],
     [ "BalloonParty.Balloon.View.IBalloonMotionView", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonMotionView.html", [
       [ "BalloonParty.Balloon.View.BalloonView", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html", null ]
     ] ],
@@ -276,6 +282,12 @@ var hierarchy =
     ] ],
     [ "BalloonParty.Configuration.Balloons.IBalloonsConfiguration", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html", [
       [ "BalloonParty.Configuration.Balloons.BalloonsConfiguration", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html", null ]
+    ] ],
+    [ "BalloonParty.Configuration.Balloons.IBalloonSwayLoop", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonSwayLoop.html", [
+      [ "BalloonParty.Configuration.Balloons.BalloonSwayLoop", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonSwayLoop.html", null ]
+    ] ],
+    [ "BalloonParty.Balloon.View.IBalloonSwayView", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonSwayView.html", [
+      [ "BalloonParty.Balloon.View.BalloonView", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html", null ]
     ] ],
     [ "BalloonParty.Balloon.Type.IBalloonVariant", "interfaceBalloonParty_1_1Balloon_1_1Type_1_1IBalloonVariant.html", [
       [ "BalloonParty.Balloon.Type.ColorableBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1ColorableBalloonVariant.html", [
@@ -723,6 +735,7 @@ var hierarchy =
     [ "ILateTickable", null, [
       [ "BalloonParty.Audio.Routing.ItemSightSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1ItemSightSoundRouter.html", null ],
       [ "BalloonParty.Balloon.Controller.BalloonMotionTicker", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker.html", null ],
+      [ "BalloonParty.Balloon.Controller.BalloonSwayTicker", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonSwayTicker.html", null ],
       [ "BalloonParty.Game.Cinematics.CinematicDirector", "classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicDirector.html", null ],
       [ "BalloonParty.Game.Danger.SpaceDanger", "classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html", null ],
       [ "BalloonParty.Game.Score.Behaviours.ShapeFormationTicker", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html", null ],
@@ -1582,6 +1595,7 @@ var hierarchy =
     [ "BalloonParty.Game.Assist.PityRoll", "classBalloonParty_1_1Game_1_1Assist_1_1PityRoll.html", null ],
     [ "BalloonParty.Balloon.Reward.PlatedRewardSchedule", "classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html", null ],
     [ "BalloonParty.Balloon.Reward.PlatedRewardTuning", "structBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardTuning.html", null ],
+    [ "BalloonParty.Editor.BalloonIdleSwayBaker.PlayedPoint", "structBalloonParty_1_1Editor_1_1BalloonIdleSwayBaker_1_1PlayedPoint.html", null ],
     [ "BalloonParty.Shared.Pool.PoolManager", "classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html", null ],
     [ "BalloonParty.Shared.Extensions.PoolManagerExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1PoolManagerExtensions.html", null ],
     [ "BalloonParty.Configuration.Balloons.PopPulse", "classBalloonParty_1_1Configuration_1_1Balloons_1_1PopPulse.html", null ],

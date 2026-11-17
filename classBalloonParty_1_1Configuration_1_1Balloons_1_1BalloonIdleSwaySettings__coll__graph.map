@@ -1,0 +1,9 @@
+<map id="BalloonParty.Configuration.Balloons.BalloonIdleSwaySettings" name="BalloonParty.Configuration.Balloons.BalloonIdleSwaySettings">
+<area shape="rect" id="Node000001" title="Baked, not typed in: every value here comes from Source and its clips, written by the idle sway baker..." alt="" coords="612,40,855,85"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonIdleSwaySettings.html" title="The plain balloon&#39;s idle sway, baked from its Animator controller so one ticker (BalloonSwayTicker) p..." alt="" coords="255,5,501,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="517,39,614,50,609,51,517,44"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonSwayLoop.html" title=" " alt="" coords="280,75,476,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="492,91,588,84,609,84,615,84,589,90,492,97"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonSwayLoop.html" title="One looping sway of the balloon&#39;s pivot, baked from an Animator state and the transitions into it." alt="" coords="5,75,206,119"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="221,94,282,97,277,97,222,100"/>
+</map>

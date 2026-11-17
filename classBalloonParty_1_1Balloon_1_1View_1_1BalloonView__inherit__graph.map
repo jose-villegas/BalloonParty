@@ -1,18 +1,20 @@
 <map id="BalloonParty.Balloon.View.BalloonView" name="BalloonParty.Balloon.View.BalloonView">
-<area shape="rect" id="Node000001" title=" " alt="" coords="505,177,698,222"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="505,208,698,252"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="283,5,406,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="421,27,458,42,500,72,536,108,588,177,583,176,532,112,497,76,456,47,421,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="421,26,458,42,504,80,542,125,571,169,592,208,587,206,567,172,538,128,500,84,456,47,422,32"/>
 <area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolable.html" title=" " alt="" coords="251,57,438,102"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="426,105,458,118,565,176,560,177,456,123,427,110"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="431,105,458,118,524,162,578,207,573,207,521,166,456,123,431,111"/>
 <area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="5,148,184,192"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="198,158,323,155,391,156,457,162,523,176,518,177,457,167,390,162,323,160,200,164"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="198,153,323,148,391,152,458,162,514,181,565,207,560,207,512,186,456,167,391,157,323,153,200,158"/>
 <area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IPaintReactive.html" title="A slot&#45;actor view that can play the paint&#45;splash drip reaction." alt="" coords="255,177,434,222"/>
-<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="198,179,257,188,252,190,199,185"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="449,197,507,199,502,200,450,202"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="198,180,257,187,253,190,200,185"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="449,209,507,218,502,219,450,214"/>
 <area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Nudge_1_1INudgeable.html" title="Decouples NudgeService from BalloonView specifically." alt="" coords="232,245,457,273"/>
-<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="424,239,456,231,509,221,504,223,458,236,425,244"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="472,242,507,240,502,242,473,247"/>
 <area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonMotionView.html" title="Position surface BalloonMotionTicker reads (base reconciliation) and writes (base + impulses)." alt="" coords="248,297,441,342"/>
-<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="441,288,456,282,515,251,565,223,570,221,518,256,458,287,442,293"/>
-<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Item_1_1IHostsSpinningItem.html" title="A board view that may be hosting a spinning item visual, exposing it read&#45;only." alt="" coords="254,366,434,411"/>
-<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="447,356,456,352,496,321,531,286,583,223,587,221,535,289,499,325,458,356,449,361"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="434,289,456,282,545,252,540,254,458,287,436,294"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonSwayView.html" title="The surface BalloonSwayTicker writes a balloon&#39;s idle sway to." alt="" coords="248,366,441,411"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="444,357,456,352,492,328,525,301,577,254,582,251,529,305,495,333,458,356,446,362"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Item_1_1IHostsSpinningItem.html" title="A board view that may be hosting a spinning item visual, exposing it read&#45;only." alt="" coords="254,436,434,480"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="448,426,455,421,500,381,538,334,567,288,587,254,592,251,572,291,542,337,504,385,459,425,449,431"/>
 </map>

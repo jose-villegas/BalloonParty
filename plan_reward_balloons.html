@@ -110,14 +110,14 @@ $(function(){initNavTree('plan_reward_balloons.html',''); initResizable(true); }
   <div class="headertitle"><div class="title">Reward Balloons</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md860"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md861"></a>
 Reward Balloons</h1>
 <blockquote class="doxtable">
 <p>Two rare balloons that pay the player instead of pressuring them. The <b>golden balloon</b> comes to a purple level, from 15% done, up to three a level: plated in gold, it shrugs off every normal hit and item, and only a piercing shot pops it, for a free upgrade card. The <b>heart balloon</b> is a heart wrapped in bandages that gives a heart back; it comes to purple levels from their start, up to five (an extra heart at full health), and to a player who is losing hearts.</p>
 <p><b>No changes until this plan is actioned.</b> </p>
 </blockquote>
 <hr  />
-<h2><a class="anchor" id="autotoc_md862"></a>
+<h2><a class="anchor" id="autotoc_md863"></a>
 Goals</h2>
 <ol type="1">
 <li><b>Golden balloon.</b><ul>
@@ -138,7 +138,7 @@ Goals</h2>
 </li>
 <li>Both are colourless: they never count toward a colour's goal, and never break or feed the streak.</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md863"></a>
+<h2><a class="anchor" id="autotoc_md864"></a>
 How it fits</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -189,7 +189,7 @@ How it fits</h2>
 <div class="line">    Up-&gt;&gt;Up: deal and hold it, the reveal plays it</div>
 <div class="line">    Spw-&gt;&gt;Rwd: every 6 lines once it has left, a roll for the next, 20% then 10%</div>
 <div class="line">    Rwd--&gt;&gt;Spw: a won one</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md864"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md865"></a>
 Tuning (<code>IRewardBalloonSettings</code>)</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -228,13 +228,13 @@ Tuning (<code>IRewardBalloonSettings</code>)</h2>
 <td class="markdownTableBodyNone">At most one of each on the board   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone">A second one waits until the first is gone   </td></tr>
 </table>
 <p>Off a purple level, full hearts never roll one, so the heart balloon is help, not loot. A purple level rolls for them regardless, as part of that level's reward. A level ends with it unpopped and it's gone with the board, like any balloon.</p>
-<h2><a class="anchor" id="autotoc_md865"></a>
+<h2><a class="anchor" id="autotoc_md866"></a>
 The looks</h2>
 <ul>
 <li><b>Golden:</b> a balloon, built from the tough balloon's prefab (body, knot, the shine sprites, the baked shadow), so it reads as one of the balloons and not as an unbreakable. Its body is <code>Balloon/GoldenBalloon.shader</code>: the tough balloon's sphere projection and scene light, plated in gold. The plates are even hexagons over the sphere, crowding toward the rim like tiles on a ball. They are even on purpose: irregular Voronoi plates read like the tough balloon's cracks. The plates are thick and stand apart: toward the rim each shows its side wall, each casts a shadow into the gaps, and the balloon's orange rubber shows at the bottom of the gaps, lit as one smooth sphere with its own gloss, so it reads as a balloon wearing the plates. Each plate is bevelled at its edges and held by two domed bolts, at its top and bottom corners, which gives it relief. Each is also tilted a little and wobbles slowly, so it shades, reflects the horizon and glints on its own as the light moves, and the glitter (<code>Include/Glitter.cginc</code>) is gated by the glint, so it sparkles only where the light catches. The knot is dark gold. Checked in the Editor at noon and at night.</li>
 <li><b>Heart:</b> a heart-shaped balloon body, drawn by <code>Tools/art/make_heart_balloon.py</code> and lit like the others (<code>SpriteDiffuse</code>), red. Its volume is baked in: the heart is inflated from a height map, so each lobe rounds off and the cleft and the tip fall into shade. Two cream cloth strips wrap across it below the lobes, slightly frayed, tied in a knot on the right lobe; they are children of the sway pivot, so they sway with the balloon. Its highlight is its own: the round balloons' shine is an arc drawn for a circle and swung round the balloon's centre, which a heart's outline doesn't follow, so <code>Balloon/HeartShine.shader</code> lights the highlight from the heart's normals (baked from the same height map) toward the scene light. It lands on each lobe at noon and follows the light round, with the round shine's night response. Checked in the Editor at noon and at night.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md866"></a>
+<h2><a class="anchor" id="autotoc_md867"></a>
 Phases</h2>
 <ol type="1">
 <li><b>Reward hook.</b> <code>LevelCompletion</code>, <code>RewardBalloonService</code>, <code>IRewardBalloonRequests</code>, the spawner's consumption and prewarm, the settings. Tests for completion, the 75% trigger once per level and only on purple, the heart chance by missing hearts and the cooldown.</li>
@@ -244,7 +244,7 @@ Phases</h2>
 <li><b>Docs and measure.</b> READMEs (Balloon, Type, Spawner, Upgrades, Health), the bots on a forced purple level and on a low-heart run, a device build.</li>
 </ol>
 <p>Each phase follows the per-phase review: implement, architect, test-everything and reviewer, then fixes, then sign-off.</p>
-<h2><a class="anchor" id="autotoc_md867"></a>
+<h2><a class="anchor" id="autotoc_md868"></a>
 Measured</h2>
 <p>The playtest bot's average player (<code>Tools/playtest/</code>, <code>--purple</code> and <code>--hearts</code>), in the Editor. It is a model of a player, not a person, so these numbers are for comparing tunings.</p>
 <table class="markdownTable">
@@ -262,7 +262,7 @@ Measured</h2>
 <li>Early on, the level-up refill heals faster than a heart balloon arrives, so a low-heart start barely sees one. That's fine: by then the help isn't needed.</li>
 <li>The golden balloon arrives on time, but the average player never broke it: only a piercing shot does, and this player doesn't seek one out. Whether that's too hard for a casual player is open (below).</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md868"></a>
+<h2><a class="anchor" id="autotoc_md869"></a>
 Open</h2>
 <ul>
 <li>Whether the golden balloon should be easier to break for a player who doesn't hunt pierces. The average bot left it standing on both purple levels it played. Since then a laser beam breaks it too, it comes at half done, and the bots aim for it.</li>

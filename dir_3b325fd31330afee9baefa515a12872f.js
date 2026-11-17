@@ -9,6 +9,7 @@ var dir_3b325fd31330afee9baefa515a12872f =
     [ "FormationGlowView.cs", "FormationGlowView_8cs.html", "FormationGlowView_8cs" ],
     [ "GrowingDiscView.cs", "GrowingDiscView_8cs.html", "GrowingDiscView_8cs" ],
     [ "IBalloonMotionView.cs", "IBalloonMotionView_8cs.html", "IBalloonMotionView_8cs" ],
+    [ "IBalloonSwayView.cs", "IBalloonSwayView_8cs.html", "IBalloonSwayView_8cs" ],
     [ "IBalloonViewBinding.cs", "IBalloonViewBinding_8cs.html", "IBalloonViewBinding_8cs" ],
     [ "IBubbleMergeReactive.cs", "IBubbleMergeReactive_8cs.html", "IBubbleMergeReactive_8cs" ],
     [ "IDiscoWaveView.cs", "IDiscoWaveView_8cs.html", "IDiscoWaveView_8cs" ],

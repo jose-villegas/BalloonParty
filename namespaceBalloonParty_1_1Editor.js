@@ -11,6 +11,7 @@ var namespaceBalloonParty_1_1Editor =
     [ "SpriteCombine", "namespaceBalloonParty_1_1Editor_1_1SpriteCombine.html", "namespaceBalloonParty_1_1Editor_1_1SpriteCombine" ],
     [ "TestRunner", "namespaceBalloonParty_1_1Editor_1_1TestRunner.html", "namespaceBalloonParty_1_1Editor_1_1TestRunner" ],
     [ "AutoFieldPropertyDrawer", "classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html", "classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer" ],
+    [ "BalloonIdleSwayBaker", "classBalloonParty_1_1Editor_1_1BalloonIdleSwayBaker.html", "classBalloonParty_1_1Editor_1_1BalloonIdleSwayBaker" ],
     [ "CardIconSpriteAssetBuilder", "classBalloonParty_1_1Editor_1_1CardIconSpriteAssetBuilder.html", "classBalloonParty_1_1Editor_1_1CardIconSpriteAssetBuilder" ],
     [ "CardRevealBuilder", "classBalloonParty_1_1Editor_1_1CardRevealBuilder.html", "classBalloonParty_1_1Editor_1_1CardRevealBuilder" ],
     [ "CardRevealShredsBuilder", "classBalloonParty_1_1Editor_1_1CardRevealShredsBuilder.html", "classBalloonParty_1_1Editor_1_1CardRevealShredsBuilder" ],

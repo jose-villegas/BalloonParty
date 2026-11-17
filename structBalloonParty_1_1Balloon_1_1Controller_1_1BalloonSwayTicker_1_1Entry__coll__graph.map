@@ -1,0 +1,7 @@
+<map id="BalloonParty.Balloon.Controller.BalloonSwayTicker.Entry" name="BalloonParty.Balloon.Controller.BalloonSwayTicker.Entry">
+<area shape="rect" id="Node000001" title=" " alt="" coords="342,40,567,85"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonSwayView.html" title="The surface BalloonSwayTicker writes a balloon&#39;s idle sway to." alt="" coords="21,5,215,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="230,37,344,50,339,52,230,42"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonSwayPlayback.html" title="One balloon&#39;s place in the idle sway." alt="" coords="5,75,231,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="246,81,344,74,339,74,246,86"/>
+</map>

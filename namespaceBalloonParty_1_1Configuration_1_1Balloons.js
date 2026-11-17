@@ -1,14 +1,18 @@
 var namespaceBalloonParty_1_1Configuration_1_1Balloons =
 [
+    [ "BalloonIdleSwaySettings", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonIdleSwaySettings.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonIdleSwaySettings" ],
     [ "BalloonMoveSpeedExtensions", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonMoveSpeedExtensions.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonMoveSpeedExtensions" ],
     [ "BalloonPrefabEntry", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry" ],
     [ "BalloonsConfiguration", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration" ],
+    [ "BalloonSwayLoop", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonSwayLoop.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonSwayLoop" ],
     [ "BalloonTypeWeight", "structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html", "structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight" ],
     [ "BubbleMergeCueSettings", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BubbleMergeCueSettings.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BubbleMergeCueSettings" ],
     [ "DiscoWaveSettings", "classBalloonParty_1_1Configuration_1_1Balloons_1_1DiscoWaveSettings.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1DiscoWaveSettings" ],
     [ "FormationGlowSettings", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings" ],
     [ "HitVfxOverride", "classBalloonParty_1_1Configuration_1_1Balloons_1_1HitVfxOverride.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1HitVfxOverride" ],
+    [ "IBalloonIdleSwaySettings", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonIdleSwaySettings.html", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonIdleSwaySettings" ],
     [ "IBalloonsConfiguration", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration" ],
+    [ "IBalloonSwayLoop", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonSwayLoop.html", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonSwayLoop" ],
     [ "IBubbleMergeCueSettings", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBubbleMergeCueSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBubbleMergeCueSettings" ],
     [ "IDiscoWaveSettings", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IDiscoWaveSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IDiscoWaveSettings" ],
     [ "IFormationGlowSettings", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings" ],

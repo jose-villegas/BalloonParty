@@ -142,6 +142,8 @@ Files</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="AutoFieldPropertyDrawer_8cs.html">AutoFieldPropertyDrawer.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="BalloonIdleSwayBaker_8cs.html">BalloonIdleSwayBaker.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="CardIconSpriteAssetBuilder_8cs.html">CardIconSpriteAssetBuilder.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="CardRevealBuilder_8cs.html">CardRevealBuilder.cs</a></td></tr>
@@ -231,7 +233,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Shared editor tooling — drawer infrastructure, custom inspectors, bake pipelines, and menu tools. Nothing in this folder is referenced at runtime — it compiles only in Editor builds.</p>
-<h1><a class="anchor" id="autotoc_md164"></a>
+<h1><a class="anchor" id="autotoc_md165"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -263,59 +265,61 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>CloudNoiseTextureGenerator</code>   </td><td class="markdownTableBodyNone">Menu tool (<b>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Generate Cloud Noise Texture</b>) — regenerates the tileable noise texture <code>PuffCloud.shader</code> samples: periodic Perlin (seamless by construction), histogram-matched to the original procedural simplex, written as a 16-bit PNG so the smoothstepped cloud gradients can't band. The period must match the material's <code>_NoisePeriod</code>    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>BalloonIdleSwayBaker</code>   </td><td class="markdownTableBodyNone">Menu tool (<b>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Balloons &gt; Bake Idle Sway</b>) — copies the plain balloon's idle sway out of its Animator controller (the two clips' Z curves as the Animator plays them, their length, the four transitions' times) into <code>BalloonsConfiguration</code>'s Idle Sway block, which <code>BalloonSwayTicker</code> plays in place of an Animator on each balloon. Bakes the controller already on record there; the first time, the one selected in the Project window. Refuses, listing why, a controller that does anything the ticker doesn't play (more layers or states, exit times, interruptions, clips animating anything but one child's Z rotation). Run it after changing <code>Balloon.controller</code> or its clips. See <code><a class="el" href="Balloon_2README_8md.html">Balloon/README.md</a></code>, <em>Idle sway</em>    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>UnusedAssetsWindow</code>   </td><td class="markdownTableBodyNone">Menu tool (<b>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Unused Assets</b>) — lists assets no root reaches (candidates, not verdicts), sorted by size, click-to-ping + copy-paths. Roots: every scene, <code>Resources/</code>, <code>Assets/Settings/</code> (ProjectSettings references aren't walkable), preloaded assets. Scripts/docs/editor/plugins excluded — their usage isn't asset-reference shaped. Anything code-loaded by name (<code>Shader.Find</code> fallbacks etc.) can be a false positive; review before deleting    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>LevelPacingWindow</code>   </td><td class="markdownTableBodyNone">Menu tool (<b>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Level Pacing</b>) — view of <code>LevelPacingConfiguration</code>: a "Level Generation" foldout (the generation settings), a "Generated Levels" preview table (per level: threat/aid budget, board lines, colours, balloons, items, actors, new pieces starred, a play button) drawn by <code>LevelGenerationPreview</code>, and a spreadsheet-style debug-preset table (one preset per row, one parameter per column; "+ Add Preset" picks the next free negative ID)    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>SceneCaptureServiceEditor</code>   </td><td class="markdownTableBodyNone">Custom inspector for <code>SceneCaptureService</code> — live play-mode preview of the shared scene-capture RT, for judging the downscale by eye    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>ScreenSpaceLightServiceEditor</code>   </td><td class="markdownTableBodyNone">Custom inspector for <code>ScreenSpaceLightService</code> — live play-mode preview of the light buffer in two views (RGB = bounce color, A = shadow amount)    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>ColorableBalloonVariantEditor</code>   </td><td class="markdownTableBodyNone">Custom inspector for <code>ColorableBalloonVariant</code> — adds a palette color picker (via <code>EditorUI/PaletteColorPicker</code>) to preview the variant in any palette color without entering Play mode    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>LaserViewEditor</code>   </td><td class="markdownTableBodyNone">Custom inspector for <code>LaserView</code> — adds an <code>EffectViewPreviewPlayer</code> (via <code>EffectPreview/LaserPreviewModule</code>) to preview the laser animation clip frame-by-frame in edit mode    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>RainbowBalloonVariantEditor</code>   </td><td class="markdownTableBodyNone">Custom inspector for <code>RainbowBalloonVariant</code> — replaces the inherited single-colour preview with an allowed-colours mask preview: pick a set of palette colors and push them into the banded shader the way a level's <code>AllowedColorsMask</code> would    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>EditorUI/</code>   </td><td class="markdownTableBodyNone">Reusable UI building blocks for editor windows — <code>SortableHeader</code> (sortable column with ▲/▼), <code>SelectionTracker</code> (<code>ISelectable</code> + toggle-all + per-row checkbox + count + get-selected), <code>AssetLinkLabel</code> (clickable ping-to-select), <code>StyledRow</code> (bold label + highlighted row), <code>SearchFilterToolbar</code> (search + enum filter + refresh), <code>EditorAnimationLoop</code> (play/pause/stop loop driven by <code>EditorApplication.update</code>), <code>PaletteColorPicker</code> (palette dropdown + swatches over <code>ConfigAssetCache&lt;GamePalette&gt;</code>). See <code>EditorUI/README.md</code>    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>EffectPreview/</code>   </td><td class="markdownTableBodyNone">Reusable editor-time preview system for <code>EffectView</code> subclasses — <code>IEffectPreviewModule</code> (interface for pluggable rendering logic), <code>EffectViewPreviewPlayer</code> (animation loop, color picker, config caches, inspector GUI), <code>EditorGridHelper</code> (slot grid position math without a runtime <code>SlotGrid</code>), <code>PaintSplashPreviewModule</code> (blob flight preview), <code>ChainLightningPreviewModule</code> (line renderer bolt preview), <code>LaserPreviewModule</code> (animation-clip frame preview). See <code><a class="el" href="Editor_2EffectPreview_2README_8md.html">EffectPreview/README.md</a></code>    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>Bush/</code>   </td><td class="markdownTableBodyNone">Bush Baker tooling — fractal branch-map generation, Gielis leaf baking, leaf atlas packing, <code>BushVariantData</code> export, all behind the <b>Tools &gt; Bush Baker</b> window. See <code><a class="el" href="Editor_2Bush_2README_8md.html">Bush/README.md</a></code>    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>ShadowBake/</code>   </td><td class="markdownTableBodyNone"><code>SpriteShadowBakerEditor</code> — bakes a prefab's blurred union sprite silhouette into a single shadow sprite, replacing per-frame shader blur. See <code><a class="el" href="Editor_2ShadowBake_2README_8md.html">ShadowBake/README.md</a></code>    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>SpriteCombine/</code>   </td><td class="markdownTableBodyNone"><code>SpriteLayerCombinerEditor</code> — flattens a prefab's rigid sprite layers into one baked sprite to cut draws/overdraw. See <code><a class="el" href="Editor_2SpriteCombine_2README_8md.html">SpriteCombine/README.md</a></code>    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>Maps/</code>   </td><td class="markdownTableBodyNone"><code>GameRenderMapsWindow</code> — unified play-mode preview of the project's shared render-target "maps" (disturbance field, GI light buffer, …) with per-channel RGBA isolation, behind <b>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Game Render Maps</b>. See <code><a class="el" href="Editor_2Maps_2README_8md.html">Maps/README.md</a></code>    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>Staging/</code>   </td><td class="markdownTableBodyNone"><code>SceneStage</code> — puts a still scene together in Play mode (hold the world, clear slots, place balloons, set the time of day, pop a balloon or freeze its pop at a moment, render the camera to a PNG), driven one call at a time through the Unity CLI by <code>Tools/stage/stage.py</code>. See <code><a class="el" href="Editor_2Staging_2README_8md.html">Staging/README.md</a></code>    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>FrameDump/</code>   </td><td class="markdownTableBodyNone">Dumps the Frame Debugger's captured event list to a diff-friendly text file, for comparing batch composition before/after a rendering change. Two menu items under <b>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a></b>. See <code><a class="el" href="Editor_2FrameDump_2README_8md.html">FrameDump/README.md</a></code>    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>ShotSolver/</code>   </td><td class="markdownTableBodyNone"><code>ShotSolverWindow</code> — play-mode-only tool that sweeps aim angle against the live board and reports which windows reach a target score, behind <b>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Shot Solver</b>. See <code><a class="el" href="Editor_2ShotSolver_2README_8md.html">ShotSolver/README.md</a></code>    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>ShieldChains/</code>   </td><td class="markdownTableBodyNone"><code>ShieldChainWindow</code> — play-mode-only tool behind <b>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Shield Chains</b>: counts how many opening angles collect every shield placed on the live board and steps through them one at a time, drawn in the Scene view — a chain still looks like ordinary items on a hex lattice, so this is the only practical way to see whether a level actually holds one. See <code><a class="el" href="Item_2README_8md.html">Item/README.md</a></code>'s <em>Shield chains</em> section. No README    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>GameOverLayoutBuilder</code>   </td><td class="markdownTableBodyNone"><b>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Game Over &gt; Rebuild Layout</b> — rebuilds the game-over screen in the UI theme, with layout groups so the card sizes to its content: the title plaque, the result, Retry as the one green primary button, the offers row (the bonus retry tile, with a corner ribbon), and Start Over in red. Also creates the theme's text materials under <code>Assets/Fonts/Materials/</code> and clears the stale rect overrides <code>GameCanvas.prefab</code> keeps for the screen. Keeps the Retry and bonus retry buttons (their clicks and sounds) and re-creates the base popup's Restart button, which a variant can't move. Running it again rebuilds the panel. See <code><a class="el" href="UI_2GameOver_2README_8md.html">UI/GameOver/README.md</a></code>    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>PrefabRebuild</code>   </td><td class="markdownTableBodyNone">Shared by the two UI builders: finds the prefab whose root carries a component, then rebuilds one named child on it (asking before replacing an existing one) and saves    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>HeadsUpBuilder</code>   </td><td class="markdownTableBodyNone"><b>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; HeadsUp &gt; Build Heads-Up Layer</b> — builds the <code>HeadsUpLayer</code> into the world-space <code>HeadsUps</code> prefab, with the one inactive <code>Line</code> it clones for every heads-up: a small <code>TextMeshPro</code> in the tooltip's font and write-on, with a <code>HandwrittenHeadsUp</code> and a hidden <code>PencilTip</code> sprite (<code>Assets/Sprites/UI/pencil-tip.png</code>) that <code>WriteOnText</code> moves along the line. Also removes the retired <code>ReloadHeadsUp</code> / <code>BounceHeadsUp</code> lines and makes sure the Game scene has the prefab. Running it again rebuilds the layer. The line's <code>Underline</code> (a <code>LineRenderer</code> on <code>Assets/Materials/UI/PencilUnderline.mat</code>) comes with it. <b>Pencil the Strikethrough</b> redraws the <code>HeartTrail</code> prefab as a pencil: the tip for its head, <code>PencilStrikethrough.mat</code> (vermilion) for its ribbon, at an even width. Both materials are on <code>BalloonParty/Sprite/PencilLine</code>, made if missing and otherwise left with their tuned values; running it again resets the trail's width and point spacing on the prefab. See <code><a class="el" href="UI_2HeadsUp_2README_8md.html">UI/HeadsUp/README.md</a></code>    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>PencilFontBuilder</code>   </td><td class="markdownTableBodyNone"><b>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; HeadsUp &gt; Build Pencil Font</b> — makes the heads-ups' pencil font: the Patrick Hand TMP font asset (<code>Assets/Fonts/PatrickHand-Regular SDF.asset</code>, created by TMP's own "Font Asset &gt; SDF" command) with its material on the <code>BalloonParty/Text/Pencil</code> shader, then sets it on the tooltip's label. Running it again reuses the asset, keeps the material's tuned values, and only re-assigns it. See <code><a class="el" href="UI_2HeadsUp_2README_8md.html">UI/HeadsUp/README.md</a></code>    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>PencilTextShaderGUI</code>   </td><td class="markdownTableBodyNone">The material inspector for <code>BalloonParty/Text/Pencil</code>: TMP's own SDF panels, with a Pencil panel on top for the grain and the ragged write-on edge    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>UpgradeCardSlotBuilder</code>   </td><td class="markdownTableBodyNone"><b>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Level Up &gt; Build Upgrade Card Slots</b> — builds the level-up popup's three upgrade card slots, a row under its panel copied from the Continue button, and assigns them to <code>LevelUpPopUp._cardViews</code>. A starting layout to restyle by hand; running it again rebuilds the row. See <code><a class="el" href="UI_2LevelUp_2README_8md.html">UI/LevelUp/README.md</a></code>    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>TelemetryLogMenu</code>   </td><td class="markdownTableBodyNone">Three menu items under <b>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Telemetry</b> — Open Log Folder, Open Latest Log (warns if the file is empty), Log Path To Console — shortcuts to the JSON Lines log <code>JsonLinesTelemetrySink</code> writes under <code>Application.persistentDataPath</code>, which differs per platform and per company/product name. See <code><a class="el" href="Game_2Telemetry_2README_8md.html">Game/Telemetry/README.md</a></code>    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>MetricBindingDrawer</code>   </td><td class="markdownTableBodyNone"><code>[CustomPropertyDrawer(typeof(MetricBinding))]</code> — two popups (which snapshot, then which value) that let a <code>MetricLabel</code> be authored without code; the value list is generated from <code>MetricCatalog</code>/<code>TimerCatalog</code>, so a new metric is selectable here with no edit to this file. See <code><a class="el" href="UI_2Telemetry_2README_8md.html">UI/Telemetry/README.md</a></code>    </td></tr>
+<td class="markdownTableBodyNone"><code>TelemetryLogMenu</code>   </td><td class="markdownTableBodyNone">Three menu items under <b>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Telemetry</b> — Open Log Folder, Open Latest Log (warns if the file is empty), Log Path To Console — shortcuts to the JSON Lines log <code>JsonLinesTelemetrySink</code> writes under <code>Application.persistentDataPath</code>, which differs per platform and per company/product name. See <code><a class="el" href="Game_2Telemetry_2README_8md.html">Game/Telemetry/README.md</a></code>    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>MetricBindingDrawer</code>   </td><td class="markdownTableBodyNone"><code>[CustomPropertyDrawer(typeof(MetricBinding))]</code> — two popups (which snapshot, then which value) that let a <code>MetricLabel</code> be authored without code; the value list is generated from <code>MetricCatalog</code>/<code>TimerCatalog</code>, so a new metric is selectable here with no edit to this file. See <code><a class="el" href="UI_2Telemetry_2README_8md.html">UI/Telemetry/README.md</a></code>    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>TestRunner/</code>   </td><td class="markdownTableBodyNone"><code>EditModeTestRunner</code> — runs the EditMode suite inside the open editor (no batchmode project-lock) via <b>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Run EditMode Tests</b>, writing the same <code>Tools/last-test-run.md</code> the headless runner produces. No README   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md165"></a>
+<h1><a class="anchor" id="autotoc_md166"></a>
 AutoFieldPropertyDrawer</h1>
 <p>Subclasses declare one required property and up to three optional overrides:</p>
 <table class="markdownTable">
@@ -330,19 +334,19 @@ AutoFieldPropertyDrawer</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>BuildFoldoutLabel</code>   </td><td class="markdownTableBodyNone">No   </td><td class="markdownTableBodyNone">Override to append contextual text to the foldout header (e.g. <code>Element 0 [Deflect]</code>, <code>Element 2 [Bomb]</code>)   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md166"></a>
+<h2><a class="anchor" id="autotoc_md167"></a>
 Draw order when expanded</h2>
 <div class="fragment"><div class="line">1. Foldout header        ← BuildFoldoutLabel</div>
 <div class="line">2. Pinned fields         ← DrawPinnedFields   (default: nothing)</div>
 <div class="line">3. Auto common fields    ← DrawCommonFields via PropertyDrawerHelper</div>
 <div class="line">4. Special fields        ← DrawSpecialFields</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md167"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md168"></a>
 Adding new fields to a type</h2>
 <ul>
 <li><b>New common field</b> — add it to the data class. It appears in the Inspector automatically with a nicified name derived from the field name. No drawer changes needed.</li>
 <li><b>New field needing custom layout</b> — add its serialized name to <code>ExcludedFields</code> and handle it in <code>DrawPinnedFields</code> or <code>DrawSpecialFields</code> (with the matching height method).</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md168"></a>
+<h1><a class="anchor" id="autotoc_md169"></a>
 Current drawers using this base</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -356,7 +360,7 @@ Current drawers using this base</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>NudgeOverrideDrawer</code>   </td><td class="markdownTableBodyNone"><code>Nudge/Editor/</code>   </td><td class="markdownTableBodyNone"><code>BuildFoldoutLabel</code> appends <code>[NudgeType]</code>; <code>_appliesTo</code> pinned to top via <code>DrawPinnedFields</code> using <code>EnumFlagsField</code>; <code>_falloff</code> conditional on Shockwave flag   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md169"></a>
+<h1><a class="anchor" id="autotoc_md170"></a>
 Standalone drawers</h1>
 <p>These drawers extend <code>PropertyDrawer</code> directly and handle their own rendering without the auto-field pattern:</p>
 <table class="markdownTable">
@@ -381,7 +385,7 @@ Standalone drawers</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>MetricBindingDrawer</code>   </td><td class="markdownTableBodyNone"><code>Editor/</code>   </td><td class="markdownTableBodyNone">Two popups for a <code>MetricBinding</code> — which snapshot, then which value out of it — generated from <code>MetricCatalog</code>/<code>TimerCatalog</code>   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md170"></a>
+<h1><a class="anchor" id="autotoc_md171"></a>
 Custom editors</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -409,7 +413,7 @@ Custom editors</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>SpriteLayerCombinerEditor</code>   </td><td class="markdownTableBodyNone"><code>SpriteLayerCombiner</code>   </td><td class="markdownTableBodyNone">Bake button + sprite-layer flattening pipeline — see <code><a class="el" href="Editor_2SpriteCombine_2README_8md.html">SpriteCombine/README.md</a></code>   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md171"></a>
+<h1><a class="anchor" id="autotoc_md172"></a>
 Scene overlays</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -419,7 +423,7 @@ Scene overlays</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>AimFanSceneOverlay</code>   </td><td class="markdownTableBodyNone"><code>[InitializeOnLoad]</code> static class (in <code><a class="el" href="ProjectileFlightConfigEditor_8cs.html">Configuration/Editor/ProjectileFlightConfigEditor.cs</a></code>, alongside <code>MapLimitsSceneOverlay</code>) — draws one ray per angle the quantized aim can actually reach, from the thrower's spawn point, clipped to the map limits (<code>WallLimits.TryFindCrossing</code>). Angles come from the exact <code>AimAngleGrid.ResolveSweepSampleCount</code>/<code>ResolveSweepAngle</code> helpers (<code>Shared/</code>) the Shot Solver and Fire Best Shot cheat sweep with, over the same config-sourced range (<code>IProjectileFlightConfig.AimAngleMinDegrees</code>/<code>AimAngleMaxDegrees</code>) the thrower itself clamps to, so the picture can't diverge from what those tools — and the player's own aim — consider reachable. Exists to make visible that a portrait board fired up its long axis does NOT map equal angular steps to equal board spacing — near-vertical rays run long and land far apart near the top, side rays hit the near walls and bunch up; the clipping is what shows this, an unclipped equal-length fan would hide it. Off by default; draws nothing when <code>AimAngleStepDegrees</code> is 0 (continuous aim has infinitely many reachable angles, so there is no finite fan to draw). Active in both edit and play mode. Toggle persisted via <code>EditorPrefs</code> and controllable from the <code>ProjectileFlightConfigEditor</code> inspector   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md172"></a>
+<h1><a class="anchor" id="autotoc_md173"></a>
 Menu tools</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -427,38 +431,40 @@ Menu tools</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>CloudNoiseTextureGenerator</code>   </td><td class="markdownTableBodyNone"><code>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Generate Cloud Noise Texture</code>   </td><td class="markdownTableBodyNone">Regenerates <code>Assets/Textures/Grid/CloudNoiseTileable.png</code> — the tileable 16-bit noise texture <code>PuffCloud.shader</code> fetches per octave    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>BalloonIdleSwayBaker</code>   </td><td class="markdownTableBodyNone"><code>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Balloons &gt; Bake Idle Sway</code>   </td><td class="markdownTableBodyNone">Re-bakes the plain balloon's idle sway from its Animator controller into <code>BalloonsConfiguration</code>    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>BushBakerWindow</code>   </td><td class="markdownTableBodyNone"><code>Tools &gt; Bush Baker</code>   </td><td class="markdownTableBodyNone">Bush branch-map + leaf-atlas baking window (see <code><a class="el" href="Editor_2Bush_2README_8md.html">Bush/README.md</a></code>)    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>SetMobileTextureSize</code>   </td><td class="markdownTableBodyNone"><code>Assets &gt; Texture &gt; Set Mobile Max Size &gt; {size}</code>   </td><td class="markdownTableBodyNone">Sets platform-specific max texture size overrides for iPhone and Android on all selected textures. Sizes: 64, 128, 256, 512, 1024, 2048. "Reset to Default" removes the mobile overrides. Only appears when the selection contains <code>Texture2D</code> assets    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>TextureAuditWindow</code>   </td><td class="markdownTableBodyNone"><code>Assets &gt; Texture &gt; Texture Audit Window</code>   </td><td class="markdownTableBodyNone">Opens an editor window pre-populated with all textures from the selected folder(s) or individual texture selection. Shows a sortable table (Name, Source size, Default/iPhone/Android max, Override status). Filters: All, No Override, With Override. Text search by name. Rows without mobile overrides are highlighted orange. Click a name to ping it in the Project view. Select rows → choose a size → Apply/Reset from the bottom bar    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>ScriptReferenceRemap</code>   </td><td class="markdownTableBodyNone"><code>CONTEXT/MonoBehaviour/Remap Script References</code>   </td><td class="markdownTableBodyNone">Remaps script GUID references in a prefab/scene file. From the Inspector "⋮" menu: parses the selected asset's file, finds broken script GUIDs, opens <code>ScriptSearchPopup</code> to pick the replacement, and replaces the GUID within that asset file. Designed for class renames that break serialized references    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>ScriptSearchPopup</code>   </td><td class="markdownTableBodyNone">(internal — opened by <code>ScriptReferenceRemap</code>)   </td><td class="markdownTableBodyNone">Searchable dropdown popup similar to Unity's "Add Component" search. Filters all <code>MonoScript</code> assets by class name and namespace. Supports keyboard navigation (↑/↓/Enter/Escape) and multi-term search    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>LevelPacingWindow</code>   </td><td class="markdownTableBodyNone"><code>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Level Pacing</code>   </td><td class="markdownTableBodyNone">Generation settings, generated-level preview, and a spreadsheet-style debug-preset table for <code>LevelPacingConfiguration</code>    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>GameRenderMapsWindow</code>   </td><td class="markdownTableBodyNone"><code>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Game Render Maps</code>   </td><td class="markdownTableBodyNone">Unified play-mode preview of the project's shared render-target "maps" with per-channel RGBA isolation — see <code><a class="el" href="Editor_2Maps_2README_8md.html">Maps/README.md</a></code>    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>FrameDebuggerDumper</code>   </td><td class="markdownTableBodyNone"><code>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Dump Frame Debugger</code>, <code>Dump Frame Debugger With Step Screenshots</code>   </td><td class="markdownTableBodyNone">Dumps the Frame Debugger's captured event list to a diff-friendly text file — see <code><a class="el" href="Editor_2FrameDump_2README_8md.html">FrameDump/README.md</a></code>    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>ShotSolverWindow</code>   </td><td class="markdownTableBodyNone"><code>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Shot Solver</code>   </td><td class="markdownTableBodyNone">Play-mode-only tool that sweeps aim angle against the live board and reports which windows reach a target score — see <code><a class="el" href="Editor_2ShotSolver_2README_8md.html">ShotSolver/README.md</a></code>    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>ShieldChainWindow</code>   </td><td class="markdownTableBodyNone"><code>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Shield Chains</code>   </td><td class="markdownTableBodyNone">Play-mode-only tool that counts how many opening angles collect every shield on the live board and steps through them one at a time in the Scene view — see <code><a class="el" href="Item_2README_8md.html">Item/README.md</a></code>'s <em>Shield chains</em> section    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>GameOverLayoutBuilder</code>   </td><td class="markdownTableBodyNone"><code>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Game Over &gt; Rebuild Layout</code>   </td><td class="markdownTableBodyNone">Rebuilds the game-over screen's panel — see <code><a class="el" href="UI_2GameOver_2README_8md.html">UI/GameOver/README.md</a></code>    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>HeadsUpBuilder</code>   </td><td class="markdownTableBodyNone"><code>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; HeadsUp &gt; Build Heads-Up Layer</code>, <code>Pencil the Strikethrough</code>   </td><td class="markdownTableBodyNone">Builds the <code>HeadsUpLayer</code> and the line it clones, with its pencil tip and underline, into the <code>HeadsUps</code> prefab; redraws the heart trail as a pencil — see <code><a class="el" href="UI_2HeadsUp_2README_8md.html">UI/HeadsUp/README.md</a></code>    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>PencilFontBuilder</code>   </td><td class="markdownTableBodyNone"><code>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; HeadsUp &gt; Build Pencil Font</code>   </td><td class="markdownTableBodyNone">Makes the Patrick Hand TMP font asset on the pencil shader and sets it on the tooltip — see <code><a class="el" href="UI_2HeadsUp_2README_8md.html">UI/HeadsUp/README.md</a></code>    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>LaunchContinueButtonBuilder</code>   </td><td class="markdownTableBodyNone"><code>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Launch &gt; Build Continue Balloon</code>   </td><td class="markdownTableBodyNone">Builds the launch screen's Continue balloon, line and ribbon in the Launcher scene, replacing any built before — see <code><a class="el" href="Game_2README_8md.html">Game/README.md</a></code>    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>UpgradeCardSlotBuilder</code>   </td><td class="markdownTableBodyNone"><code>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Level Up &gt; Build Upgrade Card Slots</code>   </td><td class="markdownTableBodyNone">Builds and wires the level-up popup's upgrade card slots — see <code><a class="el" href="UI_2LevelUp_2README_8md.html">UI/LevelUp/README.md</a></code>    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>TelemetryLogMenu</code>   </td><td class="markdownTableBodyNone"><code>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Telemetry &gt; Open Log Folder</code>, <code>Open Latest Log</code>, <code>Log Path To Console</code>   </td><td class="markdownTableBodyNone">Shortcuts to the JSON Lines telemetry log under <code>Application.persistentDataPath</code> — see <code><a class="el" href="Game_2Telemetry_2README_8md.html">Game/Telemetry/README.md</a></code>    </td></tr>
+<td class="markdownTableBodyNone"><code>UpgradeCardSlotBuilder</code>   </td><td class="markdownTableBodyNone"><code>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Level Up &gt; Build Upgrade Card Slots</code>   </td><td class="markdownTableBodyNone">Builds and wires the level-up popup's upgrade card slots — see <code><a class="el" href="UI_2LevelUp_2README_8md.html">UI/LevelUp/README.md</a></code>    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>TelemetryLogMenu</code>   </td><td class="markdownTableBodyNone"><code>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Telemetry &gt; Open Log Folder</code>, <code>Open Latest Log</code>, <code>Log Path To Console</code>   </td><td class="markdownTableBodyNone">Shortcuts to the JSON Lines telemetry log under <code>Application.persistentDataPath</code> — see <code><a class="el" href="Game_2Telemetry_2README_8md.html">Game/Telemetry/README.md</a></code>    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>ReleaseUploadWindow</code>   </td><td class="markdownTableBodyNone"><code>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Upload Release</code>   </td><td class="markdownTableBodyNone">Builds all three APK variants (release, release+cheats, development), checksums them, then publishes a tagged GitHub release with the APKs attached. <code>ReleasePublisher</code> does the API half in C# — no <code>bash</code>, <code>curl</code>, <code>jq</code> or <code>gh</code> needed, so it runs the same on Windows as on macOS. Paste the token into the window; it is never written to disk, a log, or a process command line   </td></tr>
 </table>
 </div><!-- contents -->
