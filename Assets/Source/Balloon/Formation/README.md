@@ -61,8 +61,8 @@ shape to change and nothing to hold, so it steps on its own.
    same routine roam jumps use, so the members glide in at their normal speed. Each member is marked
    in formation (`IWriteableFormationMember.SetInFormation`).
 4. **Holding.** The formation lasts its shape's hold, counted in cycles and counting the one it formed
-   on: a snake walks `SnakeHoldCycles` (3), a horizontal or diagonal line holds `LineHoldCycles` (2), an
-   item cover `ItemCoverHoldCycles` (2). During that time the next cycles only count down: nothing moves
+   on: a snake walks `SnakeHoldCycles` (3), a horizontal or diagonal line holds `LineHoldCycles` (3), an
+   item cover `ItemCoverHoldCycles` (3). During that time the next cycles only count down: nothing moves
    but a snake's steps.
 5. **Changing.** On the first cycle after the hold, each member first rolls `JoinSnakeChance` (0.35) to
    leave for the tail of the unbreakable snake with the most room, while it has room (`MaxMembers`): the
@@ -259,8 +259,8 @@ The settings are `IUnbreakableFormationSettings`, nested in `BalloonsConfigurati
 - `MinMembers` (2) and `MaxMembers` (5)
 - the clock: `BeatSeconds` (1.7: seconds of play between beats), `BeatsPerCycle` (2, so a cycle is 3.4 s)
   and `SnakeStepsPerBeat` (2: an unbreakable snake steps on the beat and the off-beat, every 0.85 s)
-- the holds, in cycles: `SnakeHoldCycles` (3), `LineHoldCycles` (2, horizontal and diagonal),
-  `ItemCoverHoldCycles` (2), and `LoneHoldCycles` (3, a lone unbreakable's rest between moves)
+- the holds, in cycles: `SnakeHoldCycles` (3), `LineHoldCycles` (3, horizontal and diagonal),
+  `ItemCoverHoldCycles` (3), and `LoneHoldCycles` (3, a lone unbreakable's rest between moves)
 - `BottomClearance` (2) and `HorizontalBottomClearance` (4, for horizontal lines)
 - `HorizontalMaxMembers` (3, for horizontal lines; an item cover takes three to six)
 - `SnakeMaxMembers` (4)

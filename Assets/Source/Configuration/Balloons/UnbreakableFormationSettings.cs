@@ -69,10 +69,10 @@ namespace BalloonParty.Configuration.Balloons
 
         [Tooltip("Cycles a horizontal or diagonal line holds, counting the cycle it formed on, before it changes " +
                  "shape.")]
-        [SerializeField] [Min(1)] private int _lineHoldCycles = 2;
+        [SerializeField] [Min(1)] private int _lineHoldCycles = 3;
 
         [Tooltip("Cycles an item cover holds, counting the cycle it formed on, before it changes shape.")]
-        [SerializeField] [Min(1)] private int _itemCoverHoldCycles = 2;
+        [SerializeField] [Min(1)] private int _itemCoverHoldCycles = 3;
 
         [Tooltip("Cycles a lone unbreakable, in no formation, stays where it is before it may move again. One " +
                  "at most moves alone on each cycle.")]
