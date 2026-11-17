@@ -27,8 +27,8 @@ Shader "BalloonParty/Sprite/ShapeInk"
     //    pools darker at its edges. It can be darker while wet (_PenWet.x; not as shipped, where a darker
     //    head reads as a dot riding the line). A straight edge runs on a little past each corner, as a
     //    quick hand does, and a second, fainter stroke rides beside the first (_Sketch.x, 0 for none). The
-    //    edges on the far side of the shape are drawn as hidden edges are: lighter, thinner and dashed
-    //    (_Far.z, 0 for unbroken). The pen is the stroke's own rounded end. The ink takes the scene's light
+    //    edges on the far side of the shape are drawn as hidden edges are: lighter and thinner, and dashed
+    //    if asked (_Far.z; unbroken as shipped). The pen is the stroke's own rounded end. The ink takes the scene's light
     //    (SceneLight.cginc) as the gameplay surfaces do: the time of day tints and dims it, part-way, and a
     //    light passing close (a spark, a laser, lightning) colours and brightens it, never past white.
     Properties
@@ -59,7 +59,7 @@ Shader "BalloonParty/Sprite/ShapeInk"
         _PenHand ("Hand: waver in world units (x), wavers per unit (y), pressure on width (z), pressure changes per unit (w)", Vector) = (0.012, 0.35, 0.25, 0.6)
         _PenWet ("Wet ink: darkness, 1 for none (x), how far along the ink it dries (y), pressure on opacity (z), the rounded end's width over the stroke's (w)", Vector) = (1, 0.12, 0.2, 1)
         _Sketch ("Sketch: second stroke strength, 0 for none (x), its offset in world units (y), run past a corner in world units (z)", Vector) = (0.45, 0.022, 0.09, 0)
-        _Far ("Far side: opacity (x), width (y), dashes per unit, 0 for none (z), soft band (w)", Vector) = (0.75, 0.75, 3.5, 0.3)
+        _Far ("Far side: opacity (x), width (y), dashes per unit, 0 for none (z), soft band (w)", Vector) = (0.5, 0.75, 0, 0.3)
         _PenLight ("Light: how much of the scene light the ink takes (x), how much of the time of day's colour (y) and of its darkening (z)", Vector) = (1, 0.4, 0.4, 0)
     }
 

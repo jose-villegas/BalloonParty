@@ -45,7 +45,7 @@ Material:
     - _ShadowStencilPass: 0
     m_Colors:
     - _BandHalf: {r: 0.27, g: 0.07, b: 0, a: 0}
-    - _Far: {r: 0.75, g: 0.75, b: 3.5, a: 0.3}
+    - _Far: {r: 0.5, g: 0.75, b: 0, a: 0.3}
     - _PenEdge: {r: 0.35, g: 0.12, b: 2.5, a: 0.18}
     - _PenGrain: {r: 0.45, g: 2, b: 6, a: 0}
     - _PenHand: {r: 0.012, g: 0.35, b: 0.25, a: 0.6}

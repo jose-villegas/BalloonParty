@@ -167,7 +167,7 @@ static; the ticker hands the view one number a frame, how far every pen has move
   pixel through the stencil so strokes that cross cast one even shadow. Then the half of the shape behind its
   centre, then the half in
   front. The shapes are wire frames of rounded solids, so that puts the near side over the far side. The far half
-  is also drawn as hidden edges are: lighter, thinner and dashed (`_Far`).
+  is also drawn as hidden edges are: lighter and thinner (`_Far`, which can dash them too).
 
 `ShapeInkMeshBuilder` bakes the mesh from a `FormationShape` the first time that shape flies (straight edges are
 one segment, arcs are cut every 6 degrees at points a pen passes through), and `ShapeInkPool`, owned by the
