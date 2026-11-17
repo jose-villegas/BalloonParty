@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerEventRow.html" target="_top" xlink:title="One text row of a frame dump, plus the two values the walker aggregates across rows (draw&#45;call total ...">
+<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerReflection.html" target="_top" xlink:title="Shared reflection plumbing for reaching into the internal UnityEditorInternal.FrameDebuggerInternal....">
 <polygon fill="white" stroke="#666666" points="175,-33.5 0,-33.5 0,0 175,0 175,-33.5"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Editor.Frame</text>
-<text xml:space="preserve" text-anchor="middle" x="87.5" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">Dump.FrameDebuggerEventRow</text>
+<text xml:space="preserve" text-anchor="middle" x="87.5" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">Dump.FrameDebuggerReflection</text>
 </a>
 </g>
 </g>

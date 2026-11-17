@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Shared_1_1Math_1_1SpringChain.html" target="_top" xlink:title="A line of points joined by springs between two pinned ends, simulated the way the launch screen&#39;s spr...">
+<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Shared_1_1Math_1_1SpringChainTuning.html" target="_top" xlink:title="How a SpringChain moves: its springs, gravity, damping and fixed step.">
 <polygon fill="white" stroke="#666666" points="143.5,-33.5 0,-33.5 0,0 143.5,0 143.5,-33.5"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Shared.Math.</text>
-<text xml:space="preserve" text-anchor="middle" x="71.75" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">SpringChain</text>
+<text xml:space="preserve" text-anchor="middle" x="71.75" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">SpringChainTuning</text>
 </a>
 </g>
 </g>

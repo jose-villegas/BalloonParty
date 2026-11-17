@@ -1,7 +1,5 @@
 var NAVTREEINDEX30 =
 {
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a195620590595e0a25be7f436f7ca3c77":[5,0,0,3,5,1,1],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a195620590595e0a25be7f436f7ca3c77":[6,0,0,3,5,1,1],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a1a0824ad52b4a0525246be3a636bc636":[5,0,0,3,5,1,10],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a1a0824ad52b4a0525246be3a636bc636":[6,0,0,3,5,1,10],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a1a20e17eddee37c310704288af4e21b0":[5,0,0,3,5,1,40],
@@ -249,5 +247,7 @@ var NAVTREEINDEX30 =
 "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a52aed2196ec6ffb3dbc4745f8d85cc0a":[5,0,0,3,5,4,20],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a52aed2196ec6ffb3dbc4745f8d85cc0a":[6,0,0,3,5,4,20],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a5565f6b19640965ee7de0d3477368f10":[5,0,0,3,5,4,14],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a5565f6b19640965ee7de0d3477368f10":[6,0,0,3,5,4,14]
+"classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a5565f6b19640965ee7de0d3477368f10":[6,0,0,3,5,4,14],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a59c0d57c521c787b67f0585e7103c7ab":[5,0,0,3,5,4,26],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a59c0d57c521c787b67f0585e7103c7ab":[6,0,0,3,5,4,26]
 };

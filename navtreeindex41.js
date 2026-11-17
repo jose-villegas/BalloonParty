@@ -1,11 +1,5 @@
 var NAVTREEINDEX41 =
 {
-"classBalloonParty_1_1Display_1_1EffectsClearingController.html#a293b5ad594c60f577c52ce3b2cb605ec":[5,0,0,4,5,7],
-"classBalloonParty_1_1Display_1_1EffectsClearingController.html#a293b5ad594c60f577c52ce3b2cb605ec":[6,0,0,4,5,7],
-"classBalloonParty_1_1Display_1_1EffectsClearingController.html#a48cb6bdab30bb27730a18ba6bd066bc4":[5,0,0,4,5,3],
-"classBalloonParty_1_1Display_1_1EffectsClearingController.html#a48cb6bdab30bb27730a18ba6bd066bc4":[6,0,0,4,5,3],
-"classBalloonParty_1_1Display_1_1EffectsClearingController.html#a7f6f6dd7bef89ee011b17246f15e1c06":[5,0,0,4,5,2],
-"classBalloonParty_1_1Display_1_1EffectsClearingController.html#a7f6f6dd7bef89ee011b17246f15e1c06":[6,0,0,4,5,2],
 "classBalloonParty_1_1Display_1_1EffectsClearingController.html#a9368208947e4e18d05a9a36d33399cc3":[5,0,0,4,5,1],
 "classBalloonParty_1_1Display_1_1EffectsClearingController.html#a9368208947e4e18d05a9a36d33399cc3":[6,0,0,4,5,1],
 "classBalloonParty_1_1Display_1_1EffectsClearingController.html#ab0ac0103d299df2c2db94589cf7d70d8":[5,0,0,4,5,8],
@@ -249,5 +243,11 @@ var NAVTREEINDEX41 =
 "classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#a1ecd80e7c0ffd3068b1e24f95f032d7d":[5,0,0,4,13,4],
 "classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#a1ecd80e7c0ffd3068b1e24f95f032d7d":[6,0,0,4,13,4],
 "classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#a77918dda4cfdca86c50c1fea1b6f8bc6":[5,0,0,4,13,3],
-"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#a77918dda4cfdca86c50c1fea1b6f8bc6":[6,0,0,4,13,3]
+"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#a77918dda4cfdca86c50c1fea1b6f8bc6":[6,0,0,4,13,3],
+"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#a95dcee80e305f23614874f12e2f0a54a":[5,0,0,4,13,2],
+"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#a95dcee80e305f23614874f12e2f0a54a":[6,0,0,4,13,2],
+"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#ae9e7b70c142d1a926c6e8fece816693f":[5,0,0,4,13,0],
+"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#ae9e7b70c142d1a926c6e8fece816693f":[6,0,0,4,13,0],
+"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#affd8942039dabec963c6cc4de99f5c41":[5,0,0,4,13,5],
+"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#affd8942039dabec963c6cc4de99f5c41":[6,0,0,4,13,5]
 };

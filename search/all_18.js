@@ -127,7 +127,7 @@ var searchData=
   ['nothing_20on_20screen_124',['Phase 0 — prep that changes nothing on screen',['../plan_hdr.html#autotoc_md718',1,'']]],
   ['notices_125',['Notices',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/UI/Score/README.md#autotoc_md1217',1,'']]],
   ['november_202026_20pass_20after_20hdr_20the_20effects_20lens_20formations_20and_20springs_126',['November 2026 pass (after HDR, the effects lens, formations and springs)',['../plan_performance_recovery.html#autotoc_md827',1,'']]],
-  ['november_20pass_127',['A2 — SceneCapture → Renderer Feature · &lt;strong&gt;built behind a setting&lt;/strong&gt; (November pass)',['../plan_performance_recovery.html#autotoc_md855',1,'']]],
+  ['november_20pass_127',['A2 — SceneCapture → Renderer Feature · &lt;strong&gt;tried and removed&lt;/strong&gt; (November pass)',['../plan_performance_recovery.html#autotoc_md855',1,'']]],
   ['now_128',['Now',['../classBalloonParty_1_1Game_1_1Assist_1_1ArmourNeed.html#ab6978fdba806ecc460a4330281316ccf',1,'BalloonParty.Game.Assist.ArmourNeed.Now'],['../classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html#a4ac5500bcafe9b6897e6cf1ced73c3b0',1,'BalloonParty.Item.Snipe.SnipeChanceRoll.Now']]],
   ['now_129',['now',['../plan_performance_recovery.html#autotoc_md828',1,'How it is measured now'],['../plan_terrain_biomes.html#autotoc_md900',1,'Why now']]],
   ['now_20grid_20effect_20ideas_130',['13.5 Active &quot;spawn now&quot; + grid-effect ideas',['../plan_future_ideas.html#autotoc_md595',1,'']]],

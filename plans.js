@@ -391,7 +391,7 @@ var plans =
           [ "What each part costs on a device", "plan_performance_recovery.html#autotoc_md831", null ],
           [ "Changes after the measurements", "plan_performance_recovery.html#autotoc_md832", null ],
           [ "Candidates, by expected size", "plan_performance_recovery.html#autotoc_md833", null ],
-          [ "The scene capture inside the main camera's frame (A2, built behind a setting)", "plan_performance_recovery.html#autotoc_md834", null ]
+          [ "The scene capture inside the main camera's frame (A2, tried and removed)", "plan_performance_recovery.html#autotoc_md834", null ]
         ] ],
         [ "Tier 0: Free / Near-Free Wins", "plan_performance_recovery.html#autotoc_md835", [
           [ "F2 — Remove the shrink Array.Resize in TransformRibbon · sonnet · ✅ DONE (a4581825)", "plan_performance_recovery.html#autotoc_md836", null ],
@@ -413,7 +413,7 @@ var plans =
         [ "Tier 3: Architectural (gated on Step 0 evidence)", "plan_performance_recovery.html#autotoc_md852", [
           [ "A4 — Quality tiers + ADPF · opus — required for ship, promoted earlier", "plan_performance_recovery.html#autotoc_md853", null ],
           [ "A1 — Render Graph prototype · opus — go/no-go, only on Step-0 GPU evidence", "plan_performance_recovery.html#autotoc_md854", null ],
-          [ "A2 — SceneCapture → Renderer Feature · built behind a setting (November pass)", "plan_performance_recovery.html#autotoc_md855", null ]
+          [ "A2 — SceneCapture → Renderer Feature · tried and removed (November pass)", "plan_performance_recovery.html#autotoc_md855", null ]
         ] ],
         [ "Quality vetoes — 2026-07-23 device pass (José)", "plan_performance_recovery.html#autotoc_md857", null ],
         [ "Dropped in the 2026-07-23 revision", "plan_performance_recovery.html#autotoc_md858", null ],

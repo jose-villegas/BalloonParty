@@ -1,20 +1,16 @@
 <map id="BalloonParty.Display.ScreenSpaceLightService" name="BalloonParty.Display.ScreenSpaceLightService">
-<area shape="rect" id="Node000001" title="Screen&#45;space light approximation (&quot;2D GI&quot; — see Screen&#45;Space Light (2D GI))." alt="" coords="962,97,1162,142"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="262,5,385,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="400,15,508,16,643,24,791,42,866,56,938,74,1002,96,996,96,937,79,865,61,791,47,643,29,508,21,401,20"/>
-<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Display_1_1SceneCaptureService.html" title="Shared low&#45;res scene capture, bound globally as _SceneCaptureTex." alt="" coords="600,62,796,107"/>
-<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="400,30,602,67,597,68,400,35"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IScreenSpaceLightSettings.html" title="Read&#45;only tuning for the screen&#45;space GI approximation (see Screen&#45;Space Light (2D GI))." alt="" coords="577,132,819,176"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="834,147,937,139,958,139,964,138,938,144,834,153"/>
-<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Shared_1_1SceneLight_1_1ISceneLightRuntime.html" title="Read surface for the LIVE ambient scene light — the current time&#45;of&#45;day state the runtime owner (Time..." alt="" coords="601,201,795,246"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="809,202,873,187,937,170,1011,143,1016,141,939,175,874,193,810,207"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="811,93,964,109,959,110,811,98"/>
-<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Shared_1_1Cadence_1_1ICadencedEffect.html" title="Implemented by field services that perform periodic RT blits on a cadence timer." alt="" coords="216,60,430,104"/>
-<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="446,80,603,83,597,84,446,85"/>
-<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html" title=" " alt="" coords="223,129,423,174"/>
-<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="438,128,603,101,598,102,439,133"/>
-<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Display_1_1SceneCaptureFramePass.html" title="Draws the scene capture inside the main camera&#39;s frame, so no second camera goes through the pipeline..." alt="" coords="226,198,421,243"/>
-<area shape="poly" id="edge8_Node000005_Node000008" title=" " alt="" coords="435,198,495,177,552,147,563,133,576,117,597,108,602,106,579,121,567,136,555,152,497,182,436,203"/>
-<area shape="rect" id="Node000009" title=" " alt="" coords="5,207,167,234"/>
-<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="182,218,228,220,222,221,182,223"/>
+<area shape="rect" id="Node000001" title="Screen&#45;space light approximation (&quot;2D GI&quot; — see Screen&#45;Space Light (2D GI))." alt="" coords="751,92,951,136"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="51,5,174,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="189,14,297,14,432,20,581,37,655,51,728,69,791,91,786,91,726,74,654,56,580,42,432,26,297,19,191,19"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Display_1_1SceneCaptureService.html" title="Shared low&#45;res scene capture, bound globally as _SceneCaptureTex." alt="" coords="390,57,585,102"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="189,29,391,62,387,65,189,34"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IScreenSpaceLightSettings.html" title="Read&#45;only tuning for the screen&#45;space GI approximation (see Screen&#45;Space Light (2D GI))." alt="" coords="367,126,608,171"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="623,142,727,134,753,133,748,133,727,139,624,147"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Shared_1_1SceneLight_1_1ISceneLightRuntime.html" title="Read surface for the LIVE ambient scene light — the current time&#45;of&#45;day state the runtime owner (Time..." alt="" coords="391,196,584,240"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="599,196,662,182,726,164,800,137,805,136,728,169,664,187,599,202"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="600,87,754,104,748,105,600,93"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Shared_1_1Cadence_1_1ICadencedEffect.html" title="Implemented by field services that perform periodic RT blits on a cadence timer." alt="" coords="5,61,220,106"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="235,79,392,79,387,82,236,84"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html" title=" " alt="" coords="12,130,213,175"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="227,127,392,97,387,100,229,133"/>
 </map>

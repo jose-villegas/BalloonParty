@@ -4,7 +4,7 @@ var searchData=
   ['machine_1',['machine',['../plan_level_up_timing.html#autotoc_md782',1,'5. The orchestrator IS the existing phase machine'],['../plan_gameplay_telemetry.html#autotoc_md618',1,'State machine']]],
   ['made_2',['5. How the pops are made',['../plan_card_reveal.html#autotoc_md391',1,'']]],
   ['magnituderefid_3',['MagnitudeRefId',['../classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#a34697363528545f96d0c12e7aafdd84e',1,'BalloonParty::Display::ScreenSpaceLightService']]],
-  ['main_20camera_20s_20frame_20a2_20built_20behind_20a_20setting_4',['The scene capture inside the main camera&apos;s frame (A2, built behind a setting)',['../plan_performance_recovery.html#autotoc_md834',1,'']]],
+  ['main_20camera_20s_20frame_20a2_20tried_20and_20removed_4',['The scene capture inside the main camera&apos;s frame (A2, tried and removed)',['../plan_performance_recovery.html#autotoc_md834',1,'']]],
   ['main_20effects_20map_20in_20part_5',['Phase 3: the main effects map (in part)',['../plan_effects_layer_clearing.html#autotoc_md487',1,'']]],
   ['main_20effects_20map_20phase_203_20in_20part_6',['Main effects map (phase 3, in part)',['../plan_effects_layer_clearing.html#autotoc_md473',1,'']]],
   ['mainpage_2emd_7',['mainpage.md',['../mainpage_8md.html',1,'']]],

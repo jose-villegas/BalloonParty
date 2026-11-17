@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Item_1_1Effects_1_1EffectHit.html" target="_top" xlink:title="One effect core&#39;s verdict on one occupant — the loop, not the core, applies it (see ShotItemLayer/App...">
+<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Item_1_1Effects_1_1EffectOccupant.html" target="_top" xlink:title="One board actor as an item effect core sees it — deliberately NOT HitsRemaining/damage&#45;capable (ISP: ...">
 <polygon fill="white" stroke="#666666" points="140.5,-33.5 0,-33.5 0,0 140.5,0 140.5,-33.5"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.Effects.</text>
-<text xml:space="preserve" text-anchor="middle" x="70.25" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">EffectHit</text>
+<text xml:space="preserve" text-anchor="middle" x="70.25" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">EffectOccupant</text>
 </a>
 </g>
 </g>

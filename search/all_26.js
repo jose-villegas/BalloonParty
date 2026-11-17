@@ -108,7 +108,7 @@ var searchData=
   ['—_20riskier_20than_20it_20looks_20strong_20opus_20if_20ever_20done_105',['G5 — Gradient-skip · &lt;strong&gt;DEFERRED — riskier than it looks&lt;/strong&gt; (opus if ever done)',['../plan_performance_recovery.html#autotoc_md850',1,'']]],
   ['—_20roguelike_20run_20modifiers_20unlockables_106',['13 — Roguelike Run Modifiers (Unlockables)',['../plan_future_ideas.html#autotoc_md590',1,'']]],
   ['—_20runtime_20bush_20baking_20at_20preload_107',['11 — Runtime Bush Baking at Preload',['../plan_future_ideas.html#autotoc_md581',1,'']]],
-  ['—_20scenecapture_20→_20renderer_20feature_20·_20strong_20built_20behind_20a_20setting_20strong_20november_20pass_108',['A2 — SceneCapture → Renderer Feature · &lt;strong&gt;built behind a setting&lt;/strong&gt; (November pass)',['../plan_performance_recovery.html#autotoc_md855',1,'']]],
+  ['—_20scenecapture_20→_20renderer_20feature_20·_20strong_20tried_20and_20removed_20strong_20november_20pass_108',['A2 — SceneCapture → Renderer Feature · &lt;strong&gt;tried and removed&lt;/strong&gt; (November pass)',['../plan_performance_recovery.html#autotoc_md855',1,'']]],
   ['—_20score_20attack_20flavor_109',['12.3 Clock / turn pressure — score-attack flavor',['../plan_future_ideas.html#autotoc_md586',1,'']]],
   ['—_20score_20attribution_20✅_20complete_110',['&lt;tt&gt;IHasScoreColor&lt;/tt&gt; — score attribution ✅ Complete',['../plan_content_production.html#autotoc_md431',1,'']]],
   ['—_20second_20pass_202026_2007_2023_20evening_2090s_20perfetto_20capture_20during_20live_20play_111',['Findings — second pass, 2026-07-23 evening (90s perfetto capture during live play)',['../plan_performance_recovery.html#autotoc_md822',1,'']]],

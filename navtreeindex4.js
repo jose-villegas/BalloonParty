@@ -1,7 +1,5 @@
 var NAVTREEINDEX4 =
 {
-"SlotPlacementMode_8cs.html":[7,0,15,0,20],
-"SmokeFieldResources_8cs.html":[7,0,13,10],
 "SmokeFieldService_8cs.html":[7,0,13,11],
 "SmokeFieldSettings_8cs.html":[7,0,3,5,29],
 "SmokeFieldView_8cs.html":[7,0,13,0,4],
@@ -27,8 +25,8 @@ var NAVTREEINDEX4 =
 "SoundHandle_8cs.html":[7,0,0,16],
 "SoundIds_8cs.html":[7,0,0,17],
 "SpaceDanger_8cs.html":[7,0,7,3,1],
-"SpawnBalloonCheat_8cs.html":[7,0,2,23],
-"SpawnBalloonLineCheat_8cs.html":[7,0,2,24],
+"SpawnBalloonCheat_8cs.html":[7,0,2,22],
+"SpawnBalloonLineCheat_8cs.html":[7,0,2,23],
 "SpawnBalloonLineMessage_8cs.html":[7,0,14,7,50],
 "SpawnClockSettings_8cs.html":[7,0,3,9,34],
 "SpawnClock_8cs.html":[7,0,1,4,11],
@@ -54,7 +52,7 @@ var NAVTREEINDEX4 =
 "SpriteShadowBaker_8cs.html":[7,0,14,10,16],
 "StampProfileDrawer_8cs.html":[7,0,3,4,10],
 "StandingFormation_8cs.html":[7,0,1,1,8],
-"StartFromLevelCheat_8cs.html":[7,0,2,25],
+"StartFromLevelCheat_8cs.html":[7,0,2,24],
 "StaticActorModel_8cs.html":[7,0,15,0,23],
 "StaticActorSpawner_8cs.html":[7,0,15,0,24],
 "StreakChangedMessage_8cs.html":[7,0,14,7,53],
@@ -82,7 +80,7 @@ var NAVTREEINDEX4 =
 "ThrowerReload_8cs.html":[7,0,17,5],
 "ThrowerSettings_8cs.html":[7,0,17,6],
 "ThrowerView_8cs.html":[7,0,17,7],
-"TimeOfDayCheat_8cs.html":[7,0,2,26],
+"TimeOfDayCheat_8cs.html":[7,0,2,25],
 "TimeOfDayClock_8cs.html":[7,0,14,11,6],
 "TimeOfDayCycle_8cs.html":[7,0,7,7,11],
 "TimeOfDayOrbit_8cs.html":[7,0,18,22],
@@ -105,7 +103,7 @@ var NAVTREEINDEX4 =
 "ToughRunPlan_8cs.html":[7,0,1,4,13],
 "ToughSnakeSpringSettings_8cs.html":[7,0,3,0,27],
 "ToughSnakeSpringView_8cs.html":[7,0,1,6,21],
-"ToughSnakeSpringsCheat_8cs.html":[7,0,2,27],
+"ToughSnakeSpringsCheat_8cs.html":[7,0,2,26],
 "TraceHitGeometry_8cs.html":[7,0,11,6],
 "TraceHitMarker_8cs.html":[7,0,11,7],
 "TrackedTrailSettings_8cs.html":[7,0,3,3,6],
@@ -119,7 +117,7 @@ var NAVTREEINDEX4 =
 "TransformCapturedMessage_8cs.html":[7,0,14,7,58],
 "TransformExtensions_8cs.html":[7,0,14,4,20],
 "TransformTrailEndpoint_8cs.html":[7,0,14,9,17],
-"TriggerLevelUpCheat_8cs.html":[7,0,2,28],
+"TriggerLevelUpCheat_8cs.html":[7,0,2,27],
 "TweenOscillator_8cs.html":[7,0,14,0,2],
 "TweenTracker_8cs.html":[7,0,14,0,3],
 "UiSfxEmitter_8cs.html":[7,0,0,3,1],
@@ -249,5 +247,7 @@ var NAVTREEINDEX4 =
 "classBalloonParty_1_1Audio_1_1AudioChannelController.html#a78fbf8bf9db505739419eb0232b02fa1":[5,0,0,0,4,0],
 "classBalloonParty_1_1Audio_1_1AudioChannelController.html#a78fbf8bf9db505739419eb0232b02fa1":[6,0,0,0,4,0],
 "classBalloonParty_1_1Audio_1_1AudioChannelController.html#a827e32e93d90ea580f8bc17b9aae2a9f":[5,0,0,0,4,6],
-"classBalloonParty_1_1Audio_1_1AudioChannelController.html#a827e32e93d90ea580f8bc17b9aae2a9f":[6,0,0,0,4,6]
+"classBalloonParty_1_1Audio_1_1AudioChannelController.html#a827e32e93d90ea580f8bc17b9aae2a9f":[6,0,0,0,4,6],
+"classBalloonParty_1_1Audio_1_1AudioChannelController.html#abcc274c1ecba2c30dc8563aae0fab8a1":[5,0,0,0,4,8],
+"classBalloonParty_1_1Audio_1_1AudioChannelController.html#abcc274c1ecba2c30dc8563aae0fab8a1":[6,0,0,0,4,8]
 };
