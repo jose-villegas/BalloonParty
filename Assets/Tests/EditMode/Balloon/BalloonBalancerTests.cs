@@ -371,6 +371,36 @@ namespace BalloonParty.Tests.Balloon
             balancer.ResetRun(balancer.Generation + 1);
         }
 
+        [Test]
+        public void AnUnbreakableSnake_StepsOnTheBeatAndTheOffBeat_TheCycleKeepsTheBeat()
+        {
+            var balancer = BalancerWithAToughSnake(out var formations, toughStepSeconds: 100f, formAtOnce: false);
+            var settings = _balloonsConfig.UnbreakableFormation;
+            settings.ToughSnakes.Returns(false);
+            settings.BeatSeconds.Returns(1f);
+            settings.SnakeStepsPerBeat.Returns(2);
+            settings.HorizontalWeight.Returns(0f);
+            settings.SnakeWeight.Returns(1f);
+            settings.SnakeMaxMembers.Returns(3);
+            settings.HorizontalMaxMembers.Returns(3);
+            _balloonsConfig.FlightRebalanceInterval.Returns(100f);
+            for (var col = 0; col < 3; col++)
+            {
+                _grid.Remove(new Vector2Int(col, 0));
+                _grid.Place(new UnbreakableBalloonModel(new BalloonModelConfig(typeName: BalloonType.Unbreakable)), null,
+                    new Vector2Int(col, 0));
+            }
+
+            formations.ArrangeOnCycle(_ => { });
+            Assert.IsTrue(formations.HasUnbreakableSnake);
+
+            Assert.IsTrue(balancer.TickFlightRebalance(0.5f), "a step on the off-beat, half a beat in");
+            Assert.IsTrue(balancer.TickFlightRebalance(0.5f), "and on the beat");
+            Assert.IsFalse(balancer.TickFlightRebalance(0.4f));
+            formations.Dispose();
+            balancer.ResetRun(balancer.Generation + 1);
+        }
+
         // Three toughs on row 0 of the 3 by 3 board: the wave start makes a snake of them, unless formAtOnce is
         // off, when it waits for the test to arrange.
         private BalloonBalancer BalancerWithAToughSnake(

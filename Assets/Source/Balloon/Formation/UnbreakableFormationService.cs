@@ -99,6 +99,7 @@ namespace BalloonParty.Balloon.Formation
         internal float ToughSnakeStepSeconds => _settings?.ToughSnakeStepSeconds ?? 0f;
         internal float BeatSeconds => _settings?.BeatSeconds ?? 0f;
         internal int BeatsPerCycle => _settings?.BeatsPerCycle ?? 1;
+        internal int SnakeStepsPerBeat => Mathf.Max(1, _settings?.SnakeStepsPerBeat ?? 1);
         internal int LoneHoldCycles => _settings?.LoneHoldCycles ?? 1;
         internal bool HasUnbreakables => CountUnbreakables() > 0;
 

@@ -1,7 +1,8 @@
 # Balloon/Formation
 
 Unbreakable balloons keep one clock, the **beat** (`BeatSeconds`, 1.7 s of play), and every
-`BeatsPerCycle` (2) beats make a **cycle** (3.4 s). When two or more are on the board, they gather into a
+`BeatsPerCycle` (2) beats make a **cycle** (3.4 s). An unbreakable snake steps `SnakeStepsPerBeat` (2) times
+a beat, on the beat and the off-beat (every 0.85 s), so it walks quicker than the tough snake. When two or more are on the board, they gather into a
 **formation**. They form up on any beat, stay in place for a few cycles, then switch to a different line on
 the cycle. While a formation stands, its members float in midair: the balloons below rise until they reach the
 formation, and spawn lines stop under it. An unbreakable left alone, in no formation, roams: it jumps toward
@@ -33,8 +34,8 @@ biggest group, every other tough falls in behind its tail, and it walks through 
 ## The clock
 
 `BalloonBalancer` keeps the beat (`TickStepClock`): it counts seconds of play, and a pause or a doomed
-shot's last glide holds it rather than restarting it, since nearly every shot ends in one. On every beat an
-unbreakable snake steps, and on a beat between cycles the free unbreakables form up (`FormOnBeat`) once
+shot's last glide holds it rather than restarting it, since nearly every shot ends in one. An unbreakable
+snake steps `SnakeStepsPerBeat` times a beat, evenly spaced, and on a beat between cycles the free unbreakables form up (`FormOnBeat`) once
 `MinMembers` of them are free, still gliding in or not, so one that arrives or is set free is red a beat at
 most, not a cycle. On every cycle the balancer asks the service to `ArrangeOnCycle`, then moves one
 lone unbreakable (`RelocateOneRoamer`): the one that has rested longest of those that have stood
@@ -74,8 +75,8 @@ shape to change and nothing to hold, so it steps on its own.
 ## Snakes
 
 A snake forms as a row, like a horizontal line, of at most `SnakeMaxMembers`. It sets off along the row,
-east or west at random, led by the member at that end. From then on it takes a step on every beat
-(`BeatSeconds`, 1.7 s of play): the balancer asks the service to `StepSnakes`, right before that
+east or west at random, led by the member at that end. From then on it takes `SnakeStepsPerBeat` (2) steps
+a beat, on the beat and the off-beat (every 0.85 s of play), quicker than the tough snake: the balancer asks the service to `StepSnakes`, right before that
 balance's race. The beat is apart from the balancer's 4 s pulse: a pause or a doomed shot's last glide
 holds it where the pulse starts over, since nearly every shot ends in one and the snakes would never
 step. A snake formed or re-planned on a cycle takes its first step on the next beat.
@@ -237,8 +238,8 @@ The settings are `IUnbreakableFormationSettings`, nested in `BalloonsConfigurati
 - `ToughSnakes` (on: the toughs walk as one snake. `ToughSnakeMinMembers` (2) toughs on the board start it, it steps
   every `ToughSnakeStepSeconds`, and it keeps out of the bottom `HorizontalBottomClearance` rows)
 - `MinMembers` (2) and `MaxMembers` (5)
-- the clock: `BeatSeconds` (1.7: seconds of play between beats, an unbreakable snake's step) and
-  `BeatsPerCycle` (2, so a cycle is 3.4 s)
+- the clock: `BeatSeconds` (1.7: seconds of play between beats), `BeatsPerCycle` (2, so a cycle is 3.4 s)
+  and `SnakeStepsPerBeat` (2: an unbreakable snake steps on the beat and the off-beat, every 0.85 s)
 - the holds, in cycles: `SnakeHoldCycles` (3), `LineHoldCycles` (4, horizontal and diagonal),
   `ItemCoverHoldCycles` (4), and `LoneHoldCycles` (3, a lone unbreakable's rest between moves)
 - `BottomClearance` (2) and `HorizontalBottomClearance` (4, for horizontal lines)

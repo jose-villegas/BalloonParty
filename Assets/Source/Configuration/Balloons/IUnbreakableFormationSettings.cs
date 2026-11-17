@@ -25,7 +25,8 @@ namespace BalloonParty.Configuration.Balloons
         int MaxMembers { get; }
 
         /// <summary>
-        ///     Seconds of play between the unbreakables' beats. An unbreakable snake steps on every beat; every
+        ///     Seconds of play between the unbreakables' beats. An unbreakable snake steps
+        ///     <see cref="SnakeStepsPerBeat" /> times a beat; every
         ///     <see cref="BeatsPerCycle" /> beats make a cycle, the clock formations form, hold and change shape on and
         ///     a lone unbreakable moves on.
         /// </summary>
@@ -33,6 +34,11 @@ namespace BalloonParty.Configuration.Balloons
 
         /// <summary>Beats in one cycle.</summary>
         int BeatsPerCycle { get; }
+
+        /// <summary>
+        ///     Steps an unbreakable snake takes each beat, evenly spaced: 2 steps on the beat and the off-beat.
+        /// </summary>
+        int SnakeStepsPerBeat { get; }
 
         /// <summary>Cycles a snake walks, counting the cycle it formed on, before it changes shape.</summary>
         int SnakeHoldCycles { get; }

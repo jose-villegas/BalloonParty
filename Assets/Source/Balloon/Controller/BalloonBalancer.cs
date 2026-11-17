@@ -71,6 +71,7 @@ namespace BalloonParty.Balloon.Controller
         private float _beatElapsed;
         private float _toughStepElapsed;
         private int _beats;
+        private int _snakeSteps;
 
         public int ResetOrder => RunResetOrder.Quiesce;
 
@@ -143,6 +144,7 @@ namespace BalloonParty.Balloon.Controller
             _beatElapsed = 0f;
             _toughStepElapsed = 0f;
             _beats = 0;
+            _snakeSteps = 0;
             _roamRests.Clear();
             _turnSteps.Clear();
             _motionTicker.CancelAllBalanceMoves();
@@ -626,10 +628,10 @@ namespace BalloonParty.Balloon.Controller
         }
 
         // Ticks the unbreakables' beat and the tough snake's step clock and asks whether the toughs should form up,
-        // marking each that falls due for the next balance. True when any did. On a beat an unbreakable snake steps
-        // and the free unbreakables form up; every BeatsPerCycle beats is a cycle, when formations also change shape
-        // and a lone unbreakable may move. The beat runs with no snake too, so the snakes' steps and the cycles keep
-        // one rhythm.
+        // marking each that falls due for the next balance. True when any did. An unbreakable snake steps
+        // SnakeStepsPerBeat times a beat, on the beat and evenly between; on a beat the free unbreakables form up;
+        // every BeatsPerCycle beats is a cycle, when formations also change shape and a lone unbreakable may move. The
+        // clock runs with no snake too, so the snakes' steps and the cycles keep one rhythm.
         private bool TickFormations(float deltaTime)
         {
             if (_formations == null)
@@ -640,12 +642,17 @@ namespace BalloonParty.Balloon.Controller
             var snakeStep = false;
             var cycle = false;
             var form = false;
-            if (TickStepClock(ref _beatElapsed, _formations.BeatSeconds, true, true, deltaTime))
+            var stepsPerBeat = _formations.SnakeStepsPerBeat;
+            if (TickStepClock(ref _beatElapsed, _formations.BeatSeconds / stepsPerBeat, true, true, deltaTime))
             {
-                _beats++;
+                _snakeSteps++;
                 snakeStep = _formations.HasUnbreakableSnake;
-                cycle = _beats % _formations.BeatsPerCycle == 0 && _formations.HasUnbreakables;
-                form = !cycle && _formations.UnbreakablesDueToForm();
+                if (_snakeSteps % stepsPerBeat == 0)
+                {
+                    _beats++;
+                    cycle = _beats % _formations.BeatsPerCycle == 0 && _formations.HasUnbreakables;
+                    form = !cycle && _formations.UnbreakablesDueToForm();
+                }
             }
 
             // The toughs don't wait for a step to form up: a tough that lands falls in at once.

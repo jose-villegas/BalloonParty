@@ -51,14 +51,18 @@ namespace BalloonParty.Configuration.Balloons
         [SerializeField] [Min(1)] private int _spotChoices = 3;
 
         [Header("Clock")]
-        [Tooltip("Seconds of play between the unbreakables' beats. An unbreakable snake steps on every beat. A " +
-                 "pause or a doomed shot holds the clock.")]
+        [Tooltip("Seconds of play between the unbreakables' beats. An unbreakable snake steps Snake Steps Per " +
+                 "Beat times a beat. A pause or a doomed shot holds the clock.")]
         [FormerlySerializedAs("_snakeStepSeconds")]
         [SerializeField] [Min(0.1f)] private float _beatSeconds = 1.7f;
 
         [Tooltip("Beats in a cycle, the clock the unbreakables keep together: formations form and change shape " +
                  "only on a cycle, and one lone unbreakable at most moves on each.")]
         [SerializeField] [Min(1)] private int _beatsPerCycle = 2;
+
+        [Tooltip("Steps an unbreakable snake takes each beat, evenly spaced: 2 = on the beat and the off-beat, " +
+                 "so it walks quicker than the tough snake while keeping the unbreakables' rhythm.")]
+        [SerializeField] [Min(1)] private int _snakeStepsPerBeat = 2;
 
         [Tooltip("Cycles a snake walks, counting the cycle it formed on, before it changes shape.")]
         [SerializeField] [Min(1)] private int _snakeHoldCycles = 3;
@@ -105,6 +109,7 @@ namespace BalloonParty.Configuration.Balloons
         public int MaxMembers => Mathf.Max(_maxMembers, _minMembers);
         public float BeatSeconds => Mathf.Max(0.1f, _beatSeconds);
         public int BeatsPerCycle => Mathf.Max(1, _beatsPerCycle);
+        public int SnakeStepsPerBeat => Mathf.Max(1, _snakeStepsPerBeat);
         public int SnakeHoldCycles => Mathf.Max(1, _snakeHoldCycles);
         public int LineHoldCycles => Mathf.Max(1, _lineHoldCycles);
         public int ItemCoverHoldCycles => Mathf.Max(1, _itemCoverHoldCycles);
