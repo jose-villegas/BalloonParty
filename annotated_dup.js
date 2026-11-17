@@ -1071,6 +1071,7 @@ var annotated_dup =
           [ "TransformTrailEndpoint", "classBalloonParty_1_1Shared_1_1Pool_1_1TransformTrailEndpoint.html", "classBalloonParty_1_1Shared_1_1Pool_1_1TransformTrailEndpoint" ]
         ] ],
         [ "Rendering", "namespaceBalloonParty_1_1Shared_1_1Rendering.html", [
+          [ "CameraVolumes", "classBalloonParty_1_1Shared_1_1Rendering_1_1CameraVolumes.html", "classBalloonParty_1_1Shared_1_1Rendering_1_1CameraVolumes" ],
           [ "ColorableRenderer", "classBalloonParty_1_1Shared_1_1Rendering_1_1ColorableRenderer.html", "classBalloonParty_1_1Shared_1_1Rendering_1_1ColorableRenderer" ],
           [ "ColorableRenderer< T >", "classBalloonParty_1_1Shared_1_1Rendering_1_1ColorableRenderer-1-g.html", "classBalloonParty_1_1Shared_1_1Rendering_1_1ColorableRenderer-1-g" ],
           [ "ColorCycle", "classBalloonParty_1_1Shared_1_1Rendering_1_1ColorCycle.html", "classBalloonParty_1_1Shared_1_1Rendering_1_1ColorCycle" ],
@@ -1079,6 +1080,8 @@ var annotated_dup =
           [ "GradientTextureHelper", "classBalloonParty_1_1Shared_1_1Rendering_1_1GradientTextureHelper.html", "classBalloonParty_1_1Shared_1_1Rendering_1_1GradientTextureHelper" ],
           [ "IColorableRenderer", "interfaceBalloonParty_1_1Shared_1_1Rendering_1_1IColorableRenderer.html", "interfaceBalloonParty_1_1Shared_1_1Rendering_1_1IColorableRenderer" ],
           [ "ImageShadowBaker", "classBalloonParty_1_1Shared_1_1Rendering_1_1ImageShadowBaker.html", "classBalloonParty_1_1Shared_1_1Rendering_1_1ImageShadowBaker" ],
+          [ "LayerPresence", "classBalloonParty_1_1Shared_1_1Rendering_1_1LayerPresence.html", "classBalloonParty_1_1Shared_1_1Rendering_1_1LayerPresence" ],
+          [ "LayerPresenceTag", "classBalloonParty_1_1Shared_1_1Rendering_1_1LayerPresenceTag.html", "classBalloonParty_1_1Shared_1_1Rendering_1_1LayerPresenceTag" ],
           [ "MeshHelper", "classBalloonParty_1_1Shared_1_1Rendering_1_1MeshHelper.html", "classBalloonParty_1_1Shared_1_1Rendering_1_1MeshHelper" ],
           [ "MeshRendererBuilder", "classBalloonParty_1_1Shared_1_1Rendering_1_1MeshRendererBuilder.html", "classBalloonParty_1_1Shared_1_1Rendering_1_1MeshRendererBuilder" ],
           [ "QuadRendererBuilder", "classBalloonParty_1_1Shared_1_1Rendering_1_1QuadRendererBuilder.html", "classBalloonParty_1_1Shared_1_1Rendering_1_1QuadRendererBuilder" ],

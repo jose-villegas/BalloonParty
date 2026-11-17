@@ -1,5 +1,10 @@
 var NAVTREEINDEX39 =
 {
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a80833c2ed7278d64261d9cf4c9579645":[5,0,0,3,27,23],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a80833c2ed7278d64261d9cf4c9579645":[6,0,0,3,27,23],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a82128484b49dda801682e953ee04b165":[5,0,0,3,27,12],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a82128484b49dda801682e953ee04b165":[6,0,0,3,27,12],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a83bb9b9fb1b5bde13b5c9086e16d8843":[5,0,0,3,27,19],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a83bb9b9fb1b5bde13b5c9086e16d8843":[6,0,0,3,27,19],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a8fabaa62fb5e9b96d144f3ea832a5709":[5,0,0,3,27,0],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a8fabaa62fb5e9b96d144f3ea832a5709":[6,0,0,3,27,0],
@@ -244,10 +249,5 @@ var NAVTREEINDEX39 =
 "classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#a834f656ae0efac2706045e79da9c5a20":[5,0,0,3,34,14],
 "classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#a834f656ae0efac2706045e79da9c5a20":[6,0,0,3,34,14],
 "classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#a9873b04815aacabef0e7d8874e330164":[5,0,0,3,34,4],
-"classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#a9873b04815aacabef0e7d8874e330164":[6,0,0,3,34,4],
-"classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#ab0ce7f820c9862db68440b1b2e57b933":[5,0,0,3,34,8],
-"classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#ab0ce7f820c9862db68440b1b2e57b933":[6,0,0,3,34,8],
-"classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#ab8a8bf800875c74e56ace6cdc1d9a23c":[5,0,0,3,34,6],
-"classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#ab8a8bf800875c74e56ace6cdc1d9a23c":[6,0,0,3,34,6],
-"classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#abc525d92f9aefc4f60bf2527797cfb64":[5,0,0,3,34,12]
+"classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#a9873b04815aacabef0e7d8874e330164":[6,0,0,3,34,4]
 };

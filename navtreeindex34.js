@@ -1,5 +1,10 @@
 var NAVTREEINDEX34 =
 {
+"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpSettings.html#af71c3a5ed179fcebfa6b81af15b68b52":[5,0,0,3,7,0,3],
+"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpSettings.html#af71c3a5ed179fcebfa6b81af15b68b52":[6,0,0,3,7,0,3],
+"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpSettings.html#af737527d243962d83dd536dbcf3a41b4":[5,0,0,3,7,0,7],
+"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpSettings.html#af737527d243962d83dd536dbcf3a41b4":[6,0,0,3,7,0,7],
+"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpSizing.html":[5,0,0,3,7,1],
 "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpSizing.html":[6,0,0,3,7,1],
 "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpSizing.html#a9beba2f30364f606d85b07848f29a814":[5,0,0,3,7,1,0],
 "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpSizing.html#a9beba2f30364f606d85b07848f29a814":[6,0,0,3,7,1,0],
@@ -244,10 +249,5 @@ var NAVTREEINDEX34 =
 "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a7234212931ae1db0d1ab9902dfb63ee6":[5,0,0,3,8,3,24],
 "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a7234212931ae1db0d1ab9902dfb63ee6":[6,0,0,3,8,3,24],
 "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a7454ffffc3392ac56da727d2620d9585":[5,0,0,3,8,3,3],
-"classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a7454ffffc3392ac56da727d2620d9585":[6,0,0,3,8,3,3],
-"classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a8296b730b0b997e0ea64ec1cfbde0f8c":[5,0,0,3,8,3,20],
-"classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a8296b730b0b997e0ea64ec1cfbde0f8c":[6,0,0,3,8,3,20],
-"classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a92608410bb52a38a8b721e78407a4ec2":[5,0,0,3,8,3,17],
-"classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a92608410bb52a38a8b721e78407a4ec2":[6,0,0,3,8,3,17],
-"classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a9a3e18b3c9302d864e922b3dfd956795":[5,0,0,3,8,3,11]
+"classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a7454ffffc3392ac56da727d2620d9585":[6,0,0,3,8,3,3]
 };

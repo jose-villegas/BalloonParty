@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"FlightPhase_8cs.html":[7,0,14,9,2],
 "FlightStatsService_8cs.html":[7,0,7,4,0],
 "FlyingTrail_8cs.html":[7,0,18,8,1],
 "FoldRule_8cs.html":[7,0,7,10,7],
@@ -43,12 +44,12 @@ var NAVTREEINDEX1 =
 "GameSoundId_8cs.html":[7,0,0,7],
 "GameplayMetricsService_8cs.html":[7,0,7,10,8],
 "GatekeeperActorModel_8cs.html":[7,0,15,0,0,11],
-"GizmoDrawingHelper_8cs.html":[7,0,14,10,4],
+"GizmoDrawingHelper_8cs.html":[7,0,14,10,5],
 "GodRaysLook_8cs.html":[7,0,1,5,3],
 "GoldenBalloonModel_8cs.html":[7,0,1,2,8],
 "GoldenSnipeGift_8cs.html":[7,0,8,7,0],
 "GradientTextureDrawer_8cs.html":[7,0,6,23],
-"GradientTextureHelper_8cs.html":[7,0,14,10,5],
+"GradientTextureHelper_8cs.html":[7,0,14,10,6],
 "GraphicColorableRenderer_8cs.html":[7,0,18,8,2],
 "GrassBladeMesh_8cs.html":[7,0,13,0,0],
 "GrassWakeBuffer_8cs.html":[7,0,13,0,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "IRunSave_8cs.html":[7,0,7,8,13],
 "IRunScore_8cs.html":[7,0,7,8,14],
 "IRunSeed_8cs.html":[7,0,7,8,15],
-"IScenarioGradeSettings_8cs.html":[7,0,3,5,13],
-"ISceneLightFieldSettings_8cs.html":[7,0,3,5,14]
+"IScenarioGradeSettings_8cs.html":[7,0,3,5,13]
 };

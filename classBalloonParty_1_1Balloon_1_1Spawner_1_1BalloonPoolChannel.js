@@ -2,6 +2,7 @@ var classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonPoolChannel =
 [
     [ "BalloonPoolChannel", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonPoolChannel.html#a2c26d9318869d68d49a2359f007b19db", null ],
     [ "Create", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonPoolChannel.html#a57257ce4e84001db7ae06951d4fb1cd9", null ],
+    [ "CreateTracked", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonPoolChannel.html#a1cd92be952ef964093f0413d5693ea2c", null ],
     [ "Get", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonPoolChannel.html#af2ee54eeffec4ef6bddd48ca10987219", null ],
     [ "InjectingPoolChannel", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonPoolChannel.html#a3f7fbb5375d905b2a1d0d7305205a8b6", null ],
     [ "Peek", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonPoolChannel.html#af9947fb47bbcf9ff54006a64d90c2131", null ],

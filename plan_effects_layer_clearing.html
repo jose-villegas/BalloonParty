@@ -219,7 +219,7 @@ The glass</h3>
 <li><b>Refraction.</b> The map is sampled toward the top of the dome, by <code>LensRefraction</code> of the dome's radius at a fresh rim, so what lies under the glass reads magnified and spreads away from the ball, and a small dome is the same glass as a big one. The bend eases in over the glass's outer edge, so the rim meets what lies outside it without a tear.</li>
 <li><b>Dispersion.</b> Red and blue sample a little further and nearer than green (<code>LensDispersion</code>, a fraction of the bend): a colour fringe where the glass is steep.</li>
 <li><b>Fade.</b> Effects under the glass fade from the rim in: <code>EdgeLow</code> 0 and <code>EdgeHigh</code> 0.9 spread the fade over the whole dome, so they thin slowly from the rim and are near gone only over the ball, which stays readable.</li>
-<li><b>Glint.</b> A mirror highlight off the dome's normal and a thin bright rim (<code>LensHighlight</code>) are added light, so the dome shows over the board too, not only over effects.</li>
+<li><b>Glint.</b> A mirror highlight off the dome's normal and a thin bright rim (<code>LensHighlight</code>) are added light, so the dome shows over the board too, not only over effects. It is the glass's, not a map's: each composite quad stays on while a clearing is open, with a transparent texture standing in for a map not rendered that frame. Both composites add it, the main one before bloom and the tonemapper and the HUD's after; that second glint came with the main map (tuned at 0.6 when the HUD's was the only one), and is kept so the look is unchanged.</li>
 </ul>
 <p>Decay subtracts evenly, so an older part of the dome keeps its slope and shrinks inward: the corridor behind a ball is a glass tube that narrows and closes. Outside the glass the composite branches to one plain map tap. The glass bends only the effects map. The ball and the board under it stay sharp, which is the point.</p>
 <p>How the stamps are fed:</p>
@@ -256,9 +256,9 @@ Mobile cost</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">HUD map, <code>ARGB32</code>   </td><td class="markdownTableBodyNone">about 10 MB stored + 10 MB read back ≈ 1.2 GB/s   </td><td class="markdownTableBodyNone"><code>MapDownscale</code> 2 quarters it, at the cost of softer lines. Default 1    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Main map, <code>ARGBHalf</code>   </td><td class="markdownTableBodyNone">about 2.4 GB/s at full size   </td><td class="markdownTableBodyNone">the expensive one. Runs while a ball flies and <code>MapHoldSeconds</code> after; <code>MapDownscale</code> 2 quarters it    </td></tr>
+<td class="markdownTableBodyNone">Main map, <code>ARGBHalf</code>   </td><td class="markdownTableBodyNone">about 2.4 GB/s at full size   </td><td class="markdownTableBodyNone">the expensive one. Runs while a ball flies and something is alive on its layer, at most <code>MapHoldSeconds</code> after the last clearing; <code>MapDownscale</code> 2 quarters it    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Extra camera per map   </td><td class="markdownTableBodyNone">one cull and one RenderGraph setup on the CPU   </td><td class="markdownTableBodyNone">effect layers only, so few renderers    </td></tr>
+<td class="markdownTableBodyNone">Extra camera per map   </td><td class="markdownTableBodyNone">one cull and one RenderGraph setup on the CPU, about a fifth of the main thread's frame on a device while both ran   </td><td class="markdownTableBodyNone">only on frames its layer has something alive (<code>LayerPresence</code>); a ball before its first pop, or a hold whose effects are done, renders none    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Effects no longer drawn by their own camera   </td><td class="markdownTableBodyNone">a saving   </td><td class="markdownTableBodyNone">they draw once, into the map   </td></tr>
 </table>

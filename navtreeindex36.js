@@ -1,5 +1,10 @@
 var NAVTREEINDEX36 =
 {
+"classBalloonParty_1_1Configuration_1_1Level_1_1ExtraColorLevelSettings.html#aff38abf929ba46a7049e907cb02f3683":[5,0,0,3,9,5,3],
+"classBalloonParty_1_1Configuration_1_1Level_1_1ExtraColorLevelSettings.html#aff38abf929ba46a7049e907cb02f3683":[6,0,0,3,9,5,3],
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelBackdrop.html":[5,0,0,3,9,16],
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelBackdrop.html":[6,0,0,3,9,16],
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelBackdrop.html#aae521615b5e4b832089c24f5dc165da1":[5,0,0,3,9,16,0],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelBackdrop.html#aae521615b5e4b832089c24f5dc165da1":[6,0,0,3,9,16,0],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html":[5,0,0,3,9,17],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html":[6,0,0,3,9,17],
@@ -244,10 +249,5 @@ var NAVTREEINDEX36 =
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelSteps.html#a1c228b182fe9b18c3c1b3ac3843ede7f":[5,0,0,3,9,25,0],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelSteps.html#a1c228b182fe9b18c3c1b3ac3843ede7f":[6,0,0,3,9,25,0],
 "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html":[5,0,0,3,9,26],
-"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html":[6,0,0,3,9,26],
-"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a0661c4feda0ba8d1f51e5ce915e00501":[5,0,0,3,9,26,5],
-"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a0661c4feda0ba8d1f51e5ce915e00501":[6,0,0,3,9,26,5],
-"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a0d605533454c9020dc6e13aa7095b253":[5,0,0,3,9,26,11],
-"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a0d605533454c9020dc6e13aa7095b253":[6,0,0,3,9,26,11],
-"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a0d795735a151c98576ceee02f1dfc476":[5,0,0,3,9,26,3]
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html":[6,0,0,3,9,26]
 };

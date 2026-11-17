@@ -1,11 +1,14 @@
 var NAVTREEINDEX4 =
 {
+"SnipeLanceLinePrefab_8cs.html":[7,0,8,7,8],
+"SnipeLanceLineView_8cs.html":[7,0,8,7,10],
+"SnipeLanceLines_8cs.html":[7,0,8,7,9],
 "SnipeLanceStroke_8cs.html":[7,0,8,7,11],
 "SnipeLanceTrace_8cs.html":[7,0,8,7,12],
 "SnipeRangePreview_8cs.html":[7,0,8,5,15],
 "SnipeWhirlwindView_8cs.html":[7,0,17,1],
 "SoapBubbleClusterVariant_8cs.html":[7,0,1,5,8],
-"SortingHelper_8cs.html":[7,0,14,10,11],
+"SortingHelper_8cs.html":[7,0,14,10,14],
 "SortingLayerNameAttribute_8cs.html":[7,0,14,35],
 "SortingLayerNameDrawer_8cs.html":[7,0,6,49],
 "SoundBankClipAssigner_8cs.html":[7,0,0,1,12],
@@ -35,10 +38,10 @@ var NAVTREEINDEX4 =
 "SpringLineGraphic_8cs.html":[7,0,18,2,5],
 "SpriteColorableRenderer_8cs.html":[7,0,1,6,19],
 "SpriteLayerCombinerEditor_8cs.html":[7,0,6,8,0],
-"SpriteLayerCombiner_8cs.html":[7,0,14,10,12],
+"SpriteLayerCombiner_8cs.html":[7,0,14,10,15],
 "SpriteRendererExtensions_8cs.html":[7,0,14,4,17],
 "SpriteShadowBakerEditor_8cs.html":[7,0,6,5,2],
-"SpriteShadowBaker_8cs.html":[7,0,14,10,13],
+"SpriteShadowBaker_8cs.html":[7,0,14,10,16],
 "StampProfileDrawer_8cs.html":[7,0,3,4,10],
 "StandingFormation_8cs.html":[7,0,1,1,8],
 "StartFromLevelCheat_8cs.html":[7,0,2,24],
@@ -142,7 +145,7 @@ var NAVTREEINDEX4 =
 "WaveDeficit_8cs.html":[7,0,7,6,6],
 "WeightedPickExtensions_8cs.html":[7,0,14,4,23],
 "WindSoundRouter_8cs.html":[7,0,0,2,8],
-"WorldPolylineGizmo_8cs.html":[7,0,14,10,14],
+"WorldPolylineGizmo_8cs.html":[7,0,14,10,17],
 "WriteOnMath_8cs.html":[7,0,18,5,3],
 "WriteOnText_8cs.html":[7,0,18,5,4],
 "annotated.html":[6,0],
@@ -246,8 +249,5 @@ var NAVTREEINDEX4 =
 "classBalloonParty_1_1Audio_1_1AudioMixerRouter.html#a0dcf2d122ccd03db909c66f64be5a2d3":[5,0,0,0,5,2],
 "classBalloonParty_1_1Audio_1_1AudioMixerRouter.html#a0dcf2d122ccd03db909c66f64be5a2d3":[6,0,0,0,5,2],
 "classBalloonParty_1_1Audio_1_1AudioMixerRouter.html#a25241fb39bd4cef4d0595639e16df3d6":[5,0,0,0,5,4],
-"classBalloonParty_1_1Audio_1_1AudioMixerRouter.html#a25241fb39bd4cef4d0595639e16df3d6":[6,0,0,0,5,4],
-"classBalloonParty_1_1Audio_1_1AudioMixerRouter.html#a94626db3f4f8bf3b4e45c1ecf8f04a4f":[5,0,0,0,5,3],
-"classBalloonParty_1_1Audio_1_1AudioMixerRouter.html#a94626db3f4f8bf3b4e45c1ecf8f04a4f":[6,0,0,0,5,3],
-"classBalloonParty_1_1Audio_1_1AudioMixerRouter.html#aa4aaf3636501d0a1b1b2377f4bc0e93f":[5,0,0,0,5,0]
+"classBalloonParty_1_1Audio_1_1AudioMixerRouter.html#a25241fb39bd4cef4d0595639e16df3d6":[6,0,0,0,5,4]
 };

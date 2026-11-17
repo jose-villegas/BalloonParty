@@ -1,5 +1,10 @@
 var NAVTREEINDEX20 =
 {
+"classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant.html#a9c52897306af6b63fedd28b401c8908f":[5,0,0,1,5,5,11],
+"classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant.html#a9c52897306af6b63fedd28b401c8908f":[6,0,0,1,5,5,11],
+"classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant.html#a9f1206b029eab4b3092137db381d898c":[5,0,0,1,5,5,3],
+"classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant.html#a9f1206b029eab4b3092137db381d898c":[6,0,0,1,5,5,3],
+"classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant.html#aa1eeaabb54a0a3cc6d50db93244636a6":[5,0,0,1,5,5,5],
 "classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant.html#aa1eeaabb54a0a3cc6d50db93244636a6":[6,0,0,1,5,5,5],
 "classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant.html#aa55016a9fff00aaffd430774bdd9da21":[5,0,0,1,5,5,13],
 "classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant.html#aa55016a9fff00aaffd430774bdd9da21":[6,0,0,1,5,5,13],
@@ -244,10 +249,5 @@ var NAVTREEINDEX20 =
 "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#af541e49c9d028eeabcd678c20a1b0697":[5,0,0,1,5,9,16],
 "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#af541e49c9d028eeabcd678c20a1b0697":[6,0,0,1,5,9,16],
 "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#af60e12ad1880ce35558a4661199d36d4":[5,0,0,1,5,9,40],
-"classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#af60e12ad1880ce35558a4661199d36d4":[6,0,0,1,5,9,40],
-"classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#af63ee53fe6897030079de7436e33cd31":[5,0,0,1,5,9,41],
-"classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#af63ee53fe6897030079de7436e33cd31":[6,0,0,1,5,9,41],
-"classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#afc073f78844726bbe4fe687e629102e2":[5,0,0,1,5,9,39],
-"classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#afc073f78844726bbe4fe687e629102e2":[6,0,0,1,5,9,39],
-"classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#afcda99dbb549ed3a4579b2bb30af979e":[5,0,0,1,5,9,3]
+"classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#af60e12ad1880ce35558a4661199d36d4":[6,0,0,1,5,9,40]
 };

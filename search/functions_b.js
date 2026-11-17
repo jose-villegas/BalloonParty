@@ -83,5 +83,6 @@ var searchData=
   ['look_80',['Look',['../classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpSettings.html#a60f7edc0bf1463291fc4077a63d72d9a',1,'BalloonParty::Configuration::HeadsUp::HeadsUpSettings']]],
   ['lossforecast_81',['LossForecast',['../classBalloonParty_1_1Game_1_1Health_1_1LossForecast.html#a46065db2ef8fab46d3928d8b26e1958a',1,'BalloonParty::Game::Health::LossForecast']]],
   ['lowestblockingrow_82',['LowestBlockingRow',['../classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonPlacementResolver.html#ae501acaab9a37eff3fa6b62fb84ed172',1,'BalloonParty::Balloon::Spawner::BalloonPlacementResolver']]],
-  ['lowestpriorityslot_83',['LowestPrioritySlot',['../classBalloonParty_1_1Audio_1_1VoiceLimiter.html#ada8abe178150a29df123ac1d4fb7239d',1,'BalloonParty::Audio::VoiceLimiter']]]
+  ['lowestlayer_83',['LowestLayer',['../classBalloonParty_1_1Shared_1_1Rendering_1_1LayerPresence.html#a3cb8339c1242d7912aff167986563c0d',1,'BalloonParty::Shared::Rendering::LayerPresence']]],
+  ['lowestpriorityslot_84',['LowestPrioritySlot',['../classBalloonParty_1_1Audio_1_1VoiceLimiter.html#ada8abe178150a29df123ac1d4fb7239d',1,'BalloonParty::Audio::VoiceLimiter']]]
 ];

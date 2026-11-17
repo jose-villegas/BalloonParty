@@ -1,5 +1,10 @@
 var NAVTREEINDEX25 =
 {
+"classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html":[5,0,0,3,0,6],
+"classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html":[6,0,0,3,0,6],
+"classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#a1a0684e36076203f168ba0e51bab5f13":[5,0,0,3,0,6,4],
+"classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#a1a0684e36076203f168ba0e51bab5f13":[6,0,0,3,0,6,4],
+"classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#a30f376f99e4e385aba2b55764ec15708":[5,0,0,3,0,6,22],
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#a30f376f99e4e385aba2b55764ec15708":[6,0,0,3,0,6,22],
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#a3c4a62819b2f3c3896d439bd144fa2d2":[5,0,0,3,0,6,7],
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#a3c4a62819b2f3c3896d439bd144fa2d2":[6,0,0,3,0,6,7],
@@ -244,10 +249,5 @@ var NAVTREEINDEX25 =
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1PopPulse.html#a7f0ea28f7384f10a433f4607006e5ee1":[5,0,0,3,0,21,2],
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1PopPulse.html#a7f0ea28f7384f10a433f4607006e5ee1":[6,0,0,3,0,21,2],
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1PopPulse.html#aab3f0f883ac842b665b5edb561503b30":[5,0,0,3,0,21,1],
-"classBalloonParty_1_1Configuration_1_1Balloons_1_1PopPulse.html#aab3f0f883ac842b665b5edb561503b30":[6,0,0,3,0,21,1],
-"classBalloonParty_1_1Configuration_1_1Balloons_1_1PopPulse.html#ab75099618b26e67d48529e3e95aaae6b":[5,0,0,3,0,21,4],
-"classBalloonParty_1_1Configuration_1_1Balloons_1_1PopPulse.html#ab75099618b26e67d48529e3e95aaae6b":[6,0,0,3,0,21,4],
-"classBalloonParty_1_1Configuration_1_1Balloons_1_1PopPulse.html#abbefd6d86f72b72367a1bb30d0ed8d80":[5,0,0,3,0,21,0],
-"classBalloonParty_1_1Configuration_1_1Balloons_1_1PopPulse.html#abbefd6d86f72b72367a1bb30d0ed8d80":[6,0,0,3,0,21,0],
-"classBalloonParty_1_1Configuration_1_1Balloons_1_1PopPulse.html#ac5c7918759391ec143510099f09b1167":[5,0,0,3,0,21,5]
+"classBalloonParty_1_1Configuration_1_1Balloons_1_1PopPulse.html#aab3f0f883ac842b665b5edb561503b30":[6,0,0,3,0,21,1]
 };

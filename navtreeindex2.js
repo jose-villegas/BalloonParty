@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"ISceneLightFieldSettings_8cs.html":[7,0,3,5,14],
 "ISceneLightRuntime_8cs.html":[7,0,14,11,0],
 "ISceneLightSettings_8cs.html":[7,0,3,5,15],
 "IScoreShapeCover_8cs.html":[7,0,7,9,0,4],
@@ -57,7 +58,7 @@ var NAVTREEINDEX2 =
 "IdleMode_8cs.html":[7,0,8,13],
 "ImageExtensions_8cs.html":[7,0,14,4,8],
 "ImageShadowBakerEditor_8cs.html":[7,0,6,5,0],
-"ImageShadowBaker_8cs.html":[7,0,14,10,6],
+"ImageShadowBaker_8cs.html":[7,0,14,10,7],
 "ImpactEventBus_8cs.html":[7,0,14,21],
 "InitialLayerPlan_8cs.html":[7,0,1,4,7],
 "InjectingPoolChannel_8cs.html":[7,0,14,9,3],
@@ -111,6 +112,8 @@ var NAVTREEINDEX2 =
 "LaunchDisturbanceStamp_8cs.html":[7,0,7,20],
 "LaunchLifetimeScope_8cs.html":[7,0,7,21],
 "LaunchPlayTrigger_8cs.html":[7,0,7,22],
+"LayerPresenceTag_8cs.html":[7,0,14,10,9],
+"LayerPresence_8cs.html":[7,0,14,10,8],
 "LeafAtlasPacker_8cs.html":[7,0,6,0,9],
 "LeafVenationSimulator_8cs.html":[7,0,6,0,10],
 "LerpStampScheduler_8cs.html":[7,0,14,3,3],
@@ -157,8 +160,8 @@ var NAVTREEINDEX2 =
 "ListExtensions_8cs.html":[7,0,14,4,11],
 "Log_8cs.html":[7,0,14,2,3],
 "LossForecast_8cs.html":[7,0,7,6,4],
-"MeshHelper_8cs.html":[7,0,14,10,7],
-"MeshRendererBuilder_8cs.html":[7,0,14,10,8],
+"MeshHelper_8cs.html":[7,0,14,10,10],
+"MeshRendererBuilder_8cs.html":[7,0,14,10,11],
 "MetricAxis_8cs.html":[7,0,7,10,16],
 "MetricBindingDrawer_8cs.html":[7,0,6,32],
 "MetricBindingSource_8cs.html":[7,0,18,10,1],
@@ -246,8 +249,5 @@ var NAVTREEINDEX2 =
 "PencilTextShaderGUI_8cs.html":[7,0,6,37],
 "PickContext_8cs.html":[7,0,0,12],
 "PierceDischargeEffects_8cs.html":[7,0,12,1,2],
-"PierceDischargedMessage_8cs.html":[7,0,14,7,30],
-"PierceEndedEndCondition_8cs.html":[7,0,12,0,1],
-"PierceTelegraphScan_8cs.html":[7,0,12,1,3],
-"PierceWallReachedMessage_8cs.html":[7,0,14,7,31]
+"PierceDischargedMessage_8cs.html":[7,0,14,7,30]
 };

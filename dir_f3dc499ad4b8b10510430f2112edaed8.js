@@ -1,5 +1,6 @@
 var dir_f3dc499ad4b8b10510430f2112edaed8 =
 [
+    [ "CameraVolumes.cs", "CameraVolumes_8cs.html", "CameraVolumes_8cs" ],
     [ "ColorableRenderer.cs", "ColorableRenderer_8cs.html", "ColorableRenderer_8cs" ],
     [ "ColorCycle.cs", "ColorCycle_8cs.html", "ColorCycle_8cs" ],
     [ "ColorCycleState.cs", "ColorCycleState_8cs.html", "ColorCycleState_8cs" ],
@@ -7,6 +8,8 @@ var dir_f3dc499ad4b8b10510430f2112edaed8 =
     [ "GizmoDrawingHelper.cs", "GizmoDrawingHelper_8cs.html", null ],
     [ "GradientTextureHelper.cs", "GradientTextureHelper_8cs.html", "GradientTextureHelper_8cs" ],
     [ "ImageShadowBaker.cs", "ImageShadowBaker_8cs.html", "ImageShadowBaker_8cs" ],
+    [ "LayerPresence.cs", "LayerPresence_8cs.html", "LayerPresence_8cs" ],
+    [ "LayerPresenceTag.cs", "LayerPresenceTag_8cs.html", "LayerPresenceTag_8cs" ],
     [ "MeshHelper.cs", "MeshHelper_8cs.html", "MeshHelper_8cs" ],
     [ "MeshRendererBuilder.cs", "MeshRendererBuilder_8cs.html", "MeshRendererBuilder_8cs" ],
     [ "QuadRendererBuilder.cs", "QuadRendererBuilder_8cs.html", "QuadRendererBuilder_8cs" ],

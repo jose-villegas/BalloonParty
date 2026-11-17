@@ -18,6 +18,7 @@ var classBalloonParty_1_1Display_1_1SceneCaptureService =
     [ "_mainCamera", "classBalloonParty_1_1Display_1_1SceneCaptureService.html#a5047cbddca6015fe89df5fbc4181f1bf", null ],
     [ "_matchMainCameraBackground", "classBalloonParty_1_1Display_1_1SceneCaptureService.html#a70145483bddb2bd59971375ad17725ba", null ],
     [ "_texture", "classBalloonParty_1_1Display_1_1SceneCaptureService.html#af0b73e13a9591f3f9d9ba7bad6205d8f", null ],
+    [ "_volumesFrozen", "classBalloonParty_1_1Display_1_1SceneCaptureService.html#a6e11dad94fe46a1aaf2d311306e83156", null ],
     [ "CaptureTexId", "classBalloonParty_1_1Display_1_1SceneCaptureService.html#ab47ce01e684a64ed6396b6fd69f8d1ad", null ],
     [ "BlitWeight", "classBalloonParty_1_1Display_1_1SceneCaptureService.html#a0d2065535d20e4438aa00cbf02937014", null ],
     [ "CaptureTexture", "classBalloonParty_1_1Display_1_1SceneCaptureService.html#aeb951443bfc153cc01a4eaabed94cf9b", null ],

@@ -1,5 +1,10 @@
 var NAVTREEINDEX24 =
 {
+"classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#a2235b8387cab6402520c755b209f042f":[5,0,0,3,0,1,22],
+"classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#a2235b8387cab6402520c755b209f042f":[6,0,0,3,0,1,22],
+"classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#a2ce48ca0dc24b7fa1a886f52bfc26c16":[5,0,0,3,0,1,6],
+"classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#a2ce48ca0dc24b7fa1a886f52bfc26c16":[6,0,0,3,0,1,6],
+"classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#a3104bde4611bcadf6c1c13c3f4f5af47":[5,0,0,3,0,1,26],
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#a3104bde4611bcadf6c1c13c3f4f5af47":[6,0,0,3,0,1,26],
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#a314c1877c6917da499ed6f03e2f6649f":[5,0,0,3,0,1,24],
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#a314c1877c6917da499ed6f03e2f6649f":[6,0,0,3,0,1,24],
@@ -244,10 +249,5 @@ var NAVTREEINDEX24 =
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1DiscoWaveSettings.html#af499247482f3cfbc5052703581f21f30":[5,0,0,3,0,5,1],
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1DiscoWaveSettings.html#af499247482f3cfbc5052703581f21f30":[6,0,0,3,0,5,1],
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1DiscoWaveSettings.html#aff6c803f8b14f6d75a75913cd9560d38":[5,0,0,3,0,5,6],
-"classBalloonParty_1_1Configuration_1_1Balloons_1_1DiscoWaveSettings.html#aff6c803f8b14f6d75a75913cd9560d38":[6,0,0,3,0,5,6],
-"classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html":[5,0,0,3,0,6],
-"classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html":[6,0,0,3,0,6],
-"classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#a1a0684e36076203f168ba0e51bab5f13":[5,0,0,3,0,6,4],
-"classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#a1a0684e36076203f168ba0e51bab5f13":[6,0,0,3,0,6,4],
-"classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#a30f376f99e4e385aba2b55764ec15708":[5,0,0,3,0,6,22]
+"classBalloonParty_1_1Configuration_1_1Balloons_1_1DiscoWaveSettings.html#aff6c803f8b14f6d75a75913cd9560d38":[6,0,0,3,0,5,6]
 };

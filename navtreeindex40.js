@@ -1,5 +1,10 @@
 var NAVTREEINDEX40 =
 {
+"classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#ab0ce7f820c9862db68440b1b2e57b933":[5,0,0,3,34,8],
+"classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#ab0ce7f820c9862db68440b1b2e57b933":[6,0,0,3,34,8],
+"classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#ab8a8bf800875c74e56ace6cdc1d9a23c":[5,0,0,3,34,6],
+"classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#ab8a8bf800875c74e56ace6cdc1d9a23c":[6,0,0,3,34,6],
+"classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#abc525d92f9aefc4f60bf2527797cfb64":[5,0,0,3,34,12],
 "classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#abc525d92f9aefc4f60bf2527797cfb64":[6,0,0,3,34,12],
 "classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#abf43f3b4474762195d14565146253e6a":[5,0,0,3,34,5],
 "classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#abf43f3b4474762195d14565146253e6a":[6,0,0,3,34,5],
@@ -244,10 +249,5 @@ var NAVTREEINDEX40 =
 "classBalloonParty_1_1Display_1_1EffectsClearingStamper.html#a3edc11455211fd76e6e73046fc6be2cf":[5,0,0,4,7,10],
 "classBalloonParty_1_1Display_1_1EffectsClearingStamper.html#a3edc11455211fd76e6e73046fc6be2cf":[6,0,0,4,7,10],
 "classBalloonParty_1_1Display_1_1EffectsClearingStamper.html#a75976838a8f6db4459bb58ba29700682":[5,0,0,4,7,15],
-"classBalloonParty_1_1Display_1_1EffectsClearingStamper.html#a75976838a8f6db4459bb58ba29700682":[6,0,0,4,7,15],
-"classBalloonParty_1_1Display_1_1EffectsClearingStamper.html#a832f69547d85768c11ee10c7c7f9be52":[5,0,0,4,7,11],
-"classBalloonParty_1_1Display_1_1EffectsClearingStamper.html#a832f69547d85768c11ee10c7c7f9be52":[6,0,0,4,7,11],
-"classBalloonParty_1_1Display_1_1EffectsClearingStamper.html#aa188abf23df26738ecd9ab32dc09247f":[5,0,0,4,7,12],
-"classBalloonParty_1_1Display_1_1EffectsClearingStamper.html#aa188abf23df26738ecd9ab32dc09247f":[6,0,0,4,7,12],
-"classBalloonParty_1_1Display_1_1EffectsClearingStamper.html#aa572c6f67de00cd1cfd323fc859057ed":[5,0,0,4,7,6]
+"classBalloonParty_1_1Display_1_1EffectsClearingStamper.html#a75976838a8f6db4459bb58ba29700682":[6,0,0,4,7,15]
 };

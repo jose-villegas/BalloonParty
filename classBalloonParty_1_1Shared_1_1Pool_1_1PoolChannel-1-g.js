@@ -1,6 +1,7 @@
 var classBalloonParty_1_1Shared_1_1Pool_1_1PoolChannel_1_g =
 [
     [ "Create", "classBalloonParty_1_1Shared_1_1Pool_1_1PoolChannel-1-g.html#a62f89905128f49f8750d8a2b3b9e4a0c", null ],
+    [ "CreateTracked", "classBalloonParty_1_1Shared_1_1Pool_1_1PoolChannel-1-g.html#a1cd92be952ef964093f0413d5693ea2c", null ],
     [ "Get", "classBalloonParty_1_1Shared_1_1Pool_1_1PoolChannel-1-g.html#af2ee54eeffec4ef6bddd48ca10987219", null ],
     [ "Peek", "classBalloonParty_1_1Shared_1_1Pool_1_1PoolChannel-1-g.html#af9947fb47bbcf9ff54006a64d90c2131", null ],
     [ "Prewarm", "classBalloonParty_1_1Shared_1_1Pool_1_1PoolChannel-1-g.html#a58d0c89df7c80fd06469fe2e61c112cc", null ],
