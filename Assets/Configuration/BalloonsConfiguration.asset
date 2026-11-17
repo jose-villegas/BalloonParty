@@ -314,7 +314,7 @@ MonoBehaviour:
     _horizontalWeight: 1
     _diagonalWeight: 1
     _itemCoverWeight: 2
-    _snakeWeight: 1
+    _snakeWeight: 0.5
     _snakeWeightPerExtraUnbreakable: 0.5
   _rewardBalloons:
     _goldenAtCompletion: 0.5

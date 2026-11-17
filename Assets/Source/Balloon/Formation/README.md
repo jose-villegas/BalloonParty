@@ -255,7 +255,7 @@ The settings are `IUnbreakableFormationSettings`, nested in `BalloonsConfigurati
 - `ToughSnakeStepSeconds` (1.5: seconds of play between the tough snake's steps, its own clock apart from the beat)
 - `SpotChoices` (3)
 - `ReinforcementChance` (0.35, eased in need by `Game/Assist/ThreatEase`) and `ReinforcementCeiling` (4)
-- the shape weights: horizontal 1, each diagonal 1, item cover 2, snake 1
+- the shape weights: horizontal 1, each diagonal 1, item cover 2, snake 0.5 (so a snake is the rarer pick)
 - `SnakeWeightPerExtraUnbreakable` (0.5: the snake's weight 1.5x with one unbreakable past `MinMembers`, 2x
   with two)
 
