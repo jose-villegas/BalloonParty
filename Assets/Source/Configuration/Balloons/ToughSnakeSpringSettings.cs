@@ -38,6 +38,16 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("How much of the knots' colour the line takes; the rest is black, so it reads as a darker string.")]
         [SerializeField] [Range(0f, 1f)] private float _knotTint = 0.6f;
 
+        [Header("Reveal")]
+        [Tooltip("Seconds one spring takes to grow from the knot ahead and tie on behind. A snake's springs reveal " +
+                 "head to tail, each once the one ahead has tied on.")]
+        [SerializeField] [Min(0.01f)] private float _revealSeconds = 0.25f;
+
+        [Tooltip("World distance between two knots inside which a spring not yet tied starts to show: none past " +
+                 "it, growing and reaching for the one behind as it closes in, tied on once it arrives. Keeps a " +
+                 "tough flying in to the tail from showing a spring stretched across the board.")]
+        [SerializeField] [Min(0.1f)] private float _attachDistance = 2.5f;
+
         public bool Enabled => _enabled;
         public int Segments => Mathf.Max(2, _segments);
         public float Slack => _slack;
@@ -48,5 +58,7 @@ namespace BalloonParty.Configuration.Balloons
         public float StepsPerSecond => Mathf.Max(15f, _stepsPerSecond);
         public float Width => _width;
         public float KnotTint => _knotTint;
+        public float RevealSeconds => Mathf.Max(0.01f, _revealSeconds);
+        public float AttachDistance => Mathf.Max(0.1f, _attachDistance);
     }
 }

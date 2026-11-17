@@ -62,11 +62,37 @@ namespace BalloonParty.Tests.Shared
             Assert.AreEqual(Vector3.zero, chain.Point(0));
         }
 
-        private static void Settle(SpringChain chain, Vector3 from, Vector3 to, float rest)
+        [Test]
+        public void HalfGrown_ItsLooseEnd_ReachesTowardTheFarEnd_WithoutTyingOn()
+        {
+            var far = new Vector3(3f, 0f, 0f);
+            var chain = new SpringChain(8);
+            chain.Place(Vector3.zero, Vector3.zero);
+
+            Settle(chain, Vector3.zero, far, 1f, 0.5f);
+
+            Assert.That(chain.Point(0), Is.EqualTo(Vector3.zero));
+            Assert.That(chain.Point(8).x, Is.GreaterThan(0.3f), "it reaches toward the far end");
+            Assert.That(Vector3.Distance(chain.Point(8), far), Is.GreaterThan(1f), "but doesn't tie on");
+        }
+
+        [Test]
+        public void FullyGrown_ItTiesOn_AtTheFarEnd()
+        {
+            var chain = new SpringChain(8);
+            chain.Place(Vector3.zero, Vector3.zero);
+            Settle(chain, Vector3.zero, Vector3.right, 1.2f, 0.5f);
+
+            Settle(chain, Vector3.zero, Vector3.right, 1.2f);
+
+            Assert.That(Vector3.Distance(chain.Point(8), Vector3.right), Is.LessThan(1e-4f));
+        }
+
+        private static void Settle(SpringChain chain, Vector3 from, Vector3 to, float rest, float reach = 1f)
         {
             for (var i = 0; i < 300; i++)
             {
-                chain.Step(from, to, rest, 1f / 60f, Tuning);
+                chain.Step(from, to, rest, 1f / 60f, Tuning, reach);
             }
         }
 

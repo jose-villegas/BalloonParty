@@ -31,6 +31,12 @@ namespace BalloonParty.Shared.Math
     {
         private const int MaxStepsPerFrame = 8;
 
+        // A chain just starting to grow is this share of its length, so its springs never fold to nothing.
+        private const float MinGrowth = 0.05f;
+
+        // Share of the way to its target a loose end moves each step at full reach.
+        private const float ReachPull = 0.2f;
+
         private readonly Vector3[] _position;
         private readonly Vector3[] _previous;
 
@@ -69,9 +75,14 @@ namespace BalloonParty.Shared.Math
         ///     Moves the ends to <paramref name="from" /> and <paramref name="to" /> over the frame's fixed steps (the
         ///     ends glide there step by step, so a quick move swings the chain rather than snapping it) and lets the
         ///     rest follow, every spring held toward <paramref name="restLength" /> over the whole chain.
+        ///     <paramref name="reach" /> below 1 leaves the far end loose: the chain is that share of its length, grown
+        ///     out of <paramref name="from" />, and its loose end reaches toward <paramref name="to" />, harder the
+        ///     further it has grown. At 1 the far end is tied on at <paramref name="to" />.
         /// </summary>
-        internal void Step(Vector3 from, Vector3 to, float restLength, float deltaTime, in SpringChainTuning tuning)
+        internal void Step(Vector3 from, Vector3 to, float restLength, float deltaTime, in SpringChainTuning tuning,
+            float reach = 1f)
         {
+            var tied = reach >= 1f;
             _carry += deltaTime;
             var steps = Mathf.FloorToInt(_carry / tuning.StepSeconds);
             if (steps <= 0)
@@ -83,13 +94,15 @@ namespace BalloonParty.Shared.Math
             steps = Mathf.Min(steps, MaxStepsPerFrame);
             var startFrom = _from;
             var startTo = _to;
-            var segmentRest = restLength / (_position.Length - 1);
-            var fall = Vector3.down * (tuning.Gravity * tuning.StepSeconds * tuning.StepSeconds);
             var last = _position.Length - 1;
+            var segmentRest = restLength * (tied ? 1f : Mathf.Max(MinGrowth, reach)) / last;
+            var fall = Vector3.down * (tuning.Gravity * tuning.StepSeconds * tuning.StepSeconds);
+            var pull = tied ? 0f : Mathf.Clamp01(reach) * Mathf.Clamp01(reach) * ReachPull;
+            var free = tied ? last : last + 1;
             for (var step = 1; step <= steps; step++)
             {
                 var t = step / (float)steps;
-                for (var i = 1; i < last; i++)
+                for (var i = 1; i < free; i++)
                 {
                     var carried = (_position[i] - _previous[i]) * (1f - tuning.Damping);
                     _previous[i] = _position[i];
@@ -97,19 +110,29 @@ namespace BalloonParty.Shared.Math
                 }
 
                 _position[0] = _previous[0] = Vector3.Lerp(startFrom, from, t);
-                _position[last] = _previous[last] = Vector3.Lerp(startTo, to, t);
+                if (tied)
+                {
+                    _position[last] = _previous[last] = Vector3.Lerp(startTo, to, t);
+                }
+                else
+                {
+                    _position[last] += (to - _position[last]) * pull;
+                }
+
                 for (var pass = 0; pass < tuning.Iterations; pass++)
                 {
-                    SolveSprings(segmentRest, tuning.Stiffness);
+                    SolveSprings(segmentRest, tuning.Stiffness, tied);
                 }
             }
 
             _from = from;
-            _to = to;
+            // A loose end ties on from where it has reached, gliding the rest of the way.
+            _to = tied ? to : _position[last];
         }
 
-        // The ends are pinned: a spring with one pinned end moves only its other point, the whole correction.
-        private void SolveSprings(float rest, float stiffness)
+        // The near end is pinned, and the far end while tied: a spring with one pinned end moves only its other
+        // point, the whole correction.
+        private void SolveSprings(float rest, float stiffness, bool tied)
         {
             var last = _position.Length - 1;
             for (var i = 0; i < last; i++)
@@ -122,7 +145,7 @@ namespace BalloonParty.Shared.Math
                 }
 
                 var giveA = i == 0 ? 0f : 1f;
-                var giveB = i + 1 == last ? 0f : 1f;
+                var giveB = i + 1 == last && tied ? 0f : 1f;
                 var give = giveA + giveB;
                 if (give <= 0f)
                 {

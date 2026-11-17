@@ -178,7 +178,11 @@ cheat flips it in play), a spring joins each pair of neighbours in the snake, ti
 way the launch screen's spring line is simulated (`Shared/Math/SpringChain`): a little longer than the gap
 between neighbouring slots, so it sags while the pair stands side by side, stretches as the one ahead steps
 away and swings as the one behind catches up. A spring lasts as long as the same pair stands next to each
-other; a pop or a joiner ties a new one.
+other; a pop or a joiner ties a new one. A spring shows only once both its balloons are on screen, and it
+reveals: it grows out of the knot ahead and reaches for the one behind until it ties on (`Reveal Seconds`), then
+stays tied. A snake's springs reveal head to tail, each once the one ahead has tied on. A tough flying in to
+the tail shows no spring while it is further than `Attach Distance` from the tail, then the spring grows and
+reaches for it as it closes in, and ties on as it arrives.
 
 ## Reinforcements
 

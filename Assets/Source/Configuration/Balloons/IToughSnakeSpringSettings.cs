@@ -33,5 +33,17 @@ namespace BalloonParty.Configuration.Balloons
 
         /// <summary>How much of the knots' colour the line takes; the rest is <see cref="UnityEngine.Color.black" />.</summary>
         float KnotTint { get; }
+
+        /// <summary>
+        ///     Seconds one spring takes to grow from the knot ahead and tie on behind; a snake's springs reveal head
+        ///     to tail, each once the one ahead has tied on.
+        /// </summary>
+        float RevealSeconds { get; }
+
+        /// <summary>
+        ///     World distance between two knots inside which a spring not yet tied starts to show, growing and
+        ///     reaching as the one behind closes in, tied on when it arrives.
+        /// </summary>
+        float AttachDistance { get; }
     }
 }
