@@ -88,8 +88,10 @@ Toughs never join an unbreakable formation, and unbreakables never join theirs.
   (`Balloon/Spawner/README.md`), so they rise together as the snake's body. The toughs form up the moment
   `MinMembers` of them are on the board, without waiting for them to land: a tough still gliding in counts
   at the slot it is heading for. So the run is the snake while it rises, anchored, and the balancer, which
-  leaves a formation's members be, never pulls it apart. The tough in the deepest row starts it, where it
-  stands, the farther west on a tie: the west end of the run. Hits left play no part. The head is never one
+  leaves a formation's members be, never pulls it apart. It starts from the biggest group of touching
+  toughs, so it starts where most of its body already is and not in a pocket the rest can't reach: that
+  group's tough in the deepest row starts it, where it stands, the farther west on a tie, the west end of
+  the run. Hits left play no part. The head is never one
   in the bottom `HorizontalBottomClearance` rows, which a snake never walks. It heads away from a free
   tough beside it, so toughs that rise side by side are its body as they stand; with none beside it, it
   heads toward the nearer edge, so its body has room behind it. Every other tough then lines up behind it
@@ -104,7 +106,9 @@ Toughs never join an unbreakable formation, and unbreakables never join theirs.
   the same way, gliding straight to its place. Where nothing on from the tail can take it (toughs,
   unbreakables, anchored actors and anything static block the line) but the head has room, it falls in at
   the head instead: the snake turns round, as it does in a dead end, and the old head's end is its tail.
-  Where neither end can take it, it waits until something on the board changes and tries again.
+  Where neither end can take it, it waits until something on the board changes and tries again, unless
+  more toughs are free than the snake holds (a snake boxed in a pocket among bushes): then it starts over
+  from the biggest group.
 - **Closing up.** When a member pops, the members behind it close up at once, each into the slot of the
   one ahead, so the body stays one line between steps (a balloon in the first one's way goes round to the
   slot the tail leaves). One with nowhere to go waits for the next step, whose trail closes the gap.

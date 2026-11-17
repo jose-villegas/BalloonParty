@@ -57,6 +57,7 @@ namespace BalloonParty.Balloon.Formation
         private readonly List<Vector2Int> _trail = new();
         private readonly List<Vector2Int> _line = new();
         private readonly List<Vector2Int> _headLine = new();
+        private readonly List<Vector2Int> _groupFill = new();
         private readonly List<Vector2Int> _leftSlots = new();
         private readonly List<IWriteableFormationMember> _freeToughs = new();
         private readonly List<IWriteableFormationMember> _gathered = new();
@@ -71,6 +72,8 @@ namespace BalloonParty.Balloon.Formation
 
         // Set when free toughs had nowhere to fall in; cleared by the next change on the board.
         private bool _gatherBlocked;
+        // Per slot (row * Columns + col), the size of the group of touching toughs it belongs to; 0 for none.
+        private int[] _toughGroups;
 
         // Counts wave-start arrangements, so a step in the same balance can skip the formations arranged in it.
         private int _arrangePass;
@@ -450,7 +453,8 @@ namespace BalloonParty.Balloon.Formation
         // initial fill's run is the snake as it rises and the balancer, which leaves a formation's members be, never
         // pulls it apart: with no snake and MinMembers toughs on the board, the deepest within the rows a snake
         // walks starts it where it stands, and every free tough falls in behind the tail at once.
-        private void GatherToughs(Action<IReadOnlyList<SlotMove>> relocate)
+        // reformed: the snake was just started over from the bigger group, so it isn't started over again.
+        private void GatherToughs(Action<IReadOnlyList<SlotMove>> relocate, bool reformed = false)
         {
             var snake = ToughSnake() ?? StartToughSnake();
             if (snake == null)
@@ -479,6 +483,20 @@ namespace BalloonParty.Balloon.Formation
 
             var members = snake.MemberList;
             ExtendLine(snake);
+
+            // Boxed in at both ends with more toughs free than it holds (a snake started in a pocket among bushes),
+            // it starts over from a bigger group of free toughs, which the rest can reach. Only when one leads now,
+            // so a snake no better start would help isn't broken up again at every change on the board.
+            if (_line.Count < _freeToughs.Count && _freeToughs.Count > members.Count && !reformed
+                && FindToughHead() is { } better && !_formationOf.ContainsKey(better))
+            {
+                Release(snake);
+                _formations.Remove(snake);
+                RebuildMemberList();
+                GatherToughs(relocate, reformed: true);
+                return;
+            }
+
             var tail = members[^1].SlotIndex.Value;
             _gatherBlocked |= _line.Count < _freeToughs.Count;
             if (_line.Count == 0)
@@ -722,31 +740,109 @@ namespace BalloonParty.Balloon.Formation
             return east ? 0 : 3;
         }
 
-        // The tough to start a snake, or null: the deepest within the rows a snake walks, landed or still gliding
-        // in, once MinMembers toughs are on the board.
+        // The tough to start a snake, or null: one in the biggest group of touching toughs, the deepest of it, within
+        // the rows a snake walks, landed or still gliding in, once MinMembers toughs are on the board.
         private IWriteableFormationMember FindToughHead()
         {
+            if (CountToughs() < _settings.MinMembers)
+            {
+                return null;
+            }
+
+            MeasureToughGroups();
             var lastRow = LastSnakeRow();
             IWriteableFormationMember head = null;
-            var toughs = 0;
+            var headGroup = 0;
             for (var col = 0; col < _grid.Columns; col++)
             {
-                for (var row = 0; row < _grid.Rows; row++)
+                for (var row = 0; row <= lastRow && row < _grid.Rows; row++)
                 {
                     if (_grid.IsEmpty(col, row) || _grid.At(new Vector2Int(col, row)) is not IArmouredFormationMember tough)
                     {
                         continue;
                     }
 
-                    toughs++;
-                    if (row <= lastRow && (head == null || LeadsBetter(tough, head)))
+                    // The biggest group of touching toughs leads, so the snake starts where most of its body already
+                    // is, not in a pocket the rest can't reach.
+                    var group = _toughGroups[row * _grid.Columns + col];
+                    if (head == null || group > headGroup || (group == headGroup && LeadsBetter(tough, head)))
                     {
                         head = tough;
+                        headGroup = group;
                     }
                 }
             }
 
-            return toughs >= _settings.MinMembers ? head : null;
+            return head;
+        }
+
+        private int CountToughs()
+        {
+            var toughs = 0;
+            for (var col = 0; col < _grid.Columns; col++)
+            {
+                for (var row = 0; row < _grid.Rows; row++)
+                {
+                    if (IsToughAt(new Vector2Int(col, row)))
+                    {
+                        toughs++;
+                    }
+                }
+            }
+
+            return toughs;
+        }
+
+        // Fills _toughGroups: each tough's slot gets the size of the group of toughs touching it, one to the next.
+        private void MeasureToughGroups()
+        {
+            var slots = _grid.Columns * _grid.Rows;
+            if (_toughGroups == null || _toughGroups.Length != slots)
+            {
+                _toughGroups = new int[slots];
+            }
+
+            Array.Clear(_toughGroups, 0, slots);
+            for (var col = 0; col < _grid.Columns; col++)
+            {
+                for (var row = 0; row < _grid.Rows; row++)
+                {
+                    if (_toughGroups[row * _grid.Columns + col] == 0 && IsToughAt(new Vector2Int(col, row)))
+                    {
+                        FillToughGroup(new Vector2Int(col, row));
+                    }
+                }
+            }
+        }
+
+        // Collects the group from seed (marking each slot -1 as it's reached), then writes its size to every slot.
+        private void FillToughGroup(Vector2Int seed)
+        {
+            _groupFill.Clear();
+            _groupFill.Add(seed);
+            _toughGroups[seed.y * _grid.Columns + seed.x] = -1;
+            for (var i = 0; i < _groupFill.Count; i++)
+            {
+                for (var direction = 0; direction < HexCoordinates.Directions; direction++)
+                {
+                    var next = HexCoordinates.Step(_groupFill[i], direction);
+                    if (_grid.InBounds(next) && _toughGroups[next.y * _grid.Columns + next.x] == 0 && IsToughAt(next))
+                    {
+                        _toughGroups[next.y * _grid.Columns + next.x] = -1;
+                        _groupFill.Add(next);
+                    }
+                }
+            }
+
+            for (var i = 0; i < _groupFill.Count; i++)
+            {
+                _toughGroups[_groupFill[i].y * _grid.Columns + _groupFill[i].x] = _groupFill.Count;
+            }
+        }
+
+        private bool IsToughAt(Vector2Int slot)
+        {
+            return !_grid.IsEmpty(slot.x, slot.y) && _grid.At(slot) is IArmouredFormationMember;
         }
 
         private bool HasFreeTough()
