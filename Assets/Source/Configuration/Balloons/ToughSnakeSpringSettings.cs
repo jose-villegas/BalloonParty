@@ -15,16 +15,16 @@ namespace BalloonParty.Configuration.Balloons
 
         [Tooltip("A link's rest length, as a share of the distance between neighbouring slots: above 1 it sags " +
                  "while the two stand side by side.")]
-        [SerializeField] [Range(0.5f, 2f)] private float _slack = 1.15f;
+        [SerializeField] [Range(0.5f, 2f)] private float _slack = 1.45f;
 
         [Tooltip("How hard each spring holds its length, per solver pass: 1 rigid, lower stretches and bounces.")]
-        [SerializeField] [Range(0.05f, 1f)] private float _stiffness = 0.6f;
+        [SerializeField] [Range(0.05f, 1f)] private float _stiffness = 0.45f;
 
         [Tooltip("Solver passes a step: more holds the length tighter.")]
         [SerializeField] [Range(1, 16)] private int _iterations = 4;
 
         [Tooltip("World units a second squared the links sag under.")]
-        [SerializeField] [Min(0f)] private float _gravity = 8f;
+        [SerializeField] [Min(0f)] private float _gravity = 12f;
 
         [Tooltip("Share of its speed a point loses each step: higher settles a swing sooner.")]
         [SerializeField] [Range(0f, 1f)] private float _damping = 0.03f;
@@ -33,7 +33,7 @@ namespace BalloonParty.Configuration.Balloons
         [SerializeField] [Min(15f)] private float _stepsPerSecond = 120f;
 
         [Tooltip("The line's thickness, in world units.")]
-        [SerializeField] [Min(0.001f)] private float _width = 0.04f;
+        [SerializeField] [Min(0.001f)] private float _width = 0.035f;
 
         [Tooltip("How much of the knots' colour the line takes; the rest is black, so it reads as a darker string.")]
         [SerializeField] [Range(0f, 1f)] private float _knotTint = 0.6f;
