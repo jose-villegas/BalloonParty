@@ -28,6 +28,7 @@ namespace BalloonParty.Display
         private static readonly int StampsId = Shader.PropertyToID("_Stamps");
         private static readonly int StampCountId = Shader.PropertyToID("_StampCount");
         private static readonly int RadiiId = Shader.PropertyToID("_Radii");
+        private static readonly int FadesId = Shader.PropertyToID("_Fades");
         private static readonly int ReprojectId = Shader.PropertyToID("_Reproject");
         private static readonly int RadiusScaleId = Shader.PropertyToID("_RadiusScale");
         private static readonly Vector4 NoReprojection = new(1f, 1f, 0f, 0f);
@@ -35,8 +36,7 @@ namespace BalloonParty.Display
 
         [Inject] private IEffectsClearingSettings _settings;
 
-        private readonly Vector4[] _stamps = new Vector4[EffectsClearingStamper.MaxStamps];
-        private readonly float[] _radii = new float[EffectsClearingStamper.MaxStamps];
+        private readonly EffectsClearingStamps _stamps = new();
 
         private Camera _camera;
         private Material _material;
@@ -69,13 +69,14 @@ namespace BalloonParty.Display
             }
 
             var view = new ClearingView(_camera.transform.position, _camera.orthographicSize, _camera.aspect);
-            var count = _source != null ? _source.FillStamps(view, _stamps, _radii) : 0;
             // Game time while a ball flies, so slow-mo stretches its clearing and a pause holds it. Real time once
-            // nothing stamps: a freeze that starts after the shot (the level-up) must not hold the hole open.
-            var deltaTime = count > 0 && !_settings.UseUnscaledTime ? Time.deltaTime : Time.unscaledDeltaTime;
+            // none does: a freeze that starts after the shot (the level-up) must not hold the hole open.
+            var flying = _source != null && _source.AnyInFlight;
+            var deltaTime = flying && !_settings.UseUnscaledTime ? Time.deltaTime : Time.unscaledDeltaTime;
+            var count = _source != null ? _source.FillStamps(view, deltaTime, _stamps) : 0;
 
-            // Without a trail the mask is wiped each frame, so it holds only this frame's domes and closes the moment
-            // no ball is left.
+            // Without a trail the mask is wiped each frame, so it holds only this frame's domes (a gone ball's fading
+            // one among them) and closes the moment none is left.
             var trail = _settings.Trail;
             if (count > 0)
             {
@@ -109,9 +110,10 @@ namespace BalloonParty.Display
             _lastView = view;
             _hasLastView = true;
             _material.SetFloat(DecayId, trail ? deltaTime / _settings.LingerSeconds : 1f);
-            _material.SetVectorArray(StampsId, _stamps);
+            _material.SetVectorArray(StampsId, _stamps.Capsules);
             _material.SetFloat(StampCountId, count);
-            _material.SetFloatArray(RadiiId, _radii);
+            _material.SetFloatArray(RadiiId, _stamps.Radii);
+            _material.SetFloatArray(FadesId, _stamps.Fades);
             _material.SetFloat(AspectId, _camera.aspect);
 
             // Outside the render loop on purpose: URP's RenderGraph rejects a mid-render Graphics.Blit.

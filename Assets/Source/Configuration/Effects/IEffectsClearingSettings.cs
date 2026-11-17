@@ -25,7 +25,8 @@ namespace BalloonParty.Configuration.Effects
         /// where the ball is.</summary>
         bool Trail { get; }
 
-        /// <summary>Seconds a stamp takes to decay from full to nothing.</summary>
+        /// <summary>Seconds a stamp takes to decay from full to nothing: with a trail, the corridor behind a ball;
+        /// without one, the dome of a ball gone from flight, shrinking inward where it was last seen.</summary>
         float LingerSeconds { get; }
 
         /// <summary>Mask value where effects start to fade.</summary>

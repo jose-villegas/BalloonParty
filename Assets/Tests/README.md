@@ -712,7 +712,7 @@ Tests per-id and global concurrent-voice accounting and the priority steal/drop 
 | `Release` on an invalid id is a no-op | 1 | Negative/out-of-range id corrupts state |
 | `Clear` restores full capacity | 1 | Stale slots block every id after a reset |
 
-### Effects clearing (`EffectsClearingStamperTests`, `EffectsClearingControllerTests`, `EffectsClearingSettingsTests`, `ShippedEffectsClearingTests`) — 37 tests
+### Effects clearing (`EffectsClearingStamperTests`, `EffectsClearingControllerTests`, `EffectsClearingSettingsTests`, `ShippedEffectsClearingTests`) — 42 tests
 
 The clearing mask's stamps (`Plans/PLAN-EffectsLayerClearing.md`): what each ball in flight stamps, and the wiring that keeps it fed.
 
@@ -722,6 +722,7 @@ The clearing mask's stamps (`Plans/PLAN-EffectsLayerClearing.md`): what each bal
 | `ClearingView` reprojection: identity when still, a world point kept in place through a pan, a zoom, both | 4 | The level-up rig's zoom leaves the clearing where the ball was on screen |
 | Stamps: none, first sighting a disc, then a capsule from last frame, a disc again after a gap or a retire, balls tracked apart | 6 | A corridor drawn across the screen from a stale position |
 | Trail off: a disc where the ball is, no corridor back to last frame's spot | 1 | The no-trail comparison still drawing the trail |
+| A ball in flight is a full dome; trail off, a ball gone from flight (its glide over, or retired) shrinks away where it was last seen over the linger time, keeping its radius, while another flies on; trail on, it leaves no stamp | 5 | A dying ball's lens vanishing at once, or one that never closes |
 | More balls than the shader's 8 stamps keep the most central | 1 | The cap drops the ball the player is watching |
 | Radius by shields: grows evenly from one shield to ten, none clears as one, past ten capped at the max, two balls each their own | 6 | A ball on its last leg stamping nothing, or a stacked ball clearing the whole board |
 | Controller binds the mask for the run, unbinds only itself, forgets retired balls, stops listening when disposed | 6 | A new run's source dropped by the old run's teardown, or a disposed run still feeding the mask |

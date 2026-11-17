@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace BalloonParty.Display
 {
     /// <summary>
@@ -8,8 +6,11 @@ namespace BalloonParty.Display
     /// </summary>
     internal interface IEffectsClearingSource
     {
-        /// <summary>Writes this frame's stamps (capsules in mask UV) and their radii (in view heights) and returns
-        /// how many.</summary>
-        int FillStamps(in ClearingView view, Vector4[] stamps, float[] radii);
+        /// <summary>Whether any ball is in flight, which puts the clearing's clock on game time.</summary>
+        bool AnyInFlight { get; }
+
+        /// <summary>Writes this frame's stamps into <paramref name="stamps" /> and returns how many;
+        /// <paramref name="deltaTime" /> moves the fading ones on.</summary>
+        int FillStamps(in ClearingView view, float deltaTime, EffectsClearingStamps stamps);
     }
 }

@@ -26,7 +26,8 @@ namespace BalloonParty.Configuration.Effects
                  "only a dome where the ball is.")]
         [SerializeField] private bool _trail;
 
-        [Tooltip("Seconds a stamp takes to decay from full to nothing. The cleared area shrinks inward over it.")]
+        [Tooltip("Seconds a stamp takes to decay from full to nothing, the cleared area shrinking inward over it: " +
+                 "with a trail, the corridor behind a ball; without, the dome of a ball gone from flight.")]
         [Min(0.05f)]
         [SerializeField] private float _lingerSeconds = 0.6f;
 

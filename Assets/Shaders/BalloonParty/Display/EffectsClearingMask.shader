@@ -7,7 +7,9 @@ Shader "Hidden/BalloonParty/Display/EffectsClearingMask"
     // glass needs to know how big the dome under each point is. Each ball's radius follows its shields.
     // Last frame's mask is read through the camera's move and zoom since (_Reproject), so a stamp stays on the
     // world when the camera moves (the level-up cinematic zooms in on the ball), and its radius in view heights
-    // grows with the zoom (_RadiusScale).
+    // grows with the zoom (_RadiusScale). A stamp's fade (_Fades, 0 to 1) takes that much off its dome, as the
+    // decay would have by then: a ball gone from flight shrinks inward to nothing even when the mask is wiped
+    // each frame (no trail).
     Properties
     {
         _MainTex ("Previous Mask", 2D) = "black" {}
@@ -32,6 +34,7 @@ Shader "Hidden/BalloonParty/Display/EffectsClearingMask"
             float  _Decay;
             float4 _Stamps[MAX_STAMPS];
             float  _Radii[MAX_STAMPS];
+            float  _Fades[MAX_STAMPS];
             float  _StampCount;
             float  _Aspect;
             float4 _Reproject;
@@ -55,7 +58,7 @@ Shader "Hidden/BalloonParty/Display/EffectsClearingMask"
                     float2 ab = _Stamps[s].zw * scale - a;
                     float t = saturate(dot(p - a, ab) / max(dot(ab, ab), 1e-8));
                     float d = length(p - a - ab * t) / max(_Radii[s], 1e-4);
-                    float stamp = s < _StampCount ? saturate(1.0 - d * d) : 0.0;
+                    float stamp = s < _StampCount ? saturate(1.0 - d * d - _Fades[s]) : 0.0;
                     if (stamp > mask)
                     {
                         mask = stamp;

@@ -42,9 +42,11 @@ namespace BalloonParty.Display
             }
         }
 
-        int IEffectsClearingSource.FillStamps(in ClearingView view, Vector4[] stamps, float[] radii)
+        bool IEffectsClearingSource.AnyInFlight => _registry.InFlightCount > 0;
+
+        int IEffectsClearingSource.FillStamps(in ClearingView view, float deltaTime, EffectsClearingStamps stamps)
         {
-            return _stamper.Fill(_registry, view, stamps, radii);
+            return _stamper.Fill(_registry, view, deltaTime, stamps);
         }
     }
 }

@@ -100,17 +100,17 @@ namespace BalloonParty.Tests.Display
             ((IStartable)controller).Start();
             var source = (IEffectsClearingSource)controller;
             var ball = Substitute.For<IProjectileModel>();
-            var stamps = new Vector4[EffectsClearingStamper.MaxStamps];
+            var stamps = new EffectsClearingStamps();
             InFlight(ball, new Vector2(1f, 2f));
-            source.FillStamps(View, stamps, new float[stamps.Length]);
+            source.FillStamps(View, 0f, stamps);
 
             _retired.OnNext(ball);
             InFlight(ball, new Vector2(1f, 3f));
-            source.FillStamps(View, stamps, new float[stamps.Length]);
+            source.FillStamps(View, 0f, stamps);
 
             // A disc (start == end), not a capsule trailing from the retired ball's old spot.
-            Assert.AreEqual(stamps[0].x, stamps[0].z, 1e-5f);
-            Assert.AreEqual(stamps[0].y, stamps[0].w, 1e-5f);
+            Assert.AreEqual(stamps.Capsules[0].x, stamps.Capsules[0].z, 1e-5f);
+            Assert.AreEqual(stamps.Capsules[0].y, stamps.Capsules[0].w, 1e-5f);
         }
 
         [Test]
@@ -120,17 +120,17 @@ namespace BalloonParty.Tests.Display
             ((IStartable)controller).Start();
             var source = (IEffectsClearingSource)controller;
             var ball = Substitute.For<IProjectileModel>();
-            var stamps = new Vector4[EffectsClearingStamper.MaxStamps];
+            var stamps = new EffectsClearingStamps();
             InFlight(ball, new Vector2(1f, 2f));
-            source.FillStamps(View, stamps, new float[stamps.Length]);
+            source.FillStamps(View, 0f, stamps);
             ((IDisposable)controller).Dispose();
 
             _retired.OnNext(ball);
             InFlight(ball, new Vector2(1f, 3f));
-            source.FillStamps(View, stamps, new float[stamps.Length]);
+            source.FillStamps(View, 0f, stamps);
 
             // Still a capsule: the disposed controller no longer reacts to retirements.
-            Assert.Greater(Mathf.Abs(stamps[0].w - stamps[0].y), 1e-3f);
+            Assert.Greater(Mathf.Abs(stamps.Capsules[0].w - stamps.Capsules[0].y), 1e-3f);
         }
 
         private IEffectsClearingSource BoundSource()

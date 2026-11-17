@@ -16,6 +16,7 @@ namespace BalloonParty.Tests.Display
         private const float MinRadius = 0.48f;
         private const float MaxRadius = 1.2f;
         private const int ShieldsForMax = 10;
+        private const float LingerSeconds = 0.6f;
 
         // A 2:1 portrait view of 10 world units' height, centred on (1, 2).
         private static readonly ClearingView View = new(new Vector2(1f, 2f), 5f, 0.5f);
@@ -23,8 +24,7 @@ namespace BalloonParty.Tests.Display
         private IProjectileRegistry _registry;
         private IEffectsClearingSettings _settings;
         private EffectsClearingStamper _stamper;
-        private Vector4[] _stamps;
-        private float[] _radii;
+        private EffectsClearingStamps _stamps;
 
         [SetUp]
         public void SetUp()
@@ -36,8 +36,8 @@ namespace BalloonParty.Tests.Display
             _settings.ShieldsForMaxRadius.Returns(ShieldsForMax);
             _settings.Trail.Returns(true);
             _stamper = new EffectsClearingStamper(_settings);
-            _stamps = new Vector4[EffectsClearingStamper.MaxStamps];
-            _radii = new float[EffectsClearingStamper.MaxStamps];
+            _settings.LingerSeconds.Returns(LingerSeconds);
+            _stamps = new EffectsClearingStamps();
         }
 
         [Test]
@@ -91,7 +91,7 @@ namespace BalloonParty.Tests.Display
         {
             InFlight();
 
-            Assert.AreEqual(0, _stamper.Fill(_registry, View, _stamps, _radii));
+            Assert.AreEqual(0, _stamper.Fill(_registry, View, 0f, _stamps));
         }
 
         [Test]
@@ -100,8 +100,8 @@ namespace BalloonParty.Tests.Display
             var ball = Ball();
             InFlight((ball, new Vector2(1f, 2f)));
 
-            Assert.AreEqual(1, _stamper.Fill(_registry, View, _stamps, _radii));
-            AssertStamp(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), _stamps[0]);
+            Assert.AreEqual(1, _stamper.Fill(_registry, View, 0f, _stamps));
+            AssertStamp(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), _stamps.Capsules[0]);
         }
 
         [Test]
@@ -109,12 +109,12 @@ namespace BalloonParty.Tests.Display
         {
             var ball = Ball();
             InFlight((ball, new Vector2(1f, 2f)));
-            _stamper.Fill(_registry, View, _stamps, _radii);
+            _stamper.Fill(_registry, View, 0f, _stamps);
 
             InFlight((ball, new Vector2(1f, 3f)));
-            _stamper.Fill(_registry, View, _stamps, _radii);
+            _stamper.Fill(_registry, View, 0f, _stamps);
 
-            AssertStamp(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.6f), _stamps[0]);
+            AssertStamp(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.6f), _stamps.Capsules[0]);
         }
 
         [Test]
@@ -123,13 +123,13 @@ namespace BalloonParty.Tests.Display
             _settings.Trail.Returns(false);
             var ball = Ball();
             InFlight((ball, new Vector2(1f, 2f)));
-            _stamper.Fill(_registry, View, _stamps, _radii);
+            _stamper.Fill(_registry, View, 0f, _stamps);
 
             InFlight((ball, new Vector2(1f, 3f)));
-            _stamper.Fill(_registry, View, _stamps, _radii);
+            _stamper.Fill(_registry, View, 0f, _stamps);
 
             // No corridor back to last frame's spot: the mask, wiped each frame, holds only where the ball is.
-            AssertStamp(new Vector2(0.5f, 0.6f), new Vector2(0.5f, 0.6f), _stamps[0]);
+            AssertStamp(new Vector2(0.5f, 0.6f), new Vector2(0.5f, 0.6f), _stamps.Capsules[0]);
         }
 
         [Test]
@@ -137,15 +137,15 @@ namespace BalloonParty.Tests.Display
         {
             var ball = Ball();
             InFlight((ball, new Vector2(1f, 2f)));
-            _stamper.Fill(_registry, View, _stamps, _radii);
+            _stamper.Fill(_registry, View, 0f, _stamps);
             InFlight();
-            _stamper.Fill(_registry, View, _stamps, _radii);
+            _stamper.Fill(_registry, View, 0f, _stamps);
 
             // Back in flight elsewhere: no corridor across the gap.
             InFlight((ball, new Vector2(1f, 3f)));
-            _stamper.Fill(_registry, View, _stamps, _radii);
+            _stamper.Fill(_registry, View, 0f, _stamps);
 
-            AssertStamp(new Vector2(0.5f, 0.6f), new Vector2(0.5f, 0.6f), _stamps[0]);
+            AssertStamp(new Vector2(0.5f, 0.6f), new Vector2(0.5f, 0.6f), _stamps.Capsules[0]);
         }
 
         [Test]
@@ -153,13 +153,88 @@ namespace BalloonParty.Tests.Display
         {
             var ball = Ball();
             InFlight((ball, new Vector2(1f, 2f)));
-            _stamper.Fill(_registry, View, _stamps, _radii);
+            _stamper.Fill(_registry, View, 0f, _stamps);
 
             _stamper.Forget(ball);
             InFlight((ball, new Vector2(1f, 3f)));
-            _stamper.Fill(_registry, View, _stamps, _radii);
+            _stamper.Fill(_registry, View, 0f, _stamps);
 
-            AssertStamp(new Vector2(0.5f, 0.6f), new Vector2(0.5f, 0.6f), _stamps[0]);
+            AssertStamp(new Vector2(0.5f, 0.6f), new Vector2(0.5f, 0.6f), _stamps.Capsules[0]);
+        }
+
+        [Test]
+        public void Fill_BallInFlight_IsNotFaded()
+        {
+            InFlight((Ball(), new Vector2(1f, 2f)));
+
+            _stamper.Fill(_registry, View, 0.1f, _stamps);
+
+            Assert.AreEqual(0f, _stamps.Fades[0], Tolerance);
+        }
+
+        [Test]
+        public void Fill_TrailOff_BallGoneFromFlight_ShrinksAwayWhereItWasLastSeen()
+        {
+            _settings.Trail.Returns(false);
+            InFlight((Ball(), new Vector2(1f, 3f)));
+            _stamper.Fill(_registry, View, 0f, _stamps);
+            InFlight();
+
+            // Its last glide over, it holds a full dome where it was this frame, so the shrink starts without a gap.
+            Assert.AreEqual(1, _stamper.Fill(_registry, View, 0.1f, _stamps));
+            AssertStamp(new Vector2(0.5f, 0.6f), new Vector2(0.5f, 0.6f), _stamps.Capsules[0]);
+            Assert.AreEqual(0f, _stamps.Fades[0], Tolerance);
+
+            Assert.AreEqual(1, _stamper.Fill(_registry, View, 0.3f, _stamps));
+            Assert.AreEqual(0.5f, _stamps.Fades[0], Tolerance);
+            AssertStamp(new Vector2(0.5f, 0.6f), new Vector2(0.5f, 0.6f), _stamps.Capsules[0]);
+
+            Assert.AreEqual(0, _stamper.Fill(_registry, View, 0.3f, _stamps));
+        }
+
+        [Test]
+        public void Forget_TrailOff_RetiredBallShrinksAway()
+        {
+            _settings.Trail.Returns(false);
+            var ball = Ball(10);
+            InFlight((ball, new Vector2(1f, 3f)));
+            _stamper.Fill(_registry, View, 0f, _stamps);
+
+            _stamper.Forget(ball);
+            InFlight();
+
+            Assert.AreEqual(1, _stamper.Fill(_registry, View, 0.15f, _stamps));
+            AssertStamp(new Vector2(0.5f, 0.6f), new Vector2(0.5f, 0.6f), _stamps.Capsules[0]);
+            Assert.AreEqual(0.25f, _stamps.Fades[0], Tolerance);
+            // It keeps the radius its shields gave it.
+            Assert.AreEqual(View.ToUvHeight(MaxRadius), _stamps.Radii[0], Tolerance);
+        }
+
+        [Test]
+        public void Fill_TrailOff_OneBallGone_TheOtherStillFlies()
+        {
+            _settings.Trail.Returns(false);
+            var gone = Ball();
+            var flying = Ball();
+            InFlight((gone, new Vector2(1f, 2f)), (flying, new Vector2(1f, 4f)));
+            _stamper.Fill(_registry, View, 0f, _stamps);
+
+            InFlight((flying, new Vector2(1f, 5f)));
+
+            Assert.AreEqual(2, _stamper.Fill(_registry, View, 0.1f, _stamps));
+        }
+
+        [Test]
+        public void Fill_TrailOn_BallGoneFromFlight_LeavesNoStamp()
+        {
+            var ball = Ball();
+            InFlight((ball, new Vector2(1f, 2f)));
+            _stamper.Fill(_registry, View, 0f, _stamps);
+            _stamper.Forget(ball);
+            InFlight();
+
+            // The mask's own decay shrinks the trail; a fading stamp on top would hold it open.
+            Assert.AreEqual(0, _stamper.Fill(_registry, View, 0.1f, _stamps));
         }
 
         [Test]
@@ -168,13 +243,13 @@ namespace BalloonParty.Tests.Display
             var first = Ball();
             var second = Ball();
             InFlight((first, new Vector2(1f, 2f)), (second, new Vector2(1f, 4f)));
-            _stamper.Fill(_registry, View, _stamps, _radii);
+            _stamper.Fill(_registry, View, 0f, _stamps);
 
             InFlight((first, new Vector2(1f, 3f)), (second, new Vector2(1f, 5f)));
 
-            Assert.AreEqual(2, _stamper.Fill(_registry, View, _stamps, _radii));
-            AssertStamp(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.6f), _stamps[0]);
-            AssertStamp(new Vector2(0.5f, 0.7f), new Vector2(0.5f, 0.8f), _stamps[1]);
+            Assert.AreEqual(2, _stamper.Fill(_registry, View, 0f, _stamps));
+            AssertStamp(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.6f), _stamps.Capsules[0]);
+            AssertStamp(new Vector2(0.5f, 0.7f), new Vector2(0.5f, 0.8f), _stamps.Capsules[1]);
         }
 
         [Test]
@@ -190,11 +265,11 @@ namespace BalloonParty.Tests.Display
 
             InFlight(balls);
 
-            Assert.AreEqual(EffectsClearingStamper.MaxStamps, _stamper.Fill(_registry, View, _stamps, _radii));
+            Assert.AreEqual(EffectsClearingStamper.MaxStamps, _stamper.Fill(_registry, View, 0f, _stamps));
             var furthestKept = View.ToUv(balls[EffectsClearingStamper.MaxStamps - 1].Item2).y;
             for (var i = 0; i < EffectsClearingStamper.MaxStamps; i++)
             {
-                Assert.LessOrEqual(_stamps[i].w, furthestKept + Tolerance);
+                Assert.LessOrEqual(_stamps.Capsules[i].w, furthestKept + Tolerance);
             }
         }
 
@@ -207,9 +282,9 @@ namespace BalloonParty.Tests.Display
         {
             InFlight((Ball(shields), new Vector2(1f, 2f)));
 
-            _stamper.Fill(_registry, View, _stamps, _radii);
+            _stamper.Fill(_registry, View, 0f, _stamps);
 
-            Assert.AreEqual(expected, _radii[0], Tolerance);
+            Assert.AreEqual(expected, _stamps.Radii[0], Tolerance);
         }
 
         [Test]
@@ -217,9 +292,9 @@ namespace BalloonParty.Tests.Display
         {
             InFlight((Ball(0), new Vector2(1f, 2f)));
 
-            _stamper.Fill(_registry, View, _stamps, _radii);
+            _stamper.Fill(_registry, View, 0f, _stamps);
 
-            Assert.AreEqual(View.ToUvHeight(MinRadius), _radii[0], Tolerance);
+            Assert.AreEqual(View.ToUvHeight(MinRadius), _stamps.Radii[0], Tolerance);
         }
 
         [Test]
@@ -227,9 +302,9 @@ namespace BalloonParty.Tests.Display
         {
             InFlight((Ball(25), new Vector2(1f, 2f)));
 
-            _stamper.Fill(_registry, View, _stamps, _radii);
+            _stamper.Fill(_registry, View, 0f, _stamps);
 
-            Assert.AreEqual(View.ToUvHeight(MaxRadius), _radii[0], Tolerance);
+            Assert.AreEqual(View.ToUvHeight(MaxRadius), _stamps.Radii[0], Tolerance);
         }
 
         [Test]
@@ -237,10 +312,10 @@ namespace BalloonParty.Tests.Display
         {
             InFlight((Ball(1), new Vector2(1f, 2f)), (Ball(2), new Vector2(1f, 4f)));
 
-            _stamper.Fill(_registry, View, _stamps, _radii);
+            _stamper.Fill(_registry, View, 0f, _stamps);
 
-            Assert.AreEqual(View.ToUvHeight(MinRadius), _radii[0], Tolerance);
-            Assert.AreEqual(View.ToUvHeight(MinRadius + (MaxRadius - MinRadius) / (ShieldsForMax - 1)), _radii[1],
+            Assert.AreEqual(View.ToUvHeight(MinRadius), _stamps.Radii[0], Tolerance);
+            Assert.AreEqual(View.ToUvHeight(MinRadius + (MaxRadius - MinRadius) / (ShieldsForMax - 1)), _stamps.Radii[1],
                 Tolerance);
         }
 

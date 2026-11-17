@@ -275,7 +275,10 @@ Each phase follows the per-phase review protocol: implement, review, curate, own
 - **No trail.** Compared side by side on the phone, the owner chose a dome that stays on the ball over a
   corridor that lingers behind it. `Trail` on the settings asset is off: the stamper stamps a disc where each
   ball is (no capsule back to last frame's spot) and the mask is wiped each frame, so it holds only the domes
-  where the balls are and closes the moment none is left. On, the trail and its decay clock below come back.
+  where the balls are. A ball gone from flight (retired, or its last glide over) keeps a disc where it was last
+  seen, faded a little more each frame (`_Fades` takes that much off its dome, as the decay would have), so its
+  lens shrinks inward to nothing over `LingerSeconds`, the owner having liked that from the trail. The mask
+  closes once none is left. On, the trail and its decay clock below come back.
 - **Camera moves.** The mask is in screen space, so when the level-up rig pans and zooms in on the ball,
   last frame's stamps would stay where they were on screen, a stale dome off the ball, and the cinematic's
   slow-mo barely decays them. Each blit reads last frame's mask through the camera's change since
