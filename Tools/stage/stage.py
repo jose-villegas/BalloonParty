@@ -203,6 +203,11 @@ class Stage:
                 time.sleep(POLL_SECONDS)
         return result
 
+    def level_up_ready(self):
+        """Readies a real level-up for the next shot: every balloon one colour, every other bar full, that one a point
+        short, the level-up let through. Fire the Fire Best Shot cheat after `release` to see the cinematic."""
+        return self.call("LevelUpReady")
+
     def clear_effects(self):
         return self.call("ClearEffects")
 
@@ -279,6 +284,7 @@ def main():
     freeze.add_argument("--shader-file", help="a .shader file, compiled on the spot (one not yet merged)")
     freeze.add_argument("--set", action="append", default=[], metavar="_NAME=VALUE",
                         help="a material float, e.g. _AmbientHue=0.25")
+    sub.add_parser("level-up-ready", help="the next pop completes the level, cinematic and all")
     ball = sub.add_parser("ball", help="put a ball in flight at a world point, held still")
     ball.add_argument("at", help="x,y")
     ball.add_argument("--from", dest="start", help="x,y: fly there from here first")
@@ -329,6 +335,8 @@ def main():
             stage.freeze_pop(args.target, args.seconds, args.hide, args.dx, args.dy, args.seed, args.texture,
                              args.start_frame, args.shader, args.shader_file,
                              dict(item.split("=", 1) for item in args.set))
+        elif args.command == "level-up-ready":
+            stage.level_up_ready()
         elif args.command == "ball":
             stage.ball(pair(args.at), pair(args.start) if args.start else None, args.seconds if args.start else 0.0,
                        args.shields)

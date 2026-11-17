@@ -17,6 +17,7 @@ using BalloonParty.Configuration.Palette;
 using BalloonParty.Game;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
+using BalloonParty.Game.Score;
 using BalloonParty.Projectile;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.GameState;
@@ -479,6 +480,37 @@ namespace BalloonParty.Editor.Staging
             Scratch.Clear();
             Balls.Clear();
             return $"removed {removed}";
+        }
+
+        /// <summary>
+        ///     Sets up a level-up for the next shot: turns every balloon on the board the level's first colour, fills
+        ///     every other colour's bar, leaves that one a point short, and lets the level-up through (<see cref="Begin" />
+        ///     blocks it). The next pop then completes the level, so the level-up cinematic plays out for real, zoom
+        ///     and all. Fire with the Fire Best Shot cheat and <see cref="Release" />.
+        /// </summary>
+        public static string LevelUpReady()
+        {
+            var colors = Resolve<IActiveLevelParameters>().Current.AllowedColors;
+            var lastColor = colors[0];
+            foreach (var view in Object.FindObjectsByType<BalloonView>())
+            {
+                if (view.Model is BalloonModel balloon)
+                {
+                    balloon.Color.Value = lastColor;
+                }
+            }
+
+            CheatState.BlockLevelUp = false;
+            var progress = Resolve<ILevelProgress>();
+            var required = Resolve<ILevelThresholds>().PointsRequiredForLevel(progress.Level.Value);
+            var palette = Resolve<IGamePalette>();
+            foreach (var color in colors)
+            {
+                ScoreCheatHelper.FillColor(palette.GetEntry(color), color == lastColor ? required - 1 : required,
+                    progress, Resolve<IHitDispatcher>(), Resolve<ColorStreakTracker>());
+            }
+
+            return $"level up on the next {lastColor} pop";
         }
 
         /// <summary>

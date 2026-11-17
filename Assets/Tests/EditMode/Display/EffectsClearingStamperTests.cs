@@ -21,6 +21,7 @@ namespace BalloonParty.Tests.Display
         private static readonly ClearingView View = new(new Vector2(1f, 2f), 5f, 0.5f);
 
         private IProjectileRegistry _registry;
+        private IEffectsClearingSettings _settings;
         private EffectsClearingStamper _stamper;
         private Vector4[] _stamps;
         private float[] _radii;
@@ -29,11 +30,12 @@ namespace BalloonParty.Tests.Display
         public void SetUp()
         {
             _registry = Substitute.For<IProjectileRegistry>();
-            var settings = Substitute.For<IEffectsClearingSettings>();
-            settings.MinClearRadius.Returns(MinRadius);
-            settings.MaxClearRadius.Returns(MaxRadius);
-            settings.ShieldsForMaxRadius.Returns(ShieldsForMax);
-            _stamper = new EffectsClearingStamper(settings);
+            _settings = Substitute.For<IEffectsClearingSettings>();
+            _settings.MinClearRadius.Returns(MinRadius);
+            _settings.MaxClearRadius.Returns(MaxRadius);
+            _settings.ShieldsForMaxRadius.Returns(ShieldsForMax);
+            _settings.Trail.Returns(true);
+            _stamper = new EffectsClearingStamper(_settings);
             _stamps = new Vector4[EffectsClearingStamper.MaxStamps];
             _radii = new float[EffectsClearingStamper.MaxStamps];
         }
@@ -58,6 +60,30 @@ namespace BalloonParty.Tests.Display
 
             var zoomedIn = new ClearingView(Vector2.zero, 2.5f, 0.5f);
             Assert.AreEqual(0.2f, zoomedIn.ToUvHeight(1f), Tolerance);
+        }
+
+        [Test]
+        public void ReprojectionFrom_SameView_IsIdentity()
+        {
+            Assert.AreEqual(new Vector4(1f, 1f, 0f, 0f), View.ReprojectionFrom(View));
+        }
+
+        // The level-up rig pans and zooms in on the ball: a world point must land where it was in last frame's
+        // mask, so a stamp stays on the world, not on the screen.
+        [TestCase(1f, 3f, 5f, Description = "pan")]
+        [TestCase(1f, 2f, 2.5f, Description = "zoom in")]
+        [TestCase(-0.5f, 4f, 3f, Description = "pan and zoom")]
+        public void ReprojectionFrom_CameraMoved_KeepsAWorldPointInPlace(float x, float y, float orthographicSize)
+        {
+            var now = new ClearingView(new Vector2(x, y), orthographicSize, View.Aspect);
+            var reprojection = now.ReprojectionFrom(View);
+
+            foreach (var world in new[] { new Vector2(1f, 2f), new Vector2(0.2f, 3.1f), new Vector2(2f, 0.5f) })
+            {
+                var uv = now.ToUv(world);
+                var carried = new Vector2(uv.x * reprojection.x + reprojection.z, uv.y * reprojection.y + reprojection.w);
+                AssertUv(View.ToUv(world), carried);
+            }
         }
 
         [Test]
@@ -89,6 +115,21 @@ namespace BalloonParty.Tests.Display
             _stamper.Fill(_registry, View, _stamps, _radii);
 
             AssertStamp(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.6f), _stamps[0]);
+        }
+
+        [Test]
+        public void Fill_TrailOff_StampsADiscWhereTheBallIs()
+        {
+            _settings.Trail.Returns(false);
+            var ball = Ball();
+            InFlight((ball, new Vector2(1f, 2f)));
+            _stamper.Fill(_registry, View, _stamps, _radii);
+
+            InFlight((ball, new Vector2(1f, 3f)));
+            _stamper.Fill(_registry, View, _stamps, _radii);
+
+            // No corridor back to last frame's spot: the mask, wiped each frame, holds only where the ball is.
+            AssertStamp(new Vector2(0.5f, 0.6f), new Vector2(0.5f, 0.6f), _stamps[0]);
         }
 
         [Test]

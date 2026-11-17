@@ -21,6 +21,10 @@ namespace BalloonParty.Configuration.Effects
         /// <summary>The shield count at which a clearing reaches <see cref="MaxClearRadius" />.</summary>
         int ShieldsForMaxRadius { get; }
 
+        /// <summary>Whether a clearing leaves a trail along the ball's path that lingers and closes, or is only a dome
+        /// where the ball is.</summary>
+        bool Trail { get; }
+
         /// <summary>Seconds a stamp takes to decay from full to nothing.</summary>
         float LingerSeconds { get; }
 

@@ -270,6 +270,14 @@ Each phase follows the per-phase review protocol: implement, review, curate, own
 - **The decay clock.** Game time while a ball flies (slow-mo stretches the clearing, a pause holds it),
   real time once none does. Otherwise a freeze that starts just after a shot, the level-up's, would hold
   the hole open through the cinematic. `UseUnscaledTime` puts the flight on real time too.
+- **No trail.** Compared side by side on the phone, the owner chose a dome that stays on the ball over a
+  corridor that lingers behind it. `Trail` on the settings asset is off: the stamper stamps a disc where each
+  ball is (no capsule back to last frame's spot) and the mask is wiped each frame, so it holds only the domes
+  where the balls are and closes the moment none is left. On, the trail and its decay clock below come back.
+- **Camera moves.** The mask is in screen space, so when the level-up rig pans and zooms in on the ball,
+  last frame's stamps would stay where they were on screen, a stale dome off the ball, and the cinematic's
+  slow-mo barely decays them. Each blit reads last frame's mask through the camera's change since
+  (`ClearingView.ReprojectionFrom`) and scales its radii by the zoom, so the stamps stay on the world.
 - **Update order.** The mask view runs after every `LateUpdate` that moves the camera
   (`[DefaultExecutionOrder]` 1000), and the compositor right after it, so the stamps frame the view this
   frame renders and the map turns on in the same frame as the first stamp.

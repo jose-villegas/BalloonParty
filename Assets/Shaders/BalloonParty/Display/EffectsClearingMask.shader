@@ -5,6 +5,9 @@ Shader "Hidden/BalloonParty/Display/EffectsClearingMask"
     // stamp is 1 - (d/r)^2, highest on the path, so a uniform decay shrinks the cleared area inward over time.
     // Red is that value; green is the radius of the stamp that set it (in view heights), which the composite's
     // glass needs to know how big the dome under each point is. Each ball's radius follows its shields.
+    // Last frame's mask is read through the camera's move and zoom since (_Reproject), so a stamp stays on the
+    // world when the camera moves (the level-up cinematic zooms in on the ball), and its radius in view heights
+    // grows with the zoom (_RadiusScale).
     Properties
     {
         _MainTex ("Previous Mask", 2D) = "black" {}
@@ -31,12 +34,15 @@ Shader "Hidden/BalloonParty/Display/EffectsClearingMask"
             float  _Radii[MAX_STAMPS];
             float  _StampCount;
             float  _Aspect;
+            float4 _Reproject;
+            float  _RadiusScale;
 
             float4 frag(v2f_img i) : SV_Target
             {
-                float2 previous = tex2D(_MainTex, i.uv).rg;
+                float2 from = i.uv * _Reproject.xy + _Reproject.zw;
+                float2 previous = all(from == saturate(from)) ? tex2D(_MainTex, from).rg : float2(0.0, 0.0);
                 float mask = previous.r - _Decay;
-                float radius = previous.g;
+                float radius = previous.g * _RadiusScale;
 
                 // Distances in units of the view's height, so a stamp is round on any aspect.
                 float2 scale = float2(_Aspect, 1.0);

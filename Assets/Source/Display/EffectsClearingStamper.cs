@@ -11,7 +11,8 @@ namespace BalloonParty.Display
     ///     Turns the balls in flight into the clearing mask's stamps: one capsule per ball, from where it was last
     ///     frame to where it is now, in mask UV (<c>xy</c> the start, <c>zw</c> the end). A capsule rather than a
     ///     disc so a fast ball leaves an unbroken corridor. A ball not stamped last frame (just fired, or back in
-    ///     flight after a gap) stamps a disc. Each stamp's radius grows with its ball's shields.
+    ///     flight after a gap) stamps a disc, and so does every ball while the clearing has no trail. Each stamp's
+    ///     radius grows with its ball's shields.
     /// </summary>
     internal sealed class EffectsClearingStamper
     {
@@ -37,6 +38,7 @@ namespace BalloonParty.Display
         {
             _frame++;
             _candidates.Clear();
+            var trail = _settings.Trail;
 
             for (var i = 0; i < registry.InFlightCount; i++)
             {
@@ -51,7 +53,7 @@ namespace BalloonParty.Display
                 }
                 else
                 {
-                    if (_tracks[index].Frame == _frame - 1)
+                    if (trail && _tracks[index].Frame == _frame - 1)
                     {
                         from = _tracks[index].Position;
                     }

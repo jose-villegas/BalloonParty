@@ -22,6 +22,10 @@ namespace BalloonParty.Configuration.Effects
         [Min(2)]
         [SerializeField] private int _shieldsForMaxRadius = 10;
 
+        [Tooltip("On, a clearing leaves a trail along the ball's path that lingers and closes behind it. Off, it is " +
+                 "only a dome where the ball is.")]
+        [SerializeField] private bool _trail;
+
         [Tooltip("Seconds a stamp takes to decay from full to nothing. The cleared area shrinks inward over it.")]
         [Min(0.05f)]
         [SerializeField] private float _lingerSeconds = 0.6f;
@@ -77,6 +81,7 @@ namespace BalloonParty.Configuration.Effects
         public float MinClearRadius => _minClearRadius;
         public float MaxClearRadius => Mathf.Max(_maxClearRadius, _minClearRadius);
         public int ShieldsForMaxRadius => Mathf.Max(2, _shieldsForMaxRadius);
+        public bool Trail => _trail;
         public float LingerSeconds => _lingerSeconds;
         public float EdgeLow => _edgeLow;
         public float EdgeHigh => Mathf.Max(_edgeHigh, _edgeLow + 0.001f);

@@ -16,6 +16,7 @@ MonoBehaviour:
   _minClearRadius: 0.48
   _maxClearRadius: 1.2
   _shieldsForMaxRadius: 10
+  _trail: 0
   _lingerSeconds: 0.6
   _edgeLow: 0
   _edgeHigh: 0.9

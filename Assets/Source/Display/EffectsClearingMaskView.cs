@@ -28,6 +28,9 @@ namespace BalloonParty.Display
         private static readonly int StampsId = Shader.PropertyToID("_Stamps");
         private static readonly int StampCountId = Shader.PropertyToID("_StampCount");
         private static readonly int RadiiId = Shader.PropertyToID("_Radii");
+        private static readonly int ReprojectId = Shader.PropertyToID("_Reproject");
+        private static readonly int RadiusScaleId = Shader.PropertyToID("_RadiusScale");
+        private static readonly Vector4 NoReprojection = new(1f, 1f, 0f, 0f);
         private static readonly int AspectId = Shader.PropertyToID("_Aspect");
 
         [Inject] private IEffectsClearingSettings _settings;
@@ -40,6 +43,8 @@ namespace BalloonParty.Display
         private RenderTexture _front;
         private RenderTexture _back;
         private IEffectsClearingSource _source;
+        private ClearingView _lastView;
+        private bool _hasLastView;
         private float _remaining;
         private bool _dirty;
         private bool _broken;
@@ -69,9 +74,17 @@ namespace BalloonParty.Display
             // nothing stamps: a freeze that starts after the shot (the level-up) must not hold the hole open.
             var deltaTime = count > 0 && !_settings.UseUnscaledTime ? Time.deltaTime : Time.unscaledDeltaTime;
 
+            // Without a trail the mask is wiped each frame, so it holds only this frame's domes and closes the moment
+            // no ball is left.
+            var trail = _settings.Trail;
             if (count > 0)
             {
                 _remaining = _settings.LingerSeconds;
+            }
+            else if (!trail)
+            {
+                GoIdle();
+                return;
             }
             else if (_remaining > 0f)
             {
@@ -88,7 +101,14 @@ namespace BalloonParty.Display
             }
 
             EnsureTargets();
-            _material.SetFloat(DecayId, deltaTime / _settings.LingerSeconds);
+            // The mask is in screen space, so a camera move or zoom would leave last frame's stamps where they were
+            // on screen; carried through the view change, they stay on the world.
+            _material.SetVector(ReprojectId, _hasLastView ? view.ReprojectionFrom(_lastView) : NoReprojection);
+            _material.SetFloat(RadiusScaleId,
+                _hasLastView ? _lastView.OrthographicSize / view.OrthographicSize : 1f);
+            _lastView = view;
+            _hasLastView = true;
+            _material.SetFloat(DecayId, trail ? deltaTime / _settings.LingerSeconds : 1f);
             _material.SetVectorArray(StampsId, _stamps);
             _material.SetFloat(StampCountId, count);
             _material.SetFloatArray(RadiiId, _radii);
@@ -134,6 +154,7 @@ namespace BalloonParty.Display
         private void GoIdle()
         {
             _remaining = 0f;
+            _hasLastView = false;
             if (!_dirty)
             {
                 return;

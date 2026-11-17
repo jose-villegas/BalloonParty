@@ -34,6 +34,7 @@ namespace BalloonParty.Tests.Display
             _retired = new Subject<IProjectileModel>();
             _registry = Substitute.For<IProjectileRegistry>();
             _settings = Substitute.For<IEffectsClearingSettings>();
+            _settings.Trail.Returns(true);
             _registry.Retired.Returns(_retired);
             _host = new GameObject("ClearingMask", typeof(Camera));
             _mask = _host.AddComponent<EffectsClearingMaskView>();

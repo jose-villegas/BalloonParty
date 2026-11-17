@@ -29,5 +29,21 @@ namespace BalloonParty.Display
         {
             return worldLength / (2f * OrthographicSize);
         }
+
+        /// <summary>
+        ///     Where a point of this view's UV was in <paramref name="previous" />'s, as <c>uv * xy + zw</c>: the mask
+        ///     carries last frame's stamps through a camera move or zoom (the level-up rig's) with this, so they stay
+        ///     on the world rather than on the screen.
+        /// </summary>
+        internal Vector4 ReprojectionFrom(in ClearingView previous)
+        {
+            var height = 2f * OrthographicSize;
+            var previousHeight = 2f * previous.OrthographicSize;
+            var scale = new Vector2(height * Aspect / (previousHeight * previous.Aspect), height / previousHeight);
+            var shift = Center - previous.Center;
+            return new Vector4(scale.x, scale.y,
+                shift.x / (previousHeight * previous.Aspect) + 0.5f - 0.5f * scale.x,
+                shift.y / previousHeight + 0.5f - 0.5f * scale.y);
+        }
     }
 }
