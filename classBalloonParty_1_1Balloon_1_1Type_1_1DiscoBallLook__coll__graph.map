@@ -1,14 +1,18 @@
 <map id="BalloonParty.Balloon.Type.DiscoBallLook" name="BalloonParty.Balloon.Type.DiscoBallLook">
-<area shape="rect" id="Node000001" title="The disco ball&#39;s body (BalloonParty/Balloon/DiscoBall): gives each ball its own turn of the mirror gr..." alt="" coords="710,57,902,102"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="51,5,174,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="190,18,413,27,550,38,686,54,712,60,707,60,686,59,549,43,413,33,190,23"/>
-<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Display_1_1SceneCaptureService.html" title="Shared low&#45;res scene capture, bound globally as _SceneCaptureTex." alt="" coords="367,57,562,102"/>
-<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="189,29,368,61,364,64,189,35"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonViewBinding.html" title="Implemented by prefab MonoBehaviours that react to model binding; BalloonView discovers and calls the..." alt="" coords="368,126,561,171"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="576,123,707,99,712,98,577,128"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="577,77,712,79,707,79,577,82"/>
-<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1Cadence_1_1ICadencedEffect.html" title="Implemented by field services that perform periodic RT blits on a cadence timer." alt="" coords="5,61,220,106"/>
-<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="235,79,369,79,364,81,235,84"/>
-<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html" title=" " alt="" coords="12,130,213,175"/>
-<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="227,126,363,100,369,99,228,131"/>
+<area shape="rect" id="Node000001" title="The disco ball&#39;s body (BalloonParty/Balloon/DiscoBall): gives each ball its own turn of the mirror gr..." alt="" coords="921,62,1113,107"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="262,5,385,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="400,19,624,31,760,43,897,59,923,65,918,66,896,64,760,48,623,36,401,24"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Display_1_1SceneCaptureService.html" title="Shared low&#45;res scene capture, bound globally as _SceneCaptureTex." alt="" coords="577,62,773,107"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="400,31,580,66,574,67,400,36"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonViewBinding.html" title="Implemented by prefab MonoBehaviours that react to model binding; BalloonView discovers and calls the..." alt="" coords="578,132,772,176"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="787,129,918,104,923,103,788,134"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="788,82,923,84,918,85,788,87"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1Cadence_1_1ICadencedEffect.html" title="Implemented by field services that perform periodic RT blits on a cadence timer." alt="" coords="216,60,430,104"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="445,80,579,83,574,84,446,85"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html" title=" " alt="" coords="223,129,423,174"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="438,127,579,102,574,104,439,132"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Display_1_1SceneCaptureFramePass.html" title="Draws the scene capture inside the main camera&#39;s frame, so no second camera goes through the pipeline..." alt="" coords="226,198,421,243"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="435,197,495,176,552,146,563,132,576,117,595,108,600,106,579,121,567,135,555,150,497,181,436,202"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="5,207,167,234"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="182,218,228,220,222,221,182,223"/>
 </map>

@@ -415,6 +415,7 @@ var annotated_dup =
         [ "IEffectsClearingSource", "interfaceBalloonParty_1_1Display_1_1IEffectsClearingSource.html", "interfaceBalloonParty_1_1Display_1_1IEffectsClearingSource" ],
         [ "NavigationCameraReveal", "classBalloonParty_1_1Display_1_1NavigationCameraReveal.html", "classBalloonParty_1_1Display_1_1NavigationCameraReveal" ],
         [ "OrthogonalSizeCameraController", "classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html", "classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController" ],
+        [ "SceneCaptureFramePass", "classBalloonParty_1_1Display_1_1SceneCaptureFramePass.html", "classBalloonParty_1_1Display_1_1SceneCaptureFramePass" ],
         [ "SceneCaptureService", "classBalloonParty_1_1Display_1_1SceneCaptureService.html", "classBalloonParty_1_1Display_1_1SceneCaptureService" ],
         [ "ScreenSpaceLightService", "classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html", "classBalloonParty_1_1Display_1_1ScreenSpaceLightService" ]
       ] ],

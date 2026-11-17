@@ -1575,6 +1575,7 @@ var hierarchy =
     [ "BalloonParty.Configuration.Palette.PaletteColorMaskedExtensions", "classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteColorMaskedExtensions.html", null ],
     [ "BalloonParty.Configuration.Palette.PaletteEntry", "classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteEntry.html", null ],
     [ "BalloonParty.Balloon.Controller.BalancePlanner.PassCandidate", "structBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner_1_1PassCandidate.html", null ],
+    [ "BalloonParty.Display.SceneCaptureFramePass.PassData", "classBalloonParty_1_1Display_1_1SceneCaptureFramePass_1_1PassData.html", null ],
     [ "BalloonParty.Shared.Animation.PathHelper", "classBalloonParty_1_1Shared_1_1Animation_1_1PathHelper.html", null ],
     [ "BalloonParty.Shared.PathTrace", "classBalloonParty_1_1Shared_1_1PathTrace.html", null ],
     [ "BalloonParty.Shared.Pause.PausedMessage", "structBalloonParty_1_1Shared_1_1Pause_1_1PausedMessage.html", null ],
@@ -1734,6 +1735,9 @@ var hierarchy =
       [ "BalloonParty.Configuration.ScoreTrailBehaviourConfiguration", "classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html", null ],
       [ "BalloonParty.Configuration.SlotGridConfig", "classBalloonParty_1_1Configuration_1_1SlotGridConfig.html", null ],
       [ "BalloonParty.Configuration.ThermalGovernorSettings", "classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings.html", null ]
+    ] ],
+    [ "ScriptableRenderPass", null, [
+      [ "BalloonParty.Display.SceneCaptureFramePass", "classBalloonParty_1_1Display_1_1SceneCaptureFramePass.html", null ]
     ] ],
     [ "ScriptableSingleton", null, [
       [ "BalloonParty.Editor.Bush.BushBakerState", "classBalloonParty_1_1Editor_1_1Bush_1_1BushBakerState.html", null ]

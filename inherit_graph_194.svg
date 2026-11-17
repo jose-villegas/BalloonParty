@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Editor_1_1EffectPreview_1_1EditorGridHelper.html" target="_top" xlink:title="Editor&#45;only grid position utilities.">
-<polygon fill="white" stroke="#666666" points="138.25,-33.5 0,-33.5 0,0 138.25,0 138.25,-33.5"/>
-<text xml:space="preserve" text-anchor="start" x="8" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Editor.Effect</text>
-<text xml:space="preserve" text-anchor="middle" x="69.12" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">Preview.EditorGridHelper</text>
+<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Editor_1_1CloudNoiseTextureGenerator.html" target="_top" xlink:title="Generates the tileable noise texture PuffCloud samples; period must match the material&#39;s _NoisePeriod...">
+<polygon fill="white" stroke="#666666" points="137.5,-33.5 0,-33.5 0,0 137.5,0 137.5,-33.5"/>
+<text xml:space="preserve" text-anchor="start" x="8" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Editor.Cloud</text>
+<text xml:space="preserve" text-anchor="middle" x="68.75" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">NoiseTextureGenerator</text>
 </a>
 </g>
 </g>

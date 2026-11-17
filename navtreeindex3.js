@@ -145,8 +145,10 @@ var NAVTREEINDEX3 =
 "ScenarioSchedule_8cs.html":[7,0,3,9,29],
 "ScenarioShift_8cs.html":[7,0,13,8],
 "ScenarioStretch_8cs.html":[7,0,3,9,31],
+"SceneCaptureFramePass_8cs.html":[7,0,5,14],
+"SceneCaptureInFrameCheat_8cs.html":[7,0,2,21],
 "SceneCaptureServiceEditor_8cs.html":[7,0,6,43],
-"SceneCaptureService_8cs.html":[7,0,5,14],
+"SceneCaptureService_8cs.html":[7,0,5,15],
 "SceneDrawingHelper_8cs.html":[7,0,6,44],
 "SceneExtensions_8cs.html":[7,0,14,4,15],
 "SceneLightFieldResources_8cs.html":[7,0,14,11,3],
@@ -157,7 +159,7 @@ var NAVTREEINDEX3 =
 "SceneTransition_8cs.html":[7,0,14,5,14],
 "ScoreAttribution_8cs.html":[7,0,15,1,18],
 "ScoreAttributions_8cs.html":[7,0,15,1,19],
-"ScoreCheatHelper_8cs.html":[7,0,2,21],
+"ScoreCheatHelper_8cs.html":[7,0,2,22],
 "ScoreController_8cs.html":[7,0,7,9,4],
 "ScoreCounterLabel_8cs.html":[7,0,18,8,6],
 "ScoreLevelUpMessage_8cs.html":[7,0,14,7,44],
@@ -171,7 +173,7 @@ var NAVTREEINDEX3 =
 "ScoreUILifetimeScope_8cs.html":[7,0,18,8,7],
 "ScoringControlPoint_8cs.html":[7,0,3,9,32],
 "ScreenSpaceLightServiceEditor_8cs.html":[7,0,6,45],
-"ScreenSpaceLightService_8cs.html":[7,0,5,15],
+"ScreenSpaceLightService_8cs.html":[7,0,5,16],
 "ScriptReferenceRemap_8cs.html":[7,0,6,46],
 "ScriptSearchPopup_8cs.html":[7,0,6,47],
 "SegmentMode_8cs.html":[7,0,3,9,33],
@@ -247,7 +249,5 @@ var NAVTREEINDEX3 =
 "SlotGridPierceItemField_8cs.html":[7,0,15,2,10],
 "SlotGridView_8cs.html":[7,0,15,2,11],
 "SlotGrid_8cs.html":[7,0,15,2,7],
-"SlotMove_8cs.html":[7,0,1,1,5],
-"SlotPlacementMode_8cs.html":[7,0,15,0,20],
-"SmokeFieldResources_8cs.html":[7,0,13,10]
+"SlotMove_8cs.html":[7,0,1,1,5]
 };
