@@ -42,8 +42,13 @@ namespace BalloonParty.Configuration.Balloons
         /// <summary>Most unbreakables in a snake, the line that walks the board.</summary>
         int SnakeMaxMembers { get; }
 
-        /// <summary>Balancer pulses between a snake's steps, so each step lands on the board's own beat.</summary>
+        /// <summary>
+        ///     Balancer pulses between an unbreakable snake's steps, so each step lands on the board's own beat.
+        /// </summary>
         int SnakeStepPulses { get; }
+
+        /// <summary>Seconds of play between the tough snake's steps, on a clock of its own.</summary>
+        float ToughSnakeStepSeconds { get; }
 
         /// <summary>A formation picks at random among this many of its least-travel spots.</summary>
         int SpotChoices { get; }

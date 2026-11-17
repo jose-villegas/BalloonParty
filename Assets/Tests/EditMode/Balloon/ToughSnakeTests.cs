@@ -246,13 +246,13 @@ namespace BalloonParty.Tests.Balloon
             var landing = AddTough(new Vector2Int(6, 5), 1);
             landing.IsStable.Value = false;
 
-            _service.StepSnakes(Relocate);
+            _service.StepToughSnake(Relocate);
 
             Assert.AreEqual(3, snake.Members.Count, "one still landing waits");
             Assert.IsFalse(landing.IsAnchored);
 
             landing.IsStable.Value = true;
-            _service.StepSnakes(Relocate);
+            _service.StepToughSnake(Relocate);
 
             Assert.AreSame(landing, snake.Members[3]);
             Assert.IsTrue(landing.IsAnchored);
@@ -269,7 +269,7 @@ namespace BalloonParty.Tests.Balloon
             var balloon = new BalloonModel();
             _grid.Place(balloon, null, ahead);
 
-            _service.StepSnakes(Relocate);
+            _service.StepToughSnake(Relocate);
 
             Assert.AreEqual(0, snake.Heading, "a balloon is no reason to turn");
             Assert.AreEqual(ahead, snake.Members[0].SlotIndex.Value);
@@ -287,7 +287,7 @@ namespace BalloonParty.Tests.Balloon
             var head = snake.Members[0].SlotIndex.Value;
             _grid.Place(new UnbreakableBalloonModel(new BalloonModelConfig()), null, HexCoordinates.Step(head, 0));
 
-            _service.StepSnakes(Relocate);
+            _service.StepToughSnake(Relocate);
 
             Assert.AreEqual(1, snake.Heading, "east is blocked: it turns south-east");
             Assert.AreEqual(HexCoordinates.Step(head, 1), snake.Members[0].SlotIndex.Value);
@@ -304,7 +304,7 @@ namespace BalloonParty.Tests.Balloon
             var middleWas = middle.SlotIndex.Value;
             head.HitsRemaining.Value = 1;
 
-            _service.StepSnakes(Relocate);
+            _service.StepToughSnake(Relocate);
 
             CollectionAssert.AreEqual(new[] { 2, 1, 1 }, Armour(snake), "equal armour keeps its order");
             Assert.AreSame(middle, snake.Members[0], "the tougher one leads now");
@@ -320,13 +320,13 @@ namespace BalloonParty.Tests.Balloon
             var snake = GrowSnake(3, 2, 1);
             var tougher = AddTough(new Vector2Int(6, 5), 3);
 
-            _service.StepSnakes(Relocate);
+            _service.StepToughSnake(Relocate);
             CollectionAssert.AreEqual(new[] { 3, 2, 1, 3 }, Armour(snake), "it joins at the tail");
 
-            _service.StepSnakes(Relocate);
+            _service.StepToughSnake(Relocate);
             CollectionAssert.AreEqual(new[] { 3, 2, 3, 1 }, Armour(snake));
 
-            _service.StepSnakes(Relocate);
+            _service.StepToughSnake(Relocate);
             CollectionAssert.AreEqual(new[] { 3, 3, 2, 1 }, Armour(snake));
             Assert.AreSame(tougher, snake.Members[1], "equal armour never trades, so it stays second");
             Assert.IsTrue(AllOnTheirSlots());
@@ -348,7 +348,7 @@ namespace BalloonParty.Tests.Balloon
                 }
             }
 
-            _service.StepSnakes(Relocate);
+            _service.StepToughSnake(Relocate);
 
             // Turned round it runs 1, 2, 3; one place per step, the 2 passes the 1 at once.
             CollectionAssert.AreEqual(new[] { 2, 1, 3 }, Armour(snake));
@@ -356,8 +356,8 @@ namespace BalloonParty.Tests.Balloon
                 "the new head took the step past the old tail");
             Assert.AreEqual(tailWas, weakest.SlotIndex.Value, "the one passed waits a beat");
 
-            _service.StepSnakes(Relocate);
-            _service.StepSnakes(Relocate);
+            _service.StepToughSnake(Relocate);
+            _service.StepToughSnake(Relocate);
 
             CollectionAssert.AreEqual(new[] { 3, 2, 1 }, Armour(snake), "the toughest is back at the front");
             Assert.AreSame(toughest, snake.Members[0]);
@@ -425,13 +425,27 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void TheSnake_GetsTheSnakeBeat()
+        public void TheSnake_WalksOnAClockOfItsOwn_NotTheUnbreakablesBeat()
         {
-            Assert.IsFalse(_service.TakeSnakeBeat(), "no snake, no beat");
+            _settings.ToughSnakeStepSeconds.Returns(1.5f);
+            Assert.IsFalse(_service.HasToughSnake);
 
             GrowSnake(3, 2, 1);
 
-            Assert.IsTrue(_service.TakeSnakeBeat());
+            Assert.IsTrue(_service.HasToughSnake);
+            Assert.AreEqual(1.5f, _service.ToughSnakeStepSeconds);
+            Assert.IsFalse(_service.TakeSnakeBeat(), "the unbreakables' beat isn't its");
+        }
+
+        [Test]
+        public void AnUnbreakableSnakesStep_LeavesTheToughSnake()
+        {
+            var snake = GrowSnake(3, 2, 1);
+            var before = snake.Members.Select(m => m.SlotIndex.Value).ToList();
+
+            _service.StepSnakes(Relocate);
+
+            CollectionAssert.AreEqual(before, snake.Members.Select(m => m.SlotIndex.Value).ToList());
         }
 
         [Test]

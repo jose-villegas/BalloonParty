@@ -82,6 +82,8 @@ namespace BalloonParty.Balloon.Formation
         internal IReadOnlyList<StandingFormation> Formations => _formations;
         internal FormationShape? CurrentShape => _formations.Count > 0 ? _formations[0].Shape : null;
         internal Func<float> Random01 { get; set; } = () => Random.value;
+        internal bool HasToughSnake => ToughSnake() != null;
+        internal float ToughSnakeStepSeconds => _settings?.ToughSnakeStepSeconds ?? 0f;
 
         [Inject]
         internal UnbreakableFormationService(SlotGrid grid, IBalloonsConfiguration balloonsConfig, ThreatEase threatEase)
@@ -196,9 +198,10 @@ namespace BalloonParty.Balloon.Formation
         }
 
         /// <summary>
-        ///     Counts one snake beat; true when a snake on the board is due its step
+        ///     Counts one snake beat; true when an unbreakable snake on the board is due its step
         ///     (<see cref="IUnbreakableFormationSettings.SnakeStepPulses" /> beats apart). With no snake the count
-        ///     starts over, so a new snake takes its first step a full beat after it forms.
+        ///     starts over, so a new snake takes its first step a full beat after it forms. The tough snake walks
+        ///     on a clock of its own (<see cref="ToughSnakeStepSeconds" />).
         /// </summary>
         internal bool TakeSnakeBeat()
         {
@@ -219,7 +222,7 @@ namespace BalloonParty.Balloon.Formation
         }
 
         /// <summary>
-        ///     Every snake steps once: its head into the next open slot (<see cref="SnakeWalk" />), each member after
+        ///     Every unbreakable snake steps once: its head into the next open slot (<see cref="SnakeWalk" />), each member after
         ///     it into the slot the one ahead just left. A snake boxed in turns round and its tail leads. Like
         ///     <see cref="ArrangeAtWaveStart" />, <paramref name="relocate" /> carries out each step's moves at once.
         ///     <paramref name="afterArranging" />: the same balance just arranged at wave start, and a snake formed or
@@ -234,17 +237,42 @@ namespace BalloonParty.Balloon.Formation
                 for (var i = 0; i < _formations.Count; i++)
                 {
                     var formation = _formations[i];
-                    if (formation.Shape == FormationShape.Snake && formation.MemberList.Count > 0
+                    if (formation.Shape == FormationShape.Snake && !formation.Armoured
+                        && formation.MemberList.Count > 0
                         && !(afterArranging && formation.ArrangedOnPass == _arrangePass))
                     {
                         Walk(formation, lastRow, relocate);
                     }
                 }
+            }
+            finally
+            {
+                _arranging = false;
+            }
+        }
 
-                if (_settings.ToughSnakes)
+        /// <summary>
+        ///     The tough snake steps once, as <see cref="StepSnakes" /> steps an unbreakable one, and the toughs
+        ///     that landed meanwhile fall in behind its new tail. <paramref name="afterArranging" />: as for
+        ///     <see cref="StepSnakes" />.
+        /// </summary>
+        internal void StepToughSnake(Action<IReadOnlyList<SlotMove>> relocate, bool afterArranging = false)
+        {
+            var snake = ToughSnake();
+            if (snake == null)
+            {
+                return;
+            }
+
+            _arranging = true;
+            try
+            {
+                if (snake.MemberList.Count > 0 && !(afterArranging && snake.ArrangedOnPass == _arrangePass))
                 {
-                    GatherToughs(relocate);
+                    Walk(snake, LastSnakeRow(), relocate);
                 }
+
+                GatherToughs(relocate);
             }
             finally
             {
@@ -262,7 +290,7 @@ namespace BalloonParty.Balloon.Formation
         {
             for (var i = 0; i < _formations.Count; i++)
             {
-                if (_formations[i].Shape == FormationShape.Snake)
+                if (_formations[i].Shape == FormationShape.Snake && !_formations[i].Armoured)
                 {
                     return true;
                 }

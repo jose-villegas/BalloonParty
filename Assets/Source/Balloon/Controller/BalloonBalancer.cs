@@ -62,9 +62,11 @@ namespace BalloonParty.Balloon.Controller
         private bool _balanceRequested;
         private bool _snakeStepDue;
         private bool _toughGatherDue;
+        private bool _toughStepDue;
         private int _generation;
         private float _flightRebalanceElapsed;
         private float _snakeBeatElapsed;
+        private float _toughStepElapsed;
 
         public int ResetOrder => RunResetOrder.Quiesce;
 
@@ -130,8 +132,10 @@ namespace BalloonParty.Balloon.Controller
             _balanceRequested = false;
             _snakeStepDue = false;
             _toughGatherDue = false;
+            _toughStepDue = false;
             _flightRebalanceElapsed = 0f;
             _snakeBeatElapsed = 0f;
+            _toughStepElapsed = 0f;
             _turnSteps.Clear();
             _motionTicker.CancelAllBalanceMoves();
             ReleasePaths();
@@ -246,6 +250,12 @@ namespace BalloonParty.Balloon.Controller
             {
                 _snakeStepDue = false;
                 _formations?.StepSnakes(_relocateActors, afterArranging: atWaveStart);
+            }
+
+            if (_toughStepDue)
+            {
+                _toughStepDue = false;
+                _formations?.StepToughSnake(_relocateActors, afterArranging: atWaveStart);
             }
 
             _balanceMoves.Clear();
@@ -518,18 +528,13 @@ namespace BalloonParty.Balloon.Controller
             }
 
             _flightRebalanceElapsed += deltaTime;
-            _snakeBeatElapsed += deltaTime;
             var pulse = _flightRebalanceElapsed >= interval;
-            var snakeBeat = false;
-            if (_snakeBeatElapsed >= interval)
-            {
-                _snakeBeatElapsed = 0f;
-                snakeBeat = _formations != null && _formations.TakeSnakeBeat();
-            }
+            var snakeBeat = TickSnakeBeat(deltaTime, interval);
 
             // The toughs don't wait for a beat to form up: a tough that lands falls in at once.
             var gather = _formations != null && _formations.ToughsDueToGather();
-            if (!pulse && !snakeBeat && !gather)
+            var toughStep = TickToughSnake(deltaTime);
+            if (!pulse && !snakeBeat && !gather && !toughStep)
             {
                 return false;
             }
@@ -542,16 +547,58 @@ namespace BalloonParty.Balloon.Controller
             // A snake steps on its beat, and the toughs gather, even when nothing else would move.
             _snakeStepDue |= snakeBeat;
             _toughGatherDue |= gather;
-            if (!snakeBeat && !gather && !HasPossibleMove())
+            _toughStepDue |= toughStep;
+            var formationDue = snakeBeat || gather || toughStep;
+            if (!formationDue && !HasPossibleMove())
             {
                 return false;
             }
 
             // Each pulse opens a fresh step window: pulses are already paced by the interval, so a
             // 1-step heavy crawls one slot per pulse instead of sitting exhausted until the next wave
-            // (the shared budget exists to stop multi-hops within one sweep's clustered runs).
-            _turnSteps.Clear();
+            // (the shared budget exists to stop multi-hops within one sweep's clustered runs). The tough
+            // snake's quicker steps and the toughs forming up open none, so the heavies keep the board's pace.
+            if (pulse || snakeBeat)
+            {
+                _turnSteps.Clear();
+            }
+
             RequestBalance();
+            return true;
+        }
+
+        // The unbreakable snakes' beat, one pulse interval apart; held, not restarted, by a pause or a doomed glide.
+        private bool TickSnakeBeat(float deltaTime, float interval)
+        {
+            _snakeBeatElapsed += deltaTime;
+            if (_snakeBeatElapsed < interval)
+            {
+                return false;
+            }
+
+            _snakeBeatElapsed = 0f;
+            return _formations != null && _formations.TakeSnakeBeat();
+        }
+
+        // The tough snake's own clock: a step every ToughSnakeStepSeconds of play while it walks, held (not
+        // restarted) by a pause or a doomed glide as the snake beat is. A new snake's first step comes a full
+        // interval after it forms.
+        private bool TickToughSnake(float deltaTime)
+        {
+            var interval = _formations?.ToughSnakeStepSeconds ?? 0f;
+            if (interval <= 0f || !_formations.HasToughSnake)
+            {
+                _toughStepElapsed = 0f;
+                return false;
+            }
+
+            _toughStepElapsed += deltaTime;
+            if (_toughStepElapsed < interval)
+            {
+                return false;
+            }
+
+            _toughStepElapsed = 0f;
             return true;
         }
 

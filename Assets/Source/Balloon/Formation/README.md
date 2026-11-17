@@ -80,7 +80,9 @@ can play out differently from its prediction.
 ## Tough snakes
 
 The board's toughs and toughers (`ToughBalloonModel`, an `IArmouredFormationMember`) are one body: a
-single snake of their own, walking on the same beat and with the same `SnakeWalk` as an unbreakable snake.
+single snake of their own, walking with the same `SnakeWalk` as an unbreakable snake but quicker, on a clock
+of its own: a step every `ToughSnakeStepSeconds` (1.5 s) of play, held like the beat by a pause or a doomed
+glide (`BalloonBalancer`).
 Toughs never join an unbreakable formation, and unbreakables never join theirs.
 
 - **Starting as one body.** The initial fill deals the toughs side by side on one line, most hits at
@@ -93,7 +95,7 @@ Toughs never join an unbreakable formation, and unbreakables never join theirs.
   other tough then lines up behind it at once (`SnakeBody`): a line of slots on from the head, following
   the toughs where they stand and otherwise bending as little as it can. A balloon on that line moves out
   to a slot one of the toughs left. The balancer asks every frame (`ToughsDueToGather`), so the snake
-  forms the moment it can, not at a wave start or on a beat, and takes its first step on the next beat.
+  forms the moment it can, not at a wave start or on a beat, and takes its first step one step interval later.
 - **Falling in at the tail.** A tough that lands later falls in behind the tail the moment it lands, the
   same way. Where nothing on from the tail can take a tough (toughs, unbreakables, anchored actors and
   anything static block the line), it waits until something on the board changes and tries again.
@@ -201,7 +203,8 @@ The settings are `IUnbreakableFormationSettings`, nested in `BalloonsConfigurati
 - `HoldWaves` (3)
 - `BottomClearance` (2) and `HorizontalBottomClearance` (4, for horizontal lines)
 - `HorizontalMaxMembers` (3, for horizontal lines; an item cover takes three to six)
-- `SnakeMaxMembers` (4) and `SnakeStepPulses` (1: a step on every pulse)
+- `SnakeMaxMembers` (4) and `SnakeStepPulses` (1: an unbreakable snake steps on every pulse)
+- `ToughSnakeStepSeconds` (1.5: seconds of play between the tough snake's steps)
 - `SpotChoices` (3)
 - `ReinforcementChance` (0.35, eased in need by `Game/Assist/ThreatEase`) and `ReinforcementCeiling` (4)
 - the shape weights: horizontal 1, each diagonal 1, item cover 2, snake 1

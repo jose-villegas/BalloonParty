@@ -214,7 +214,7 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void SnakeBeat_ADoomedShotHoldsItsClock_RatherThanRestartingIt()
+        public void ToughSnakeStep_ADoomedShotHoldsItsClock_RatherThanRestartingIt()
         {
             // Nearly every shot ends in a doomed glide; restarting the clock there kept the snakes from ever stepping.
             var balancer = BalancerWithAToughSnake(out var formations);
@@ -225,13 +225,13 @@ namespace BalloonParty.Tests.Balloon
             Assert.IsFalse(balancer.TickFlightRebalance(5f), "a doomed glide freezes the board, the snake too");
             shot.IsLastShieldApproach.Value = false;
 
-            Assert.IsTrue(balancer.TickFlightRebalance(0.5f), "the beat comes 1s of play after the last one");
+            Assert.IsTrue(balancer.TickFlightRebalance(0.5f), "the step comes 1s of play after the last one");
             formations.Dispose();
             balancer.ResetRun(balancer.Generation + 1);
         }
 
         [Test]
-        public void SnakeBeat_FallsDue_WhenNothingElseWouldMove()
+        public void ToughSnakeStep_FallsDue_WhenNothingElseWouldMove()
         {
             var balancer = BalancerWithAToughSnake(out var formations);
 
@@ -241,8 +241,20 @@ namespace BalloonParty.Tests.Balloon
             balancer.ResetRun(balancer.Generation + 1);
         }
 
+        [Test]
+        public void ToughSnakeStep_KeepsItsOwnInterval_NotTheBoardsPulse()
+        {
+            var balancer = BalancerWithAToughSnake(out var formations, toughStepSeconds: 0.25f);
+
+            Assert.IsFalse(balancer.TickFlightRebalance(0.2f));
+            Assert.IsTrue(balancer.TickFlightRebalance(0.1f), "a step at 0.25s, well before the 1s pulse");
+            formations.Dispose();
+            balancer.ResetRun(balancer.Generation + 1);
+        }
+
         // Three toughs on row 0 of the 3 by 3 board: the wave start makes a snake of the toughest.
-        private BalloonBalancer BalancerWithAToughSnake(out UnbreakableFormationService formations)
+        private BalloonBalancer BalancerWithAToughSnake(
+            out UnbreakableFormationService formations, float toughStepSeconds = 1f)
         {
             var settings = Substitute.For<IUnbreakableFormationSettings>();
             settings.Enabled.Returns(true);
@@ -250,6 +262,7 @@ namespace BalloonParty.Tests.Balloon
             settings.MinMembers.Returns(3);
             settings.MaxMembers.Returns(5);
             settings.SnakeStepPulses.Returns(1);
+            settings.ToughSnakeStepSeconds.Returns(toughStepSeconds);
             _balloonsConfig.UnbreakableFormation.Returns(settings);
             formations = new UnbreakableFormationService(_grid, _balloonsConfig,
                 new ThreatEase(Substitute.For<IPlayerNeed>(), Substitute.For<IAssistSettings>()));

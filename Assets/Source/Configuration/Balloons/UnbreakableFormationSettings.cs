@@ -44,6 +44,10 @@ namespace BalloonParty.Configuration.Balloons
                  "board's own beat, so the player can see the next one coming.")]
         [SerializeField] [Min(1)] private int _snakeStepPulses = 1;
 
+        [Tooltip("Seconds of play between the tough snake's steps, on a clock of its own: the unbreakable " +
+                 "snakes keep the board's beat (Snake Step Pulses). A pause or a doomed shot holds it.")]
+        [SerializeField] [Min(0.1f)] private float _toughSnakeStepSeconds = 1.5f;
+
         [Tooltip("A formation picks at random among this many of its least-travel spots, so it doesn't " +
                  "always form in the same place. 1 = always the least travel.")]
         [SerializeField] [Min(1)] private int _spotChoices = 3;
@@ -83,6 +87,7 @@ namespace BalloonParty.Configuration.Balloons
         public int HorizontalMaxMembers => Mathf.Clamp(_horizontalMaxMembers, _minMembers, MaxMembers);
         public int SnakeMaxMembers => Mathf.Clamp(_snakeMaxMembers, _minMembers, MaxMembers);
         public int SnakeStepPulses => Mathf.Max(1, _snakeStepPulses);
+        public float ToughSnakeStepSeconds => Mathf.Max(0.1f, _toughSnakeStepSeconds);
         public int SpotChoices => _spotChoices;
         public float HorizontalWeight => _horizontalWeight;
         public float DiagonalWeight => _diagonalWeight;
