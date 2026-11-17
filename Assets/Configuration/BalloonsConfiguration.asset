@@ -316,6 +316,8 @@ MonoBehaviour:
     _itemCoverWeight: 2
     _snakeWeight: 0.5
     _snakeWeightPerExtraUnbreakable: 0.5
+    _maxUnbreakableSnakes: 2
+    _joinSnakeChance: 0.35
   _rewardBalloons:
     _goldenAtCompletion: 0.5
     _ordinaryGoldenEveryLevels: 1

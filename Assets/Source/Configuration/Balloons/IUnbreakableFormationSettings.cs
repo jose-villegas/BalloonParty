@@ -97,6 +97,19 @@ namespace BalloonParty.Configuration.Balloons
         float SnakeWeightPerExtraUnbreakable { get; }
 
         /// <summary>
+        ///     Most unbreakable snakes on the board at once; a formation that would make one more picks another
+        ///     shape. 0 sets no cap.
+        /// </summary>
+        int MaxUnbreakableSnakes { get; }
+
+        /// <summary>
+        ///     Chance that each member of a formation changing shape on its cycle leaves it and flies to an
+        ///     unbreakable snake's tail instead, while that snake has room (<see cref="MaxMembers" />): snakes grow
+        ///     from the other formations rather than new ones forming.
+        /// </summary>
+        float JoinSnakeChance { get; }
+
+        /// <summary>
         ///     Chance, at each wave start, that a formation which stood untouched through the last wave calls in
         ///     one more unbreakable.
         /// </summary>

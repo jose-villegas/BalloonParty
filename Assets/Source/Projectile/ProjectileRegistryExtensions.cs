@@ -1,3 +1,4 @@
+using BalloonParty.Balloon.Model;
 using BalloonParty.Projectile.Model;
 using UnityEngine;
 
@@ -19,6 +20,23 @@ namespace BalloonParty.Projectile
         internal static bool DoomedShotFliesAlone(this IProjectileRegistry registry)
         {
             return registry.InFlightCount == 1 && registry.InFlightAt(0).IsLastShieldApproach.Value;
+        }
+
+        /// <summary>
+        ///     Whether a ball in flight plowed <paramref name="balloon" /> and holds it for its discharge, which
+        ///     shatters it where it was struck.
+        /// </summary>
+        internal static bool AwaitsDischarge(this IProjectileRegistry registry, IBalloonModel balloon)
+        {
+            for (var i = 0; i < registry.InFlightCount; i++)
+            {
+                if (registry.InFlightAt(i).Flight.HasPendingPierceHit(balloon))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>Where <paramref name="projectile" /> is, if it is in flight; false for a held or gone ball.</summary>

@@ -113,5 +113,18 @@ namespace BalloonParty.Projectile.Model
         // Seconds elapsed on the current segment — the last-shield ease normalizes to it so the
         // doomed drift takes a fixed wall-clock time regardless of the segment's length.
         public float SegmentElapsed { get; set; }
+
+        public bool HasPendingPierceHit(IBalloonModel balloon)
+        {
+            for (var i = 0; i < PendingPierceHits.Count; i++)
+            {
+                if (ReferenceEquals(PendingPierceHits[i].Balloon, balloon))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

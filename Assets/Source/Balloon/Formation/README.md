@@ -52,7 +52,8 @@ shape to change and nothing to hold, so it steps on its own.
 2. **Forming.** If at least `MinMembers` unbreakables are free (in no formation), the service picks a
    shape for them. The pick is weighted at random from the shape weights. The snake's weight grows by
    `SnakeWeightPerExtraUnbreakable` of itself for each unbreakable on the board beyond `MinMembers`, so a
-   crowded board snakes more often. It leaves out the shape just held, and `ItemCover` finds no spot
+   crowded board snakes more often, up to `MaxUnbreakableSnakes` (2) snakes at once: with that many
+   walking, the pick leaves the snake out. It leaves out the shape just held, and `ItemCover` finds no spot
    unless a bomb, a snipe or a lightning is on the board. If the picked shape fits nowhere, the service tries the next one. If nothing fits, nothing forms and the unbreakables roam as usual. A
    formation takes at most `MaxMembers` (a horizontal line, `HorizontalMaxMembers`); an item cover takes
    three to six. While `MinMembers` or more are still free after it, they form another one.
@@ -63,8 +64,13 @@ shape to change and nothing to hold, so it steps on its own.
    on: a snake walks `SnakeHoldCycles` (3), a horizontal or diagonal line holds `LineHoldCycles` (2), an
    item cover `ItemCoverHoldCycles` (2). During that time the next cycles only count down: nothing moves
    but a snake's steps.
-5. **Changing.** On the first cycle after the hold, a new shape is planned for that formation's
-   members and any free unbreakables. Members that stay in the formation are never marked out, even for a
+5. **Changing.** On the first cycle after the hold, each member first rolls `JoinSnakeChance` (0.35) to
+   leave for the tail of the unbreakable snake with the most room, while it has room (`MaxMembers`): the
+   joiners fly in one batch to a line of slots on from the tail, away from its body, each balloon on that
+   line going to the slot a joiner left, so snakes grow from the other formations rather than new ones
+   forming. Then a new shape is planned for the members left and any free unbreakables. A formation with a
+   member a lance plowed (see "Plowed by a lance" below) waits for the discharge and changes on the cycle
+   after it. Members that stay in the formation are never marked out, even for a
    moment. Members the new shape doesn't need turn red and roam again, each once it has rested. If no shape fits, the formation
    breaks up. Each formation keeps its own count, so they change at different waves.
 6. **Breaking up.** The service watches `SlotGrid.OnChanged`. When a member leaves the grid (it was
@@ -90,6 +96,12 @@ cycle takes its first step on the next tick.
   back.
 - Each member behind the head steps into the slot the member ahead of it just left. When a member was
   popped, the one behind it closes the gap, so the snake stays one line.
+- **Plowed by a lance.** A piercing shot plows through toughs and unbreakables without popping them and
+  shatters them at the next wall, where each was struck (`ProjectileHitResolver.DischargePending`). Until
+  then each plowed one holds its slot (`ProjectileRegistryExtensions.AwaitsDischarge`), and the snake splits
+  there: the members ahead of it walk on, on the tick, and it and those behind it wait. With the head
+  plowed, the tail end leads. Once the discharge pops the plowed ones, the members behind close up at the
+  next step. A plowed one never joins a formation, falls in behind the tough snake, or roams meanwhile.
 - Boxed in (by toughs, other unbreakables, anchored or static actors, the edges), the snake turns round in
   the same tick and its tail leads the way back. Only boxed in at both ends does it miss a step, and it
   tries the other end on the next tick.
@@ -256,6 +268,8 @@ The settings are `IUnbreakableFormationSettings`, nested in `BalloonsConfigurati
 - `SpotChoices` (3)
 - `ReinforcementChance` (0.35, eased in need by `Game/Assist/ThreatEase`) and `ReinforcementCeiling` (4)
 - the shape weights: horizontal 1, each diagonal 1, item cover 2, snake 0.5 (so a snake is the rarer pick)
+- `MaxUnbreakableSnakes` (2: a formation that would make a third picks another shape; 0 sets no cap)
+- `JoinSnakeChance` (0.35: each member of a formation changing shape flies to a snake's tail instead)
 - `SnakeWeightPerExtraUnbreakable` (0.5: the snake's weight 1.5x with one unbreakable past `MinMembers`, 2x
   with two)
 

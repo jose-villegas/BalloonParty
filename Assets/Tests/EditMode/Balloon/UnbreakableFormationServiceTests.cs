@@ -6,6 +6,8 @@ using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Game.Assist;
+using BalloonParty.Projectile;
+using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
@@ -21,6 +23,7 @@ namespace BalloonParty.Tests.Balloon
         private SlotGrid _grid;
         private IUnbreakableFormationSettings _settings;
         private UnbreakableFormationService _service;
+        private ProjectileRegistry _projectiles;
         private List<UnbreakableBalloonModel> _unbreakables;
         private int _relocations;
 
@@ -48,8 +51,9 @@ namespace BalloonParty.Tests.Balloon
             var balloonsConfig = Substitute.For<IBalloonsConfiguration>();
             balloonsConfig.UnbreakableFormation.Returns(_settings);
 
+            _projectiles = new ProjectileRegistry();
             _service = new UnbreakableFormationService(_grid, balloonsConfig,
-                new ThreatEase(Substitute.For<IPlayerNeed>(), Substitute.For<IAssistSettings>()))
+                new ThreatEase(Substitute.For<IPlayerNeed>(), Substitute.For<IAssistSettings>()), _projectiles)
             {
                 Random01 = () => 0f,
             };
@@ -668,6 +672,118 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void ASnakePlowedInTheMiddle_SplitsThere_TheMembersAheadWalkOn()
+        {
+            var snake = FormSnake();
+            var members = snake.Members.ToList();
+            var before = members.Select(m => m.SlotIndex.Value).ToList();
+            Plow(members[1]);
+
+            _service.StepSnakes(Relocate);
+
+            Assert.AreEqual(HexCoordinates.Step(before[0], 0), members[0].SlotIndex.Value, "the head walks on");
+            Assert.AreEqual(before[1], members[1].SlotIndex.Value, "the plowed one stays where it was struck");
+            Assert.AreEqual(before[2], members[2].SlotIndex.Value, "and the one behind it waits for the discharge");
+        }
+
+        [Test]
+        public void ASnakeWithItsHeadPlowed_WalksOnTailFirst()
+        {
+            var snake = FormSnake();
+            var members = snake.Members.ToList();
+            var before = members.Select(m => m.SlotIndex.Value).ToList();
+            Plow(members[0]);
+
+            _service.StepSnakes(Relocate);
+
+            Assert.AreSame(members[2], snake.Members[0], "the tail leads");
+            Assert.AreEqual(1, HexCoordinates.Distance(before[2], members[2].SlotIndex.Value), "and took a step");
+            Assert.AreEqual(before[2], members[1].SlotIndex.Value, "the middle one follows it");
+            Assert.AreEqual(before[0], members[0].SlotIndex.Value, "the plowed head stays");
+        }
+
+        [Test]
+        public void ASnakeDischarged_WalksWhole_Again()
+        {
+            var snake = FormSnake();
+            var members = snake.Members.ToList();
+            var shot = Plow(members[1]);
+            _service.StepSnakes(Relocate);
+            shot.Flight.PendingPierceHits.Clear();
+            var before = members.Select(m => m.SlotIndex.Value).ToList();
+
+            _service.StepSnakes(Relocate);
+
+            Assert.AreEqual(before[0], members[1].SlotIndex.Value, "the one that held takes the slot ahead");
+            Assert.AreEqual(before[1], members[2].SlotIndex.Value);
+        }
+
+        [Test]
+        public void AFormationWithAPlowedMember_WaitsForTheDischarge_ToChangeShape()
+        {
+            _settings.LineHoldCycles.Returns(1);
+            AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(6, 4), new Vector2Int(3, 5));
+            Arrange();
+            var formation = _service.Formations[0];
+            var shape = formation.Shape;
+            var slots = _unbreakables.Select(u => u.SlotIndex.Value).ToList();
+            var shot = Plow(_unbreakables[0]);
+
+            Arrange();
+
+            Assert.AreEqual(shape, formation.Shape);
+            CollectionAssert.AreEqual(slots, _unbreakables.Select(u => u.SlotIndex.Value).ToList(), "nothing moved");
+
+            shot.Flight.PendingPierceHits.Clear();
+            Arrange();
+
+            Assert.AreNotEqual(shape, _service.CurrentShape, "it changes on the cycle after the discharge");
+        }
+
+        [Test]
+        public void NoMoreUnbreakableSnakes_ThanTheCap_ATheThirdPicksAnotherShape()
+        {
+            _settings.MinMembers.Returns(2);
+            _settings.MaxUnbreakableSnakes.Returns(2);
+            _settings.SnakeWeight.Returns(100f);
+            _settings.SnakeMaxMembers.Returns(2);
+            _settings.HorizontalMaxMembers.Returns(2);
+            _settings.DiagonalWeight.Returns(0f);
+            AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(1, 0), new Vector2Int(5, 0), new Vector2Int(6, 0),
+                new Vector2Int(0, 5), new Vector2Int(1, 5));
+
+            Arrange();
+
+            Assert.AreEqual(2, _service.Formations.Count(f => f.Shape == FormationShape.Snake));
+            Assert.AreEqual(3, _service.Formations.Count, "the third formed all the same, as another shape");
+        }
+
+        [Test]
+        public void AFormationChangingShape_SendsItsMembersToASnakesTail_OnTheJoinRoll()
+        {
+            _settings.MinMembers.Returns(2);
+            _settings.JoinSnakeChance.Returns(1f);
+            var snake = FormSnake(2);
+            _settings.SnakeWeight.Returns(0f);
+            _settings.LineHoldCycles.Returns(1);
+            AddUnbreakables(new Vector2Int(4, 5), new Vector2Int(6, 5));
+            Arrange();
+            Assert.AreEqual(2, _service.Formations.Count, "the two newcomers line up");
+
+            Arrange();
+
+            Assert.AreEqual(1, _service.Formations.Count, "the line left for the snake");
+            Assert.AreEqual(4, snake.Members.Count);
+            for (var i = 1; i < snake.Members.Count; i++)
+            {
+                Assert.AreEqual(1, HexCoordinates.Distance(snake.Members[i - 1].SlotIndex.Value,
+                    snake.Members[i].SlotIndex.Value), "they fall in on from its tail, one line");
+            }
+
+            Assert.IsTrue(_unbreakables.All(u => _grid.At(u.SlotIndex.Value) == u));
+        }
+
+        [Test]
         public void ASnake_BoxedIn_TurnsRoundAndItsTailLeads()
         {
             // Toughs, which a snake never trades places with, box the head in.
@@ -839,6 +955,16 @@ namespace BalloonParty.Tests.Balloon
             Arrange();
 
             Assert.AreEqual(snake ? FormationShape.Snake : FormationShape.Horizontal, _service.CurrentShape);
+        }
+
+        // A shot in flight that plowed through member and holds it for its discharge.
+        private ProjectileModel Plow(object member)
+        {
+            var shot = new ProjectileModel { IsFree = true };
+            _projectiles.Load(shot, null);
+            _projectiles.Launch(shot);
+            shot.Flight.PendingPierceHits.Add(new PendingPierceHit((IBalloonModel)member, Vector3.zero));
+            return shot;
         }
 
         private void SnakeOnly()

@@ -1,3 +1,4 @@
+using BalloonParty.Balloon.Model;
 using UnityEngine;
 
 namespace BalloonParty.Projectile.Model
@@ -22,5 +23,8 @@ namespace BalloonParty.Projectile.Model
         Vector3 LastBouncePosition { get; }
         Vector3 SegmentStartPosition { get; }
         float SegmentElapsed { get; }
+
+        /// <summary>Whether the shot plowed <paramref name="balloon" /> and hasn't discharged it yet.</summary>
+        bool HasPendingPierceHit(IBalloonModel balloon);
     }
 }

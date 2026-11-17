@@ -103,6 +103,14 @@ namespace BalloonParty.Configuration.Balloons
                  "Members: 0.5 makes a snake 1.5x as likely with one more, 2x with two more.")]
         [SerializeField] [Min(0f)] private float _snakeWeightPerExtraUnbreakable = 0.5f;
 
+        [Tooltip("Most unbreakable snakes on the board at once; a formation that would make one more picks another " +
+                 "shape. 0 sets no cap.")]
+        [SerializeField] [Min(0)] private int _maxUnbreakableSnakes = 2;
+
+        [Tooltip("Chance that each member of a formation changing shape on its cycle leaves it and flies to an " +
+                 "unbreakable snake's tail instead, while that snake has room (Max Members).")]
+        [SerializeField] [Range(0f, 1f)] private float _joinSnakeChance = 0.35f;
+
         public bool Enabled => _enabled;
         public bool ToughSnakes => _toughSnakes;
         public int MinMembers => _minMembers;
@@ -126,6 +134,8 @@ namespace BalloonParty.Configuration.Balloons
         public float ItemCoverWeight => _itemCoverWeight;
         public float SnakeWeight => _snakeWeight;
         public float SnakeWeightPerExtraUnbreakable => _snakeWeightPerExtraUnbreakable;
+        public int MaxUnbreakableSnakes => _maxUnbreakableSnakes;
+        public float JoinSnakeChance => _joinSnakeChance;
         public float ReinforcementChance => _reinforcementChance;
         public int ReinforcementCeiling => _reinforcementCeiling;
     }

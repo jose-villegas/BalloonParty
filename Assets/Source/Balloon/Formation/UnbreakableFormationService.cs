@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
+using BalloonParty.Projectile;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Game.Assist;
 using BalloonParty.Game.Run;
@@ -38,6 +39,9 @@ namespace BalloonParty.Balloon.Formation
             FormationShape.Snake,
         };
 
+        // Straight on, then 60° right and left, then 120° right and left: a line bends as little as it can.
+        private static readonly int[] Turns = { 0, 1, -1, 2, -2 };
+
         // West to east, so a snake heading east reverses to lead with its eastmost member.
         private static readonly Comparison<IWriteableFormationMember> ByColumn = (a, b) =>
             a.SlotIndex.Value.x - b.SlotIndex.Value.x;
@@ -45,6 +49,7 @@ namespace BalloonParty.Balloon.Formation
         private readonly SlotGrid _grid;
         private readonly IUnbreakableFormationSettings _settings;
         private readonly ThreatEase _threatEase;
+        private readonly IProjectileRegistry _projectiles;
         private readonly FormationPlanner _planner = new();
         private readonly ShotWall _wall = new();
         private readonly List<IWriteableFormationMember> _candidates = new();
@@ -62,6 +67,7 @@ namespace BalloonParty.Balloon.Formation
         private readonly List<Vector2Int> _vacated = new();
         private readonly List<IWriteableFormationMember> _freeToughs = new();
         private readonly List<IWriteableFormationMember> _gathered = new();
+        private readonly List<IWriteableFormationMember> _joiners = new();
         private readonly List<FormationShape> _shapePool = new();
         private readonly CompositeDisposable _subscriptions = new();
         private readonly Func<int, int> _pickIndex;
@@ -69,6 +75,8 @@ namespace BalloonParty.Balloon.Formation
         private bool _arranging;
         // Counted at the start of each shape plan, for the snake's weight in that plan's picks.
         private int _unbreakablesOnBoard;
+        // Set at the start of each shape plan: MaxUnbreakableSnakes already walk, so the plan picks no snake.
+        private bool _snakesAtCap;
         private int _reinforcementCalls;
 
         // Set when free toughs had nowhere to fall in; cleared by the next change on the board.
@@ -104,11 +112,14 @@ namespace BalloonParty.Balloon.Formation
         internal bool HasUnbreakables => CountUnbreakables() > 0;
 
         [Inject]
-        internal UnbreakableFormationService(SlotGrid grid, IBalloonsConfiguration balloonsConfig, ThreatEase threatEase)
+        internal UnbreakableFormationService(
+            SlotGrid grid, IBalloonsConfiguration balloonsConfig, ThreatEase threatEase,
+            IProjectileRegistry projectiles = null)
         {
             _grid = grid;
             _settings = balloonsConfig.UnbreakableFormation;
             _threatEase = threatEase;
+            _projectiles = projectiles;
             _pickIndex = PickIndex;
         }
 
@@ -351,17 +362,34 @@ namespace BalloonParty.Balloon.Formation
         {
             var members = snake.MemberList;
 
+            // A member a lance plowed stays where it was struck until the discharge shatters it, and the snake
+            // splits there: the members ahead of it walk on, on the tick; it and those behind it wait, and close up
+            // once it's gone. With the head plowed, the tail end leads.
+            var walking = FreeFromHead(members);
+            if (walking == 0)
+            {
+                walking = FreeFromTail(members);
+                if (walking == 0)
+                {
+                    return;
+                }
+
+                TurnRound(snake);
+            }
+
             // A tough never walls, so moving one can't close a wall. Every snake walks through the board's balloons
             // rather than wait for an empty slot, which a full board seldom has: it steps on every tick.
             var wall = snake.Armoured ? null : LoadWall();
-            if (!SnakeWalk.TryStep(_grid, members[0].SlotIndex.Value, members[^1].SlotIndex.Value, snake.Heading,
-                    lastRow, wall, out var direction))
+            if (!SnakeWalk.TryStep(_grid, members[0].SlotIndex.Value, members[walking - 1].SlotIndex.Value,
+                    snake.Heading, lastRow, wall, out var direction))
             {
-                members.Reverse();
-                var back = members.Count > 1
-                    ? HexCoordinates.DirectionBetween(members[1].SlotIndex.Value, members[0].SlotIndex.Value)
-                    : -1;
-                snake.Heading = back >= 0 ? back : HexCoordinates.Turn(snake.Heading, 3);
+                // A part split off a plowed member can't turn round through it.
+                if (walking < members.Count)
+                {
+                    return;
+                }
+
+                TurnRound(snake);
                 if (!SnakeWalk.TryStep(_grid, members[0].SlotIndex.Value, members[^1].SlotIndex.Value, snake.Heading,
                         lastRow, wall, out direction))
                 {
@@ -377,14 +405,14 @@ namespace BalloonParty.Balloon.Formation
             // left, the member behind it takes the slot the one ahead of it just left.
             _trail.Clear();
             _trail.Add(HexCoordinates.Step(members[0].SlotIndex.Value, direction));
-            for (var i = 0; i < members.Count - 1; i++)
+            for (var i = 0; i < walking - 1; i++)
             {
                 _trail.Add(members[i].SlotIndex.Value);
             }
 
-            var tailSlot = members[^1].SlotIndex.Value;
+            var tailSlot = members[walking - 1].SlotIndex.Value;
             _moves.Clear();
-            for (var i = 0; i < members.Count; i++)
+            for (var i = 0; i < walking; i++)
             {
                 if (members[i].SlotIndex.Value != _trail[i])
                 {
@@ -398,13 +426,71 @@ namespace BalloonParty.Balloon.Formation
                 _moves.Add(new SlotMove((IWriteableDynamicSlotActor)_grid.At(_trail[0]), tailSlot));
             }
 
-            for (var i = 0; i < members.Count; i++)
+            for (var i = 0; i < walking; i++)
             {
                 members[i].SetWalking(true);
                 members[i].SetFormationHeading(heading);
             }
 
             relocate(_moves);
+        }
+
+        private static void TurnRound(StandingFormation snake)
+        {
+            var members = snake.MemberList;
+            members.Reverse();
+            var back = members.Count > 1
+                ? HexCoordinates.DirectionBetween(members[1].SlotIndex.Value, members[0].SlotIndex.Value)
+                : -1;
+            snake.Heading = back >= 0 ? back : HexCoordinates.Turn(snake.Heading, 3);
+        }
+
+        // How many members from the head on walk: those ahead of the first one a lance plowed.
+        private int FreeFromHead(IReadOnlyList<IWriteableFormationMember> members)
+        {
+            for (var i = 0; i < members.Count; i++)
+            {
+                if (AwaitsDischarge(members[i]))
+                {
+                    return i;
+                }
+            }
+
+            return members.Count;
+        }
+
+        private int FreeFromTail(IReadOnlyList<IWriteableFormationMember> members)
+        {
+            for (var i = members.Count - 1; i >= 0; i--)
+            {
+                if (AwaitsDischarge(members[i]))
+                {
+                    return members.Count - 1 - i;
+                }
+            }
+
+            return members.Count;
+        }
+
+        // A balloon a piercing shot plowed through, held for the discharge that shatters it where it was struck:
+        // nothing moves it till then.
+        private bool AwaitsDischarge(IWriteableFormationMember member)
+        {
+            return _projectiles != null && member is IBalloonModel balloon && _projectiles.AwaitsDischarge(balloon);
+        }
+
+        private bool AwaitsDischarge(StandingFormation formation)
+        {
+            var members = formation.MemberList;
+            for (var i = 0; i < members.Count; i++)
+            {
+                if (AwaitsDischarge(members[i]))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -480,8 +566,16 @@ namespace BalloonParty.Balloon.Formation
                     continue;
                 }
 
+                // A lance's plowed member holds its slot till the discharge, so the change waits for the next cycle.
+                if (AwaitsDischarge(formation))
+                {
+                    continue;
+                }
+
+                JoinASnakesTail(formation, relocate);
                 CollectCandidates(formation, armoured: false);
-                if (_candidates.Count < _settings.MinMembers || !TryPlanNextShape(formation.Shape, out var shape))
+                if (_candidates.Count < _settings.MinMembers
+                    || !TryPlanNextShape(formation.Shape, out var shape, formation))
                 {
                     // The balancer runs the race right after this, so the released members settle there.
                     Release(formation);
@@ -492,6 +586,138 @@ namespace BalloonParty.Balloon.Formation
 
                 Apply(formation, shape, relocate);
             }
+        }
+
+        // Each member of a formation done holding rolls JoinSnakeChance to leave it for the tail of the unbreakable
+        // snake with the most room, while that snake has room: the snakes grow from the other formations rather
+        // than new snakes forming. The joiners fly in one batch to a line of slots on from the tail, each balloon
+        // on that line going to the slot a joiner left. The rest of the formation plans its next shape as usual.
+        private void JoinASnakesTail(StandingFormation formation, Action<IReadOnlyList<SlotMove>> relocate)
+        {
+            var snake = SnakeToJoin(formation);
+            if (snake == null || _settings.JoinSnakeChance <= 0f)
+            {
+                return;
+            }
+
+            _joiners.Clear();
+            var members = formation.MemberList;
+            for (var i = 0; i < members.Count && snake.MemberList.Count + _joiners.Count < _settings.MaxMembers; i++)
+            {
+                if (Random01() < _settings.JoinSnakeChance)
+                {
+                    _joiners.Add(members[i]);
+                }
+            }
+
+            if (_joiners.Count == 0)
+            {
+                return;
+            }
+
+            LineOnFromTheTail(snake);
+            var heading = DirectionHeading(snake.Heading);
+            _moves.Clear();
+            for (var i = 0; i < _line.Count; i++)
+            {
+                var joiner = _joiners[i];
+                var slot = _line[i];
+                if (!_grid.IsEmpty(slot.x, slot.y))
+                {
+                    _moves.Add(new SlotMove((IWriteableDynamicSlotActor)_grid.At(slot), joiner.SlotIndex.Value));
+                }
+
+                _moves.Add(new SlotMove(joiner, slot));
+                members.Remove(joiner);
+                snake.MemberList.Add(joiner);
+                _formationOf[joiner] = snake;
+                joiner.SetWalking(true);
+                joiner.SetFormationHeading(heading);
+            }
+
+            if (_moves.Count > 0)
+            {
+                relocate(_moves);
+            }
+        }
+
+        // The unbreakable snake, other than formation itself, with the most room to grow; null when none has room.
+        private StandingFormation SnakeToJoin(StandingFormation formation)
+        {
+            StandingFormation best = null;
+            for (var i = 0; i < _formations.Count; i++)
+            {
+                var snake = _formations[i];
+                if (snake != formation && snake.Shape == FormationShape.Snake && !snake.Armoured
+                    && snake.MemberList.Count > 0 && snake.MemberList.Count < _settings.MaxMembers
+                    && (best == null || snake.MemberList.Count < best.MemberList.Count))
+                {
+                    best = snake;
+                }
+            }
+
+            return best;
+        }
+
+        // Into _line, a slot for each joiner in turn, each a neighbour of the one before from the snake's tail on,
+        // away from its body, bending as little as it can: empty or held by a balloon that trades places, in the
+        // rows a snake walks, and never where the joiner landing there would wall the board. Stops short where no
+        // slot on from its end will do.
+        private void LineOnFromTheTail(StandingFormation snake)
+        {
+            _line.Clear();
+            var members = snake.MemberList;
+            var end = members[^1].SlotIndex.Value;
+            var direction = members.Count > 1 ? HexCoordinates.DirectionBetween(members[^2].SlotIndex.Value, end) : -1;
+            if (direction < 0)
+            {
+                direction = HexCoordinates.Turn(snake.Heading, 3);
+            }
+
+            var lastRow = LastSnakeRow();
+            var wall = LoadWall();
+            while (_line.Count < _joiners.Count
+                   && TryNextTailSlot(end, direction, lastRow, wall, _joiners[_line.Count].SlotIndex.Value,
+                       out var next, out direction))
+            {
+                _line.Add(next);
+                end = next;
+            }
+        }
+
+        private bool TryNextTailSlot(
+            Vector2Int end, int direction, int lastRow, ShotWall wall, Vector2Int joinerFrom,
+            out Vector2Int next, out int turned)
+        {
+            for (var i = 0; i < Turns.Length; i++)
+            {
+                turned = HexCoordinates.Turn(direction, Turns[i]);
+                next = HexCoordinates.Step(end, turned);
+                if (!_grid.InBounds(next) || next.y > lastRow || _line.Contains(next)
+                    || !(_grid.IsEmpty(next.x, next.y) || SnakeWalk.CanPassThrough(_grid.At(next))))
+                {
+                    continue;
+                }
+
+                if (wall == null)
+                {
+                    return true;
+                }
+
+                wall.Set(joinerFrom, false);
+                wall.Set(next, true);
+                if (!wall.Spans())
+                {
+                    return true;
+                }
+
+                wall.Set(next, false);
+                wall.Set(joinerFrom, true);
+            }
+
+            next = end;
+            turned = direction;
+            return false;
         }
 
         // Each pass takes at least MinMembers free unbreakables, so the loop ends.
@@ -532,7 +758,8 @@ namespace BalloonParty.Balloon.Formation
             {
                 for (var row = 0; row < _grid.Rows; row++)
                 {
-                    if (!_grid.IsEmpty(col, row) && SnakeBody.IsFreeTough(_grid.At(new Vector2Int(col, row))))
+                    if (!_grid.IsEmpty(col, row) && SnakeBody.IsFreeTough(_grid.At(new Vector2Int(col, row)))
+                        && !AwaitsDischarge((IWriteableFormationMember)_grid.At(new Vector2Int(col, row))))
                     {
                         _freeToughs.Add((IWriteableFormationMember)_grid.At(new Vector2Int(col, row)));
                     }
@@ -663,6 +890,13 @@ namespace BalloonParty.Balloon.Formation
                 var gap = GapAt(snake);
                 if (gap == 0)
                 {
+                    return;
+                }
+
+                // The members behind a plowed one wait for its discharge; its pop closes the gap's other end.
+                if (FreeFromTail(members) < members.Count - gap)
+                {
+                    _gatherBlocked = true;
                     return;
                 }
 
@@ -1096,7 +1330,8 @@ namespace BalloonParty.Balloon.Formation
                         continue;
                     }
 
-                    if (!_formationOf.TryGetValue(member, out var formation) || formation == own)
+                    if ((!_formationOf.TryGetValue(member, out var formation) || formation == own)
+                        && !AwaitsDischarge(member))
                     {
                         _candidates.Add(member);
                     }
@@ -1106,9 +1341,11 @@ namespace BalloonParty.Balloon.Formation
 
         // A weighted pick without the shape just held; a shape with no spot drops out and the pick goes
         // again. The held shape is the last resort, when nothing else fits.
-        private bool TryPlanNextShape(FormationShape? lastShape, out FormationShape shape)
+        private bool TryPlanNextShape(
+            FormationShape? lastShape, out FormationShape shape, StandingFormation own = null)
         {
             _unbreakablesOnBoard = CountUnbreakables();
+            _snakesAtCap = _settings.MaxUnbreakableSnakes > 0 && CountUnbreakableSnakes(own) >= _settings.MaxUnbreakableSnakes;
             _shapePool.Clear();
             foreach (var candidate in Shapes)
             {
@@ -1169,10 +1406,27 @@ namespace BalloonParty.Balloon.Formation
                 FormationShape.DiagonalDownRight => _settings.DiagonalWeight,
                 FormationShape.DiagonalDownLeft => _settings.DiagonalWeight,
                 FormationShape.ItemCover => _settings.ItemCoverWeight,
-                FormationShape.Snake => _settings.SnakeWeight * (1f + _settings.SnakeWeightPerExtraUnbreakable
-                    * Mathf.Max(0, _unbreakablesOnBoard - _settings.MinMembers)),
+                FormationShape.Snake => _snakesAtCap
+                    ? 0f
+                    : _settings.SnakeWeight * (1f + _settings.SnakeWeightPerExtraUnbreakable
+                        * Mathf.Max(0, _unbreakablesOnBoard - _settings.MinMembers)),
                 _ => 0f,
             };
+        }
+
+        private int CountUnbreakableSnakes(StandingFormation except)
+        {
+            var count = 0;
+            for (var i = 0; i < _formations.Count; i++)
+            {
+                if (_formations[i] != except && _formations[i].Shape == FormationShape.Snake
+                    && !_formations[i].Armoured)
+                {
+                    count++;
+                }
+            }
+
+            return count;
         }
 
         // Every unbreakable on the board, in a formation or not: the snake's weight grows with them. Toughs don't

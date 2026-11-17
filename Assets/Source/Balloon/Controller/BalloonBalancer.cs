@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.Formation;
+using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Run;
 using BalloonParty.Projectile;
@@ -327,7 +328,10 @@ namespace BalloonParty.Balloon.Controller
             foreach (var roamer in _roamers)
             {
                 var actor = roamer.Actor;
-                if (_roamRests.CyclesAtRest(actor) < _formations.LoneHoldCycles)
+
+                // A lance's plowed one stays where it was struck until the discharge shatters it.
+                if (_roamRests.CyclesAtRest(actor) < _formations.LoneHoldCycles
+                    || (actor is IBalloonModel balloon && _projectiles.AwaitsDischarge(balloon)))
                 {
                     continue;
                 }
