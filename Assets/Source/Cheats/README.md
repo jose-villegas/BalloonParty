@@ -36,7 +36,9 @@ ships.
 - `AutoplaySettings.TryParse` reads it: `player=human|best`, `seconds`, `restart=0|1`, and the human's knobs
   `floor`, `mean`, `aim`, `wild` (the playtest bot's, see `Tools/playtest/README.md`), plus an optional
   `seed` and an optional `fps`, which holds the frame rate for the session (`ThermalFrameRateGovernor.Pin`)
-  so a performance run isn't stepped down as the phone warms. A malformed spec is refused with a warning rather than played wrong.
+  so a performance run isn't stepped down as the phone warms, and an optional `off`, which switches parts
+  of the game off for the session (`CheatState.PerfOff`: `lens`, `hudmap`, `capture`, `animators`, `post`,
+  `hud`, joined by `+`) so a run can measure what each costs. The game looks wrong with any of them off. A malformed spec is refused with a warning rather than played wrong.
 - `AutoplayController` (Game scope) presses Play on the launch screen, fires as the chosen player once the
   cannon is ready (the best angle from `FireBestShotCheat.TryFindBestAngle`, plus `AutoplayDice`'s reaction
   time and aim error for a human), presses Restart on game over or ends there, and quits the app when the

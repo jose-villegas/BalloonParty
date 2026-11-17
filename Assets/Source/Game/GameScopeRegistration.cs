@@ -565,6 +565,8 @@ namespace BalloonParty.Game
                 return;
             }
 
+            // Before any view starts, so each reads the switch from its first frame.
+            CheatState.PerfOff = settings.Off;
             builder.RegisterInstance(settings);
             builder.RegisterEntryPoint<AutoplayController>();
         }

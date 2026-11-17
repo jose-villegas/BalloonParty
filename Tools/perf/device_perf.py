@@ -156,7 +156,7 @@ def run(args):
     os.makedirs(out_dir, exist_ok=True)
 
     spec = (f"player={args.player} seconds={args.seconds + args.warmup + 30} seed={args.seed} restart=1 "
-            f"fps={args.fps}")
+            f"fps={args.fps}" + (f" off={args.off}" if args.off else ""))
     adb(serial, "shell", "am", "force-stop", PACKAGE)
     time.sleep(1)
     adb(serial, "shell", f"am start -n {launch_activity(serial)} -e autoplay '{spec}'")
@@ -247,7 +247,8 @@ def run(args):
     report = [
         f"# Device performance: {args.label}",
         "",
-        f"- Build: the one installed on {serial}. Player {args.player}, seed {args.seed}, held at {args.fps} fps, "
+        f"- Build: the one installed on {serial}. Player {args.player}, seed {args.seed}, held at {args.fps} fps"
+        f"{', switched off: ' + args.off if args.off else ''}, "
         f"{len(rows)} samples over {rows[-1]['t']:.0f} s after a {args.warmup} s warm-up.",
         f"- Thermal status {rows[0]['thermal']} at the start, {rows[-1]['thermal']} at the end; "
         f"battery {rows[0]['battery_c']} to {rows[-1]['battery_c']} C.",
@@ -290,6 +291,8 @@ def main():
     parser.add_argument("--player", default="best", choices=("best", "human"))
     parser.add_argument("--seed", type=int, default=7)
     parser.add_argument("--fps", type=int, default=120, help="frame rate the session holds (default 120)")
+    parser.add_argument("--off", default="", help="parts switched off for the session, joined by '+': lens, hudmap, "
+                                                  "capture, animators, post, hud (CheatState.PerfOff)")
     parser.add_argument("--label", default="run")
     return run(parser.parse_args())
 

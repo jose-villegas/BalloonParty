@@ -62,6 +62,13 @@ namespace BalloonParty.Display
 
         private void LateUpdate()
         {
+#if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
+            if ((BalloonParty.Cheats.CheatState.PerfOff & BalloonParty.Cheats.PerfOff.Lens) != 0)
+            {
+                return;
+            }
+#endif
+
             if (_settings == null || !_settings.Enabled || !EnsureMaterial())
             {
                 GoIdle();

@@ -23,6 +23,9 @@ namespace BalloonParty.Cheats.Autoplay
         /// <summary>The frame rate to hold for the whole session, or 0 to leave it to the thermal governor.</summary>
         public int Fps { get; private set; }
 
+        /// <summary>Parts of the game switched off for this session, to measure what each costs.</summary>
+        public PerfOff Off { get; private set; }
+
         /// <summary>
         ///     False for an empty spec (no autoplay asked for) and for a malformed one: a typo would otherwise
         ///     play a session nobody asked for and report it as the one they did.
@@ -88,6 +91,21 @@ namespace BalloonParty.Cheats.Autoplay
                 case "wild":
                     WildChance = TryFloat(text, out number) ? number : -1f;
                     return WildChance >= 0f && WildChance <= 1f;
+                case "off":
+                    // Names joined by '+': off=lens+capture.
+                    var off = PerfOff.None;
+                    foreach (var name in text.Split('+'))
+                    {
+                        if (!System.Enum.TryParse<PerfOff>(name, true, out var part))
+                        {
+                            return false;
+                        }
+
+                        off |= part;
+                    }
+
+                    Off = off;
+                    return true;
                 case "fps":
                     var hasFps = int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out var fps);
                     Fps = hasFps && fps > 0 ? fps : 0;

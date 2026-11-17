@@ -14,6 +14,7 @@ using BalloonParty.Thrower;
 using BalloonParty.UI.GameOver;
 using BalloonParty.Shared.Diagnostics;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using VContainer.Unity;
 
 namespace BalloonParty.Cheats.Autoplay
@@ -54,6 +55,7 @@ namespace BalloonParty.Cheats.Autoplay
         private int _shots;
         private bool _restartPressed;
         private bool _warnedNoPlay;
+        private bool _switchedOff;
         private bool _finished;
 
         internal AutoplayController(
@@ -90,6 +92,30 @@ namespace BalloonParty.Cheats.Autoplay
             Log.Info("Autoplay", $"playing as {(_settings.Best ? "best" : "human")} for {_settings.Seconds:F0} s.");
         }
 
+        // The switches a view can't read for itself, applied once the game scene is up. The HUD's canvases stop
+        // drawing only after the launch screen, whose Play button the autoplay has to press.
+        private void SwitchOffOnce()
+        {
+            if (_switchedOff)
+            {
+                return;
+            }
+
+            _switchedOff = true;
+            if ((_settings.Off & PerfOff.Post) != 0 && Camera.main != null)
+            {
+                Camera.main.GetUniversalAdditionalCameraData().renderPostProcessing = false;
+            }
+
+            if ((_settings.Off & PerfOff.Hud) != 0)
+            {
+                foreach (var canvas in UnityEngine.Object.FindObjectsByType<Canvas>(FindObjectsInactive.Exclude))
+                {
+                    canvas.enabled = false;
+                }
+            }
+        }
+
         public void Tick()
         {
             if (_finished)
@@ -118,6 +144,7 @@ namespace BalloonParty.Cheats.Autoplay
                     break;
                 default:
                     _restartPressed = false;
+                    SwitchOffOnce();
                     Shoot(clock, navigation);
                     break;
             }

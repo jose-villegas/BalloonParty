@@ -152,6 +152,10 @@ namespace BalloonParty.Balloon.View
             if (_animator != null)
             {
                 _animator.enabled = true;
+#if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
+                _animator.enabled =
+                    (BalloonParty.Cheats.CheatState.PerfOff & BalloonParty.Cheats.PerfOff.Animators) == 0;
+#endif
             }
 
             foreach (var r in _spriteLayerRenderers)

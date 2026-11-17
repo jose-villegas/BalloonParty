@@ -4,6 +4,31 @@ using UnityEngine;
 
 namespace BalloonParty.Cheats
 {
+    /// <summary>What <see cref="CheatState.PerfOff" /> can switch off.</summary>
+    [System.Flags]
+    internal enum PerfOff
+    {
+        None = 0,
+
+        /// <summary>The effects-clearing lens: its mask, both effects maps and their composites.</summary>
+        Lens = 1,
+
+        /// <summary>Only the HUD's effects map (the score trails').</summary>
+        HudMap = 2,
+
+        /// <summary>The scene capture the bounce light and soft shadows are made from.</summary>
+        Capture = 4,
+
+        /// <summary>The balloons' idle-sway Animators.</summary>
+        Animators = 8,
+
+        /// <summary>Post-processing on the main camera: bloom, tonemapping, the colour grade.</summary>
+        Post = 16,
+
+        /// <summary>The HUD canvases (they stop drawing; their scripts keep running).</summary>
+        Hud = 32
+    }
+
     /// <summary>Shared dev-cheat flags read by gameplay under the same compile guard, so they strip from
     /// release builds. Static because the reader (gameplay) and writer (a cheat) live in different objects
     /// and we don't want a cheat concept in production DI.</summary>
@@ -20,6 +45,11 @@ namespace BalloonParty.Cheats
         /// .Damage</c> is a no-op (hearts never drain), and <c>RunController.EndRun</c> is a no-op (no loss).
         /// Toggled by <see cref="BlockLevelUpCheat" />.</summary>
         public static bool BlockLevelUp;
+
+        /// <summary>Parts of the game a performance run has switched off, to measure what each one costs on a
+        /// device (the autoplay's <c>off</c> key, <c>Tools/perf/device_perf.py --off</c>). The game looks wrong
+        /// with any of them set; nothing but a measurement sets them.</summary>
+        public static PerfOff PerfOff;
 
         /// <summary>While true, <c>ScoreTrailService</c> resolves each score group INSTANTLY — it publishes the
         /// arrival immediately with the group's full points instead of spawning flying pen-trails. Set only for

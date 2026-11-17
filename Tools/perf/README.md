@@ -40,4 +40,24 @@ fixed-step physics runs more steps in it, and the 60 Hz scene capture lands on e
 The big and little cores do different amounts of work per cycle, and the scheduler moves threads between
 them, so expect a few percent of noise. Run each build twice, in turn (A, B, A, B).
 
+## What a part of the game costs
+
+`--off` switches parts of the game off for the session, so the difference from a normal run is what they
+cost on that device:
+
+```bash
+python3 Tools/perf/device_perf.py --serial <serial> --label no-lens --off lens
+```
+
+| Name | Switches off |
+|---|---|
+| `lens` | The effects-clearing lens: its mask, both effects maps, their composites |
+| `hudmap` | Only the HUD's effects map |
+| `capture` | The scene capture the bounce light and soft shadows are made from |
+| `animators` | The balloons' idle-sway Animators |
+| `post` | Post-processing on the main camera: bloom, tonemapping, the colour grade |
+| `hud` | The HUD canvases' drawing (their scripts keep running) |
+
+Join several with `+`. The switches live in `CheatState.PerfOff` and compile out of a shipping build.
+
 Reports go to `Logs/perf/<stamp>-<label>/` (`report.md`, `samples.csv`), which git ignores.

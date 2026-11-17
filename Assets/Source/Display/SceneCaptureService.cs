@@ -77,6 +77,9 @@ namespace BalloonParty.Display
             // Unscaled so cadence keeps refreshing during pause/slow-mo, same as the old frame count did.
             var captureInterval = _displayConfig.SceneCaptureFrameInterval / 60f;
             var shouldRender = _consumers > 0 && _captureAccumulator >= captureInterval;
+#if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
+            shouldRender &= (BalloonParty.Cheats.CheatState.PerfOff & BalloonParty.Cheats.PerfOff.Capture) == 0;
+#endif
 
             if (shouldRender)
             {

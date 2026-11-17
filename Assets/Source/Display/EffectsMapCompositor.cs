@@ -86,6 +86,11 @@ namespace BalloonParty.Display
         {
             var live = _settings != null && _settings.Enabled && _mask != null && Held()
                        && _effectLayers.value != 0 && EnsureResources();
+#if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
+            var off = BalloonParty.Cheats.CheatState.PerfOff;
+            live &= (off & BalloonParty.Cheats.PerfOff.Lens) == 0
+                    && (_hdr || (off & BalloonParty.Cheats.PerfOff.HudMap) == 0);
+#endif
 
             if (live)
             {
