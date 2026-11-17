@@ -741,14 +741,15 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void NoMoreUnbreakableSnakes_ThanTheCap_ATheThirdPicksAnotherShape()
+        public void NoMoreUnbreakableSnakes_ThanTheCap_TheThirdPicksAnotherShape()
         {
+            // The roll at the top of the range picks the last shape in the pool, the snake, while it's in it.
+            _service.Random01 = () => 0.999f;
             _settings.MinMembers.Returns(2);
             _settings.MaxUnbreakableSnakes.Returns(2);
             _settings.SnakeWeight.Returns(100f);
             _settings.SnakeMaxMembers.Returns(2);
-            _settings.HorizontalMaxMembers.Returns(2);
-            _settings.DiagonalWeight.Returns(0f);
+            _settings.HorizontalWeight.Returns(0f);
             AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(1, 0), new Vector2Int(5, 0), new Vector2Int(6, 0),
                 new Vector2Int(0, 5), new Vector2Int(1, 5));
 
@@ -765,6 +766,7 @@ namespace BalloonParty.Tests.Balloon
             _settings.JoinSnakeChance.Returns(1f);
             var snake = FormSnake(2);
             _settings.SnakeWeight.Returns(0f);
+            _settings.HorizontalWeight.Returns(1f);
             _settings.LineHoldCycles.Returns(1);
             AddUnbreakables(new Vector2Int(4, 5), new Vector2Int(6, 5));
             Arrange();
