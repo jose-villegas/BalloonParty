@@ -72,7 +72,8 @@ var annotated_dup =
           [ "BubbleMergeRule", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeRule.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeRule" ],
           [ "BubbleMergeService", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeService.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeService" ],
           [ "IBalloonPopper", "interfaceBalloonParty_1_1Balloon_1_1Controller_1_1IBalloonPopper.html", "interfaceBalloonParty_1_1Balloon_1_1Controller_1_1IBalloonPopper" ],
-          [ "PressurePropagation", "classBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation" ]
+          [ "PressurePropagation", "classBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation" ],
+          [ "RoamRests", "classBalloonParty_1_1Balloon_1_1Controller_1_1RoamRests.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1RoamRests" ]
         ] ],
         [ "Formation", "namespaceBalloonParty_1_1Balloon_1_1Formation.html", [
           [ "FormationAssignment", "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html", "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment" ],

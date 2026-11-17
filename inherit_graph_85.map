@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$classBalloonParty_1_1Configuration_1_1Balloons_1_1PopPulse.html" title="A pop that swells and then shrinks away instead of vanishing at once: the heart balloon&#39;s beat." alt="" coords="5,5,202,50"/>
+<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html" title="When the reward balloons come (PLAN&#45;RewardBalloons): on a purple level, both rolled every few lines w..." alt="" coords="5,5,242,50"/>
+<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html" title=" " alt="" coords="290,5,522,50"/>
+<area shape="poly" id="edge83_Node000000_Node000001" title=" " alt="" coords="257,25,292,28,287,28,257,30"/>
 </map>

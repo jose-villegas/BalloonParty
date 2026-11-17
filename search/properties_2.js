@@ -78,5 +78,6 @@ var searchData=
   ['currentshape_75',['CurrentShape',['../classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#ad1d2ecf8b149e3f97de52a0586c09fd5',1,'BalloonParty::Balloon::Formation::UnbreakableFormationService']]],
   ['currentspeed_76',['CurrentSpeed',['../interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#a7241c77b83287709308490b40c693745',1,'BalloonParty.Projectile.Model.IProjectileFlightState.CurrentSpeed'],['../classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState.html#a4cc37bdeb2997a270777b81c2519a5f0',1,'BalloonParty.Projectile.Model.ProjectileFlightState.CurrentSpeed']]],
   ['currentstreak_77',['CurrentStreak',['../classBalloonParty_1_1Game_1_1Score_1_1ColorStreak.html#a5dd2efe83a10ba40e4f87157e02f6ade',1,'BalloonParty::Game::Score::ColorStreak']]],
-  ['cyclecomplete_78',['CycleComplete',['../classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewTicker.html#a98c5af7bfbcfaadb91a0e28f785c3d4e',1,'BalloonParty::Item::Preview::ItemPreviewTicker']]]
+  ['cyclecomplete_78',['CycleComplete',['../classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewTicker.html#a98c5af7bfbcfaadb91a0e28f785c3d4e',1,'BalloonParty::Item::Preview::ItemPreviewTicker']]],
+  ['cyclesleft_79',['CyclesLeft',['../classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation.html#ad5718e2e7a3cfe4b0a4306ec8205e886',1,'BalloonParty::Balloon::Formation::StandingFormation']]]
 ];

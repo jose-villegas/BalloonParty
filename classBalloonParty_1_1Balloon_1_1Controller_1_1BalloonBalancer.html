@@ -198,6 +198,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a7d6c38f58490e0bbde06bb26885d595b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b6e0dafc21d5add44944754ddd12dd6" id="r_a3b6e0dafc21d5add44944754ddd12dd6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3b6e0dafc21d5add44944754ddd12dd6">CollectRestingSlots</a> ()</td></tr>
 <tr class="separator:a3b6e0dafc21d5add44944754ddd12dd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3cfbc66806223590e6f2d7fda1b48dc8" id="r_a3cfbc66806223590e6f2d7fda1b48dc8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3cfbc66806223590e6f2d7fda1b48dc8">CollectRoamers</a> ()</td></tr>
+<tr class="separator:a3cfbc66806223590e6f2d7fda1b48dc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a476238f07fc7785aedd5dcf7d65aae63" id="r_a476238f07fc7785aedd5dcf7d65aae63"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a476238f07fc7785aedd5dcf7d65aae63">FinalizeBalanceMove</a> (object payload)</td></tr>
 <tr class="separator:a476238f07fc7785aedd5dcf7d65aae63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5d708098897a4a77a6b630b08b7e593" id="r_ab5d708098897a4a77a6b630b08b7e593"><td class="memItemLeft" align="right" valign="top">Vector3[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab5d708098897a4a77a6b630b08b7e593">FinalWaypointBuffer</a> (Vector3 currentPosition, IReadOnlyList&lt; Vector3 &gt; path)</td></tr>
@@ -212,8 +214,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a985381046e2c9e9959380e9232b54413"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab958027ca090536882047822ea97cb3" id="r_aab958027ca090536882047822ea97cb3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab958027ca090536882047822ea97cb3">RelocateActors</a> (IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Balloon_1_1Formation_1_1SlotMove.html">SlotMove</a> &gt; moves)</td></tr>
 <tr class="separator:aab958027ca090536882047822ea97cb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a08664ec4bf751fc5d494b358c96eb892" id="r_a08664ec4bf751fc5d494b358c96eb892"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a08664ec4bf751fc5d494b358c96eb892">RelocateRoamers</a> ()</td></tr>
-<tr class="separator:a08664ec4bf751fc5d494b358c96eb892"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3afb0880187359bcfbe15666295753ae" id="r_a3afb0880187359bcfbe15666295753ae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3afb0880187359bcfbe15666295753ae">RelocateOneRoamer</a> ()</td></tr>
+<tr class="separator:a3afb0880187359bcfbe15666295753ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6bb43d593342b493fe03b116aff3ca02" id="r_a6bb43d593342b493fe03b116aff3ca02"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6bb43d593342b493fe03b116aff3ca02">RequestBalance</a> ()</td></tr>
 <tr class="separator:a6bb43d593342b493fe03b116aff3ca02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae46d6363e746207ecc98620a7ddeb989" id="r_ae46d6363e746207ecc98620a7ddeb989"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae46d6363e746207ecc98620a7ddeb989">StartBalanceMove</a> (<a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableDynamicSlotActor.html">IWriteableDynamicSlotActor</a> actor, List&lt; Vector3 &gt; path, <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html">ISlotActorView</a> view)</td></tr>
@@ -242,6 +244,12 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a57bed067f6c08fd6a27968ba58b3ff7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad644cab88494a769fd6680ed06970ce3" id="r_ad644cab88494a769fd6680ed06970ce3"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html">IBalloonsConfiguration</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad644cab88494a769fd6680ed06970ce3">_balloonsConfig</a></td></tr>
 <tr class="separator:ad644cab88494a769fd6680ed06970ce3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1db532a0dbd6f2ed97dec4280bc4c5c" id="r_aa1db532a0dbd6f2ed97dec4280bc4c5c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa1db532a0dbd6f2ed97dec4280bc4c5c">_beatElapsed</a></td></tr>
+<tr class="separator:aa1db532a0dbd6f2ed97dec4280bc4c5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35b79f7661dad5086c268feba9dfa3cf" id="r_a35b79f7661dad5086c268feba9dfa3cf"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a35b79f7661dad5086c268feba9dfa3cf">_beats</a></td></tr>
+<tr class="separator:a35b79f7661dad5086c268feba9dfa3cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6762a1b9dd9f37a15f6048ea6ac5b729" id="r_a6762a1b9dd9f37a15f6048ea6ac5b729"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6762a1b9dd9f37a15f6048ea6ac5b729">_cycleDue</a></td></tr>
+<tr class="separator:a6762a1b9dd9f37a15f6048ea6ac5b729"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e43477f5bc622b9205591e879e3a07b" id="r_a6e43477f5bc622b9205591e879e3a07b"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html">DisturbanceFieldService</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6e43477f5bc622b9205591e879e3a07b">_disturbanceField</a></td></tr>
 <tr class="separator:a6e43477f5bc622b9205591e879e3a07b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:add3338e6b2649a7dfb4ddb46b43c3b4a" id="r_add3338e6b2649a7dfb4ddb46b43c3b4a"><td class="memItemLeft" align="right" valign="top">readonly Action&lt; object &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#add3338e6b2649a7dfb4ddb46b43c3b4a">_finalizeBalanceMove</a></td></tr>
@@ -276,8 +284,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:afb37f7292de459b0b9bee842fdccdace"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adaef9f46d953a3f09e871c9e80b28760" id="r_adaef9f46d953a3f09e871c9e80b28760"><td class="memItemLeft" align="right" valign="top">readonly List&lt; <a class="el" href="structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer_1_1RoamCandidate.html">RoamCandidate</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adaef9f46d953a3f09e871c9e80b28760">_roamers</a> = new()</td></tr>
 <tr class="separator:adaef9f46d953a3f09e871c9e80b28760"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46d4f7bfbf74697e3bf027867297a276" id="r_a46d4f7bfbf74697e3bf027867297a276"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a46d4f7bfbf74697e3bf027867297a276">_snakeBeatElapsed</a></td></tr>
-<tr class="separator:a46d4f7bfbf74697e3bf027867297a276"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61e5e8d99764630b124d9d34d72ad5e7" id="r_a61e5e8d99764630b124d9d34d72ad5e7"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1RoamRests.html">RoamRests</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a61e5e8d99764630b124d9d34d72ad5e7">_roamRests</a> = new()</td></tr>
+<tr class="separator:a61e5e8d99764630b124d9d34d72ad5e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e8fc7bff5f5b176efa69a171abd6789" id="r_a9e8fc7bff5f5b176efa69a171abd6789"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9e8fc7bff5f5b176efa69a171abd6789">_snakeStepDue</a></td></tr>
 <tr class="separator:a9e8fc7bff5f5b176efa69a171abd6789"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac4b1e3aa3edf6e31a4bfaa4955f3a67a" id="r_ac4b1e3aa3edf6e31a4bfaa4955f3a67a"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1BalanceBalloonsMessage.html">BalanceBalloonsMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac4b1e3aa3edf6e31a4bfaa4955f3a67a">_subscriber</a></td></tr>
@@ -489,6 +497,31 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">void BalloonParty.Balloon.Controller.BalloonBalancer.CollectRestingSlots </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3cfbc66806223590e6f2d7fda1b48dc8" name="a3cfbc66806223590e6f2d7fda1b48dc8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3cfbc66806223590e6f2d7fda1b48dc8">&#9670;&#160;</a></span>CollectRoamers()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Balloon.Controller.BalloonBalancer.CollectRoamers </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -761,8 +794,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a08664ec4bf751fc5d494b358c96eb892" name="a08664ec4bf751fc5d494b358c96eb892"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a08664ec4bf751fc5d494b358c96eb892">&#9670;&#160;</a></span>RelocateRoamers()</h2>
+<a id="a3afb0880187359bcfbe15666295753ae" name="a3afb0880187359bcfbe15666295753ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3afb0880187359bcfbe15666295753ae">&#9670;&#160;</a></span>RelocateOneRoamer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -771,7 +804,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void BalloonParty.Balloon.Controller.BalloonBalancer.RelocateRoamers </td>
+          <td class="memname">void BalloonParty.Balloon.Controller.BalloonBalancer.RelocateOneRoamer </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -1212,6 +1245,72 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="aa1db532a0dbd6f2ed97dec4280bc4c5c" name="aa1db532a0dbd6f2ed97dec4280bc4c5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa1db532a0dbd6f2ed97dec4280bc4c5c">&#9670;&#160;</a></span>_beatElapsed</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Balloon.Controller.BalloonBalancer._beatElapsed</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a35b79f7661dad5086c268feba9dfa3cf" name="a35b79f7661dad5086c268feba9dfa3cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35b79f7661dad5086c268feba9dfa3cf">&#9670;&#160;</a></span>_beats</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Balloon.Controller.BalloonBalancer._beats</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6762a1b9dd9f37a15f6048ea6ac5b729" name="a6762a1b9dd9f37a15f6048ea6ac5b729"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6762a1b9dd9f37a15f6048ea6ac5b729">&#9670;&#160;</a></span>_cycleDue</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Balloon.Controller.BalloonBalancer._cycleDue</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a6e43477f5bc622b9205591e879e3a07b" name="a6e43477f5bc622b9205591e879e3a07b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6e43477f5bc622b9205591e879e3a07b">&#9670;&#160;</a></span>_disturbanceField</h2>
 
@@ -1586,8 +1685,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a46d4f7bfbf74697e3bf027867297a276" name="a46d4f7bfbf74697e3bf027867297a276"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a46d4f7bfbf74697e3bf027867297a276">&#9670;&#160;</a></span>_snakeBeatElapsed</h2>
+<a id="a61e5e8d99764630b124d9d34d72ad5e7" name="a61e5e8d99764630b124d9d34d72ad5e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61e5e8d99764630b124d9d34d72ad5e7">&#9670;&#160;</a></span>_roamRests</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1596,7 +1695,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float BalloonParty.Balloon.Controller.BalloonBalancer._snakeBeatElapsed</td>
+          <td class="memname">readonly <a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1RoamRests.html">RoamRests</a> BalloonParty.Balloon.Controller.BalloonBalancer._roamRests = new()</td>
         </tr>
       </table>
   </td>

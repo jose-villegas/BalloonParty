@@ -97,6 +97,7 @@ var NAVTREEINDEX3 =
 "RibbonGraphic_8cs.html":[7,0,18,1,2],
 "RibbonPiece_8cs.html":[7,0,18,1,3],
 "RibbonStrike_8cs.html":[7,0,18,1,4],
+"RoamRests_8cs.html":[7,0,1,0,12],
 "RollingCounterDisplay_8cs.html":[7,0,18,20],
 "RollingTextAnimator_8cs.html":[7,0,14,0,1],
 "RunConfig_8cs.html":[7,0,3,24],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "SortingHelper_8cs.html":[7,0,14,10,11],
 "SortingLayerNameAttribute_8cs.html":[7,0,14,35],
 "SortingLayerNameDrawer_8cs.html":[7,0,6,49],
-"SoundBankClipAssigner_8cs.html":[7,0,0,1,12],
-"SoundBankConfigurationEditor_8cs.html":[7,0,0,1,13]
+"SoundBankClipAssigner_8cs.html":[7,0,0,1,12]
 };

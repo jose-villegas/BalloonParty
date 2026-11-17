@@ -11,5 +11,6 @@ var dir_83bbb28316399931328a130d4e8f7c97 =
     [ "BubbleMergeRule.cs", "BubbleMergeRule_8cs.html", "BubbleMergeRule_8cs" ],
     [ "BubbleMergeService.cs", "BubbleMergeService_8cs.html", "BubbleMergeService_8cs" ],
     [ "IBalloonPopper.cs", "IBalloonPopper_8cs.html", "IBalloonPopper_8cs" ],
-    [ "PressurePropagation.cs", "PressurePropagation_8cs.html", "PressurePropagation_8cs" ]
+    [ "PressurePropagation.cs", "PressurePropagation_8cs.html", "PressurePropagation_8cs" ],
+    [ "RoamRests.cs", "RoamRests_8cs.html", "RoamRests_8cs" ]
 ];

@@ -126,6 +126,12 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:af878da69efc6cff720ede5832a9b476a" id="r_af878da69efc6cff720ede5832a9b476a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af878da69efc6cff720ede5832a9b476a">BeatSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:af878da69efc6cff720ede5832a9b476a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds of play between the unbreakables' beats.  <br /></td></tr>
+<tr class="separator:af878da69efc6cff720ede5832a9b476a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02cca91833529db2620546083d03cf68" id="r_a02cca91833529db2620546083d03cf68"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a02cca91833529db2620546083d03cf68">BeatsPerCycle</a><code> [get]</code></td></tr>
+<tr class="memdesc:a02cca91833529db2620546083d03cf68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Beats in one cycle.  <br /></td></tr>
+<tr class="separator:a02cca91833529db2620546083d03cf68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf9e9826d99af0a92744527a179189d9" id="r_abf9e9826d99af0a92744527a179189d9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abf9e9826d99af0a92744527a179189d9">BottomClearance</a><code> [get]</code></td></tr>
 <tr class="memdesc:abf9e9826d99af0a92744527a179189d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bottom rows a formation never uses, so spawn lines always have room to enter.  <br /></td></tr>
 <tr class="separator:abf9e9826d99af0a92744527a179189d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -134,9 +140,6 @@ Properties</h2></td></tr>
 <tr class="separator:abff06e34c00e3b222969a654fdfff118"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a84106b8faf66b27add61798fa20625ef" id="r_a84106b8faf66b27add61798fa20625ef"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a84106b8faf66b27add61798fa20625ef">Enabled</a><code> [get]</code></td></tr>
 <tr class="separator:a84106b8faf66b27add61798fa20625ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1e2f9a7c649b859b07308f8b6d641764" id="r_a1e2f9a7c649b859b07308f8b6d641764"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1e2f9a7c649b859b07308f8b6d641764">HoldWaves</a><code> [get]</code></td></tr>
-<tr class="memdesc:a1e2f9a7c649b859b07308f8b6d641764"><td class="mdescLeft">&#160;</td><td class="mdescRight">Waves a formation holds, counting the wave it formed in, before it changes shape.  <br /></td></tr>
-<tr class="separator:a1e2f9a7c649b859b07308f8b6d641764"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29d6af280feaabfa6fc0601541bd818c" id="r_a29d6af280feaabfa6fc0601541bd818c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a29d6af280feaabfa6fc0601541bd818c">HorizontalBottomClearance</a><code> [get]</code></td></tr>
 <tr class="memdesc:a29d6af280feaabfa6fc0601541bd818c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bottom rows a horizontal line never uses, at least <a class="el" href="#abf9e9826d99af0a92744527a179189d9" title="Bottom rows a formation never uses, so spawn lines always have room to enter.">BottomClearance</a>, so a wall across the board stands well above the cannon.  <br /></td></tr>
 <tr class="separator:a29d6af280feaabfa6fc0601541bd818c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -145,9 +148,18 @@ Properties</h2></td></tr>
 <tr class="separator:aa690423d9a3d9014f13e12cf857a2f87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b37aa7112069dd23b5e36c1b1492f94" id="r_a5b37aa7112069dd23b5e36c1b1492f94"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5b37aa7112069dd23b5e36c1b1492f94">HorizontalWeight</a><code> [get]</code></td></tr>
 <tr class="separator:a5b37aa7112069dd23b5e36c1b1492f94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6bf06f13d2bfc9828f5af9637c7819d6" id="r_a6bf06f13d2bfc9828f5af9637c7819d6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6bf06f13d2bfc9828f5af9637c7819d6">ItemCoverHoldCycles</a><code> [get]</code></td></tr>
+<tr class="memdesc:a6bf06f13d2bfc9828f5af9637c7819d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cycles an item cover holds, counting the cycle it formed on.  <br /></td></tr>
+<tr class="separator:a6bf06f13d2bfc9828f5af9637c7819d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8673f39cf5e400fa604513f81968d1b3" id="r_a8673f39cf5e400fa604513f81968d1b3"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8673f39cf5e400fa604513f81968d1b3">ItemCoverWeight</a><code> [get]</code></td></tr>
 <tr class="memdesc:a8673f39cf5e400fa604513f81968d1b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pick weight of ringing an item; only in the pick while an item is on the board.  <br /></td></tr>
 <tr class="separator:a8673f39cf5e400fa604513f81968d1b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a171ac4d9c599fcc577c17857cb1acf" id="r_a0a171ac4d9c599fcc577c17857cb1acf"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0a171ac4d9c599fcc577c17857cb1acf">LineHoldCycles</a><code> [get]</code></td></tr>
+<tr class="memdesc:a0a171ac4d9c599fcc577c17857cb1acf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cycles a horizontal or diagonal line holds, counting the cycle it formed on.  <br /></td></tr>
+<tr class="separator:a0a171ac4d9c599fcc577c17857cb1acf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab468150f070921bfe9783d5dcc502d4" id="r_aab468150f070921bfe9783d5dcc502d4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab468150f070921bfe9783d5dcc502d4">LoneHoldCycles</a><code> [get]</code></td></tr>
+<tr class="memdesc:aab468150f070921bfe9783d5dcc502d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cycles a lone unbreakable (in no formation) stays where it is before it may move again.  <br /></td></tr>
+<tr class="separator:aab468150f070921bfe9783d5dcc502d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b851ecb128d8c14a4b32708508885ac" id="r_a0b851ecb128d8c14a4b32708508885ac"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0b851ecb128d8c14a4b32708508885ac">MaxMembers</a><code> [get]</code></td></tr>
 <tr class="memdesc:a0b851ecb128d8c14a4b32708508885ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Most unbreakables in one formation; the rest roam, or form a formation of their own.  <br /></td></tr>
 <tr class="separator:a0b851ecb128d8c14a4b32708508885ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -160,12 +172,12 @@ Properties</h2></td></tr>
 <tr class="memitem:ab57ce9338d75ace4254ea5c59f50c575" id="r_ab57ce9338d75ace4254ea5c59f50c575"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab57ce9338d75ace4254ea5c59f50c575">ReinforcementChance</a><code> [get]</code></td></tr>
 <tr class="memdesc:ab57ce9338d75ace4254ea5c59f50c575"><td class="mdescLeft">&#160;</td><td class="mdescRight">Chance, at each wave start, that a formation which stood untouched through the last wave calls in one more unbreakable.  <br /></td></tr>
 <tr class="separator:ab57ce9338d75ace4254ea5c59f50c575"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad99b4bba26df4f361816ee98cd86c561" id="r_ad99b4bba26df4f361816ee98cd86c561"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad99b4bba26df4f361816ee98cd86c561">SnakeHoldCycles</a><code> [get]</code></td></tr>
+<tr class="memdesc:ad99b4bba26df4f361816ee98cd86c561"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cycles a snake walks, counting the cycle it formed on, before it changes shape.  <br /></td></tr>
+<tr class="separator:ad99b4bba26df4f361816ee98cd86c561"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9049ea6657189c05859a740e6f67a8f8" id="r_a9049ea6657189c05859a740e6f67a8f8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9049ea6657189c05859a740e6f67a8f8">SnakeMaxMembers</a><code> [get]</code></td></tr>
 <tr class="memdesc:a9049ea6657189c05859a740e6f67a8f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Most unbreakables in a snake, the line that walks the board.  <br /></td></tr>
 <tr class="separator:a9049ea6657189c05859a740e6f67a8f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5fb6a2c5e674c2a70627aa3366cd27ba" id="r_a5fb6a2c5e674c2a70627aa3366cd27ba"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5fb6a2c5e674c2a70627aa3366cd27ba">SnakeStepSeconds</a><code> [get]</code></td></tr>
-<tr class="memdesc:a5fb6a2c5e674c2a70627aa3366cd27ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds of play between an unbreakable snake's steps, on a clock of its own.  <br /></td></tr>
-<tr class="separator:a5fb6a2c5e674c2a70627aa3366cd27ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7da097d9ad46cdaf9471eb941d324602" id="r_a7da097d9ad46cdaf9471eb941d324602"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7da097d9ad46cdaf9471eb941d324602">SnakeWeight</a><code> [get]</code></td></tr>
 <tr class="memdesc:a7da097d9ad46cdaf9471eb941d324602"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pick weight of a snake.  <br /></td></tr>
 <tr class="separator:a7da097d9ad46cdaf9471eb941d324602"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -182,12 +194,65 @@ Properties</h2></td></tr>
 <tr class="memdesc:a11b522ef2c041a3e16995984ded83d73"><td class="mdescLeft">&#160;</td><td class="mdescRight">The board's toughs walk as one snake of their own, through the balloons in its way, keeping its order.  <br /></td></tr>
 <tr class="separator:a11b522ef2c041a3e16995984ded83d73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72a958f42f4d9e945064f71fa55525b9" id="r_a72a958f42f4d9e945064f71fa55525b9"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a72a958f42f4d9e945064f71fa55525b9">ToughSnakeStepSeconds</a><code> [get]</code></td></tr>
-<tr class="memdesc:a72a958f42f4d9e945064f71fa55525b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds of play between the tough snake's steps, on a clock of its own.  <br /></td></tr>
+<tr class="memdesc:a72a958f42f4d9e945064f71fa55525b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds of play between the tough snake's steps, on a clock of its own apart from the beat.  <br /></td></tr>
 <tr class="separator:a72a958f42f4d9e945064f71fa55525b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>How unbreakables gather into formations, hold them, pick the next shape, and call in more unbreakables while left alone. </p>
 </div><h2 class="groupheader">Property Documentation</h2>
+<a id="af878da69efc6cff720ede5832a9b476a" name="af878da69efc6cff720ede5832a9b476a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af878da69efc6cff720ede5832a9b476a">&#9670;&#160;</a></span>BeatSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings.BeatSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds of play between the unbreakables' beats. </p>
+<p>An unbreakable snake steps on every beat; every <a class="el" href="#a02cca91833529db2620546083d03cf68" title="Beats in one cycle.">BeatsPerCycle</a> beats make a cycle, the clock formations form, hold and change shape on and a lone unbreakable moves on. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#af1faf93d863550ddbded0b8b84a960d0">BalloonParty.Configuration.Balloons.UnbreakableFormationSettings</a>.</p>
+
+</div>
+</div>
+<a id="a02cca91833529db2620546083d03cf68" name="a02cca91833529db2620546083d03cf68"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02cca91833529db2620546083d03cf68">&#9670;&#160;</a></span>BeatsPerCycle</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings.BeatsPerCycle</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Beats in one cycle. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a0d65d97222345f6c01c5a784743bdd2e">BalloonParty.Configuration.Balloons.UnbreakableFormationSettings</a>.</p>
+
+</div>
+</div>
 <a id="abf9e9826d99af0a92744527a179189d9" name="abf9e9826d99af0a92744527a179189d9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abf9e9826d99af0a92744527a179189d9">&#9670;&#160;</a></span>BottomClearance</h2>
 
@@ -261,32 +326,6 @@ Properties</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a7909bcc38346b71d0414ae7d06ce131a">BalloonParty.Configuration.Balloons.UnbreakableFormationSettings</a>.</p>
-
-</div>
-</div>
-<a id="a1e2f9a7c649b859b07308f8b6d641764" name="a1e2f9a7c649b859b07308f8b6d641764"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1e2f9a7c649b859b07308f8b6d641764">&#9670;&#160;</a></span>HoldWaves</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings.HoldWaves</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Waves a formation holds, counting the wave it formed in, before it changes shape. </p>
-
-<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a4341909c3eb246071fda4e4b37f976f7">BalloonParty.Configuration.Balloons.UnbreakableFormationSettings</a>.</p>
 
 </div>
 </div>
@@ -366,6 +405,32 @@ Properties</h2></td></tr>
 
 </div>
 </div>
+<a id="a6bf06f13d2bfc9828f5af9637c7819d6" name="a6bf06f13d2bfc9828f5af9637c7819d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6bf06f13d2bfc9828f5af9637c7819d6">&#9670;&#160;</a></span>ItemCoverHoldCycles</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings.ItemCoverHoldCycles</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Cycles an item cover holds, counting the cycle it formed on. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#aa84fab0e4a5973cf3526846188886627">BalloonParty.Configuration.Balloons.UnbreakableFormationSettings</a>.</p>
+
+</div>
+</div>
 <a id="a8673f39cf5e400fa604513f81968d1b3" name="a8673f39cf5e400fa604513f81968d1b3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8673f39cf5e400fa604513f81968d1b3">&#9670;&#160;</a></span>ItemCoverWeight</h2>
 
@@ -389,6 +454,59 @@ Properties</h2></td></tr>
 <p>Pick weight of ringing an item; only in the pick while an item is on the board. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#ad1f360877b29faa467fd44b79fd21b78">BalloonParty.Configuration.Balloons.UnbreakableFormationSettings</a>.</p>
+
+</div>
+</div>
+<a id="a0a171ac4d9c599fcc577c17857cb1acf" name="a0a171ac4d9c599fcc577c17857cb1acf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a171ac4d9c599fcc577c17857cb1acf">&#9670;&#160;</a></span>LineHoldCycles</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings.LineHoldCycles</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Cycles a horizontal or diagonal line holds, counting the cycle it formed on. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a224b550adbf386687e7f508aed357966">BalloonParty.Configuration.Balloons.UnbreakableFormationSettings</a>.</p>
+
+</div>
+</div>
+<a id="aab468150f070921bfe9783d5dcc502d4" name="aab468150f070921bfe9783d5dcc502d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab468150f070921bfe9783d5dcc502d4">&#9670;&#160;</a></span>LoneHoldCycles</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings.LoneHoldCycles</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Cycles a lone unbreakable (in no formation) stays where it is before it may move again. </p>
+<p>Only one moves alone per cycle. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a9d5c73a260c6d29ff11cbf94e0af0ba8">BalloonParty.Configuration.Balloons.UnbreakableFormationSettings</a>.</p>
 
 </div>
 </div>
@@ -496,6 +614,32 @@ Properties</h2></td></tr>
 
 </div>
 </div>
+<a id="ad99b4bba26df4f361816ee98cd86c561" name="ad99b4bba26df4f361816ee98cd86c561"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad99b4bba26df4f361816ee98cd86c561">&#9670;&#160;</a></span>SnakeHoldCycles</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings.SnakeHoldCycles</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Cycles a snake walks, counting the cycle it formed on, before it changes shape. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a5e760088aa4aac86777cc79e17223a1f">BalloonParty.Configuration.Balloons.UnbreakableFormationSettings</a>.</p>
+
+</div>
+</div>
 <a id="a9049ea6657189c05859a740e6f67a8f8" name="a9049ea6657189c05859a740e6f67a8f8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9049ea6657189c05859a740e6f67a8f8">&#9670;&#160;</a></span>SnakeMaxMembers</h2>
 
@@ -519,32 +663,6 @@ Properties</h2></td></tr>
 <p>Most unbreakables in a snake, the line that walks the board. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a81c3c54e098f5754dfc34f1201278e50">BalloonParty.Configuration.Balloons.UnbreakableFormationSettings</a>.</p>
-
-</div>
-</div>
-<a id="a5fb6a2c5e674c2a70627aa3366cd27ba" name="a5fb6a2c5e674c2a70627aa3366cd27ba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5fb6a2c5e674c2a70627aa3366cd27ba">&#9670;&#160;</a></span>SnakeStepSeconds</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings.SnakeStepSeconds</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Seconds of play between an unbreakable snake's steps, on a clock of its own. </p>
-
-<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#ac86cae72a863aca882b8ca2381e96195">BalloonParty.Configuration.Balloons.UnbreakableFormationSettings</a>.</p>
 
 </div>
 </div>
@@ -699,7 +817,7 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Seconds of play between the tough snake's steps, on a clock of its own. </p>
+<p>Seconds of play between the tough snake's steps, on a clock of its own apart from the beat. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a6095b8f0869b5c9c3898c1d42cfd347d">BalloonParty.Configuration.Balloons.UnbreakableFormationSettings</a>.</p>
 

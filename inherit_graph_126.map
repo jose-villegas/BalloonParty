@@ -1,7 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelStep.html" title="One step of a level&#45;stepped value: it holds from FromLevel until the next step." alt="" coords="5,40,202,85"/>
-<area shape="rect" id="Node000001" href="$structBalloonParty_1_1Configuration_1_1Level_1_1IntLevelStep.html" title=" " alt="" coords="250,5,446,50"/>
-<area shape="poly" id="edge96_Node000000_Node000001" title=" " alt="" coords="217,44,252,41,246,42,218,49"/>
-<area shape="rect" id="Node000002" href="$structBalloonParty_1_1Configuration_1_1Level_1_1ItemCountStep.html" title="The item&#45;count distributions in force from FromLevel on." alt="" coords="250,75,446,119"/>
-<area shape="poly" id="edge97_Node000000_Node000002" title=" " alt="" coords="217,76,252,83,246,83,217,81"/>
+<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Configuration_1_1Level_1_1IContentPiece.html" title="A catalogue entry the level generator can include in a level." alt="" coords="5,75,202,119"/>
+<area shape="rect" id="Node000001" href="$structBalloonParty_1_1Configuration_1_1Level_1_1BalloonContentEntry.html" title=" " alt="" coords="255,5,451,50"/>
+<area shape="poly" id="edge92_Node000000_Node000001" title=" " alt="" coords="200,67,272,49,268,52,202,72"/>
+<area shape="rect" id="Node000002" href="$structBalloonParty_1_1Configuration_1_1Level_1_1GridActorContentEntry.html" title="A grid actor in the catalogue. Actors block the board, so they&#39;re paid from the threat budget." alt="" coords="250,75,456,119"/>
+<area shape="poly" id="edge93_Node000000_Node000002" title=" " alt="" coords="217,94,252,96,246,98,218,100"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Configuration_1_1Level_1_1ItemContentEntry.html" title="An item in the catalogue. Items help the player, so they&#39;re always paid from the aid budget." alt="" coords="255,144,451,189"/>
+<area shape="poly" id="edge94_Node000000_Node000003" title=" " alt="" coords="202,121,273,143,267,144,201,127"/>
 </map>

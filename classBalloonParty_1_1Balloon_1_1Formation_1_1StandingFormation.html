@@ -135,8 +135,14 @@ Properties</h2></td></tr>
 <tr class="memdesc:a7611b3df8f7c6d9786bff64e426a1b42"><td class="mdescLeft">&#160;</td><td class="mdescRight">The snake of toughs (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IArmouredFormationMember.html" title="A formation member with armour: a tough balloon.">IArmouredFormationMember</a>), one at most: it takes every other tough in at its tail, walks through the balloons in its way, keeping its order, until its last member pops, and never changes shape or calls reinforcements.  <br /></td></tr>
 <tr class="separator:a7611b3df8f7c6d9786bff64e426a1b42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a60f8de529e3eb03c664a987d2ec1cfcc" id="r_a60f8de529e3eb03c664a987d2ec1cfcc"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a60f8de529e3eb03c664a987d2ec1cfcc">ArrangedOnPass</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:a60f8de529e3eb03c664a987d2ec1cfcc"><td class="mdescLeft">&#160;</td><td class="mdescRight">The wave-start arrangement that last formed or re-planned it.  <br /></td></tr>
+<tr class="memdesc:a60f8de529e3eb03c664a987d2ec1cfcc"><td class="mdescLeft">&#160;</td><td class="mdescRight">The cycle's arrangement that last formed or re-planned it.  <br /></td></tr>
 <tr class="separator:a60f8de529e3eb03c664a987d2ec1cfcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5718e2e7a3cfe4b0a4306ec8205e886" id="r_ad5718e2e7a3cfe4b0a4306ec8205e886"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad5718e2e7a3cfe4b0a4306ec8205e886">CyclesLeft</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:ad5718e2e7a3cfe4b0a4306ec8205e886"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cycles left to hold the current shape before it changes.  <br /></td></tr>
+<tr class="separator:ad5718e2e7a3cfe4b0a4306ec8205e886"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a5712231b53ffdf1dcb7823d4bacf57" id="r_a2a5712231b53ffdf1dcb7823d4bacf57"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2a5712231b53ffdf1dcb7823d4bacf57">FormedOnWave</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a2a5712231b53ffdf1dcb7823d4bacf57"><td class="mdescLeft">&#160;</td><td class="mdescRight">The wave it formed in, which rolls for no reinforcement.  <br /></td></tr>
+<tr class="separator:a2a5712231b53ffdf1dcb7823d4bacf57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afbb3961fe761fccb2e2435f93704a750" id="r_afbb3961fe761fccb2e2435f93704a750"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afbb3961fe761fccb2e2435f93704a750">Heading</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:afbb3961fe761fccb2e2435f93704a750"><td class="mdescLeft">&#160;</td><td class="mdescRight">A snake's walking direction (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1HexCoordinates.html#ab98ceaa27dad848be1ada5a45480c8bf" title="The neighbour one step from slot  in direction : 0 east, then clockwise on screen in 60° turns.">Slots.Grid.HexCoordinates.Step</a>); its members run head first.  <br /></td></tr>
 <tr class="separator:afbb3961fe761fccb2e2435f93704a750"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -147,9 +153,6 @@ Properties</h2></td></tr>
 <tr class="memitem:af2c1a8f3511be76aceee6c0190d43637" id="r_af2c1a8f3511be76aceee6c0190d43637"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af2c1a8f3511be76aceee6c0190d43637">Touched</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:af2c1a8f3511be76aceee6c0190d43637"><td class="mdescLeft">&#160;</td><td class="mdescRight">A member was pierced since it formed; a touched formation calls no reinforcements.  <br /></td></tr>
 <tr class="separator:af2c1a8f3511be76aceee6c0190d43637"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c2ff99217b4e7eef85c31c04c6bbbed" id="r_a9c2ff99217b4e7eef85c31c04c6bbbed"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9c2ff99217b4e7eef85c31c04c6bbbed">WavesLeft</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:a9c2ff99217b4e7eef85c31c04c6bbbed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wave starts left to hold the current shape before it changes.  <br /></td></tr>
-<tr class="separator:a9c2ff99217b4e7eef85c31c04c6bbbed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>One standing formation: its members, its shape, and how long it holds that shape. </p>
@@ -247,7 +250,55 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>The wave-start arrangement that last formed or re-planned it. </p>
+<p>The cycle's arrangement that last formed or re-planned it. </p>
+
+</div>
+</div>
+<a id="ad5718e2e7a3cfe4b0a4306ec8205e886" name="ad5718e2e7a3cfe4b0a4306ec8205e886"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad5718e2e7a3cfe4b0a4306ec8205e886">&#9670;&#160;</a></span>CyclesLeft</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Balloon.Formation.StandingFormation.CyclesLeft</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel set">set</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Cycles left to hold the current shape before it changes. </p>
+
+</div>
+</div>
+<a id="a2a5712231b53ffdf1dcb7823d4bacf57" name="a2a5712231b53ffdf1dcb7823d4bacf57"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a5712231b53ffdf1dcb7823d4bacf57">&#9670;&#160;</a></span>FormedOnWave</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Balloon.Formation.StandingFormation.FormedOnWave</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel set">set</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The wave it formed in, which rolls for no reinforcement. </p>
 
 </div>
 </div>
@@ -340,30 +391,6 @@ Properties</h2></td></tr>
 </div><div class="memdoc">
 
 <p>A member was pierced since it formed; a touched formation calls no reinforcements. </p>
-
-</div>
-</div>
-<a id="a9c2ff99217b4e7eef85c31c04c6bbbed" name="a9c2ff99217b4e7eef85c31c04c6bbbed"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9c2ff99217b4e7eef85c31c04c6bbbed">&#9670;&#160;</a></span>WavesLeft</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int BalloonParty.Balloon.Formation.StandingFormation.WavesLeft</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel set">set</span><span class="mlabel package">package</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Wave starts left to hold the current shape before it changes. </p>
 
 </div>
 </div>

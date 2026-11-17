@@ -130,5 +130,6 @@ var searchData=
   ['currentversion_127',['CurrentVersion',['../classBalloonParty_1_1Game_1_1Run_1_1RunSnapshot.html#a5ec3a57e0a13fec975c1f964036f00ad',1,'BalloonParty::Game::Run::RunSnapshot']]],
   ['curveaveragesamples_128',['CurveAverageSamples',['../structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a89b8752b63c3ba4b51ad87ae2d8a90c3',1,'BalloonParty::Solver::ShotCruiseConfig']]],
   ['curvefieldwidth_129',['CurveFieldWidth',['../classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a4002c2612ae4f6869d641ee103c89658',1,'BalloonParty::Editor::LevelPacingWindow']]],
-  ['customcolor_130',['CustomColor',['../structBalloonParty_1_1Configuration_1_1Effects_1_1PaintProfile.html#a2aec7a97904642d398130d1b7b1610cd',1,'BalloonParty::Configuration::Effects::PaintProfile']]]
+  ['customcolor_130',['CustomColor',['../structBalloonParty_1_1Configuration_1_1Effects_1_1PaintProfile.html#a2aec7a97904642d398130d1b7b1610cd',1,'BalloonParty::Configuration::Effects::PaintProfile']]],
+  ['cycles_131',['Cycles',['../structBalloonParty_1_1Balloon_1_1Controller_1_1RoamRests_1_1Rest.html#a3482930b1c2a01f0b6e9e37fd062b09b',1,'BalloonParty::Balloon::Controller::RoamRests::Rest']]]
 ];

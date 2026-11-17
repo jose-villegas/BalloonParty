@@ -160,15 +160,18 @@ Public Member Functions</h2></td></tr>
 Package Functions</h2></td></tr>
 <tr class="memitem:a07f679a7086bd028b1950688ba71ed46" id="r_a07f679a7086bd028b1950688ba71ed46"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a07f679a7086bd028b1950688ba71ed46">UnbreakableFormationService</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html">IBalloonsConfiguration</a> balloonsConfig, <a class="el" href="classBalloonParty_1_1Game_1_1Assist_1_1ThreatEase.html">ThreatEase</a> threatEase)</td></tr>
 <tr class="separator:a07f679a7086bd028b1950688ba71ed46"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a24aeb1ec5cb687e704818222d3a1d569" id="r_a24aeb1ec5cb687e704818222d3a1d569"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a24aeb1ec5cb687e704818222d3a1d569">ArrangeAtWaveStart</a> (Action&lt; IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Balloon_1_1Formation_1_1SlotMove.html">SlotMove</a> &gt; &gt; relocate)</td></tr>
-<tr class="memdesc:a24aeb1ec5cb687e704818222d3a1d569"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs once per wave start, before the roam pre-pass.  <br /></td></tr>
-<tr class="separator:a24aeb1ec5cb687e704818222d3a1d569"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a712e1a5de168e7ee63ac4b80fd49083b" id="r_a712e1a5de168e7ee63ac4b80fd49083b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a712e1a5de168e7ee63ac4b80fd49083b">ArrangeOnCycle</a> (Action&lt; IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Balloon_1_1Formation_1_1SlotMove.html">SlotMove</a> &gt; &gt; relocate)</td></tr>
+<tr class="memdesc:a712e1a5de168e7ee63ac4b80fd49083b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs once per cycle of the unbreakables' clock, before the lone unbreakable's move.  <br /></td></tr>
+<tr class="separator:a712e1a5de168e7ee63ac4b80fd49083b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2475830109b55f1fa70b5ee77834a657" id="r_a2475830109b55f1fa70b5ee77834a657"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2475830109b55f1fa70b5ee77834a657">DropWallClosingSlots</a> (Vector2Int from, List&lt; Vector2Int &gt; slots)</td></tr>
 <tr class="memdesc:a2475830109b55f1fa70b5ee77834a657"><td class="mdescLeft">&#160;</td><td class="mdescRight">Drops from <em>slots</em>  every slot an unbreakable roaming from <em>from</em>  would link the board's unbreakables side to side by landing on (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1ShotWall.html" title="Whether the balloons no ordinary shot gets through (unbreakables, deflectors) link one side of the bo...">ShotWall</a>).  <br /></td></tr>
 <tr class="separator:a2475830109b55f1fa70b5ee77834a657"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a08aefc1544fa87df44e5ab626f965804" id="r_a08aefc1544fa87df44e5ab626f965804"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a08aefc1544fa87df44e5ab626f965804">GatherToughSnake</a> (Action&lt; IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Balloon_1_1Formation_1_1SlotMove.html">SlotMove</a> &gt; &gt; relocate)</td></tr>
 <tr class="memdesc:a08aefc1544fa87df44e5ab626f965804"><td class="mdescLeft">&#160;</td><td class="mdescRight">Forms the toughs into one body: with no snake, the deepest tough starts one where it stands; then every free tough, landed or still gliding in, falls in behind the tail at once, along a line of slots on from it (<a class="el" href="classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeBody.html" title="Where the tough snake&#39;s free toughs fall in: a line of slots on from its tail, away from the body,...">SnakeBody</a>).  <br /></td></tr>
 <tr class="separator:a08aefc1544fa87df44e5ab626f965804"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa07541aa485399509023674f4ac273a3" id="r_aa07541aa485399509023674f4ac273a3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa07541aa485399509023674f4ac273a3">RollReinforcementsAtWaveStart</a> ()</td></tr>
+<tr class="memdesc:aa07541aa485399509023674f4ac273a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs once per wave start: every formation that stood untouched through the last wave, and didn't form in it, rolls for a reinforcement.  <br /></td></tr>
+<tr class="separator:aa07541aa485399509023674f4ac273a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4763736a6c1ba93d1b50a400de4bbdf" id="r_ad4763736a6c1ba93d1b50a400de4bbdf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad4763736a6c1ba93d1b50a400de4bbdf">StepSnakes</a> (Action&lt; IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Balloon_1_1Formation_1_1SlotMove.html">SlotMove</a> &gt; &gt; relocate, bool afterArranging=false)</td></tr>
 <tr class="memdesc:ad4763736a6c1ba93d1b50a400de4bbdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Every unbreakable snake steps once: its head into the next open slot (<a class="el" href="classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeWalk.html" title="Where a snake&#39;s head steps next: on along its heading when that slot is open, else the gentlest open ...">SnakeWalk</a>), each member after it into the slot the one ahead just left.  <br /></td></tr>
 <tr class="separator:ad4763736a6c1ba93d1b50a400de4bbdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -181,22 +184,28 @@ Package Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:a2bbb0708c443c165baa42b4b2b2ad4a6" id="r_a2bbb0708c443c165baa42b4b2b2ad4a6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2bbb0708c443c165baa42b4b2b2ad4a6">BeatSeconds</a><code> [get]</code></td></tr>
+<tr class="separator:a2bbb0708c443c165baa42b4b2b2ad4a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d43056216e7cd45b50b61a9f5dfbeba" id="r_a7d43056216e7cd45b50b61a9f5dfbeba"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7d43056216e7cd45b50b61a9f5dfbeba">BeatsPerCycle</a><code> [get]</code></td></tr>
+<tr class="separator:a7d43056216e7cd45b50b61a9f5dfbeba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad1d2ecf8b149e3f97de52a0586c09fd5" id="r_ad1d2ecf8b149e3f97de52a0586c09fd5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Formation.html#a7d189f644fea0191bb4f5acaef4bf746">FormationShape</a>?&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad1d2ecf8b149e3f97de52a0586c09fd5">CurrentShape</a><code> [get]</code></td></tr>
 <tr class="separator:ad1d2ecf8b149e3f97de52a0586c09fd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7dd46d1a2b4baabf8be65259bf2b8bd2" id="r_a7dd46d1a2b4baabf8be65259bf2b8bd2"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation.html">StandingFormation</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7dd46d1a2b4baabf8be65259bf2b8bd2">Formations</a><code> [get]</code></td></tr>
 <tr class="separator:a7dd46d1a2b4baabf8be65259bf2b8bd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a925a1fa38cb7fe3c0043911a9496ba97" id="r_a925a1fa38cb7fe3c0043911a9496ba97"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a925a1fa38cb7fe3c0043911a9496ba97">HasToughSnake</a><code> [get]</code></td></tr>
 <tr class="separator:a925a1fa38cb7fe3c0043911a9496ba97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46bcf88c0f410682641d30d865089e7c" id="r_a46bcf88c0f410682641d30d865089e7c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a46bcf88c0f410682641d30d865089e7c">HasUnbreakables</a><code> [get]</code></td></tr>
+<tr class="separator:a46bcf88c0f410682641d30d865089e7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3336dddfe6bd4a96d4cd760c21bf309a" id="r_a3336dddfe6bd4a96d4cd760c21bf309a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3336dddfe6bd4a96d4cd760c21bf309a">HasUnbreakableSnake</a><code> [get]</code></td></tr>
 <tr class="separator:a3336dddfe6bd4a96d4cd760c21bf309a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a570e478850c9a0a75f892d72282357c0" id="r_a570e478850c9a0a75f892d72282357c0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a570e478850c9a0a75f892d72282357c0">LoneHoldCycles</a><code> [get]</code></td></tr>
+<tr class="separator:a570e478850c9a0a75f892d72282357c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a645ca20096e67ab442f383b70189f95b" id="r_a645ca20096e67ab442f383b70189f95b"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html">IWriteableFormationMember</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a645ca20096e67ab442f383b70189f95b">Members</a><code> [get]</code></td></tr>
 <tr class="separator:a645ca20096e67ab442f383b70189f95b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97790f65e0d4a43b8e21a8a28e8ceb31" id="r_a97790f65e0d4a43b8e21a8a28e8ceb31"><td class="memItemLeft" align="right" valign="top">Func&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a97790f65e0d4a43b8e21a8a28e8ceb31">Random01</a> = () =&gt; Random.value<code> [get, set]</code></td></tr>
 <tr class="separator:a97790f65e0d4a43b8e21a8a28e8ceb31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a92670ecfb5b2b4094787d83b3fa35f00" id="r_a92670ecfb5b2b4094787d83b3fa35f00"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a92670ecfb5b2b4094787d83b3fa35f00">ResetOrder</a><code> [get]</code></td></tr>
 <tr class="separator:a92670ecfb5b2b4094787d83b3fa35f00"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a59cfbc7ddd43e5e1eacdf629f7eea34f" id="r_a59cfbc7ddd43e5e1eacdf629f7eea34f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a59cfbc7ddd43e5e1eacdf629f7eea34f">SnakeStepSeconds</a><code> [get]</code></td></tr>
-<tr class="separator:a59cfbc7ddd43e5e1eacdf629f7eea34f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa4ea7c53178f0ffc8c4db3652101aed" id="r_afa4ea7c53178f0ffc8c4db3652101aed"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa4ea7c53178f0ffc8c4db3652101aed">ToughSnakeLanded</a><code> [get]</code></td></tr>
 <tr class="separator:afa4ea7c53178f0ffc8c4db3652101aed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a965354256b6866657b321eccfb48c976" id="r_a965354256b6866657b321eccfb48c976"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a965354256b6866657b321eccfb48c976">ToughSnakeStepSeconds</a><code> [get]</code></td></tr>
@@ -234,6 +243,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a5af445a6e7b4576340d4a67ac549e68b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80ad40557ff7bf99ae96ac1dcb874663" id="r_a80ad40557ff7bf99ae96ac1dcb874663"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a80ad40557ff7bf99ae96ac1dcb874663">HeadingFor</a> (<a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Formation.html#a7d189f644fea0191bb4f5acaef4bf746">FormationShape</a> shape)</td></tr>
 <tr class="separator:a80ad40557ff7bf99ae96ac1dcb874663"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6965cb37a3d9ba747c9a73ecbdcd013a" id="r_a6965cb37a3d9ba747c9a73ecbdcd013a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6965cb37a3d9ba747c9a73ecbdcd013a">HoldCyclesOf</a> (<a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Formation.html#a7d189f644fea0191bb4f5acaef4bf746">FormationShape</a> shape)</td></tr>
+<tr class="separator:a6965cb37a3d9ba747c9a73ecbdcd013a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5db3a099f0d6e8223182284200227e5" id="r_af5db3a099f0d6e8223182284200227e5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af5db3a099f0d6e8223182284200227e5">IsAssigned</a> (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html">IWriteableFormationMember</a> member)</td></tr>
 <tr class="separator:af5db3a099f0d6e8223182284200227e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4288586bd4e05f8f3873f9d051b2d69d" id="r_a4288586bd4e05f8f3873f9d051b2d69d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4288586bd4e05f8f3873f9d051b2d69d">IsToughAt</a> (Vector2Int slot)</td></tr>
@@ -344,6 +355,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a734de00aaa95f8c82076389c0eefc8a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a26c862e7620263a62064e245f194fb61" id="r_a26c862e7620263a62064e245f194fb61"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1ShotWall.html">ShotWall</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a26c862e7620263a62064e245f194fb61">_wall</a> = new()</td></tr>
 <tr class="separator:a26c862e7620263a62064e245f194fb61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5bb3113098b9b4cd3747b46b5328da09" id="r_a5bb3113098b9b4cd3747b46b5328da09"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5bb3113098b9b4cd3747b46b5328da09">_wavePass</a></td></tr>
+<tr class="separator:a5bb3113098b9b4cd3747b46b5328da09"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
@@ -354,7 +367,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Gathers the board's unbreakables into formations, as many as there are members for. </p>
-<p>At each wave start the balancer asks it to arrange: each formation holds for <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a1e2f9a7c649b859b07308f8b6d641764" title="Waves a formation holds, counting the wave it formed in, before it changes shape.">IUnbreakableFormationSettings.HoldWaves</a> waves, then plans a different shape, and the unbreakables left free form new ones. It hands the balancer the moves and anchors the members. A formation that loses members below the minimum breaks at once. One that stands untouched may call in another unbreakable (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IFormationReinforcements.html" title="Unbreakables the board&#39;s formations have called in.">IFormationReinforcements</a>). The board's toughs are one snake of their own (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a11b522ef2c041a3e16995984ded83d73" title="The board&#39;s toughs walk as one snake of their own, through the balloons in its way,...">IUnbreakableFormationSettings.ToughSnakes</a>): it starts from the deepest with every other tough lined up behind it at once, even while they are still gliding in, each tough that arrives later falls in behind its tail as soon as it appears, and it walks through the balloons in its way, keeping its order and its shape, until its last member pops. </p>
+<p>On each cycle of the unbreakables' clock (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a02cca91833529db2620546083d03cf68" title="Beats in one cycle.">IUnbreakableFormationSettings.BeatsPerCycle</a>) the balancer asks it to arrange: each formation holds for its shape's hold cycles, then plans a different shape, and the unbreakables left free form new ones. It hands the balancer the moves and anchors the members. A formation that loses members below the minimum breaks at once. One that stands untouched may call in another unbreakable (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IFormationReinforcements.html" title="Unbreakables the board&#39;s formations have called in.">IFormationReinforcements</a>). The board's toughs are one snake of their own (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a11b522ef2c041a3e16995984ded83d73" title="The board&#39;s toughs walk as one snake of their own, through the balloons in its way,...">IUnbreakableFormationSettings.ToughSnakes</a>): it starts from the deepest with every other tough lined up behind it at once, even while they are still gliding in, each tough that arrives later falls in behind its tail as soon as it appears, and it walks through the balloons in its way, keeping its order and its shape, until its last member pops. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a07f679a7086bd028b1950688ba71ed46" name="a07f679a7086bd028b1950688ba71ed46"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a07f679a7086bd028b1950688ba71ed46">&#9670;&#160;</a></span>UnbreakableFormationService()</h2>
@@ -425,8 +438,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a24aeb1ec5cb687e704818222d3a1d569" name="a24aeb1ec5cb687e704818222d3a1d569"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a24aeb1ec5cb687e704818222d3a1d569">&#9670;&#160;</a></span>ArrangeAtWaveStart()</h2>
+<a id="a712e1a5de168e7ee63ac4b80fd49083b" name="a712e1a5de168e7ee63ac4b80fd49083b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a712e1a5de168e7ee63ac4b80fd49083b">&#9670;&#160;</a></span>ArrangeOnCycle()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -435,7 +448,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void BalloonParty.Balloon.Formation.UnbreakableFormationService.ArrangeAtWaveStart </td>
+          <td class="memname">void BalloonParty.Balloon.Formation.UnbreakableFormationService.ArrangeOnCycle </td>
           <td>(</td>
           <td class="paramtype">Action&lt; IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Balloon_1_1Formation_1_1SlotMove.html">SlotMove</a> &gt; &gt;</td>          <td class="paramname"><span class="paramname"><em>relocate</em></span></td><td>)</td>
           <td></td>
@@ -448,8 +461,8 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Runs once per wave start, before the roam pre-pass. </p>
-<p>Every formation that stood untouched through the last wave rolls for a reinforcement. A formation still holding counts down; one done holding plans its next shape, or breaks if none fits. Then the free unbreakables form new formations while there are enough of them, and the toughs start their snake if none walks. <em>relocate</em>  carries out a batch of moves at once and owns the grid change and the glides. </p>
+<p>Runs once per cycle of the unbreakables' clock, before the lone unbreakable's move. </p>
+<p>A formation still holding counts down; one done holding plans its next shape, or breaks if none fits. Then the free unbreakables form new formations while there are enough of them, and the toughs start their snake if none walks. <em>relocate</em>  carries out a batch of moves at once and owns the grid change and the glides. </p>
 
 </div>
 </div>
@@ -916,6 +929,31 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a6965cb37a3d9ba747c9a73ecbdcd013a" name="a6965cb37a3d9ba747c9a73ecbdcd013a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6965cb37a3d9ba747c9a73ecbdcd013a">&#9670;&#160;</a></span>HoldCyclesOf()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Balloon.Formation.UnbreakableFormationService.HoldCyclesOf </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Formation.html#a7d189f644fea0191bb4f5acaef4bf746">FormationShape</a></td>          <td class="paramname"><span class="paramname"><em>shape</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="af5db3a099f0d6e8223182284200227e5" name="af5db3a099f0d6e8223182284200227e5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af5db3a099f0d6e8223182284200227e5">&#9670;&#160;</a></span>IsAssigned()</h2>
 
@@ -1347,6 +1385,33 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="aa07541aa485399509023674f4ac273a3" name="aa07541aa485399509023674f4ac273a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa07541aa485399509023674f4ac273a3">&#9670;&#160;</a></span>RollReinforcementsAtWaveStart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Balloon.Formation.UnbreakableFormationService.RollReinforcementsAtWaveStart </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Runs once per wave start: every formation that stood untouched through the last wave, and didn't form in it, rolls for a reinforcement. </p>
+
+</div>
+</div>
 <a id="a43d911257d24ad738a8e2d43e17284ee" name="a43d911257d24ad738a8e2d43e17284ee"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a43d911257d24ad738a8e2d43e17284ee">&#9670;&#160;</a></span>Start()</h2>
 
@@ -1442,7 +1507,7 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Every unbreakable snake steps once: its head into the next open slot (<a class="el" href="classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeWalk.html" title="Where a snake&#39;s head steps next: on along its heading when that slot is open, else the gentlest open ...">SnakeWalk</a>), each member after it into the slot the one ahead just left. </p>
-<p>A snake boxed in turns round and its tail leads. Like <a class="el" href="#a24aeb1ec5cb687e704818222d3a1d569" title="Runs once per wave start, before the roam pre-pass.">ArrangeAtWaveStart</a>, <em>relocate</em>  carries out each step's moves at once. <em>afterArranging</em> : the same balance just arranged at wave start, and a snake formed or re-planned there waits for the next beat rather than stepping off its slots the moment it lands. </p>
+<p>A snake boxed in turns round and its tail leads. Like <a class="el" href="#a712e1a5de168e7ee63ac4b80fd49083b" title="Runs once per cycle of the unbreakables&#39; clock, before the lone unbreakable&#39;s move.">ArrangeOnCycle</a>, <em>relocate</em>  carries out each step's moves at once. <em>afterArranging</em> : the same balance just arranged on a cycle, and a snake formed or re-planned there waits for the next beat rather than stepping off its slots the moment it lands. </p>
 
 </div>
 </div>
@@ -2282,6 +2347,28 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a5bb3113098b9b4cd3747b46b5328da09" name="a5bb3113098b9b4cd3747b46b5328da09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5bb3113098b9b4cd3747b46b5328da09">&#9670;&#160;</a></span>_wavePass</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Balloon.Formation.UnbreakableFormationService._wavePass</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a51a6b4986cb6bef5432b491cbe37affe" name="a51a6b4986cb6bef5432b491cbe37affe"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a51a6b4986cb6bef5432b491cbe37affe">&#9670;&#160;</a></span>ByColumn</h2>
 
@@ -2338,6 +2425,50 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Property Documentation</h2>
+<a id="a2bbb0708c443c165baa42b4b2b2ad4a6" name="a2bbb0708c443c165baa42b4b2b2ad4a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2bbb0708c443c165baa42b4b2b2ad4a6">&#9670;&#160;</a></span>BeatSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Balloon.Formation.UnbreakableFormationService.BeatSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7d43056216e7cd45b50b61a9f5dfbeba" name="a7d43056216e7cd45b50b61a9f5dfbeba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d43056216e7cd45b50b61a9f5dfbeba">&#9670;&#160;</a></span>BeatsPerCycle</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Balloon.Formation.UnbreakableFormationService.BeatsPerCycle</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ad1d2ecf8b149e3f97de52a0586c09fd5" name="ad1d2ecf8b149e3f97de52a0586c09fd5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad1d2ecf8b149e3f97de52a0586c09fd5">&#9670;&#160;</a></span>CurrentShape</h2>
 
@@ -2404,6 +2535,28 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a46bcf88c0f410682641d30d865089e7c" name="a46bcf88c0f410682641d30d865089e7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46bcf88c0f410682641d30d865089e7c">&#9670;&#160;</a></span>HasUnbreakables</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Balloon.Formation.UnbreakableFormationService.HasUnbreakables</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a3336dddfe6bd4a96d4cd760c21bf309a" name="a3336dddfe6bd4a96d4cd760c21bf309a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3336dddfe6bd4a96d4cd760c21bf309a">&#9670;&#160;</a></span>HasUnbreakableSnake</h2>
 
@@ -2415,6 +2568,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">bool BalloonParty.Balloon.Formation.UnbreakableFormationService.HasUnbreakableSnake</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a570e478850c9a0a75f892d72282357c0" name="a570e478850c9a0a75f892d72282357c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a570e478850c9a0a75f892d72282357c0">&#9670;&#160;</a></span>LoneHoldCycles</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Balloon.Formation.UnbreakableFormationService.LoneHoldCycles</td>
         </tr>
       </table>
   </td>
@@ -2491,28 +2666,6 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html#a347699f041bd2f73a8326aa24a351d81">BalloonParty.Game.Run.IRunResettable</a>.</p>
-
-</div>
-</div>
-<a id="a59cfbc7ddd43e5e1eacdf629f7eea34f" name="a59cfbc7ddd43e5e1eacdf629f7eea34f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a59cfbc7ddd43e5e1eacdf629f7eea34f">&#9670;&#160;</a></span>SnakeStepSeconds</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float BalloonParty.Balloon.Formation.UnbreakableFormationService.SnakeStepSeconds</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel package">package</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
 
 </div>
 </div>
