@@ -85,6 +85,9 @@ namespace BalloonParty.Configuration.Balloons
         [Header("Tough Snake Springs")]
         [SerializeField] private ToughSnakeSpringSettings _toughSnakeSprings = new();
 
+        [Header("Formation Glow")]
+        [SerializeField] private FormationGlowSettings _formationGlow = new();
+
         [Header("Reward Balloons")]
         [SerializeField] private RewardBalloonSettings _rewardBalloons = new();
 
@@ -122,6 +125,7 @@ namespace BalloonParty.Configuration.Balloons
         public IBubbleMergeCueSettings BubbleMergeCue => _bubbleMergeCue;
         public IUnbreakableFormationSettings UnbreakableFormation => _unbreakableFormation;
         public IToughSnakeSpringSettings ToughSnakeSprings => _toughSnakeSprings;
+        public IFormationGlowSettings FormationGlow => _formationGlow;
         public IRewardBalloonSettings RewardBalloons => _rewardBalloons;
         public IDiscoWaveSettings DiscoWave => _discoWave;
         public INukeOddsSettings NukeOdds => _nukeOdds;

@@ -61,6 +61,8 @@ namespace BalloonParty.Configuration.Balloons
 
         IToughSnakeSpringSettings ToughSnakeSprings { get; }
 
+        IFormationGlowSettings FormationGlow { get; }
+
         IRewardBalloonSettings RewardBalloons { get; }
 
         IDiscoWaveSettings DiscoWave { get; }

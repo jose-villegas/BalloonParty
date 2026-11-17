@@ -256,6 +256,24 @@ the halo so its swirl drifts that way. A line heads along its slots, and an item
 item. The unbreakable's periodic burst is tagged blue too, so its specks
 match. All the blue comes from the palette's `UnbreakableFormation` entry. See `Balloon/Type/README.md`.
 
+Under the members, on the ground, a blue ring of light circles each one, and neighbouring rings join into
+one outline the way metaballs do. A ring lights only as its member draws close to a fellow member: none
+while the nearest is past `FadeDistance` (2.2 world units), full at `FullDistance` (0.8, about one slot
+apart). So members gliding in to form a line brighten and merge as they arrive, and a snake's rings flow
+along with it as it walks. Unlike the blue lights, the ring counts a member from the moment it is assigned,
+gliding in or not, since the drawing together is what it shows. Lone unbreakables and toughs never glow.
+
+`Balloon/View/FormationGlowView` draws it: one quad (`BalloonParty/Sprite/FormationGlow` shader) fitted
+each frame round the glowing members, so the shader only runs where the light can be, and hidden while no
+member glows. Each `UnbreakableFormationLook` registers in `FormationGlowSources` from its bind to its
+despawn, and `FormationGlowField` works out who glows and how brightly (at most 24 members, the shader's
+array). The shader sums a smooth falloff round every member and draws the ring where that sum crosses the
+level a lone member's would at `RingRadius`, at a constant width, with a faint fill inside. The light is
+additive and HDR (`HdrBoost`, 2.5 over the palette blue), so it blooms. It sorts under the balloons
+(`Balloons` -2), on the Default layer: the main camera draws it, the GI capture doesn't, so it casts no
+shadow. Rings of neighbouring formations join too, so a stack of formations reads as one wall. The
+settings are `IFormationGlowSettings`, `BalloonsConfiguration`'s "Formation Glow".
+
 ## Settings
 
 The settings are `IUnbreakableFormationSettings`, nested in `BalloonsConfiguration` under

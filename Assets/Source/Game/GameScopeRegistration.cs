@@ -277,6 +277,12 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<NukeFuse>().As<IRunResettable>();
             builder.RegisterComponentOnNewGameObject<NukeBlastView>(Lifetime.Singleton, "NukeBlast").As<INukeBlastView>();
             builder.RegisterComponentOnNewGameObject<NukeCloudView>(Lifetime.Singleton, "NukeCloud").As<INukeCloudView>();
+
+            // The blue ring round unbreakables in formation: their looks join the sources as they bind, and the
+            // view, which nothing depends on, is built with the scope.
+            builder.Register<FormationGlowSources>(Lifetime.Singleton);
+            builder.RegisterComponentOnNewGameObject<FormationGlowView>(Lifetime.Singleton, "FormationGlow");
+            builder.RegisterBuildCallback(resolver => resolver.Resolve<FormationGlowView>());
             builder.RegisterEntryPoint<GridActorHitController>();
             builder.Register<NavigationReadyGate>(Lifetime.Singleton).WithParameter(NavigationState.Game);
             builder.RegisterEntryPoint<GridSpawnerCoordinator>().AsSelf().As<IRunResettable>();

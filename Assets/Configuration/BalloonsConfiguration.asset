@@ -318,6 +318,18 @@ MonoBehaviour:
     _snakeWeightPerExtraUnbreakable: 0.25
     _maxUnbreakableSnakes: 2
     _joinSnakeChance: 0.35
+  _formationGlow:
+    _enabled: 1
+    _ringRadius: 0.48
+    _reach: 0.96
+    _ringWidth: 0.05
+    _fill: 0.12
+    _hdrBoost: 2.5
+    _fullDistance: 0.8
+    _fadeDistance: 2.2
+    _sortingLayerName: Balloons
+    _sortingOrder: -2
+    _shader: {fileID: 4800000, guid: 5d2c8e1a7b3f4c6e9a1d0b4f2e7c3a85, type: 3}
   _rewardBalloons:
     _goldenAtCompletion: 0.5
     _ordinaryGoldenEveryLevels: 1
