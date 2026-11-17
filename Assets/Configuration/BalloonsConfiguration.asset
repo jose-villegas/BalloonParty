@@ -301,7 +301,7 @@ MonoBehaviour:
     _horizontalBottomClearance: 4
     _horizontalMaxMembers: 3
     _snakeMaxMembers: 4
-    _snakeStepPulses: 1
+    _snakeStepSeconds: 1.7
     _spotChoices: 3
     _reinforcementChance: 0.35
     _reinforcementCeiling: 4

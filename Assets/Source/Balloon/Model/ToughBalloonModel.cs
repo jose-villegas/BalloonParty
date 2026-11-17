@@ -39,7 +39,6 @@ namespace BalloonParty.Balloon.Model
         public IReadOnlyReactiveProperty<bool> InFormation => _membership.InFormation;
         public Vector2 FormationHeading => _membership.Heading;
         public bool Walking => _membership.Walking;
-        public int Armour => HitsRemaining.Value;
 
         internal ToughBalloonModel(
             BalloonModelConfig config, IGamePalette palette = null, IReadOnlyList<string> allowedColors = null)

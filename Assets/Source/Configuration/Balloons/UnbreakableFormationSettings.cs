@@ -9,9 +9,9 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("Off: unbreakables only roam, as before formations, and toughs never snake.")]
         [SerializeField] private bool _enabled = true;
 
-        [Tooltip("The board's toughs (and toughers) walk as one snake of their own, led by the one with the most " +
-                 "hits left, through the balloons in its way. Once Min Members toughs are on the board it starts " +
-                 "from the toughest with the rest lined up behind it at once, and each tough that lands later falls in " +
+        [Tooltip("The board's toughs (and toughers) walk as one snake of their own, through the balloons in its " +
+                 "way, keeping its order. Once Min Members toughs are on the board it starts " +
+                 "from the deepest with the rest lined up behind it at once, and each tough that lands later falls in " +
                  "behind its tail as soon as it lands.")]
         [SerializeField] private bool _toughSnakes = true;
 
@@ -40,12 +40,12 @@ namespace BalloonParty.Configuration.Balloons
                  "Max Members.")]
         [SerializeField] [Min(2)] private int _snakeMaxMembers = 4;
 
-        [Tooltip("Balancer pulses (Flight Rebalance Interval) between a snake's steps. Every step lands on the " +
-                 "board's own beat, so the player can see the next one coming.")]
-        [SerializeField] [Min(1)] private int _snakeStepPulses = 1;
+        [Tooltip("Seconds of play between an unbreakable snake's steps, on a clock of its own beside the " +
+                 "balancer's pulse. A pause or a doomed shot holds it.")]
+        [SerializeField] [Min(0.1f)] private float _snakeStepSeconds = 1.7f;
 
-        [Tooltip("Seconds of play between the tough snake's steps, on a clock of its own: the unbreakable " +
-                 "snakes keep the board's beat (Snake Step Pulses). A pause or a doomed shot holds it.")]
+        [Tooltip("Seconds of play between the tough snake's steps, on a clock of its own. A pause or a doomed " +
+                 "shot holds it.")]
         [SerializeField] [Min(0.1f)] private float _toughSnakeStepSeconds = 1.5f;
 
         [Tooltip("A formation picks at random among this many of its least-travel spots, so it doesn't " +
@@ -86,7 +86,7 @@ namespace BalloonParty.Configuration.Balloons
         public int HorizontalBottomClearance => Mathf.Max(_horizontalBottomClearance, _bottomClearance);
         public int HorizontalMaxMembers => Mathf.Clamp(_horizontalMaxMembers, _minMembers, MaxMembers);
         public int SnakeMaxMembers => Mathf.Clamp(_snakeMaxMembers, _minMembers, MaxMembers);
-        public int SnakeStepPulses => Mathf.Max(1, _snakeStepPulses);
+        public float SnakeStepSeconds => Mathf.Max(0.1f, _snakeStepSeconds);
         public float ToughSnakeStepSeconds => Mathf.Max(0.1f, _toughSnakeStepSeconds);
         public int SpotChoices => _spotChoices;
         public float HorizontalWeight => _horizontalWeight;

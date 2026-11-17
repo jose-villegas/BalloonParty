@@ -88,8 +88,7 @@ Placement reach is a `PlacementReach` argument to `Resolve`:
 
 With tough snakes on (`IUnbreakableFormationSettings.ToughSnakes`) and at least `MinMembers` toughs and
 toughers in it, the **initial fill** deals them as one run instead (`ArrangeToughRun` + the pure
-`ToughRunPlan`): side by side on the deepest line a snake walks, the most hits at the run's west end and
-the run at a random place along the line. Past a full line the rest go on the line above, from its east
+`ToughRunPlan`): side by side on the deepest line a snake walks, at a random place along the line. Past a full line the rest go on the line above, from its east
 edge westward, so the body bends round the line's east end; any past two lines sink to the bottom. The
 run's columns are dealt first in that line (`PutToughRunFirst`), so the toughs rise together and land as
 the snake's body, its head at the west end (`Balloon/Formation/README.md`). Otherwise the **initial fill**

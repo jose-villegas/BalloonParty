@@ -10,7 +10,7 @@ one, so two lines can stack into a blockade. A formation the player leaves alone
 unbreakables, past the level's usual cap, and those form formations of their own.
 
 Tough balloons (toughs and toughers) gather too, but only into one snake of their own. It starts from the
-toughest, every other tough falls in behind its tail, and it walks through the balloons in its way. See
+deepest, every other tough falls in behind its tail, and it walks through the balloons in its way. See
 "Tough snakes" below.
 
 ## Contents
@@ -20,7 +20,6 @@ toughest, every other tough falls in behind its tail, and it walks through the b
 | `FormationShape` | The five shapes: `Horizontal`, `DiagonalDownRight`, `DiagonalDownLeft`, `ItemCover` (three to six around a balloon carrying a bomb, a snipe or a lightning, shielding it from the cannon: below it first, then its sides, then above), and `Snake` (a line that walks the board) |
 | `SnakeWalk` | Where a snake's head steps next: straight on if it can, else the gentlest open turn |
 | `SnakeBody` | Where free toughs fall in behind the tough snake's tail: a line on from it that they take in one batch, the balloons on it moving out to the slots they left |
-| `ArmourOrder` | The tough snake's order, head to tail by armour (hits left), and the one place per step it moves toward that order as it walks. Equal armour keeps the order it stands in |
 | `SlotMove` | One actor and the slot it moves to. The service hands the balancer each arrangement and each snake step as a batch of these, and every actor in a batch leaves its slot before any lands |
 | `FormationPlanner` | Pure planning. For one shape it lists every spot on the board where the shape fits, works out how far the members would travel to fill it, and picks at random among the few cheapest spots. It then says which member goes to which slot. It reads the grid but never changes it |
 | `FormationAssignment` | One member and the slot it goes to |
@@ -56,11 +55,11 @@ toughest, every other tough falls in behind its tail, and it walks through the b
 ## Snakes
 
 A snake forms as a row, like a horizontal line, of at most `SnakeMaxMembers`. It sets off along the row,
-east or west at random, led by the member at that end. From then on it walks on the board's own beat, one
-`FlightRebalanceInterval` (4 s) of play apart, so the player can see each step coming. Every
-`SnakeStepPulses` beats the balancer asks the service to `StepSnakes`, right before that beat's race.
-The beat keeps its own clock beside the balancer's pulse: a pause or a doomed shot's last glide holds it
-where the pulse starts over, since nearly every shot ends in one and the snakes would never step.
+east or west at random, led by the member at that end. From then on it takes a step every
+`SnakeStepSeconds` (1.7 s) of play: the balancer asks the service to `StepSnakes`, right before that
+balance's race. The step keeps a clock of its own beside the balancer's 4 s pulse
+(`BalloonBalancer.TickStepClock`): a pause or a doomed shot's last glide holds it where the pulse starts
+over, since nearly every shot ends in one and the snakes would never step.
 
 - The head steps one slot along the snake's heading (`HexCoordinates.Step`, six directions numbered from
   east, clockwise). When that slot is off the board, below the row clearance, or taken, `SnakeWalk` tries
@@ -85,17 +84,18 @@ of its own: a step every `ToughSnakeStepSeconds` (1.5 s) of play, held like the 
 glide (`BalloonBalancer`).
 Toughs never join an unbreakable formation, and unbreakables never join theirs.
 
-- **Starting as one body.** The initial fill deals the toughs side by side on one line, most hits at
-  the west end (`Balloon/Spawner/README.md`), so they rise together and land as the snake's body. The
-  toughs form up once none is still gliding in: with no tough snake and `MinMembers` toughs on the board,
-  the toughest (`IsStable`: landed) starts it, where it stands. Ties go to the deeper row, then farther
-  west. The head is never one in the bottom `HorizontalBottomClearance` rows, which a snake never walks.
+- **Starting as one body.** The initial fill deals the toughs side by side on one line
+  (`Balloon/Spawner/README.md`), so they rise together and land as the snake's body. The toughs form up
+  once none is still gliding in: with no tough snake and `MinMembers` toughs on the board, the one in the
+  deepest row (`IsStable`: landed) starts it, where it stands, the farther west on a tie: the west end of
+  the run. Hits left play no part. The head is never one in the bottom `HorizontalBottomClearance` rows, which a snake never walks.
   It heads away from a free tough beside it, so toughs that landed side by side are its body as they
   stand; with none beside it, it heads toward the nearer edge, so its body has room behind it. Every
   other tough then lines up behind it at once (`SnakeBody`): a line of slots on from the head, following
   the toughs where they stand and otherwise bending as little as it can. A balloon on that line moves out
   to a slot one of the toughs left. The balancer asks every frame (`ToughsDueToGather`), so the snake
-  forms the moment it can, not at a wave start or on a beat, and takes its first step one step interval later.
+  forms the moment it can, not at a wave start or on a beat, and takes its first step at once: the toughs
+  are moving as soon as they land at a level's start.
 - **Falling in at the tail.** A tough that lands later falls in behind the tail the moment it lands, the
   same way. Where nothing on from the tail can take a tough (toughs, unbreakables, anchored actors and
   anything static block the line), it waits until something on the board changes and tries again.
@@ -107,12 +107,9 @@ Toughs never join an unbreakable formation, and unbreakables never join theirs.
   formation), anchored actors and anything static still stand in its way, and then it turns as any snake
   does. The balancer carries out each step as one batch (`SlotMove`): every mover leaves its slot before
   any lands, so the head and the balloon it passes can trade slots.
-- **Most armour leads.** The head is the hardest balloon to stop. The worn ones trail behind it.
-- **Re-ordering one place per step.** Before every step the snake moves toward armour order by one place:
-  from the head down, a member with more armour than the one ahead of it passes it, and the one passed
-  holds its slot for that beat (`ArmourOrder.StepTowardOrder`). So a tough hit at the head drops back a
-  place a step, and a tougher that joined at the tail works its way forward. Boxed in, the snake turns
-  round like any snake, and its toughest works back to the new front the same way.
+- **Keeping its shape.** The snake never re-orders: each member walks into the slot the one ahead of it
+  left, a tough that's hit keeps its place, and one that joins stays at the tail. Boxed in, the snake
+  turns round like any snake, its tail leading, and walks on in the same order.
 - **Walking until the last pops.** The tough snake has no other shape to change to, so it never holds or
   re-plans, and it doesn't break below `MinMembers`: it walks on with whoever is left. When its last
   member pops it ends, and the toughs on the board start another at once. It calls no reinforcements.
@@ -198,12 +195,12 @@ The settings are `IUnbreakableFormationSettings`, nested in `BalloonsConfigurati
 "Unbreakable Formations":
 - `Enabled` (all formations, tough snakes too)
 - `ToughSnakes` (on: the toughs walk as one snake. `MinMembers` toughs on the board start it, it steps
-  every `SnakeStepPulses` pulses, and it keeps out of the bottom `HorizontalBottomClearance` rows)
+  every `ToughSnakeStepSeconds`, and it keeps out of the bottom `HorizontalBottomClearance` rows)
 - `MinMembers` (3) and `MaxMembers` (5)
 - `HoldWaves` (3)
 - `BottomClearance` (2) and `HorizontalBottomClearance` (4, for horizontal lines)
 - `HorizontalMaxMembers` (3, for horizontal lines; an item cover takes three to six)
-- `SnakeMaxMembers` (4) and `SnakeStepPulses` (1: an unbreakable snake steps on every pulse)
+- `SnakeMaxMembers` (4) and `SnakeStepSeconds` (1.7: seconds of play between an unbreakable snake's steps)
 - `ToughSnakeStepSeconds` (1.5: seconds of play between the tough snake's steps)
 - `SpotChoices` (3)
 - `ReinforcementChance` (0.35, eased in need by `Game/Assist/ThreatEase`) and `ReinforcementCeiling` (4)

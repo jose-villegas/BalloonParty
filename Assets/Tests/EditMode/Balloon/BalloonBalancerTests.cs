@@ -252,16 +252,46 @@ namespace BalloonParty.Tests.Balloon
             balancer.ResetRun(balancer.Generation + 1);
         }
 
-        // Three toughs on row 0 of the 3 by 3 board: the wave start makes a snake of the toughest.
+        [Test]
+        public void StepClock_ANewSnakeStepsAtOnce_ThenEachInterval()
+        {
+            var elapsed = 0f;
+
+            Assert.IsFalse(BalloonBalancer.TickStepClock(ref elapsed, 1.7f, false, 0.1f), "no snake yet");
+            Assert.IsTrue(BalloonBalancer.TickStepClock(ref elapsed, 1.7f, true, 0.01f), "it moves as it forms");
+            Assert.IsFalse(BalloonBalancer.TickStepClock(ref elapsed, 1.7f, true, 1f));
+            Assert.IsTrue(BalloonBalancer.TickStepClock(ref elapsed, 1.7f, true, 0.8f), "1.8s on");
+            Assert.IsFalse(BalloonBalancer.TickStepClock(ref elapsed, 1.7f, true, 1f));
+        }
+
+        [Test]
+        public void ToughSnakeStep_TheFirstComesTheMomentTheSnakeForms()
+        {
+            var balancer = BalancerWithAToughSnake(out var formations, formAtOnce: false);
+
+            Assert.IsTrue(balancer.TickFlightRebalance(0.1f), "the landed toughs are due to form up");
+            Assert.IsFalse(formations.HasToughSnake, "which the balance does");
+            formations.GatherToughSnake(_ => { });
+            Assert.IsTrue(formations.HasToughSnake);
+            Assert.IsFalse(formations.ToughsDueToGather(), "all in");
+
+            // Neither the board's pulse nor a gather: only the snake's own clock can make this true.
+            Assert.IsTrue(balancer.TickFlightRebalance(0.01f), "its first step, not a full interval later");
+            formations.Dispose();
+            balancer.ResetRun(balancer.Generation + 1);
+        }
+
+        // Three toughs on row 0 of the 3 by 3 board: the wave start makes a snake of them, unless formAtOnce is
+        // off, when it waits for the test to arrange.
         private BalloonBalancer BalancerWithAToughSnake(
-            out UnbreakableFormationService formations, float toughStepSeconds = 1f)
+            out UnbreakableFormationService formations, float toughStepSeconds = 1f, bool formAtOnce = true)
         {
             var settings = Substitute.For<IUnbreakableFormationSettings>();
             settings.Enabled.Returns(true);
             settings.ToughSnakes.Returns(true);
             settings.MinMembers.Returns(3);
             settings.MaxMembers.Returns(5);
-            settings.SnakeStepPulses.Returns(1);
+            settings.SnakeStepSeconds.Returns(1.7f);
             settings.ToughSnakeStepSeconds.Returns(toughStepSeconds);
             _balloonsConfig.UnbreakableFormation.Returns(settings);
             formations = new UnbreakableFormationService(_grid, _balloonsConfig,
@@ -273,8 +303,10 @@ namespace BalloonParty.Tests.Balloon
                     new Vector2Int(col, 0));
             }
 
+            settings.ToughSnakes.Returns(formAtOnce);
             formations.ArrangeAtWaveStart(_ => { });
-            Assert.AreEqual(1, formations.Formations.Count);
+            settings.ToughSnakes.Returns(true);
+            Assert.AreEqual(formAtOnce ? 1 : 0, formations.Formations.Count);
 
             var pathHolder = new BalancePathHolder();
             return new BalloonBalancer(

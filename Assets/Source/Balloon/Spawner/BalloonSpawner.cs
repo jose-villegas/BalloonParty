@@ -34,8 +34,6 @@ namespace BalloonParty.Balloon.Spawner
         private static readonly Comparison<BalloonPrefabEntry> BySpawnWeightAscending =
             (a, b) => a.SpawnWeight - b.SpawnWeight;
 
-        private static readonly Comparison<BalloonPrefabEntry> ByHitsDescending = (a, b) => b.HitsToPop - a.HitsToPop;
-
         private readonly Dictionary<string, int> _activeCounts = new();
         private readonly Dictionary<string, int> _waveQuotas = new();
         private readonly BalloonBalancer _balancer;
@@ -707,8 +705,8 @@ namespace BalloonParty.Balloon.Spawner
         }
 
         // With tough snakes on, the initial fill deals every tough into one run (ToughRunPlan) instead of layers:
-        // side by side on the deepest line a snake walks, most hits at the run's west end, where the snake's
-        // head starts, so the toughs land already lined up as its body. False leaves the batch to the layering:
+        // side by side on the deepest line a snake walks, its head at the run's west end, so the toughs land
+        // already lined up as its body. False leaves the batch to the layering:
         // tough snakes off, or too few toughs to start one.
         private bool ArrangeToughRun(int lineCount)
         {
@@ -737,7 +735,6 @@ namespace BalloonParty.Balloon.Spawner
                 return false;
             }
 
-            _layerHeavies.Sort(ByHitsDescending);
             _layerLights.Sort(BySpawnWeightAscending);
             _spawnBatch.Clear();
             var heavyCursor = 0;

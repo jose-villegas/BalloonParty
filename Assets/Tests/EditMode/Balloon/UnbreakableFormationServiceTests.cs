@@ -643,17 +643,16 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void TakeSnakeBeat_ComesEverySnakeStepPulses_OnlyWithASnake()
+        public void AnUnbreakableSnake_WalksOnItsOwnInterval()
         {
-            Assert.IsFalse(_service.TakeSnakeBeat(), "no snake, no beat");
+            _settings.SnakeStepSeconds.Returns(1.7f);
+            Assert.IsFalse(_service.HasUnbreakableSnake, "no snake, no clock");
 
             FormSnake();
-            _settings.SnakeStepPulses.Returns(2);
 
-            Assert.IsFalse(_service.TakeSnakeBeat());
-            Assert.IsTrue(_service.TakeSnakeBeat());
-            Assert.IsFalse(_service.TakeSnakeBeat());
-            Assert.IsTrue(_service.TakeSnakeBeat());
+            Assert.IsTrue(_service.HasUnbreakableSnake);
+            Assert.IsFalse(_service.HasToughSnake);
+            Assert.AreEqual(1.7f, _service.SnakeStepSeconds);
         }
 
         [Test]
@@ -732,7 +731,7 @@ namespace BalloonParty.Tests.Balloon
             _settings.DiagonalWeight.Returns(0f);
             _settings.SnakeWeight.Returns(1f);
             _settings.SnakeMaxMembers.Returns(5);
-            _settings.SnakeStepPulses.Returns(1);
+            _settings.SnakeStepSeconds.Returns(1.7f);
         }
 
         // A snake of count along row 2 from the west edge, heading east (Random01 is 0). An even row, so at the

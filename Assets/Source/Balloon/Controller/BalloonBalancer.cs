@@ -529,12 +529,8 @@ namespace BalloonParty.Balloon.Controller
 
             _flightRebalanceElapsed += deltaTime;
             var pulse = _flightRebalanceElapsed >= interval;
-            var snakeBeat = TickSnakeBeat(deltaTime, interval);
-
-            // The toughs don't wait for a beat to form up: a tough that lands falls in at once.
-            var gather = _formations != null && _formations.ToughsDueToGather();
-            var toughStep = TickToughSnake(deltaTime);
-            if (!pulse && !snakeBeat && !gather && !toughStep)
+            var formationDue = TickFormations(deltaTime);
+            if (!pulse && !formationDue)
             {
                 return false;
             }
@@ -544,11 +540,7 @@ namespace BalloonParty.Balloon.Controller
                 _flightRebalanceElapsed = 0f;
             }
 
-            // A snake steps on its beat, and the toughs gather, even when nothing else would move.
-            _snakeStepDue |= snakeBeat;
-            _toughGatherDue |= gather;
-            _toughStepDue |= toughStep;
-            var formationDue = snakeBeat || gather || toughStep;
+            // A snake steps on its clock, and the toughs gather, even when nothing else would move.
             if (!formationDue && !HasPossibleMove())
             {
                 return false;
@@ -556,9 +548,9 @@ namespace BalloonParty.Balloon.Controller
 
             // Each pulse opens a fresh step window: pulses are already paced by the interval, so a
             // 1-step heavy crawls one slot per pulse instead of sitting exhausted until the next wave
-            // (the shared budget exists to stop multi-hops within one sweep's clustered runs). The tough
-            // snake's quicker steps and the toughs forming up open none, so the heavies keep the board's pace.
-            if (pulse || snakeBeat)
+            // (the shared budget exists to stop multi-hops within one sweep's clustered runs). The snakes'
+            // quicker steps and the toughs forming up open none, so the heavies keep the board's pace.
+            if (pulse)
             {
                 _turnSteps.Clear();
             }
@@ -567,38 +559,53 @@ namespace BalloonParty.Balloon.Controller
             return true;
         }
 
-        // The unbreakable snakes' beat, one pulse interval apart; held, not restarted, by a pause or a doomed glide.
-        private bool TickSnakeBeat(float deltaTime, float interval)
+        // Ticks the snakes' step clocks and asks whether the toughs should form up, marking each that falls due
+        // for the next balance. True when any did.
+        private bool TickFormations(float deltaTime)
         {
-            _snakeBeatElapsed += deltaTime;
-            if (_snakeBeatElapsed < interval)
+            if (_formations == null)
             {
                 return false;
             }
 
-            _snakeBeatElapsed = 0f;
-            return _formations != null && _formations.TakeSnakeBeat();
+            var snakeStep = TickStepClock(
+                ref _snakeBeatElapsed, _formations.SnakeStepSeconds, _formations.HasUnbreakableSnake, deltaTime);
+
+            // The toughs don't wait for a step to form up: a tough that lands falls in at once.
+            var gather = _formations.ToughsDueToGather();
+            var toughStep = TickStepClock(
+                ref _toughStepElapsed, _formations.ToughSnakeStepSeconds, _formations.HasToughSnake, deltaTime);
+            _snakeStepDue |= snakeStep;
+            _toughGatherDue |= gather;
+            _toughStepDue |= toughStep;
+            return snakeStep || gather || toughStep;
         }
 
-        // The tough snake's own clock: a step every ToughSnakeStepSeconds of play while it walks, held (not
-        // restarted) by a pause or a doomed glide as the snake beat is. A new snake's first step comes a full
-        // interval after it forms.
-        private bool TickToughSnake(float deltaTime)
+        // A snake's step clock: true every interval of play while one walks. A pause or a doomed glide holds it
+        // (the caller doesn't tick it then) where the pulse starts over, since nearly every shot ends in a doomed
+        // glide. With no snake it stands ready, so a new snake takes its first step the moment it forms: the
+        // toughs that rise together at a level's start are moving as soon as they land.
+        internal static bool TickStepClock(ref float elapsed, float interval, bool walking, float deltaTime)
         {
-            var interval = _formations?.ToughSnakeStepSeconds ?? 0f;
-            if (interval <= 0f || !_formations.HasToughSnake)
+            if (interval <= 0f)
             {
-                _toughStepElapsed = 0f;
+                elapsed = 0f;
                 return false;
             }
 
-            _toughStepElapsed += deltaTime;
-            if (_toughStepElapsed < interval)
+            if (!walking)
+            {
+                elapsed = interval;
+                return false;
+            }
+
+            elapsed += deltaTime;
+            if (elapsed < interval)
             {
                 return false;
             }
 
-            _toughStepElapsed = 0f;
+            elapsed = 0f;
             return true;
         }
 
