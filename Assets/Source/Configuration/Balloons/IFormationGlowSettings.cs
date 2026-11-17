@@ -33,7 +33,7 @@ namespace BalloonParty.Configuration.Balloons
 
         /// <summary>
         ///     Seconds a ring takes to dissolve once its member is disconnected (out of formation, alone, popped or
-        ///     cleared), and to grow in once it's connected.
+        ///     cleared), and to dissolve in once it's connected.
         /// </summary>
         float DissolveSeconds { get; }
 

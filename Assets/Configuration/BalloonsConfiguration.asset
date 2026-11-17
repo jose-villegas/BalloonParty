@@ -320,7 +320,7 @@ MonoBehaviour:
     _joinSnakeChance: 0.35
   _formationGlow:
     _enabled: 1
-    _ringRadius: 0.48
+    _ringRadius: 0.4
     _reach: 0.96
     _ringWidth: 0.05
     _fill: 0.12

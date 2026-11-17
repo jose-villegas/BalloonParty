@@ -10,7 +10,8 @@ namespace BalloonParty.Balloon.View
     ///     <see cref="IFormationGlowSettings.FadeDistance" />: its brightness follows how close the nearest fellow is,
     ///     full at <see cref="IFormationGlowSettings.FullDistance" />. Disconnected for any reason (out of formation,
     ///     left alone, popped, cleared with the board), the ring stays where its member was last and dissolves over
-    ///     <see cref="IFormationGlowSettings.DissolveSeconds" /> at the brightness it had, instead of vanishing.
+    ///     <see cref="IFormationGlowSettings.DissolveSeconds" /> at the brightness it had, instead of vanishing. A
+    ///     ring connecting dissolves in the same way, over the same time.
     /// </summary>
     internal sealed class FormationGlowField
     {
@@ -104,7 +105,7 @@ namespace BalloonParty.Balloon.View
                         continue;
                     }
 
-                    ring = Rent(source);
+                    ring = Rent(source, target);
                 }
 
                 ring.Seen = true;
@@ -211,11 +212,13 @@ namespace BalloonParty.Balloon.View
             return null;
         }
 
-        private Ring Rent(IFormationGlowSource source)
+        // A new ring starts at its full brightness and only its presence grows, so it dissolves in as a leaving
+        // one dissolves out, rather than fading up.
+        private Ring Rent(IFormationGlowSource source, float target)
         {
             var ring = _spare.Count > 0 ? _spare.Pop() : new Ring();
             ring.Source = source;
-            ring.Brightness = 0f;
+            ring.Brightness = target;
             ring.Presence = 0f;
             _rings.Add(ring);
             return ring;

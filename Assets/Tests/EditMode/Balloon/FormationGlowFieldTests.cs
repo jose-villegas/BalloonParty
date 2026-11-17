@@ -65,18 +65,37 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void Step_NeighboursInALine_GrowInOverTheDissolveTime()
+        public void Step_NeighboursJoining_DissolveInOverTheDissolveTime_AtFullBrightness()
         {
             Add(0f, 0f);
             Add(Pitch, 0f);
 
             Assert.AreEqual(2, Step(Dissolve * 0.5f));
-            Assert.AreEqual(0.5f, _points[0].z, 1e-4f);
+            Assert.AreEqual(1f, _points[0].z, 1e-4f, "it doesn't fade up: its presence alone grows");
             Assert.AreEqual(0.5f, _points[0].w, 1e-4f);
 
             Step(Dissolve * 0.5f);
-            Assert.AreEqual(1f, _points[0].z, 1e-4f);
             Assert.AreEqual(1f, _points[1].w, 1e-4f);
+        }
+
+        [Test]
+        public void Step_AMemberJoiningAFormedPair_DissolvesIn_AndEasesIntoTheMerge()
+        {
+            Add(0f, 0f);
+            Add(Pitch, 0f);
+            Step(Settled);
+            var midpoint = new Vector2(Pitch * 1.5f, 0f);
+            var before = FormationGlowField.FieldAt(_points, 2, midpoint, Reach, _threshold);
+
+            Add(Pitch * 2f, 0f);
+            var count = Step(Dissolve * 0.5f);
+            var half = FormationGlowField.FieldAt(_points, count, midpoint, Reach, _threshold);
+            count = Step(Dissolve * 0.5f);
+            var whole = FormationGlowField.FieldAt(_points, count, midpoint, Reach, _threshold);
+
+            Assert.AreEqual(3, count);
+            Assert.That(half, Is.GreaterThan(before));
+            Assert.That(whole, Is.GreaterThan(half));
         }
 
         [Test]

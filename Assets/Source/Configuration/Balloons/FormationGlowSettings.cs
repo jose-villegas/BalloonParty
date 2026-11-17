@@ -10,9 +10,9 @@ namespace BalloonParty.Configuration.Balloons
         [SerializeField] private bool _enabled = true;
 
         [Tooltip("World radius of a lone member's ring. A slot is 0.75 apart and a balloon about 0.7 across, so " +
-                 "0.48 rings it just outside its edge.")]
+                 "0.4 rings it close outside its edge.")]
         [Min(0.05f)]
-        [SerializeField] private float _ringRadius = 0.48f;
+        [SerializeField] private float _ringRadius = 0.4f;
 
         [Tooltip("World reach of a member's field, past which it adds nothing. Two rings join when members are " +
                  "closer than about 2.5 ring radii at a reach of twice the radius; a longer reach joins them " +
@@ -43,7 +43,8 @@ namespace BalloonParty.Configuration.Balloons
 
         [Tooltip("Seconds a ring takes to dissolve once its member is disconnected: out of formation, left alone, " +
                  "popped or cleared with the board. Its line erodes along a noise and shrinks back into the member, " +
-                 "easing off its merge with its neighbours. A connecting ring grows in over the same time.")]
+                 "easing off its merge with its neighbours. A connecting ring dissolves in over the same time: it " +
+                 "grows out of the member and its line fills in along the same noise.")]
         [Min(0.05f)]
         [SerializeField] private float _dissolveSeconds = 0.6f;
 

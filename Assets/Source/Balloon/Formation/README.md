@@ -276,8 +276,10 @@ and turns red, its partner leaves or pops so it is left alone, it pops itself, o
 level's end or a run reset), the ring dissolves over `DissolveSeconds` (0.6). It keeps the brightness it
 had, its line erodes along a world-space noise with a brighter edge where it eats, and it draws back into
 its member, so a merge with its neighbours eases off rather than snapping apart. A ring whose balloon has
-gone dissolves where the balloon was last. A newly connected ring grows in over the same time, and a member
-that reconnects mid-dissolve grows back from where it had got to.
+gone dissolves where the balloon was last. Joining works the same way in reverse: when a member forms up,
+rejoins or joins a snake's tail, its ring dissolves in over the same time at its full brightness, its line
+filling in along the noise as it grows out of the member and eases into the merge. A member that reconnects
+mid-dissolve comes back from where it had got to.
 
 `Balloon/View/FormationGlowView` draws it: one quad (`BalloonParty/Sprite/FormationGlow` shader) fitted
 each frame round the glowing members, so the shader only runs where the light can be, and hidden while no

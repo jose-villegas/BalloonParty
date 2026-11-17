@@ -575,14 +575,14 @@ Tests the directed pressure search (`TryResolve`) — a board-up shove propagati
 | Relocation terminals (nearest/farthest) end the chain | 3 | Relocator not vacating, or wrong gap picked |
 | Puff at entry seeds the balloon above it | 1 | Traversability seeding regression blocks relief |
 
-### `FormationGlowFieldTests` — 19 tests
+### `FormationGlowFieldTests` — 20 tests
 
 The formation glow's field (`Balloon/View/FormationGlowField`): which rings light and how brightly, how a disconnected ring dissolves instead of vanishing, and where the shader's rings join.
 
 | Area | Tests | What could break |
 |---|---|---|
 | A whole lone ring sits at the ring radius; a dissolved one draws back into its member | 2 | Threshold, shape and shader sum disagree |
-| Neighbours grow in over the dissolve time; brightness falls with distance | 2 | Rings pop in, or the closeness curve is inverted |
+| Neighbours dissolve in over the dissolve time at full brightness, a joiner easing into the merge; brightness falls with distance | 3 | Rings pop in or fade up, a merge snaps on, or the closeness curve is inverted |
 | A lone member, a far pair and a balloon out of formation don't light | 3 | Lone unbreakables glow, or a non-member counts as a neighbour |
 | A member leaving, popping, or the board clearing dissolves the rings over the dissolve time at their brightness, following a leaver and staying where a popped one was | 4 | Rings vanish at once, dim before dissolving, or jump |
 | Reconnecting mid-dissolve grows back; stopped time holds a dissolve | 2 | Ring restarts from nothing, or dissolves through a pause |
