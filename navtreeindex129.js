@@ -1,5 +1,17 @@
 var NAVTREEINDEX129 =
 {
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a146c08a9e0be4480f1e680885374bfab":[6,0,0,3,9,23,11],
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a2f8df43167f3556571dbbb11d49b60ca":[5,0,0,3,9,23,7],
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a2f8df43167f3556571dbbb11d49b60ca":[6,0,0,3,9,23,7],
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a3056668ddb975767b08b012693ae1522":[5,0,0,3,9,23,0],
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a3056668ddb975767b08b012693ae1522":[6,0,0,3,9,23,0],
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a3b3ac29386df743763c2086e568eb903":[5,0,0,3,9,23,6],
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a3b3ac29386df743763c2086e568eb903":[6,0,0,3,9,23,6],
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a494bd39055005d2556e1a17a7211d673":[5,0,0,3,9,23,10],
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a494bd39055005d2556e1a17a7211d673":[6,0,0,3,9,23,10],
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a4c9a508f565ded10f7b505b86ed28e54":[5,0,0,3,9,23,4],
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a4c9a508f565ded10f7b505b86ed28e54":[6,0,0,3,9,23,4],
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a7a19b4d58c8b0cce74a57f14cf18cf3d":[5,0,0,3,9,23,1],
 "structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a7a19b4d58c8b0cce74a57f14cf18cf3d":[6,0,0,3,9,23,1],
 "structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#abab7c03df4b393883c62c639d789eb87":[5,0,0,3,9,23,3],
 "structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#abab7c03df4b393883c62c639d789eb87":[6,0,0,3,9,23,3],
@@ -237,17 +249,5 @@ var NAVTREEINDEX129 =
 "structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html#a83ba4125aa491f4b7c3a87226fdbd5e9":[6,0,0,5,12,0,6],
 "structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html#a976aa24c9ed82cc7aec123c26bfdf19d":[5,0,0,5,12,0,4],
 "structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html#a976aa24c9ed82cc7aec123c26bfdf19d":[6,0,0,5,12,0,4],
-"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html#aa3e8ca64a0db06d08d23e7660e14fe76":[5,0,0,5,12,0,3],
-"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html#aa3e8ca64a0db06d08d23e7660e14fe76":[6,0,0,5,12,0,3],
-"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html#ab27082e054a3cad697752879c5923488":[5,0,0,5,12,0,7],
-"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html#ab27082e054a3cad697752879c5923488":[6,0,0,5,12,0,7],
-"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html#ae94d777e1756bdad094f5b8795c29032":[5,0,0,5,12,0,2],
-"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html#ae94d777e1756bdad094f5b8795c29032":[6,0,0,5,12,0,2],
-"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html#af488d428c2fc94d921d410ad5403e035":[5,0,0,5,12,0,5],
-"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html#af488d428c2fc94d921d410ad5403e035":[6,0,0,5,12,0,5],
-"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html":[5,0,0,5,12,1],
-"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html":[6,0,0,5,12,1],
-"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html#a3a64c048f853d66208fc190eba81dbff":[5,0,0,5,12,1,2],
-"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html#a3a64c048f853d66208fc190eba81dbff":[6,0,0,5,12,1,2],
-"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html#a54cdeb28806c4c58aaa1188386ccc143":[5,0,0,5,12,1,3]
+"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html#aa3e8ca64a0db06d08d23e7660e14fe76":[5,0,0,5,12,0,3]
 };

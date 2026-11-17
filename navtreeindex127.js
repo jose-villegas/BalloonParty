@@ -1,5 +1,17 @@
 var NAVTREEINDEX127 =
 {
+"structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html#a67f3c5c1905caa09c9194ce721a4193a":[6,0,0,3,13,18],
+"structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html#a70e6c028371335c51551f9f53a8412b8":[5,0,0,3,13,1],
+"structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html#a70e6c028371335c51551f9f53a8412b8":[6,0,0,3,13,1],
+"structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html#a79a41d6c018ae094b4dd0b391af51a7d":[5,0,0,3,13,6],
+"structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html#a79a41d6c018ae094b4dd0b391af51a7d":[6,0,0,3,13,6],
+"structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html#a81ca8e25ec746bde94b6249cd55ef59f":[5,0,0,3,13,9],
+"structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html#a81ca8e25ec746bde94b6249cd55ef59f":[6,0,0,3,13,9],
+"structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html#a918a0bd0d252585649c57e7969025254":[5,0,0,3,13,4],
+"structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html#a918a0bd0d252585649c57e7969025254":[6,0,0,3,13,4],
+"structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html#a91ce998a1fcf517ec9665e921782c361":[5,0,0,3,13,20],
+"structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html#a91ce998a1fcf517ec9665e921782c361":[6,0,0,3,13,20],
+"structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html#a9c7a830ad588f33253d840f612b02a25":[5,0,0,3,13,19],
 "structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html#a9c7a830ad588f33253d840f612b02a25":[6,0,0,3,13,19],
 "structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html#ac05d0cd3fdc7e479bf2821ec22fa1664":[5,0,0,3,13,13],
 "structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html#ac05d0cd3fdc7e479bf2821ec22fa1664":[6,0,0,3,13,13],
@@ -237,17 +249,5 @@ var NAVTREEINDEX127 =
 "structBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyle.html#a78efd67270eea0a88921484287f9a185":[6,0,0,3,7,2,6],
 "structBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyle.html#aac76b4653fde80dc9002e9384b9f5f3f":[5,0,0,3,7,2,3],
 "structBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyle.html#aac76b4653fde80dc9002e9384b9f5f3f":[6,0,0,3,7,2,3],
-"structBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyle.html#aceb626e9f51680c78b4a8885c4f30d15":[5,0,0,3,7,2,0],
-"structBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyle.html#aceb626e9f51680c78b4a8885c4f30d15":[6,0,0,3,7,2,0],
-"structBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyle.html#ada976a1c5bfb64451ed58e847f9135df":[5,0,0,3,7,2,2],
-"structBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyle.html#ada976a1c5bfb64451ed58e847f9135df":[6,0,0,3,7,2,2],
-"structBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyle.html#af520821b590bb5e8d60c37ac0f495669":[5,0,0,3,7,2,4],
-"structBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyle.html#af520821b590bb5e8d60c37ac0f495669":[6,0,0,3,7,2,4],
-"structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html":[5,0,0,3,8,4],
-"structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html":[6,0,0,3,8,4],
-"structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html#a2a618904ba11dae2f8f47c2487ed15d9":[5,0,0,3,8,4,8],
-"structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html#a2a618904ba11dae2f8f47c2487ed15d9":[6,0,0,3,8,4,8],
-"structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html#a2fbedf493af53685c2699f000d6143cc":[5,0,0,3,8,4,7],
-"structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html#a2fbedf493af53685c2699f000d6143cc":[6,0,0,3,8,4,7],
-"structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html#a6c943c210f7bb9b1e6436d523e5019d0":[5,0,0,3,8,4,6]
+"structBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyle.html#aceb626e9f51680c78b4a8885c4f30d15":[5,0,0,3,7,2,0]
 };

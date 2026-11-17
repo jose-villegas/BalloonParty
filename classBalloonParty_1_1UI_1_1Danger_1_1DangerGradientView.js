@@ -9,6 +9,7 @@ var classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView =
     [ "OnDestroy", "classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#a35457662d3707eb164e47f310f650e4c", null ],
     [ "Unbind", "classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#adb96ccf5bccd1488526b7b9b1ae8f2dc", null ],
     [ "Update", "classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#add11abfaa12673c9699fbca7322a88c4", null ],
+    [ "_appliedLight", "classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#adc4d9a1c7bd0bd3dfbfe0a7afcc22aeb", null ],
     [ "_bottomContainer", "classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#a3f370caf50bd184b3557e396aaaf9e98", null ],
     [ "_bottomContainerOffsetY", "classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#a1e7af0a72059e77af1abadecb9a738fa", null ],
     [ "_bottomContainerRest", "classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#a9dc7c8c0621874cd57660dc90122c8e0", null ],

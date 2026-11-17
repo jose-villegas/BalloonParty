@@ -110,6 +110,7 @@ $(function(){initNavTree('classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDay
   <div class="summary">
 <a href="#pac-methods">Package Functions</a> &#124;
 <a href="#pac-static-methods">Static Package Functions</a> &#124;
+<a href="#pac-static-attribs">Static Package Attributes</a> &#124;
 <a href="#properties">Properties</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
@@ -149,6 +150,13 @@ Static Package Functions</h2></td></tr>
 <tr class="memitem:a3f3ebfbd196612a480d9788517d98bc4" id="r_a3f3ebfbd196612a480d9788517d98bc4"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3f3ebfbd196612a480d9788517d98bc4">IsNightAngle</a> (float angleDegrees, float startAngle, float endAngle)</td></tr>
 <tr class="separator:a3f3ebfbd196612a480d9788517d98bc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-attribs" name="pac-static-attribs"></a>
+Static Package Attributes</h2></td></tr>
+<tr class="memitem:a0a59b552cf4f9f914ebf0b297a73c95d" id="r_a0a59b552cf4f9f914ebf0b297a73c95d"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0a59b552cf4f9f914ebf0b297a73c95d">ReaderColorStep</a> = 0.5f / 255f</td></tr>
+<tr class="separator:a0a59b552cf4f9f914ebf0b297a73c95d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02f86b730ce437e3d8a43cb8dddce8f9" id="r_a02f86b730ce437e3d8a43cb8dddce8f9"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a02f86b730ce437e3d8a43cb8dddce8f9">ReaderStepDegrees</a> = 0.25f</td></tr>
+<tr class="separator:a02f86b730ce437e3d8a43cb8dddce8f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
 <tr class="memitem:aef07778bc28a357f2b3aa72b47d07d4a" id="r_aef07778bc28a357f2b3aa72b47d07d4a"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aef07778bc28a357f2b3aa72b47d07d4a">CurrentColor</a><code> [get]</code></td></tr>
@@ -174,6 +182,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a45908c196fb56d2a3fc53395d4e2000b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36707e52c25d25af9ef8a4553b89f15a" id="r_a36707e52c25d25af9ef8a4553b89f15a"><td class="memItemLeft" align="right" valign="top">void IStartable.&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a36707e52c25d25af9ef8a4553b89f15a">Start</a> ()</td></tr>
 <tr class="separator:a36707e52c25d25af9ef8a4553b89f15a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a231baee34165e620a295956e4a5aa7ba" id="r_a231baee34165e620a295956e4a5aa7ba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a231baee34165e620a295956e4a5aa7ba">StepReaders</a> (Color color)</td></tr>
+<tr class="separator:a231baee34165e620a295956e4a5aa7ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae4d4547e0b67dad17f962f9a02229da5" id="r_ae4d4547e0b67dad17f962f9a02229da5"><td class="memItemLeft" align="right" valign="top">void ITickable.&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae4d4547e0b67dad17f962f9a02229da5">Tick</a> ()</td></tr>
 <tr class="separator:ae4d4547e0b67dad17f962f9a02229da5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -181,6 +191,10 @@ Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a958ba34be0e20443fea4619c1107bdf6" id="r_a958ba34be0e20443fea4619c1107bdf6"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a958ba34be0e20443fea4619c1107bdf6">_currentDirection</a></td></tr>
 <tr class="separator:a958ba34be0e20443fea4619c1107bdf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31afeacc0af6e92167f471012337d7aa" id="r_a31afeacc0af6e92167f471012337d7aa"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31afeacc0af6e92167f471012337d7aa">_readerColor</a></td></tr>
+<tr class="separator:a31afeacc0af6e92167f471012337d7aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77a87ad13962e4d00b70e11b1a022f55" id="r_a77a87ad13962e4d00b70e11b1a022f55"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a77a87ad13962e4d00b70e11b1a022f55">_readerDirection</a></td></tr>
+<tr class="separator:a77a87ad13962e4d00b70e11b1a022f55"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aecb89597c9358f59a1c9e0d440576555" id="r_aecb89597c9358f59a1c9e0d440576555"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightSettings.html">ISceneLightSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aecb89597c9358f59a1c9e0d440576555">_settings</a></td></tr>
 <tr class="separator:aecb89597c9358f59a1c9e0d440576555"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab3fbfee93a8368d02f0e66d69f85272d" id="r_ab3fbfee93a8368d02f0e66d69f85272d"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html">ITimeOfDaySettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab3fbfee93a8368d02f0e66d69f85272d">_timeOfDay</a></td></tr>
@@ -197,7 +211,8 @@ Static Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Owns the LIVE ambient scene light and is the single writer of its shader globals (<code>_SceneLightDir</code>/<code>_SceneLightColor</code>/<code>_SceneLightIntensity</code>). </p>
-<p>A passive holder: it publishes whichever toward-light direction it's given — the authored rest value, or the swept target that the Game-layer <code>TimeOfDayCycle</code> pushes via <a class="el" href="#ad355936a15b000d846a093573e42e771" title="Sets the current toward-light direction and republishes the globals — the write path for the night-mo...">SetDirection</a> while night mode is on — deriving the colour/intensity and exposing them both as globals and through <a class="el" href="interfaceBalloonParty_1_1Shared_1_1SceneLight_1_1ISceneLightRuntime.html" title="Read surface for the LIVE ambient scene light — the current time-of-day state the runtime owner (Time...">ISceneLightRuntime</a> for the CPU-side consumers (sky tint, GI) that can't read the globals. Replaces the ambient push formerly bolted onto <a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html" title="Owns the scene-light FIELD — a small screen/world-space RT (the disturbance-field architecture applie...">SceneLightFieldService</a>, which now owns only the local light field. </p>
+<p>A passive holder: it publishes whichever toward-light direction it's given — the authored rest value, or the swept target that the Game-layer <code>TimeOfDayCycle</code> pushes via <a class="el" href="#ad355936a15b000d846a093573e42e771" title="Sets the current toward-light direction and republishes the globals — the write path for the night-mo...">SetDirection</a> while night mode is on — deriving the colour/intensity and exposing them both as globals and through <a class="el" href="interfaceBalloonParty_1_1Shared_1_1SceneLight_1_1ISceneLightRuntime.html" title="Read surface for the LIVE ambient scene light — the current time-of-day state the runtime owner (Time...">ISceneLightRuntime</a> for the CPU-side consumers (sky tint, GI) that can't read the globals. Replaces the ambient push formerly bolted onto <a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html" title="Owns the scene-light FIELD — a small screen/world-space RT (the disturbance-field architecture applie...">SceneLightFieldService</a>, which now owns only the local light field.</p>
+<p>The shader globals follow the direction exactly. What <a class="el" href="interfaceBalloonParty_1_1Shared_1_1SceneLight_1_1ISceneLightRuntime.html" title="Read surface for the LIVE ambient scene light — the current time-of-day state the runtime owner (Time...">ISceneLightRuntime</a> hands the CPU-side readers moves in steps too small to see (<a class="el" href="#a02f86b730ce437e3d8a43cb8dddce8f9">ReaderStepDegrees</a>, <a class="el" href="#a0a59b552cf4f9f914ebf0b297a73c95d">ReaderColorStep</a>): the wall-clock source turns the light a few thousandths of a degree every frame, and a reader that compares against last frame's value (the <a class="el" href="namespaceBalloonParty_1_1UI.html">UI</a> tints and speculars, which rebuild canvas meshes on a change) would otherwise redo its work on every one of them. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="acfdf3107d403f2444c495daf03037de6" name="acfdf3107d403f2444c495daf03037de6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acfdf3107d403f2444c495daf03037de6">&#9670;&#160;</a></span>TimeOfDayService()</h2>
@@ -365,6 +380,31 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a231baee34165e620a295956e4a5aa7ba" name="a231baee34165e620a295956e4a5aa7ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a231baee34165e620a295956e4a5aa7ba">&#9670;&#160;</a></span>StepReaders()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Shared.SceneLight.TimeOfDayService.StepReaders </td>
+          <td>(</td>
+          <td class="paramtype">Color</td>          <td class="paramname"><span class="paramname"><em>color</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ae4d4547e0b67dad17f962f9a02229da5" name="ae4d4547e0b67dad17f962f9a02229da5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae4d4547e0b67dad17f962f9a02229da5">&#9670;&#160;</a></span>Tick()</h2>
 
@@ -402,6 +442,50 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">Vector2 BalloonParty.Shared.SceneLight.TimeOfDayService._currentDirection</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a31afeacc0af6e92167f471012337d7aa" name="a31afeacc0af6e92167f471012337d7aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31afeacc0af6e92167f471012337d7aa">&#9670;&#160;</a></span>_readerColor</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Color BalloonParty.Shared.SceneLight.TimeOfDayService._readerColor</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a77a87ad13962e4d00b70e11b1a022f55" name="a77a87ad13962e4d00b70e11b1a022f55"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a77a87ad13962e4d00b70e11b1a022f55">&#9670;&#160;</a></span>_readerDirection</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector2 BalloonParty.Shared.SceneLight.TimeOfDayService._readerDirection</td>
         </tr>
       </table>
   </td>
@@ -451,6 +535,50 @@ Static Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0a59b552cf4f9f914ebf0b297a73c95d" name="a0a59b552cf4f9f914ebf0b297a73c95d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a59b552cf4f9f914ebf0b297a73c95d">&#9670;&#160;</a></span>ReaderColorStep</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float BalloonParty.Shared.SceneLight.TimeOfDayService.ReaderColorStep = 0.5f / 255f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a02f86b730ce437e3d8a43cb8dddce8f9" name="a02f86b730ce437e3d8a43cb8dddce8f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02f86b730ce437e3d8a43cb8dddce8f9">&#9670;&#160;</a></span>ReaderStepDegrees</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float BalloonParty.Shared.SceneLight.TimeOfDayService.ReaderStepDegrees = 0.25f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

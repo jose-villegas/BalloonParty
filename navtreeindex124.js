@@ -1,5 +1,17 @@
 var NAVTREEINDEX124 =
 {
+"plan_future_ideas.html#autotoc_md564":[3,5,0,9,0],
+"plan_future_ideas.html#autotoc_md565":[3,5,0,9,1],
+"plan_future_ideas.html#autotoc_md566":[3,5,0,9,1,0],
+"plan_future_ideas.html#autotoc_md567":[3,5,0,9,1,1],
+"plan_future_ideas.html#autotoc_md568":[3,5,0,9,1,2],
+"plan_future_ideas.html#autotoc_md569":[3,5,0,9,1,3],
+"plan_future_ideas.html#autotoc_md570":[3,5,0,9,1,4],
+"plan_future_ideas.html#autotoc_md571":[3,5,0,9,1,5],
+"plan_future_ideas.html#autotoc_md572":[3,5,0,9,1,6],
+"plan_future_ideas.html#autotoc_md573":[3,5,0,9,1,7],
+"plan_future_ideas.html#autotoc_md574":[3,5,0,9,2],
+"plan_future_ideas.html#autotoc_md575":[3,5,0,9,3],
 "plan_future_ideas.html#autotoc_md576":[3,5,0,9,4],
 "plan_future_ideas.html#autotoc_md578":[3,5,0,10],
 "plan_future_ideas.html#autotoc_md580":[3,5,0,11],
@@ -237,17 +249,5 @@ var NAVTREEINDEX124 =
 "plan_reward_balloons.html#autotoc_md855":[3,22,0],
 "plan_reward_balloons.html#autotoc_md857":[3,22,0,0],
 "plan_reward_balloons.html#autotoc_md858":[3,22,0,1],
-"plan_reward_balloons.html#autotoc_md859":[3,22,0,2],
-"plan_reward_balloons.html#autotoc_md860":[3,22,0,3],
-"plan_reward_balloons.html#autotoc_md861":[3,22,0,4],
-"plan_reward_balloons.html#autotoc_md862":[3,22,0,5],
-"plan_reward_balloons.html#autotoc_md863":[3,22,0,6],
-"plan_shot_solver_accuracy.html":[3,14],
-"plan_shot_solver_accuracy.html#autotoc_md864":[3,14,0],
-"plan_shot_solver_accuracy.html#autotoc_md866":[3,14,0,0],
-"plan_shot_solver_accuracy.html#autotoc_md867":[3,14,0,1],
-"plan_shot_solver_accuracy.html#autotoc_md868":[3,14,0,2],
-"plan_shot_solver_accuracy.html#autotoc_md869":[3,14,0,3],
-"plan_shot_solver_accuracy.html#autotoc_md870":[3,14,0,3,0],
-"plan_shot_solver_accuracy.html#autotoc_md871":[3,14,0,3,1]
+"plan_reward_balloons.html#autotoc_md859":[3,22,0,2]
 };
