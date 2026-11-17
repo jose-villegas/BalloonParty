@@ -167,7 +167,7 @@ namespace BalloonParty.Balloon.Formation
         }
 
         /// <summary>
-        ///     True when the toughs can form up: either <see cref="IUnbreakableFormationSettings.MinMembers" /> toughs
+        ///     True when the toughs can form up: either <see cref="IUnbreakableFormationSettings.ToughSnakeMinMembers" /> toughs
         ///     are on the board with no snake yet, or a snake walks and a tough is free of it or a popped member left a
         ///     gap in its body. A tough still gliding in
         ///     counts at the slot it is heading for. The balancer asks every frame, so the toughs never wait for a wave
@@ -451,7 +451,7 @@ namespace BalloonParty.Balloon.Formation
 
         // The board's toughs are one body. They form up the moment they are on the board, still gliding in, so the
         // initial fill's run is the snake as it rises and the balancer, which leaves a formation's members be, never
-        // pulls it apart: with no snake and MinMembers toughs on the board, the deepest within the rows a snake
+        // pulls it apart: with no snake and ToughSnakeMinMembers toughs on the board, the deepest within the rows a snake
         // walks starts it where it stands, and every free tough falls in behind the tail at once.
         // reformed: the snake was just started over from the bigger group, so it isn't started over again.
         private void GatherToughs(Action<IReadOnlyList<SlotMove>> relocate, bool reformed = false)
@@ -741,10 +741,10 @@ namespace BalloonParty.Balloon.Formation
         }
 
         // The tough to start a snake, or null: one in the biggest group of touching toughs, the deepest of it, within
-        // the rows a snake walks, landed or still gliding in, once MinMembers toughs are on the board.
+        // the rows a snake walks, landed or still gliding in, once ToughSnakeMinMembers toughs are on the board.
         private IWriteableFormationMember FindToughHead()
         {
-            if (CountToughs() < _settings.MinMembers)
+            if (CountToughs() < _settings.ToughSnakeMinMembers)
             {
                 return null;
             }

@@ -10,8 +10,8 @@ namespace BalloonParty.Configuration.Balloons
         [SerializeField] private bool _enabled = true;
 
         [Tooltip("The board's toughs (and toughers) walk as one snake of their own, through the balloons in its " +
-                 "way, keeping its order. Once Min Members toughs are on the board it starts " +
-                 "from the deepest with the rest lined up behind it at once, and each tough that lands later falls in " +
+                 "way, keeping its order. Once Tough Snake Min Members toughs are on the board it starts " +
+                 "from the biggest group with the rest lined up behind it at once, and each tough that lands later falls in " +
                  "behind its tail as soon as it lands.")]
         [SerializeField] private bool _toughSnakes = true;
 
@@ -47,6 +47,10 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("Seconds of play between the tough snake's steps, on a clock of its own. A pause or a doomed " +
                  "shot holds it.")]
         [SerializeField] [Min(0.1f)] private float _toughSnakeStepSeconds = 1.5f;
+
+        [Tooltip("Fewest toughs (and toughers) on the board that start the tough snake. Apart from Min Members, " +
+                 "which the unbreakables' formations keep, so a pair of toughers walks as one too.")]
+        [SerializeField] [Min(1)] private int _toughSnakeMinMembers = 2;
 
         [Tooltip("A formation picks at random among this many of its least-travel spots, so it doesn't " +
                  "always form in the same place. 1 = always the least travel.")]
@@ -88,6 +92,7 @@ namespace BalloonParty.Configuration.Balloons
         public int SnakeMaxMembers => Mathf.Clamp(_snakeMaxMembers, _minMembers, MaxMembers);
         public float SnakeStepSeconds => Mathf.Max(0.1f, _snakeStepSeconds);
         public float ToughSnakeStepSeconds => Mathf.Max(0.1f, _toughSnakeStepSeconds);
+        public int ToughSnakeMinMembers => Mathf.Max(1, _toughSnakeMinMembers);
         public int SpotChoices => _spotChoices;
         public float HorizontalWeight => _horizontalWeight;
         public float DiagonalWeight => _diagonalWeight;

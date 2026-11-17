@@ -728,7 +728,7 @@ namespace BalloonParty.Balloon.Spawner
                 (entry.BalloonType is BalloonType.Tough or BalloonType.Tougher ? _layerHeavies : _layerLights).Add(entry);
             }
 
-            if (_layerHeavies.Count < settings.MinMembers)
+            if (_layerHeavies.Count < settings.ToughSnakeMinMembers)
             {
                 return false;
             }

@@ -43,6 +43,7 @@ namespace BalloonParty.Tests.Balloon
             _settings.Enabled.Returns(true);
             _settings.ToughSnakes.Returns(true);
             _settings.MinMembers.Returns(3);
+            _settings.ToughSnakeMinMembers.Returns(3);
             _settings.MaxMembers.Returns(5);
             _settings.SnakeMaxMembers.Returns(4);
             _settings.SnakeStepSeconds.Returns(1.7f);
@@ -82,6 +83,21 @@ namespace BalloonParty.Tests.Balloon
 
             Assert.AreEqual(0, _service.Formations.Count);
             Assert.IsFalse(_toughs.Any(t => t.IsAnchored));
+        }
+
+        [Test]
+        public void APairOfToughers_IsASnake_WithItsOwnMinimum()
+        {
+            // Apart from MinMembers (3 here), which the unbreakables' formations keep.
+            _settings.ToughSnakeMinMembers.Returns(2);
+            var west = AddTough(new Vector2Int(2, 2), 5);
+            var east = AddTough(new Vector2Int(3, 2), 5);
+
+            Assert.IsTrue(_service.ToughsDueToGather());
+            _service.GatherToughSnake(Relocate);
+
+            CollectionAssert.AreEqual(new IWriteableFormationMember[] { west, east }, SingleSnake().Members);
+            Assert.AreEqual(0, _relocations, "side by side, they're the body as they stand");
         }
 
         [Test]
@@ -200,7 +216,7 @@ namespace BalloonParty.Tests.Balloon
         {
             // A pair walled in at the bottom corner, the snake; a run of three free above that can't reach it.
             var pocket = new[] { AddTough(new Vector2Int(0, 5), 3), AddTough(new Vector2Int(1, 5), 3) };
-            _settings.MinMembers.Returns(2);
+            _settings.ToughSnakeMinMembers.Returns(2);
             _service.GatherToughSnake(Relocate);
             Assert.AreEqual(2, SingleSnake().Members.Count);
             foreach (var slot in new[] { new Vector2Int(0, 4), new Vector2Int(1, 4), new Vector2Int(2, 4), new Vector2Int(2, 5) })

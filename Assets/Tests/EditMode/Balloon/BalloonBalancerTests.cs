@@ -328,6 +328,7 @@ namespace BalloonParty.Tests.Balloon
             settings.Enabled.Returns(true);
             settings.ToughSnakes.Returns(true);
             settings.MinMembers.Returns(3);
+            settings.ToughSnakeMinMembers.Returns(3);
             settings.MaxMembers.Returns(5);
             settings.SnakeStepSeconds.Returns(1.7f);
             settings.ToughSnakeStepSeconds.Returns(toughStepSeconds);

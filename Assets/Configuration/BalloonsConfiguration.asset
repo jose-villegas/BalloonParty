@@ -302,6 +302,7 @@ MonoBehaviour:
     _horizontalMaxMembers: 3
     _snakeMaxMembers: 4
     _snakeStepSeconds: 1.7
+    _toughSnakeMinMembers: 2
     _spotChoices: 3
     _reinforcementChance: 0.35
     _reinforcementCeiling: 4

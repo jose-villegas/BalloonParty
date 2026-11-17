@@ -87,7 +87,7 @@ Placement reach is a `PlacementReach` argument to `Resolve`:
 
 `BalloonPrefabEntry.SpawnWeight` controls *depth*, never *which* types spawn or *how many* (those come from the range pick weights and the `InitialCountWeights`/`WaveCountWeights` quota curves). Each batch (the initial fill, or one line) is dealt into the topmost open rows first, so the deal order is the vertical order. `PrepareSpawnBatch` sorts the batch **lightest-first** (`BySpawnWeightAscending`), so heavier types (Tough, weight `+3`) settle below lighter ones — one bottom-heavy gradient.
 
-With tough snakes on (`IUnbreakableFormationSettings.ToughSnakes`) and at least `MinMembers` toughs and
+With tough snakes on (`IUnbreakableFormationSettings.ToughSnakes`) and at least `ToughSnakeMinMembers` toughs and
 toughers in it, the **initial fill** deals them as one run instead (`ArrangeToughRun` + the pure
 `ToughRunPlan`): side by side on the deepest line a snake walks, at a random place along the line. Past a full line the rest go on the line above, from its east
 edge westward, so the body bends round the line's east end; any past two lines sink to the bottom. The

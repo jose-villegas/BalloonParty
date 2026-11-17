@@ -86,7 +86,7 @@ Toughs never join an unbreakable formation, and unbreakables never join theirs.
 
 - **Starting as one body.** The initial fill deals the toughs side by side on one line
   (`Balloon/Spawner/README.md`), so they rise together as the snake's body. The toughs form up the moment
-  `MinMembers` of them are on the board, without waiting for them to land: a tough still gliding in counts
+  `ToughSnakeMinMembers` (2) of them are on the board, without waiting for them to land: a tough still gliding in counts
   at the slot it is heading for. So the run is the snake while it rises, anchored, and the balancer, which
   leaves a formation's members be, never pulls it apart. It starts from the biggest group of touching
   toughs, so it starts where most of its body already is and not in a pocket the rest can't reach: that
@@ -207,7 +207,7 @@ match. All the blue comes from the palette's `UnbreakableFormation` entry. See `
 The settings are `IUnbreakableFormationSettings`, nested in `BalloonsConfiguration` under
 "Unbreakable Formations":
 - `Enabled` (all formations, tough snakes too)
-- `ToughSnakes` (on: the toughs walk as one snake. `MinMembers` toughs on the board start it, it steps
+- `ToughSnakes` (on: the toughs walk as one snake. `ToughSnakeMinMembers` (2) toughs on the board start it, it steps
   every `ToughSnakeStepSeconds`, and it keeps out of the bottom `HorizontalBottomClearance` rows)
 - `MinMembers` (3) and `MaxMembers` (5)
 - `HoldWaves` (3)

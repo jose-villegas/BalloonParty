@@ -10,10 +10,13 @@ namespace BalloonParty.Configuration.Balloons
 
         /// <summary>
         ///     The board's toughs walk as one snake of their own, through the balloons in its way, keeping its order.
-        ///     <see cref="MinMembers" /> toughs on the board start it from the deepest, with every other landed tough
-        ///     lined up behind it at once; a tough that lands later joins at its tail. Only while <see cref="Enabled" />.
+        ///     <see cref="ToughSnakeMinMembers" /> toughs on the board start it, with every other tough lined up behind
+        ///     it at once; a tough that arrives later joins at its tail. Only while <see cref="Enabled" />.
         /// </summary>
         bool ToughSnakes { get; }
+
+        /// <summary>Fewest toughs (and toughers) on the board that start the tough snake.</summary>
+        int ToughSnakeMinMembers { get; }
 
         /// <summary>Fewest unbreakables on the board that form up.</summary>
         int MinMembers { get; }
