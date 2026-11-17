@@ -182,7 +182,11 @@ other; a pop or a joiner ties a new one. A spring shows only once both its ballo
 reveals: it grows out of the knot ahead and reaches for the one behind until it ties on (`Reveal Seconds`), then
 stays tied. A snake's springs reveal head to tail, each once the one ahead has tied on. A tough flying in to
 the tail shows no spring while it is further than `Attach Distance` from the tail, then the spring grows and
-reaches for it as it closes in, and ties on as it arrives.
+reaches for it as it closes in, and ties on as it arrives. Each spring is drawn on its knot's layer, so the
+scene capture sees it as it sees the balloons: it casts the soft shadow and takes the bounce light
+(`Display/README.md`). When a level hands its board off, the level-up's ascent or the loss restart's pop
+wave, the tied springs stay with the balloons they tie and ride out with them (the view is outgoing
+content, `ITransitionOutgoingContent`); each drops once either balloon is popped or pooled.
 
 ## Reinforcements
 

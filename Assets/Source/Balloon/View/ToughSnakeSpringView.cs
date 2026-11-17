@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using BalloonParty.Balloon.Formation;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Shared.Math;
+using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
 using UnityEngine;
 using VContainer;
@@ -20,8 +21,12 @@ namespace BalloonParty.Balloon.View
     ///     and reaches for the one behind until it ties on, then stays tied. A snake's links reveal head to tail,
     ///     each once the one ahead has tied on, and one whose balloon behind is further than the attach distance
     ///     (a tough flying in to the tail) stays hidden, growing and reaching as it closes in.
+    ///     Each line is on its knot's layer, so the scene capture sees it as it sees the balloons: it casts the
+    ///     soft shadow and takes the bounce light. When a level hands its board off (the level-up's ascent, the
+    ///     loss restart's pop wave), the tied links stay with the balloons they tie, riding out with them, and
+    ///     each drops once either balloon is popped or pooled.
     /// </summary>
-    internal sealed class ToughSnakeSpringView : MonoBehaviour
+    internal sealed class ToughSnakeSpringView : MonoBehaviour, ITransitionOutgoingContent
     {
         // Within this share of the gap between neighbouring slots, the one behind has arrived.
         private const float ArrivedShare = 1.15f;
@@ -31,6 +36,7 @@ namespace BalloonParty.Balloon.View
         [Inject] private IBalloonsConfiguration _balloonsConfig;
 
         private readonly List<Link> _links = new();
+        private readonly List<Link> _outgoing = new();
         private readonly List<Link> _spare = new();
 
         private float _neighbourGap;
@@ -42,8 +48,11 @@ namespace BalloonParty.Balloon.View
             if (settings == null || !Shown(settings))
             {
                 RetireAll();
+                ReleaseOutgoing();
                 return;
             }
+
+            DrawOutgoing(settings);
 
             for (var i = 0; i < _links.Count; i++)
             {
@@ -54,15 +63,19 @@ namespace BalloonParty.Balloon.View
             var aheadTied = true;
             for (var i = 0; i + 1 < members.Count; i++)
             {
-                var ahead = KnotOf(members[i].SlotIndex);
-                var behind = KnotOf(members[i + 1].SlotIndex);
-                if (ahead == null || behind == null || !OnScreen(ahead) || !OnScreen(behind))
+                var aheadView = ViewOf(members[i].SlotIndex);
+                var behindView = ViewOf(members[i + 1].SlotIndex);
+                if (aheadView == null || behindView == null || !OnScreen(aheadView.Knot) || !OnScreen(behindView.Knot))
                 {
                     aheadTied = false;
                     continue;
                 }
 
+                var ahead = aheadView.Knot;
+                var behind = behindView.Knot;
                 var link = LinkFor(members[i], members[i + 1], ahead, settings);
+                link.AheadView = aheadView;
+                link.BehindView = behindView;
                 Reveal(link, ahead, behind, aheadTied, settings);
                 Draw(link, ahead, behind, settings);
                 aheadTied = link.Tied;
@@ -77,6 +90,34 @@ namespace BalloonParty.Balloon.View
             }
         }
 
+        // The board is handed off: the tied links stay with the balloons they tie, the rest go.
+        public void HoldOutgoing(Transform outgoingRoot, float exitDrop)
+        {
+            for (var i = _links.Count - 1; i >= 0; i--)
+            {
+                var link = _links[i];
+                _links.RemoveAt(i);
+                if (link.Tied)
+                {
+                    _outgoing.Add(link);
+                }
+                else
+                {
+                    Shelve(link);
+                }
+            }
+        }
+
+        public void ReleaseOutgoing()
+        {
+            for (var i = _outgoing.Count - 1; i >= 0; i--)
+            {
+                Shelve(_outgoing[i]);
+            }
+
+            _outgoing.Clear();
+        }
+
         private static bool Shown(IToughSnakeSpringSettings settings)
         {
 #if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
@@ -87,15 +128,38 @@ namespace BalloonParty.Balloon.View
         }
 
         // Null while the slot's view is gone or its knot hidden (a balloon mid-pop, or not a tough).
-        private SpriteRenderer KnotOf(Vector2Int slot)
+        private BalloonView ViewOf(Vector2Int slot)
         {
             if (!_grid.InBounds(slot) || _grid.ViewAt(slot) is not BalloonView view)
             {
                 return null;
             }
 
-            var knot = view.Knot;
-            return knot != null && knot.gameObject.activeInHierarchy ? knot : null;
+            return view.Knot != null && view.Knot.gameObject.activeInHierarchy ? view : null;
+        }
+
+        // Still tying the same balloon: a pooled view that came back as another has a different model.
+        private static bool StillTies(BalloonView view, object member)
+        {
+            return view != null && ReferenceEquals(view.Model, member) && view.Knot != null
+                   && view.Knot.gameObject.activeInHierarchy;
+        }
+
+        // The handed-off links ride out with their balloons, on unscaled time, as the float away plays.
+        private void DrawOutgoing(IToughSnakeSpringSettings settings)
+        {
+            for (var i = _outgoing.Count - 1; i >= 0; i--)
+            {
+                var link = _outgoing[i];
+                if (!StillTies(link.AheadView, link.Ahead) || !StillTies(link.BehindView, link.Behind))
+                {
+                    _outgoing.RemoveAt(i);
+                    Shelve(link);
+                    continue;
+                }
+
+                Draw(link, link.AheadView.Knot, link.BehindView.Knot, settings, Time.unscaledDeltaTime);
+            }
         }
 
         // A balloon still rising from below the board hasn't appeared yet.
@@ -132,6 +196,7 @@ namespace BalloonParty.Balloon.View
             link.Tied = false;
             link.Chain.Place(aheadKnot.transform.position, aheadKnot.transform.position);
             link.Line.sharedMaterial = aheadKnot.sharedMaterial;
+            link.Line.gameObject.layer = aheadKnot.gameObject.layer;
             link.Line.gameObject.SetActive(true);
             _links.Add(link);
             return link;
@@ -184,6 +249,12 @@ namespace BalloonParty.Balloon.View
 
         private void Draw(Link link, SpriteRenderer ahead, SpriteRenderer behind, IToughSnakeSpringSettings settings)
         {
+            Draw(link, ahead, behind, settings, Time.deltaTime);
+        }
+
+        private void Draw(Link link, SpriteRenderer ahead, SpriteRenderer behind, IToughSnakeSpringSettings settings,
+            float deltaTime)
+        {
             var line = link.Line;
             if (link.Reach <= 0f)
             {
@@ -197,7 +268,7 @@ namespace BalloonParty.Balloon.View
             var tuning = new SpringChainTuning(settings.Stiffness, settings.Gravity, settings.Damping,
                 1f / settings.StepsPerSecond, settings.Iterations);
             var rest = NeighbourGap() * settings.Slack;
-            link.Chain.Step(ahead.transform.position, behind.transform.position, rest, Time.deltaTime, tuning,
+            link.Chain.Step(ahead.transform.position, behind.transform.position, rest, deltaTime, tuning,
                 link.Tied ? 1f : link.Reach);
 
             line.widthMultiplier = settings.Width;
@@ -242,8 +313,15 @@ namespace BalloonParty.Balloon.View
         {
             var link = _links[index];
             _links.RemoveAt(index);
+            Shelve(link);
+        }
+
+        private void Shelve(Link link)
+        {
             link.Ahead = null;
             link.Behind = null;
+            link.AheadView = null;
+            link.BehindView = null;
             link.Line.gameObject.SetActive(false);
             _spare.Add(link);
         }
@@ -255,6 +333,8 @@ namespace BalloonParty.Balloon.View
 
             internal object Ahead;
             internal object Behind;
+            internal BalloonView AheadView;
+            internal BalloonView BehindView;
             internal bool Seen;
             internal float Grown;
             internal float Reach;

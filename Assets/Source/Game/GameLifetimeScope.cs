@@ -118,7 +118,7 @@ namespace BalloonParty.Game
                 .UnderTransform(transform);
             builder.RegisterBuildCallback(resolver => resolver.Resolve<ScenarioGradeView>());
             builder.RegisterComponentOnNewGameObject<ToughSnakeSpringView>(Lifetime.Singleton, "ToughSnakeSprings")
-                .UnderTransform(transform);
+                .UnderTransform(transform).AsSelf().As<ITransitionOutgoingContent>();
             builder.RegisterBuildCallback(resolver => resolver.Resolve<ToughSnakeSpringView>());
         }
 
