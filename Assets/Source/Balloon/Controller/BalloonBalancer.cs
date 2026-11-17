@@ -566,15 +566,22 @@ namespace BalloonParty.Balloon.Controller
         internal bool TickFlightRebalance(float deltaTime)
         {
             var interval = _balloonsConfig.FlightRebalanceInterval;
-            if (interval <= 0f || _projectiles.DoomedShotFliesAlone() || _pauseService.IsAnyPaused.Value)
+            var paused = _pauseService.IsAnyPaused.Value;
+            var doomed = _projectiles.DoomedShotFliesAlone();
+            if (interval <= 0f || doomed || paused)
             {
                 // Freeze the board while a lone doomed shot glides its last-breath segment: with the spawn clock
-                // already held (SpawnClock) and rebalance stopped here, nothing can drift into the
-                // computed glide path, so the eased traversal is safe for any curve. Resumes when the
-                // shot dies. One ball's doom never freezes the board under other balls. The snake's clock only
-                // holds: nearly every shot ends in a doomed glide, so restarting it would stop the snakes for good.
+                // already held (SpawnClock) and rebalance stopped here, nothing drifts into the glide path but an
+                // unbreakable snake's step, which at most turns the shot back from doomed. Resumes when the shot
+                // dies. One ball's doom never freezes the board under other balls. The tough snake's clock only
+                // holds: nearly every shot ends in a doomed glide, so restarting it would stop the snake for good.
                 _flightRebalanceElapsed = 0f;
                 FormToughsInTheLevelTransition();
+                if (doomed && !paused && interval > 0f)
+                {
+                    KeepTheBeatThroughADoomedGlide(deltaTime);
+                }
+
                 return false;
             }
 
@@ -627,11 +634,25 @@ namespace BalloonParty.Balloon.Controller
             ReleasePaths();
         }
 
+        // The unbreakables' rhythm comes first, so their beat runs on through a doomed glide, and an unbreakable
+        // snake steps on its tick right there. A cycle or a form-up that falls due waits for the balance after the
+        // glide, as everything else on the board does.
+        private void KeepTheBeatThroughADoomedGlide(float deltaTime)
+        {
+            if (_formations == null || !TickBeat(deltaTime) || !_snakeStepDue)
+            {
+                return;
+            }
+
+            _snakeStepDue = false;
+            ReleasePaths();
+            _formations.StepSnakes(_relocateActors);
+            AnimatePaths(_paths);
+            ReleasePaths();
+        }
+
         // Ticks the unbreakables' beat and the tough snake's step clock and asks whether the toughs should form up,
-        // marking each that falls due for the next balance. True when any did. An unbreakable snake steps
-        // SnakeStepsPerBeat times a beat, on the beat and evenly between; on a beat the free unbreakables form up;
-        // every BeatsPerCycle beats is a cycle, when formations also change shape and a lone unbreakable may move. The
-        // clock runs with no snake too, so the snakes' steps and the cycles keep one rhythm.
+        // marking each that falls due for the next balance. True when any did.
         private bool TickFormations(float deltaTime)
         {
             if (_formations == null)
@@ -639,32 +660,44 @@ namespace BalloonParty.Balloon.Controller
                 return false;
             }
 
-            var snakeStep = false;
-            var cycle = false;
-            var form = false;
-            var stepsPerBeat = _formations.SnakeStepsPerBeat;
-            if (TickStepClock(ref _beatElapsed, _formations.BeatSeconds / stepsPerBeat, true, true, deltaTime))
-            {
-                _snakeSteps++;
-                snakeStep = _formations.HasUnbreakableSnake;
-                if (_snakeSteps % stepsPerBeat == 0)
-                {
-                    _beats++;
-                    cycle = _beats % _formations.BeatsPerCycle == 0 && _formations.HasUnbreakables;
-                    form = !cycle && _formations.UnbreakablesDueToForm();
-                }
-            }
+            var beat = TickBeat(deltaTime);
 
             // The toughs don't wait for a step to form up: a tough that lands falls in at once.
             var gather = _formations.ToughsDueToGather();
             var toughStep = TickStepClock(ref _toughStepElapsed, _formations.ToughSnakeStepSeconds,
                 _formations.HasToughSnake, _formations.ToughSnakeLanded, deltaTime);
+            _toughGatherDue |= gather;
+            _toughStepDue |= toughStep;
+            return beat || gather || toughStep;
+        }
+
+        // The unbreakables' clock, marking what falls due. True when anything did. An unbreakable snake steps
+        // SnakeStepsPerBeat times a beat, on the beat and evenly between; on a beat the free unbreakables form up;
+        // every BeatsPerCycle beats is a cycle, when formations also change shape and a lone unbreakable may move. The
+        // clock runs with no snake too, so the snakes' steps and the cycles keep one rhythm.
+        private bool TickBeat(float deltaTime)
+        {
+            var stepsPerBeat = _formations.SnakeStepsPerBeat;
+            if (!TickStepClock(ref _beatElapsed, _formations.BeatSeconds / stepsPerBeat, true, true, deltaTime))
+            {
+                return false;
+            }
+
+            _snakeSteps++;
+            var snakeStep = _formations.HasUnbreakableSnake;
+            var cycle = false;
+            var form = false;
+            if (_snakeSteps % stepsPerBeat == 0)
+            {
+                _beats++;
+                cycle = _beats % _formations.BeatsPerCycle == 0 && _formations.HasUnbreakables;
+                form = !cycle && _formations.UnbreakablesDueToForm();
+            }
+
             _snakeStepDue |= snakeStep;
             _cycleDue |= cycle;
             _formDue |= form;
-            _toughGatherDue |= gather;
-            _toughStepDue |= toughStep;
-            return snakeStep || cycle || form || gather || toughStep;
+            return snakeStep || cycle || form;
         }
 
         // A snake's step clock: true every interval of play while one walks. A pause or a doomed glide holds it

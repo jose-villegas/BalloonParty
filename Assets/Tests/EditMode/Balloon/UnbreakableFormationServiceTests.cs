@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BalloonParty.Balloon.Formation;
 using BalloonParty.Balloon.Model;
+using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Game.Assist;
@@ -650,8 +651,26 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void ASnake_WalksThroughABalloonInItsWay_WhichGoesRoundToTheTail()
+        {
+            // Every tick is a step: a balloon ahead trades places with the head rather than stop the snake.
+            var snake = FormSnake();
+            var ahead = HexCoordinates.Step(snake.Members[0].SlotIndex.Value, 0);
+            var tailWas = snake.Members[snake.Members.Count - 1].SlotIndex.Value;
+            var balloon = new BalloonModel();
+            _grid.Place(balloon, null, ahead);
+
+            _service.StepSnakes(Relocate);
+
+            Assert.AreEqual(ahead, snake.Members[0].SlotIndex.Value, "the head steps on east, through the balloon");
+            Assert.AreEqual(tailWas, balloon.SlotIndex.Value, "which takes the slot the tail left");
+            Assert.AreSame(balloon, _grid.At(tailWas));
+        }
+
+        [Test]
         public void ASnake_BoxedIn_TurnsRoundAndItsTailLeads()
         {
+            // Toughs, which a snake never trades places with, box the head in.
             var snake = FormSnake();
             var head = snake.Members[0];
             var tail = snake.Members[snake.Members.Count - 1];
@@ -660,7 +679,8 @@ namespace BalloonParty.Tests.Balloon
                 var slot = HexCoordinates.Step(head.SlotIndex.Value, direction);
                 if (_grid.InBounds(slot) && _grid.IsEmpty(slot.x, slot.y))
                 {
-                    _grid.Place(new BalloonModel(), null, slot);
+                    _grid.Place(new ToughBalloonModel(new BalloonModelConfig(BalloonType.Tough, hitsToPop: 1)), null,
+                        slot);
                 }
             }
 

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Formation;
 using BalloonParty.Balloon.Model;
@@ -8,8 +10,10 @@ using BalloonParty.Game.Assist;
 using BalloonParty.Projectile;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Animation;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pause;
+using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
 using MessagePipe;
 using NSubstitute;
@@ -22,6 +26,7 @@ namespace BalloonParty.Tests.Balloon
     [TestFixture]
     public class BalloonBalancerTests
     {
+        private readonly List<GameObject> _viewObjects = new();
         private SlotGrid _grid;
         private IBalloonsConfiguration _balloonsConfig;
         private PauseService _pauseService;
@@ -61,6 +66,12 @@ namespace BalloonParty.Tests.Balloon
             // A flight pulse crossing the interval schedules a fire-and-forget balance; bump the generation
             // so that orphaned continuation drops instead of running against this viewless grid post-test.
             _balancer.ResetRun(_balancer.Generation + 1);
+            foreach (var viewObject in _viewObjects)
+            {
+                UnityEngine.Object.DestroyImmediate(viewObject);
+            }
+
+            _viewObjects.Clear();
         }
 
         [Test]
@@ -401,6 +412,40 @@ namespace BalloonParty.Tests.Balloon
             balancer.ResetRun(balancer.Generation + 1);
         }
 
+        [Test]
+        public void AnUnbreakableSnake_StepsOnItsTick_ThroughADoomedGlide()
+        {
+            // The rhythm comes first: the glide holds the rest of the board, not the snake.
+            var balancer = BalancerWithAToughSnake(out var formations, toughStepSeconds: 100f, formAtOnce: false);
+            var settings = _balloonsConfig.UnbreakableFormation;
+            settings.ToughSnakes.Returns(false);
+            settings.BeatSeconds.Returns(1f);
+            settings.SnakeStepsPerBeat.Returns(2);
+            settings.HorizontalWeight.Returns(0f);
+            settings.SnakeWeight.Returns(1f);
+            settings.SnakeMaxMembers.Returns(3);
+            _balloonsConfig.FlightRebalanceInterval.Returns(100f);
+            for (var col = 0; col < 3; col++)
+            {
+                var slot = new Vector2Int(col, 0);
+                _grid.Remove(slot);
+                _grid.Place(new UnbreakableBalloonModel(new BalloonModelConfig(typeName: BalloonType.Unbreakable)),
+                    ViewObject(), slot);
+            }
+
+            formations.ArrangeOnCycle(_ => { });
+            var snake = formations.Formations.Single(f => f.Shape == FormationShape.Snake);
+            var before = snake.Members.Select(m => m.SlotIndex.Value).ToList();
+            var shot = LoadFreeProjectile();
+            shot.IsLastShieldApproach.Value = true;
+
+            Assert.IsFalse(balancer.TickFlightRebalance(0.5f), "the doomed glide holds the board");
+            Assert.AreNotEqual(before[0], snake.Members[0].SlotIndex.Value, "but the snake steps on its tick");
+            Assert.AreEqual(before[0], snake.Members[1].SlotIndex.Value, "the member behind takes the head's slot");
+            formations.Dispose();
+            balancer.ResetRun(balancer.Generation + 1);
+        }
+
         // Three toughs on row 0 of the 3 by 3 board: the wave start makes a snake of them, unless formAtOnce is
         // off, when it waits for the test to arrange.
         private BalloonBalancer BalancerWithAToughSnake(
@@ -452,6 +497,18 @@ namespace BalloonParty.Tests.Balloon
         private void RequestBalance()
         {
             _balanceHandler.Handle(default);
+        }
+
+        // A stand-in view for a balloon a step moves: the grid's default positions are all the same point, so the
+        // move settles at once.
+        private ISlotActorView ViewObject()
+        {
+            var viewObject = new GameObject("BalanceTestView");
+            _viewObjects.Add(viewObject);
+            var view = Substitute.For<ISlotActorView>();
+            view.transform.Returns(viewObject.transform);
+            view.TweenTracker.Returns(viewObject.AddComponent<TweenTracker>());
+            return view;
         }
 
         private ProjectileModel LoadFreeProjectile()

@@ -351,12 +351,11 @@ namespace BalloonParty.Balloon.Formation
         {
             var members = snake.MemberList;
 
-            // A tough never walls, so moving one can't close a wall. The toughs walk through the board's balloons
-            // rather than wait for an empty slot, which a full board seldom has.
-            var armoured = snake.Armoured;
-            var wall = armoured ? null : LoadWall();
+            // A tough never walls, so moving one can't close a wall. Every snake walks through the board's balloons
+            // rather than wait for an empty slot, which a full board seldom has: it steps on every tick.
+            var wall = snake.Armoured ? null : LoadWall();
             if (!SnakeWalk.TryStep(_grid, members[0].SlotIndex.Value, members[^1].SlotIndex.Value, snake.Heading,
-                    lastRow, wall, out var direction, armoured))
+                    lastRow, wall, out var direction))
             {
                 members.Reverse();
                 var back = members.Count > 1
@@ -364,7 +363,7 @@ namespace BalloonParty.Balloon.Formation
                     : -1;
                 snake.Heading = back >= 0 ? back : HexCoordinates.Turn(snake.Heading, 3);
                 if (!SnakeWalk.TryStep(_grid, members[0].SlotIndex.Value, members[^1].SlotIndex.Value, snake.Heading,
-                        lastRow, wall, out direction, armoured))
+                        lastRow, wall, out direction))
                 {
                     // Boxed in at both ends: it stays turned round, and next beat tries the other end again.
                     return;

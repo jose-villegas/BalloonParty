@@ -300,8 +300,8 @@ MonoBehaviour:
     _beatsPerCycle: 2
     _snakeStepsPerBeat: 2
     _snakeHoldCycles: 3
-    _lineHoldCycles: 4
-    _itemCoverHoldCycles: 4
+    _lineHoldCycles: 2
+    _itemCoverHoldCycles: 2
     _loneHoldCycles: 3
     _bottomClearance: 2
     _horizontalBottomClearance: 4

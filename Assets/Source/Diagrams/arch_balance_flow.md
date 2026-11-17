@@ -88,7 +88,8 @@ resolve path from the priority race above, used specifically to open room for a 
 - Rebalance pulses: all through play (not paused, not while a lone doomed ball glides),
   `BalloonBalancer.Tick` fires a deferred balance every `FlightRebalanceInterval` seconds,
   but only when `HasPossibleMove()` finds something to do — when the board is already
-  settled no pulse is scheduled.
+  settled no pulse is scheduled. An unbreakable snake's step never waits for one: while a lone
+  doomed ball glides, the snake steps on its tick on its own, with no race around it.
 
 **Transit tracking — `BalancePathHolder`:**
 `ApplyBalanceMoves` reserves every slot along an actor's full move chain — its original

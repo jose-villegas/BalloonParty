@@ -33,9 +33,10 @@ biggest group, every other tough falls in behind its tail, and it walks through 
 
 ## The clock
 
-`BalloonBalancer` keeps the beat (`TickStepClock`): it counts seconds of play, and a pause or a doomed
-shot's last glide holds it rather than restarting it, since nearly every shot ends in one. An unbreakable
-snake steps `SnakeStepsPerBeat` times a beat, evenly spaced, and on a beat between cycles the free unbreakables form up (`FormOnBeat`) once
+`BalloonBalancer` keeps the beat (`TickStepClock`): it counts seconds of play, and a pause holds it. The
+rhythm comes before anything else, so a doomed shot's last glide, which freezes the rest of the board,
+doesn't hold the beat: an unbreakable snake steps on its tick right through it, and a cycle or form-up that
+falls due in the glide runs in the balance after it. An unbreakable snake steps `SnakeStepsPerBeat` times a beat, evenly spaced, and on a beat between cycles the free unbreakables form up (`FormOnBeat`) once
 `MinMembers` of them are free, still gliding in or not, so one that arrives or is set free is red a beat at
 most, not a cycle. On every cycle the balancer asks the service to `ArrangeOnCycle`, then moves one
 lone unbreakable (`RelocateOneRoamer`): the one that has rested longest of those that have stood
@@ -59,8 +60,8 @@ shape to change and nothing to hold, so it steps on its own.
    same routine roam jumps use, so the members glide in at their normal speed. Each member is marked
    in formation (`IWriteableFormationMember.SetInFormation`).
 4. **Holding.** The formation lasts its shape's hold, counted in cycles and counting the one it formed
-   on: a snake walks `SnakeHoldCycles` (3), a horizontal or diagonal line holds `LineHoldCycles` (4), an
-   item cover `ItemCoverHoldCycles` (4). During that time the next cycles only count down: nothing moves
+   on: a snake walks `SnakeHoldCycles` (3), a horizontal or diagonal line holds `LineHoldCycles` (2), an
+   item cover `ItemCoverHoldCycles` (2). During that time the next cycles only count down: nothing moves
    but a snake's steps.
 5. **Changing.** On the first cycle after the hold, a new shape is planned for that formation's
    members and any free unbreakables. Members that stay in the formation are never marked out, even for a
@@ -77,16 +78,21 @@ shape to change and nothing to hold, so it steps on its own.
 A snake forms as a row, like a horizontal line, of at most `SnakeMaxMembers`. It sets off along the row,
 east or west at random, led by the member at that end. From then on it takes `SnakeStepsPerBeat` (2) steps
 a beat, on the beat and the off-beat (every 0.85 s of play), quicker than the tough snake: the balancer asks the service to `StepSnakes`, right before that
-balance's race. The beat is apart from the balancer's 4 s pulse: a pause or a doomed shot's last glide
-holds it where the pulse starts over, since nearly every shot ends in one and the snakes would never
-step. A snake formed or re-planned on a cycle takes its first step on the next beat.
+balance's race, or at once in a doomed shot's last glide. The beat is apart from the balancer's 4 s pulse,
+which a pause or a doomed glide starts over; a pause only holds the beat. A snake formed or re-planned on a
+cycle takes its first step on the next tick.
 
 - The head steps one slot along the snake's heading (`HexCoordinates.Step`, six directions numbered from
-  east, clockwise). When that slot is off the board, below the row clearance, or taken, `SnakeWalk` tries
-  the gentlest turn instead: 60° right, 60° left, 120° right, 120° left. It never turns back.
+  east, clockwise). A balloon there trades places with it, going round the snake to the slot the tail
+  leaves (see "Walking through the board" below), so the snake steps on every tick. When that slot is off
+  the board, below the row clearance, held by something it can't trade with, or would wall the board,
+  `SnakeWalk` tries the gentlest turn instead: 60° right, 60° left, 120° right, 120° left. It never turns
+  back.
 - Each member behind the head steps into the slot the member ahead of it just left. When a member was
   popped, the one behind it closes the gap, so the snake stays one line.
-- Boxed in, the snake turns round: its tail leads the way back.
+- Boxed in (by toughs, other unbreakables, anchored or static actors, the edges), the snake turns round in
+  the same tick and its tail leads the way back. Only boxed in at both ends does it miss a step, and it
+  tries the other end on the next tick.
 
 Members stay anchored and blue as they walk (`IFormationMember.Walking`), and the board settles around
 each step in the same pulse. The snake keeps the row's limits: never in the bottom
@@ -99,9 +105,9 @@ can play out differently from its prediction.
 ## Tough snakes
 
 The board's toughs and toughers (`ToughBalloonModel`, an `IArmouredFormationMember`) are one body: a
-single snake of their own, walking with the same `SnakeWalk` as an unbreakable snake but quicker, on a clock
-of its own: a step every `ToughSnakeStepSeconds` (1.5 s) of play, held like the beat by a pause or a doomed
-glide (`BalloonBalancer`).
+single snake of their own, walking with the same `SnakeWalk` as an unbreakable snake but slower, on a clock
+of its own: a step every `ToughSnakeStepSeconds` (1.5 s) of play, held by a pause or a doomed glide
+(`BalloonBalancer`).
 Toughs never join an unbreakable formation, and unbreakables never join theirs.
 
 - **Starting as one body.** The initial fill deals the toughs side by side on one line
@@ -135,7 +141,8 @@ Toughs never join an unbreakable formation, and unbreakables never join theirs.
   one ahead, so the body stays one line between steps (a balloon in the first one's way goes round to the
   slot the tail leaves). One with nowhere to go waits for the next step, whose trail closes the gap.
 - **Walking through the board.** A board in play is nearly full, so a snake that only steps into empty
-  slots would hardly move. The tough snake walks through balloons instead: its head may step into a slot
+  slots would hardly move. Every snake, the tough one and the unbreakables', walks through balloons
+  instead: its head may step into a slot
   held by a balloon that moves and is held by nothing (`SnakeWalk.CanPassThrough`), and that balloon
   goes round the snake to the slot the tail leaves. When a tough joins in the same step, the tail's slot
   is the joiner's, so the balloon takes the joiner's slot instead. Toughs and unbreakables (free or in a
@@ -240,8 +247,8 @@ The settings are `IUnbreakableFormationSettings`, nested in `BalloonsConfigurati
 - `MinMembers` (2) and `MaxMembers` (5)
 - the clock: `BeatSeconds` (1.7: seconds of play between beats), `BeatsPerCycle` (2, so a cycle is 3.4 s)
   and `SnakeStepsPerBeat` (2: an unbreakable snake steps on the beat and the off-beat, every 0.85 s)
-- the holds, in cycles: `SnakeHoldCycles` (3), `LineHoldCycles` (4, horizontal and diagonal),
-  `ItemCoverHoldCycles` (4), and `LoneHoldCycles` (3, a lone unbreakable's rest between moves)
+- the holds, in cycles: `SnakeHoldCycles` (3), `LineHoldCycles` (2, horizontal and diagonal),
+  `ItemCoverHoldCycles` (2), and `LoneHoldCycles` (3, a lone unbreakable's rest between moves)
 - `BottomClearance` (2) and `HorizontalBottomClearance` (4, for horizontal lines)
 - `HorizontalMaxMembers` (3, for horizontal lines; an item cover takes three to six)
 - `SnakeMaxMembers` (4)
