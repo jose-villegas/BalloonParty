@@ -253,6 +253,32 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void TheToughs_FormUpWhileTheLevelTransitionHoldsTheBoard()
+        {
+            var balancer = BalancerWithAToughSnake(out var formations, formAtOnce: false);
+            _pauseService.Pause(PauseSource.LevelTransition);
+
+            Assert.IsFalse(balancer.TickFlightRebalance(0.1f), "no balance, no step");
+            Assert.IsTrue(formations.HasToughSnake, "but the toughs rising for the next level form up");
+            formations.Dispose();
+            balancer.ResetRun(balancer.Generation + 1);
+        }
+
+        [Test]
+        public void TheToughs_DontFormUpInAnyOtherPause()
+        {
+            var balancer = BalancerWithAToughSnake(out var formations, formAtOnce: false);
+            _pauseService.Pause(PauseSource.LevelTransition);
+            _pauseService.Pause(PauseSource.Cheat);
+
+            balancer.TickFlightRebalance(0.1f);
+
+            Assert.IsFalse(formations.HasToughSnake, "a pause holds everything");
+            formations.Dispose();
+            balancer.ResetRun(balancer.Generation + 1);
+        }
+
+        [Test]
         public void StepClock_ANewSnakeStepsAtOnce_ThenEachInterval()
         {
             var elapsed = 0f;

@@ -96,7 +96,9 @@ Toughs never join an unbreakable formation, and unbreakables never join theirs.
   at once (`SnakeBody`): a line of slots on from the head, following the toughs where they stand and
   otherwise bending as little as it can. A balloon on that line moves out to a slot one of the toughs
   left. The balancer asks every frame (`ToughsDueToGather`), so the snake forms the moment it can, not at
-  a wave start or on a beat. It takes its first step the moment its head has landed
+  a wave start or on a beat, and even while a level's transition holds the board, when the next level's
+  toughs rise (`BalloonBalancer.FormToughsInTheLevelTransition`; only the form-up runs then, no step and no
+  balance). It takes its first step the moment its head has landed
   (`ToughSnakeLanded`), so the toughs are moving as soon as they arrive at a level's start.
 - **Falling in at the tail.** A tough that rises later falls in behind the tail the moment it appears,
   the same way, gliding straight to its place. Where nothing on from the tail can take it (toughs,

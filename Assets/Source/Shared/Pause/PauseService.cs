@@ -39,6 +39,20 @@ namespace BalloonParty.Shared.Pause
             return _stack.TryGetValue(source, out var count) && count > 0;
         }
 
+        // True when source holds the game and nothing else does.
+        internal bool IsPausedOnlyBy(PauseSource source)
+        {
+            foreach (var pair in _stack)
+            {
+                if (pair.Value > 0 != (pair.Key == source))
+                {
+                    return false;
+                }
+            }
+
+            return IsPaused(source);
+        }
+
         internal void Pause(PauseSource source)
         {
             _stack.TryGetValue(source, out var count);

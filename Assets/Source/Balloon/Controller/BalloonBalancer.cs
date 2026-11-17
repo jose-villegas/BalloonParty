@@ -524,6 +524,7 @@ namespace BalloonParty.Balloon.Controller
                 // shot dies. One ball's doom never freezes the board under other balls. The snake's clock only
                 // holds: nearly every shot ends in a doomed glide, so restarting it would stop the snakes for good.
                 _flightRebalanceElapsed = 0f;
+                FormToughsInTheLevelTransition();
                 return false;
             }
 
@@ -557,6 +558,23 @@ namespace BalloonParty.Balloon.Controller
 
             RequestBalance();
             return true;
+        }
+
+        // A level's toughs rise during its transition, which holds the board. They form up as they rise all the
+        // same, so the snake is one body before play starts; nothing else moves, no step and no balance. Any
+        // other hold (a pause, a doomed glide) stops them too.
+        private void FormToughsInTheLevelTransition()
+        {
+            if (_formations == null || !_pauseService.IsPausedOnlyBy(PauseSource.LevelTransition)
+                || _projectiles.DoomedShotFliesAlone() || !_formations.ToughsDueToGather())
+            {
+                return;
+            }
+
+            ReleasePaths();
+            _formations.GatherToughSnake(_relocateActors);
+            AnimatePaths(_paths);
+            ReleasePaths();
         }
 
         // Ticks the snakes' step clocks and asks whether the toughs should form up, marking each that falls due
