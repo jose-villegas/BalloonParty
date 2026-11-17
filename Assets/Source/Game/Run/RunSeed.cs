@@ -65,6 +65,15 @@ namespace BalloonParty.Game.Run
 
         private void Roll()
         {
+#if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
+            if (BalloonParty.Cheats.CheatState.PinnedRunSeed != 0)
+            {
+                _value = BalloonParty.Cheats.CheatState.PinnedRunSeed;
+                Log.Info("RunSeed", $"Pinned run seed {_value}");
+                return;
+            }
+#endif
+
             _value = _rolls.Next();
             Log.Info("RunSeed", $"New run seed {_value}");
         }

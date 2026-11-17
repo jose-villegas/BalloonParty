@@ -79,6 +79,11 @@ namespace BalloonParty.Cheats
         /// (<c>Editor/Staging</c>); read by <c>RunSeed.ResetRun</c>.</summary>
         public static int ForcedRunSeed;
 
+        /// <summary>When not 0, every run of this session takes this seed instead of rolling one, the first
+        /// included, so two performance runs play the same schedule of levels. Set from the autoplay's
+        /// <c>seed</c>; read by <c>RunSeed</c>.</summary>
+        public static int PinnedRunSeed;
+
         /// <summary>While true, no balloons come on their own: a run's opening board isn't dealt
         /// (<c>BalloonSpawner.SpawnAsync</c>) and the spawn clock sends no lines, so the board holds only what's
         /// put on it. The level's obstacles still come. Set by the scene stage (<c>Editor/Staging</c>) for its

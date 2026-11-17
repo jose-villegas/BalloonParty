@@ -578,6 +578,13 @@ namespace BalloonParty.Game
 
             // Before any view starts, so each reads the switch from its first frame.
             CheatState.PerfOff = settings.Off;
+
+            // The same levels and, as far as the frame timing allows, the same draws in every seeded session.
+            if (settings.Seed.HasValue)
+            {
+                CheatState.PinnedRunSeed = settings.Seed.Value == 0 ? 1 : settings.Seed.Value;
+                UnityEngine.Random.InitState(settings.Seed.Value);
+            }
             builder.RegisterInstance(settings);
             builder.RegisterEntryPoint<AutoplayController>();
         }
