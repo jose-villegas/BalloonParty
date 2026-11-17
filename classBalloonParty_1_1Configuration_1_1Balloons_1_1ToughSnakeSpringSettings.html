@@ -160,15 +160,6 @@ Properties</h2></td></tr>
 <tr class="memitem:a7ab064f02492ee68c5bb7f00fe9d736f" id="r_a7ab064f02492ee68c5bb7f00fe9d736f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7ab064f02492ee68c5bb7f00fe9d736f">Segments</a><code> [get]</code></td></tr>
 <tr class="memdesc:a7ab064f02492ee68c5bb7f00fe9d736f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Springs along each link, knot to knot.  <br /></td></tr>
 <tr class="separator:a7ab064f02492ee68c5bb7f00fe9d736f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9cdbf98949863973a368e2d6a890b66a" id="r_a9cdbf98949863973a368e2d6a890b66a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9cdbf98949863973a368e2d6a890b66a">Shadow</a><code> [get]</code></td></tr>
-<tr class="memdesc:a9cdbf98949863973a368e2d6a890b66a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether each spring casts a drop shadow away from the scene light, as the balloons do.  <br /></td></tr>
-<tr class="separator:a9cdbf98949863973a368e2d6a890b66a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e04916872be9355fb7de4e5565b6246" id="r_a0e04916872be9355fb7de4e5565b6246"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0e04916872be9355fb7de4e5565b6246">ShadowColour</a><code> [get]</code></td></tr>
-<tr class="memdesc:a0e04916872be9355fb7de4e5565b6246"><td class="mdescLeft">&#160;</td><td class="mdescRight">The drop shadow's colour.  <br /></td></tr>
-<tr class="separator:a0e04916872be9355fb7de4e5565b6246"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a92488bb443585d3fb1dfbcd7e5c716a5" id="r_a92488bb443585d3fb1dfbcd7e5c716a5"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a92488bb443585d3fb1dfbcd7e5c716a5">ShadowSoftness</a><code> [get]</code></td></tr>
-<tr class="memdesc:a92488bb443585d3fb1dfbcd7e5c716a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">World units the drop shadow's edge fades over, either side of the spring's width.  <br /></td></tr>
-<tr class="separator:a92488bb443585d3fb1dfbcd7e5c716a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa27019046d156d47abe723b7d88963da" id="r_aa27019046d156d47abe723b7d88963da"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa27019046d156d47abe723b7d88963da">Slack</a><code> [get]</code></td></tr>
 <tr class="memdesc:aa27019046d156d47abe723b7d88963da"><td class="mdescLeft">&#160;</td><td class="mdescRight">A link's rest length, as a share of the distance between neighbouring slots.  <br /></td></tr>
 <tr class="separator:aa27019046d156d47abe723b7d88963da"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -203,12 +194,6 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a7f5428d70b4192aff742e272a9b39d12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8792bef91e547045e5fcac32bdd5e324" id="r_a8792bef91e547045e5fcac32bdd5e324"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8792bef91e547045e5fcac32bdd5e324">_segments</a> = 8</td></tr>
 <tr class="separator:a8792bef91e547045e5fcac32bdd5e324"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adaaa5c9b3d7e86365f3e99fdbba07f15" id="r_adaaa5c9b3d7e86365f3e99fdbba07f15"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adaaa5c9b3d7e86365f3e99fdbba07f15">_shadow</a> = true</td></tr>
-<tr class="separator:adaaa5c9b3d7e86365f3e99fdbba07f15"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e1f9660edd1ebff71ed59e8ab88716d" id="r_a2e1f9660edd1ebff71ed59e8ab88716d"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2e1f9660edd1ebff71ed59e8ab88716d">_shadowColour</a> = new(0.12f, 0.14f, 0.22f, 0.4f)</td></tr>
-<tr class="separator:a2e1f9660edd1ebff71ed59e8ab88716d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05a8f88e49f3ed94d57ca98306d055a2" id="r_a05a8f88e49f3ed94d57ca98306d055a2"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a05a8f88e49f3ed94d57ca98306d055a2">_shadowSoftness</a> = 0.025f</td></tr>
-<tr class="separator:a05a8f88e49f3ed94d57ca98306d055a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a18786c5af03a81b7a94391afcf48daa4" id="r_a18786c5af03a81b7a94391afcf48daa4"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a18786c5af03a81b7a94391afcf48daa4">_slack</a> = 1.25f</td></tr>
 <tr class="separator:a18786c5af03a81b7a94391afcf48daa4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0eeec029adde48e66e2133d6d734f4e9" id="r_a0eeec029adde48e66e2133d6d734f4e9"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0eeec029adde48e66e2133d6d734f4e9">_stepsPerSecond</a> = 120f</td></tr>
@@ -428,72 +413,6 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">int BalloonParty.Configuration.Balloons.ToughSnakeSpringSettings._segments = 8</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="adaaa5c9b3d7e86365f3e99fdbba07f15" name="adaaa5c9b3d7e86365f3e99fdbba07f15"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adaaa5c9b3d7e86365f3e99fdbba07f15">&#9670;&#160;</a></span>_shadow</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool BalloonParty.Configuration.Balloons.ToughSnakeSpringSettings._shadow = true</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a2e1f9660edd1ebff71ed59e8ab88716d" name="a2e1f9660edd1ebff71ed59e8ab88716d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2e1f9660edd1ebff71ed59e8ab88716d">&#9670;&#160;</a></span>_shadowColour</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Color BalloonParty.Configuration.Balloons.ToughSnakeSpringSettings._shadowColour = new(0.12f, 0.14f, 0.22f, 0.4f)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a05a8f88e49f3ed94d57ca98306d055a2" name="a05a8f88e49f3ed94d57ca98306d055a2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a05a8f88e49f3ed94d57ca98306d055a2">&#9670;&#160;</a></span>_shadowSoftness</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float BalloonParty.Configuration.Balloons.ToughSnakeSpringSettings._shadowSoftness = 0.025f</td>
         </tr>
       </table>
   </td>
@@ -849,84 +768,6 @@ Private Attributes</h2></td></tr>
 <p>Springs along each link, knot to knot. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IToughSnakeSpringSettings.html#adb4b04bb79df8b5b4b93cb3a8d6d84fd">BalloonParty.Configuration.Balloons.IToughSnakeSpringSettings</a>.</p>
-
-</div>
-</div>
-<a id="a9cdbf98949863973a368e2d6a890b66a" name="a9cdbf98949863973a368e2d6a890b66a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9cdbf98949863973a368e2d6a890b66a">&#9670;&#160;</a></span>Shadow</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool BalloonParty.Configuration.Balloons.ToughSnakeSpringSettings.Shadow</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Whether each spring casts a drop shadow away from the scene light, as the balloons do. </p>
-
-<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IToughSnakeSpringSettings.html#a7b7642b34f30095854a2634bd255686e">BalloonParty.Configuration.Balloons.IToughSnakeSpringSettings</a>.</p>
-
-</div>
-</div>
-<a id="a0e04916872be9355fb7de4e5565b6246" name="a0e04916872be9355fb7de4e5565b6246"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0e04916872be9355fb7de4e5565b6246">&#9670;&#160;</a></span>ShadowColour</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Color BalloonParty.Configuration.Balloons.ToughSnakeSpringSettings.ShadowColour</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The drop shadow's colour. </p>
-
-<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IToughSnakeSpringSettings.html#a4d5c76d24adcac64cf3d2c1c55adeaee">BalloonParty.Configuration.Balloons.IToughSnakeSpringSettings</a>.</p>
-
-</div>
-</div>
-<a id="a92488bb443585d3fb1dfbcd7e5c716a5" name="a92488bb443585d3fb1dfbcd7e5c716a5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a92488bb443585d3fb1dfbcd7e5c716a5">&#9670;&#160;</a></span>ShadowSoftness</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float BalloonParty.Configuration.Balloons.ToughSnakeSpringSettings.ShadowSoftness</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>World units the drop shadow's edge fades over, either side of the spring's width. </p>
-
-<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IToughSnakeSpringSettings.html#a7dbf45ce86e979abaf0f6e8816fa6933">BalloonParty.Configuration.Balloons.IToughSnakeSpringSettings</a>.</p>
 
 </div>
 </div>
