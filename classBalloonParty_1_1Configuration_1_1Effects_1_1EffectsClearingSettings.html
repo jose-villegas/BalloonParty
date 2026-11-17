@@ -176,6 +176,9 @@ Properties</h2></td></tr>
 <tr class="memitem:a8df62ee99a3492a5ab7f2abf424a6d97" id="r_a8df62ee99a3492a5ab7f2abf424a6d97"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8df62ee99a3492a5ab7f2abf424a6d97">Strength</a><code> [get]</code></td></tr>
 <tr class="memdesc:a8df62ee99a3492a5ab7f2abf424a6d97"><td class="mdescLeft">&#160;</td><td class="mdescRight">How much of the effects a full clearing removes: 1 hides them, below 1 leaves a trace.  <br /></td></tr>
 <tr class="separator:a8df62ee99a3492a5ab7f2abf424a6d97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1facbe4276258bd11dd395a7ab205fee" id="r_a1facbe4276258bd11dd395a7ab205fee"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1facbe4276258bd11dd395a7ab205fee">Trail</a><code> [get]</code></td></tr>
+<tr class="memdesc:a1facbe4276258bd11dd395a7ab205fee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether a clearing leaves a trail along the ball's path that lingers and closes, or is only a dome where the ball is.  <br /></td></tr>
+<tr class="separator:a1facbe4276258bd11dd395a7ab205fee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a48088ed918785136e6f0847e0929dde5" id="r_a48088ed918785136e6f0847e0929dde5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a48088ed918785136e6f0847e0929dde5">UseUnscaledTime</a><code> [get]</code></td></tr>
 <tr class="memdesc:a48088ed918785136e6f0847e0929dde5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decay on real time even while a ball flies; once none does, it always is.  <br /></td></tr>
 <tr class="separator:a48088ed918785136e6f0847e0929dde5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -212,6 +215,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a5565f6b19640965ee7de0d3477368f10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d1c3d8a36f66d087a9aa21559e24dde" id="r_a5d1c3d8a36f66d087a9aa21559e24dde"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5d1c3d8a36f66d087a9aa21559e24dde">_strength</a> = 1f</td></tr>
 <tr class="separator:a5d1c3d8a36f66d087a9aa21559e24dde"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d055b187340befba86617278e4abd89" id="r_a5d055b187340befba86617278e4abd89"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5d055b187340befba86617278e4abd89">_trail</a></td></tr>
+<tr class="separator:a5d055b187340befba86617278e4abd89"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4095d9aaa31d9031352dbaf666ca043e" id="r_a4095d9aaa31d9031352dbaf666ca043e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4095d9aaa31d9031352dbaf666ca043e">_useUnscaledTime</a></td></tr>
 <tr class="separator:a4095d9aaa31d9031352dbaf666ca043e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -537,6 +542,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">float BalloonParty.Configuration.Effects.EffectsClearingSettings._strength = 1f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5d055b187340befba86617278e4abd89" name="a5d055b187340befba86617278e4abd89"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d055b187340befba86617278e4abd89">&#9670;&#160;</a></span>_trail</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Configuration.Effects.EffectsClearingSettings._trail</td>
         </tr>
       </table>
   </td>
@@ -952,6 +979,32 @@ Private Attributes</h2></td></tr>
 <p>How much of the effects a full clearing removes: 1 hides them, below 1 leaves a trace. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IEffectsClearingSettings.html#a5c23499d85d7ab2033f01d8343146c06">BalloonParty.Configuration.Effects.IEffectsClearingSettings</a>.</p>
+
+</div>
+</div>
+<a id="a1facbe4276258bd11dd395a7ab205fee" name="a1facbe4276258bd11dd395a7ab205fee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1facbe4276258bd11dd395a7ab205fee">&#9670;&#160;</a></span>Trail</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Configuration.Effects.EffectsClearingSettings.Trail</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Whether a clearing leaves a trail along the ball's path that lingers and closes, or is only a dome where the ball is. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IEffectsClearingSettings.html#aaef1c9448c163e5ee68572cddbbdb068">BalloonParty.Configuration.Effects.IEffectsClearingSettings</a>.</p>
 
 </div>
 </div>

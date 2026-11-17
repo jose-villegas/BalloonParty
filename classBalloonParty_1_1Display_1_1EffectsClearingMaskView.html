@@ -134,7 +134,7 @@ $(function(){initNavTree('classBalloonParty_1_1Display_1_1EffectsClearingMaskVie
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Display_1_1EffectsClearingMaskView__coll__graph.svg" width="547" height="176"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Display_1_1EffectsClearingMaskView__coll__graph.svg" width="568" height="228"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
@@ -191,6 +191,10 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a9b32ed5442158d40cf1d091fc89cbc33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a60e5bd4371937cf6068edf5c4d5310e1" id="r_a60e5bd4371937cf6068edf5c4d5310e1"><td class="memItemLeft" align="right" valign="top">RenderTexture&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a60e5bd4371937cf6068edf5c4d5310e1">_front</a></td></tr>
 <tr class="separator:a60e5bd4371937cf6068edf5c4d5310e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa04eddadcd80a1d753cc6711105a749e" id="r_aa04eddadcd80a1d753cc6711105a749e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa04eddadcd80a1d753cc6711105a749e">_hasLastView</a></td></tr>
+<tr class="separator:aa04eddadcd80a1d753cc6711105a749e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36582d5e886ea6a46aa7a91dbce9afc6" id="r_a36582d5e886ea6a46aa7a91dbce9afc6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1Display_1_1ClearingView.html">ClearingView</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a36582d5e886ea6a46aa7a91dbce9afc6">_lastView</a></td></tr>
+<tr class="separator:a36582d5e886ea6a46aa7a91dbce9afc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ec899b28b1f42038f80fde46d4a0b30" id="r_a1ec899b28b1f42038f80fde46d4a0b30"><td class="memItemLeft" align="right" valign="top">Material&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ec899b28b1f42038f80fde46d4a0b30">_material</a></td></tr>
 <tr class="separator:a1ec899b28b1f42038f80fde46d4a0b30"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8a62c907097bb7e7f091236afcb66e7e" id="r_a8a62c907097bb7e7f091236afcb66e7e"><td class="memItemLeft" align="right" valign="top">readonly float[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8a62c907097bb7e7f091236afcb66e7e">_radii</a> = new float[<a class="el" href="classBalloonParty_1_1Display_1_1EffectsClearingStamper.html#a28fd5f656d4be042e15e061a2bf90020">EffectsClearingStamper.MaxStamps</a>]</td></tr>
@@ -216,8 +220,14 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:ae516a69c2a39ea64b3de461b7e0a3f6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee2dfb0a9f042df58b6bac35f181d1b3" id="r_aee2dfb0a9f042df58b6bac35f181d1b3"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aee2dfb0a9f042df58b6bac35f181d1b3">MaskTexId</a> = Shader.PropertyToID(&quot;_EffectsClearMask&quot;)</td></tr>
 <tr class="separator:aee2dfb0a9f042df58b6bac35f181d1b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d94bd02025e7e094cf42991e8a4bf5d" id="r_a8d94bd02025e7e094cf42991e8a4bf5d"><td class="memItemLeft" align="right" valign="top">static readonly Vector4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8d94bd02025e7e094cf42991e8a4bf5d">NoReprojection</a> = new(1f, 1f, 0f, 0f)</td></tr>
+<tr class="separator:a8d94bd02025e7e094cf42991e8a4bf5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab0d55bb5baade44d75e8cc2d81fe152e" id="r_ab0d55bb5baade44d75e8cc2d81fe152e"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab0d55bb5baade44d75e8cc2d81fe152e">RadiiId</a> = Shader.PropertyToID(&quot;_Radii&quot;)</td></tr>
 <tr class="separator:ab0d55bb5baade44d75e8cc2d81fe152e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a156484f016da4c58cbe2922eb22ea6" id="r_a9a156484f016da4c58cbe2922eb22ea6"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9a156484f016da4c58cbe2922eb22ea6">RadiusScaleId</a> = Shader.PropertyToID(&quot;_RadiusScale&quot;)</td></tr>
+<tr class="separator:a9a156484f016da4c58cbe2922eb22ea6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad31c25f6770991ae6b6feaec47362a12" id="r_ad31c25f6770991ae6b6feaec47362a12"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad31c25f6770991ae6b6feaec47362a12">ReprojectId</a> = Shader.PropertyToID(&quot;_Reproject&quot;)</td></tr>
+<tr class="separator:ad31c25f6770991ae6b6feaec47362a12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a50b96826a342893366f639e3867edc50" id="r_a50b96826a342893366f639e3867edc50"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a50b96826a342893366f639e3867edc50">StampCountId</a> = Shader.PropertyToID(&quot;_StampCount&quot;)</td></tr>
 <tr class="separator:a50b96826a342893366f639e3867edc50"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae5cca99d180a2a95ad05569ebedbd299" id="r_ae5cca99d180a2a95ad05569ebedbd299"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae5cca99d180a2a95ad05569ebedbd299">StampsId</a> = Shader.PropertyToID(&quot;_Stamps&quot;)</td></tr>
@@ -597,6 +607,50 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="aa04eddadcd80a1d753cc6711105a749e" name="aa04eddadcd80a1d753cc6711105a749e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa04eddadcd80a1d753cc6711105a749e">&#9670;&#160;</a></span>_hasLastView</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Display.EffectsClearingMaskView._hasLastView</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a36582d5e886ea6a46aa7a91dbce9afc6" name="a36582d5e886ea6a46aa7a91dbce9afc6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36582d5e886ea6a46aa7a91dbce9afc6">&#9670;&#160;</a></span>_lastView</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structBalloonParty_1_1Display_1_1ClearingView.html">ClearingView</a> BalloonParty.Display.EffectsClearingMaskView._lastView</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a1ec899b28b1f42038f80fde46d4a0b30" name="a1ec899b28b1f42038f80fde46d4a0b30"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1ec899b28b1f42038f80fde46d4a0b30">&#9670;&#160;</a></span>_material</h2>
 
@@ -861,6 +915,28 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a8d94bd02025e7e094cf42991e8a4bf5d" name="a8d94bd02025e7e094cf42991e8a4bf5d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d94bd02025e7e094cf42991e8a4bf5d">&#9670;&#160;</a></span>NoReprojection</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly Vector4 BalloonParty.Display.EffectsClearingMaskView.NoReprojection = new(1f, 1f, 0f, 0f)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ab0d55bb5baade44d75e8cc2d81fe152e" name="ab0d55bb5baade44d75e8cc2d81fe152e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab0d55bb5baade44d75e8cc2d81fe152e">&#9670;&#160;</a></span>RadiiId</h2>
 
@@ -872,6 +948,50 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly int BalloonParty.Display.EffectsClearingMaskView.RadiiId = Shader.PropertyToID(&quot;_Radii&quot;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9a156484f016da4c58cbe2922eb22ea6" name="a9a156484f016da4c58cbe2922eb22ea6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a156484f016da4c58cbe2922eb22ea6">&#9670;&#160;</a></span>RadiusScaleId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Display.EffectsClearingMaskView.RadiusScaleId = Shader.PropertyToID(&quot;_RadiusScale&quot;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad31c25f6770991ae6b6feaec47362a12" name="ad31c25f6770991ae6b6feaec47362a12"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad31c25f6770991ae6b6feaec47362a12">&#9670;&#160;</a></span>ReprojectId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Display.EffectsClearingMaskView.ReprojectId = Shader.PropertyToID(&quot;_Reproject&quot;)</td>
         </tr>
       </table>
   </td>

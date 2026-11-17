@@ -1,5 +1,9 @@
 var NAVTREEINDEX33 =
 {
+"classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html#addff59992f3f90c413728466a5110d6f":[5,0,0,3,8,5,3],
+"classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html#addff59992f3f90c413728466a5110d6f":[6,0,0,3,8,5,3],
+"classBalloonParty_1_1Configuration_1_1Items_1_1LightningSettings.html":[5,0,0,3,8,6],
+"classBalloonParty_1_1Configuration_1_1Items_1_1LightningSettings.html":[6,0,0,3,8,6],
 "classBalloonParty_1_1Configuration_1_1Items_1_1LightningSettings.html#a08769f2e7eef9ebef685ee9435f615f1":[5,0,0,3,8,6,13],
 "classBalloonParty_1_1Configuration_1_1Items_1_1LightningSettings.html#a08769f2e7eef9ebef685ee9435f615f1":[6,0,0,3,8,6,13],
 "classBalloonParty_1_1Configuration_1_1Items_1_1LightningSettings.html#a1402915168216d350391a8ac994c1314":[5,0,0,3,8,6,16],
@@ -245,9 +249,5 @@ var NAVTREEINDEX33 =
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#abce9357a5e8e1fe8e1d5c7dd0548ba01":[5,0,0,3,9,17,9],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#abce9357a5e8e1fe8e1d5c7dd0548ba01":[6,0,0,3,9,17,9],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#ac111b10ba74cee939b823e26b656dadf":[5,0,0,3,9,17,10],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#ac111b10ba74cee939b823e26b656dadf":[6,0,0,3,9,17,10],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#acba9af6805647d30f6636a50f8f1873a":[5,0,0,3,9,17,20],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#acba9af6805647d30f6636a50f8f1873a":[6,0,0,3,9,17,20],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#ad49b37de1383c0451284b156ec46aa96":[5,0,0,3,9,17,2],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#ad49b37de1383c0451284b156ec46aa96":[6,0,0,3,9,17,2]
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#ac111b10ba74cee939b823e26b656dadf":[6,0,0,3,9,17,10]
 };

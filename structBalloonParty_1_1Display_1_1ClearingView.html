@@ -122,6 +122,9 @@ $(function(){initNavTree('structBalloonParty_1_1Display_1_1ClearingView.html',''
 Package Functions</h2></td></tr>
 <tr class="memitem:aec866458b16f0d7e7c4617d20ed786dd" id="r_aec866458b16f0d7e7c4617d20ed786dd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aec866458b16f0d7e7c4617d20ed786dd">ClearingView</a> (Vector2 center, float orthographicSize, float aspect)</td></tr>
 <tr class="separator:aec866458b16f0d7e7c4617d20ed786dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e8b22d49b0647ba419907bb0bb0410b" id="r_a8e8b22d49b0647ba419907bb0bb0410b"><td class="memItemLeft" align="right" valign="top">Vector4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8e8b22d49b0647ba419907bb0bb0410b">ReprojectionFrom</a> (in <a class="el" href="structBalloonParty_1_1Display_1_1ClearingView.html">ClearingView</a> previous)</td></tr>
+<tr class="memdesc:a8e8b22d49b0647ba419907bb0bb0410b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where a point of this view's UV was in <em>previous</em> 's, as <code>uv * xy + zw</code>: the mask carries last frame's stamps through a camera move or zoom (the level-up rig's) with this, so they stay on the world rather than on the screen.  <br /></td></tr>
+<tr class="separator:a8e8b22d49b0647ba419907bb0bb0410b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a5c14a7f729e55b79f5377ed53e3f3a" id="r_a1a5c14a7f729e55b79f5377ed53e3f3a"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1a5c14a7f729e55b79f5377ed53e3f3a">ToUv</a> (Vector2 world)</td></tr>
 <tr class="separator:a1a5c14a7f729e55b79f5377ed53e3f3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8adc377e14937fad8373a192744fe84d" id="r_a8adc377e14937fad8373a192744fe84d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8adc377e14937fad8373a192744fe84d">ToUvHeight</a> (float worldLength)</td></tr>
@@ -175,6 +178,33 @@ Package Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a8e8b22d49b0647ba419907bb0bb0410b" name="a8e8b22d49b0647ba419907bb0bb0410b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e8b22d49b0647ba419907bb0bb0410b">&#9670;&#160;</a></span>ReprojectionFrom()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector4 BalloonParty.Display.ClearingView.ReprojectionFrom </td>
+          <td>(</td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Display_1_1ClearingView.html">ClearingView</a></td>          <td class="paramname"><span class="paramname"><em>previous</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Where a point of this view's UV was in <em>previous</em> 's, as <code>uv * xy + zw</code>: the mask carries last frame's stamps through a camera move or zoom (the level-up rig's) with this, so they stay on the world rather than on the screen. </p>
+
+</div>
+</div>
 <a id="a1a5c14a7f729e55b79f5377ed53e3f3a" name="a1a5c14a7f729e55b79f5377ed53e3f3a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1a5c14a7f729e55b79f5377ed53e3f3a">&#9670;&#160;</a></span>ToUv()</h2>
 

@@ -15,6 +15,7 @@ var classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings =
     [ "_minClearRadius", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a0b8324d7b9324fc79e7429dae39f8c9c", null ],
     [ "_shieldsForMaxRadius", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a5565f6b19640965ee7de0d3477368f10", null ],
     [ "_strength", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a5d1c3d8a36f66d087a9aa21559e24dde", null ],
+    [ "_trail", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a5d055b187340befba86617278e4abd89", null ],
     [ "_useUnscaledTime", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a4095d9aaa31d9031352dbaf666ca043e", null ],
     [ "CompositeShader", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a61c9ec13fc40e09bf32b9bd49e3f6776", null ],
     [ "EdgeHigh", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#abbc957a96b08d19af0bae6b81afecf39", null ],
@@ -31,5 +32,6 @@ var classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings =
     [ "MinClearRadius", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#ae80f0cb4df65013533b18e72d7390461", null ],
     [ "ShieldsForMaxRadius", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#ad8fc129350eedfafdf6cad07df4d472c", null ],
     [ "Strength", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a8df62ee99a3492a5ab7f2abf424a6d97", null ],
+    [ "Trail", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a1facbe4276258bd11dd395a7ab205fee", null ],
     [ "UseUnscaledTime", "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a48088ed918785136e6f0847e0929dde5", null ]
 ];

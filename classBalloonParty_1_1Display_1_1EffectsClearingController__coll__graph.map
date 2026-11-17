@@ -1,21 +1,23 @@
 <map id="BalloonParty.Display.EffectsClearingController" name="BalloonParty.Display.EffectsClearingController">
-<area shape="rect" id="Node000001" title="Feeds the clearing mask from the balls in flight." alt="" coords="654,120,854,164"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="399,5,483,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="498,31,542,43,587,58,631,75,715,119,710,119,629,80,585,63,540,48,498,36"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="392,57,490,85"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="505,77,631,101,688,119,683,119,629,106,505,82"/>
-<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Display_1_1IEffectsClearingSource.html" title="Where the clearing mask gets its stamps from." alt="" coords="15,110,220,155"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="235,132,655,138,652,143,235,137"/>
-<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Display_1_1EffectsClearingMaskView.html" title="The clearing mask (Effects Layer Clearing): a small two&#45;channel target, bound globally as _EffectsCle..." alt="" coords="341,160,541,204"/>
-<area shape="poly" id="edge8_Node000006_Node000004" title=" " alt="" coords="234,152,254,155,343,169,338,171,253,160,235,157"/>
-<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html" title="Which shots exist right now: the one held in the thrower, and every one in flight (oldest first)." alt="" coords="356,298,526,343"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="527,289,540,283,593,255,644,222,723,165,728,163,647,226,596,259,542,288,528,295"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="556,165,656,154,651,155,557,170"/>
-<area shape="rect" id="Node000007" title=" " alt="" coords="56,189,179,217"/>
-<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="194,196,343,187,339,190,195,201"/>
-<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IEffectsClearingSettings.html" title="Read&#45;only tuning for the effects clearing (see Effects Layer Clearing): how wide a clearing each ball..." alt="" coords="5,253,230,298"/>
-<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="211,246,363,203,359,206,213,251"/>
-<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Display_1_1EffectsClearingStamper.html" title="Turns the balls in flight into the clearing mask&#39;s stamps: one capsule per ball, from where it was la..." alt="" coords="341,229,541,274"/>
-<area shape="poly" id="edge10_Node000009_Node000008" title=" " alt="" coords="245,287,316,284,371,275,376,274,317,289,245,293"/>
-<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="526,221,629,186,691,165,696,164,631,191,528,226"/>
+<area shape="rect" id="Node000001" title="Feeds the clearing mask from the balls in flight." alt="" coords="676,110,876,155"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="421,5,505,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="520,31,564,43,650,75,728,109,722,110,648,80,562,48,520,36"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="414,57,512,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="527,78,653,101,684,109,679,110,651,106,527,83"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Display_1_1IEffectsClearingSource.html" title="Where the clearing mask gets its stamps from." alt="" coords="24,109,229,154"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="244,129,677,130,675,135,245,134"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Display_1_1EffectsClearingMaskView.html" title="The clearing mask (Effects Layer Clearing): a small two&#45;channel target, bound globally as _EffectsCle..." alt="" coords="363,174,563,219"/>
+<area shape="poly" id="edge8_Node000006_Node000004" title=" " alt="" coords="244,151,365,176,360,178,244,157"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html" title="Which shots exist right now: the one held in the thrower, and every one in flight (oldest first)." alt="" coords="378,313,548,358"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="550,304,562,298,619,264,672,225,750,156,755,154,675,229,622,269,564,303,551,309"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="578,170,678,152,673,154,579,176"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="65,241,188,269"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="203,239,365,212,360,216,204,244"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IEffectsClearingSettings.html" title="Read&#45;only tuning for the effects clearing (see Effects Layer Clearing): how wide a clearing each ball..." alt="" coords="14,301,239,346"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="235,293,287,274,337,250,349,240,361,229,384,221,389,218,364,233,352,244,340,254,289,279,237,298"/>
+<area shape="rect" id="Node000010" href="$classBalloonParty_1_1Display_1_1EffectsClearingStamper.html" title="Turns the balls in flight into the clearing mask&#39;s stamps: one capsule per ball, from where it was la..." alt="" coords="363,244,563,288"/>
+<area shape="poly" id="edge11_Node000010_Node000008" title=" " alt="" coords="221,346,281,348,310,343,337,333,345,326,349,318,353,308,361,298,380,289,385,288,364,303,357,311,354,320,349,329,340,337,311,348,281,353,221,351"/>
+<area shape="rect" id="Node000009" href="$structBalloonParty_1_1Display_1_1ClearingView.html" title="What the camera frames this frame, for turning world positions into clearing&#45;mask UV." alt="" coords="5,189,248,217"/>
+<area shape="poly" id="edge9_Node000006_Node000009" title=" " alt="" coords="263,204,339,203,365,204,360,205,339,208,264,209"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="545,235,562,229,651,190,727,156,732,155,654,195,564,234,546,240"/>
 </map>

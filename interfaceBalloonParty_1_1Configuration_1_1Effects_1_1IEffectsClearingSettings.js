@@ -15,5 +15,6 @@ var interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IEffectsClearingSetting
     [ "MinClearRadius", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IEffectsClearingSettings.html#aa736dc5247795adbf0298402ec063a6c", null ],
     [ "ShieldsForMaxRadius", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IEffectsClearingSettings.html#a0f25ac274940ed27b28d8fb1f043a848", null ],
     [ "Strength", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IEffectsClearingSettings.html#a5c23499d85d7ab2033f01d8343146c06", null ],
+    [ "Trail", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IEffectsClearingSettings.html#aaef1c9448c163e5ee68572cddbbdb068", null ],
     [ "UseUnscaledTime", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IEffectsClearingSettings.html#af62e670e49bd28e754922fccb651403e", null ]
 ];
