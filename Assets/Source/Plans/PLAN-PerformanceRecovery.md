@@ -294,6 +294,64 @@ graph TD
 
 ---
 
+## November 2026 pass (after HDR, the effects lens, formations and springs)
+
+Everything above predates the HDR pipeline, the effects-clearing lens, the formation glow and the tough-snake
+springs. This pass re-profiled the game as it stands and set up repeatable measurement.
+
+### How it is measured now
+
+- **On a phone:** `Tools/perf/device_perf.py` (`Tools/perf/README.md`). A release build with cheats plays itself
+  (`Cheats/Autoplay`, same seed and player each run) while the script reads, over adb, each thread's CPU cycles
+  per frame, frame delivery, thermal status and memory. Cycles, not milliseconds: the phone lowers its clocks to
+  fit the load, so time on a core is not a measure of work. The run holds its frame rate (`fps` in the autoplay
+  spec pins `ThermalFrameRateGovernor`).
+- **In the Editor:** the playtest bot plays while Unity's profiler records 2000 frames, and a script totals the
+  markers under `PlayerLoop` (self and total time, calls, GC bytes per frame) plus the render counters. The
+  absolute times are the Editor's; the shares and the counts carry over.
+
+### What the profile showed (Editor, bot play, per frame)
+
+| Share of the frame | What | Counts |
+|---|---|---|
+| About half | Rendering: culling, render graph and draw submission | 4.6 camera renders a frame (main, HUD, the scene capture at 60 Hz, two effects-map cameras while the lens is on), about 300 SetPass calls, 380 visible renderers |
+| About a seventh | UI canvases | 36 graphics rebuilt every frame, about 9 canvas batches rebuilt |
+| About a fourteenth | Animators | 44 live: 37 balloon idle sways, 7 on the HUD, several sitting in a finished clip |
+| Under a tenth | Every script's Update, LateUpdate and tick together | no hot one |
+
+Other findings:
+
+- **The frame rate players get is mostly not 120.** `ThermalFrameRateGovernor` steps down at thermal status 1,
+  which a Pixel 9 Pro reaches within minutes of play and reports at once while charging. A session measured
+  on a charging phone ran at 60. Less work per frame, on every thread, is what keeps the phone at status 0.
+- **Balloons do not batch.** A balloon is 7 or more sprite layers on different materials, each with a property
+  block, drawn one balloon at a time; the capture camera draws them again. No shader in the project is
+  SRP-Batcher compatible (none declares `UnityPerMaterial`).
+- **The wall-clock time of day made every reader of the light redo its work each frame** (fixed, below).
+
+### Done in this pass
+
+| Change | Effect |
+|---|---|
+| `TimeOfDayService` hands CPU-side readers a light that moves in steps of a quarter degree or half an 8-bit colour step; the shader globals stay exact | UI graphics rebuilt per frame 36 to about 5; canvas time in the Editor profile halved. On the phone the saving is small, about 1% of the main thread, within run-to-run noise |
+| `DangerGradientView` skips its re-apply under an unchanged light | About 35 native calls a frame |
+| `PaintDripOverlay` sleeps until it plays | One Update call per balloon per frame |
+
+### Candidates, by expected size (none done yet)
+
+| # | Change | Kind | Fidelity |
+|---|---|---|---|
+| 1 | Skip an effects-map camera while its layer has nothing alive (the HUD map between score trails; the main map before a shot's first pop) | Code | Identical; needs a presence count per layer |
+| 2 | `allowHDR = false` on the main effects-map camera: URP adds an intermediate half-float target and a copy that the map's own format makes redundant | Code | Identical in theory; check a lightning still for values above 1 |
+| 3 | Balloon idle sway from one ticker instead of 37 Animators | Code | Must match the two clips and their crossfade |
+| 4 | Sleep HUD Animators that sit in a finished clip | Code | Identical if the last pose is kept |
+| 5 | Port the per-balloon shaders to the SRP Batcher and drop their property blocks, or measure first with a Frame Debugger dump | Shaders, Editor | A/B stills |
+| 6 | Post-processing volume update "via scripting" on the HUD, capture and map cameras | Code and one prefab field | Identical |
+| 7 | Gate the grass wake's field copy and the water ripple's clear on a change | Code | Identical |
+| 8 | Aim trace pushed to its line renderers only when it changed; springs set positions in one call | Code | Identical |
+| 9 | Memory: memoryless depth on the effects maps and capture (9 to 15 MB), Blit Type Never (9 to 29 MB and a full-screen copy a frame), part sheets at 1024 (16 MB), long audio streamed (29 MB of RAM) | Code, ProjectSettings, import settings | Identical except the part sheets (eye check) |
+| 10 | Build: ARM64 only, strip engine code, incremental GC | ProjectSettings | Identical |
+
 ## Tier 0: Free / Near-Free Wins
 
 ### F2 — Remove the shrink `Array.Resize` in `TransformRibbon` · **sonnet** · ✅ DONE (`a4581825`)
