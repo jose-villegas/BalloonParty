@@ -9,9 +9,12 @@ Shader "BalloonParty/Sprite/ShapeInk"
     // The pen itself is a ball. Each segment of the mesh carries a spare square for it, which the vertex stage
     // moves to wherever on that segment a pen is, or folds away while none is there.
     // Ribbon and ball face the camera and keep their size in world units however the shape is scaled.
-    // A shape is drawn twice, by two materials: the half of it behind its centre first (_InkHalf -1), then the
-    // half in front (_InkHalf 1). The shapes are wire frames of rounded solids, so that alone puts the near
-    // side over the far side.
+    // A shape is drawn three times, by three materials. First its drop shadow (_InkShadow 1): the whole ink
+    // again, moved away from the scene's light as the game's other drop shadows are, dark, soft-edged and
+    // fading with the light. The stencil lets each pixel take the shadow once, so strokes that cross or lie
+    // on one another cast one even shadow, not a darker patch. Then the half of the shape behind its centre
+    // (_InkHalf -1), then the half in front (_InkHalf 1). The shapes are wire frames of rounded solids, so
+    // that alone puts the near side over the far side.
     //
     // Two looks (_InkLook):
     // 0, the ribbon picture: the look of the trails this stands in for. The ribbon is the trail's picture laid
@@ -34,6 +37,14 @@ Shader "BalloonParty/Sprite/ShapeInk"
         _InkRamp ("Ink Ramp (R width over the widest, G alpha, B tail mix)", 2D) = "white" {}
         _TailColor ("Tail Color", Color) = (0.95, 0.95, 0.91, 1)
         _InkHalf ("Half drawn (-1 behind the centre, 1 in front, 0 both)", Float) = 0
+
+        [Header(Drop shadow)]
+        _InkShadow ("Drawn as the drop shadow (set by ShapeInkPool)", Float) = 0
+        _ShadowColor ("Shadow Color", Color) = (0.08, 0.1, 0.18, 1)
+        _Shadow ("Shadow: distance from the ink in world units (x), opacity (y), edge softness (z), width over the ink's (w)", Vector) = (0.07, 0.5, 0.45, 1.25)
+        // The shadow's stencil, set by ShapeInkPool: it writes and tests a bit of its own, the ink ignores it.
+        [HideInInspector] _ShadowStencilComp ("Shadow Stencil Comp", Float) = 8
+        [HideInInspector] _ShadowStencilPass ("Shadow Stencil Pass", Float) = 0
 
         [Header(Ribbon picture)]
         _MainTex ("Ribbon (u along the ink, v across)", 2D) = "white" {}
@@ -66,6 +77,16 @@ Shader "BalloonParty/Sprite/ShapeInk"
         ZWrite Off
         Blend One OneMinusSrcAlpha
 
+        // One bit, well clear of the bits UI masks take, marking the pixels a shadow has already darkened.
+        Stencil
+        {
+            Ref 128
+            ReadMask 128
+            WriteMask 128
+            Comp [_ShadowStencilComp]
+            Pass [_ShadowStencilPass]
+        }
+
         Pass
         {
             CGPROGRAM
@@ -91,6 +112,9 @@ Shader "BalloonParty/Sprite/ShapeInk"
             half4 _TailColor;
             float _InkLook;
             float _InkHalf;
+            float _InkShadow;
+            half4 _ShadowColor;
+            float4 _Shadow;
             float _HeadCentre;
             float4 _BandHalf;
             float4 _PenRim;
@@ -149,7 +173,16 @@ Shader "BalloonParty/Sprite/ShapeInk"
 
             float Toward(float3 world, float3 viewAxis)
             {
+                // The view axis has no part in the screen's plane, so a shadow's shift leaves this as it was.
                 return dot(world - unity_ObjectToWorld._m03_m13_m23, viewAxis);
+            }
+
+            // A point of the mesh in the world. The drop shadow is the same shape set down away from the light.
+            float3 InWorld(float3 local)
+            {
+                float3 world = mul(unity_ObjectToWorld, float4(local, 1.0)).xyz;
+                world.xy -= SceneLightDirection() * (_Shadow.x * _InkShadow);
+                return world;
             }
 
             // Must match ShapeCatalog.WavingSphereDisplacer.
@@ -183,7 +216,7 @@ Shader "BalloonParty/Sprite/ShapeInk"
             v2f Ribbon(appdata_t IN, float3 here, float3 other, float3 viewAxis, float3 fallback)
             {
                 v2f OUT;
-                float3 neighbour = mul(unity_ObjectToWorld, float4(Wave(IN.neighbour.xyz), 1.0)).xyz;
+                float3 neighbour = InWorld(Wave(IN.neighbour.xyz));
                 float side = IN.other.w;
                 float farEnd = IN.neighbour.w;
 
@@ -270,8 +303,8 @@ Shader "BalloonParty/Sprite/ShapeInk"
 
             v2f vert(appdata_t IN)
             {
-                float3 here = mul(unity_ObjectToWorld, float4(Wave(IN.vertex.xyz), 1.0)).xyz;
-                float3 other = mul(unity_ObjectToWorld, float4(Wave(IN.other.xyz), 1.0)).xyz;
+                float3 here = InWorld(Wave(IN.vertex.xyz));
+                float3 other = InWorld(Wave(IN.other.xyz));
                 float3 viewAxis = normalize(UNITY_MATRIX_V[2].xyz);
                 float3 fallback = normalize(UNITY_MATRIX_V[0].xyz);
 
@@ -425,6 +458,7 @@ Shader "BalloonParty/Sprite/ShapeInk"
                 across -= hand.x;
 
                 float halfWidth = ramp.r * _InkSize.y * _InkPen.w * lerp(_Far.y, 1.0, front);
+                halfWidth *= lerp(1.0, _Shadow.w, _InkShadow);
                 halfWidth *= 1.0 - _PenHand.z * pressure;
                 // Running past a corner, the pen lifts: the stroke thins to nothing.
                 halfWidth = max(halfWidth * sqrt(1.0 - run), 1e-4);
@@ -433,7 +467,7 @@ Shader "BalloonParty/Sprite/ShapeInk"
                 float fromCentre = abs(across) / halfWidth;
                 float2 edgeUV = float2(along * _PenEdge.z + seed, across / halfWidth * 0.25 + seed * 2.3);
                 float reach = 1.0 - _PenEdge.x * tex2Dlod(_PencilNoiseTex, float4(edgeUV, 0, 0)).r;
-                float soft = max(_PenEdge.y, pixel / halfWidth);
+                float soft = max(_PenEdge.y + _Shadow.z * _InkShadow, pixel / halfWidth);
                 float coverage = 1.0 - smoothstep(reach - soft, reach, fromCentre);
 
                 float2 grainUV = float2(along * _PenGrain.y + seed * 3.1, across * _PenGrain.z);
@@ -448,7 +482,9 @@ Shader "BalloonParty/Sprite/ShapeInk"
                 float drawn = step(behind, ribbon) * step(behind, travelled);
 
                 half4 c;
-                c.a = ramp.g * _InkColor.a * coverage * (1.0 - _PenGrain.x * speck) * (1.0 - _PenWet.z * pressure)
+                // A shadow is cast by the stroke's shape, not by the paper's grain in it.
+                float grain = 1.0 - _PenGrain.x * speck * (1.0 - _InkShadow);
+                c.a = ramp.g * _InkColor.a * coverage * grain * (1.0 - _PenWet.z * pressure)
                     * (1.0 - run) * shown * drawn;
 
                 // Ink pools at the stroke's edges.
@@ -514,8 +550,18 @@ Shader "BalloonParty/Sprite/ShapeInk"
                 float behind = travelled - along;
                 behind -= gap * floor(behind / gap);
 
-                // Read outside the branch below: a light-field tap wants its screen-space gradients.
+                // Read outside the branches below: a light-field tap wants its screen-space gradients.
                 float3 light = SceneLightTintAt(IN.world) + SceneLightAmbientRegrade(_PenLight.y, _PenLight.z);
+
+                if (_InkShadow > 0.5)
+                {
+                    // The ink's shape, in the shadow's colour: no light, no shadow.
+                    half4 cast = _InkLook > 0.5
+                        ? Pen(IN, along, behind, ribbon, travelled)
+                        : Picture(IN, behind, ribbon, travelled);
+                    float shade = cast.a * _Shadow.y * _ShadowColor.a * ShadowLightFade();
+                    return half4(_ShadowColor.rgb * shade, shade);
+                }
 
                 if (_InkLook > 0.5)
                 {

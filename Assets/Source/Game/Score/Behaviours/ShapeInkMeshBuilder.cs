@@ -33,8 +33,8 @@ namespace BalloonParty.Game.Score.Behaviours
     ///     </list>
     ///     Straight edges are one segment each. Arc edges are cut so no piece turns more than
     ///     <see cref="MaxArcStepDegrees" />, at points a pen passes through (<see cref="FormationShape.PointOnWalk" />).
-    ///     The mesh has two submeshes with the same triangles: the view draws the shape's far half with one and
-    ///     its near half with the other, so the near side lies over the far side.
+    ///     The mesh has <see cref="Layers" /> submeshes with the same triangles, one for each time the view draws
+    ///     it: the drop shadow, then the shape's far half, then its near half over that.
     /// </summary>
     internal static class ShapeInkMeshBuilder
     {
@@ -45,6 +45,9 @@ namespace BalloonParty.Game.Score.Behaviours
         internal const float RibbonKind = 0f;
         internal const float JointKind = -1f;
         internal const float FirstBallKind = 1f;
+
+        // The shadow, the far half and the near half, in the order they draw.
+        internal const int Layers = 3;
 
         // Past this an arc's middle would need cutting without end; no catalog arc comes near it.
         private const float WidestArcDegrees = 170f;
@@ -270,9 +273,12 @@ namespace BalloonParty.Game.Score.Behaviours
                 mesh.SetUVs(1, Others);
                 mesh.SetUVs(2, Neighbours);
                 mesh.SetUVs(3, Extras);
-                mesh.subMeshCount = 2;
-                mesh.SetTriangles(_indices, 0, false);
-                mesh.SetTriangles(_indices, 1, false);
+                mesh.subMeshCount = Layers;
+                for (var layer = 0; layer < Layers; layer++)
+                {
+                    mesh.SetTriangles(_indices, layer, false);
+                }
+
                 mesh.bounds = new Bounds(Vector3.zero, Vector3.one * BoundsSize);
                 return mesh;
             }

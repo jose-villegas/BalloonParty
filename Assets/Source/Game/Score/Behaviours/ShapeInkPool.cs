@@ -4,14 +4,15 @@ using BalloonParty.Configuration;
 using BalloonParty.Shared.Rendering;
 using BalloonParty.UI.Score;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace BalloonParty.Game.Score.Behaviours
 {
     /// <summary>
     ///     Hands <see cref="ShapeFormationTicker" /> a <see cref="ShapeInkView" /> for each shape in flight and
     ///     takes it back when the shape is done. Owns what the views share: each shape's baked mesh, built the
-    ///     first time that shape flies, and two copies of the ink material carrying the ink ramp, one drawing
-    ///     the half of a shape behind its centre and one, after it, the half in front.
+    ///     first time that shape flies, and three copies of the ink material carrying the ink ramp, drawn in
+    ///     turn: the shape's drop shadow, the half of it behind its centre, and the half in front.
     /// </summary>
     internal sealed class ShapeInkPool : IDisposable
     {
@@ -20,6 +21,9 @@ namespace BalloonParty.Game.Score.Behaviours
 
         private static readonly int InkRampId = Shader.PropertyToID("_InkRamp");
         private static readonly int InkHalfId = Shader.PropertyToID("_InkHalf");
+        private static readonly int InkShadowId = Shader.PropertyToID("_InkShadow");
+        private static readonly int ShadowStencilCompId = Shader.PropertyToID("_ShadowStencilComp");
+        private static readonly int ShadowStencilPassId = Shader.PropertyToID("_ShadowStencilPass");
         private static readonly int InkLookId = Shader.PropertyToID("_InkLook");
         private static readonly int PenHandId = Shader.PropertyToID("_PenHand");
         private static readonly int SketchId = Shader.PropertyToID("_Sketch");
@@ -29,8 +33,8 @@ namespace BalloonParty.Game.Score.Behaviours
         private readonly List<ShapeInkView> _views = new();
         private readonly Color32[] _pixels = new Color32[ShapeInkRamp.Size];
 
-        // The far half's material, then the near half's: one for each of the mesh's two submeshes.
-        private readonly Material[] _materials = new Material[2];
+        // The shadow's material, the far half's, then the near half's: one for each of the mesh's submeshes.
+        private readonly Material[] _materials = new Material[ShapeInkMeshBuilder.Layers];
 
         private Material _source;
         private Texture2D _ramp;
@@ -110,15 +114,23 @@ namespace BalloonParty.Game.Score.Behaviours
                     hideFlags = HideFlags.HideAndDontSave
                 };
 
-                for (var half = 0; half < _materials.Length; half++)
+                for (var layer = 0; layer < _materials.Length; layer++)
                 {
                     var material = new Material(_source) { hideFlags = HideFlags.HideAndDontSave };
                     material.SetTexture(InkRampId, _ramp);
-                    material.SetFloat(InkHalfId, half == 0 ? -1f : 1f);
 
-                    // Same sorting layer and order, so the queue decides: the near half after the far half.
-                    material.renderQueue = _source.renderQueue + half;
-                    _materials[half] = material;
+                    // The shadow is the whole shape; the ink is its far half, then its near half.
+                    var shadow = layer == 0;
+                    material.SetFloat(InkShadowId, shadow ? 1f : 0f);
+                    material.SetFloat(InkHalfId, shadow ? 0f : layer == 1 ? -1f : 1f);
+
+                    // A pixel takes the shadow once: the shadow marks it in the stencil and skips marked ones.
+                    material.SetFloat(ShadowStencilCompId, (float)(shadow ? CompareFunction.NotEqual : CompareFunction.Always));
+                    material.SetFloat(ShadowStencilPassId, (float)(shadow ? StencilOp.Replace : StencilOp.Keep));
+
+                    // Same sorting layer and order, so the queue decides the order the three draw in.
+                    material.renderQueue = _source.renderQueue + layer;
+                    _materials[layer] = material;
                 }
             }
 
@@ -155,14 +167,14 @@ namespace BalloonParty.Game.Score.Behaviours
 
         private void DestroyMaterial()
         {
-            for (var half = 0; half < _materials.Length; half++)
+            for (var layer = 0; layer < _materials.Length; layer++)
             {
-                if (_materials[half] != null)
+                if (_materials[layer] != null)
                 {
-                    UnityEngine.Object.Destroy(_materials[half]);
+                    UnityEngine.Object.Destroy(_materials[layer]);
                 }
 
-                _materials[half] = null;
+                _materials[layer] = null;
             }
 
             if (_ramp != null)

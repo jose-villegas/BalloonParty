@@ -162,7 +162,10 @@ static; the ticker hands the view one number a frame, how far every pen has move
 - The pen is the stroke's own rounded end: a half disc in front of the pen, where the stroke has wavered to, as
   wide as the stroke is pressed there and in the same wet ink, so the line ends round with no dot on it. Each segment of the mesh carries a spare square for it,
   which the vertex stage moves to wherever on that segment a pen is and folds away while none is.
-- The mesh is drawn twice, by two materials: the half of the shape behind its centre first, then the half in
+- The mesh is drawn three times, by three materials. First the ink's drop shadow: the same shape set down away
+  from the scene's light (`_Shadow`, `_ShadowColor`), dark and soft, fading as the light does, and stamped once a
+  pixel through the stencil so strokes that cross cast one even shadow. Then the half of the shape behind its
+  centre, then the half in
   front. The shapes are wire frames of rounded solids, so that puts the near side over the far side. The far half
   is also drawn as hidden edges are: lighter, thinner and dashed (`_Far`).
 

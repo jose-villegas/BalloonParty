@@ -266,14 +266,17 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void Build_GivesTwoSubmeshesWithTheSameTriangles()
+        public void Build_GivesASubmeshForEachLayerWithTheSameTriangles()
         {
             ShapeCatalog.TryGet(8, out var cube);
             var mesh = ShapeInkMeshBuilder.Build(cube);
             _meshes.Add(mesh);
 
-            Assert.AreEqual(2, mesh.subMeshCount);
-            CollectionAssert.AreEqual(mesh.GetTriangles(0), mesh.GetTriangles(1));
+            Assert.AreEqual(ShapeInkMeshBuilder.Layers, mesh.subMeshCount);
+            for (var layer = 1; layer < ShapeInkMeshBuilder.Layers; layer++)
+            {
+                CollectionAssert.AreEqual(mesh.GetTriangles(0), mesh.GetTriangles(layer), $"layer {layer}");
+            }
         }
 
         [Test]
