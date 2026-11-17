@@ -267,10 +267,10 @@ The settings are `IUnbreakableFormationSettings`, nested in `BalloonsConfigurati
 - `ToughSnakeStepSeconds` (1.5: seconds of play between the tough snake's steps, its own clock apart from the beat)
 - `SpotChoices` (3)
 - `ReinforcementChance` (0.35, eased in need by `Game/Assist/ThreatEase`) and `ReinforcementCeiling` (4)
-- the shape weights: horizontal 1, each diagonal 1, item cover 2, snake 0.5 (so a snake is the rarer pick)
+- the shape weights: horizontal 1, each diagonal 1, item cover 2, snake 0.25 (so a snake is the rarest pick)
 - `MaxUnbreakableSnakes` (2: a formation that would make a third picks another shape; 0 sets no cap)
 - `JoinSnakeChance` (0.35: each member of a formation changing shape flies to a snake's tail instead)
-- `SnakeWeightPerExtraUnbreakable` (0.5: the snake's weight 1.5x with one unbreakable past `MinMembers`, 2x
+- `SnakeWeightPerExtraUnbreakable` (0.25: the snake's weight 1.25x with one unbreakable past `MinMembers`, 1.5x
   with two)
 
 The design and its open risks are in `Plans/PLAN-UnbreakableFormations.md`.

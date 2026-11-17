@@ -97,11 +97,11 @@ namespace BalloonParty.Configuration.Balloons
         [SerializeField] [Min(0f)] private float _itemCoverWeight = 2f;
 
         [Tooltip("Weight of a snake, the line that walks the board.")]
-        [SerializeField] [Min(0f)] private float _snakeWeight = 0.5f;
+        [SerializeField] [Min(0f)] private float _snakeWeight = 0.25f;
 
         [Tooltip("Added to the snake's weight, as a share of it, for each unbreakable on the board beyond Min " +
-                 "Members: 0.5 makes a snake 1.5x as likely with one more, 2x with two more.")]
-        [SerializeField] [Min(0f)] private float _snakeWeightPerExtraUnbreakable = 0.5f;
+                 "Members: 0.25 makes a snake 1.25x as likely with one more, 1.5x with two more.")]
+        [SerializeField] [Min(0f)] private float _snakeWeightPerExtraUnbreakable = 0.25f;
 
         [Tooltip("Most unbreakable snakes on the board at once; a formation that would make one more picks another " +
                  "shape. 0 sets no cap.")]
