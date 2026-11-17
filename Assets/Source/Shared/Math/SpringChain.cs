@@ -95,7 +95,8 @@ namespace BalloonParty.Shared.Math
             var startFrom = _from;
             var startTo = _to;
             var last = _position.Length - 1;
-            var segmentRest = restLength * (tied ? 1f : Mathf.Max(MinGrowth, reach)) / last;
+            var grown = restLength * (tied ? 1f : Mathf.Max(MinGrowth, reach));
+            var segmentRest = grown / last;
             var fall = Vector3.down * (tuning.Gravity * tuning.StepSeconds * tuning.StepSeconds);
             var pull = tied ? 0f : Mathf.Clamp01(reach) * Mathf.Clamp01(reach) * ReachPull;
             var free = tied ? last : last + 1;
@@ -116,7 +117,7 @@ namespace BalloonParty.Shared.Math
                 }
                 else
                 {
-                    _position[last] += (to - _position[last]) * pull;
+                    _position[last] += (Toward(_position[0], to, grown) - _position[last]) * pull;
                 }
 
                 for (var pass = 0; pass < tuning.Iterations; pass++)
@@ -128,6 +129,15 @@ namespace BalloonParty.Shared.Math
             _from = from;
             // A loose end ties on from where it has reached, gliding the rest of the way.
             _to = tied ? to : _position[last];
+        }
+
+        // A loose end reaches toward its target no further than the chain has grown, so it points the way rather
+        // than stretching across to a target still far off.
+        private static Vector3 Toward(Vector3 from, Vector3 target, float length)
+        {
+            var toward = target - from;
+            var distance = toward.magnitude;
+            return distance > length ? from + toward * (length / distance) : target;
         }
 
         // The near end is pinned, and the far end while tied: a spring with one pinned end moves only its other

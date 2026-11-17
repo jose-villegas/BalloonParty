@@ -46,7 +46,7 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("World distance between two knots inside which a spring not yet tied starts to show: none past " +
                  "it, growing and reaching for the one behind as it closes in, tied on once it arrives. Keeps a " +
                  "tough flying in to the tail from showing a spring stretched across the board.")]
-        [SerializeField] [Min(0.1f)] private float _attachDistance = 2.5f;
+        [SerializeField] [Min(0.1f)] private float _attachDistance = 1.8f;
 
         public bool Enabled => _enabled;
         public int Segments => Mathf.Max(2, _segments);
