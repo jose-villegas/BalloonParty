@@ -1,5 +1,7 @@
 var NAVTREEINDEX139 =
 {
+"structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a1b94e17ee5cfbe5aba4d846ef6b31ac4":[6,0,0,14,4,0],
+"structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a1f69a8ccd3973163322749a5402a6469":[5,0,0,14,4,10],
 "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a1f69a8ccd3973163322749a5402a6469":[6,0,0,14,4,10],
 "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a25ce084feb61fbe6ec5280ffa290cd7e":[5,0,0,14,4,4],
 "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a25ce084feb61fbe6ec5280ffa290cd7e":[6,0,0,14,4,4],
@@ -247,7 +249,5 @@ var NAVTREEINDEX139 =
 "structBalloonParty_1_1Solver_1_1ShotPopCause.html#a8cc675e5004e204e23bbdf69e926abb8":[6,0,0,14,16,2],
 "structBalloonParty_1_1Solver_1_1ShotScoreRules.html":[5,0,0,14,18],
 "structBalloonParty_1_1Solver_1_1ShotScoreRules.html":[6,0,0,14,18],
-"structBalloonParty_1_1Solver_1_1ShotScoreRules.html#a02814ad7c50320ffdb7e0eb89cdfecb7":[5,0,0,14,18,2],
-"structBalloonParty_1_1Solver_1_1ShotScoreRules.html#a02814ad7c50320ffdb7e0eb89cdfecb7":[6,0,0,14,18,2],
-"structBalloonParty_1_1Solver_1_1ShotScoreRules.html#a1104452934b6ac299c219844d8120d39":[5,0,0,14,18,4]
+"structBalloonParty_1_1Solver_1_1ShotScoreRules.html#a02814ad7c50320ffdb7e0eb89cdfecb7":[5,0,0,14,18,2]
 };

@@ -1,5 +1,7 @@
 var NAVTREEINDEX128 =
 {
+"structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html#ad75867bfa01e5c0d11a6933eb183b6af":[6,0,0,3,0,5,10],
+"structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html#af7f3bf25e7a39f59f01b8e05b41a5ed9":[5,0,0,3,0,5,1],
 "structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html#af7f3bf25e7a39f59f01b8e05b41a5ed9":[6,0,0,3,0,5,1],
 "structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html#afdeb4f456ec6f407c7beed98d594d390":[5,0,0,3,0,5,3],
 "structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html#afdeb4f456ec6f407c7beed98d594d390":[6,0,0,3,0,5,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX128 =
 "structBalloonParty_1_1Configuration_1_1GridActors_1_1GridActorTypeGate.html#aa72e8e26365234448a3dab030fe00fa4":[6,0,0,3,6,2,1],
 "structBalloonParty_1_1Configuration_1_1GridActors_1_1GridActorTypeGate.html#ad69c3bf3729fbd004ef69fcdddead56f":[5,0,0,3,6,2,5],
 "structBalloonParty_1_1Configuration_1_1GridActors_1_1GridActorTypeGate.html#ad69c3bf3729fbd004ef69fcdddead56f":[6,0,0,3,6,2,5],
-"structBalloonParty_1_1Configuration_1_1GridActors_1_1ResolvedGridActorGate.html":[5,0,0,3,6,4],
-"structBalloonParty_1_1Configuration_1_1GridActors_1_1ResolvedGridActorGate.html":[6,0,0,3,6,4],
-"structBalloonParty_1_1Configuration_1_1GridActors_1_1ResolvedGridActorGate.html#a1ba579b6c7a023fa4699abc4ebf51ba0":[5,0,0,3,6,4,6]
+"structBalloonParty_1_1Configuration_1_1GridActors_1_1ResolvedGridActorGate.html":[5,0,0,3,6,4]
 };

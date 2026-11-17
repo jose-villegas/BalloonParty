@@ -1,5 +1,7 @@
 var NAVTREEINDEX131 =
 {
+"structBalloonParty_1_1Editor_1_1Bush_1_1LeafVenationSimulator_1_1SimulationSettings.html#a653b5c71baec34ef006a7765a0ae2923":[6,0,0,5,0,10,0,4],
+"structBalloonParty_1_1Editor_1_1Bush_1_1LeafVenationSimulator_1_1SimulationSettings.html#ab10b20c2cf81b85190f8c3ec570664ad":[5,0,0,5,0,10,0,1],
 "structBalloonParty_1_1Editor_1_1Bush_1_1LeafVenationSimulator_1_1SimulationSettings.html#ab10b20c2cf81b85190f8c3ec570664ad":[6,0,0,5,0,10,0,1],
 "structBalloonParty_1_1Editor_1_1Bush_1_1LeafVenationSimulator_1_1SimulationSettings.html#ac72dbc72d21aa63a98972c3ed100695f":[5,0,0,5,0,10,0,7],
 "structBalloonParty_1_1Editor_1_1Bush_1_1LeafVenationSimulator_1_1SimulationSettings.html#ac72dbc72d21aa63a98972c3ed100695f":[6,0,0,5,0,10,0,7],
@@ -247,7 +249,5 @@ var NAVTREEINDEX131 =
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpOffer.html#a9ea5f36d91d43201391764261d34094f":[6,0,0,6,5,4,0],
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpOffer.html#aa1988a9e93f556985b00bad742b63fa0":[5,0,0,6,5,4,4],
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpOffer.html#aa1988a9e93f556985b00bad742b63fa0":[6,0,0,6,5,4,4],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue_1_1Slot.html":[5,0,0,6,5,5,0],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue_1_1Slot.html":[6,0,0,6,5,5,0],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue_1_1Slot.html#a1031aaad1452a27c38ff22c8c63e15b7":[5,0,0,6,5,5,0,6]
+"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue_1_1Slot.html":[5,0,0,6,5,5,0]
 };

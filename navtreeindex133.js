@@ -1,5 +1,7 @@
 var NAVTREEINDEX133 =
 {
+"structBalloonParty_1_1Game_1_1Telemetry_1_1MetricScopeState.html#a6d7f25c9632d0b55126ea9eeac059b2e":[6,0,0,6,10,16,4],
+"structBalloonParty_1_1Game_1_1Telemetry_1_1MetricScopeState.html#aa8cfc34f3af79873b747117077e68aa1":[5,0,0,6,10,16,6],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1MetricScopeState.html#aa8cfc34f3af79873b747117077e68aa1":[6,0,0,6,10,16,6],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1MetricScopeState.html#aa9420f73d57c374f5e44100ce87c81df":[5,0,0,6,10,16,0],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1MetricScopeState.html#aa9420f73d57c374f5e44100ce87c81df":[6,0,0,6,10,16,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX133 =
 "structBalloonParty_1_1Item_1_1Paint_1_1BlobFlightSnapshot.html#a5c567f688048a919490ef7c8c0af82a8":[6,0,0,7,4,0,3],
 "structBalloonParty_1_1Item_1_1Paint_1_1BlobFlightSnapshot.html#a798664f4d2b5d1b1b1c762eb5ffd975a":[5,0,0,7,4,0,0],
 "structBalloonParty_1_1Item_1_1Paint_1_1BlobFlightSnapshot.html#a798664f4d2b5d1b1b1c762eb5ffd975a":[6,0,0,7,4,0,0],
-"structBalloonParty_1_1Item_1_1Paint_1_1BlobFlightSnapshot.html#a7ba2714c68a931de6af5f94e47e08360":[5,0,0,7,4,0,1],
-"structBalloonParty_1_1Item_1_1Paint_1_1BlobFlightSnapshot.html#a7ba2714c68a931de6af5f94e47e08360":[6,0,0,7,4,0,1],
-"structBalloonParty_1_1Item_1_1Paint_1_1BlobFlightSnapshot.html#aeb28b417f0007ac71e6a5a2e4c3d8531":[5,0,0,7,4,0,2]
+"structBalloonParty_1_1Item_1_1Paint_1_1BlobFlightSnapshot.html#a7ba2714c68a931de6af5f94e47e08360":[5,0,0,7,4,0,1]
 };
