@@ -956,9 +956,8 @@ namespace BalloonParty.Tests.Game
             ScoreColor(Blue, 1);
             Assert.AreEqual(LevelUpPhase.Completing, _controller.Phase.Value);
 
+            // No Tick here: Tick adds the editor's real frame time, which can be longer than the 0.3 s beat.
             LandMidBeat(_registry.InFlightAt(0));
-            SetField("_completingElapsed", 0.1f);
-            _controller.Tick();
 
             Assert.AreEqual(LevelUpPhase.Completing, _controller.Phase.Value, "the beat is still playing");
             _levelUpPublisher.DidNotReceive().Publish(Arg.Any<ScoreLevelUpMessage>());
