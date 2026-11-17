@@ -110,14 +110,11 @@ namespace BalloonParty.Tests.Balloon
             Assert.AreEqual(3, snake.Members.Count);
             Assert.IsTrue(IsOneLine(snake));
             Assert.IsTrue(_toughs.All(t => t.IsAnchored), "anchored at once, so the balancer leaves them be");
-            Assert.IsFalse(_service.ToughSnakeLanded, "its first step waits for them to land");
+            Assert.IsFalse(_service.ToughSnakeLanded, "its first step waits for its head to land");
 
-            foreach (var tough in _toughs)
-            {
-                tough.IsStable.Value = true;
-            }
+            rising.IsStable.Value = true;
 
-            Assert.IsTrue(_service.ToughSnakeLanded);
+            Assert.IsTrue(_service.ToughSnakeLanded, "the rest still rising hold nothing up");
         }
 
         [Test]
@@ -349,6 +346,51 @@ namespace BalloonParty.Tests.Balloon
                 "the old tail took the step past itself");
             Assert.AreEqual(before[2], members[1].SlotIndex.Value, "each in the slot the one ahead left");
             Assert.AreEqual(before[1], members[2].SlotIndex.Value);
+            Assert.IsTrue(IsOneLine(snake));
+            Assert.IsTrue(AllOnTheirSlots());
+        }
+
+        [Test]
+        public void AMemberPopped_TheBodyClosesUp_AtOnce()
+        {
+            var snake = GrowSnake(3, 2, 1, 1);
+            var before = snake.Members.Select(m => m.SlotIndex.Value).ToList();
+            var behind = snake.Members.Skip(2).ToList();
+
+            _grid.Remove(before[1]);
+
+            Assert.IsTrue(_service.ToughsDueToGather(), "a gap is due to close");
+            _service.GatherToughSnake(Relocate);
+
+            Assert.AreEqual(3, snake.Members.Count);
+            Assert.AreEqual(before[1], behind[0].SlotIndex.Value, "into the slot the popped one left");
+            Assert.AreEqual(before[2], behind[1].SlotIndex.Value, "and the one behind into its slot");
+            Assert.IsTrue(IsOneLine(snake));
+            Assert.IsFalse(_service.ToughsDueToGather(), "one body again");
+        }
+
+        [Test]
+        public void ATailBoxedIn_TheToughsFallInAtTheHead_TheSnakeTurnedRound()
+        {
+            var snake = GrowSnake(3, 2, 1);
+            var members = snake.Members.ToList();
+            var tail = members[2].SlotIndex.Value;
+            for (var direction = 0; direction < HexCoordinates.Directions; direction++)
+            {
+                var slot = HexCoordinates.Step(tail, direction);
+                if (_grid.InBounds(slot) && _grid.IsEmpty(slot.x, slot.y))
+                {
+                    _grid.Place(new UnbreakableBalloonModel(new BalloonModelConfig()), null, slot);
+                }
+            }
+
+            var joiner = AddTough(new Vector2Int(6, 5), 2);
+            _service.GatherToughSnake(Relocate);
+
+            members.Reverse();
+            members.Add(joiner);
+            CollectionAssert.AreEqual(members, snake.Members, "the old head's end is the tail now");
+            Assert.AreEqual(3, snake.Heading, "it walks the other way");
             Assert.IsTrue(IsOneLine(snake));
             Assert.IsTrue(AllOnTheirSlots());
         }

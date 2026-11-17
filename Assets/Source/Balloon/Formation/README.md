@@ -96,12 +96,16 @@ Toughs never join an unbreakable formation, and unbreakables never join theirs.
   at once (`SnakeBody`): a line of slots on from the head, following the toughs where they stand and
   otherwise bending as little as it can. A balloon on that line moves out to a slot one of the toughs
   left. The balancer asks every frame (`ToughsDueToGather`), so the snake forms the moment it can, not at
-  a wave start or on a beat. It takes its first step the moment its members have landed
+  a wave start or on a beat. It takes its first step the moment its head has landed
   (`ToughSnakeLanded`), so the toughs are moving as soon as they arrive at a level's start.
 - **Falling in at the tail.** A tough that rises later falls in behind the tail the moment it appears,
-  the same way, gliding straight to its place. Where nothing on from the tail can take a tough (toughs,
-  unbreakables, anchored actors and anything static block the line), it waits until something on the
-  board changes and tries again.
+  the same way, gliding straight to its place. Where nothing on from the tail can take it (toughs,
+  unbreakables, anchored actors and anything static block the line) but the head has room, it falls in at
+  the head instead: the snake turns round, as it does in a dead end, and the old head's end is its tail.
+  Where neither end can take it, it waits until something on the board changes and tries again.
+- **Closing up.** When a member pops, the members behind it close up at once, each into the slot of the
+  one ahead, so the body stays one line between steps (a balloon in the first one's way goes round to the
+  slot the tail leaves). One with nowhere to go waits for the next step, whose trail closes the gap.
 - **Walking through the board.** A board in play is nearly full, so a snake that only steps into empty
   slots would hardly move. The tough snake walks through balloons instead: its head may step into a slot
   held by a balloon that moves and is held by nothing (`SnakeWalk.CanPassThrough`), and that balloon

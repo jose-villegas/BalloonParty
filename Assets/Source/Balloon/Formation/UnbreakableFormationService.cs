@@ -56,6 +56,7 @@ namespace BalloonParty.Balloon.Formation
         private readonly List<SlotMove> _moves = new();
         private readonly List<Vector2Int> _trail = new();
         private readonly List<Vector2Int> _line = new();
+        private readonly List<Vector2Int> _headLine = new();
         private readonly List<Vector2Int> _leftSlots = new();
         private readonly List<IWriteableFormationMember> _freeToughs = new();
         private readonly List<IWriteableFormationMember> _gathered = new();
@@ -83,8 +84,8 @@ namespace BalloonParty.Balloon.Formation
         internal Func<float> Random01 { get; set; } = () => Random.value;
         internal bool HasToughSnake => ToughSnake() != null;
 
-        // Every member of the tough snake has landed: it takes no step while one is still rising into place.
-        internal bool ToughSnakeLanded => ToughSnake()?.MemberList.TrueForAll(m => m.IsStable.Value) ?? false;
+        // The tough snake's head has landed: a snake formed from toughs still rising takes no step until it has.
+        internal bool ToughSnakeLanded => ToughSnake() is { MemberList: { Count: > 0 } members } && members[0].IsStable.Value;
         internal bool HasUnbreakableSnake => HasSnake();
 
         // The two snakes' step intervals (IUnbreakableFormationSettings); the balancer keeps their clocks.
@@ -164,7 +165,8 @@ namespace BalloonParty.Balloon.Formation
 
         /// <summary>
         ///     True when the toughs can form up: either <see cref="IUnbreakableFormationSettings.MinMembers" /> toughs
-        ///     are on the board with no snake yet, or a snake walks and a tough is free of it. A tough still gliding in
+        ///     are on the board with no snake yet, or a snake walks and a tough is free of it or a popped member left a
+        ///     gap in its body. A tough still gliding in
         ///     counts at the slot it is heading for. The balancer asks every frame, so the toughs never wait for a wave
         ///     start, a beat or a landing. Read-only.
         /// </summary>
@@ -175,7 +177,8 @@ namespace BalloonParty.Balloon.Formation
                 return false;
             }
 
-            return ToughSnake() == null ? FindToughHead() != null : !_gatherBlocked && HasFreeTough();
+            var snake = ToughSnake();
+            return snake == null ? FindToughHead() != null : !_gatherBlocked && (HasFreeTough() || GapAt(snake) > 0);
         }
 
         /// <summary>
@@ -455,6 +458,8 @@ namespace BalloonParty.Balloon.Formation
                 return;
             }
 
+            _gatherBlocked = false;
+            CloseGaps(snake, relocate);
             _freeToughs.Clear();
             for (var col = 0; col < _grid.Columns; col++)
             {
@@ -473,15 +478,9 @@ namespace BalloonParty.Balloon.Formation
             }
 
             var members = snake.MemberList;
+            ExtendLine(snake);
             var tail = members[^1].SlotIndex.Value;
-            var away = members.Count > 1 ? HexCoordinates.DirectionBetween(members[^2].SlotIndex.Value, tail) : -1;
-            if (away < 0)
-            {
-                away = HexCoordinates.Turn(snake.Heading, 3);
-            }
-
-            SnakeBody.Extend(_grid, tail, away, LastSnakeRow(), _freeToughs.Count, _line);
-            _gatherBlocked = _line.Count < _freeToughs.Count;
+            _gatherBlocked |= _line.Count < _freeToughs.Count;
             if (_line.Count == 0)
             {
                 return;
@@ -529,6 +528,122 @@ namespace BalloonParty.Balloon.Formation
 
             RebuildMemberList();
             relocate(_moves);
+        }
+
+        // The line on from the tail, or, where the tail is boxed in and the head has more room, on from the head: the
+        // snake turns round, as it does walking into a dead end, so the toughs fall in at whichever end takes more.
+        private void ExtendLine(StandingFormation snake)
+        {
+            var members = snake.MemberList;
+            var lastRow = LastSnakeRow();
+            var tail = members[^1].SlotIndex.Value;
+            var away = members.Count > 1 ? HexCoordinates.DirectionBetween(members[^2].SlotIndex.Value, tail) : -1;
+            if (away < 0)
+            {
+                away = HexCoordinates.Turn(snake.Heading, 3);
+            }
+
+            SnakeBody.Extend(_grid, tail, away, lastRow, _freeToughs.Count, _line);
+            if (_line.Count >= _freeToughs.Count)
+            {
+                return;
+            }
+
+            var head = members[0].SlotIndex.Value;
+            var ahead = members.Count > 1 ? HexCoordinates.DirectionBetween(members[1].SlotIndex.Value, head) : -1;
+            if (ahead < 0)
+            {
+                ahead = snake.Heading;
+            }
+
+            SnakeBody.Extend(_grid, head, ahead, lastRow, _freeToughs.Count, _headLine);
+            if (_headLine.Count <= _line.Count)
+            {
+                return;
+            }
+
+            members.Reverse();
+            snake.Heading = HexCoordinates.Turn(ahead, 3);
+            _line.Clear();
+            _line.AddRange(_headLine);
+        }
+
+        // Where a member popped, the members behind it close up at once, each into the slot of the one ahead, so the
+        // body stays one line between steps. The first behind the gap takes the open slot beside the member ahead
+        // nearest to it; a balloon there goes round to the slot the tail leaves. One with nowhere to go waits for
+        // the next step, whose trail closes any gap.
+        private void CloseGaps(StandingFormation snake, Action<IReadOnlyList<SlotMove>> relocate)
+        {
+            var members = snake.MemberList;
+            var lastRow = LastSnakeRow();
+            // Each pass closes the first gap, so there are never more passes than members.
+            for (var pass = 0; pass < members.Count; pass++)
+            {
+                var gap = GapAt(snake);
+                if (gap == 0)
+                {
+                    return;
+                }
+
+                var ahead = members[gap - 1].SlotIndex.Value;
+                var behind = members[gap].SlotIndex.Value;
+                var target = ahead;
+                var best = int.MaxValue;
+                for (var direction = 0; direction < HexCoordinates.Directions; direction++)
+                {
+                    var slot = HexCoordinates.Step(ahead, direction);
+                    var distance = HexCoordinates.Distance(slot, behind);
+                    if (distance < best && _grid.InBounds(slot) && slot.y <= lastRow && OpensForTheBody(slot))
+                    {
+                        best = distance;
+                        target = slot;
+                    }
+                }
+
+                if (target == ahead)
+                {
+                    _gatherBlocked = true;
+                    return;
+                }
+
+                _moves.Clear();
+                var tailSlot = members[^1].SlotIndex.Value;
+                var previous = target;
+                for (var i = gap; i < members.Count; i++)
+                {
+                    var from = members[i].SlotIndex.Value;
+                    _moves.Add(new SlotMove(members[i], previous));
+                    previous = from;
+                }
+
+                if (!_grid.IsEmpty(target.x, target.y))
+                {
+                    _moves.Add(new SlotMove((IWriteableDynamicSlotActor)_grid.At(target), tailSlot));
+                }
+
+                relocate(_moves);
+            }
+        }
+
+        // A slot a member closing a gap may step into: empty, or a balloon it can walk through.
+        private bool OpensForTheBody(Vector2Int slot)
+        {
+            return _grid.IsEmpty(slot.x, slot.y) || SnakeWalk.CanPassThrough(_grid.At(slot));
+        }
+
+        // The index of the first member not beside the one ahead of it, or 0 when the body is one line.
+        private static int GapAt(StandingFormation snake)
+        {
+            var members = snake.MemberList;
+            for (var i = 1; i < members.Count; i++)
+            {
+                if (HexCoordinates.Distance(members[i - 1].SlotIndex.Value, members[i].SlotIndex.Value) > 1)
+                {
+                    return i;
+                }
+            }
+
+            return 0;
         }
 
         // Who falls in, in line order: the free toughs on the line, then the nearest of the rest to the tail, as
