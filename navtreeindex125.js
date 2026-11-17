@@ -1,5 +1,11 @@
 var NAVTREEINDEX125 =
 {
+"plan_bubble_cluster_hit_feedback.html#autotoc_md373":[3,2,0,5],
+"plan_bubble_cluster_hit_feedback.html#autotoc_md375":[3,2,0,6],
+"plan_bubble_cluster_hit_feedback.html#autotoc_md376":[3,2,0,6,0],
+"plan_bubble_cluster_hit_feedback.html#autotoc_md377":[3,2,0,6,1],
+"plan_bubble_cluster_hit_feedback.html#autotoc_md378":[3,2,0,6,2],
+"plan_bubble_cluster_hit_feedback.html#autotoc_md379":[3,2,0,6,3],
 "plan_bubble_cluster_hit_feedback.html#autotoc_md381":[3,2,0,7],
 "plan_bubble_cluster_hit_feedback.html#autotoc_md383":[3,2,0,8],
 "plan_bubble_cluster_hit_feedback.html#autotoc_md385":[3,2,0,9],
@@ -243,11 +249,5 @@ var NAVTREEINDEX125 =
 "plan_grid_actor_expansion.html#autotoc_md687":[3,3,0,2,7,1],
 "plan_grid_actor_expansion.html#autotoc_md688":[3,3,0,2,7,2],
 "plan_grid_actor_expansion.html#autotoc_md690":[3,3,0,2,8],
-"plan_grid_actor_expansion.html#autotoc_md691":[3,3,0,2,8,0],
-"plan_grid_actor_expansion.html#autotoc_md692":[3,3,0,2,8,1],
-"plan_grid_actor_expansion.html#autotoc_md694":[3,3,0,3],
-"plan_grid_actor_expansion.html#autotoc_md696":[3,3,0,4],
-"plan_hdr.html":[3,6],
-"plan_hdr.html#autotoc_md697":[3,6,0],
-"plan_hdr.html#autotoc_md699":[3,6,0,0]
+"plan_grid_actor_expansion.html#autotoc_md691":[3,3,0,2,8,0]
 };

@@ -45,6 +45,7 @@ var classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker =
     [ "_states", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a52bad5e7bddcf00ce7babd5e2084a1a3", null ],
     [ "_stationary", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#ab42c88bc25508ace9c14cca708f4fc56", null ],
     [ "FreezeRibbonTime", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#ac3699aa7d5640bb1e7aea96d14c9104e", null ],
+    [ "GuideTipVertices", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a4bb648c8bed08f2f58473ff19602bda9", null ],
     [ "MaxVertexCount", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a66774b0b4bff3c5c745300e3c4ca309a", null ],
     [ "MinDuration", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a29474076fcd198329a4de8f3257b08a5", null ],
     [ "SnapFadeDuration", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#adec6901ed367f27c5050c82f7b9894f0", null ],

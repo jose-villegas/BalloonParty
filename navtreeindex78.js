@@ -1,5 +1,7 @@
 var NAVTREEINDEX78 =
 {
+"classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html#a8d33fe54be929a98260423a2a553f4f4":[5,0,0,9,4,7],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html#a8d33fe54be929a98260423a2a553f4f4":[6,0,0,9,4,7],
 "classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html#aaab5caefa4d93be6b867e73921dcabfb":[5,0,0,9,4,9],
 "classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html#aaab5caefa4d93be6b867e73921dcabfb":[6,0,0,9,4,9],
 "classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html#afbefc6af1256d2a21abc17b20f5af5a2":[5,0,0,9,4,4],
@@ -247,7 +249,5 @@ var NAVTREEINDEX78 =
 "classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html#ad92fdae13c971b1ed0642e08752f7cec":[5,0,0,10,1,4,7],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html#ad92fdae13c971b1ed0642e08752f7cec":[6,0,0,10,1,4,7],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html#adde1d9b610c21f8a41698b1a85d2c858":[5,0,0,10,1,4,10],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html#adde1d9b610c21f8a41698b1a85d2c858":[6,0,0,10,1,4,10],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1PierceTelegraphScan.html":[5,0,0,10,1,5],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1PierceTelegraphScan.html":[6,0,0,10,1,5]
+"classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html#adde1d9b610c21f8a41698b1a85d2c858":[6,0,0,10,1,4,10]
 };

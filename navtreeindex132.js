@@ -1,5 +1,11 @@
 var NAVTREEINDEX132 =
 {
+"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html#a54cdeb28806c4c58aaa1188386ccc143":[5,0,0,5,13,1,3],
+"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html#a54cdeb28806c4c58aaa1188386ccc143":[6,0,0,5,13,1,3],
+"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html#a6e2b7268fa964a9208350fe5efc03a32":[5,0,0,5,13,1,1],
+"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html#a6e2b7268fa964a9208350fe5efc03a32":[6,0,0,5,13,1,1],
+"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html#a828f96f1302fb06d13df68fa2fdadd27":[5,0,0,5,13,1,4],
+"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html#a828f96f1302fb06d13df68fa2fdadd27":[6,0,0,5,13,1,4],
 "structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html#a82f3cbf6a219aeb1b9cf2dc539b90d50":[5,0,0,5,13,1,0],
 "structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html#a82f3cbf6a219aeb1b9cf2dc539b90d50":[6,0,0,5,13,1,0],
 "structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1PinImages.html":[5,0,0,5,13,2],
@@ -243,11 +249,5 @@ var NAVTREEINDEX132 =
 "structBalloonParty_1_1Game_1_1LaunchContinueView_1_1LitMaterial.html#a742754528c8191fbc5f57410f3af9a59":[5,0,0,6,19,0,0],
 "structBalloonParty_1_1Game_1_1LaunchContinueView_1_1LitMaterial.html#a742754528c8191fbc5f57410f3af9a59":[6,0,0,6,19,0,0],
 "structBalloonParty_1_1Game_1_1Run_1_1FailureOffer.html":[5,0,0,6,8,1],
-"structBalloonParty_1_1Game_1_1Run_1_1FailureOffer.html":[6,0,0,6,8,1],
-"structBalloonParty_1_1Game_1_1Run_1_1FailureOffer.html#a17912d3ddf8f051d09fb6d47d0dc1e66":[5,0,0,6,8,1,1],
-"structBalloonParty_1_1Game_1_1Run_1_1FailureOffer.html#a17912d3ddf8f051d09fb6d47d0dc1e66":[6,0,0,6,8,1,1],
-"structBalloonParty_1_1Game_1_1Run_1_1FailureOffer.html#a5bdfa3406f22e66d3dab2b6ab6a0ed97":[5,0,0,6,8,1,3],
-"structBalloonParty_1_1Game_1_1Run_1_1FailureOffer.html#a5bdfa3406f22e66d3dab2b6ab6a0ed97":[6,0,0,6,8,1,3],
-"structBalloonParty_1_1Game_1_1Run_1_1FailureOffer.html#a77b35428197a2480b3c9b1ef2533ad62":[5,0,0,6,8,1,0],
-"structBalloonParty_1_1Game_1_1Run_1_1FailureOffer.html#a77b35428197a2480b3c9b1ef2533ad62":[6,0,0,6,8,1,0]
+"structBalloonParty_1_1Game_1_1Run_1_1FailureOffer.html":[6,0,0,6,8,1]
 };

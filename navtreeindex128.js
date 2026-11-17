@@ -1,5 +1,11 @@
 var NAVTREEINDEX128 =
 {
+"structBalloonParty_1_1Balloon_1_1Controller_1_1RoamRests_1_1Rest.html":[5,0,0,1,0,16,0],
+"structBalloonParty_1_1Balloon_1_1Controller_1_1RoamRests_1_1Rest.html":[6,0,0,1,0,16,0],
+"structBalloonParty_1_1Balloon_1_1Controller_1_1RoamRests_1_1Rest.html#a3482930b1c2a01f0b6e9e37fd062b09b":[5,0,0,1,0,16,0,0],
+"structBalloonParty_1_1Balloon_1_1Controller_1_1RoamRests_1_1Rest.html#a3482930b1c2a01f0b6e9e37fd062b09b":[6,0,0,1,0,16,0,0],
+"structBalloonParty_1_1Balloon_1_1Controller_1_1RoamRests_1_1Rest.html#a76bc7ea3a11e7cd7ce448e322627231d":[5,0,0,1,0,16,0,1],
+"structBalloonParty_1_1Balloon_1_1Controller_1_1RoamRests_1_1Rest.html#a76bc7ea3a11e7cd7ce448e322627231d":[6,0,0,1,0,16,0,1],
 "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html":[5,0,0,1,1,0],
 "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html":[6,0,0,1,1,0],
 "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html#a6bd8cd92a3cb884da4c89e9703374837":[5,0,0,1,1,0,1],
@@ -243,11 +249,5 @@ var NAVTREEINDEX128 =
 "structBalloonParty_1_1Configuration_1_1Effects_1_1PaintProfile.html":[5,0,0,3,5,26],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1PaintProfile.html":[6,0,0,3,5,26],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1PaintProfile.html#a1a93d24ceaf250392206e9524b2fb5ac":[5,0,0,3,5,26,4],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1PaintProfile.html#a1a93d24ceaf250392206e9524b2fb5ac":[6,0,0,3,5,26,4],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1PaintProfile.html#a2136cb799ab37a8e229f450566f7d907":[5,0,0,3,5,26,6],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1PaintProfile.html#a2136cb799ab37a8e229f450566f7d907":[6,0,0,3,5,26,6],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1PaintProfile.html#a26b97afabd0a22c4cbbd9aec25df9a9a":[5,0,0,3,5,26,3],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1PaintProfile.html#a26b97afabd0a22c4cbbd9aec25df9a9a":[6,0,0,3,5,26,3],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1PaintProfile.html#a2aec7a97904642d398130d1b7b1610cd":[5,0,0,3,5,26,1],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1PaintProfile.html#a2aec7a97904642d398130d1b7b1610cd":[6,0,0,3,5,26,1]
+"structBalloonParty_1_1Configuration_1_1Effects_1_1PaintProfile.html#a1a93d24ceaf250392206e9524b2fb5ac":[6,0,0,3,5,26,4]
 };

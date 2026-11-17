@@ -1,5 +1,11 @@
 var NAVTREEINDEX131 =
 {
+"structBalloonParty_1_1Configuration_1_1Level_1_1ScoringControlPoint.html#a6b0e9ec66ca301aef3927f459948c802":[5,0,0,3,9,32,2],
+"structBalloonParty_1_1Configuration_1_1Level_1_1ScoringControlPoint.html#a6b0e9ec66ca301aef3927f459948c802":[6,0,0,3,9,32,2],
+"structBalloonParty_1_1Configuration_1_1Level_1_1ScoringControlPoint.html#a85e118c09741691491b7d455404fabf5":[5,0,0,3,9,32,5],
+"structBalloonParty_1_1Configuration_1_1Level_1_1ScoringControlPoint.html#a85e118c09741691491b7d455404fabf5":[6,0,0,3,9,32,5],
+"structBalloonParty_1_1Configuration_1_1Level_1_1ScoringControlPoint.html#ab5ead7706fcec60a57217dfe3a2aa609":[5,0,0,3,9,32,3],
+"structBalloonParty_1_1Configuration_1_1Level_1_1ScoringControlPoint.html#ab5ead7706fcec60a57217dfe3a2aa609":[6,0,0,3,9,32,3],
 "structBalloonParty_1_1Configuration_1_1Level_1_1ScoringControlPoint.html#af00177233ab6ea5f597d128313c0d18f":[5,0,0,3,9,32,4],
 "structBalloonParty_1_1Configuration_1_1Level_1_1ScoringControlPoint.html#af00177233ab6ea5f597d128313c0d18f":[6,0,0,3,9,32,4],
 "structBalloonParty_1_1Configuration_1_1Level_1_1TailGrowthConfig.html":[5,0,0,3,9,34],
@@ -243,11 +249,5 @@ var NAVTREEINDEX131 =
 "structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html":[5,0,0,5,13,1],
 "structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html":[6,0,0,5,13,1],
 "structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html#a3a64c048f853d66208fc190eba81dbff":[5,0,0,5,13,1,2],
-"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html#a3a64c048f853d66208fc190eba81dbff":[6,0,0,5,13,1,2],
-"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html#a54cdeb28806c4c58aaa1188386ccc143":[5,0,0,5,13,1,3],
-"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html#a54cdeb28806c4c58aaa1188386ccc143":[6,0,0,5,13,1,3],
-"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html#a6e2b7268fa964a9208350fe5efc03a32":[5,0,0,5,13,1,1],
-"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html#a6e2b7268fa964a9208350fe5efc03a32":[6,0,0,5,13,1,1],
-"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html#a828f96f1302fb06d13df68fa2fdadd27":[5,0,0,5,13,1,4],
-"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html#a828f96f1302fb06d13df68fa2fdadd27":[6,0,0,5,13,1,4]
+"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html#a3a64c048f853d66208fc190eba81dbff":[6,0,0,5,13,1,2]
 };

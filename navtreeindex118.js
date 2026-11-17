@@ -1,5 +1,11 @@
 var NAVTREEINDEX118 =
 {
+"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IPaletteColorMasked.html":[5,0,0,3,10,3],
+"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IPaletteColorMasked.html":[6,0,0,3,10,3],
+"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IPaletteColorMasked.html#ac1c174fb9eeda55c0684df79315d5b58":[5,0,0,3,10,3,0],
+"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IPaletteColorMasked.html#ac1c174fb9eeda55c0684df79315d5b58":[6,0,0,3,10,3,0],
+"interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html":[5,0,0,3,11,0],
+"interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html":[6,0,0,3,11,0],
 "interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html#a13349dcb9c5c3c426078b3f9bf04ad37":[5,0,0,3,11,0,2],
 "interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html#a13349dcb9c5c3c426078b3f9bf04ad37":[6,0,0,3,11,0,2],
 "interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html#a216e6b95d0a04ed08408b2c7642e60d3":[5,0,0,3,11,0,3],
@@ -243,11 +249,5 @@ var NAVTREEINDEX118 =
 "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunScore.html#ac73fa31c2bf8e872d978a7b7fd71282c":[5,0,0,6,8,16,1],
 "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunScore.html#ac73fa31c2bf8e872d978a7b7fd71282c":[6,0,0,6,8,16,1],
 "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunScore.html#ac8ae1b8742675f87c495a08bf93cf193":[5,0,0,6,8,16,0],
-"interfaceBalloonParty_1_1Game_1_1Run_1_1IRunScore.html#ac8ae1b8742675f87c495a08bf93cf193":[6,0,0,6,8,16,0],
-"interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSeed.html":[5,0,0,6,8,17],
-"interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSeed.html":[6,0,0,6,8,17],
-"interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSeed.html#a59a80dd494c696b8f2681161e76f31de":[5,0,0,6,8,17,0],
-"interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSeed.html#a59a80dd494c696b8f2681161e76f31de":[6,0,0,6,8,17,0],
-"interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreShapeCover.html":[5,0,0,6,9,0,8],
-"interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreShapeCover.html":[6,0,0,6,9,0,8]
+"interfaceBalloonParty_1_1Game_1_1Run_1_1IRunScore.html#ac8ae1b8742675f87c495a08bf93cf193":[6,0,0,6,8,16,0]
 };

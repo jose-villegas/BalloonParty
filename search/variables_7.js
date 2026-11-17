@@ -66,5 +66,6 @@ var searchData=
   ['groupbordercolor_63',['GroupBorderColor',['../classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a3bfce5063286a93e583f3de3d0b52aea',1,'BalloonParty::Editor::LevelPacingWindow']]],
   ['groupgap_64',['GroupGap',['../classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#aeddd91a7e130cb2d59d5eafb8c635c54',1,'BalloonParty::Editor::LevelPacingWindow']]],
   ['grown_65',['Grown',['../classBalloonParty_1_1Balloon_1_1View_1_1ToughSnakeSpringView_1_1Link.html#a2341e3598d831c4ea491ffd127de3da7',1,'BalloonParty::Balloon::View::ToughSnakeSpringView::Link']]],
-  ['guide_66',['Guide',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a1976318db9f85a34b9cc161834d2d6d0',1,'BalloonParty::Game::Score::Behaviours::ShapeFormationTicker::FormationState']]]
+  ['guide_66',['Guide',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a1976318db9f85a34b9cc161834d2d6d0',1,'BalloonParty::Game::Score::Behaviours::ShapeFormationTicker::FormationState']]],
+  ['guidetipvertices_67',['GuideTipVertices',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a4bb648c8bed08f2f58473ff19602bda9',1,'BalloonParty::Game::Score::Behaviours::ShapeFormationTicker']]]
 ];

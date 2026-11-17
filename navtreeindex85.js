@@ -1,5 +1,7 @@
 var NAVTREEINDEX85 =
 {
+"classBalloonParty_1_1Scenario_1_1View_1_1WaterRippleBuffer.html#aeb3552672ae888a37c5a08f620977ade":[5,0,0,11,0,8,5],
+"classBalloonParty_1_1Scenario_1_1View_1_1WaterRippleBuffer.html#aeb3552672ae888a37c5a08f620977ade":[6,0,0,11,0,8,5],
 "classBalloonParty_1_1Scenario_1_1View_1_1WaterRippleBuffer.html#af0e6a76dd8b0798a57393a2485c7126b":[5,0,0,11,0,8,8],
 "classBalloonParty_1_1Scenario_1_1View_1_1WaterRippleBuffer.html#af0e6a76dd8b0798a57393a2485c7126b":[6,0,0,11,0,8,8],
 "classBalloonParty_1_1Scenario_1_1View_1_1WaterRippleBuffer.html#af5f2c5d531835a6f03d8fdac7c738820":[5,0,0,11,0,8,9],
@@ -247,7 +249,5 @@ var NAVTREEINDEX85 =
 "classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html#a37df79c299b3e57c6b867d5d8e11556c":[5,0,0,12,2,2,3],
 "classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html#a37df79c299b3e57c6b867d5d8e11556c":[6,0,0,12,2,2,3],
 "classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html#a5d52f235947f76c63ad6bb4c29612be9":[5,0,0,12,2,2,4],
-"classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html#a5d52f235947f76c63ad6bb4c29612be9":[6,0,0,12,2,2,4],
-"classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html#a67777e5605c567846dcaaa6d78bc3dfb":[5,0,0,12,2,2,7],
-"classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html#a67777e5605c567846dcaaa6d78bc3dfb":[6,0,0,12,2,2,7]
+"classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html#a5d52f235947f76c63ad6bb4c29612be9":[6,0,0,12,2,2,4]
 };
