@@ -5,6 +5,7 @@ var namespaceBalloonParty_1_1Balloon_1_1Formation =
     [ "FormationPlanner", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner" ],
     [ "IFormationReinforcements", "interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IFormationReinforcements.html", "interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IFormationReinforcements" ],
     [ "SlotMove", "structBalloonParty_1_1Balloon_1_1Formation_1_1SlotMove.html", "structBalloonParty_1_1Balloon_1_1Formation_1_1SlotMove" ],
+    [ "SnakeBody", "classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeBody.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeBody" ],
     [ "SnakeWalk", "classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeWalk.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeWalk" ],
     [ "StandingFormation", "classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation" ],
     [ "UnbreakableFormationService", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService" ],

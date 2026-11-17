@@ -1,5 +1,6 @@
 var NAVTREEINDEX8 =
 {
+"classBalloonParty_1_1Audio_1_1SfxService.html#a0666a6d593489dbcd869244784903f14":[5,0,0,0,12,28],
 "classBalloonParty_1_1Audio_1_1SfxService.html#a0666a6d593489dbcd869244784903f14":[6,0,0,0,12,28],
 "classBalloonParty_1_1Audio_1_1SfxService.html#a0b4e90260a3fc7dd156870e95b2a313f":[5,0,0,0,12,33],
 "classBalloonParty_1_1Audio_1_1SfxService.html#a0b4e90260a3fc7dd156870e95b2a313f":[6,0,0,0,12,33],
@@ -248,6 +249,5 @@ var NAVTREEINDEX8 =
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder.html#a3992e5e4e2d733cb3905a2a28b04878c":[5,0,0,1,0,0,10],
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder.html#a3992e5e4e2d733cb3905a2a28b04878c":[6,0,0,1,0,0,10],
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder.html#a3cadaf45926095823fd72c09e769d6f3":[5,0,0,1,0,0,4],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder.html#a3cadaf45926095823fd72c09e769d6f3":[6,0,0,1,0,0,4],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder.html#a3cadaf45926095823fd72c09e769d6f3a6adf97f83acf6453d4a6a4b1070f3754":[5,0,0,1,0,0,4,0]
+"classBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder.html#a3cadaf45926095823fd72c09e769d6f3":[6,0,0,1,0,0,4]
 };

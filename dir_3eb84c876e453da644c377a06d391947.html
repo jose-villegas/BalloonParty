@@ -132,6 +132,8 @@ Files</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SlotMove_8cs.html">SlotMove.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SnakeBody_8cs.html">SnakeBody.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SnakeWalk_8cs.html">SnakeWalk.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="StandingFormation_8cs.html">StandingFormation.cs</a></td></tr>
@@ -153,18 +155,20 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>SnakeWalk</code>   </td><td class="markdownTableBodyNone">Where a snake's head steps next: straight on if it can, else the gentlest open turn    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>SnakeBody</code>   </td><td class="markdownTableBodyNone">Where free toughs fall in behind the tough snake's tail: a line on from it that they take in one batch, the balloons on it moving out to the slots they left    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>ArmourOrder</code>   </td><td class="markdownTableBodyNone">The tough snake's order, head to tail by armour (hits left), and the one place per step it moves toward that order as it walks. Equal armour keeps the order it stands in    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>SlotMove</code>   </td><td class="markdownTableBodyNone">One actor and the slot it moves to. The service hands the balancer each arrangement and each snake step as a batch of these, and every actor in a batch leaves its slot before any lands    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>FormationPlanner</code>   </td><td class="markdownTableBodyNone">Pure planning. For one shape it lists every spot on the board where the shape fits, works out how far the members would travel to fill it, and picks at random among the few cheapest spots. It then says which member goes to which slot. It reads the grid but never changes it    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>FormationAssignment</code>   </td><td class="markdownTableBodyNone">One member and the slot it goes to    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>StandingFormation</code>   </td><td class="markdownTableBodyNone">One standing formation: its members, its shape, the waves it has left to hold, whether a member was pierced since it formed, and whether it is a tough snake (<code>Armoured</code>)    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>UnbreakableFormationService</code>   </td><td class="markdownTableBodyNone">The controller. It decides when each formation forms, holds, changes and breaks up, marks members as in formation, rolls for reinforcements, and keeps the toughs' snake: starts it, takes each free tough in at its tail, and walks it through the board    </td></tr>
+<td class="markdownTableBodyNone"><code>StandingFormation</code>   </td><td class="markdownTableBodyNone">One standing formation: its members, its shape, the waves it has left to hold, whether a member was pierced since it formed, and whether it is a tough snake (<code>Armoured</code>)    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>UnbreakableFormationService</code>   </td><td class="markdownTableBodyNone">The controller. It decides when each formation forms, holds, changes and breaks up, marks members as in formation, rolls for reinforcements, and keeps the toughs' snake: starts it, takes each free tough in at its tail, and walks it through the board    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>IFormationReinforcements</code>   </td><td class="markdownTableBodyNone">The reinforcements the formations have called in. <code>BalloonSpawner</code> takes them at each wave's first line   </td></tr>
 </table>
 <h1><a class="anchor" id="autotoc_md21"></a>
@@ -191,12 +195,12 @@ Snakes</h1>
 Tough snakes</h1>
 <p>The board's toughs and toughers (<code>ToughBalloonModel</code>, an <code>IArmouredFormationMember</code>) are one body: a single snake of their own, walking on the same beat and with the same <code>SnakeWalk</code> as an unbreakable snake. Toughs never join an unbreakable formation, and unbreakables never join theirs.</p>
 <ul>
-<li><b>Starting.</b> With no tough snake on the board, once <code>MinMembers</code> toughs are on it, the toughest that has landed (<code>IsStable</code>: not still gliding in from a spawn line) starts it, where it stands; the others join as they land. That is checked at each wave start and on each snake beat, since a level can end before its next wave start. Ties go to the higher row. The head is never one in the bottom <code>HorizontalBottomClearance</code> rows, which a snake never walks. It sets off east or west at random: started at a wave start, it takes its first step on the next beat; started on a beat, it steps off on that one.</li>
-<li><b>Joining at the tail.</b> At each step, the free tough nearest the tail falls in behind it, into the slot the tail just left: one per step, so the body grows by one a beat. A tough still landing waits. Its glide to the tail is one move, so a tough far from the tail crosses the board to join.</li>
+<li><b>Starting as one body.</b> With no tough snake on the board, once <code>MinMembers</code> toughs are on it, the toughest that has landed (<code>IsStable</code>: not still gliding in from a spawn line) starts it, where it stands. Ties go to the higher row. The head is never one in the bottom <code>HorizontalBottomClearance</code> rows, which a snake never walks. It heads toward the nearer edge, so its body has room behind it, and every other tough that has landed lines up behind it at once (<code>SnakeBody</code>): a line of slots on from the head, away from its heading, bending as little as it can. A balloon on that line moves out to a slot one of the toughs left. The balancer asks every frame (<code>ToughsDueToGather</code>), so the snake forms the moment it can, not at a wave start or on a beat, and takes its first step on the next beat.</li>
+<li><b>Falling in at the tail.</b> A tough that lands later, or one still gliding in when the snake formed, falls in behind the tail the moment it lands, the same way. Where nothing on from the tail can take a tough (toughs, unbreakables, anchored actors and anything static block the line), it waits until something on the board changes and tries again.</li>
 <li><b>Walking through the board.</b> A board in play is nearly full, so a snake that only steps into empty slots would hardly move. The tough snake walks through balloons instead: its head may step into a slot held by a balloon that moves and is held by nothing (<code>SnakeWalk.CanPassThrough</code>), and that balloon goes round the snake to the slot the tail leaves. When a tough joins in the same step, the tail's slot is the joiner's, so the balloon takes the joiner's slot instead. Toughs and unbreakables (free or in a formation), anchored actors and anything static still stand in its way, and then it turns as any snake does. The balancer carries out each step as one batch (<code>SlotMove</code>): every mover leaves its slot before any lands, so the head and the balloon it passes can trade slots.</li>
 <li><b>Most armour leads.</b> The head is the hardest balloon to stop. The worn ones trail behind it.</li>
 <li><b>Re-ordering one place per step.</b> Before every step the snake moves toward armour order by one place: from the head down, a member with more armour than the one ahead of it passes it, and the one passed holds its slot for that beat (<code>ArmourOrder.StepTowardOrder</code>). So a tough hit at the head drops back a place a step, and a tougher that joined at the tail works its way forward. Boxed in, the snake turns round like any snake, and its toughest works back to the new front the same way.</li>
-<li><b>Walking until the last pops.</b> The tough snake has no other shape to change to, so it never holds or re-plans, and it doesn't break below <code>MinMembers</code>: it walks on with whoever is left. When its last member pops it ends, and the next wave start or beat can start another. It calls no reinforcements.</li>
+<li><b>Walking until the last pops.</b> The tough snake has no other shape to change to, so it never holds or re-plans, and it doesn't break below <code>MinMembers</code>: it walks on with whoever is left. When its last member pops it ends, and the toughs on the board start another at once. It calls no reinforcements.</li>
 <li><b>No wall from toughs.</b> A tough gives way to enough hits, so it never counts toward the wall across the board (<code>ShotWall.Walls</code>), and the tough snake's step skips that check.</li>
 </ul>
 <p>Members are anchored (<code>IBalanceAnchor</code>) while in their snake, exactly as unbreakables are. A tough snake has no look of its own: its members look like any tough.</p>

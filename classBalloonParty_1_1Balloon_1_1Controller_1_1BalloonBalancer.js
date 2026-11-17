@@ -53,6 +53,7 @@ var classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer =
     [ "_snakeStepDue", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a9e8fc7bff5f5b176efa69a171abd6789", null ],
     [ "_subscriber", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#ac4b1e3aa3edf6e31a4bfaa4955f3a67a", null ],
     [ "_subscriptions", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#ab59ef08e9040c718a85d96cbfc7100aa", null ],
+    [ "_toughGatherDue", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a5fa767225272f884a819bc1a21bb4676", null ],
     [ "_turnSteps", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#aed7b43dbc80744a8e0fc76e0a67486ce", null ],
     [ "_waypointBuffers", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a7130d9f5c300efd2d677c372070f6234", null ],
     [ "ByRoamOrder", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a4ac9b3fa306a76420b7796e2df71a948", null ],

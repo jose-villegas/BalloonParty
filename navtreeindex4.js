@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"SoundBankConfigurationEditor_8cs.html":[7,0,0,1,13],
 "SoundBankConfiguration_8cs.html":[7,0,0,0,8],
 "SoundHandle_8cs.html":[7,0,0,16],
 "SoundIds_8cs.html":[7,0,0,17],
@@ -29,7 +30,7 @@ var NAVTREEINDEX4 =
 "SpriteShadowBakerEditor_8cs.html":[7,0,6,5,2],
 "SpriteShadowBaker_8cs.html":[7,0,14,10,13],
 "StampProfileDrawer_8cs.html":[7,0,3,4,10],
-"StandingFormation_8cs.html":[7,0,1,1,7],
+"StandingFormation_8cs.html":[7,0,1,1,8],
 "StartFromLevelCheat_8cs.html":[7,0,2,24],
 "StaticActorModel_8cs.html":[7,0,15,0,23],
 "StaticActorSpawner_8cs.html":[7,0,15,0,24],
@@ -98,8 +99,8 @@ var NAVTREEINDEX4 =
 "UnbreakableBalloonVariant_8cs.html":[7,0,1,5,10],
 "UnbreakableBalloonVariant_8cs.html#a90519392e763b626f8e41b3c580fa94d":[7,0,1,5,10,1],
 "UnbreakableFormationLook_8cs.html":[7,0,1,5,11],
-"UnbreakableFormationService_8cs.html":[7,0,1,1,8],
-"UnbreakableFormationService_8cs.html#a832e8f52fca5a678819ec96269dcb532":[7,0,1,1,8,1],
+"UnbreakableFormationService_8cs.html":[7,0,1,1,9],
+"UnbreakableFormationService_8cs.html#a832e8f52fca5a678819ec96269dcb532":[7,0,1,1,9,1],
 "UnbreakableFormationSettings_8cs.html":[7,0,3,0,20],
 "UnitCircleAttribute_8cs.html":[7,0,14,37],
 "UnitCircleDrawer_8cs.html":[7,0,6,53],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "classBalloonParty_1_1Audio_1_1Configuration_1_1AudioMixerSettings.html#a74e02d91abef00ce1b07d7c04c92f037":[5,0,0,0,0,0,5],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1AudioMixerSettings.html#a74e02d91abef00ce1b07d7c04c92f037":[6,0,0,0,0,0,5],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1AudioMixerSettings.html#a7ad92d3d0d64f65d2ee44cac8ff735fb":[5,0,0,0,0,0,3],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1AudioMixerSettings.html#a7ad92d3d0d64f65d2ee44cac8ff735fb":[6,0,0,0,0,0,3],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1AudioMixerSettings.html#aa235a5b7743eb998bb2e580241944464":[5,0,0,0,0,0,1]
+"classBalloonParty_1_1Audio_1_1Configuration_1_1AudioMixerSettings.html#a7ad92d3d0d64f65d2ee44cac8ff735fb":[6,0,0,0,0,0,3]
 };
