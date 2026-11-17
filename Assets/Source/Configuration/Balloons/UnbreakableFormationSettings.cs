@@ -11,7 +11,8 @@ namespace BalloonParty.Configuration.Balloons
 
         [Tooltip("The board's toughs (and toughers) walk as one snake of their own, led by the one with the most " +
                  "hits left, through the balloons in its way. Once Min Members toughs are on the board it starts " +
-                 "from the toughest; every other tough falls in behind its tail, one per step.")]
+                 "from the toughest with the rest lined up behind it at once, and each tough that lands later falls in " +
+                 "behind its tail as soon as it lands.")]
         [SerializeField] private bool _toughSnakes = true;
 
         [Tooltip("Fewest unbreakables on the board that gather into a formation.")]

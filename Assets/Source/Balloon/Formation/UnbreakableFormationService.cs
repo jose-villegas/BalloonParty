@@ -22,8 +22,9 @@ namespace BalloonParty.Balloon.Formation
     ///     formation that loses members below the minimum breaks at once. One that stands untouched may call
     ///     in another unbreakable (<see cref="IFormationReinforcements" />). The board's toughs are one snake of
     ///     their own (<see cref="IUnbreakableFormationSettings.ToughSnakes" />), ordered by armour: it starts from
-    ///     the toughest, every tough that lands falls in behind its tail, and it walks through the balloons in its
-    ///     way until its last member pops.
+    ///     the toughest with every landed tough lined up behind it at once, each tough that lands later falls in
+    ///     behind its tail as soon as it lands, and it walks through the balloons in its way until its last member
+    ///     pops.
     /// </summary>
     internal sealed class UnbreakableFormationService : IStartable, IRunResettable, IDisposable,
         IFormationReinforcements
@@ -54,6 +55,10 @@ namespace BalloonParty.Balloon.Formation
         private readonly List<FormationAssignment> _assignments = new();
         private readonly List<SlotMove> _moves = new();
         private readonly List<Vector2Int> _trail = new();
+        private readonly List<Vector2Int> _line = new();
+        private readonly List<Vector2Int> _leftSlots = new();
+        private readonly List<IWriteableFormationMember> _freeToughs = new();
+        private readonly List<IWriteableFormationMember> _gathered = new();
         private readonly List<FormationShape> _shapePool = new();
         private readonly CompositeDisposable _subscriptions = new();
         private readonly Func<int, int> _pickIndex;
@@ -63,6 +68,9 @@ namespace BalloonParty.Balloon.Formation
         private int _unbreakablesOnBoard;
         private int _reinforcementCalls;
         private int _snakePulses;
+
+        // Set when free toughs had nowhere to fall in; cleared by the next change on the board.
+        private bool _gatherBlocked;
 
         // Counts wave-start arrangements, so a step in the same balance can skip the formations arranged in it.
         private int _arrangePass;
@@ -94,6 +102,7 @@ namespace BalloonParty.Balloon.Formation
             ReleaseAll();
             _reinforcementCalls = 0;
             _snakePulses = 0;
+            _gatherBlocked = false;
         }
 
         public void Dispose()
@@ -135,7 +144,7 @@ namespace BalloonParty.Balloon.Formation
                 FormFromFreeUnbreakables(relocate);
                 if (_settings.ToughSnakes)
                 {
-                    FormToughSnake();
+                    GatherToughs(relocate);
                 }
             }
             finally
@@ -147,24 +156,52 @@ namespace BalloonParty.Balloon.Formation
         }
 
         /// <summary>
+        ///     True when the toughs can form up: <see cref="IUnbreakableFormationSettings.MinMembers" /> toughs are on
+        ///     the board with no snake yet and one of them has landed to lead it, or a snake walks and a tough has
+        ///     landed free of it. The balancer asks every frame, so the toughs never wait for a wave start or a beat.
+        ///     Read-only.
+        /// </summary>
+        internal bool ToughsDueToGather()
+        {
+            if (_settings == null || !_settings.Enabled || !_settings.ToughSnakes)
+            {
+                return false;
+            }
+
+            return ToughSnake() == null ? FindToughHead() != null : !_gatherBlocked && HasFreeLandedTough();
+        }
+
+        /// <summary>
+        ///     Forms the toughs into one body: with no snake, the toughest landed tough starts one where it stands;
+        ///     then every free tough that has landed falls in behind the tail at once, along a line of slots on from
+        ///     it (<see cref="SnakeBody" />). A balloon on that line moves out to a slot a tough left.
+        ///     <paramref name="relocate" /> carries out the moves as one batch.
+        /// </summary>
+        internal void GatherToughSnake(Action<IReadOnlyList<SlotMove>> relocate)
+        {
+            if (_settings == null || !_settings.Enabled || !_settings.ToughSnakes)
+            {
+                return;
+            }
+
+            _arranging = true;
+            try
+            {
+                GatherToughs(relocate);
+            }
+            finally
+            {
+                _arranging = false;
+            }
+        }
+
+        /// <summary>
         ///     Counts one snake beat; true when a snake on the board is due its step
         ///     (<see cref="IUnbreakableFormationSettings.SnakeStepPulses" /> beats apart). With no snake the count
-        ///     starts over, so a snake formed at wave start takes its first step a full beat later. Toughs that
-        ///     landed since the wave started start their snake on the beat, and it steps off at once.
+        ///     starts over, so a new snake takes its first step a full beat after it forms.
         /// </summary>
         internal bool TakeSnakeBeat()
         {
-            // A level can end before its next wave start, so toughs that land late would otherwise never snake.
-            if (_settings.Enabled && _settings.ToughSnakes && !HasToughSnake())
-            {
-                FormToughSnake();
-                if (HasToughSnake())
-                {
-                    RebuildMemberList();
-                    _snakePulses = _settings.SnakeStepPulses - 1;
-                }
-            }
-
             if (!HasSnake())
             {
                 _snakePulses = 0;
@@ -202,6 +239,11 @@ namespace BalloonParty.Balloon.Formation
                     {
                         Walk(formation, lastRow, relocate);
                     }
+                }
+
+                if (_settings.ToughSnakes)
+                {
+                    GatherToughs(relocate);
                 }
             }
             finally
@@ -284,27 +326,10 @@ namespace BalloonParty.Balloon.Formation
                 }
             }
 
-            // The balloon the head walks into goes round the snake to the slot its tail leaves, or, when a tough
-            // joins there this step, to the joiner's slot: the two trade places.
-            var passed = _grid.IsEmpty(_trail[0].x, _trail[0].y)
-                ? null
-                : (IWriteableDynamicSlotActor)_grid.At(_trail[0]);
-            var passedTo = tailSlot;
-
-            // The board's toughs are one body: a free tough that has landed falls in behind the tail, one per step.
-            if (armoured && TryFindJoiner(tailSlot, out var joiner))
+            // The balloon the head walks into goes round the snake to the slot its tail leaves.
+            if (!_grid.IsEmpty(_trail[0].x, _trail[0].y))
             {
-                passedTo = joiner.SlotIndex.Value;
-                joiner.SetInFormation(true);
-                members.Add(joiner);
-                _formationOf[joiner] = snake;
-                _moves.Add(new SlotMove(joiner, tailSlot));
-                RebuildMemberList();
-            }
-
-            if (passed != null)
-            {
-                _moves.Add(new SlotMove(passed, passedTo));
+                _moves.Add(new SlotMove((IWriteableDynamicSlotActor)_grid.At(_trail[0]), tailSlot));
             }
 
             for (var i = 0; i < members.Count; i++)
@@ -314,34 +339,6 @@ namespace BalloonParty.Balloon.Formation
             }
 
             relocate(_moves);
-        }
-
-        // The free tough nearest the tail's slot, once it has landed: one still gliding in from its spawn waits.
-        private bool TryFindJoiner(Vector2Int tailSlot, out IWriteableFormationMember joiner)
-        {
-            joiner = null;
-            var best = int.MaxValue;
-            for (var col = 0; col < _grid.Columns; col++)
-            {
-                for (var row = 0; row < _grid.Rows; row++)
-                {
-                    var slot = new Vector2Int(col, row);
-                    if (_grid.IsEmpty(col, row) || _grid.At(slot) is not IArmouredFormationMember tough
-                        || _formationOf.ContainsKey(tough) || !tough.IsStable.Value)
-                    {
-                        continue;
-                    }
-
-                    var distance = HexCoordinates.Distance(tailSlot, slot);
-                    if (distance < best)
-                    {
-                        best = distance;
-                        joiner = tough;
-                    }
-                }
-            }
-
-            return joiner != null;
         }
 
         /// <summary>
@@ -446,17 +443,173 @@ namespace BalloonParty.Balloon.Formation
             }
         }
 
-        // The board's toughs are one body. With none walking and MinMembers toughs on the board, landed or still
-        // gliding in, the toughest landed one within the rows a snake walks starts it where it stands, heading east or west at random; the rest fall in
-        // behind its tail as it walks (Walk). Formed at wave start, it waits for the next beat to take its first
-        // step; formed on a beat (TakeSnakeBeat), it steps off on that one.
-        private void FormToughSnake()
+        // The board's toughs are one body. With no snake, once MinMembers toughs are on the board, landed or still
+        // gliding in, the toughest landed one within the rows a snake walks starts it where it stands, heading the
+        // way that leaves its body the most room behind it. Every free tough that has landed then falls in behind
+        // the tail at once; one still landing joins as soon as it lands.
+        private void GatherToughs(Action<IReadOnlyList<SlotMove>> relocate)
         {
-            if (HasToughSnake())
+            var snake = ToughSnake() ?? StartToughSnake();
+            if (snake == null)
             {
                 return;
             }
 
+            _freeToughs.Clear();
+            for (var col = 0; col < _grid.Columns; col++)
+            {
+                for (var row = 0; row < _grid.Rows; row++)
+                {
+                    if (!_grid.IsEmpty(col, row) && SnakeBody.IsFreeLandedTough(_grid.At(new Vector2Int(col, row))))
+                    {
+                        _freeToughs.Add((IWriteableFormationMember)_grid.At(new Vector2Int(col, row)));
+                    }
+                }
+            }
+
+            if (_freeToughs.Count == 0)
+            {
+                return;
+            }
+
+            var members = snake.MemberList;
+            var tail = members[^1].SlotIndex.Value;
+            var away = members.Count > 1 ? HexCoordinates.DirectionBetween(members[^2].SlotIndex.Value, tail) : -1;
+            if (away < 0)
+            {
+                away = HexCoordinates.Turn(snake.Heading, 3);
+            }
+
+            SnakeBody.Extend(_grid, tail, away, LastSnakeRow(), _freeToughs.Count, _line);
+            _gatherBlocked = _line.Count < _freeToughs.Count;
+            if (_line.Count == 0)
+            {
+                return;
+            }
+
+            PickGathered(tail);
+            _moves.Clear();
+            _leftSlots.Clear();
+            for (var i = 0; i < _gathered.Count; i++)
+            {
+                var from = _gathered[i].SlotIndex.Value;
+                if (!_line.Contains(from))
+                {
+                    _leftSlots.Add(from);
+                }
+
+                if (from != _line[i])
+                {
+                    _moves.Add(new SlotMove(_gathered[i], _line[i]));
+                }
+            }
+
+            // The balloons on the line move out to the slots the toughs left; there are at least as many of those.
+            var left = 0;
+            for (var i = 0; i < _line.Count; i++)
+            {
+                var slot = _line[i];
+                if (!_grid.IsEmpty(slot.x, slot.y) && !SnakeBody.IsFreeLandedTough(_grid.At(slot)))
+                {
+                    _moves.Add(new SlotMove((IWriteableDynamicSlotActor)_grid.At(slot), _leftSlots[left++]));
+                }
+            }
+
+            var walking = members[0].Walking;
+            var heading = DirectionHeading(snake.Heading);
+            for (var i = 0; i < _gathered.Count; i++)
+            {
+                var tough = _gathered[i];
+                tough.SetInFormation(true);
+                tough.SetWalking(walking);
+                tough.SetFormationHeading(heading);
+                members.Add(tough);
+                _formationOf[tough] = snake;
+            }
+
+            RebuildMemberList();
+            relocate(_moves);
+        }
+
+        // Who falls in, in line order: the free toughs on the line, then the nearest of the rest to the tail, as
+        // many as the line has slots, with the most armour nearest the body.
+        private void PickGathered(Vector2Int tail)
+        {
+            _gathered.Clear();
+            for (var i = 0; i < _freeToughs.Count; i++)
+            {
+                if (_line.Contains(_freeToughs[i].SlotIndex.Value))
+                {
+                    _gathered.Add(_freeToughs[i]);
+                }
+            }
+
+            while (_gathered.Count < _line.Count)
+            {
+                IWriteableFormationMember nearest = null;
+                var best = int.MaxValue;
+                for (var i = 0; i < _freeToughs.Count; i++)
+                {
+                    var tough = _freeToughs[i];
+                    var distance = HexCoordinates.Distance(tail, tough.SlotIndex.Value);
+                    if (distance < best && !_gathered.Contains(tough))
+                    {
+                        best = distance;
+                        nearest = tough;
+                    }
+                }
+
+                _gathered.Add(nearest);
+            }
+
+            // An insertion sort keeps equal armour in the order picked.
+            for (var i = 1; i < _gathered.Count; i++)
+            {
+                var tough = _gathered[i];
+                var j = i - 1;
+                while (j >= 0 && ArmourOrder.Of(_gathered[j]) < ArmourOrder.Of(tough))
+                {
+                    _gathered[j + 1] = _gathered[j];
+                    j--;
+                }
+
+                _gathered[j + 1] = tough;
+            }
+        }
+
+        private StandingFormation StartToughSnake()
+        {
+            var head = FindToughHead();
+            if (head == null)
+            {
+                return null;
+            }
+
+            // The body forms on the side away from the heading, so head toward the nearer edge.
+            var slot = head.SlotIndex.Value;
+            var roomWest = slot.x;
+            var roomEast = _grid.Columns - 1 - slot.x;
+            var east = roomWest != roomEast ? roomWest > roomEast : Random01() < 0.5f;
+
+            var snake = TakeSpareFormation();
+            snake.Armoured = true;
+            snake.Shape = FormationShape.Snake;
+            snake.ArrangedOnPass = _arrangePass;
+            snake.Heading = east ? 0 : 3;
+            snake.MemberList.Add(head);
+            _formationOf[head] = snake;
+            head.SetInFormation(true);
+            head.SetWalking(false);
+            head.SetFormationHeading(DirectionHeading(snake.Heading));
+            _formations.Add(snake);
+            RebuildMemberList();
+            return snake;
+        }
+
+        // The tough to start a snake, or null: the toughest landed one within the rows a snake walks, once
+        // MinMembers toughs are on the board, landed or still gliding in.
+        private IWriteableFormationMember FindToughHead()
+        {
             var lastRow = LastSnakeRow();
             IWriteableFormationMember head = null;
             var toughs = 0;
@@ -477,22 +630,23 @@ namespace BalloonParty.Balloon.Formation
                 }
             }
 
-            if (head == null || toughs < _settings.MinMembers)
+            return toughs >= _settings.MinMembers ? head : null;
+        }
+
+        private bool HasFreeLandedTough()
+        {
+            for (var col = 0; col < _grid.Columns; col++)
             {
-                return;
+                for (var row = 0; row < _grid.Rows; row++)
+                {
+                    if (!_grid.IsEmpty(col, row) && SnakeBody.IsFreeLandedTough(_grid.At(new Vector2Int(col, row))))
+                    {
+                        return true;
+                    }
+                }
             }
 
-            var snake = TakeSpareFormation();
-            snake.Armoured = true;
-            snake.Shape = FormationShape.Snake;
-            snake.ArrangedOnPass = _arrangePass;
-            snake.Heading = Random01() < 0.5f ? 0 : 3;
-            snake.MemberList.Add(head);
-            _formationOf[head] = snake;
-            head.SetInFormation(true);
-            head.SetWalking(false);
-            head.SetFormationHeading(DirectionHeading(snake.Heading));
-            _formations.Add(snake);
+            return false;
         }
 
         // More armour, then the higher row, then farther west.
@@ -510,17 +664,17 @@ namespace BalloonParty.Balloon.Formation
             return slot.y != thanSlot.y ? slot.y < thanSlot.y : slot.x < thanSlot.x;
         }
 
-        private bool HasToughSnake()
+        private StandingFormation ToughSnake()
         {
             for (var i = 0; i < _formations.Count; i++)
             {
                 if (_formations[i].Armoured)
                 {
-                    return true;
+                    return _formations[i];
                 }
             }
 
-            return false;
+            return null;
         }
 
         private void Apply(
@@ -754,7 +908,14 @@ namespace BalloonParty.Balloon.Formation
         // line's balance, or the timed pulse, floats the released ones up.
         private void OnGridChanged(SlotGridChangedEvent change)
         {
-            if (_arranging || change.ChangeType != SlotGridChangeType.Removed || _formations.Count == 0)
+            if (_arranging)
+            {
+                return;
+            }
+
+            // Something moved, so a tough that had nowhere to fall in may have somewhere now.
+            _gatherBlocked = false;
+            if (change.ChangeType != SlotGridChangeType.Removed || _formations.Count == 0)
             {
                 return;
             }

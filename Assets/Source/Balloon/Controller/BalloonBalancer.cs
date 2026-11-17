@@ -61,6 +61,7 @@ namespace BalloonParty.Balloon.Controller
 
         private bool _balanceRequested;
         private bool _snakeStepDue;
+        private bool _toughGatherDue;
         private int _generation;
         private float _flightRebalanceElapsed;
         private float _snakeBeatElapsed;
@@ -128,6 +129,7 @@ namespace BalloonParty.Balloon.Controller
             _generation = generation;
             _balanceRequested = false;
             _snakeStepDue = false;
+            _toughGatherDue = false;
             _flightRebalanceElapsed = 0f;
             _snakeBeatElapsed = 0f;
             _turnSteps.Clear();
@@ -230,6 +232,13 @@ namespace BalloonParty.Balloon.Controller
                 // Formations go first, so the roamers see the formation's slots as taken.
                 _formations?.ArrangeAtWaveStart(_relocateActors);
                 RelocateRoamers();
+            }
+
+            // The toughs form up the moment they can, before the race, so the board settles around them.
+            if (_toughGatherDue)
+            {
+                _toughGatherDue = false;
+                _formations?.GatherToughSnake(_relocateActors);
             }
 
             // A snake's step rides the beat that called it, before the race, so the board settles around it.
@@ -518,7 +527,9 @@ namespace BalloonParty.Balloon.Controller
                 snakeBeat = _formations != null && _formations.TakeSnakeBeat();
             }
 
-            if (!pulse && !snakeBeat)
+            // The toughs don't wait for a beat to form up: a tough that lands falls in at once.
+            var gather = _formations != null && _formations.ToughsDueToGather();
+            if (!pulse && !snakeBeat && !gather)
             {
                 return false;
             }
@@ -528,9 +539,10 @@ namespace BalloonParty.Balloon.Controller
                 _flightRebalanceElapsed = 0f;
             }
 
-            // A snake steps on its beat even when nothing else would move.
+            // A snake steps on its beat, and the toughs gather, even when nothing else would move.
             _snakeStepDue |= snakeBeat;
-            if (!snakeBeat && !HasPossibleMove())
+            _toughGatherDue |= gather;
+            if (!snakeBeat && !gather && !HasPossibleMove())
             {
                 return false;
             }
