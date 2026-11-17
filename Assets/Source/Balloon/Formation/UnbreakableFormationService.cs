@@ -541,11 +541,12 @@ namespace BalloonParty.Balloon.Formation
         private void PickGathered(Vector2Int tail)
         {
             _gathered.Clear();
-            for (var i = 0; i < _freeToughs.Count; i++)
+            for (var i = 0; i < _line.Count; i++)
             {
-                if (_line.Contains(_freeToughs[i].SlotIndex.Value))
+                var slot = _line[i];
+                if (!_grid.IsEmpty(slot.x, slot.y) && SnakeBody.IsFreeLandedTough(_grid.At(slot)))
                 {
-                    _gathered.Add(_freeToughs[i]);
+                    _gathered.Add((IWriteableFormationMember)_grid.At(slot));
                 }
             }
 
