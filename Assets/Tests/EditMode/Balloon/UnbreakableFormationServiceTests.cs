@@ -171,6 +171,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void OnABeat_FreeUnbreakablesFormUp_ButAStandingFormationKeepsItsShape()
         {
+            _settings.MinMembers.Returns(2);
             AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(6, 4), new Vector2Int(3, 5));
             Arrange();
             var standing = _service.Formations[0];
