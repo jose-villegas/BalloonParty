@@ -966,7 +966,7 @@ namespace BalloonParty.Tests.Game
 
             Assert.AreEqual(LevelUpPhase.Pending, _controller.Phase.Value);
             _levelUpPublisher.Received(1).Publish(Arg.Any<ScoreLevelUpMessage>());
-            _timeScale.Received(1).ReleaseExclusive(TimeScaleSource.LevelUpCeremony);
+            _timeScale.Received().ReleaseExclusive(TimeScaleSource.LevelUpCeremony);
             _timeScale.DidNotReceive().Claim(TimeScaleSource.LevelUpCeremony, 1f);
         }
 
