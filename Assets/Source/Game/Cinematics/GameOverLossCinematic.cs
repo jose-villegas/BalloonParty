@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Configuration.Cinematics;
+using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
@@ -32,6 +33,8 @@ namespace BalloonParty.Game.Cinematics
         private readonly PauseService _pauseService;
         private readonly GameOverPresentationGate _gate;
         private readonly RunController _runController;
+        private readonly IRetryState _retryState;
+        private readonly IActiveLevelParameters _levelParams;
         private readonly BoardPopWave _popWave;
         private readonly ScenarioContentRoot _scenarioRoot;
         private readonly GridSpawnerCoordinator _spawnerCoordinator;
@@ -61,6 +64,8 @@ namespace BalloonParty.Game.Cinematics
             PauseService pauseService,
             GameOverPresentationGate gate,
             RunController runController,
+            IRetryState retryState,
+            IActiveLevelParameters levelParams,
             BoardPopWave popWave,
             ScenarioContentRoot scenarioRoot,
             GridSpawnerCoordinator spawnerCoordinator,
@@ -76,6 +81,8 @@ namespace BalloonParty.Game.Cinematics
             _pauseService = pauseService;
             _gate = gate;
             _runController = runController;
+            _retryState = retryState;
+            _levelParams = levelParams;
             _popWave = popWave;
             _scenarioRoot = scenarioRoot;
             _spawnerCoordinator = spawnerCoordinator;
@@ -186,6 +193,12 @@ namespace BalloonParty.Game.Cinematics
             if (_awaitingDismiss)
             {
                 _awaitingDismiss = false;
+                if (RetriesABonusLevel())
+                {
+                    RestartBonusLevelInPlace();
+                    return;
+                }
+
                 RestoreAndRestartAsync().Forget();
                 return;
             }
@@ -194,6 +207,20 @@ namespace BalloonParty.Game.Cinematics
             ResumeCinematicPause();
             _runController.RestartRun();
             _descendStartedPublisher.Publish(default);
+        }
+
+        // A retry of a bonus (purple) level plays it again where it stands: the camera pulls back while the board
+        // resets in place, with no descent. Read before the restart, which moves the active level on.
+        private bool RetriesABonusLevel()
+        {
+            return _retryState.RetryLevel > 0 && _levelParams.Current is { IsExtraColorLevel: true };
+        }
+
+        private void RestartBonusLevelInPlace()
+        {
+            Runner.TryBeginRestore();
+            ResumeCinematicPause();
+            _runController.RestartRun();
         }
 
         // Camera-down transition, the mirror of the level-up ascend: the lost level becomes the outgoing
