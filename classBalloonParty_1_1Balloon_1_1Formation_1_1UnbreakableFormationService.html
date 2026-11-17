@@ -176,7 +176,7 @@ Package Functions</h2></td></tr>
 <tr class="memdesc:a7e2ee719685798aff649f58f620d0f76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Counts one snake beat; true when a snake on the board is due its step (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#ab87940dbc5b09c3fdfe62c7bd5c7b3cd" title="Balancer pulses between a snake&#39;s steps, so each step lands on the board&#39;s own beat.">IUnbreakableFormationSettings.SnakeStepPulses</a> beats apart).  <br /></td></tr>
 <tr class="separator:a7e2ee719685798aff649f58f620d0f76"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa1a357daf1131118f047f8ef9e4f409" id="r_afa1a357daf1131118f047f8ef9e4f409"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa1a357daf1131118f047f8ef9e4f409">ToughsDueToGather</a> ()</td></tr>
-<tr class="memdesc:afa1a357daf1131118f047f8ef9e4f409"><td class="mdescLeft">&#160;</td><td class="mdescRight">True when the toughs can form up: <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a8a7e96cbdf0a2c82cb071c964262be84" title="Fewest unbreakables on the board that form up.">IUnbreakableFormationSettings.MinMembers</a> toughs are on the board with no snake yet and one of them has landed to lead it, or a snake walks and a tough has landed free of it.  <br /></td></tr>
+<tr class="memdesc:afa1a357daf1131118f047f8ef9e4f409"><td class="mdescLeft">&#160;</td><td class="mdescRight">True when the toughs can form up: none is still gliding in, and either <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a8a7e96cbdf0a2c82cb071c964262be84" title="Fewest unbreakables on the board that form up.">IUnbreakableFormationSettings.MinMembers</a> toughs are on the board with no snake yet, or a snake walks and a tough has landed free of it.  <br /></td></tr>
 <tr class="separator:afa1a357daf1131118f047f8ef9e4f409"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
@@ -216,6 +216,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a5af445a6e7b4576340d4a67ac549e68b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80ad40557ff7bf99ae96ac1dcb874663" id="r_a80ad40557ff7bf99ae96ac1dcb874663"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a80ad40557ff7bf99ae96ac1dcb874663">HeadingFor</a> (<a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Formation.html#a7d189f644fea0191bb4f5acaef4bf746">FormationShape</a> shape)</td></tr>
 <tr class="separator:a80ad40557ff7bf99ae96ac1dcb874663"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c359d13ea64cc8cf7b02e44962f38d8" id="r_a7c359d13ea64cc8cf7b02e44962f38d8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7c359d13ea64cc8cf7b02e44962f38d8">IsAFreeToughLanding</a> ()</td></tr>
+<tr class="separator:a7c359d13ea64cc8cf7b02e44962f38d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5db3a099f0d6e8223182284200227e5" id="r_af5db3a099f0d6e8223182284200227e5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af5db3a099f0d6e8223182284200227e5">IsAssigned</a> (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html">IWriteableFormationMember</a> member)</td></tr>
 <tr class="separator:af5db3a099f0d6e8223182284200227e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f448104e035aeb0844420db2b42dbd8" id="r_a8f448104e035aeb0844420db2b42dbd8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8f448104e035aeb0844420db2b42dbd8">LastSnakeRow</a> ()</td></tr>
@@ -240,6 +242,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a0cda8bca27db2a9bbbe0e5498be7b113"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afba8fd560d8063218ec240bb2eaea4f7" id="r_afba8fd560d8063218ec240bb2eaea4f7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afba8fd560d8063218ec240bb2eaea4f7">RollReinforcements</a> ()</td></tr>
 <tr class="separator:afba8fd560d8063218ec240bb2eaea4f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafc38b4cd0f994e6a0d9065245896281" id="r_aafc38b4cd0f994e6a0d9065245896281"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aafc38b4cd0f994e6a0d9065245896281">StartHeading</a> (Vector2Int head)</td></tr>
+<tr class="separator:aafc38b4cd0f994e6a0d9065245896281"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9f0cbec1a92172d4ec862f161d36d52" id="r_af9f0cbec1a92172d4ec862f161d36d52"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation.html">StandingFormation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af9f0cbec1a92172d4ec862f161d36d52">StartToughSnake</a> ()</td></tr>
 <tr class="separator:af9f0cbec1a92172d4ec862f161d36d52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adec67682bbe2ca148869e47c856486a9" id="r_adec67682bbe2ca148869e47c856486a9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation.html">StandingFormation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adec67682bbe2ca148869e47c856486a9">TakeSpareFormation</a> ()</td></tr>
@@ -751,6 +755,31 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a7c359d13ea64cc8cf7b02e44962f38d8" name="a7c359d13ea64cc8cf7b02e44962f38d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c359d13ea64cc8cf7b02e44962f38d8">&#9670;&#160;</a></span>IsAFreeToughLanding()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Balloon.Formation.UnbreakableFormationService.IsAFreeToughLanding </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="af5db3a099f0d6e8223182284200227e5" name="af5db3a099f0d6e8223182284200227e5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af5db3a099f0d6e8223182284200227e5">&#9670;&#160;</a></span>IsAssigned()</h2>
 
@@ -1124,6 +1153,31 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="aafc38b4cd0f994e6a0d9065245896281" name="aafc38b4cd0f994e6a0d9065245896281"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aafc38b4cd0f994e6a0d9065245896281">&#9670;&#160;</a></span>StartHeading()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Balloon.Formation.UnbreakableFormationService.StartHeading </td>
+          <td>(</td>
+          <td class="paramtype">Vector2Int</td>          <td class="paramname"><span class="paramname"><em>head</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="af9f0cbec1a92172d4ec862f161d36d52" name="af9f0cbec1a92172d4ec862f161d36d52"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af9f0cbec1a92172d4ec862f161d36d52">&#9670;&#160;</a></span>StartToughSnake()</h2>
 
@@ -1278,7 +1332,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>True when the toughs can form up: <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a8a7e96cbdf0a2c82cb071c964262be84" title="Fewest unbreakables on the board that form up.">IUnbreakableFormationSettings.MinMembers</a> toughs are on the board with no snake yet and one of them has landed to lead it, or a snake walks and a tough has landed free of it. </p>
+<p>True when the toughs can form up: none is still gliding in, and either <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a8a7e96cbdf0a2c82cb071c964262be84" title="Fewest unbreakables on the board that form up.">IUnbreakableFormationSettings.MinMembers</a> toughs are on the board with no snake yet, or a snake walks and a tough has landed free of it. </p>
 <p>The balancer asks every frame, so the toughs never wait for a wave start or a beat. Read-only. </p>
 
 </div>

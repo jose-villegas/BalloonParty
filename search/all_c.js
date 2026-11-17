@@ -815,8 +815,9 @@ var searchData=
   ['bycolumn_812',['ByColumn',['../classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a51a6b4986cb6bef5432b491cbe37affe',1,'BalloonParty::Balloon::Formation::UnbreakableFormationService']]],
   ['bydistance_813',['ByDistance',['../classBalloonParty_1_1Item_1_1Lightning_1_1LightningChain.html#a75b453abad26e1274af83b3818b4a10d',1,'BalloonParty::Item::Lightning::LightningChain']]],
   ['bydistancecomparer_814',['ByDistanceComparer',['../classBalloonParty_1_1Item_1_1Lightning_1_1LightningItemHandler_1_1ByDistanceComparer.html',1,'BalloonParty::Item::Lightning::LightningItemHandler']]],
-  ['byid_815',['ById',['../classBalloonParty_1_1Game_1_1Telemetry_1_1MetricCatalog.html#a509e0879fdcacda55e6e895b2975cff0',1,'BalloonParty.Game.Telemetry.MetricCatalog.ById'],['../classBalloonParty_1_1Game_1_1Telemetry_1_1TimerCatalog.html#af3ad51760a1fa85f25fd4ee4ac81ac37',1,'BalloonParty.Game.Telemetry.TimerCatalog.ById']]],
-  ['byinterventionorder_816',['ByInterventionOrder',['../classBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner.html#aa76cc611d22f769443b5add7fbbb2a90',1,'BalloonParty::Balloon::Controller::BalancePlanner']]],
-  ['byroamorder_817',['ByRoamOrder',['../classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a4ac9b3fa306a76420b7796e2df71a948',1,'BalloonParty::Balloon::Controller::BalloonBalancer']]],
-  ['byspawnweightascending_818',['BySpawnWeightAscending',['../classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a247e490b50566756b301095e4329d25d',1,'BalloonParty::Balloon::Spawner::BalloonSpawner']]]
+  ['byhitsdescending_815',['ByHitsDescending',['../classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a70c4ce6aeca5350b459838ead95bd761',1,'BalloonParty::Balloon::Spawner::BalloonSpawner']]],
+  ['byid_816',['ById',['../classBalloonParty_1_1Game_1_1Telemetry_1_1MetricCatalog.html#a509e0879fdcacda55e6e895b2975cff0',1,'BalloonParty.Game.Telemetry.MetricCatalog.ById'],['../classBalloonParty_1_1Game_1_1Telemetry_1_1TimerCatalog.html#af3ad51760a1fa85f25fd4ee4ac81ac37',1,'BalloonParty.Game.Telemetry.TimerCatalog.ById']]],
+  ['byinterventionorder_817',['ByInterventionOrder',['../classBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner.html#aa76cc611d22f769443b5add7fbbb2a90',1,'BalloonParty::Balloon::Controller::BalancePlanner']]],
+  ['byroamorder_818',['ByRoamOrder',['../classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a4ac9b3fa306a76420b7796e2df71a948',1,'BalloonParty::Balloon::Controller::BalloonBalancer']]],
+  ['byspawnweightascending_819',['BySpawnWeightAscending',['../classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a247e490b50566756b301095e4329d25d',1,'BalloonParty::Balloon::Spawner::BalloonSpawner']]]
 ];

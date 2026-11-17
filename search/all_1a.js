@@ -924,5 +924,6 @@ var searchData=
   ['pushtimeoffset_921',['PushTimeOffset',['../classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant.html#a1b887a9a88125947bc072bf8e5e64e78',1,'BalloonParty::Balloon::Type::RainbowBalloonVariant']]],
   ['pushtransitionoffset_922',['PushTransitionOffset',['../classBalloonParty_1_1Scenario_1_1BackgroundFieldService.html#af1909f1f925f9c6e61b86cbab9a493ac',1,'BalloonParty::Scenario::BackgroundFieldService']]],
   ['pushwarm_923',['PushWarm',['../classBalloonParty_1_1Shared_1_1Pool_1_1PoolChannel-1-g.html#a82433da39dedd6354e35d4475337d588',1,'BalloonParty::Shared::Pool::PoolChannel-1-g']]],
-  ['puzzle_20bobble_20lineage_924',['12.1 Grid encroachment — the natural fit (Puzzle Bobble lineage)',['../plan_future_ideas.html#autotoc_md582',1,'']]]
+  ['puttoughrunfirst_924',['PutToughRunFirst',['../classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a88abaee9be2914d744b15c4a1e0ecb3f',1,'BalloonParty::Balloon::Spawner::BalloonSpawner']]],
+  ['puzzle_20bobble_20lineage_925',['12.1 Grid encroachment — the natural fit (Puzzle Bobble lineage)',['../plan_future_ideas.html#autotoc_md582',1,'']]]
 ];

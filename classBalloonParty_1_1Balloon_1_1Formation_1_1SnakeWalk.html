@@ -124,6 +124,9 @@ Static Package Functions</h2></td></tr>
 <tr class="memitem:ab66444997071a82cc86b0f24ae2f1473" id="r_ab66444997071a82cc86b0f24ae2f1473"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab66444997071a82cc86b0f24ae2f1473">CanPassThrough</a> (<a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html">IWriteableSlotActor</a> occupant)</td></tr>
 <tr class="memdesc:ab66444997071a82cc86b0f24ae2f1473"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the tough snake may walk into <em>occupant</em> 's slot, sending it to the slot its tail leaves: a balloon that moves, held by nothing.  <br /></td></tr>
 <tr class="separator:ab66444997071a82cc86b0f24ae2f1473"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4682f624612296b42a3a7c54ac086391" id="r_a4682f624612296b42a3a7c54ac086391"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4682f624612296b42a3a7c54ac086391">LastRow</a> (int rows, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html">IUnbreakableFormationSettings</a> settings)</td></tr>
+<tr class="memdesc:a4682f624612296b42a3a7c54ac086391"><td class="mdescLeft">&#160;</td><td class="mdescRight">The deepest row a snake walks on a board of <em>rows</em> : it keeps a horizontal line's rows, never in the bottom <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a29d6af280feaabfa6fc0601541bd818c" title="Bottom rows a horizontal line never uses, at least BottomClearance, so a wall across the board stands...">IUnbreakableFormationSettings.HorizontalBottomClearance</a>.  <br /></td></tr>
+<tr class="separator:a4682f624612296b42a3a7c54ac086391"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a16310e11c558e387fb79f96f1d4c1fc2" id="r_a16310e11c558e387fb79f96f1d4c1fc2"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a16310e11c558e387fb79f96f1d4c1fc2">TryStep</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, Vector2Int head, Vector2Int tail, int heading, int lastRow, <a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1ShotWall.html">ShotWall</a> wall, out int direction, bool passThrough=false)</td></tr>
 <tr class="memdesc:a16310e11c558e387fb79f96f1d4c1fc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">The direction the head at <em>head</em> , walking <em>heading</em> , steps in.  <br /></td></tr>
 <tr class="separator:a16310e11c558e387fb79f96f1d4c1fc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -237,6 +240,37 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4682f624612296b42a3a7c54ac086391" name="a4682f624612296b42a3a7c54ac086391"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4682f624612296b42a3a7c54ac086391">&#9670;&#160;</a></span>LastRow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int BalloonParty.Balloon.Formation.SnakeWalk.LastRow </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>rows</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html">IUnbreakableFormationSettings</a></td>          <td class="paramname"><span class="paramname"><em>settings</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The deepest row a snake walks on a board of <em>rows</em> : it keeps a horizontal line's rows, never in the bottom <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a29d6af280feaabfa6fc0601541bd818c" title="Bottom rows a horizontal line never uses, at least BottomClearance, so a wall across the board stands...">IUnbreakableFormationSettings.HorizontalBottomClearance</a>. </p>
 
 </div>
 </div>

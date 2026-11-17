@@ -11,5 +11,6 @@ var dir_67368aa1e6683233e8623c7c4fdb9a8e =
     [ "ISpawnClock.cs", "ISpawnClock_8cs.html", "ISpawnClock_8cs" ],
     [ "ReinforcementPlan.cs", "ReinforcementPlan_8cs.html", "ReinforcementPlan_8cs" ],
     [ "RejectedBalloonEffect.cs", "RejectedBalloonEffect_8cs.html", "RejectedBalloonEffect_8cs" ],
-    [ "SpawnClock.cs", "SpawnClock_8cs.html", "SpawnClock_8cs" ]
+    [ "SpawnClock.cs", "SpawnClock_8cs.html", "SpawnClock_8cs" ],
+    [ "ToughRunPlan.cs", "ToughRunPlan_8cs.html", "ToughRunPlan_8cs" ]
 ];

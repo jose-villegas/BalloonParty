@@ -137,7 +137,8 @@ var annotated_dup =
           [ "ISpawnClock", "interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1ISpawnClock.html", "interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1ISpawnClock" ],
           [ "ReinforcementPlan", "classBalloonParty_1_1Balloon_1_1Spawner_1_1ReinforcementPlan.html", "classBalloonParty_1_1Balloon_1_1Spawner_1_1ReinforcementPlan" ],
           [ "RejectedBalloonEffect", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect" ],
-          [ "SpawnClock", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock" ]
+          [ "SpawnClock", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock" ],
+          [ "ToughRunPlan", "structBalloonParty_1_1Balloon_1_1Spawner_1_1ToughRunPlan.html", "structBalloonParty_1_1Balloon_1_1Spawner_1_1ToughRunPlan" ]
         ] ],
         [ "Type", "namespaceBalloonParty_1_1Balloon_1_1Type.html", [
           [ "ColorableBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1ColorableBalloonVariant.html", "classBalloonParty_1_1Balloon_1_1Type_1_1ColorableBalloonVariant" ],

@@ -12,6 +12,7 @@ var namespaceBalloonParty_1_1Balloon_1_1Spawner =
     [ "ReinforcementPlan", "classBalloonParty_1_1Balloon_1_1Spawner_1_1ReinforcementPlan.html", "classBalloonParty_1_1Balloon_1_1Spawner_1_1ReinforcementPlan" ],
     [ "RejectedBalloonEffect", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect" ],
     [ "SpawnClock", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock" ],
+    [ "ToughRunPlan", "structBalloonParty_1_1Balloon_1_1Spawner_1_1ToughRunPlan.html", "structBalloonParty_1_1Balloon_1_1Spawner_1_1ToughRunPlan" ],
     [ "PlacementReach", "namespaceBalloonParty_1_1Balloon_1_1Spawner.html#ae16f087915c8b12ffd2f6ea5168e6406", [
       [ "OwnColumn", "namespaceBalloonParty_1_1Balloon_1_1Spawner.html#ae16f087915c8b12ffd2f6ea5168e6406a8e817e1716265abd403dbe13c2c664e6", null ],
       [ "Rehome", "namespaceBalloonParty_1_1Balloon_1_1Spawner.html#ae16f087915c8b12ffd2f6ea5168e6406a7a959688f51cbe7704d6b05725d70e0a", null ],

@@ -78,6 +78,7 @@ var NAVTREEINDEX4 =
 "TooltipMessage_8cs.html":[7,0,14,7,57],
 "ToughBalloonModel_8cs.html":[7,0,1,2,18],
 "ToughBalloonVariant_8cs.html":[7,0,1,5,9],
+"ToughRunPlan_8cs.html":[7,0,1,4,12],
 "TraceHitGeometry_8cs.html":[7,0,11,6],
 "TraceHitMarker_8cs.html":[7,0,11,7],
 "TrackedTrailSettings_8cs.html":[7,0,3,3,6],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "classBalloonParty_1_1Audio_1_1Configuration_1_1AudioMixerSettings.html#a1111a35d664c9cfa6e0405f7e9580823":[6,0,0,0,0,0,4],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1AudioMixerSettings.html#a74e02d91abef00ce1b07d7c04c92f037":[5,0,0,0,0,0,5],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1AudioMixerSettings.html#a74e02d91abef00ce1b07d7c04c92f037":[6,0,0,0,0,0,5],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1AudioMixerSettings.html#a7ad92d3d0d64f65d2ee44cac8ff735fb":[5,0,0,0,0,0,3],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1AudioMixerSettings.html#a7ad92d3d0d64f65d2ee44cac8ff735fb":[6,0,0,0,0,0,3]
+"classBalloonParty_1_1Audio_1_1Configuration_1_1AudioMixerSettings.html#a7ad92d3d0d64f65d2ee44cac8ff735fb":[5,0,0,0,0,0,3]
 };

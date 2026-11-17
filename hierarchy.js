@@ -1803,6 +1803,7 @@ var hierarchy =
     ] ],
     [ "BalloonParty.Shared.Extensions.TmpTextExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1TmpTextExtensions.html", null ],
     [ "BalloonParty.Shared.Messages.TooltipMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1TooltipMessage.html", null ],
+    [ "BalloonParty.Balloon.Spawner.ToughRunPlan", "structBalloonParty_1_1Balloon_1_1Spawner_1_1ToughRunPlan.html", null ],
     [ "BalloonParty.Prediction.TraceHitGeometry", "classBalloonParty_1_1Prediction_1_1TraceHitGeometry.html", null ],
     [ "BalloonParty.Display.EffectsClearingStamper.Track", "structBalloonParty_1_1Display_1_1EffectsClearingStamper_1_1Track.html", null ],
     [ "BalloonParty.Projectile.Controller.ActiveProjectilePierce.Tracked", "structBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce_1_1Tracked.html", null ],
