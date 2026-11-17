@@ -712,7 +712,7 @@ Tests per-id and global concurrent-voice accounting and the priority steal/drop 
 | `Release` on an invalid id is a no-op | 1 | Negative/out-of-range id corrupts state |
 | `Clear` restores full capacity | 1 | Stale slots block every id after a reset |
 
-### Effects clearing (`EffectsClearingStamperTests`, `EffectsClearingControllerTests`, `EffectsClearingSettingsTests`, `ShippedEffectsClearingTests`) — 34 tests
+### Effects clearing (`EffectsClearingStamperTests`, `EffectsClearingControllerTests`, `EffectsClearingSettingsTests`, `ShippedEffectsClearingTests`) — 37 tests
 
 The clearing mask's stamps (`Plans/PLAN-EffectsLayerClearing.md`): what each ball in flight stamps, and the wiring that keeps it fed.
 
@@ -727,6 +727,7 @@ The clearing mask's stamps (`Plans/PLAN-EffectsLayerClearing.md`): what each bal
 | Controller binds the mask for the run, unbinds only itself, forgets retired balls, stops listening when disposed | 6 | A new run's source dropped by the old run's teardown, or a disposed run still feeding the mask |
 | `EdgeHigh` always above `EdgeLow` | 4 | The composite's `smoothstep` with equal edges |
 | Shipped wiring: both shaders on the settings asset, both components on the Main Camera prefab, the settings on the app scope | 3 | A shader only found by name, stripped from a device build |
+| Every balloon pop effect, item effect (bar the shield gain) and the nuke cloud draws into the HUD map, with a material that writes its coverage | 3 | A new effect authored on a board layer, burying the ball's surroundings where the glass can't clear it |
 
 ### `SfxThrottleGateTests` — 7 tests
 

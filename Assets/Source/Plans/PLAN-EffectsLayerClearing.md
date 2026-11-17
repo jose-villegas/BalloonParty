@@ -75,6 +75,9 @@ camera, both read through the same mask.
 |---|---|---|
 | Score shapes, score trails (`ShapeFormationTicker`, `FlyingTrail`, `ScoreTrail.prefab`) | `Trail` layer, UI 3300 (set by `ScoreTrailService`) | yes |
 | Heart trail, highlight trail, item-preview pens | `Trail` layer, UI 100 (`FlyingTrail`'s default) / ScoreTrail 0–1 | yes |
+| Balloon pops and armour breaks (`PSVFX_*Pop`) | `Trail` (were `Default`), Default 0 / Balloons 199–200 | yes: open question 1 |
+| Item effects: the bomb's smoke burst, the laser, the lightning chain, the paint splash, drips and flying blobs (`Items/BalloonItems/VFX/`) | `Trail` (were `Items`), PowerUps | yes: the chaos a ball has to stay readable in |
+| Nuke cloud (`NukeCloudView`, `INukeBlastSettings.CloudLayerName`) | `Trail` (was `Default`), Balloons 40 | yes |
 | Heads-ups (`HeadsUps.prefab`) | `UI` layer, UI 0/1 | **not yet**: open question 4 |
 | Game canvas, hearts counter, launcher canvas | `UI` layer | **no**: that's the HUD, not effects |
 
@@ -89,11 +92,10 @@ open while a clearing is.
 | Family | Today | In the map |
 |---|---|---|
 | Item range previews (`Item/Preview/`) | `Items`, PowerUps 0–100 | yes |
-| Item VFX: paint splash and drip, flying blob, shield gain | `Items`, PowerUps | yes |
+| Shield item's gain burst (`PSVFX_ShieldGainPU`) | `Items`, PowerUps 20 | yes: news about the ball, not chaos around it |
 | Shield bounce/gain/lose VFX | `Projectile`, PowerUps 20 | yes |
 | Dust speck field (`SpeckField`) | `Field`, Sky 0 | yes |
-| Balloon pop VFX (`PSVFX_*Pop`) | `Default`, Default 0 / Balloons 199–200 | **open question 1** |
-| Nuke cloud, disc wave, bubble merge cue, paint drip overlay | Balloons layer, various | open question 1: these are pop-like |
+| Nuke blast flood, disco wash, bubble merge cue, paint drip overlay | Balloons layer, under or on the balloons | no: the ground beneath the balloons or a balloon's own coat, never over the ball (open question 1) |
 | Ball trail (`ProjectileTrail`), snipe lance line, trace prediction | `Projectile` / `TracePrediction` | no: they *are* the ball's readout |
 | Danger walls (`Limits`), clouds, bushes, puffs, the wall net | board layers | no: gameplay information |
 | Screen-space light quad (`ScreenSpaceLightService`) | `TransparentFX`, Sky 32000 | no: it lights the board, and the composite sorts below it |
@@ -159,7 +161,7 @@ How the stamps are fed:
   row of dots. A ball seen for the first time stamps a disc. A ball that retired drops out.
 - Positions go to viewport space through the main camera. The radius is in world units and converted with
   the camera's orthographic size, so a cinematic zoom scales the clearing with the board.
-- **The radius follows the ball's shields**, as the owner asked: `MinClearRadius` (0.48) at one shield,
+- **The radius follows the ball's shields**, as the owner asked: `MinClearRadius` (0.6) at one shield,
   growing evenly with each shield to `MaxClearRadius` (1.2) at `ShieldsForMaxRadius` (10), and no wider past
   it. A ball with no shields left, on its last leg, clears as one. The rejected attempt used a circle a little wider than the ball, and it read as nothing, so one
   shield is still about a balloon wide.
@@ -311,9 +313,21 @@ minus the claims. The compositor's mask writes are already in one method, `Suppr
 
 ## Open questions for the owner
 
-1. **Pops.** Balloon pops draw over the balloons, so they hide what the ball just hit, but they are also the
-   feedback that it hit. Should pops (and the pop-like nuke cloud, disc wave and merge cue) clear around the
-   ball, or stay?
+1. **Pops.** Answered: pops go to the upper layer and clear like the other effects. All nine `PSVFX_*Pop`
+   prefabs (the default pop, which also plays for recolours and bubble merges, and the heart, golden, disco,
+   nuke, soap, tough, tougher and unbreakable pops and armour breaks) are on `Trail`, so the HUD map takes them
+   and they draw over the board, balls included, except under the glass. That costs them the main camera's
+   grading: they skip its tonemapper and contrast, and the scene-lit shards read a little lighter, most at
+   night. Their legacy `Mobile/Particles/Alpha Blended` materials moved to `Sprites/Default`, which draws the
+   same colour and writes coverage. The nuke blast's flood and the disco wash are discs on the ground beneath
+   the balloons, and the blast lights the board itself, so they stay on the board: the glass can't lift a light.
+
+   The owner widened it to the chaos a ball flies through: lightning, bombs, paint, the laser and the nuke. The
+   item effects (the bomb's smoke burst, the laser, the lightning chain, the paint splash, drips and flying blobs)
+   and the nuke cloud moved to `Trail` too, the bomb smoke and the paint splash off the legacy particle shader,
+   and `PaintBlob` writes coverage. They draw over the board and over the ball now, as the pops do, and the
+   glass opens a hole around the ball. The ball itself already drew above them all on the board, so what they
+   hid was what it was about to hit. The shield item's gain burst stays: it's news about the ball.
 2. **Phase 3 at all.** The score shapes and trails are the HUD map. Should item VFX, range
    previews, shield VFX and the dust specks clear as well, at roughly twice the HUD map's cost?
 3. **How clear is clear.** Answered: a hard cut near the rim read too strong. The clearing is now the

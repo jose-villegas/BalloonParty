@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1947199329108356482}
   - component: {fileID: 881599055088884422}
   - component: {fileID: 5560910238643714805}
-  m_Layer: 15
+  m_Layer: 7
   m_Name: PSVFX_PaintFlyDrip
   m_TagString: Untagged
   m_Icon: {fileID: 0}

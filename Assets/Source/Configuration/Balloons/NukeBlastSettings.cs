@@ -68,6 +68,9 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("The cloud's sorting order on the sorting layer: above the balloons.")]
         [SerializeField] private int _cloudSortingOrder = 40;
 
+        [Tooltip("Physics layer the cloud draws on. Trail is the effects layer the glass over a ball clears.")]
+        [SerializeField] private string _cloudLayerName = "Trail";
+
         public float Seconds => _seconds;
         public NudgeOverride[] NudgeOverrides => _nudgeOverrides;
         public float NudgeLead => _nudgeLead;
@@ -85,5 +88,6 @@ namespace BalloonParty.Configuration.Balloons
         public float CloudSeconds => _cloudSeconds;
         public float CloudReach => _cloudReach;
         public int CloudSortingOrder => _cloudSortingOrder;
+        public string CloudLayerName => _cloudLayerName;
     }
 }

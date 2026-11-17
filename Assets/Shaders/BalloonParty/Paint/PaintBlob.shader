@@ -68,7 +68,9 @@ Shader "BalloonParty/Paint/PaintBlob"
         Cull Off
         Lighting Off
         ZWrite Off
-        Blend SrcAlpha OneMinusSrcAlpha
+        // Alpha blends as coverage, so a flying blob drawn into the effects map lays back over the frame as it
+        // drew straight in.
+        Blend SrcAlpha OneMinusSrcAlpha, One OneMinusSrcAlpha
 
         Pass
         {

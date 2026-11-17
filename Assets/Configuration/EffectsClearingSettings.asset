@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EffectsClearingSettings
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Configuration.Effects.EffectsClearingSettings
   _enabled: 1
-  _minClearRadius: 0.48
+  _minClearRadius: 0.6
   _maxClearRadius: 1.2
   _shieldsForMaxRadius: 10
   _trail: 0

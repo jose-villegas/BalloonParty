@@ -11,7 +11,7 @@ namespace BalloonParty.Configuration.Effects
         [Tooltip("World units from the ball's path to the clearing's edge for a ball with one shield. A ball with " +
                  "no shields left clears as if it had one, so its last leg still reads.")]
         [Min(0.05f)]
-        [SerializeField] private float _minClearRadius = 0.48f;
+        [SerializeField] private float _minClearRadius = 0.6f;
 
         [Tooltip("The clearing's radius in world units once the ball has Shields For Max Radius shields or more. " +
                  "Between one shield and that many it grows evenly with each shield.")]

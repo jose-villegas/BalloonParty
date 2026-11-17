@@ -65,6 +65,17 @@ namespace BalloonParty.Balloon.View
             _renderer.receiveShadows = false;
             _renderer.sortingLayerName = _settings.SortingLayerName;
             _renderer.sortingOrder = _settings.CloudSortingOrder;
+            var layer = LayerMask.NameToLayer(_settings.CloudLayerName);
+            if (layer < 0)
+            {
+                Log.Warn(nameof(NukeCloudView), $"No physics layer '{_settings.CloudLayerName}': the cloud draws on " +
+                                                "Default, where the glass over a ball can't clear it.");
+            }
+            else
+            {
+                gameObject.layer = layer;
+            }
+
             _renderer.enabled = false;
             _block = new MaterialPropertyBlock();
         }

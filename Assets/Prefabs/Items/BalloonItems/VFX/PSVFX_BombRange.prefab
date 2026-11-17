@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3044695920632228802}
   - component: {fileID: 7404131686713687719}
   - component: {fileID: 1545043174332561462}
-  m_Layer: 15
+  m_Layer: 7
   m_Name: PSVFX_BombRange
   m_TagString: Balloons
   m_Icon: {fileID: 0}

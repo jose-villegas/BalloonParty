@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 27973598430667300}
   - component: {fileID: 2751478740061744049}
   - component: {fileID: 1701751783636392814}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Smoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4847,7 +4847,7 @@ GameObject:
   - component: {fileID: 8142549391911035545}
   - component: {fileID: 2148469744637963286}
   - component: {fileID: 8326537744216015860}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: PSVFX_DiscoPop
   m_TagString: Untagged
   m_Icon: {fileID: 0}

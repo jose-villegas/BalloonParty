@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 47108937523203564}
   - component: {fileID: 1947199329108356482}
   - component: {fileID: 881599055088884422}
-  m_Layer: 15
+  m_Layer: 7
   m_Name: PSVFX_PaintSplash
   m_TagString: Untagged
   m_Icon: {fileID: 0}

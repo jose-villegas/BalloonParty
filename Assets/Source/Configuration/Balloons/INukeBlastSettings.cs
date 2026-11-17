@@ -61,5 +61,11 @@ namespace BalloonParty.Configuration.Balloons
 
         /// <summary>The cloud's sorting order on <see cref="SortingLayerName" />: above the balloons.</summary>
         int CloudSortingOrder { get; }
+
+        /// <summary>
+        ///     The physics layer the cloud draws on: the effects layer the glass over a ball clears, so a ball flying
+        ///     through the cloud stays in sight.
+        /// </summary>
+        string CloudLayerName { get; }
     }
 }

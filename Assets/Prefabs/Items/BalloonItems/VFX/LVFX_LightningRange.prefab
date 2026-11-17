@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6948410460400653777}
   - component: {fileID: 5735112468169355169}
-  m_Layer: 15
+  m_Layer: 7
   m_Name: Chain (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -150,7 +150,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5364524794121600656}
   - component: {fileID: 7298086300349085861}
-  m_Layer: 15
+  m_Layer: 7
   m_Name: LVFX_LightningRange
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -204,7 +204,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3115396759926199725}
   - component: {fileID: 1780500698417090463}
-  m_Layer: 15
+  m_Layer: 7
   m_Name: Chain (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -344,7 +344,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8931780973118479343}
   - component: {fileID: 5838023478284772440}
-  m_Layer: 15
+  m_Layer: 7
   m_Name: Glow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -435,7 +435,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8031224196889435910}
   - component: {fileID: 7426084919422666475}
-  m_Layer: 15
+  m_Layer: 7
   m_Name: Chain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
