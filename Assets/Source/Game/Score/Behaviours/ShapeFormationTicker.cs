@@ -117,6 +117,9 @@ namespace BalloonParty.Game.Score.Behaviours
         private const float MinDuration = 0.0001f;
         private const float FreezeRibbonTime = 600f;
 
+        // Vertices rounding each end of the guiding trail: enough for its head to read as a round tip.
+        private const int GuideTipVertices = 6;
+
         // How fast the tumble's angular velocity eases toward its target (per second). Ramping it in keeps a
         // high spin speed from snapping the ribbons with a big rotation delta on the first ticks.
         private const float SpinRampRate = 2f;
@@ -299,6 +302,7 @@ namespace BalloonParty.Game.Score.Behaviours
             state.Guide.transform.position = state.Center;
             state.Guide.transform.localScale = Vector3.one;
             state.Guide.ClearRibbon();
+            state.Guide.SetRoundTip(GuideTipVertices);
 
             if (ink.Baked)
             {

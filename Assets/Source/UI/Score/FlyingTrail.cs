@@ -44,6 +44,7 @@ namespace BalloonParty.UI.Score
         private Color _defaultColor;
         private Vector3 _defaultScale;
         private float _defaultRibbonTime;
+        private int _defaultCapVertices;
 
         private void Awake()
         {
@@ -53,6 +54,7 @@ namespace BalloonParty.UI.Score
             _defaultColor = _renderer.color;
             _defaultScale = transform.localScale;
             _defaultRibbonTime = _trailRenderer.time;
+            _defaultCapVertices = _trailRenderer.numCapVertices;
         }
 
         private void Update()
@@ -99,6 +101,7 @@ namespace BalloonParty.UI.Score
             ApplySortingOrder(OverlaySortingOrder);
             // Restore the authored ribbon length/emission so a formation's overrides can't leak into pooled reuse.
             _trailRenderer.time = _defaultRibbonTime;
+            _trailRenderer.numCapVertices = _defaultCapVertices;
             _trailRenderer.emitting = true;
         }
 
@@ -204,6 +207,13 @@ namespace BalloonParty.UI.Score
         {
             _flightGradient = null;
             ApplyColor(color);
+        }
+
+        // Rounds the ribbon's ends with this many vertices each, so its head is a round tip and not a flat cut;
+        // OnDespawned restores the authored ends.
+        internal void SetRoundTip(int capVertices)
+        {
+            _trailRenderer.numCapVertices = capVertices;
         }
 
         // Sorts another renderer where this trail's ribbon sorts: a score shape's baked ink stands in for the
