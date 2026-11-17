@@ -76,11 +76,12 @@ resolve path from the priority race above, used specifically to open room for a 
 - The pre-line pass: `BalloonSpawner` calls `Balance()` directly,
   synchronously, before placing each line. Because a direct call services any pending
   deferred request immediately, this coalesces with a same-frame publish into one
-  sweep. `atWaveStart: true` (a wave's first line) also runs the `IPreBalanceRelocatable` pre-pass once per
-  wave — each roamer (an `IPreBalanceRelocatable` implementer; today only Unbreakable)
-  picks its own destination among already-settled empty slots, in `BalancePriority` order,
-  before the balance race resolves everything around it — rather than being swept toward
-  the nearest gap like an ordinary actor.
+  sweep. `atWaveStart: true` (a wave's first line) also rolls the formations' reinforcements.
+- The cycle pass: once every unbreakables' cycle (`BeatsPerCycle` beats of `BeatSeconds`), the balance runs
+  the `IPreBalanceRelocatable` pre-pass for one roamer (an `IPreBalanceRelocatable` implementer; today only
+  Unbreakable) that has rested `LoneHoldCycles` cycles: it picks its own destination among already-settled
+  empty slots before the balance race resolves everything around it, rather than being swept toward the
+  nearest gap like an ordinary actor.
 - The post-line pass: after each line is placed, `BalloonSpawner` publishes
   `BalanceBalloonsMessage` again — deferred to the next frame — to settle any gap the fresh
   spawn just created.

@@ -1,16 +1,19 @@
 # Balloon/Formation
 
-Unbreakable balloons normally roam: once per wave each one jumps toward the far side of the board. When
-three or more are on the board, they gather into a **formation** instead. They line up, stay in place for
-a few waves, then switch to a different line. While a formation stands, its members float in midair: the
-balloons below rise until they reach the formation, and spawn lines stop under it.
+Unbreakable balloons keep one clock, the **beat** (`BeatSeconds`, 1.7 s of play), and every
+`BeatsPerCycle` (2) beats make a **cycle** (3.4 s). When two or more are on the board, they gather into a
+**formation**. They line up, stay in place for a few cycles, then switch to a different line, all on the
+cycle. While a formation stands, its members float in midair: the balloons below rise until they reach the
+formation, and spawn lines stop under it. An unbreakable left alone, in no formation, roams: it jumps toward
+the far side of the board, but only on a cycle, only after it has stood `LoneHoldCycles` (3) cycles, and only
+one at a time, so the board moves to one rhythm rather than a lone unbreakable crossing it at every wave.
 
 Several formations can stand at once. Unbreakables left over after one formation is full form a second
 one, so two lines can stack into a blockade. A formation the player leaves alone calls in more
 unbreakables, past the level's usual cap, and those form formations of their own.
 
 Tough balloons (toughs and toughers) gather too, but only into one snake of their own. It starts from the
-deepest, every other tough falls in behind its tail, and it walks through the balloons in its way. See
+biggest group, every other tough falls in behind its tail, and it walks through the balloons in its way. See
 "Tough snakes" below.
 
 ## Contents
@@ -27,10 +30,21 @@ deepest, every other tough falls in behind its tail, and it walks through the ba
 | `UnbreakableFormationService` | The controller. It decides when each formation forms, holds, changes and breaks up, marks members as in formation, rolls for reinforcements, and keeps the toughs' snake: starts it, takes each free tough in at its tail, and walks it through the board |
 | `IFormationReinforcements` | The reinforcements the formations have called in. `BalloonSpawner` takes them at each wave's first line |
 
+## The clock
+
+`BalloonBalancer` keeps the beat (`TickStepClock`): it counts seconds of play, and a pause or a doomed
+shot's last glide holds it rather than restarting it, since nearly every shot ends in one. On every beat an
+unbreakable snake steps. On every cycle the balancer asks the service to `ArrangeOnCycle`, then moves one
+lone unbreakable (`RelocateOneRoamer`): the one that has rested longest of those that have stood
+`LoneHoldCycles`, and none while the last one to move is still on its way (`RoamRests` keeps the count).
+Formations go first, so the lone one sees their slots as taken. A cycle with no unbreakable on the board
+does nothing, and no balance runs for it. The beat runs with no snake too, so the snakes' steps and the
+cycles keep one rhythm. The tough snake keeps its own clock (`ToughSnakeStepSeconds`, 1.5 s): it has no
+shape to change and nothing to hold, so it steps on its own.
+
 ## How a formation runs
 
-1. **Wave start.** `BalloonBalancer.Balance(atWaveStart: true)` calls `ArrangeAtWaveStart` before the
-   usual roam pre-pass. Roamers therefore see the formation's slots as already taken.
+1. **Cycle.** On each cycle the balancer calls `ArrangeOnCycle`, before the lone unbreakable's move.
 2. **Forming.** If at least `MinMembers` unbreakables are free (in no formation), the service picks a
    shape for them. The pick is weighted at random from the shape weights. The snake's weight grows by
    `SnakeWeightPerExtraUnbreakable` of itself for each unbreakable on the board beyond `MinMembers`, so a
@@ -41,25 +55,28 @@ deepest, every other tough falls in behind its tail, and it walks through the ba
 3. **Moving in.** The service hands each member's move to the balancer's relocate routine. That is the
    same routine roam jumps use, so the members glide in at their normal speed. Each member is marked
    in formation (`IWriteableFormationMember.SetInFormation`).
-4. **Holding.** The formation lasts `HoldWaves` waves, counting the one it formed in. During that time
-   the next wave starts only count down: nothing moves.
-5. **Changing.** At the first wave start after the hold, a new shape is planned for that formation's
+4. **Holding.** The formation lasts its shape's hold, counted in cycles and counting the one it formed
+   on: a snake walks `SnakeHoldCycles` (3), a horizontal or diagonal line holds `LineHoldCycles` (4), an
+   item cover `ItemCoverHoldCycles` (4). During that time the next cycles only count down: nothing moves
+   but a snake's steps.
+5. **Changing.** On the first cycle after the hold, a new shape is planned for that formation's
    members and any free unbreakables. Members that stay in the formation are never marked out, even for a
-   moment. Members the new shape doesn't need turn red and roam again. If no shape fits, the formation
+   moment. Members the new shape doesn't need turn red and roam again, each once it has rested. If no shape fits, the formation
    breaks up. Each formation keeps its own count, so they change at different waves.
 6. **Breaking up.** The service watches `SlotGrid.OnChanged`. When a member leaves the grid (it was
    pierced, or the board was cleared) it drops out of its formation. If fewer than `MinMembers` are left
    in that formation, the rest are released at once. The other formations stand. The next line's balance,
-   or the timed pulse, floats the released ones up. `ResetRun` releases everything.
+   or the timed pulse, floats the released ones up. The service never moves a lone one itself; the
+   balancer does, one a cycle. `ResetRun` releases everything.
 
 ## Snakes
 
 A snake forms as a row, like a horizontal line, of at most `SnakeMaxMembers`. It sets off along the row,
-east or west at random, led by the member at that end. From then on it takes a step every
-`SnakeStepSeconds` (1.7 s) of play: the balancer asks the service to `StepSnakes`, right before that
-balance's race. The step keeps a clock of its own beside the balancer's 4 s pulse
-(`BalloonBalancer.TickStepClock`): a pause or a doomed shot's last glide holds it where the pulse starts
-over, since nearly every shot ends in one and the snakes would never step.
+east or west at random, led by the member at that end. From then on it takes a step on every beat
+(`BeatSeconds`, 1.7 s of play): the balancer asks the service to `StepSnakes`, right before that
+balance's race. The beat is apart from the balancer's 4 s pulse: a pause or a doomed shot's last glide
+holds it where the pulse starts over, since nearly every shot ends in one and the snakes would never
+step. A snake formed or re-planned on a cycle takes its first step on the next beat.
 
 - The head steps one slot along the snake's heading (`HexCoordinates.Step`, six directions numbered from
   east, clockwise). When that slot is off the board, below the row clearance, or taken, `SnakeWalk` tries
@@ -70,7 +87,7 @@ over, since nearly every shot ends in one and the snakes would never step.
 
 Members stay anchored and blue as they walk (`IFormationMember.Walking`), and the board settles around
 each step in the same pulse. The snake keeps the row's limits: never in the bottom
-`HorizontalBottomClearance` rows. Like any formation it changes shape after `HoldWaves`, breaks below
+`HorizontalBottomClearance` rows. Like any formation it changes shape after its hold (`SnakeHoldCycles`), breaks below
 `MinMembers`, and calls reinforcements while untouched.
 
 The shot solver predicts the pulse's rise but not a snake's step, so a shot that meets a step mid-flight
@@ -100,7 +117,9 @@ Toughs never join an unbreakable formation, and unbreakables never join theirs.
   left. The balancer asks every frame (`ToughsDueToGather`), so the snake forms the moment it can, not at
   a wave start or on a beat, and even while a level's transition holds the board, when the next level's
   toughs rise (`BalloonBalancer.FormToughsInTheLevelTransition`; only the form-up runs then, no step and no
-  balance). It takes its first step the moment its head has landed
+  balance). The balance a line calls forms them up too, without waiting for the next frame's tick, so a
+  tough or tougher a line brings flies from its entry straight to its place behind the tail. It takes its
+  first step the moment its head has landed
   (`ToughSnakeLanded`), so the toughs are moving as soon as they arrive at a level's start.
 - **Falling in at the tail.** A tough that rises later falls in behind the tail the moment it appears,
   the same way, gliding straight to its place. Where nothing on from the tail can take it (toughs,
@@ -134,10 +153,12 @@ has no look of its own: its members look like any tough.
 
 ## Reinforcements
 
-A formation the player doesn't break calls for help. At each wave start, every formation that has had no
-member pierced since it formed rolls `ReinforcementChance`, eased while the player is in need
+A formation the player doesn't break calls for help. Reinforcements still count waves, not cycles, since
+they arrive with a wave's first line: at each wave start (`RollReinforcementsAtWaveStart`), every formation
+that has had no member pierced since it formed rolls `ReinforcementChance`, eased while the player is in need
 (`Game/Assist/ThreatEase`: half as likely on the last heart). Each success calls in one more unbreakable.
-The wave a formation forms in doesn't roll, so the player always gets a wave to answer it. A formation
+A formation sits out the roll at the end of the wave it formed in, so the player always gets a whole wave to
+answer it. A formation
 keeps its record through shape changes: once pierced, it never calls again.
 
 The service only counts the calls (`IFormationReinforcements`). `BalloonSpawner` takes them right after
@@ -145,7 +166,7 @@ the formations arrange, since both run at the wave's first line, and adds that m
 line. They enter like any other balloon. They don't count against the level's own unbreakable cap or wave
 quota. Instead, at most `ReinforcementCeiling` of them are on the board at once (`ReinforcementPlan`).
 Calls past the ceiling, or past the line's open places, are dropped. On the board they are ordinary
-unbreakables: they roam, and once enough are free they form a formation of their own.
+unbreakables: they roam, and once two are free they form a formation of their own.
 
 ## Rules a formation keeps
 
@@ -158,7 +179,7 @@ unbreakables: they roam, and once enough are free they form a formation of their
   roamer, could still meet: a row of three beside a snake of four fills a seven-wide row, and two lines one
   row apart can touch end to end. So nothing that moves an unbreakable may link the board's unbreakables
   (and deflectors) from one side wall to the other (`Slots/Grid/ShotWall`). The planner drops every spot
-  that would, a snake's head turns away from a step that would, and `BalloonBalancer`'s roam pre-pass drops
+  that would, a snake's head turns away from a step that would, and `BalloonBalancer`'s lone move drops
   the landing slots that would (`DropWallClosingSlots`). A board some other way walled already (the balance
   race floating unbreakables up, say) is no reason to freeze them, so then the check stands aside.
 - **Rows stay up and short.** A horizontal line never uses the bottom `HorizontalBottomClearance` rows,
@@ -187,7 +208,7 @@ unbreakables: they roam, and once enough are free they form a formation of their
 A member in formation reports `IBalanceAnchor.IsAnchored` (from `Slots/Actor`). Everything that moves
 balloons leaves an anchored actor in its slot:
 - the balance race (`BalancePlanner`) and `BalloonBalancer.HasPossibleMove`,
-- the roam pre-pass, and the model's own `TryPickRelocation`,
+- the lone move, and the model's own `TryPickRelocation`,
 - `PressurePropagation`, where an anchored actor blocks the shove the way a static actor does,
 - the shot solver. `ShotBoardGather` copies the flag into `BalanceProfile.Anchored`, and
   `ShotSimDynamicActor` reports it, so the solver's predicted pulses leave anchored balloons in place too.
@@ -209,12 +230,15 @@ The settings are `IUnbreakableFormationSettings`, nested in `BalloonsConfigurati
 - `Enabled` (all formations, tough snakes too)
 - `ToughSnakes` (on: the toughs walk as one snake. `ToughSnakeMinMembers` (2) toughs on the board start it, it steps
   every `ToughSnakeStepSeconds`, and it keeps out of the bottom `HorizontalBottomClearance` rows)
-- `MinMembers` (3) and `MaxMembers` (5)
-- `HoldWaves` (3)
+- `MinMembers` (2) and `MaxMembers` (5)
+- the clock: `BeatSeconds` (1.7: seconds of play between beats, an unbreakable snake's step) and
+  `BeatsPerCycle` (2, so a cycle is 3.4 s)
+- the holds, in cycles: `SnakeHoldCycles` (3), `LineHoldCycles` (4, horizontal and diagonal),
+  `ItemCoverHoldCycles` (4), and `LoneHoldCycles` (3, a lone unbreakable's rest between moves)
 - `BottomClearance` (2) and `HorizontalBottomClearance` (4, for horizontal lines)
 - `HorizontalMaxMembers` (3, for horizontal lines; an item cover takes three to six)
-- `SnakeMaxMembers` (4) and `SnakeStepSeconds` (1.7: seconds of play between an unbreakable snake's steps)
-- `ToughSnakeStepSeconds` (1.5: seconds of play between the tough snake's steps)
+- `SnakeMaxMembers` (4)
+- `ToughSnakeStepSeconds` (1.5: seconds of play between the tough snake's steps, its own clock apart from the beat)
 - `SpotChoices` (3)
 - `ReinforcementChance` (0.35, eased in need by `Game/Assist/ThreatEase`) and `ReinforcementCeiling` (4)
 - the shape weights: horizontal 1, each diagonal 1, item cover 2, snake 1

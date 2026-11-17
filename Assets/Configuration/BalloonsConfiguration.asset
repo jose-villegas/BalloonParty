@@ -294,14 +294,18 @@ MonoBehaviour:
   _bubbleMergeMax: 5
   _unbreakableFormation:
     _enabled: 1
-    _minMembers: 3
+    _minMembers: 2
     _maxMembers: 5
-    _holdWaves: 3
+    _beatSeconds: 1.7
+    _beatsPerCycle: 2
+    _snakeHoldCycles: 3
+    _lineHoldCycles: 4
+    _itemCoverHoldCycles: 4
+    _loneHoldCycles: 3
     _bottomClearance: 2
     _horizontalBottomClearance: 4
     _horizontalMaxMembers: 3
     _snakeMaxMembers: 4
-    _snakeStepSeconds: 1.7
     _toughSnakeMinMembers: 2
     _spotChoices: 3
     _reinforcementChance: 0.35

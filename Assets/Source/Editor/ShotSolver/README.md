@@ -196,7 +196,8 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
   the one part of the live path shape not reproduced.
 - Heavy step budgets reset per simulated shot; in-game the wave's budget may be part-spent at fire
   time (unknowable from a snapshot).
-- Pulses never relocate roamers (`atWaveStart: false`) — matches the live code.
+- Pulses never relocate roamers — matches the live code, where one roamer moves only on the unbreakables'
+  cycle, which the solver doesn't predict (nor a snake's step).
 - Idle sway/animator drift is not modeled (visual-only).
 - Contact search against moving balloons linearizes at the segment-start instantaneous velocity,
   then re-solves once at the candidate hit time (two-pass fixed point) — the easing's curvature

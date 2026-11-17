@@ -31,8 +31,8 @@ last breath. One line per tick, however long the frame. `BalloonSpawner` handles
 with the synchronous `SpawnLine()`:
 
 1. **Pre-line balance** — `Balance()` consolidates existing balloons upward. On a wave's
-   first line it is `Balance(atWaveStart: true)`, which also relocates roamers and refreshes
-   the heavy-step budget. Transit slots for in-progress balance animations are reserved in
+   first line it is `Balance(atWaveStart: true)`, which also rolls the formations' reinforcements
+   and refreshes the heavy-step budget. Transit slots for in-progress balance animations are reserved in
    `BalancePathHolder`.
 2. **Spawn** — one line is placed. Spawn animations use `ComputePath` waypoints; the
    `BalancePathHolder` is consulted to detect conflicts with still-animating balance moves.

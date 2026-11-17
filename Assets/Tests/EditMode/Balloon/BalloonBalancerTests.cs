@@ -319,6 +319,37 @@ namespace BalloonParty.Tests.Balloon
             balancer.ResetRun(balancer.Generation + 1);
         }
 
+        [Test]
+        public void ASpawnedTough_FallsInInTheBalanceItsLineCalls_WithoutWaitingForATick()
+        {
+            var balancer = BalancerWithAToughSnake(out var formations, formAtOnce: false);
+
+            balancer.Balance();
+
+            Assert.IsTrue(formations.HasToughSnake, "it flies from its entry straight to its place in the body");
+            formations.Dispose();
+            balancer.ResetRun(balancer.Generation + 1);
+        }
+
+        [Test]
+        public void TheUnbreakablesCycle_ComesEveryBeatsPerCycleBeats_WhileAnUnbreakableIsOnTheBoard()
+        {
+            var balancer = BalancerWithAToughSnake(out var formations, toughStepSeconds: 100f, formAtOnce: false);
+            _balloonsConfig.UnbreakableFormation.ToughSnakes.Returns(false);
+            _balloonsConfig.UnbreakableFormation.BeatSeconds.Returns(1f);
+            _grid.Place(new UnbreakableBalloonModel(new BalloonModelConfig(typeName: BalloonType.Unbreakable)), null,
+                new Vector2Int(1, 1));
+            _balloonsConfig.FlightRebalanceInterval.Returns(100f);
+
+            Assert.IsFalse(balancer.TickFlightRebalance(1f), "the first beat: no snake to step, no cycle");
+            Assert.IsTrue(balancer.TickFlightRebalance(1f), "the second beat is a cycle");
+            Assert.IsFalse(balancer.TickFlightRebalance(1f));
+            _grid.Remove(new Vector2Int(1, 1));
+            Assert.IsFalse(balancer.TickFlightRebalance(1f), "no unbreakable, nothing to arrange");
+            formations.Dispose();
+            balancer.ResetRun(balancer.Generation + 1);
+        }
+
         // Three toughs on row 0 of the 3 by 3 board: the wave start makes a snake of them, unless formAtOnce is
         // off, when it waits for the test to arrange.
         private BalloonBalancer BalancerWithAToughSnake(
@@ -330,7 +361,8 @@ namespace BalloonParty.Tests.Balloon
             settings.MinMembers.Returns(3);
             settings.ToughSnakeMinMembers.Returns(3);
             settings.MaxMembers.Returns(5);
-            settings.SnakeStepSeconds.Returns(1.7f);
+            settings.BeatSeconds.Returns(1.7f);
+            settings.BeatsPerCycle.Returns(2);
             settings.ToughSnakeStepSeconds.Returns(toughStepSeconds);
             _balloonsConfig.UnbreakableFormation.Returns(settings);
             formations = new UnbreakableFormationService(_grid, _balloonsConfig,
@@ -343,7 +375,7 @@ namespace BalloonParty.Tests.Balloon
             }
 
             settings.ToughSnakes.Returns(formAtOnce);
-            formations.ArrangeAtWaveStart(_ => { });
+            formations.ArrangeOnCycle(_ => { });
             settings.ToughSnakes.Returns(true);
             Assert.AreEqual(formAtOnce ? 1 : 0, formations.Formations.Count);
 

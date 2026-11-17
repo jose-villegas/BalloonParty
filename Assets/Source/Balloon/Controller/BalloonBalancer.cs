@@ -55,18 +55,21 @@ namespace BalloonParty.Balloon.Controller
         private readonly List<BalanceMove> _balanceMoves = new();
         private readonly Dictionary<IWriteableDynamicSlotActor, int> _turnSteps = new();
         private readonly List<RoamCandidate> _roamers = new();
+        private readonly RoamRests _roamRests = new();
         private readonly List<Vector2Int> _restingSlots = new();
         private readonly Dictionary<int, Vector3[]> _waypointBuffers = new();
         private readonly CompositeDisposable _subscriptions = new();
 
         private bool _balanceRequested;
         private bool _snakeStepDue;
+        private bool _cycleDue;
         private bool _toughGatherDue;
         private bool _toughStepDue;
         private int _generation;
         private float _flightRebalanceElapsed;
-        private float _snakeBeatElapsed;
+        private float _beatElapsed;
         private float _toughStepElapsed;
+        private int _beats;
 
         public int ResetOrder => RunResetOrder.Quiesce;
 
@@ -131,11 +134,14 @@ namespace BalloonParty.Balloon.Controller
             _generation = generation;
             _balanceRequested = false;
             _snakeStepDue = false;
+            _cycleDue = false;
             _toughGatherDue = false;
             _toughStepDue = false;
             _flightRebalanceElapsed = 0f;
-            _snakeBeatElapsed = 0f;
+            _beatElapsed = 0f;
             _toughStepElapsed = 0f;
+            _beats = 0;
+            _roamRests.Clear();
             _turnSteps.Clear();
             _motionTicker.CancelAllBalanceMoves();
             ReleasePaths();
@@ -220,10 +226,10 @@ namespace BalloonParty.Balloon.Controller
             _balancePathHolder.Release(actor);
         }
 
-        // atWaveStart: true only for the spawner's sweep before a wave's first line. Roaming types jump once
-        // per wave, not on every line, deferred or pulse rebalance, and the heavy-step budget refreshes
-        // there, covering the wave's sweeps and the pulses until the next wave as one allowance. A direct
-        // run services any pending deferred request, so a publish in the same frame coalesces into one sweep.
+        // atWaveStart: true only for the spawner's sweep before a wave's first line. The formations roll for
+        // reinforcements there, and the heavy-step budget refreshes there, covering the wave's sweeps and the pulses
+        // until the next wave as one allowance. A direct run services any pending deferred request, so a publish in
+        // the same frame coalesces into one sweep.
         internal void Balance(bool atWaveStart = false)
         {
             _balanceRequested = false;
@@ -232,14 +238,23 @@ namespace BalloonParty.Balloon.Controller
             if (atWaveStart)
             {
                 _turnSteps.Clear();
-
-                // Formations go first, so the roamers see the formation's slots as taken.
-                _formations?.ArrangeAtWaveStart(_relocateActors);
-                RelocateRoamers();
+                _formations?.RollReinforcementsAtWaveStart();
             }
 
-            // The toughs form up the moment they can, before the race, so the board settles around them.
-            if (_toughGatherDue)
+            // The unbreakables keep one clock: formations form and change, and a lone one moves, only on a cycle.
+            var arranged = _cycleDue;
+            if (_cycleDue)
+            {
+                _cycleDue = false;
+
+                // Formations go first, so the lone unbreakable sees the formation's slots as taken.
+                _formations?.ArrangeOnCycle(_relocateActors);
+                RelocateOneRoamer();
+            }
+
+            // The toughs form up the moment they can, before the race, so the board settles around them: a tough
+            // that a line just brought flies from its entry straight to the snake's tail.
+            if (_toughGatherDue || (_formations?.ToughsDueToGather() ?? false))
             {
                 _toughGatherDue = false;
                 _formations?.GatherToughSnake(_relocateActors);
@@ -249,13 +264,13 @@ namespace BalloonParty.Balloon.Controller
             if (_snakeStepDue)
             {
                 _snakeStepDue = false;
-                _formations?.StepSnakes(_relocateActors, afterArranging: atWaveStart);
+                _formations?.StepSnakes(_relocateActors, afterArranging: arranged);
             }
 
             if (_toughStepDue)
             {
                 _toughStepDue = false;
-                _formations?.StepToughSnake(_relocateActors, afterArranging: atWaveStart);
+                _formations?.StepToughSnake(_relocateActors, afterArranging: arranged);
             }
 
             _balanceMoves.Clear();
@@ -283,10 +298,50 @@ namespace BalloonParty.Balloon.Controller
             }
         }
 
-        // Pre-pass of the race: each IPreBalanceRelocatable defines its own placement; the balancer only
-        // supplies the legal resting slots and invokes the contract in priority order. The balance rounds
-        // then settle everything around the new positions.
-        private void RelocateRoamers()
+        // Pre-pass of the race, once a cycle: each IPreBalanceRelocatable defines its own placement; the balancer
+        // only supplies the legal resting slots and invokes the contract. Only one moves alone per cycle, the
+        // longest at rest of those that have stood LoneHoldCycles, and none while the last one is still on its way,
+        // so the lone ones keep the formations' pace instead of all crossing the board at every wave. The balance
+        // rounds then settle everything around the new position.
+        private void RelocateOneRoamer()
+        {
+            _roamRests.BeginCycle();
+            CollectRoamers();
+            _roamRests.EndCycle();
+            if (_formations == null || _roamRests.LastMoverOnItsWay)
+            {
+                return;
+            }
+
+            _roamers.Sort(ByRoamOrder);
+            foreach (var roamer in _roamers)
+            {
+                var actor = roamer.Actor;
+                if (_roamRests.CyclesAtRest(actor) < _formations.LoneHoldCycles)
+                {
+                    continue;
+                }
+
+                CollectRestingSlots();
+                if (ShotWall.Walls(actor))
+                {
+                    _formations.DropWallClosingSlots(actor.SlotIndex.Value, _restingSlots);
+                }
+
+                if (!((IPreBalanceRelocatable)actor).TryPickRelocation(_grid, _restingSlots, out var target))
+                {
+                    continue;
+                }
+
+                RelocateActor(actor, target);
+                _roamRests.Moved(actor);
+                return;
+            }
+        }
+
+        // The free roamers on the board, each a cycle further into its rest (a new one starts its rest now), by
+        // priority, then the longest at rest first.
+        private void CollectRoamers()
         {
             _roamers.Clear();
             for (var col = 0; col < _grid.Columns; col++)
@@ -294,39 +349,24 @@ namespace BalloonParty.Balloon.Controller
                 for (var row = 0; row < _grid.Rows; row++)
                 {
                     var actor = _grid.At(new Vector2Int(col, row));
-                    if (actor is IPreBalanceRelocatable && actor is IWriteableDynamicSlotActor dynamicActor
-                        && actor is not IBalanceAnchor { IsAnchored: true })
+                    if (actor is not IPreBalanceRelocatable || actor is not IWriteableDynamicSlotActor dynamicActor
+                        || actor is IBalanceAnchor { IsAnchored: true })
                     {
-                        _roamers.Add(new RoamCandidate
-                        {
-                            Actor = dynamicActor,
-                            Priority = (actor as IBalanceInfluence)?.BalancePriority ?? 0,
-                            Order = _roamers.Count,
-                        });
+                        continue;
                     }
-                }
-            }
 
-            _roamers.Sort(ByRoamOrder);
-
-            foreach (var roamer in _roamers)
-            {
-                var actor = roamer.Actor;
-                CollectRestingSlots();
-                if (_formations != null && ShotWall.Walls(actor))
-                {
-                    _formations.DropWallClosingSlots(actor.SlotIndex.Value, _restingSlots);
+                    var rest = _roamRests.Stand(dynamicActor);
+                    _roamers.Add(new RoamCandidate
+                    {
+                        Actor = dynamicActor,
+                        Priority = (actor as IBalanceInfluence)?.BalancePriority ?? 0,
+                        Order = -rest,
+                    });
                 }
-                if (!((IPreBalanceRelocatable)actor).TryPickRelocation(_grid, _restingSlots, out var target))
-                {
-                    continue;
-                }
-
-                RelocateActor(actor, target);
             }
         }
 
-        // One wave-start jump (a roam or a formation move): the grid changes now, the glide is animated
+        // One cycle's jump (a roam or a formation move): the grid changes now, the glide is animated
         // with the rest of this balance's paths.
         private void RelocateActor(IWriteableDynamicSlotActor actor, Vector2Int target)
         {
@@ -577,8 +617,10 @@ namespace BalloonParty.Balloon.Controller
             ReleasePaths();
         }
 
-        // Ticks the snakes' step clocks and asks whether the toughs should form up, marking each that falls due
-        // for the next balance. True when any did.
+        // Ticks the unbreakables' beat and the tough snake's step clock and asks whether the toughs should form up,
+        // marking each that falls due for the next balance. True when any did. On a beat an unbreakable snake steps;
+        // every BeatsPerCycle beats is a cycle, when formations form and change and a lone unbreakable may move. The
+        // beat runs with no snake too, so the snakes' steps and the cycles keep one rhythm.
         private bool TickFormations(float deltaTime)
         {
             if (_formations == null)
@@ -586,17 +628,24 @@ namespace BalloonParty.Balloon.Controller
                 return false;
             }
 
-            var snakeStep = TickStepClock(ref _snakeBeatElapsed, _formations.SnakeStepSeconds,
-                _formations.HasUnbreakableSnake, true, deltaTime);
+            var snakeStep = false;
+            var cycle = false;
+            if (TickStepClock(ref _beatElapsed, _formations.BeatSeconds, true, true, deltaTime))
+            {
+                _beats++;
+                snakeStep = _formations.HasUnbreakableSnake;
+                cycle = _beats % _formations.BeatsPerCycle == 0 && _formations.HasUnbreakables;
+            }
 
             // The toughs don't wait for a step to form up: a tough that lands falls in at once.
             var gather = _formations.ToughsDueToGather();
             var toughStep = TickStepClock(ref _toughStepElapsed, _formations.ToughSnakeStepSeconds,
                 _formations.HasToughSnake, _formations.ToughSnakeLanded, deltaTime);
             _snakeStepDue |= snakeStep;
+            _cycleDue |= cycle;
             _toughGatherDue |= gather;
             _toughStepDue |= toughStep;
-            return snakeStep || gather || toughStep;
+            return snakeStep || cycle || gather || toughStep;
         }
 
         // A snake's step clock: true every interval of play while one walks. A pause or a doomed glide holds it

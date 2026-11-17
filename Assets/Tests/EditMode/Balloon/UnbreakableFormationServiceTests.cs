@@ -35,7 +35,9 @@ namespace BalloonParty.Tests.Balloon
             _settings.Enabled.Returns(true);
             _settings.MinMembers.Returns(3);
             _settings.MaxMembers.Returns(5);
-            _settings.HoldWaves.Returns(3);
+            _settings.SnakeHoldCycles.Returns(3);
+            _settings.LineHoldCycles.Returns(3);
+            _settings.ItemCoverHoldCycles.Returns(3);
             _settings.BottomClearance.Returns(2);
             _settings.SpotChoices.Returns(1);
             _settings.HorizontalWeight.Returns(1f);
@@ -88,7 +90,7 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void AFormation_HoldsForHoldWaves_ThenChangesToADifferentShape()
+        public void AFormation_HoldsForItsHoldCycles_ThenChangesToADifferentShape()
         {
             AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(6, 4), new Vector2Int(3, 5));
             Arrange();
@@ -107,6 +109,45 @@ namespace BalloonParty.Tests.Balloon
 
             Assert.IsNotNull(_service.CurrentShape);
             Assert.AreNotEqual(firstShape, _service.CurrentShape, "the next formation is a different shape");
+            Assert.IsTrue(_unbreakables.All(u => u.IsAnchored));
+        }
+
+        [Test]
+        public void EachShape_HoldsForItsOwnCycles()
+        {
+            _settings.SnakeHoldCycles.Returns(2);
+            _settings.LineHoldCycles.Returns(4);
+            FormSnake();
+            _settings.SnakeWeight.Returns(0f);
+            _settings.HorizontalWeight.Returns(1f);
+
+            Arrange();
+            Assert.AreEqual(FormationShape.Snake, _service.CurrentShape, "a snake walks its two cycles");
+
+            Arrange();
+            Assert.AreEqual(FormationShape.Horizontal, _service.CurrentShape);
+
+            _settings.HorizontalWeight.Returns(0f);
+            _settings.SnakeWeight.Returns(1f);
+            for (var cycle = 0; cycle < 3; cycle++)
+            {
+                Arrange();
+                Assert.AreEqual(FormationShape.Horizontal, _service.CurrentShape, "a line holds its four");
+            }
+
+            Arrange();
+            Assert.AreEqual(FormationShape.Snake, _service.CurrentShape);
+        }
+
+        [Test]
+        public void TwoUnbreakables_FormUp_WhenTheMinimumIsTwo()
+        {
+            _settings.MinMembers.Returns(2);
+            AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(6, 4));
+
+            Arrange();
+
+            Assert.AreEqual(1, _service.Formations.Count);
             Assert.IsTrue(_unbreakables.All(u => u.IsAnchored));
         }
 
@@ -315,7 +356,8 @@ namespace BalloonParty.Tests.Balloon
             AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(6, 4), new Vector2Int(3, 5));
 
             Arrange();
-            Arrange();
+            WaveStart();
+            WaveStart();
 
             Assert.AreEqual(0, _service.TakeReinforcementCalls(), "0.5 eased to 0.25 at the last heart: 0.3 misses it");
         }
@@ -327,10 +369,11 @@ namespace BalloonParty.Tests.Balloon
             AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(6, 4), new Vector2Int(3, 5));
 
             Arrange();
+            WaveStart();
 
             Assert.AreEqual(0, _service.TakeReinforcementCalls(), "the wave it formed in calls nobody");
 
-            Arrange();
+            WaveStart();
 
             Assert.AreEqual(1, _service.TakeReinforcementCalls());
             Assert.AreEqual(0, _service.TakeReinforcementCalls(), "a take clears the calls");
@@ -343,8 +386,9 @@ namespace BalloonParty.Tests.Balloon
             _settings.ReinforcementChance.Returns(1f);
             AddSixSpreadOut();
             Arrange();
+            WaveStart();
 
-            Arrange();
+            WaveStart();
 
             Assert.AreEqual(2, _service.TakeReinforcementCalls());
         }
@@ -355,9 +399,10 @@ namespace BalloonParty.Tests.Balloon
             _settings.ReinforcementChance.Returns(0.5f);
             AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(6, 4), new Vector2Int(3, 5));
             Arrange();
+            WaveStart();
             _service.Random01 = () => 0.5f;
 
-            Arrange();
+            WaveStart();
 
             Assert.AreEqual(0, _service.TakeReinforcementCalls());
         }
@@ -371,9 +416,9 @@ namespace BalloonParty.Tests.Balloon
             Arrange();
 
             _grid.Remove(_unbreakables[0].SlotIndex.Value);
-            Arrange();
-            Arrange();
-            Arrange();
+            WaveStart();
+            WaveStart();
+            WaveStart();
 
             Assert.AreEqual(1, _service.Formations.Count, "three members still stand");
             Assert.AreEqual(0, _service.TakeReinforcementCalls());
@@ -385,7 +430,8 @@ namespace BalloonParty.Tests.Balloon
             _settings.ReinforcementChance.Returns(1f);
             AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(6, 4), new Vector2Int(3, 5));
             Arrange();
-            Arrange();
+            WaveStart();
+            WaveStart();
 
             _service.ResetRun(1);
 
@@ -643,16 +689,16 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void AnUnbreakableSnake_WalksOnItsOwnInterval()
+        public void AnUnbreakableSnake_WalksOnTheBeat()
         {
-            _settings.SnakeStepSeconds.Returns(1.7f);
+            _settings.BeatSeconds.Returns(1.7f);
             Assert.IsFalse(_service.HasUnbreakableSnake, "no snake, no clock");
 
             FormSnake();
 
             Assert.IsTrue(_service.HasUnbreakableSnake);
             Assert.IsFalse(_service.HasToughSnake);
-            Assert.AreEqual(1.7f, _service.SnakeStepSeconds);
+            Assert.AreEqual(1.7f, _service.BeatSeconds);
         }
 
         [Test]
@@ -731,7 +777,7 @@ namespace BalloonParty.Tests.Balloon
             _settings.DiagonalWeight.Returns(0f);
             _settings.SnakeWeight.Returns(1f);
             _settings.SnakeMaxMembers.Returns(5);
-            _settings.SnakeStepSeconds.Returns(1.7f);
+            _settings.BeatSeconds.Returns(1.7f);
         }
 
         // A snake of count along row 2 from the west edge, heading east (Random01 is 0). An even row, so at the
@@ -751,7 +797,12 @@ namespace BalloonParty.Tests.Balloon
 
         private void Arrange()
         {
-            _service.ArrangeAtWaveStart(Relocate);
+            _service.ArrangeOnCycle(Relocate);
+        }
+
+        private void WaveStart()
+        {
+            _service.RollReinforcementsAtWaveStart();
         }
 
         // As the balancer does it: every actor leaves its slot before any lands.

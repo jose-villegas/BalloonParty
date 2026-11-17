@@ -11,8 +11,11 @@ namespace BalloonParty.Balloon.Formation
         internal IReadOnlyList<IWriteableFormationMember> Members => MemberList;
         internal FormationShape Shape { get; set; }
 
-        /// <summary>Wave starts left to hold the current shape before it changes.</summary>
-        internal int WavesLeft { get; set; }
+        /// <summary>Cycles left to hold the current shape before it changes.</summary>
+        internal int CyclesLeft { get; set; }
+
+        /// <summary>The wave it formed in, which rolls for no reinforcement.</summary>
+        internal int FormedOnWave { get; set; }
 
         /// <summary>A member was pierced since it formed; a touched formation calls no reinforcements.</summary>
         internal bool Touched { get; set; }
@@ -23,7 +26,7 @@ namespace BalloonParty.Balloon.Formation
         /// </summary>
         internal int Heading { get; set; }
 
-        /// <summary>The wave-start arrangement that last formed or re-planned it.</summary>
+        /// <summary>The cycle's arrangement that last formed or re-planned it.</summary>
         internal int ArrangedOnPass { get; set; }
 
         /// <summary>
@@ -37,7 +40,8 @@ namespace BalloonParty.Balloon.Formation
         {
             MemberList.Clear();
             Armoured = false;
-            WavesLeft = 0;
+            CyclesLeft = 0;
+            FormedOnWave = 0;
             Touched = false;
             Heading = 0;
             ArrangedOnPass = 0;

@@ -24,8 +24,30 @@ namespace BalloonParty.Configuration.Balloons
         /// <summary>Most unbreakables in one formation; the rest roam, or form a formation of their own.</summary>
         int MaxMembers { get; }
 
-        /// <summary>Waves a formation holds, counting the wave it formed in, before it changes shape.</summary>
-        int HoldWaves { get; }
+        /// <summary>
+        ///     Seconds of play between the unbreakables' beats. An unbreakable snake steps on every beat; every
+        ///     <see cref="BeatsPerCycle" /> beats make a cycle, the clock formations form, hold and change shape on and
+        ///     a lone unbreakable moves on.
+        /// </summary>
+        float BeatSeconds { get; }
+
+        /// <summary>Beats in one cycle.</summary>
+        int BeatsPerCycle { get; }
+
+        /// <summary>Cycles a snake walks, counting the cycle it formed on, before it changes shape.</summary>
+        int SnakeHoldCycles { get; }
+
+        /// <summary>Cycles a horizontal or diagonal line holds, counting the cycle it formed on.</summary>
+        int LineHoldCycles { get; }
+
+        /// <summary>Cycles an item cover holds, counting the cycle it formed on.</summary>
+        int ItemCoverHoldCycles { get; }
+
+        /// <summary>
+        ///     Cycles a lone unbreakable (in no formation) stays where it is before it may move again. Only one moves
+        ///     alone per cycle.
+        /// </summary>
+        int LoneHoldCycles { get; }
 
         /// <summary>Bottom rows a formation never uses, so spawn lines always have room to enter.</summary>
         int BottomClearance { get; }
@@ -45,10 +67,7 @@ namespace BalloonParty.Configuration.Balloons
         /// <summary>Most unbreakables in a snake, the line that walks the board.</summary>
         int SnakeMaxMembers { get; }
 
-        /// <summary>Seconds of play between an unbreakable snake's steps, on a clock of its own.</summary>
-        float SnakeStepSeconds { get; }
-
-        /// <summary>Seconds of play between the tough snake's steps, on a clock of its own.</summary>
+        /// <summary>Seconds of play between the tough snake's steps, on a clock of its own apart from the beat.</summary>
         float ToughSnakeStepSeconds { get; }
 
         /// <summary>A formation picks at random among this many of its least-travel spots.</summary>

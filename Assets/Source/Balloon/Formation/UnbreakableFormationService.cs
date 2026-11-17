@@ -15,9 +15,9 @@ using Random = UnityEngine.Random;
 namespace BalloonParty.Balloon.Formation
 {
     /// <summary>
-    ///     Gathers the board's unbreakables into formations, as many as there are members for. At each wave
-    ///     start the balancer asks it to arrange: each formation holds for
-    ///     <see cref="IUnbreakableFormationSettings.HoldWaves" /> waves, then plans a different shape, and the
+    ///     Gathers the board's unbreakables into formations, as many as there are members for. On each cycle of
+    ///     the unbreakables' clock (<see cref="IUnbreakableFormationSettings.BeatsPerCycle" />) the balancer asks it
+    ///     to arrange: each formation holds for its shape's hold cycles, then plans a different shape, and the
     ///     unbreakables left free form new ones. It hands the balancer the moves and anchors the members. A
     ///     formation that loses members below the minimum breaks at once. One that stands untouched may call
     ///     in another unbreakable (<see cref="IFormationReinforcements" />). The board's toughs are one snake of
@@ -75,8 +75,10 @@ namespace BalloonParty.Balloon.Formation
         // Per slot (row * Columns + col), the size of the group of touching toughs it belongs to; 0 for none.
         private int[] _toughGroups;
 
-        // Counts wave-start arrangements, so a step in the same balance can skip the formations arranged in it.
+        // Counts the cycles' arrangements, so a step in the same balance can skip the formations arranged in it.
         private int _arrangePass;
+        // Counts wave starts, so a formation sits out the reinforcement roll of the wave it formed in.
+        private int _wavePass;
 
         public int ResetOrder => RunResetOrder.Quiesce;
 
@@ -91,9 +93,13 @@ namespace BalloonParty.Balloon.Formation
         internal bool ToughSnakeLanded => ToughSnake() is { MemberList: { Count: > 0 } members } && members[0].IsStable.Value;
         internal bool HasUnbreakableSnake => HasSnake();
 
-        // The two snakes' step intervals (IUnbreakableFormationSettings); the balancer keeps their clocks.
+        // The unbreakables' beat and the tough snake's step interval (IUnbreakableFormationSettings); the balancer
+        // keeps the clocks.
         internal float ToughSnakeStepSeconds => _settings?.ToughSnakeStepSeconds ?? 0f;
-        internal float SnakeStepSeconds => _settings?.SnakeStepSeconds ?? 0f;
+        internal float BeatSeconds => _settings?.BeatSeconds ?? 0f;
+        internal int BeatsPerCycle => _settings?.BeatsPerCycle ?? 1;
+        internal int LoneHoldCycles => _settings?.LoneHoldCycles ?? 1;
+        internal bool HasUnbreakables => CountUnbreakables() > 0;
 
         [Inject]
         internal UnbreakableFormationService(SlotGrid grid, IBalloonsConfiguration balloonsConfig, ThreatEase threatEase)
@@ -129,14 +135,27 @@ namespace BalloonParty.Balloon.Formation
         }
 
         /// <summary>
-        ///     Runs once per wave start, before the roam pre-pass. Every formation that stood untouched through
-        ///     the last wave rolls for a reinforcement. A formation still holding counts down; one done holding
-        ///     plans its next shape, or breaks if none fits. Then the free unbreakables form new formations
-        ///     while there are enough of them, and the toughs start their snake if none walks.
-        ///     <paramref name="relocate" /> carries out a batch of moves at once and owns the grid change and the
-        ///     glides.
+        ///     Runs once per wave start: every formation that stood untouched through the last wave, and didn't form
+        ///     in it, rolls for a reinforcement.
         /// </summary>
-        internal void ArrangeAtWaveStart(Action<IReadOnlyList<SlotMove>> relocate)
+        internal void RollReinforcementsAtWaveStart()
+        {
+            if (_settings != null && _settings.Enabled)
+            {
+                RollReinforcements();
+            }
+
+            _wavePass++;
+        }
+
+        /// <summary>
+        ///     Runs once per cycle of the unbreakables' clock, before the lone unbreakable's move. A formation still
+        ///     holding counts down; one done holding plans its next shape, or breaks if none fits. Then the free
+        ///     unbreakables form new formations while there are enough of them, and the toughs start their snake if
+        ///     none walks. <paramref name="relocate" /> carries out a batch of moves at once and owns the grid change
+        ///     and the glides.
+        /// </summary>
+        internal void ArrangeOnCycle(Action<IReadOnlyList<SlotMove>> relocate)
         {
             if (_settings == null || !_settings.Enabled)
             {
@@ -145,7 +164,6 @@ namespace BalloonParty.Balloon.Formation
             }
 
             _arrangePass++;
-            RollReinforcements();
 
             // The members' own moves remove and place them; that is not a member being lost.
             _arranging = true;
@@ -211,8 +229,8 @@ namespace BalloonParty.Balloon.Formation
         /// <summary>
         ///     Every unbreakable snake steps once: its head into the next open slot (<see cref="SnakeWalk" />), each member after
         ///     it into the slot the one ahead just left. A snake boxed in turns round and its tail leads. Like
-        ///     <see cref="ArrangeAtWaveStart" />, <paramref name="relocate" /> carries out each step's moves at once.
-        ///     <paramref name="afterArranging" />: the same balance just arranged at wave start, and a snake formed or
+        ///     <see cref="ArrangeOnCycle" />, <paramref name="relocate" /> carries out each step's moves at once.
+        ///     <paramref name="afterArranging" />: the same balance just arranged on a cycle, and a snake formed or
         ///     re-planned there waits for the next beat rather than stepping off its slots the moment it lands.
         /// </summary>
         internal void StepSnakes(Action<IReadOnlyList<SlotMove>> relocate, bool afterArranging = false)
@@ -390,10 +408,12 @@ namespace BalloonParty.Balloon.Formation
                 return;
             }
 
-            // Only unbreakables call unbreakables in; a tough snake calls no one.
+            // Only unbreakables call unbreakables in; a tough snake calls no one. A formation sits out the wave it
+            // formed in, so the player always gets a wave to answer it.
             for (var i = 0; i < _formations.Count; i++)
             {
-                if (!_formations[i].Armoured && !_formations[i].Touched && Random01() < chance)
+                if (!_formations[i].Armoured && !_formations[i].Touched && _formations[i].FormedOnWave < _wavePass
+                    && Random01() < chance)
                 {
                     _reinforcementCalls++;
                 }
@@ -412,9 +432,9 @@ namespace BalloonParty.Balloon.Formation
                     continue;
                 }
 
-                if (formation.WavesLeft > 0)
+                if (formation.CyclesLeft > 0)
                 {
-                    formation.WavesLeft--;
+                    formation.CyclesLeft--;
                     continue;
                 }
 
@@ -444,6 +464,7 @@ namespace BalloonParty.Balloon.Formation
                 }
 
                 var formation = TakeSpareFormation();
+                formation.FormedOnWave = _wavePass;
                 _formations.Add(formation);
                 Apply(formation, shape, relocate);
             }
@@ -924,12 +945,22 @@ namespace BalloonParty.Balloon.Formation
 
             relocate(_moves);
             formation.Shape = shape;
-            formation.WavesLeft = _settings.HoldWaves - 1;
+            formation.CyclesLeft = HoldCyclesOf(shape) - 1;
             formation.ArrangedOnPass = _arrangePass;
             if (shape == FormationShape.Snake)
             {
                 LineUpSnake(formation);
             }
+        }
+
+        private int HoldCyclesOf(FormationShape shape)
+        {
+            return shape switch
+            {
+                FormationShape.Snake => _settings.SnakeHoldCycles,
+                FormationShape.ItemCover => _settings.ItemCoverHoldCycles,
+                _ => _settings.LineHoldCycles,
+            };
         }
 
         // A snake forms as a row and sets off along it, east or west at random, led by the member at that end.

@@ -46,8 +46,10 @@ namespace BalloonParty.Tests.Balloon
             _settings.ToughSnakeMinMembers.Returns(3);
             _settings.MaxMembers.Returns(5);
             _settings.SnakeMaxMembers.Returns(4);
-            _settings.SnakeStepSeconds.Returns(1.7f);
-            _settings.HoldWaves.Returns(3);
+            _settings.BeatSeconds.Returns(1.7f);
+            _settings.SnakeHoldCycles.Returns(3);
+            _settings.LineHoldCycles.Returns(3);
+            _settings.ItemCoverHoldCycles.Returns(3);
             _settings.BottomClearance.Returns(2);
             _settings.SpotChoices.Returns(1);
             _settings.HorizontalWeight.Returns(1f);
@@ -608,7 +610,7 @@ namespace BalloonParty.Tests.Balloon
 
         private void Arrange()
         {
-            _service.ArrangeAtWaveStart(Relocate);
+            _service.ArrangeOnCycle(Relocate);
         }
 
         // As the balancer does it: every actor leaves its slot before any lands.

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace BalloonParty.Configuration.Balloons
 {
@@ -16,13 +17,10 @@ namespace BalloonParty.Configuration.Balloons
         [SerializeField] private bool _toughSnakes = true;
 
         [Tooltip("Fewest unbreakables on the board that gather into a formation.")]
-        [SerializeField] [Min(2)] private int _minMembers = 3;
+        [SerializeField] [Min(2)] private int _minMembers = 2;
 
         [Tooltip("Most unbreakables in one formation; the rest roam, or form a formation of their own.")]
         [SerializeField] [Min(2)] private int _maxMembers = 5;
-
-        [Tooltip("Waves a formation holds, counting the wave it formed in, before it changes shape.")]
-        [SerializeField] [Min(1)] private int _holdWaves = 3;
 
         [Tooltip("Bottom rows a formation never uses, so spawn lines always have room to enter.")]
         [SerializeField] [Min(0)] private int _bottomClearance = 2;
@@ -40,12 +38,8 @@ namespace BalloonParty.Configuration.Balloons
                  "Max Members.")]
         [SerializeField] [Min(2)] private int _snakeMaxMembers = 4;
 
-        [Tooltip("Seconds of play between an unbreakable snake's steps, on a clock of its own beside the " +
-                 "balancer's pulse. A pause or a doomed shot holds it.")]
-        [SerializeField] [Min(0.1f)] private float _snakeStepSeconds = 1.7f;
-
-        [Tooltip("Seconds of play between the tough snake's steps, on a clock of its own. A pause or a doomed " +
-                 "shot holds it.")]
+        [Tooltip("Seconds of play between the tough snake's steps, on a clock of its own apart from the beat. A " +
+                 "pause or a doomed shot holds it.")]
         [SerializeField] [Min(0.1f)] private float _toughSnakeStepSeconds = 1.5f;
 
         [Tooltip("Fewest toughs (and toughers) on the board that start the tough snake. Apart from Min Members, " +
@@ -55,6 +49,30 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("A formation picks at random among this many of its least-travel spots, so it doesn't " +
                  "always form in the same place. 1 = always the least travel.")]
         [SerializeField] [Min(1)] private int _spotChoices = 3;
+
+        [Header("Clock")]
+        [Tooltip("Seconds of play between the unbreakables' beats. An unbreakable snake steps on every beat. A " +
+                 "pause or a doomed shot holds the clock.")]
+        [FormerlySerializedAs("_snakeStepSeconds")]
+        [SerializeField] [Min(0.1f)] private float _beatSeconds = 1.7f;
+
+        [Tooltip("Beats in a cycle, the clock the unbreakables keep together: formations form and change shape " +
+                 "only on a cycle, and one lone unbreakable at most moves on each.")]
+        [SerializeField] [Min(1)] private int _beatsPerCycle = 2;
+
+        [Tooltip("Cycles a snake walks, counting the cycle it formed on, before it changes shape.")]
+        [SerializeField] [Min(1)] private int _snakeHoldCycles = 3;
+
+        [Tooltip("Cycles a horizontal or diagonal line holds, counting the cycle it formed on, before it changes " +
+                 "shape.")]
+        [SerializeField] [Min(1)] private int _lineHoldCycles = 4;
+
+        [Tooltip("Cycles an item cover holds, counting the cycle it formed on, before it changes shape.")]
+        [SerializeField] [Min(1)] private int _itemCoverHoldCycles = 4;
+
+        [Tooltip("Cycles a lone unbreakable, in no formation, stays where it is before it may move again. One " +
+                 "at most moves alone on each cycle.")]
+        [SerializeField] [Min(1)] private int _loneHoldCycles = 3;
 
         [Header("Reinforcements")]
         [Tooltip("Chance, at each wave start, that a formation which stood untouched through the last wave " +
@@ -85,12 +103,16 @@ namespace BalloonParty.Configuration.Balloons
         public bool ToughSnakes => _toughSnakes;
         public int MinMembers => _minMembers;
         public int MaxMembers => Mathf.Max(_maxMembers, _minMembers);
-        public int HoldWaves => _holdWaves;
+        public float BeatSeconds => Mathf.Max(0.1f, _beatSeconds);
+        public int BeatsPerCycle => Mathf.Max(1, _beatsPerCycle);
+        public int SnakeHoldCycles => Mathf.Max(1, _snakeHoldCycles);
+        public int LineHoldCycles => Mathf.Max(1, _lineHoldCycles);
+        public int ItemCoverHoldCycles => Mathf.Max(1, _itemCoverHoldCycles);
+        public int LoneHoldCycles => Mathf.Max(1, _loneHoldCycles);
         public int BottomClearance => _bottomClearance;
         public int HorizontalBottomClearance => Mathf.Max(_horizontalBottomClearance, _bottomClearance);
         public int HorizontalMaxMembers => Mathf.Clamp(_horizontalMaxMembers, _minMembers, MaxMembers);
         public int SnakeMaxMembers => Mathf.Clamp(_snakeMaxMembers, _minMembers, MaxMembers);
-        public float SnakeStepSeconds => Mathf.Max(0.1f, _snakeStepSeconds);
         public float ToughSnakeStepSeconds => Mathf.Max(0.1f, _toughSnakeStepSeconds);
         public int ToughSnakeMinMembers => Mathf.Max(1, _toughSnakeMinMembers);
         public int SpotChoices => _spotChoices;
