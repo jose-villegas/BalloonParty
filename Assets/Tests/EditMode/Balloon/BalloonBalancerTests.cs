@@ -257,11 +257,23 @@ namespace BalloonParty.Tests.Balloon
         {
             var elapsed = 0f;
 
-            Assert.IsFalse(BalloonBalancer.TickStepClock(ref elapsed, 1.7f, false, 0.1f), "no snake yet");
-            Assert.IsTrue(BalloonBalancer.TickStepClock(ref elapsed, 1.7f, true, 0.01f), "it moves as it forms");
-            Assert.IsFalse(BalloonBalancer.TickStepClock(ref elapsed, 1.7f, true, 1f));
-            Assert.IsTrue(BalloonBalancer.TickStepClock(ref elapsed, 1.7f, true, 0.8f), "1.8s on");
-            Assert.IsFalse(BalloonBalancer.TickStepClock(ref elapsed, 1.7f, true, 1f));
+            Assert.IsFalse(BalloonBalancer.TickStepClock(ref elapsed, 1.7f, false, true, 0.1f), "no snake yet");
+            Assert.IsTrue(BalloonBalancer.TickStepClock(ref elapsed, 1.7f, true, true, 0.01f), "it moves as it forms");
+            Assert.IsFalse(BalloonBalancer.TickStepClock(ref elapsed, 1.7f, true, true, 1f));
+            Assert.IsTrue(BalloonBalancer.TickStepClock(ref elapsed, 1.7f, true, true, 0.8f), "1.8s on");
+            Assert.IsFalse(BalloonBalancer.TickStepClock(ref elapsed, 1.7f, true, true, 1f));
+        }
+
+        [Test]
+        public void StepClock_AStepDueWhileAMemberRises_ComesTheMomentItLands()
+        {
+            var elapsed = 0f;
+            BalloonBalancer.TickStepClock(ref elapsed, 1.7f, false, true, 0.1f);
+
+            Assert.IsFalse(BalloonBalancer.TickStepClock(ref elapsed, 1.7f, true, false, 0.5f), "formed while rising");
+            Assert.IsFalse(BalloonBalancer.TickStepClock(ref elapsed, 1.7f, true, false, 0.5f));
+            Assert.IsTrue(BalloonBalancer.TickStepClock(ref elapsed, 1.7f, true, true, 0.01f), "landed: it steps");
+            Assert.IsFalse(BalloonBalancer.TickStepClock(ref elapsed, 1.7f, true, true, 1f), "then a full interval");
         }
 
         [Test]

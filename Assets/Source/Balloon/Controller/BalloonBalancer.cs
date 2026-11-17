@@ -568,13 +568,13 @@ namespace BalloonParty.Balloon.Controller
                 return false;
             }
 
-            var snakeStep = TickStepClock(
-                ref _snakeBeatElapsed, _formations.SnakeStepSeconds, _formations.HasUnbreakableSnake, deltaTime);
+            var snakeStep = TickStepClock(ref _snakeBeatElapsed, _formations.SnakeStepSeconds,
+                _formations.HasUnbreakableSnake, true, deltaTime);
 
             // The toughs don't wait for a step to form up: a tough that lands falls in at once.
             var gather = _formations.ToughsDueToGather();
-            var toughStep = TickStepClock(
-                ref _toughStepElapsed, _formations.ToughSnakeStepSeconds, _formations.HasToughSnake, deltaTime);
+            var toughStep = TickStepClock(ref _toughStepElapsed, _formations.ToughSnakeStepSeconds,
+                _formations.HasToughSnake, _formations.ToughSnakeLanded, deltaTime);
             _snakeStepDue |= snakeStep;
             _toughGatherDue |= gather;
             _toughStepDue |= toughStep;
@@ -583,9 +583,10 @@ namespace BalloonParty.Balloon.Controller
 
         // A snake's step clock: true every interval of play while one walks. A pause or a doomed glide holds it
         // (the caller doesn't tick it then) where the pulse starts over, since nearly every shot ends in a doomed
-        // glide. With no snake it stands ready, so a new snake takes its first step the moment it forms: the
-        // toughs that rise together at a level's start are moving as soon as they land.
-        internal static bool TickStepClock(ref float elapsed, float interval, bool walking, float deltaTime)
+        // glide. With no snake it stands ready, so a new snake takes its first step the moment it forms, or, while
+        // a member is still rising into place (ready false), the moment it lands: the toughs that rise together at
+        // a level's start are moving as soon as they land. A step that falls due unready waits for it.
+        internal static bool TickStepClock(ref float elapsed, float interval, bool walking, bool ready, float deltaTime)
         {
             if (interval <= 0f)
             {
@@ -600,7 +601,7 @@ namespace BalloonParty.Balloon.Controller
             }
 
             elapsed += deltaTime;
-            if (elapsed < interval)
+            if (elapsed < interval || !ready)
             {
                 return false;
             }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
@@ -8,8 +9,8 @@ namespace BalloonParty.Balloon.Formation
 {
     /// <summary>
     ///     Where the tough snake's free toughs fall in: a line of slots on from its tail, away from the body, that
-    ///     they take in one batch. A slot on the line may be empty, hold a free tough that has landed, or hold a
-    ///     balloon the snake can walk through (<see cref="SnakeWalk.CanPassThrough" />), which moves out to a slot a
+    ///     they take in one batch. A slot on the line may be empty, hold a free tough (landed or still gliding in), or
+    ///     hold a balloon the snake can walk through (<see cref="SnakeWalk.CanPassThrough" />), which moves out to a slot a
     ///     gathered tough leaves.
     /// </summary>
     internal static class SnakeBody
@@ -35,13 +36,10 @@ namespace BalloonParty.Balloon.Formation
             }
         }
 
-        /// <summary>A tough no snake holds that has landed: one free to fall in.</summary>
-        internal static bool IsFreeLandedTough(IWriteableSlotActor occupant)
-        {
-            return IsFreeTough(occupant) && ((IArmouredFormationMember)occupant).IsStable.Value;
-        }
-
-        /// <summary>A tough no snake holds, landed or still gliding in.</summary>
+        /// <summary>
+        ///     A tough no snake holds, landed or still gliding in: one free to fall in. A gliding one counts at the
+        ///     slot it is heading for.
+        /// </summary>
         internal static bool IsFreeTough(IWriteableSlotActor occupant)
         {
             return occupant is IArmouredFormationMember tough && tough is not IBalanceAnchor { IsAnchored: true };
@@ -50,8 +48,8 @@ namespace BalloonParty.Balloon.Formation
         // A free tough beside the end first, whichever way it lies, so the line follows the toughs where they stand
         // and moves as few as it can; then the gentlest turn that takes one.
         private static bool TryNext(
-            SlotGrid grid, Vector2Int end, int direction, int lastRow, List<Vector2Int> line, out Vector2Int next,
-            out int turned)
+            SlotGrid grid, Vector2Int end, int direction, int lastRow, IReadOnlyCollection<Vector2Int> line,
+            out Vector2Int next, out int turned)
         {
             for (var pass = 0; pass < 2; pass++)
             {
@@ -65,7 +63,7 @@ namespace BalloonParty.Balloon.Formation
                     }
 
                     var takes = pass == 0
-                        ? !grid.IsEmpty(next.x, next.y) && IsFreeLandedTough(grid.At(next))
+                        ? !grid.IsEmpty(next.x, next.y) && IsFreeTough(grid.At(next))
                         : Takes(grid, next);
                     if (takes)
                     {
@@ -87,7 +85,7 @@ namespace BalloonParty.Balloon.Formation
             }
 
             var occupant = grid.At(slot);
-            return IsFreeLandedTough(occupant) || SnakeWalk.CanPassThrough(occupant);
+            return IsFreeTough(occupant) || SnakeWalk.CanPassThrough(occupant);
         }
     }
 }

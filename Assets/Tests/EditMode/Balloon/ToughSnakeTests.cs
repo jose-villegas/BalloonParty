@@ -95,26 +95,29 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void AToughStillGlidingIn_HoldsTheStart_ThenAllFormAtOnce()
+        public void ToughsStillGlidingIn_FormUpAtOnce_WhereTheyAreHeading()
         {
-            AddTough(new Vector2Int(0, 0), 1);
-            var landing = AddTough(new Vector2Int(3, 5), 3);
-            landing.IsStable.Value = false;
-            AddTough(new Vector2Int(6, 4), 2);
+            AddTough(new Vector2Int(0, 0), 1).IsStable.Value = false;
+            var rising = AddTough(new Vector2Int(3, 5), 3);
+            rising.IsStable.Value = false;
+            AddTough(new Vector2Int(6, 4), 2).IsStable.Value = false;
 
-            Arrange();
-
-            Assert.AreEqual(0, _service.Formations.Count, "toughs rising together land together, so it waits");
-            Assert.IsFalse(_service.ToughsDueToGather());
-
-            landing.IsStable.Value = true;
-
-            Assert.IsTrue(_service.ToughsDueToGather(), "the moment the last lands");
+            Assert.IsTrue(_service.ToughsDueToGather(), "no waiting for them to land");
             _service.GatherToughSnake(Relocate);
+
             var snake = SingleSnake();
-            Assert.AreSame(landing, snake.Members[0]);
+            Assert.AreSame(rising, snake.Members[0], "the deepest leads, though still rising");
             Assert.AreEqual(3, snake.Members.Count);
             Assert.IsTrue(IsOneLine(snake));
+            Assert.IsTrue(_toughs.All(t => t.IsAnchored), "anchored at once, so the balancer leaves them be");
+            Assert.IsFalse(_service.ToughSnakeLanded, "its first step waits for them to land");
+
+            foreach (var tough in _toughs)
+            {
+                tough.IsStable.Value = true;
+            }
+
+            Assert.IsTrue(_service.ToughSnakeLanded);
         }
 
         [Test]
@@ -241,21 +244,16 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void AToughThatLandsDuringAWalk_FallsInBehindTheNewTail_OnThatStep()
+        public void AToughStillRising_FallsInBehindTheTail_WithoutWaitingToLand()
         {
             var snake = GrowSnake(3, 2, 1);
             var landing = AddTough(new Vector2Int(6, 5), 1);
             landing.IsStable.Value = false;
 
+            Assert.IsTrue(_service.ToughsDueToGather());
             _service.StepToughSnake(Relocate);
 
-            Assert.AreEqual(3, snake.Members.Count, "one still landing waits");
-            Assert.IsFalse(landing.IsAnchored);
-
-            landing.IsStable.Value = true;
-            _service.StepToughSnake(Relocate);
-
-            Assert.AreSame(landing, snake.Members[3]);
+            Assert.AreSame(landing, snake.Members[3], "it joins on the step, still rising");
             Assert.IsTrue(landing.IsAnchored);
             Assert.IsTrue(IsOneLine(snake));
             Assert.IsTrue(AllOnTheirSlots());
@@ -455,11 +453,10 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void ToughsAllStillLanding_AreNotDue()
+        public void TooFewToughs_EvenRising_AreNotDue()
         {
             AddTough(new Vector2Int(0, 0), 1).IsStable.Value = false;
             AddTough(new Vector2Int(6, 4), 3).IsStable.Value = false;
-            AddTough(new Vector2Int(3, 5), 2).IsStable.Value = false;
 
             Assert.IsFalse(_service.ToughsDueToGather());
         }
