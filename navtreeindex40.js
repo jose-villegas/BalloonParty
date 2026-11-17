@@ -1,5 +1,11 @@
 var NAVTREEINDEX40 =
 {
+"classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#abc525d92f9aefc4f60bf2527797cfb64":[6,0,0,3,34,12],
+"classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#abf43f3b4474762195d14565146253e6a":[5,0,0,3,34,5],
+"classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#abf43f3b4474762195d14565146253e6a":[6,0,0,3,34,5],
+"classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#ac8cb50d0c7b820b5194c97d3c305d527":[5,0,0,3,34,2],
+"classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#ac8cb50d0c7b820b5194c97d3c305d527":[6,0,0,3,34,2],
+"classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#adbce7c96ada7386841a2100297d51377":[5,0,0,3,34,7],
 "classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#adbce7c96ada7386841a2100297d51377":[6,0,0,3,34,7],
 "classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#aeb1964bfa88b38489e9a142dcdc4a591":[5,0,0,3,34,10],
 "classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#aeb1964bfa88b38489e9a142dcdc4a591":[6,0,0,3,34,10],
@@ -243,11 +249,5 @@ var NAVTREEINDEX40 =
 "classBalloonParty_1_1Display_1_1EffectsClearingStamper.html#a832f69547d85768c11ee10c7c7f9be52":[6,0,0,4,7,11],
 "classBalloonParty_1_1Display_1_1EffectsClearingStamper.html#aa188abf23df26738ecd9ab32dc09247f":[5,0,0,4,7,12],
 "classBalloonParty_1_1Display_1_1EffectsClearingStamper.html#aa188abf23df26738ecd9ab32dc09247f":[6,0,0,4,7,12],
-"classBalloonParty_1_1Display_1_1EffectsClearingStamper.html#aa572c6f67de00cd1cfd323fc859057ed":[5,0,0,4,7,6],
-"classBalloonParty_1_1Display_1_1EffectsClearingStamper.html#aa572c6f67de00cd1cfd323fc859057ed":[6,0,0,4,7,6],
-"classBalloonParty_1_1Display_1_1EffectsClearingStamper.html#ab53482f91903a0aeca0a171697e1d8be":[5,0,0,4,7,4],
-"classBalloonParty_1_1Display_1_1EffectsClearingStamper.html#ab53482f91903a0aeca0a171697e1d8be":[6,0,0,4,7,4],
-"classBalloonParty_1_1Display_1_1EffectsClearingStamper.html#abf53662b8b9e4e733ab94352146c0cf1":[5,0,0,4,7,5],
-"classBalloonParty_1_1Display_1_1EffectsClearingStamper.html#abf53662b8b9e4e733ab94352146c0cf1":[6,0,0,4,7,5],
-"classBalloonParty_1_1Display_1_1EffectsClearingStamper.html#ad53a9bafaebd881e0c5a03e6f0f7a587":[5,0,0,4,7,13]
+"classBalloonParty_1_1Display_1_1EffectsClearingStamper.html#aa572c6f67de00cd1cfd323fc859057ed":[5,0,0,4,7,6]
 };

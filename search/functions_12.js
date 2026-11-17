@@ -280,7 +280,7 @@ var searchData=
   ['sortneighborsbyangle_277',['SortNeighborsByAngle',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog.html#acf6195d61e1a7813f302ab3cf2a41ef0',1,'BalloonParty::Game::Score::Behaviours::ShapeCatalog']]],
   ['soundhandle_278',['SoundHandle',['../structBalloonParty_1_1Audio_1_1SoundHandle.html#aa7ec94b7090556d8ec57a8df08f0ce9e',1,'BalloonParty::Audio::SoundHandle']]],
   ['sourcecatalog_279',['SourceCatalog',['../structBalloonParty_1_1Editor_1_1MetricBindingDrawer_1_1SourceCatalog.html#a66840a262dfccd334165404081c804c5',1,'BalloonParty::Editor::MetricBindingDrawer::SourceCatalog']]],
-  ['spacedanger_280',['SpaceDanger',['../classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html#abf8761708283c2f6d98f0fcfa6049d17',1,'BalloonParty::Game::Danger::SpaceDanger']]],
+  ['spacedanger_280',['SpaceDanger',['../classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html#a0f7423a8bfb8aeaa316b768315f2b1bf',1,'BalloonParty::Game::Danger::SpaceDanger']]],
   ['spans_281',['Spans',['../classBalloonParty_1_1Slots_1_1Grid_1_1ShotWall.html#a7267d09ff5de8afa20da160a2bdcab01',1,'BalloonParty::Slots::Grid::ShotWall']]],
   ['spatialfilter_282',['SpatialFilter',['../classBalloonParty_1_1Editor_1_1Bush_1_1BushLeafExtractor.html#a22f458557bc0b068eaaabaf2f9f2b83d',1,'BalloonParty::Editor::Bush::BushLeafExtractor']]],
   ['spawn_283',['Spawn',['../classBalloonParty_1_1Shared_1_1Pool_1_1TrailSpawner.html#a6e220366b21f538e0430b62922de4dfb',1,'BalloonParty::Shared::Pool::TrailSpawner']]],

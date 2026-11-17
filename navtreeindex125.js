@@ -1,5 +1,15 @@
 var NAVTREEINDEX125 =
 {
+"plan_shot_solver_accuracy.html#autotoc_md869":[3,14,0],
+"plan_shot_solver_accuracy.html#autotoc_md871":[3,14,0,0],
+"plan_shot_solver_accuracy.html#autotoc_md872":[3,14,0,1],
+"plan_shot_solver_accuracy.html#autotoc_md873":[3,14,0,2],
+"plan_shot_solver_accuracy.html#autotoc_md874":[3,14,0,3],
+"plan_shot_solver_accuracy.html#autotoc_md875":[3,14,0,3,0],
+"plan_shot_solver_accuracy.html#autotoc_md876":[3,14,0,3,1],
+"plan_shot_solver_accuracy.html#autotoc_md877":[3,14,0,3,2],
+"plan_shot_solver_accuracy.html#autotoc_md878":[3,14,0,3,3],
+"plan_shot_solver_accuracy.html#autotoc_md879":[3,14,0,3,4],
 "plan_shot_solver_accuracy.html#autotoc_md880":[3,14,0,3,5],
 "plan_shot_solver_accuracy.html#autotoc_md881":[3,14,0,3,6],
 "plan_shot_solver_accuracy.html#autotoc_md882":[3,14,0,3,7],
@@ -239,15 +249,5 @@ var NAVTREEINDEX125 =
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer_1_1RoamCandidate.html#a33d8f487425dd442ff74c461a26dc0be":[5,0,0,1,0,3,0,1],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer_1_1RoamCandidate.html#a33d8f487425dd442ff74c461a26dc0be":[6,0,0,1,0,3,0,1],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer_1_1RoamCandidate.html#a3bd445f5a87cc1659e50aef04d95dd6b":[5,0,0,1,0,3,0,2],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer_1_1RoamCandidate.html#a3bd445f5a87cc1659e50aef04d95dd6b":[6,0,0,1,0,3,0,2],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer_1_1RoamCandidate.html#abf916cea9911f206e641e043b014f292":[5,0,0,1,0,3,0,0],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer_1_1RoamCandidate.html#abf916cea9911f206e641e043b014f292":[6,0,0,1,0,3,0,0],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html":[5,0,0,1,0,7,1],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html":[6,0,0,1,0,7,1],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html#a0eca132d879742cab96ef47b9d1f60ed":[5,0,0,1,0,7,1,0],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html#a0eca132d879742cab96ef47b9d1f60ed":[6,0,0,1,0,7,1,0],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html#a44cec23a867979e37f45b6f8a71b0876":[5,0,0,1,0,7,1,1],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html#a44cec23a867979e37f45b6f8a71b0876":[6,0,0,1,0,7,1,1],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html#afe75b9f1c154a5e167f2bfd96d9a7474":[5,0,0,1,0,7,1,2],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html#afe75b9f1c154a5e167f2bfd96d9a7474":[6,0,0,1,0,7,1,2]
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer_1_1RoamCandidate.html#a3bd445f5a87cc1659e50aef04d95dd6b":[6,0,0,1,0,3,0,2]
 };

@@ -130,6 +130,9 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonPlac
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a068e4e5095e93f98c7fd64e45371faff" id="r_a068e4e5095e93f98c7fd64e45371faff"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a068e4e5095e93f98c7fd64e45371faff">LineHasRoom</a> ()</td></tr>
+<tr class="memdesc:a068e4e5095e93f98c7fd64e45371faff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether a clock line has room for any of its balloons: some column's entry is open, or pressure can shove one open.  <br /></td></tr>
+<tr class="separator:a068e4e5095e93f98c7fd64e45371faff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b25a04232740f7443d687cd81a11037" id="r_a5b25a04232740f7443d687cd81a11037"><td class="memItemLeft" align="right" valign="top">int?&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5b25a04232740f7443d687cd81a11037">ProbeEntryRow</a> (int col)</td></tr>
 <tr class="memdesc:a5b25a04232740f7443d687cd81a11037"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read-only probe of the column's next entry row — used to order a line's columns by depth.  <br /></td></tr>
 <tr class="separator:a5b25a04232740f7443d687cd81a11037"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -261,6 +264,26 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Topmost empty row reachable from below without passing a non-traversable actor (e.g. a bush). </p>
+
+</div>
+</div>
+<a id="a068e4e5095e93f98c7fd64e45371faff" name="a068e4e5095e93f98c7fd64e45371faff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a068e4e5095e93f98c7fd64e45371faff">&#9670;&#160;</a></span>LineHasRoom()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Balloon.Spawner.BalloonPlacementResolver.LineHasRoom </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Whether a clock line has room for any of its balloons: some column's entry is open, or pressure can shove one open. </p>
+<p>Nothing moves. A board can hold empty slots and still have no room, when they sit in pockets nothing rising can reach (above a wall of anchored toughs, a formation or bushes). </p>
 
 </div>
 </div>

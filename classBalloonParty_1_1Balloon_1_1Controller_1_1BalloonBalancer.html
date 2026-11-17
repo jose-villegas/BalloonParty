@@ -165,6 +165,8 @@ Package Functions</h2></td></tr>
 <tr class="separator:a8e62417ceae4298faa30283224ca0d85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a555a54f5d6618b767e98fd1f235fcafb" id="r_a555a54f5d6618b767e98fd1f235fcafb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a555a54f5d6618b767e98fd1f235fcafb">Balance</a> (bool atWaveStart=false)</td></tr>
 <tr class="separator:a555a54f5d6618b767e98fd1f235fcafb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ba65bc07cf76c481503dd83743c43aa" id="r_a2ba65bc07cf76c481503dd83743c43aa"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2ba65bc07cf76c481503dd83743c43aa">CanRelievePressure</a> (int column)</td></tr>
+<tr class="separator:a2ba65bc07cf76c481503dd83743c43aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aceccef8949deaa7ec3c7f02e7f5ef447" id="r_aceccef8949deaa7ec3c7f02e7f5ef447"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aceccef8949deaa7ec3c7f02e7f5ef447">HasPossibleMove</a> ()</td></tr>
 <tr class="separator:aceccef8949deaa7ec3c7f02e7f5ef447"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f7ea8c14e5855c4a095731541ec5a0c" id="r_a3f7ea8c14e5855c4a095731541ec5a0c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3f7ea8c14e5855c4a095731541ec5a0c">RunScheduledBalance</a> (int generation)</td></tr>
@@ -280,6 +282,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a950ba220625d939d585cac3bd98d9941"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d226b478ba6b3980107c9f4d30d0af3" id="r_a1d226b478ba6b3980107c9f4d30d0af3"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation.html">PressurePropagation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1d226b478ba6b3980107c9f4d30d0af3">_pressurePropagation</a></td></tr>
 <tr class="separator:a1d226b478ba6b3980107c9f4d30d0af3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd4454e451fe199d71b9fed2dd03b115" id="r_abd4454e451fe199d71b9fed2dd03b115"><td class="memItemLeft" align="right" valign="top">readonly List&lt; PressurePropagation.Move &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abd4454e451fe199d71b9fed2dd03b115">_probeMoves</a> = new()</td></tr>
+<tr class="separator:abd4454e451fe199d71b9fed2dd03b115"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0405283c3ca289df39114c1ce6eef0cb" id="r_a0405283c3ca289df39114c1ce6eef0cb"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html">IProjectileRegistry</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0405283c3ca289df39114c1ce6eef0cb">_projectiles</a></td></tr>
 <tr class="separator:a0405283c3ca289df39114c1ce6eef0cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace9c54cb1858f2ff85a214b8d82c9341" id="r_ace9c54cb1858f2ff85a214b8d82c9341"><td class="memItemLeft" align="right" valign="top">readonly Action&lt; <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableDynamicSlotActor.html">IWriteableDynamicSlotActor</a>, Vector2Int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace9c54cb1858f2ff85a214b8d82c9341">_relocateActor</a></td></tr>
@@ -488,6 +492,31 @@ Static Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2ba65bc07cf76c481503dd83743c43aa" name="a2ba65bc07cf76c481503dd83743c43aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ba65bc07cf76c481503dd83743c43aa">&#9670;&#160;</a></span>CanRelievePressure()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Balloon.Controller.BalloonBalancer.CanRelievePressure </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>column</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1644,6 +1673,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly <a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation.html">PressurePropagation</a> BalloonParty.Balloon.Controller.BalloonBalancer._pressurePropagation</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abd4454e451fe199d71b9fed2dd03b115" name="abd4454e451fe199d71b9fed2dd03b115"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd4454e451fe199d71b9fed2dd03b115">&#9670;&#160;</a></span>_probeMoves</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly List&lt;PressurePropagation.Move&gt; BalloonParty.Balloon.Controller.BalloonBalancer._probeMoves = new()</td>
         </tr>
       </table>
   </td>

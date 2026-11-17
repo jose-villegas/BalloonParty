@@ -3,6 +3,7 @@ var classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonPlacementResolver =
     [ "BalloonPlacementResolver", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonPlacementResolver.html#aaa14e9cf396956fcf5d23bcf72050853", null ],
     [ "FindFirstEmptyRowFromTop", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonPlacementResolver.html#a78a3ee1f549b43657893b29241f311d4", null ],
     [ "FindFirstReachableEmptyRow", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonPlacementResolver.html#aeffc24344ade6e8e3b3642954c2d3049", null ],
+    [ "LineHasRoom", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonPlacementResolver.html#a068e4e5095e93f98c7fd64e45371faff", null ],
     [ "LowestBlockingRow", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonPlacementResolver.html#ae501acaab9a37eff3fa6b62fb84ed172", null ],
     [ "ProbeEntryRow", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonPlacementResolver.html#a5b25a04232740f7443d687cd81a11037", null ],
     [ "ReachableCapacity", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonPlacementResolver.html#aeb87637deb7b1707e1be2822450e18e4", null ],

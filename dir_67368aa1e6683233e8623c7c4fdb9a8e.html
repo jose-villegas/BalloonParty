@@ -199,7 +199,7 @@ Behaviour</h1>
 <li>A wave's <b>last line</b> publishes <code>ItemCheckMessage(Wave)</code> over that line's balloons only (earlier lines' balloons may already be popped); <code>ItemAssigner</code> counts waves against <code>ItemCadence</code>. Other lines drop their new-balloon list without a check.</li>
 <li>Every line ends by publishing <code>BalanceBalloonsMessage</code> so the balancer settles the grid.</li>
 </ul>
-<p>A doomed line (one the board has no room for) still spawns: <code>BeginDoomedLine</code> / <code>EndDoomedLine</code> tag its overflow balloons so they wait for the strikethrough, and <code>WaveDamageMessage</code> goes out after them. <code>SpaceDanger</code> assumes this one-line-per-tick shape. The line hold while the doomed ball flies alone lives in <code>SpawnClock</code>, not here (<code><a class="el" href="Projectile_2README_8md.html">Projectile/README.md</a></code>).</p>
+<p>A line is doomed when the board has no room for any of it: no column's entry is open and pressure can't shove one open (<code>BalloonPlacementResolver.LineHasRoom</code>, which moves nothing). Empty slots no line can reach, sealed above a tough snake lying across the board, a formation or bushes, don't count as room. A doomed line still spawns: <code>BeginDoomedLine</code> / <code>EndDoomedLine</code> tag its overflow balloons so they wait for the strikethrough, and <code>WaveDamageMessage</code> goes out after them. <code>SpaceDanger</code> assumes this one-line-per-tick shape. The line hold while the doomed ball flies alone lives in <code>SpawnClock</code>, not here (<code><a class="el" href="Projectile_2README_8md.html">Projectile/README.md</a></code>).</p>
 <h2><a class="anchor" id="autotoc_md48"></a>
 Reinforcements</h2>
 <p>A clock line also brings the unbreakables the board's formations called in at this wave's start (<code>IFormationReinforcements</code>, see <code><a class="el" href="Balloon_2Formation_2README_8md.html">Balloon/Formation/README.md</a></code>). Like the initial fill's guaranteed entries, they go into the batch first and bypass the level's pick and its wave quota. They also bypass the level's cap for unbreakables: they aren't counted in the active counts, so the level's own unbreakables keep their cap, and the spawner counts these apart, up to <code>IUnbreakableFormationSettings.ReinforcementCeiling</code> alive at once. All unbreakables in a batch are alike, so the first ones dealt are tagged as the reinforcements, and an undealt one hands back no count. The unbreakable pool is prewarmed with room for the ceiling.</p>
@@ -230,7 +230,7 @@ Spawn depth &amp; tough layering</h2>
 <h1><a class="anchor" id="autotoc_md52"></a>
 Interactions</h1>
 <ul>
-<li><b>SlotGrid</b> — queried for empty slots (<code>CountEmpty()</code>); all placed balloons registered here</li>
+<li><b>SlotGrid</b> — queried for empty slots (<code>CountEmpty()</code>, counted only when the line has room); all placed balloons registered here</li>
 <li><b>WaveDeficitCalculator</b> — called before each line to determine hearts lost (pure static function in <code>Game/Health/</code>)</li>
 <li><b>WaveDamageMessage</b> — published after doomed lines are spawned, carrying <code>HeartsLost</code></li>
 <li><b>BalloonBalancer</b> — notified via <code>BalanceBalloonsMessage</code> after each line; <code>Balance(atWaveStart)</code> before it</li>

@@ -1,5 +1,11 @@
 var NAVTREEINDEX34 =
 {
+"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpSizing.html":[6,0,0,3,7,1],
+"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpSizing.html#a9beba2f30364f606d85b07848f29a814":[5,0,0,3,7,1,0],
+"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpSizing.html#a9beba2f30364f606d85b07848f29a814":[6,0,0,3,7,1,0],
+"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleIds.html":[5,0,0,3,7,3],
+"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleIds.html":[6,0,0,3,7,3],
+"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleIds.html#a0899e86da2bcb8203fec2b2fdacdbbb3":[5,0,0,3,7,3,1],
 "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleIds.html#a0899e86da2bcb8203fec2b2fdacdbbb3":[6,0,0,3,7,3,1],
 "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleIds.html#a13576e60e67b0706c63cff39f391752e":[5,0,0,3,7,3,0],
 "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleIds.html#a13576e60e67b0706c63cff39f391752e":[6,0,0,3,7,3,0],
@@ -243,11 +249,5 @@ var NAVTREEINDEX34 =
 "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a8296b730b0b997e0ea64ec1cfbde0f8c":[6,0,0,3,8,3,20],
 "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a92608410bb52a38a8b721e78407a4ec2":[5,0,0,3,8,3,17],
 "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a92608410bb52a38a8b721e78407a4ec2":[6,0,0,3,8,3,17],
-"classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a9a3e18b3c9302d864e922b3dfd956795":[5,0,0,3,8,3,11],
-"classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a9a3e18b3c9302d864e922b3dfd956795":[6,0,0,3,8,3,11],
-"classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#aa3f1c28a0d51837dec38d4b8b92d4259":[5,0,0,3,8,3,7],
-"classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#aa3f1c28a0d51837dec38d4b8b92d4259":[6,0,0,3,8,3,7],
-"classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#aaa720de1fb6912f0cfee2fe1cd5a1304":[5,0,0,3,8,3,2],
-"classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#aaa720de1fb6912f0cfee2fe1cd5a1304":[6,0,0,3,8,3,2],
-"classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#ab133f98f0072c93f96f9cb5545377afd":[5,0,0,3,8,3,14]
+"classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a9a3e18b3c9302d864e922b3dfd956795":[5,0,0,3,8,3,11]
 };

@@ -1,5 +1,11 @@
 var NAVTREEINDEX19 =
 {
+"classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#ae08fb4c7c579fe9d8dd1a0e7627226d9":[6,0,0,1,4,10,15],
+"classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#af36144bb937a0a96e6e7ee560a8f3c07":[5,0,0,1,4,10,4],
+"classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#af36144bb937a0a96e6e7ee560a8f3c07":[6,0,0,1,4,10,4],
+"classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#afa9c95ec80101b4324a8692454836078":[5,0,0,1,4,10,11],
+"classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#afa9c95ec80101b4324a8692454836078":[6,0,0,1,4,10,11],
+"classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#afab2655fa5d45b0dd004b8177bd5163c":[5,0,0,1,4,10,13],
 "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#afab2655fa5d45b0dd004b8177bd5163c":[6,0,0,1,4,10,13],
 "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect_1_1OverflowBalloon.html":[5,0,0,1,4,10,0],
 "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect_1_1OverflowBalloon.html":[6,0,0,1,4,10,0],
@@ -243,11 +249,5 @@ var NAVTREEINDEX19 =
 "classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant.html#a9c52897306af6b63fedd28b401c8908f":[6,0,0,1,5,5,11],
 "classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant.html#a9f1206b029eab4b3092137db381d898c":[5,0,0,1,5,5,3],
 "classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant.html#a9f1206b029eab4b3092137db381d898c":[6,0,0,1,5,5,3],
-"classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant.html#aa1eeaabb54a0a3cc6d50db93244636a6":[5,0,0,1,5,5,5],
-"classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant.html#aa1eeaabb54a0a3cc6d50db93244636a6":[6,0,0,1,5,5,5],
-"classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant.html#aa55016a9fff00aaffd430774bdd9da21":[5,0,0,1,5,5,13],
-"classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant.html#aa55016a9fff00aaffd430774bdd9da21":[6,0,0,1,5,5,13],
-"classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant.html#ab05f1da610eb1d38ff4fe6b3946330b6":[5,0,0,1,5,5,1],
-"classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant.html#ab05f1da610eb1d38ff4fe6b3946330b6":[6,0,0,1,5,5,1],
-"classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant.html#ab80d798b50b8e8443f2990f0cc2bb702":[5,0,0,1,5,5,18]
+"classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant.html#aa1eeaabb54a0a3cc6d50db93244636a6":[5,0,0,1,5,5,5]
 };

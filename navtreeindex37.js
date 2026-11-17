@@ -1,5 +1,11 @@
 var NAVTREEINDEX37 =
 {
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a0d795735a151c98576ceee02f1dfc476":[6,0,0,3,9,26,3],
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a1cedc1b23b3e1478dadf86459eaf83be":[5,0,0,3,9,26,8],
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a1cedc1b23b3e1478dadf86459eaf83be":[6,0,0,3,9,26,8],
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a1ec161848fd56e11278cab175450881f":[5,0,0,3,9,26,12],
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a1ec161848fd56e11278cab175450881f":[6,0,0,3,9,26,12],
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a1fba35edd281ed5b3f03eacf70a1c977":[5,0,0,3,9,26,0],
 "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a1fba35edd281ed5b3f03eacf70a1c977":[6,0,0,3,9,26,0],
 "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a246bc83e13d83c58552d897b09aa7a9d":[5,0,0,3,9,26,21],
 "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a246bc83e13d83c58552d897b09aa7a9d":[6,0,0,3,9,26,21],
@@ -243,11 +249,5 @@ var NAVTREEINDEX37 =
 "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#aeba089fda0f83e847a7e90cdb548e7a5":[6,0,0,3,9,33,47],
 "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#aed9c77d5c9a39b4591a7aa1acfddcc05":[5,0,0,3,9,33,28],
 "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#aed9c77d5c9a39b4591a7aa1acfddcc05":[6,0,0,3,9,33,28],
-"classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#afa64ec7a1feac45095c7810672e003a6":[5,0,0,3,9,33,16],
-"classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#afa64ec7a1feac45095c7810672e003a6":[6,0,0,3,9,33,16],
-"classBalloonParty_1_1Configuration_1_1OverflowSettings.html":[5,0,0,3,24],
-"classBalloonParty_1_1Configuration_1_1OverflowSettings.html":[6,0,0,3,24],
-"classBalloonParty_1_1Configuration_1_1OverflowSettings.html#a1a0826458d24277ff053a41d1de9a35d":[5,0,0,3,24,3],
-"classBalloonParty_1_1Configuration_1_1OverflowSettings.html#a1a0826458d24277ff053a41d1de9a35d":[6,0,0,3,24,3],
-"classBalloonParty_1_1Configuration_1_1OverflowSettings.html#a3143cea65290837e51c653b427ca75e3":[5,0,0,3,24,16]
+"classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#afa64ec7a1feac45095c7810672e003a6":[5,0,0,3,9,33,16]
 };

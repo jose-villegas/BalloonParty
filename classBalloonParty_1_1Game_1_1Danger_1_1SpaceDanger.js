@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger =
 [
-    [ "SpaceDanger", "classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html#abf8761708283c2f6d98f0fcfa6049d17", null ],
+    [ "SpaceDanger", "classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html#a0f7423a8bfb8aeaa316b768315f2b1bf", null ],
     [ "Dispose", "classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html#af53e461a4f92fe676bfaff8f849af699", null ],
     [ "Evaluate", "classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html#ad3fa439c09ff897b273669ec18095d2a", null ],
     [ "LateTick", "classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html#a7313f89a8f420f9e0af8ec56352a60e3", null ],
@@ -11,6 +11,8 @@ var classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger =
     [ "_health", "classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html#afd8b8d4938c92780ea68b9c6af308268", null ],
     [ "_heartsAtRisk", "classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html#ab7febfa29557b47886af42f25ead6ae5", null ],
     [ "_level", "classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html#a9f9e5088bfa712eb60d55eaec2aca393", null ],
+    [ "_placement", "classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html#ac154a776beff39d557d21279efd0f915", null ],
+    [ "_resolver", "classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html#a0215f46f9ce929b20a1ceaa2d4bd403c", null ],
     [ "_subscriptions", "classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html#a665abee8186d012be96fef76d5054e2f", null ],
     [ "HeartsAtRisk", "classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html#adeb53fdb6518950a67009a0b4364a1b0", null ],
     [ "Level", "classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html#ad5abd0782e6c22a033e4df7b741b428a", null ]

@@ -183,6 +183,7 @@ Damage formula</h1>
 <li><code>deficit = neededSlots - availableSpace</code> (clamped ≥ 0)</li>
 <li><code>heartsLost = deficit / rowLength</code> (integer division — only full lines count)</li>
 <li>Partial remainders (&lt; one full line) are simply not spawned, costing no heart.</li>
+<li><code>availableSpace</code> is the board's empty slots when the line has room, and 0 when it has none (<code>BalloonPlacementResolver.LineHasRoom</code>): empty slots no line can reach, sealed above a wall such as a tough snake lying across the board, would otherwise forgive every line for as long as the wall stood.</li>
 </ul>
 <p>Example (6 columns, 4 spawn lines = 24 needed):</p><ul>
 <li>18 available → deficit 6 → 1 heart lost</li>

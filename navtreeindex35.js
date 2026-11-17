@@ -1,5 +1,11 @@
 var NAVTREEINDEX35 =
 {
+"classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a9a3e18b3c9302d864e922b3dfd956795":[6,0,0,3,8,3,11],
+"classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#aa3f1c28a0d51837dec38d4b8b92d4259":[5,0,0,3,8,3,7],
+"classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#aa3f1c28a0d51837dec38d4b8b92d4259":[6,0,0,3,8,3,7],
+"classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#aaa720de1fb6912f0cfee2fe1cd5a1304":[5,0,0,3,8,3,2],
+"classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#aaa720de1fb6912f0cfee2fe1cd5a1304":[6,0,0,3,8,3,2],
+"classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#ab133f98f0072c93f96f9cb5545377afd":[5,0,0,3,8,3,14],
 "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#ab133f98f0072c93f96f9cb5545377afd":[6,0,0,3,8,3,14],
 "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#ac23c6ecb62ca8db77db0839dd259268f":[5,0,0,3,8,3,1],
 "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#ac23c6ecb62ca8db77db0839dd259268f":[6,0,0,3,8,3,1],
@@ -243,11 +249,5 @@ var NAVTREEINDEX35 =
 "classBalloonParty_1_1Configuration_1_1Level_1_1ExtraColorLevelSettings.html#aff38abf929ba46a7049e907cb02f3683":[6,0,0,3,9,5,3],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelBackdrop.html":[5,0,0,3,9,16],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelBackdrop.html":[6,0,0,3,9,16],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelBackdrop.html#aae521615b5e4b832089c24f5dc165da1":[5,0,0,3,9,16,0],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelBackdrop.html#aae521615b5e4b832089c24f5dc165da1":[6,0,0,3,9,16,0],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html":[5,0,0,3,9,17],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html":[6,0,0,3,9,17],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a131317305ddc487a36e43473fa2f116c":[5,0,0,3,9,17,0],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a131317305ddc487a36e43473fa2f116c":[6,0,0,3,9,17,0],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a1519d4d1d8058942cf8af26f4c166be2":[5,0,0,3,9,17,15]
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelBackdrop.html#aae521615b5e4b832089c24f5dc165da1":[5,0,0,3,9,16,0]
 };
