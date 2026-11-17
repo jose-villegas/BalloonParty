@@ -63,5 +63,6 @@ var searchData=
   ['group_60',['Group',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#ac7e66b5ffc3ce5d38f15eee6aecabecb',1,'BalloonParty.Game.Score.Behaviours.ShapeFormationTicker.FormationState.Group'],['../structBalloonParty_1_1Item_1_1Effects_1_1EffectHit.html#a795d8fe1328892d8764588e714269400',1,'BalloonParty.Item.Effects.EffectHit.Group']]],
   ['groupbordercolor_61',['GroupBorderColor',['../classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a3bfce5063286a93e583f3de3d0b52aea',1,'BalloonParty::Editor::LevelPacingWindow']]],
   ['groupgap_62',['GroupGap',['../classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#aeddd91a7e130cb2d59d5eafb8c635c54',1,'BalloonParty::Editor::LevelPacingWindow']]],
-  ['guide_63',['Guide',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a1976318db9f85a34b9cc161834d2d6d0',1,'BalloonParty::Game::Score::Behaviours::ShapeFormationTicker::FormationState']]]
+  ['grown_63',['Grown',['../classBalloonParty_1_1Balloon_1_1View_1_1ToughSnakeSpringView_1_1Link.html#a2341e3598d831c4ea491ffd127de3da7',1,'BalloonParty::Balloon::View::ToughSnakeSpringView::Link']]],
+  ['guide_64',['Guide',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a1976318db9f85a34b9cc161834d2d6d0',1,'BalloonParty::Game::Score::Behaviours::ShapeFormationTicker::FormationState']]]
 ];

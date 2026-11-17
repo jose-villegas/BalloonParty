@@ -4,6 +4,9 @@ var classBalloonParty_1_1Balloon_1_1View_1_1ToughSnakeSpringView_1_1Link =
     [ "Ahead", "classBalloonParty_1_1Balloon_1_1View_1_1ToughSnakeSpringView_1_1Link.html#ad96fdb40da5457c15f15f9ca559e08e5", null ],
     [ "Behind", "classBalloonParty_1_1Balloon_1_1View_1_1ToughSnakeSpringView_1_1Link.html#a9aa1c1d067edeecde1d8c0ffaf7a40c1", null ],
     [ "Chain", "classBalloonParty_1_1Balloon_1_1View_1_1ToughSnakeSpringView_1_1Link.html#a04c6dfadc53b289e215b18ef22b1d601", null ],
+    [ "Grown", "classBalloonParty_1_1Balloon_1_1View_1_1ToughSnakeSpringView_1_1Link.html#a2341e3598d831c4ea491ffd127de3da7", null ],
     [ "Line", "classBalloonParty_1_1Balloon_1_1View_1_1ToughSnakeSpringView_1_1Link.html#ac28bba94605a7d4a9d88a56a24ac5cae", null ],
-    [ "Seen", "classBalloonParty_1_1Balloon_1_1View_1_1ToughSnakeSpringView_1_1Link.html#a4663cddc38380dc44f479dd00877e5ed", null ]
+    [ "Reach", "classBalloonParty_1_1Balloon_1_1View_1_1ToughSnakeSpringView_1_1Link.html#ae24fe20977f94e2dbb0dd94e493ee934", null ],
+    [ "Seen", "classBalloonParty_1_1Balloon_1_1View_1_1ToughSnakeSpringView_1_1Link.html#a4663cddc38380dc44f479dd00877e5ed", null ],
+    [ "Tied", "classBalloonParty_1_1Balloon_1_1View_1_1ToughSnakeSpringView_1_1Link.html#a035ff138456fc034afd7eb1f5deedb90", null ]
 ];
