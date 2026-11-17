@@ -72,5 +72,8 @@ namespace BalloonParty.Configuration.Balloons
         INukeBlastSettings NukeBlast { get; }
 
         INukeFuseSettings NukeFuse { get; }
+
+        /// <summary>The plain balloon's idle sway, baked from its Animator controller.</summary>
+        IBalloonIdleSwaySettings IdleSway { get; }
     }
 }

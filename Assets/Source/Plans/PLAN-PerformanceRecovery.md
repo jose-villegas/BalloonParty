@@ -337,13 +337,13 @@ Other findings:
 | `DangerGradientView` skips its re-apply under an unchanged light | About 35 native calls a frame |
 | `PaintDripOverlay` sleeps until it plays | One Update call per balloon per frame |
 
-### Candidates, by expected size (none done yet)
+### Candidates, by expected size (3 is built, the rest not started)
 
 | # | Change | Kind | Fidelity |
 |---|---|---|---|
 | 1 | Skip an effects-map camera while its layer has nothing alive (the HUD map between score trails; the main map before a shot's first pop) | Code | Identical; needs a presence count per layer |
 | 2 | `allowHDR = false` on the main effects-map camera: URP adds an intermediate half-float target and a copy that the map's own format makes redundant | Code | Identical in theory; check a lightning still for values above 1 |
-| 3 | Balloon idle sway from one ticker instead of 37 Animators | Code | Must match the two clips and their crossfade |
+| 3 | Balloon idle sway from one ticker instead of 37 Animators. **Built:** `BalloonSwayTicker` plays the plain balloons' sway from curves and crossfade times baked out of `Balloon.controller`; tough, unbreakable and the plated reward balloons keep their Animators, which animate more than a sway (`Balloon/README.md`, *Idle sway*). Its tests have not been run in the Editor yet and the saving has not been measured on a device | Code | Must match the two clips and their crossfade: `BalloonSwayAnimatorParityPlayModeTests` compares it with a real Animator frame for frame |
 | 4 | Sleep HUD Animators that sit in a finished clip | Code | Identical if the last pose is kept |
 | 5 | Port the per-balloon shaders to the SRP Batcher and drop their property blocks, or measure first with a Frame Debugger dump | Shaders, Editor | A/B stills |
 | 6 | Post-processing volume update "via scripting" on the HUD, capture and map cameras | Code and one prefab field | Identical |

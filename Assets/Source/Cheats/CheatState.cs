@@ -19,7 +19,7 @@ namespace BalloonParty.Cheats
         /// <summary>The scene capture the bounce light and soft shadows are made from.</summary>
         Capture = 4,
 
-        /// <summary>The balloons' idle-sway Animators.</summary>
+        /// <summary>The balloons' idle sway: the plain balloons' shared ticker and the other types' Animators.</summary>
         Animators = 8,
 
         /// <summary>Post-processing on the main camera: bloom, tonemapping, the colour grade.</summary>

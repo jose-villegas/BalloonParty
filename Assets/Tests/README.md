@@ -840,6 +840,50 @@ Lives in `Assets/Tests/EditMode/Game/` (paired with `GameScopeRegistration`, not
 | Valid prefab → registers `ISoundPlayer`/`IMelodicContext`/`IAudioMixerRouter` | 1 | Registration graph incomplete |
 | Null sound bank → still registers a working fallback bank | 1 | Missing bank null-refs every voice-cap reader instead of degrading to silence |
 
+### `BalloonSwayPlaybackTests` — 9 tests
+
+The idle sway's state machine (`Balloon/Controller/BalloonSwayPlayback`), which stands in for the plain balloon's Animator controller. On straight-line loops, so each loop's angle at each step is arithmetic.
+
+| Area | Tests | What could break |
+|---|---|---|
+| Two poses mix as the normalised sum of their rotations, pinned against worked values a straight line between the angles misses | 1 | The crossfade is up to a tenth of a degree off the Animator's |
+| A fresh playback plays the loop `Stable` asks for whole from its first step, and is entering it for that loop's enter time | 2 | A fade is invented where the Animator had none, or the enter time ends a flip's wait too soon |
+| Phase is the time since the loop began and wraps at its length; a stopped clock holds the pose | 2 | The sway drifts, jumps at the wrap, or moves through a pause |
+| A switch starts on the step that sees it, at no progress, then crossfades into the new loop from its start while the old one keeps playing, over the entered loop's time | 2 | The crossfade runs a step ahead of the Animator's, resumes a stale phase, or takes the wrong duration |
+| A flip during a crossfade or the enter time waits for it to end; the step it ends on starts nothing, the step after starts the crossfade back | 2 | A crossfade is interrupted, or the way back starts a step early |
+
+### `BalloonSwayTickerTests` — 9 tests
+
+`Balloon/Controller/BalloonSwayTicker`'s bookkeeping, through a fake `IBalloonSwayView`.
+
+| Area | Tests | What could break |
+|---|---|---|
+| Each view sways from its own start; `SetStable` reaches only its view | 2 | Balloons sway in lockstep, or one balloon's move flips another's sway |
+| `End` stops writing and leaves the last pose; the others keep their own playback when slots reshuffle; ending a view that isn't swaying does nothing | 3 | A float-away fights the sway for the pivot, or a despawn hands a neighbour the wrong playback |
+| Beginning again (a pooled reuse) starts over on the unstable loop from its start, with no crossfade or flag left from before | 2 | A reused balloon resumes its last life's crossfade or stays stable |
+| `SetStable` on a view that isn't swaying is ignored and not remembered; more views than the starting capacity all sway | 2 | A suspended balloon throws, or the 65th balloon stands still |
+
+### `ShippedBalloonIdleSwayTests` — 8 tests
+
+Pins the baked idle sway (`BalloonsConfiguration`'s Idle Sway block) to the Animator controller it was baked from. Nothing compiles one against the other, so a clip or transition edited without a new bake would leave the balloons on the old sway.
+
+| Area | Tests | What could break |
+|---|---|---|
+| The baked block reads what `BalloonIdleSwayBaker.Read` gives for its controller now (same times, same curve at 3001 points); `Bake` writes what it reads | 2 | The controller changed and nobody baked, or the baker writes to a renamed field |
+| Each baked curve reads what a real Animator plays in that loop's state, at 320 steps across the loop, within a thousandth of a degree | 2 | The baked curve isn't the one Unity plays (it plays a weighted stretch as straight lines between frames, not as drawn) |
+| `AsPlayed` leaves a curve with no weighted keys as drawn, and turns a weighted stretch into a key a frame joined by straight lines, the rest as drawn | 2 | The baker resamples what the Animator plays as drawn, or the reverse |
+| Every prefab the ticker sways has the clips' child as its sway pivot, level in the prefab | 1 | The ticker turns a different child than the Animator did |
+| Every prefab that keeps its Animator plays a controller the baker refuses | 1 | A variant pays for an Animator that only sways |
+
+### `BalloonSwayAnimatorParityTests` — 3 tests
+
+Steps a real Animator on the baked controller by hand beside a `BalloonSwayPlayback` and compares the pivot's angle at every step. The EditMode twin of `BalloonSwayAnimatorParityPlayModeTests`, at 70 steps a second (so no crossfade ends exactly on a step); these report inconclusive if the Animator stays inert when stepped by hand outside Play mode. A failure lists the steps after every spawn and flip, the steps around each change in the Animator's state or transition, and the steps apart, each with the Animator's own account of its states.
+
+| Area | Tests | What could break |
+|---|---|---|
+| Spawn, flips of `IsStable` settled and mid-crossfade, a loop's wrap, to five thousandths of a degree | 1 | The playback starts a crossfade a step off, mixes the poses differently, or lets a flip interrupt |
+| A balloon despawned mid-swing and reused, and one reused after its sway was stopped and its pivot tilted, both start over level | 2 | A last life's tilt shows in the next |
+
 ---
 
 ## PlayMode tests — 7 tests
@@ -883,6 +927,26 @@ Exercises `SfxService`'s slot-generation guard — the one piece of novel, safet
 |---|---|---|
 | `Stop(stale handle)` after a slot steal does not tear down the reused voice | 1 | The generation check is missing or wrong — a late `Stop` from a stolen-away sound silently kills an unrelated voice |
 | `Stop(current handle)` after a slot steal still stops it | 1 | The guard over-corrects and blocks legitimate stops on the voice that actually owns the slot |
+
+### `BalloonSwayAnimatorParityPlayModeTests` — 3 tests
+
+The proof that `BalloonSwayTicker` plays what the plain balloon's Animator played. Standalone (no Game scene, editor only): a real Animator on the baked controller runs in the player loop beside a `BalloonSwayPlayback` stepped in `LateUpdate` with the same delta time, and the pivot's angle is compared every frame to five thousandths of a degree. What's being settled is the engine's: the frame an enabled Animator first advances on, how a transition starts and mixes, and what it shows when its object is activated again. Runs at 70 frames a second, so no crossfade ends exactly on a frame. A failure lists the frames after every spawn and flip, the frames around each change in the Animator's state or transition, and the frames apart, each with the Animator's own account of its states.
+
+| Area | Tests | What could break |
+|---|---|---|
+| Spawn, flips of `IsStable` settled and mid-crossfade, a loop's wrap, 601 frames | 1 | The playback is a frame off the Animator, mixes the poses differently, or lets a flip interrupt a crossfade |
+| A balloon despawned mid-swing and reused starts over level | 1 | A last life's tilt shows in the next |
+| A balloon reused after its sway was stopped (a float-away) starts level | 1 | A cinematic's tilt leaks into the next spawn |
+
+### `BalloonSwayPlayModeTests` — 4 tests
+
+The idle sway's wiring on real balloons in the Game scene. Each test takes one plain balloon that has landed in a slot of the grid; none waits for the whole board to be stable, which lines arriving on the spawn clock and a walking formation can put off indefinitely. A wait that times out lists every live balloon (type, on the grid or not, stable, tilt, scale, Animator).
+
+| Area | Tests | What could break |
+|---|---|---|
+| Plain balloons sway with their Animator disabled; the other types keep theirs enabled | 1 | The Animator cost comes back, a balloon stands still, or a tough loses its animation |
+| A reused view is level on its first frame and on the unstable loop from its start on the next; after `SuspendAnimator` the pivot is left alone and the next spawn starts level | 2 | A reuse resumes the old sway, or the sway fights the float-away |
+| `CheatState.PerfOff.Animators` spawns a balloon with no sway | 1 | The device measurement of "no sway" no longer measures that |
 
 ---
 

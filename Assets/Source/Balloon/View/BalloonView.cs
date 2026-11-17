@@ -27,7 +27,7 @@ using BalloonParty.Configuration.Items;
 namespace BalloonParty.Balloon.View
 {
     public class BalloonView : MonoBehaviour, IPoolable, ISlotActorView, IPaintReactive, INudgeable,
-        IBalloonMotionView, IHostsSpinningItem
+        IBalloonMotionView, IBalloonSwayView, IHostsSpinningItem
     {
         private static readonly int IsStableParam = Animator.StringToHash("IsStable");
         private static readonly int TimeOffsetId = Shader.PropertyToID("_TimeOffset");
@@ -75,6 +75,7 @@ namespace BalloonParty.Balloon.View
         [Inject] private IItemConfiguration _itemConfig;
         [Inject] private PoolManager _poolManager;
         [Inject] private BalloonMotionTicker _motionTicker;
+        [Inject] private BalloonSwayTicker _swayTicker;
         [Inject] private SceneLightFieldService _lightField;
         [Inject] private IProjectileFacingSource _projectileFacing;
 
@@ -85,6 +86,12 @@ namespace BalloonParty.Balloon.View
         private HitVfxOverride[] _hitVfxOverrides;
         private Material _originalBodyMaterial;
         private MaterialPropertyBlock _rainbowBlock;
+
+        // The child the sway ticker turns, set once this prefab's Animator is found to play the controller the
+        // ticker's sway was baked from. Null leaves the Animator in charge: a variant with a controller of its
+        // own, which animates more than a sway (tough, unbreakable, golden, disco, nuke).
+        private Transform _tickedSwayPivot;
+        private bool _swayResolved;
 
         public IBalloonModel Model { get; private set; }
         public IBalloonVariant Variant => _variant;
@@ -142,21 +149,26 @@ namespace BalloonParty.Balloon.View
             }
         }
 
+        private void OnDestroy()
+        {
+            // A view destroyed without being despawned must leave the ticker, or its next pass writes to a
+            // destroyed transform.
+            EndTickedSway();
+        }
+
+        void IBalloonSwayView.ApplySway(float degrees)
+        {
+            var half = degrees * (Mathf.Deg2Rad * 0.5f);
+            _tickedSwayPivot.localRotation = new Quaternion(0f, 0f, Mathf.Sin(half), Mathf.Cos(half));
+        }
+
         public void OnSpawned()
         {
             transform.localScale = Vector3.one;
             RotationPivot.localRotation = Quaternion.identity;
             transform.position = Vector3.one * -1000f;
 
-            // Re-enable in case this balloon was graduated into a float-away, which suspends the idle bob.
-            if (_animator != null)
-            {
-                _animator.enabled = true;
-#if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
-                _animator.enabled =
-                    (BalloonParty.Cheats.CheatState.PerfOff & BalloonParty.Cheats.PerfOff.Animators) == 0;
-#endif
-            }
+            StartIdleSway();
 
             foreach (var r in _spriteLayerRenderers)
             {
@@ -174,6 +186,7 @@ namespace BalloonParty.Balloon.View
             TweenTracker.Kill();
             transform.DOKill();
             _motionTicker?.CancelAll(this);
+            EndTickedSway();
             _bindDisposables.Clear();
             _itemService?.Unbind();
             SetBodyMaterial(_originalBodyMaterial);
@@ -202,10 +215,16 @@ namespace BalloonParty.Balloon.View
             _poolManager.PlayParticle(prefab, transform.position, oldColor).transform.localScale *= scale;
         }
 
-        // Stops the idle animator so a board effect's tween owns the balloon's rotation without the idle
-        // clip clobbering it each frame. OnSpawned re-enables it for the next reuse.
+        // Stops the idle sway so a board effect's tween owns the balloon's rotation without the sway
+        // clobbering it each frame. OnSpawned starts it again for the next reuse.
         internal void SuspendAnimator()
         {
+            if (_tickedSwayPivot != null)
+            {
+                EndTickedSway();
+                return;
+            }
+
             if (_animator != null)
             {
                 _animator.enabled = false;
@@ -241,7 +260,7 @@ namespace BalloonParty.Balloon.View
             if (_animator != null)
             {
                 model.IsStable
-                    .Subscribe(stable => _animator.SetBool(IsStableParam, stable))
+                    .Subscribe(SetSwayStable)
                     .AddTo(_bindDisposables);
             }
 
@@ -360,6 +379,79 @@ namespace BalloonParty.Balloon.View
                 _poolManager.PlayParticle(defaultPrefab, transform.position,
                     _palette.GetColor(modelColor.Color.Value)),
                 parent);
+        }
+
+        // Deferred to the first spawn: the pool injects after Awake.
+        private void ResolveSwayDriver()
+        {
+            if (_swayResolved)
+            {
+                return;
+            }
+
+            _swayResolved = true;
+            var sway = _balloonsConfig?.IdleSway;
+            if (_animator == null || _swayTicker == null || sway == null || sway.Source == null
+                || _animator.runtimeAnimatorController != sway.Source)
+            {
+                return;
+            }
+
+            // The clips' own target, so the ticker turns exactly the child the Animator turned.
+            _tickedSwayPivot = _animator.transform.Find(sway.PivotPath);
+        }
+
+        // A reused balloon starts its sway over, level and on the unstable loop, whatever tilt its last life
+        // left on the pivot: so did its Animator, whose state and parameters reset each time it was enabled.
+        private void StartIdleSway()
+        {
+            ResolveSwayDriver();
+
+            var swayOn = true;
+#if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
+            swayOn = (BalloonParty.Cheats.CheatState.PerfOff & BalloonParty.Cheats.PerfOff.Animators) == 0;
+#endif
+
+            if (_tickedSwayPivot != null)
+            {
+                _animator.enabled = false;
+                if (swayOn)
+                {
+                    _swayTicker.Begin(this);
+                }
+                else
+                {
+                    _swayTicker.End(this);
+                }
+
+                return;
+            }
+
+            // Re-enable in case this balloon was graduated into a float-away, which suspends the idle bob.
+            if (_animator != null)
+            {
+                _animator.enabled = swayOn;
+            }
+        }
+
+        private void EndTickedSway()
+        {
+            // By reference: on the way out of a destroyed hierarchy the pivot already compares equal to null.
+            if (!ReferenceEquals(_tickedSwayPivot, null))
+            {
+                _swayTicker.End(this);
+            }
+        }
+
+        private void SetSwayStable(bool stable)
+        {
+            if (_tickedSwayPivot != null)
+            {
+                _swayTicker.SetStable(this, stable);
+                return;
+            }
+
+            _animator.SetBool(IsStableParam, stable);
         }
 
         private HitVfxOverride FindHitVfxOverride(HitOutcome outcome)

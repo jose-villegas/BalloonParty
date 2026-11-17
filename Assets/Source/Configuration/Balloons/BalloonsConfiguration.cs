@@ -103,6 +103,9 @@ namespace BalloonParty.Configuration.Balloons
         [Header("Nuke Fuse")]
         [SerializeField] private NukeFuseSettings _nukeFuse = new();
 
+        [Header("Idle Sway (baked: Tools > BalloonParty > Balloons > Bake Idle Sway)")]
+        [SerializeField] private BalloonIdleSwaySettings _idleSway = new();
+
         public IReadOnlyList<BalloonPrefabEntry> Entries => _entries;
         public ParticleSystem DefaultPopVfxPrefab => _defaultPopVfxPrefab;
         public Material RainbowMaterial => _rainbowMaterial;
@@ -131,5 +134,6 @@ namespace BalloonParty.Configuration.Balloons
         public INukeOddsSettings NukeOdds => _nukeOdds;
         public INukeBlastSettings NukeBlast => _nukeBlast;
         public INukeFuseSettings NukeFuse => _nukeFuse;
+        public IBalloonIdleSwaySettings IdleSway => _idleSway;
     }
 }

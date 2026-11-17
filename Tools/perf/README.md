@@ -54,7 +54,7 @@ python3 Tools/perf/device_perf.py --serial <serial> --label no-lens --off lens
 | `lens` | The effects-clearing lens: its mask, both effects maps, their composites |
 | `hudmap` | Only the HUD's effects map |
 | `capture` | The scene capture the bounce light and soft shadows are made from |
-| `animators` | The balloons' idle-sway Animators |
+| `animators` | The balloons' idle sway: the plain balloons' shared ticker, and the Animators the other types keep |
 | `post` | Post-processing on the main camera: bloom, tonemapping, the colour grade |
 | `hud` | The HUD canvases' drawing (their scripts keep running) |
 

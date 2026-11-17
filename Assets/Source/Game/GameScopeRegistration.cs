@@ -293,6 +293,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<BushViewController>().AsSelf().As<ITransitionOutgoingContent>();
             builder.Register<SceneLightFieldService>(Lifetime.Singleton)
                 .AsImplementedInterfaces().AsSelf();
+            builder.RegisterEntryPoint<BalloonSwayTicker>().AsSelf();
             builder.RegisterEntryPoint<BalloonMotionTicker>().AsSelf();
             builder.RegisterEntryPoint<RejectedBalloonEffect>().AsSelf().As<IRunResettable>();
             builder.RegisterEntryPoint<BalloonControllerRegistry>().AsSelf().As<IBalloonPopper>();
