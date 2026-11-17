@@ -186,6 +186,47 @@ namespace BalloonParty.Balloon.Formation
         }
 
         /// <summary>
+        ///     True when <see cref="IUnbreakableFormationSettings.MinMembers" /> or more unbreakables are free, in no
+        ///     formation, gliding in or not. The balancer asks on each beat between cycles. Read-only.
+        /// </summary>
+        internal bool UnbreakablesDueToForm()
+        {
+            if (_settings == null || !_settings.Enabled)
+            {
+                return false;
+            }
+
+            CollectCandidates(null, armoured: false);
+            return _candidates.Count >= _settings.MinMembers;
+        }
+
+        /// <summary>
+        ///     On a beat between cycles, the free unbreakables form new formations, so one that arrives or is set free
+        ///     stays red a beat at most rather than a whole cycle. Only forming: the standing formations count their
+        ///     holds and change shape on the cycle (<see cref="ArrangeOnCycle" />).
+        /// </summary>
+        internal void FormOnBeat(Action<IReadOnlyList<SlotMove>> relocate)
+        {
+            if (_settings == null || !_settings.Enabled)
+            {
+                return;
+            }
+
+            _arrangePass++;
+            _arranging = true;
+            try
+            {
+                FormFromFreeUnbreakables(relocate);
+            }
+            finally
+            {
+                _arranging = false;
+            }
+
+            RebuildMemberList();
+        }
+
+        /// <summary>
         ///     True when the toughs can form up: either <see cref="IUnbreakableFormationSettings.ToughSnakeMinMembers" /> toughs
         ///     are on the board with no snake yet, or a snake walks and a tough is free of it or a popped member left a
         ///     gap in its body. A tough still gliding in

@@ -169,6 +169,26 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void OnABeat_FreeUnbreakablesFormUp_ButAStandingFormationKeepsItsShape()
+        {
+            AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(6, 4), new Vector2Int(3, 5));
+            Arrange();
+            var standing = _service.Formations[0];
+            var shape = standing.Shape;
+            var cyclesLeft = standing.CyclesLeft;
+            Assert.IsFalse(_service.UnbreakablesDueToForm(), "all three in");
+
+            var arrivals = new[] { AddUnbreakable(new Vector2Int(1, 4)), AddUnbreakable(new Vector2Int(5, 0)) };
+            Assert.IsTrue(_service.UnbreakablesDueToForm());
+            _service.FormOnBeat(Relocate);
+
+            Assert.AreEqual(2, _service.Formations.Count, "the two that arrived form a pair at once");
+            Assert.IsTrue(arrivals.All(u => u.IsAnchored));
+            Assert.AreEqual(shape, standing.Shape);
+            Assert.AreEqual(cyclesLeft, standing.CyclesLeft, "holds count only on a cycle");
+        }
+
+        [Test]
         public void TwoUnbreakables_FormUp_WhenTheMinimumIsTwo()
         {
             _settings.MinMembers.Returns(2);

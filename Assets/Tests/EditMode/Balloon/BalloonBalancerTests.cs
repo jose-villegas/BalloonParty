@@ -350,6 +350,27 @@ namespace BalloonParty.Tests.Balloon
             balancer.ResetRun(balancer.Generation + 1);
         }
 
+        [Test]
+        public void FreeUnbreakables_FormUpOnABeat_BetweenCycles()
+        {
+            var balancer = BalancerWithAToughSnake(out var formations, toughStepSeconds: 100f, formAtOnce: false);
+            _balloonsConfig.UnbreakableFormation.ToughSnakes.Returns(false);
+            _balloonsConfig.UnbreakableFormation.BeatSeconds.Returns(1f);
+            _balloonsConfig.UnbreakableFormation.MinMembers.Returns(2);
+            _balloonsConfig.FlightRebalanceInterval.Returns(100f);
+            _grid.Place(new UnbreakableBalloonModel(new BalloonModelConfig(typeName: BalloonType.Unbreakable)), null,
+                new Vector2Int(0, 1));
+
+            Assert.IsFalse(balancer.TickFlightRebalance(1f), "one alone: nothing to form on the first beat");
+
+            _grid.Place(new UnbreakableBalloonModel(new BalloonModelConfig(typeName: BalloonType.Unbreakable)), null,
+                new Vector2Int(2, 1));
+            Assert.IsTrue(balancer.TickFlightRebalance(1f), "the second beat is a cycle");
+            Assert.IsTrue(balancer.TickFlightRebalance(1f), "and the third, between cycles, forms the pair up");
+            formations.Dispose();
+            balancer.ResetRun(balancer.Generation + 1);
+        }
+
         // Three toughs on row 0 of the 3 by 3 board: the wave start makes a snake of them, unless formAtOnce is
         // off, when it waits for the test to arrange.
         private BalloonBalancer BalancerWithAToughSnake(

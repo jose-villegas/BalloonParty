@@ -2,8 +2,8 @@
 
 Unbreakable balloons keep one clock, the **beat** (`BeatSeconds`, 1.7 s of play), and every
 `BeatsPerCycle` (2) beats make a **cycle** (3.4 s). When two or more are on the board, they gather into a
-**formation**. They line up, stay in place for a few cycles, then switch to a different line, all on the
-cycle. While a formation stands, its members float in midair: the balloons below rise until they reach the
+**formation**. They form up on any beat, stay in place for a few cycles, then switch to a different line on
+the cycle. While a formation stands, its members float in midair: the balloons below rise until they reach the
 formation, and spawn lines stop under it. An unbreakable left alone, in no formation, roams: it jumps toward
 the far side of the board, but only on a cycle, only after it has stood `LoneHoldCycles` (3) cycles, and only
 one at a time, so the board moves to one rhythm rather than a lone unbreakable crossing it at every wave.
@@ -34,7 +34,9 @@ biggest group, every other tough falls in behind its tail, and it walks through 
 
 `BalloonBalancer` keeps the beat (`TickStepClock`): it counts seconds of play, and a pause or a doomed
 shot's last glide holds it rather than restarting it, since nearly every shot ends in one. On every beat an
-unbreakable snake steps. On every cycle the balancer asks the service to `ArrangeOnCycle`, then moves one
+unbreakable snake steps, and on a beat between cycles the free unbreakables form up (`FormOnBeat`) once
+`MinMembers` of them are free, still gliding in or not, so one that arrives or is set free is red a beat at
+most, not a cycle. On every cycle the balancer asks the service to `ArrangeOnCycle`, then moves one
 lone unbreakable (`RelocateOneRoamer`): the one that has rested longest of those that have stood
 `LoneHoldCycles`, and none while the last one to move is still on its way (`RoamRests` keeps the count).
 Formations go first, so the lone one sees their slots as taken. A cycle with no unbreakable on the board
