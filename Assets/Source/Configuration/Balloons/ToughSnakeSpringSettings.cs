@@ -15,7 +15,7 @@ namespace BalloonParty.Configuration.Balloons
 
         [Tooltip("A link's rest length, as a share of the distance between neighbouring slots: above 1 it sags " +
                  "while the two stand side by side.")]
-        [SerializeField] [Range(0.5f, 2f)] private float _slack = 1.45f;
+        [SerializeField] [Range(0.5f, 2f)] private float _slack = 1.25f;
 
         [Tooltip("How hard each spring holds its length, per solver pass: 1 rigid, lower stretches and bounces.")]
         [SerializeField] [Range(0.05f, 1f)] private float _stiffness = 0.45f;

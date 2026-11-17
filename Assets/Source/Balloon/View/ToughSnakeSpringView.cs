@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using BalloonParty.Balloon.Formation;
 using BalloonParty.Configuration.Balloons;
-using BalloonParty.Shared;
 using BalloonParty.Shared.Math;
 using BalloonParty.Slots.Grid;
 using UnityEngine;
@@ -23,10 +22,11 @@ namespace BalloonParty.Balloon.View
         [Inject] private IToughSnakeBody _snake;
         [Inject] private SlotGrid _grid;
         [Inject] private IBalloonsConfiguration _balloonsConfig;
-        [Inject] private ISlotGridConfig _gridConfig;
 
         private readonly List<Link> _links = new();
         private readonly List<Link> _spare = new();
+
+        private float _neighbourGap;
 
         private void LateUpdate()
         {
@@ -132,7 +132,7 @@ namespace BalloonParty.Balloon.View
             link.Seen = true;
             var tuning = new SpringChainTuning(settings.Stiffness, settings.Gravity, settings.Damping,
                 1f / settings.StepsPerSecond, settings.Iterations);
-            var rest = _gridConfig.SlotSeparation.x * settings.Slack;
+            var rest = NeighbourGap() * settings.Slack;
             link.Chain.Step(ahead.transform.position, behind.transform.position, rest, Time.deltaTime, tuning);
 
             var line = link.Line;
@@ -146,6 +146,19 @@ namespace BalloonParty.Balloon.View
             {
                 line.SetPosition(i, link.Chain.Point(i));
             }
+        }
+
+        // The world gap between neighbouring slots (a hex grid's are all the same); the grid's own slot separation
+        // is half of it across a row.
+        private float NeighbourGap()
+        {
+            if (_neighbourGap <= 0f)
+            {
+                _neighbourGap = Vector3.Distance(_grid.IndexToWorldPosition(Vector2Int.zero),
+                    _grid.IndexToWorldPosition(Vector2Int.right));
+            }
+
+            return _neighbourGap;
         }
 
         private static Color Shade(Color knot, float tint)
