@@ -267,12 +267,23 @@ apart). So members gliding in to form a line brighten and merge as they arrive, 
 along with it as it walks. Unlike the blue lights, the ring counts a member from the moment it is assigned,
 gliding in or not, since the drawing together is what it shows. Lone unbreakables and toughs never glow.
 
+A ring never just vanishes. Once its member is disconnected, for whatever reason (it leaves the formation
+and turns red, its partner leaves or pops so it is left alone, it pops itself, or the board is cleared at a
+level's end or a run reset), the ring dissolves over `DissolveSeconds` (0.6). It keeps the brightness it
+had, its line erodes along a world-space noise with a brighter edge where it eats, and it draws back into
+its member, so a merge with its neighbours eases off rather than snapping apart. A ring whose balloon has
+gone dissolves where the balloon was last. A newly connected ring grows in over the same time, and a member
+that reconnects mid-dissolve grows back from where it had got to.
+
 `Balloon/View/FormationGlowView` draws it: one quad (`BalloonParty/Sprite/FormationGlow` shader) fitted
 each frame round the glowing members, so the shader only runs where the light can be, and hidden while no
 member glows. Each `UnbreakableFormationLook` registers in `FormationGlowSources` from its bind to its
-despawn, and `FormationGlowField` works out who glows and how brightly (at most 24 members, the shader's
-array). The shader sums a smooth falloff round every member and draws the ring where that sum crosses the
-level a lone member's would at `RingRadius`, at a constant width, with a faint fill inside. The light is
+despawn, each spawn its own entry, so a pooled look spawning again never takes over its old ring.
+`FormationGlowField` keeps the rings from frame to frame: which are connected, how brightly they glow and
+how far each has dissolved (at most 24 drawn, the shader's array). The shader sums a smooth falloff round every member and draws the ring where that sum crosses the
+level a lone member's would at `RingRadius`, at a constant width, with a faint fill inside. A dissolving
+ring adds less to that sum as it goes, down to only the threshold, which is what draws it back into its
+member, and the noise eats its light as far as the dissolving rings' share of the sum. The light is
 additive and HDR (`HdrBoost`, 2.5 over the palette blue), so it blooms. It sorts under the balloons
 (`Balloons` -2), on the Default layer: the main camera draws it, the GI capture doesn't, so it casts no
 shadow. Rings of neighbouring formations join too, so a stack of formations reads as one wall. The

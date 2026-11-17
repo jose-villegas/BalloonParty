@@ -31,6 +31,15 @@ namespace BalloonParty.Configuration.Balloons
         /// <summary>A member this far from every other glows not at all.</summary>
         float FadeDistance { get; }
 
+        /// <summary>
+        ///     Seconds a ring takes to dissolve once its member is disconnected (out of formation, alone, popped or
+        ///     cleared), and to grow in once it's connected.
+        /// </summary>
+        float DissolveSeconds { get; }
+
+        /// <summary>Grains per world unit of the noise a dissolving ring erodes along.</summary>
+        float DissolveNoiseScale { get; }
+
         string SortingLayerName { get; }
 
         int SortingOrder { get; }

@@ -575,18 +575,20 @@ Tests the directed pressure search (`TryResolve`) — a board-up shove propagati
 | Relocation terminals (nearest/farthest) end the chain | 3 | Relocator not vacating, or wrong gap picked |
 | Puff at entry seeds the balloon above it | 1 | Traversability seeding regression blocks relief |
 
-### `FormationGlowFieldTests` — 12 tests
+### `FormationGlowFieldTests` — 19 tests
 
-The formation glow's field (`Balloon/View/FormationGlowField`): which members light it and how brightly, and where the shader's rings join.
+The formation glow's field (`Balloon/View/FormationGlowField`): which rings light and how brightly, how a disconnected ring dissolves instead of vanishing, and where the shader's rings join.
 
 | Area | Tests | What could break |
 |---|---|---|
-| A lone member's outline sits at the ring radius | 1 | Threshold and shader sum disagree, ring drawn too big or small |
-| Neighbours weigh fully, weight falls with distance, membership scales it | 3 | Closeness curve inverted or unscaled |
-| A lone member, a far pair and a balloon out of formation don't glow | 3 | Lone unbreakables glow, or a non-member counts as a neighbour |
-| Members with no neighbour are left out and the rest compacted | 1 | Zero-weight points sent to the shader, or positions shuffled |
-| Bounds cover the members and their light; capped at the array size | 2 | Quad clips the ring, or the array overruns |
-| Neighbours' rings join, two slots apart they don't | 2 | Reach default no longer joins a line, or joins everything |
+| A whole lone ring sits at the ring radius; a dissolved one draws back into its member | 2 | Threshold, shape and shader sum disagree |
+| Neighbours grow in over the dissolve time; brightness falls with distance | 2 | Rings pop in, or the closeness curve is inverted |
+| A lone member, a far pair and a balloon out of formation don't light | 3 | Lone unbreakables glow, or a non-member counts as a neighbour |
+| A member leaving, popping, or the board clearing dissolves the rings over the dissolve time at their brightness, following a leaver and staying where a popped one was | 4 | Rings vanish at once, dim before dissolving, or jump |
+| Reconnecting mid-dissolve grows back; stopped time holds a dissolve | 2 | Ring restarts from nothing, or dissolves through a pause |
+| A pooled look spawning again starts a fresh ring and leaves its old one dissolving | 1 | Respawn steals the old ring and drags it across the board |
+| Bounds cover the rings and their light; capped at the array size | 2 | Quad clips the ring, or the array overruns |
+| Neighbours' rings join, two slots apart they don't, and a dissolving neighbour eases the merge off | 3 | Reach default no longer joins a line, or a merge snaps apart |
 
 ### `UnbreakableBalloonModelTests` — 6 tests
 

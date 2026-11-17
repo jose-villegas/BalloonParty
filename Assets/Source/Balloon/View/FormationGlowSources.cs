@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UniRx;
 using UnityEngine;
 
 namespace BalloonParty.Balloon.View
@@ -11,11 +10,15 @@ namespace BalloonParty.Balloon.View
         /// <summary>World centre of the balloon.</summary>
         Vector2 GlowCentre { get; }
 
-        /// <summary>How far into its formation it is: 0 out, 1 in, easing between as it joins and leaves.</summary>
-        float GlowMembership { get; }
+        /// <summary>Whether it is in a formation now, gliding to its slot or there.</summary>
+        bool GlowsInFormation { get; }
     }
 
-    /// <summary>The balloons that can light the formation glow, each in from its bind until its despawn.</summary>
+    /// <summary>
+    ///     The balloons that can light the formation glow, each in from its bind until its despawn. Each spawn is its
+    ///     own entry, so the ring a despawned balloon leaves dissolving is never taken over by the same pooled look
+    ///     spawning again.
+    /// </summary>
     internal sealed class FormationGlowSources
     {
         private readonly List<IFormationGlowSource> _sources = new();
@@ -24,8 +27,29 @@ namespace BalloonParty.Balloon.View
 
         internal IDisposable Add(IFormationGlowSource source)
         {
-            _sources.Add(source);
-            return Disposable.Create(() => _sources.Remove(source));
+            var registration = new Registration(source, _sources);
+            _sources.Add(registration);
+            return registration;
+        }
+
+        private sealed class Registration : IFormationGlowSource, IDisposable
+        {
+            private readonly IFormationGlowSource _source;
+            private readonly List<IFormationGlowSource> _sources;
+
+            public Vector2 GlowCentre => _source.GlowCentre;
+            public bool GlowsInFormation => _source.GlowsInFormation;
+
+            internal Registration(IFormationGlowSource source, List<IFormationGlowSource> sources)
+            {
+                _source = source;
+                _sources = sources;
+            }
+
+            public void Dispose()
+            {
+                _sources.Remove(this);
+            }
         }
     }
 }

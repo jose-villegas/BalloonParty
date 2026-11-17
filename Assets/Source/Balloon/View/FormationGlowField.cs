@@ -5,14 +5,21 @@ using UnityEngine;
 namespace BalloonParty.Balloon.View
 {
     /// <summary>
-    ///     Which formation members light the formation glow, and how brightly (<c>FormationGlow</c> shader). A
-    ///     member's weight is how far into its formation it is times how close its nearest fellow is: full at
-    ///     <see cref="IFormationGlowSettings.FullDistance" />, none past <see cref="IFormationGlowSettings.FadeDistance" />.
+    ///     Which rings the formation glow draws (<c>FormationGlow</c> shader), how brightly, and how far each has
+    ///     dissolved. A ring is connected while its member is in a formation with a fellow member within
+    ///     <see cref="IFormationGlowSettings.FadeDistance" />: its brightness follows how close the nearest fellow is,
+    ///     full at <see cref="IFormationGlowSettings.FullDistance" />. Disconnected for any reason (out of formation,
+    ///     left alone, popped, cleared with the board), the ring stays where its member was last and dissolves over
+    ///     <see cref="IFormationGlowSettings.DissolveSeconds" /> at the brightness it had, instead of vanishing.
     /// </summary>
-    internal static class FormationGlowField
+    internal sealed class FormationGlowField
     {
         /// <summary>The shader's fixed array size (<c>MAX_POINTS</c>).</summary>
         internal const int MaxPoints = 24;
+
+        private readonly List<Ring> _rings = new();
+        private readonly Stack<Ring> _spare = new();
+        private readonly List<Vector2> _connected = new();
 
         /// <summary>The field's value at a lone member's ring, so its outline sits at the ring radius.</summary>
         internal static float Threshold(float ringRadius, float reach)
@@ -22,10 +29,19 @@ namespace BalloonParty.Balloon.View
         }
 
         /// <summary>
+        ///     How much of its field a ring adds at <paramref name="presence" />: all of it when whole, and at none
+        ///     no more than the threshold, so a lone ring shrinks into its member as it dissolves.
+        /// </summary>
+        internal static float Shape(float presence, float threshold)
+        {
+            return threshold + (1f - threshold) * presence;
+        }
+
+        /// <summary>
         ///     The field the shader sums at <paramref name="point" />. The view doesn't need it; it pins the shader's
         ///     sum, so the tests can tell where rings join.
         /// </summary>
-        internal static float FieldAt(IReadOnlyList<Vector4> points, int count, Vector2 point, float reach)
+        internal static float FieldAt(IReadOnlyList<Vector4> points, int count, Vector2 point, float reach, float threshold)
         {
             var reach2 = reach * reach;
             var field = 0f;
@@ -35,7 +51,7 @@ namespace BalloonParty.Balloon.View
                 if (r2 < reach2)
                 {
                     var t = 1f - r2 / reach2;
-                    field += t * t * t;
+                    field += Shape(points[i].w, threshold) * t * t * t;
                 }
             }
 
@@ -43,46 +59,109 @@ namespace BalloonParty.Balloon.View
         }
 
         /// <summary>
-        ///     Writes the glowing members into <paramref name="points" /> (xy their centre, z their weight) and
-        ///     returns how many; <paramref name="bounds" /> covers their light. Past <see cref="MaxPoints" /> members
-        ///     in formation, the rest are left out.
+        ///     Moves the rings on by <paramref name="deltaTime" /> and writes the ones to draw into
+        ///     <paramref name="points" /> (xy centre, z brightness, w presence: 1 whole, falling to 0 as it dissolves),
+        ///     returning how many; <paramref name="bounds" /> covers their light. Past <see cref="MaxPoints" />, the
+        ///     rest are left out.
         /// </summary>
-        internal static int Fill(
-            IReadOnlyList<IFormationGlowSource> sources, IFormationGlowSettings settings, Vector4[] points,
-            out Rect bounds)
+        internal int Step(
+            IReadOnlyList<IFormationGlowSource> sources, IFormationGlowSettings settings, float deltaTime,
+            Vector4[] points, out Rect bounds)
         {
-            var candidates = 0;
-            for (var i = 0; i < sources.Count && candidates < points.Length; i++)
+            Match(sources, settings);
+            Advance(deltaTime / settings.DissolveSeconds);
+            return Write(points, settings, out bounds);
+        }
+
+        // Pairs each source with its ring, opening one for a source that has just connected, and sets what each
+        // ring is heading for: its closeness while connected, nothing once not.
+        private void Match(IReadOnlyList<IFormationGlowSource> sources, IFormationGlowSettings settings)
+        {
+            _connected.Clear();
+            for (var i = 0; i < sources.Count; i++)
             {
-                var membership = sources[i].GlowMembership;
-                if (membership > 0f)
+                if (sources[i].GlowsInFormation)
                 {
-                    var centre = sources[i].GlowCentre;
-                    points[candidates++] = new Vector4(centre.x, centre.y, membership, 0f);
+                    _connected.Add(sources[i].GlowCentre);
                 }
             }
 
-            // Weights read every candidate's position, so they're worked out before any is moved down the array.
-            for (var i = 0; i < candidates; i++)
+            for (var i = 0; i < _rings.Count; i++)
             {
-                points[i].w = points[i].z * Closeness(points, candidates, i, settings);
+                _rings[i].Seen = false;
             }
 
+            var index = 0;
+            for (var i = 0; i < sources.Count; i++)
+            {
+                var source = sources[i];
+                var target = source.GlowsInFormation ? Closeness(index++, settings) : 0f;
+                var ring = Find(source);
+                if (ring == null)
+                {
+                    if (target <= 0f)
+                    {
+                        continue;
+                    }
+
+                    ring = Rent(source);
+                }
+
+                ring.Seen = true;
+                ring.Centre = source.GlowCentre;
+                ring.Target = target;
+            }
+        }
+
+        private void Advance(float rate)
+        {
+            for (var i = _rings.Count - 1; i >= 0; i--)
+            {
+                var ring = _rings[i];
+                if (!ring.Seen)
+                {
+                    // Its balloon has gone: the ring stays where it was last and dissolves there.
+                    ring.Source = null;
+                    ring.Target = 0f;
+                }
+
+                if (ring.Target > 0f)
+                {
+                    ring.Brightness = Mathf.MoveTowards(ring.Brightness, ring.Target, rate);
+                    ring.Presence = Mathf.MoveTowards(ring.Presence, 1f, rate);
+                }
+                else
+                {
+                    // The brightness holds, so the ring dissolves as it was rather than dimming first.
+                    ring.Presence = Mathf.MoveTowards(ring.Presence, 0f, rate);
+                }
+
+                if (ring.Presence <= 0f && ring.Target <= 0f)
+                {
+                    _rings[i] = _rings[_rings.Count - 1];
+                    _rings.RemoveAt(_rings.Count - 1);
+                    ring.Source = null;
+                    _spare.Push(ring);
+                }
+            }
+        }
+
+        private int Write(Vector4[] points, IFormationGlowSettings settings, out Rect bounds)
+        {
             var count = 0;
             var min = Vector2.positiveInfinity;
             var max = Vector2.negativeInfinity;
-            for (var i = 0; i < candidates; i++)
+            for (var i = 0; i < _rings.Count && count < points.Length; i++)
             {
-                var weight = points[i].w;
-                if (weight <= 0f)
+                var ring = _rings[i];
+                if (ring.Presence <= 0f)
                 {
                     continue;
                 }
 
-                var centre = (Vector2)points[i];
-                points[count++] = new Vector4(centre.x, centre.y, weight, 0f);
-                min = Vector2.Min(min, centre);
-                max = Vector2.Max(max, centre);
+                points[count++] = new Vector4(ring.Centre.x, ring.Centre.y, ring.Brightness, ring.Presence);
+                min = Vector2.Min(min, ring.Centre);
+                max = Vector2.Max(max, ring.Centre);
             }
 
             if (count == 0)
@@ -97,15 +176,16 @@ namespace BalloonParty.Balloon.View
             return count;
         }
 
-        private static float Closeness(Vector4[] points, int count, int index, IFormationGlowSettings settings)
+        // How close the nearest fellow member in formation is to the one at index, as a weight: 0 when alone.
+        private float Closeness(int index, IFormationGlowSettings settings)
         {
             var nearest = float.PositiveInfinity;
-            var centre = (Vector2)points[index];
-            for (var j = 0; j < count; j++)
+            var centre = _connected[index];
+            for (var j = 0; j < _connected.Count; j++)
             {
                 if (j != index)
                 {
-                    nearest = Mathf.Min(nearest, ((Vector2)points[j] - centre).magnitude);
+                    nearest = Mathf.Min(nearest, (_connected[j] - centre).magnitude);
                 }
             }
 
@@ -116,6 +196,39 @@ namespace BalloonParty.Balloon.View
 
             var t = Mathf.Clamp01((settings.FadeDistance - nearest) / (settings.FadeDistance - settings.FullDistance));
             return t * t * (3f - 2f * t);
+        }
+
+        private Ring Find(IFormationGlowSource source)
+        {
+            for (var i = 0; i < _rings.Count; i++)
+            {
+                if (_rings[i].Source == source)
+                {
+                    return _rings[i];
+                }
+            }
+
+            return null;
+        }
+
+        private Ring Rent(IFormationGlowSource source)
+        {
+            var ring = _spare.Count > 0 ? _spare.Pop() : new Ring();
+            ring.Source = source;
+            ring.Brightness = 0f;
+            ring.Presence = 0f;
+            _rings.Add(ring);
+            return ring;
+        }
+
+        private sealed class Ring
+        {
+            internal IFormationGlowSource Source;
+            internal Vector2 Centre;
+            internal float Target;
+            internal float Brightness;
+            internal float Presence;
+            internal bool Seen;
         }
     }
 }

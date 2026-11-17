@@ -21,7 +21,10 @@ namespace BalloonParty.Balloon.View
         private static readonly int ColorId = Shader.PropertyToID("_Color");
         private static readonly int HdrBoostId = Shader.PropertyToID("_HdrBoost");
 
+        private static readonly int DissolveId = Shader.PropertyToID("_GlowDissolve");
+
         private readonly Vector4[] _points = new Vector4[FormationGlowField.MaxPoints];
+        private readonly FormationGlowField _field = new();
 
         private IFormationGlowSettings _settings;
         private FormationGlowSources _sources;
@@ -38,7 +41,7 @@ namespace BalloonParty.Balloon.View
             }
 
             var bounds = default(Rect);
-            var count = _settings.Enabled ? FormationGlowField.Fill(_sources.All, _settings, _points, out bounds) : 0;
+            var count = _settings.Enabled ? _field.Step(_sources.All, _settings, Time.deltaTime, _points, out bounds) : 0;
             if (count == 0)
             {
                 _renderer.enabled = false;
@@ -80,6 +83,7 @@ namespace BalloonParty.Balloon.View
             _material.SetVector(FieldId, new Vector4(
                 reach * reach, FormationGlowField.Threshold(_settings.RingRadius, reach), _settings.RingWidth,
                 _settings.Fill));
+            _material.SetVector(DissolveId, new Vector4(_settings.DissolveNoiseScale, 0f, 0f, 0f));
 
             // Default layer: the main camera draws it in play, but neither the launch screen nor the GI capture
             // (as an occluder, a ring would cast a shadow on the ground).

@@ -41,6 +41,16 @@ namespace BalloonParty.Configuration.Balloons
         [Min(0f)]
         [SerializeField] private float _fadeDistance = 2.2f;
 
+        [Tooltip("Seconds a ring takes to dissolve once its member is disconnected: out of formation, left alone, " +
+                 "popped or cleared with the board. Its line erodes along a noise and shrinks back into the member, " +
+                 "easing off its merge with its neighbours. A connecting ring grows in over the same time.")]
+        [Min(0.05f)]
+        [SerializeField] private float _dissolveSeconds = 0.6f;
+
+        [Tooltip("Grains per world unit of the noise a dissolving ring erodes along: higher breaks it into finer bits.")]
+        [Min(0.5f)]
+        [SerializeField] private float _dissolveNoiseScale = 7f;
+
         [Tooltip("On the ground beneath the balloons, as the nuke's flood.")]
         [SortingLayerName]
         [SerializeField] private string _sortingLayerName = "Balloons";
@@ -58,6 +68,8 @@ namespace BalloonParty.Configuration.Balloons
         public float HdrBoost => _hdrBoost;
         public float FullDistance => _fullDistance;
         public float FadeDistance => Mathf.Max(_fadeDistance, _fullDistance + 0.01f);
+        public float DissolveSeconds => _dissolveSeconds;
+        public float DissolveNoiseScale => _dissolveNoiseScale;
         public string SortingLayerName => _sortingLayerName;
         public int SortingOrder => _sortingOrder;
         public Shader Shader => _shader;

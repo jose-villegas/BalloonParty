@@ -327,6 +327,8 @@ MonoBehaviour:
     _hdrBoost: 2.5
     _fullDistance: 0.8
     _fadeDistance: 2.2
+    _dissolveSeconds: 0.6
+    _dissolveNoiseScale: 7
     _sortingLayerName: Balloons
     _sortingOrder: -2
     _shader: {fileID: 4800000, guid: 5d2c8e1a7b3f4c6e9a1d0b4f2e7c3a85, type: 3}

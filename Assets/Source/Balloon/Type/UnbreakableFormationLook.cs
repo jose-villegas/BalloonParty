@@ -58,12 +58,13 @@ namespace BalloonParty.Balloon.Type
         private float _blend;
         private bool _trailIsBlue;
         private Transform _root;
-        private float _glowMembership;
 
         // The balloon's own centre: the look sits on a body part that sways.
         Vector2 IFormationGlowSource.GlowCentre => _root.position;
 
-        float IFormationGlowSource.GlowMembership => _glowMembership;
+        // From the moment it's assigned, gliding in or not, unlike the blue, which waits for it to arrive: the ring
+        // is what shows the members drawing together.
+        bool IFormationGlowSource.GlowsInFormation => _model is IFormationMember { InFormation: { Value: true } };
 
         private void Awake()
         {
@@ -79,11 +80,6 @@ namespace BalloonParty.Balloon.Type
             {
                 return;
             }
-
-            // The glow counts a member from the moment it's assigned, gliding in or not, unlike the blue below,
-            // which waits for it to arrive: the ring is what shows the members drawing together.
-            var inFormation = _model is IFormationMember { InFormation: { Value: true } };
-            _glowMembership = Mathf.MoveTowards(_glowMembership, inFormation ? 1f : 0f, Time.deltaTime / _fadeDuration);
 
             var target = ShowsFormation(_model) ? 1f : 0f;
             if (Mathf.Approximately(_blend, target))
@@ -131,7 +127,6 @@ namespace BalloonParty.Balloon.Type
             _trailBlue ??= BuildBlueTrail();
             _blend = 0f;
             Apply(0f);
-            _glowMembership = 0f;
             if (_glowSources != null)
             {
                 disposables.Add(_glowSources.Add(this));
