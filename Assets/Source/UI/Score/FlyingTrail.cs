@@ -206,6 +206,14 @@ namespace BalloonParty.UI.Score
             ApplyColor(color);
         }
 
+        // Sorts another renderer where this trail's ribbon sorts: a score shape's baked ink stands in for the
+        // ribbons of its pens.
+        internal void CopyRibbonSorting(Renderer target)
+        {
+            target.sortingLayerID = _trailRenderer.sortingLayerID;
+            target.sortingOrder = _trailRenderer.sortingOrder;
+        }
+
         // Per-tier ribbon length so nested-star tiers stay visible through the whole sequence; OnDespawned
         // restores the authored value.
         internal void SetRibbonTime(float time)

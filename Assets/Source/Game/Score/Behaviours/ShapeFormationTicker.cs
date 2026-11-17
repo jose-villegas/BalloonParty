@@ -110,7 +110,7 @@ namespace BalloonParty.Game.Score.Behaviours
     ///       object REFERENCES, not indices, and a freshly-launched state's <c>PendingRelease</c> starts
     ///       false. Don't refactor either list to store indices without re-checking this.
     /// </summary>
-    internal sealed class ShapeFormationTicker : ILateTickable, IScoreShapeCover
+    internal sealed class ShapeFormationTicker : ILateTickable, IScoreShapeCover, System.IDisposable
     {
         private const int MaxVertexCount = 100;
         private const float SnapFadeDuration = 0.1f;
@@ -138,6 +138,10 @@ namespace BalloonParty.Game.Score.Behaviours
         // Pass C (their Center/LastScale are already stable, that's what "frozen"/"fading" means).
         private readonly List<FormationState> _stationary = new(8);
 
+        // The baked way of drawing a shape (ShapeInkSettings.Baked): one mesh view per formation in place of a
+        // trail per pen.
+        private readonly ShapeInkPool _ink = new();
+
         // Grow-only scratch for FormationOverlapResolver.Resolve's O(n²) pass — resized only when too small
         // (mirrors FlyingTrail._ribbonScratch / BigScoreTrailBehaviour._dpPieces), never shrunk.
         private Vector3[] _correctionCenters = new Vector3[16];
@@ -160,6 +164,11 @@ namespace BalloonParty.Game.Score.Behaviours
 
                 return area;
             }
+        }
+
+        public void Dispose()
+        {
+            _ink.Dispose();
         }
 
         public void LateTick()
@@ -244,8 +253,11 @@ namespace BalloonParty.Game.Score.Behaviours
             var penSpeed = Mathf.Max(group.Settings.PenSpeed * shape.PenSpeedScale, MinDuration);
             var coverage = group.Settings.Coverage;
             state.LocalPenSpeed = penSpeed / Mathf.Max(request.FormationRadius, MinDuration);
+
+            // Baked ink needs no pen objects: its shader places the pens from the time alone.
+            var ink = group.Settings.Ink;
             var pen = 0;
-            for (var w = 0; w < shape.Walks.Length; w++)
+            for (var w = 0; w < shape.Walks.Length && !ink.Baked; w++)
             {
                 var perimeter = shape.Perimeters[w];
                 var k = shape.PensPerWalk[w];
@@ -287,6 +299,12 @@ namespace BalloonParty.Game.Score.Behaviours
             state.Guide.transform.position = state.Center;
             state.Guide.transform.localScale = Vector3.one;
             state.Guide.ClearRibbon();
+
+            if (ink.Baked)
+            {
+                state.Ink = _ink.Acquire(shape, in ink, group.Color, state.Guide);
+                ApplyInk(state, 1f);
+            }
 
             // Sample the random landing offset ONCE; the live target re-reads the endpoint centre every tick.
             if (group.Target != null)
@@ -532,6 +550,7 @@ namespace BalloonParty.Game.Score.Behaviours
                 state.Vertices[p].transform.position = LocalToWorld(state, local * scale);
             }
 
+            ApplyInk(state, 1f);
             WriteAnchor(state);
 
             if (state.Elapsed < state.Duration)
@@ -550,6 +569,7 @@ namespace BalloonParty.Game.Score.Behaviours
             state.FadeElapsed += unscaledDt;
             var fade = Mathf.Clamp01(state.FadeElapsed / SnapFadeDuration);
             ScaleVertices(state, 1f - fade);
+            ApplyInk(state, 1f - fade);
 
             if (fade < 1f)
             {
@@ -640,6 +660,12 @@ namespace BalloonParty.Game.Score.Behaviours
                 state.Guide = null;
             }
 
+            if (state.Ink != null)
+            {
+                _ink.Release(state.Ink);
+                state.Ink = null;
+            }
+
             if (!state.VerticesLive)
             {
                 return;
@@ -713,54 +739,40 @@ namespace BalloonParty.Game.Score.Behaviours
             return state.Center + state.Rotation * (state.FormationRadius * local);
         }
 
-        // The pen's local position on its closed walk at the current orbit time, parameterized by LOCAL arc length
-        // (so a world-units pen speed gives constant travel speed between vertices). Arc walks slerp their segments
-        // (curved ring bands), chords lerp them.
+        // Hands the baked ink this frame's pose and how far the pens have come: the same centre, tumble, scale
+        // and pen distance the trail pens are placed from, so the two ways of drawing agree.
+        private static void ApplyInk(FormationState state, float fade)
+        {
+            if (state.Ink == null)
+            {
+                return;
+            }
+
+            var settings = state.Group.Settings;
+            var shape = state.Shape;
+            var waveAmplitude = shape.Displacer != null
+                ? ShapeCatalog.WaveAmplitude * settings.DisplacementScale * shape.DisplacementScale
+                : 0f;
+            state.Ink.Apply(new ShapeInkFrame(
+                state.Center,
+                state.Rotation,
+                state.FormationRadius * state.LastScale,
+                state.Elapsed * state.LocalPenSpeed,
+                settings.Coverage,
+                fade,
+                waveAmplitude,
+                state.Elapsed * settings.DisplacementSpeed * shape.DisplacementSpeed));
+        }
+
+        // The pen's local position on its closed walk at the current orbit time (FormationShape.PointOnWalk).
         private static Vector3 PenOrbitLocal(FormationState state, int p)
         {
             var w = state.PenWalk[p];
-            var walk = state.Shape.Walks[w];
-            var m = walk.Vertices.Length;
             var perimeter = state.Shape.Perimeters[w];
-            if (perimeter <= Mathf.Epsilon)
-            {
-                return state.Shape.Vertices[walk.Vertices[0]];
-            }
-
-            var cumulative = state.Shape.Cumulative[w];
-            var d = Mathf.Repeat(state.PenStartDist[p] + state.Elapsed * state.LocalPenSpeed, perimeter);
-
-            // Pens advance monotonically within a lap, so the segment index only moves forward; resume the
-            // scan from where the pen last was instead of rescanning from 0 every tick. Only a lap wrap
-            // (d falls behind the cached segment's start) forces a rescan from the top.
-            var seg = state.PenSegment[p];
-            if (d < cumulative[seg])
-            {
-                seg = 0;
-            }
-
-            while (seg < m - 1 && cumulative[seg + 1] <= d)
-            {
-                seg++;
-            }
-
-            state.PenSegment[p] = seg;
-
-            var segLength = cumulative[seg + 1] - cumulative[seg];
-            var localT = segLength > Mathf.Epsilon ? (d - cumulative[seg]) / segLength : 0f;
-            var a = state.Shape.Vertices[walk.Vertices[seg]];
-            var b = state.Shape.Vertices[walk.Vertices[(seg + 1) % m]];
-            return walk.Arc ? NormalizedLerp(a, b, localT) : Vector3.LerpUnclamped(a, b, localT);
-        }
-
-        // Fast great-circle interpolation: Lerp + normalize replaces Slerp's trig (acos + 2 sin)
-        // with a single normalize (rsqrt). On unit-radius vertices this traces the same arc with
-        // a mild speed nonlinearity at wide angles — imperceptible at gameplay pen speeds.
-        private static Vector3 NormalizedLerp(Vector3 a, Vector3 b, float t)
-        {
-            var v = Vector3.LerpUnclamped(a, b, t);
-            var mag = v.magnitude;
-            return mag > 1e-6f ? v * (a.magnitude / mag) : a;
+            var d = perimeter > Mathf.Epsilon
+                ? Mathf.Repeat(state.PenStartDist[p] + state.Elapsed * state.LocalPenSpeed, perimeter)
+                : 0f;
+            return state.Shape.PointOnWalk(w, d, ref state.PenSegment[p]);
         }
 
         private static void ScaleVertices(FormationState state, float scale)
@@ -850,6 +862,7 @@ namespace BalloonParty.Game.Score.Behaviours
             internal bool IsPrincipal;
             internal bool VerticesLive;
             internal FlyingTrail Guide;
+            internal ShapeInkView Ink;
             internal bool Reported;
             internal bool Frozen;
 
@@ -904,6 +917,7 @@ namespace BalloonParty.Game.Score.Behaviours
                 VertexCount = 0;
                 VerticesLive = false;
                 Guide = null;
+                Ink = null;
                 Reported = false;
                 Frozen = false;
                 PendingRelease = false;

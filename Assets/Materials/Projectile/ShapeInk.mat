@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ShapeInk
+  m_Shader: {fileID: 4800000, guid: f5dad6a256494e82af5476bfde9eeeb0, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _InkRamp:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 87d378ead725e435ea59d3efd530d934, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _PencilNoiseTex:
+        m_Texture: {fileID: 2800000, guid: cc8b8fafc0034e8eabb2d4d54b345b66, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HeadCentre: 0.4
+    - _InkHalf: 0
+    - _InkLook: 1
+    m_Colors:
+    - _BandHalf: {r: 0.27, g: 0.07, b: 0, a: 0}
+    - _Far: {r: 0.5, g: 0.75, b: 0, a: 0.3}
+    - _PenEdge: {r: 0.35, g: 0.12, b: 2.5, a: 0.18}
+    - _PenGrain: {r: 0.45, g: 2, b: 6, a: 0}
+    - _PenHand: {r: 0.012, g: 0.35, b: 0.25, a: 0.6}
+    - _PenRim: {r: 1.25, g: 0.7, b: 0.72, a: 0.45}
+    - _PenWet: {r: 0.8, g: 0.12, b: 0.2, a: 1}
+    - _Sketch: {r: 0, g: 0.022, b: 0.09, a: 0}
+    - _TailColor: {r: 0.95, g: 0.95, b: 0.9098039, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

@@ -131,11 +131,54 @@ position is \f$C(t) + Q(t) \cdot \big(\text{radius} \cdot \text{scale}(t) \cdot 
   period-`P` walk in \f$P/k\f$. `Coverage` (a style dial, Range 0.2–2) sets each pen's ribbon time — \f$\ge 1\f$ solid
   wireframe, \f$<1\f$ chasing comet heads, \f$\ll 1\f$ orbiting pearls.
 
-The whole figure is **rigid in formation space**: each tick every live pen ribbon is re-framed through
+With trails (`Baked` off), the whole figure is **rigid in formation space**: each tick every live pen ribbon is re-framed through
 `FlyingTrail.TransformRibbon(oldCenter, newCenter, delta, scaleRatio)` (\f$p' = \text{newCenter} + \text{delta} \cdot (p - \text{oldCenter}) \cdot \text{scaleRatio}\f$;
 pure translation at scale 1 is the identity-delta fast path). The ribbon **is** scale-corrected — old
 ink shrinks with the shape as it tapers toward the bar, which matters most on the long-ribbon shapes (few pens
 sharing a long walk) where unscaled old ink would outlive the taper and hold the big silhouette.
+
+### How a shape is drawn
+
+A shape's ink is drawn one of two ways, chosen by `ShapeInkSettings.Baked` (in the BigScore settings of
+`ScoreTrailBehaviourConfiguration`; on as shipped). Both are fed the same centre, tumble, scale and pen distance
+each tick, so they show the same shape at the same moment.
+
+**Baked (the shipped look): a pen on paper.** Each shape in flight is one `ShapeInkView`: a `MeshRenderer` on the
+shape's baked wire mesh, drawn by the `BalloonParty/Sprite/ShapeInk` shader. There are no pen objects. The mesh is
+static; the ticker hands the view one number a frame, how far every pen has moved along its walk since the launch
+(`Elapsed × LocalPenSpeed`), and the shader works the rest out per pixel:
+
+- A walk of perimeter `P` carries `k` pens `P / k` apart, so a pixel that knows its own distance along the walk
+  knows how far behind the last pen to pass it sits. That distance is the ink's age. The ink's width, opacity and
+  colour along its length are read from it (the ink ramp, baked from the settings' three curves).
+- The stroke is hand-drawn, after the sketchy edges of a drafting program: it wavers off its line, presses harder
+  and lighter along it, has a ragged edge and paper specks (the heads-ups' pencil noise, laid along the stroke so
+  the grain stays with the line as the shape tumbles), and runs on a little past each sharp corner. Its dials are
+  on the `ShapeInk` material: `_PenHand`, `_PenEdge`, `_PenGrain`, `_PenWet`, `_Sketch` (a second, fainter stroke
+  beside the first, off as shipped), `_Far`.
+- The pen is a wet dot at the ink's head. Each segment of the mesh carries a spare square for it, which the
+  vertex stage moves to wherever on that segment a pen is and folds away while none is.
+- The mesh is drawn twice, by two materials: the half of the shape behind its centre first, then the half in
+  front. The shapes are wire frames of rounded solids, so that puts the near side over the far side. The far half
+  is also drawn lighter and thinner (`_Far`), as hidden edges are.
+
+`ShapeInkMeshBuilder` bakes the mesh from a `FormationShape` the first time that shape flies (straight edges are
+one segment, arcs are cut every 6 degrees at points a pen passes through), and `ShapeInkPool`, owned by the
+ticker, keeps the meshes, the two material copies and the pooled views. The waving sphere's displacement is
+repeated in the shader (`Wave`, which must match `ShapeCatalog.WavingSphereDisplacer`), applied to the whole
+wire at once, so the sphere ripples as one surface. A snapped shape fades by thinning its ink to nothing over the
+snap fade; a frozen one simply stops, since its pen distance stops advancing.
+
+The same shader has a second look, `_InkLook` 0, that lays the trail's own ribbon picture along the ink with a
+round ball for the pen and round joints at sharp corners. It is kept for comparison.
+
+**Trails (`Baked` off): a pooled trail per pen.** Each pen is a pooled `FlyingTrail` whose `TrailRenderer` the
+ticker moves along its walk, and whose recorded ribbon it re-frames every tick (below). This is how the shapes
+were first drawn. It costs one object, one ribbon copy in and out, and one trail mesh per pen per frame, and its
+look depends on the frame rate: a trail samples its pen once a frame, so corners are cut and a long frame thins
+the shape out.
+
+The guiding central trail (below) is a `FlyingTrail` either way.
 
 ### Overlap Resolution
 

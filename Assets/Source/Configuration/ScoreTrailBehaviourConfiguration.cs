@@ -92,6 +92,9 @@ namespace BalloonParty.Configuration
         [Range(0f, 1f)]
         [SerializeField] private float _principalPushDamping;
 
+        [Tooltip("How a shape's ink is drawn: a pooled trail per pen, or one baked mesh per shape.")]
+        [SerializeField] private ShapeInkSettings _ink;
+
         public float BaseRadius => _baseRadius;
         public AnimationCurve ScaleOverTravel => _scaleOverTravel;
         public float PenSpeed => _penSpeed;
@@ -103,6 +106,7 @@ namespace BalloonParty.Configuration
         public float MaxOverlapPushFraction => _maxOverlapPushFraction;
         public float SeparationRelaxRate => _separationRelaxRate;
         public float PrincipalPushDamping => _principalPushDamping;
+        public ShapeInkSettings Ink => _ink;
 
         internal BigScoreFormationSettings(
             float baseRadius,
@@ -115,7 +119,8 @@ namespace BalloonParty.Configuration
             float overlapPadding = 0.05f,
             float maxOverlapPushFraction = 0.6f,
             float separationRelaxRate = 1.5f,
-            float principalPushDamping = 0f)
+            float principalPushDamping = 0f,
+            ShapeInkSettings ink = default)
         {
             _baseRadius = baseRadius;
             _scaleOverTravel = scaleOverTravel;
@@ -128,6 +133,7 @@ namespace BalloonParty.Configuration
             _maxOverlapPushFraction = maxOverlapPushFraction;
             _separationRelaxRate = separationRelaxRate;
             _principalPushDamping = principalPushDamping;
+            _ink = ink;
         }
     }
 

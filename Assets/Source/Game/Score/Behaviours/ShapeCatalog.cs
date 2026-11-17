@@ -106,6 +106,58 @@ namespace BalloonParty.Game.Score.Behaviours
             }
         }
 
+        /// <summary>
+        ///     The point <paramref name="distance" /> along a closed walk, by LOCAL arc length (so a pen moving at a
+        ///     steady distance per second travels at a steady speed between vertices). Arc walks bend their
+        ///     segments round the sphere, chords run them straight. <paramref name="segment" /> is the caller's
+        ///     memory of the segment the last call landed in: a pen only moves forward within a lap, so the search
+        ///     resumes there and only a lap wrap rescans from the top.
+        /// </summary>
+        internal Vector3 PointOnWalk(int w, float distance, ref int segment)
+        {
+            var walk = Walks[w];
+            var m = walk.Vertices.Length;
+            if (Perimeters[w] <= Mathf.Epsilon)
+            {
+                return Vertices[walk.Vertices[0]];
+            }
+
+            var cumulative = Cumulative[w];
+            var seg = Mathf.Clamp(segment, 0, m - 1);
+            if (distance < cumulative[seg])
+            {
+                seg = 0;
+            }
+
+            while (seg < m - 1 && cumulative[seg + 1] <= distance)
+            {
+                seg++;
+            }
+
+            segment = seg;
+
+            var segLength = cumulative[seg + 1] - cumulative[seg];
+            var localT = segLength > Mathf.Epsilon ? (distance - cumulative[seg]) / segLength : 0f;
+            var a = Vertices[walk.Vertices[seg]];
+            var b = Vertices[walk.Vertices[(seg + 1) % m]];
+            return Interpolate(a, b, localT, walk.Arc);
+        }
+
+        // An arc is Lerp + normalize: it replaces Slerp's trig (acos + 2 sin) with one normalize (rsqrt). On
+        // unit-radius vertices this traces the same great-circle arc with a mild speed nonlinearity at wide
+        // angles, imperceptible at gameplay pen speeds.
+        internal static Vector3 Interpolate(Vector3 a, Vector3 b, float t, bool arc)
+        {
+            var v = Vector3.LerpUnclamped(a, b, t);
+            if (!arc)
+            {
+                return v;
+            }
+
+            var mag = v.magnitude;
+            return mag > 1e-6f ? v * (a.magnitude / mag) : a;
+        }
+
         // Largest-remainder apportionment of the pens over the walks by segment count, so the sum is exact and
         // longer walks get more pens (a pen never has zero to orbit for the authored catalog).
         private static int[] DistributePens(int total, FormationWalk[] walks)
@@ -163,6 +215,10 @@ namespace BalloonParty.Game.Score.Behaviours
     {
         // φ (golden ratio) — the dodecahedron's vertex coordinates are framed on it.
         private const float Phi = 1.6180339887498949f;
+
+        // The waving sphere's swell at a displacement scale of 1, as a share of its radius. The ink shader
+        // (ShapeInk.shader's Wave) repeats the displacer, so the two must change together.
+        internal const float WaveAmplitude = 0.09f;
 
         private static readonly int[] LadderDenominations = { 100, 50, 30, 20, 15, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
 
@@ -813,7 +869,7 @@ namespace BalloonParty.Game.Score.Behaviours
             var phase2 = (-0.3f * pos.x + 0.9f * pos.y + 0.5f * pos.z) * 3.7f + t * 3.2f;
             var phase3 = (0.5f * pos.x - 0.6f * pos.y + 0.8f * pos.z) * 5.2f + t * 4.8f;
             var displacement = (Mathf.Sin(phase1) + 0.6f * Mathf.Sin(phase2)
-                + 0.35f * Mathf.Sin(phase3)) * 0.09f * scale;
+                + 0.35f * Mathf.Sin(phase3)) * WaveAmplitude * scale;
             return pos + n * displacement;
         }
 
