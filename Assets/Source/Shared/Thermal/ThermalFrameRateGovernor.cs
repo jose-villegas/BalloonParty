@@ -34,6 +34,7 @@ namespace BalloonParty.Shared.Thermal
         private float _downSustained;
         private float _upSustained;
         private float _dwell;
+        private bool _pinned;
 
         internal int CurrentRate => _ladder.Length > 0 ? _ladder[_rungIndex] : -1;
         internal int CurrentRungIndex => _rungIndex;
@@ -65,11 +66,21 @@ namespace BalloonParty.Shared.Thermal
             Advance(Time.unscaledDeltaTime);
         }
 
+        /// <summary>
+        ///     Holds the frame rate at <paramref name="fps" /> whatever the phone's temperature, until the app
+        ///     quits. For performance runs: two builds can only be compared at the same rate.
+        /// </summary>
+        internal void Pin(int fps)
+        {
+            _pinned = true;
+            FrameRateSettings.ApplyGovernedRate(fps);
+        }
+
         internal void Advance(float dt)
         {
             // Gate here, not in Tick: Advance is the sanctioned seam (tests and any future caller),
             // so the Enabled flag must hold no matter who drives the state machine.
-            if (!_enabled)
+            if (!_enabled || _pinned)
             {
                 return;
             }

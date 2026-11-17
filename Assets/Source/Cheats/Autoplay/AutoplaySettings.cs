@@ -20,6 +20,9 @@ namespace BalloonParty.Cheats.Autoplay
         public bool Restart { get; private set; }
         public int? Seed { get; private set; }
 
+        /// <summary>The frame rate to hold for the whole session, or 0 to leave it to the thermal governor.</summary>
+        public int Fps { get; private set; }
+
         /// <summary>
         ///     False for an empty spec (no autoplay asked for) and for a malformed one: a typo would otherwise
         ///     play a session nobody asked for and report it as the one they did.
@@ -85,6 +88,10 @@ namespace BalloonParty.Cheats.Autoplay
                 case "wild":
                     WildChance = TryFloat(text, out number) ? number : -1f;
                     return WildChance >= 0f && WildChance <= 1f;
+                case "fps":
+                    var hasFps = int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out var fps);
+                    Fps = hasFps && fps > 0 ? fps : 0;
+                    return hasFps;
                 case "seed":
                     var hasSeed = int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out var seed);
                     Seed = hasSeed ? seed : null;

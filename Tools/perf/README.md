@@ -16,9 +16,10 @@ over adb every 5 seconds and stops the app at the end.
 
 | Measure | Where it comes from | Why it matters |
 |---|---|---|
-| UnityMain ms per frame | `/proc/<pid>/task/<tid>/stat` (utime + stime) over the frames delivered | The main thread is what misses the frame. At 120 Hz a frame is 8.33 ms |
-| Render thread ms per frame | The same, for `UnityGfxDeviceW` | Draw-call submission |
-| All threads ms per frame | The same, summed | Heat: every thread's work warms the phone |
+| Main thread, million cycles per frame | `/proc/<pid>/task/<tid>/time_in_state` (time at each clock speed) over the frames delivered | The work one frame takes on the thread that misses frames |
+| Render thread, million cycles per frame | The same, for `UnityGfxDeviceW` | Draw-call submission |
+| All threads, million cycles per frame | The same, summed | Heat: every thread's work warms the phone, and a warm phone drops the frame rate |
+| Main and render thread ms per frame | `/proc/<pid>/task/<tid>/stat` (utime + stime) | Time against the frame's budget, at whatever clock the phone chose |
 | Frames per second, frame percentiles | `dumpsys SurfaceFlinger --latency` of the game's layer | What the player sees. `dumpsys gfxinfo` reports nothing for a Unity surface |
 | Frames over 1.5 vsyncs | The same | Missed frames |
 | Thermal status, battery temperature | `dumpsys thermalservice`, `dumpsys battery` | The phone slows its cores as it warms, so compare runs at the same status |
@@ -27,9 +28,16 @@ over adb every 5 seconds and stops the app at the end.
 
 ## Reading it
 
-Compare "UnityMain ms per frame" between runs, not frames per second: the game is vsync-locked, so a
-faster build shows the same 120 until the phone warms up. A run that starts at thermal status 0 and one that
-starts at 2 are not comparable; let the phone cool between runs, and keep it off the charger for both or
-on it for both.
+Compare the cycles per frame between runs. Not frames per second: the game is vsync-locked, so a faster build
+shows the same rate. And not milliseconds or a share of a core: the phone lowers its clocks to fit the load,
+so the same work reads as more time on a slower core.
+
+The session holds its frame rate (`--fps`, 120 by default; the autoplay's `fps` key pins the thermal
+governor). Without that the governor steps the game down to 80 and then 60 as the phone warms (at thermal
+status 1, which a charging phone already reports), and a frame at 60 does more work than one at 120: the
+fixed-step physics runs more steps in it, and the 60 Hz scene capture lands on every frame.
+
+The big and little cores do different amounts of work per cycle, and the scheduler moves threads between
+them, so expect a few percent of noise. Run each build twice, in turn (A, B, A, B).
 
 Reports go to `Logs/perf/<stamp>-<label>/` (`report.md`, `samples.csv`), which git ignores.

@@ -226,7 +226,7 @@ namespace BalloonParty.Game
 #else
             builder.Register<IThermalSource, StubThermalSource>(Lifetime.Singleton);
 #endif
-            builder.RegisterEntryPoint<ThermalFrameRateGovernor>();
+            builder.RegisterEntryPoint<ThermalFrameRateGovernor>().AsSelf();
 
             builder.RegisterComponentInHierarchy<SlotGridView>();
 #if UNITY_EDITOR

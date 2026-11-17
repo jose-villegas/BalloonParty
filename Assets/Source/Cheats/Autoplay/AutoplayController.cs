@@ -8,6 +8,7 @@ using BalloonParty.Game.Run;
 using BalloonParty.Projectile;
 using BalloonParty.Shared;
 using BalloonParty.Shared.GameState;
+using BalloonParty.Shared.Thermal;
 using BalloonParty.Solver;
 using BalloonParty.Thrower;
 using BalloonParty.UI.GameOver;
@@ -40,6 +41,7 @@ namespace BalloonParty.Cheats.Autoplay
         private readonly IProjectileRegistry _projectiles;
         private readonly IProjectileFlightConfig _flight;
         private readonly FireBestShotCheat _solver;
+        private readonly ThermalFrameRateGovernor _governor;
         private readonly System.Random _random;
 
         private AutoplayTickWriter _writer;
@@ -62,7 +64,8 @@ namespace BalloonParty.Cheats.Autoplay
             IBoardFill fill,
             IProjectileRegistry projectiles,
             IProjectileFlightConfig flight,
-            FireBestShotCheat solver)
+            FireBestShotCheat solver,
+            ThermalFrameRateGovernor governor)
         {
             _settings = settings;
             _progress = progress;
@@ -72,12 +75,18 @@ namespace BalloonParty.Cheats.Autoplay
             _projectiles = projectiles;
             _flight = flight;
             _solver = solver;
+            _governor = governor;
             _random = settings.Seed.HasValue ? new System.Random(settings.Seed.Value) : new System.Random();
         }
 
         public void Start()
         {
             _writer = new AutoplayTickWriter();
+            if (_settings.Fps > 0)
+            {
+                _governor.Pin(_settings.Fps);
+            }
+
             Log.Info("Autoplay", $"playing as {(_settings.Best ? "best" : "human")} for {_settings.Seconds:F0} s.");
         }
 

@@ -2,13 +2,15 @@
 """Measures BalloonParty's performance on an Android phone while the build plays itself.
 
 Launches the installed build with an autoplay spec (Cheats/Autoplay, in a checked build or a release build
-with cheats), then samples it over adb every few seconds: CPU time per thread (from /proc, so it is exact,
-not top's rounding), frame delivery (SurfaceFlinger's latency log of the game's layer), the thermal status,
-the CPU clocks and the app's memory. Writes samples.csv and report.md under Logs/perf/<stamp>-<label>/.
+with cheats), then samples it over adb every few seconds: CPU work per thread (from /proc), frame delivery
+(SurfaceFlinger's latency log of the game's layer), the thermal status, the CPU clocks and the app's memory.
+Writes samples.csv and report.md under Logs/perf/<stamp>-<label>/.
 
-The number to compare between two builds is "UnityMain ms per frame": the main thread's CPU time for one
-frame. At 120 Hz a frame is 8.33 ms, and the phone slows its cores as it warms, so every millisecond there
-is headroom before frames start to miss. Compare runs taken at the same thermal status, same seed and player.
+The number to compare between two builds is "million cycles per frame": how much work a frame takes. Time
+on a core is not that: the phone lowers its clocks to fit the load, so the same work reads as a bigger share
+of a slower core. The cycles come from each thread's time at each clock speed (time_in_state). The session
+holds its frame rate (--fps) so the thermal governor can't change it mid-run: a frame at 60 does more than
+one at 120 (the fixed-step physics, the 60 Hz scene capture). Compare runs with the same seed, player and fps.
 
 Usage:
     python3 Tools/perf/device_perf.py --serial 192.168.0.219:41379 --seconds 180 --label baseline
@@ -33,11 +35,16 @@ PENDING = 9223372036854775807
 # One shell round trip per sample: the clock, every thread's stat line, the CPU clocks, the thermal status.
 SAMPLE = (
     "P=$(pidof {pkg}); echo \"PID $P\"; echo \"UP $(cat /proc/uptime)\"; "
-    "for t in /proc/$P/task/*; do echo \"T $(cat $t/stat 2>/dev/null)\"; done; "
+    "cat /proc/$P/task/*/stat 2>/dev/null | sed 's/^/T /'; "
+    "for t in /proc/$P/task/*; do c=$(cat $t/comm 2>/dev/null); case \"$c\" in "
+    "'Unity Main Thre'*|UnityMain|UnityGfxDeviceW) echo \"S $c\"; cat $t/time_in_state 2>/dev/null;; esac; done; "
+    "echo \"S all\"; cat /proc/$P/task/*/time_in_state 2>/dev/null; echo \"S end\"; "
     "echo \"F $(cat /sys/devices/system/cpu/cpufreq/policy*/scaling_cur_freq | tr '\\n' ' ')\"; "
     "echo \"TH $(dumpsys thermalservice | grep 'Thermal Status')\"; "
     "echo \"B $(dumpsys battery | grep temperature)\""
 )
+MAIN_THREADS = ("Unity Main Thre", "UnityMain")
+RENDER_THREAD = "UnityGfxDeviceW"
 
 
 def adb(serial, *args, timeout=60):
@@ -52,16 +59,39 @@ def launch_activity(serial):
 
 def game_layer(serial):
     """The game's surface in SurfaceFlinger: the BLAST layer of Unity's SurfaceView."""
-    names = [line.strip() for line in adb(serial, "shell", "dumpsys", "SurfaceFlinger", "--list").splitlines()
-             if PACKAGE in line]
+    names = []
+    for line in adb(serial, "shell", "dumpsys", "SurfaceFlinger", "--list").splitlines():
+        if PACKAGE not in line:
+            continue
+        # Newer Androids print "RequestedLayerState{<name> parentId=...}"; the name alone is what --latency takes.
+        name = line.strip()
+        if name.startswith("RequestedLayerState{"):
+            name = re.sub(r" (parentId|relativeParentId|z)=.*$", "", name[len("RequestedLayerState{"):]).rstrip("}")
+        names.append(name)
     blast = [n for n in names if "BLAST" in n and "SurfaceView" in n]
     return (blast or names or [None])[-1]
 
 
 def read_sample(serial):
     out = adb(serial, "shell", SAMPLE.format(pkg=PACKAGE))
-    sample = {"threads": {}, "pid": None, "uptime": None, "freqs": [], "thermal": None, "battery": None}
+    sample = {"threads": {}, "pid": None, "uptime": None, "freqs": [], "thermal": None, "battery": None,
+              "cycles": {}}
+    section = None
     for line in out.splitlines():
+        if line.startswith("S "):
+            section = line[2:].strip()
+            section = None if section == "end" else ("main" if section in MAIN_THREADS else
+                                                     "render" if section == RENDER_THREAD else section)
+            continue
+        if section:
+            # time_in_state: "<kHz> <ticks>" rows under "cpuN" headers. kHz x ticks / 1e5 = million cycles.
+            parts = line.split()
+            if len(parts) == 2 and parts[0].isdigit() and parts[1].isdigit():
+                sample["cycles"][section] = sample["cycles"].get(section, 0.0) + int(parts[0]) * int(parts[1]) / 1e5
+                continue
+            if line.startswith("cpu"):
+                continue
+            section = None
         if line.startswith("PID "):
             sample["pid"] = line[4:].strip() or None
         elif line.startswith("UP "):
@@ -125,7 +155,8 @@ def run(args):
     out_dir = os.path.join(REPO_ROOT, "Logs", "perf", f"{stamp}-{args.label}")
     os.makedirs(out_dir, exist_ok=True)
 
-    spec = f"player={args.player} seconds={args.seconds + args.warmup + 30} seed={args.seed} restart=1"
+    spec = (f"player={args.player} seconds={args.seconds + args.warmup + 30} seed={args.seed} restart=1 "
+            f"fps={args.fps}")
     adb(serial, "shell", "am", "force-stop", PACKAGE)
     time.sleep(1)
     adb(serial, "shell", f"am start -n {launch_activity(serial)} -e autoplay '{spec}'")
@@ -169,30 +200,40 @@ def run(args):
             if before:
                 cpu_ms[comm] = cpu_ms.get(comm, 0.0) + (ticks - before[1]) * 1000.0 / CLOCK_TICKS
         total = sum(cpu_ms.values())
+        main_ms = sum(cpu_ms.get(name, 0.0) for name in MAIN_THREADS)
+        work = {key: sample["cycles"].get(key, 0.0) - previous["cycles"].get(key, 0.0)
+                for key in ("main", "render", "all")}
         row = {
             "t": round(time.time() - started, 1),
             "thermal": sample["thermal"],
             "battery_c": sample["battery"],
             "fps": round(fps, 1),
             "frame_p95_ms": round(percentile(fresh, 0.95), 2),
-            "main_ms_per_frame": round(cpu_ms.get("UnityMain", 0.0) / frames, 3),
-            "gfx_ms_per_frame": round(cpu_ms.get("UnityGfxDeviceW", 0.0) / frames, 3),
+            "main_mcycles_per_frame": round(work["main"] / frames, 3),
+            "render_mcycles_per_frame": round(work["render"] / frames, 3),
+            "all_mcycles_per_frame": round(work["all"] / frames, 3),
+            "main_ms_per_frame": round(main_ms / frames, 3),
+            "gfx_ms_per_frame": round(cpu_ms.get(RENDER_THREAD, 0.0) / frames, 3),
             "all_ms_per_frame": round(total / frames, 3),
-            "main_core_share": round(cpu_ms.get("UnityMain", 0.0) / (dt * 1000.0), 3),
+            "main_core_share": round(main_ms / (dt * 1000.0), 3),
             "max_cpu_mhz": max(sample["freqs"]) // 1000 if sample["freqs"] else 0,
             "top_threads": " ".join(f"{name}:{ms / frames:.2f}" for name, ms in
                                     sorted(cpu_ms.items(), key=lambda kv: -kv[1])[:6]),
         }
         rows.append(row)
         print(f"{row['t']:6.1f}s thermal {row['thermal']} fps {row['fps']:5.1f} "
-              f"main {row['main_ms_per_frame']:.2f} gfx {row['gfx_ms_per_frame']:.2f} "
-              f"all {row['all_ms_per_frame']:.2f} ms/frame", flush=True)
+              f"main {row['main_mcycles_per_frame']:.2f} render {row['render_mcycles_per_frame']:.2f} "
+              f"all {row['all_mcycles_per_frame']:.2f} Mcycles/frame "
+              f"(main {row['main_ms_per_frame']:.2f} ms at up to {row['max_cpu_mhz']} MHz)", flush=True)
         if not memory and time.time() - started > args.seconds * 0.6:
             memory = meminfo(serial)
         previous = sample
 
     adb(serial, "shell", "am", "force-stop", PACKAGE)
-    if not rows:
+    # The first sample still holds the level's load.
+    rows = rows[1:]
+    if not rows or not intervals_ms:
+        print("no samples with frames: is the game drawing?", file=sys.stderr)
         return 1
 
     keys = list(rows[0].keys())
@@ -206,7 +247,7 @@ def run(args):
     report = [
         f"# Device performance: {args.label}",
         "",
-        f"- Build: the one installed on {serial}. Player {args.player}, seed {args.seed}, "
+        f"- Build: the one installed on {serial}. Player {args.player}, seed {args.seed}, held at {args.fps} fps, "
         f"{len(rows)} samples over {rows[-1]['t']:.0f} s after a {args.warmup} s warm-up.",
         f"- Thermal status {rows[0]['thermal']} at the start, {rows[-1]['thermal']} at the end; "
         f"battery {rows[0]['battery_c']} to {rows[-1]['battery_c']} C.",
@@ -214,9 +255,11 @@ def run(args):
         "| Measure | Mean | Median | Worst sample |",
         "|---|---|---|---|",
     ]
-    for key, title in (("main_ms_per_frame", "UnityMain CPU, ms per frame"),
-                       ("gfx_ms_per_frame", "Render thread CPU, ms per frame"),
-                       ("all_ms_per_frame", "All threads CPU, ms per frame"),
+    for key, title in (("main_mcycles_per_frame", "Main thread, million cycles per frame"),
+                       ("render_mcycles_per_frame", "Render thread, million cycles per frame"),
+                       ("all_mcycles_per_frame", "All threads, million cycles per frame"),
+                       ("main_ms_per_frame", "Main thread CPU time, ms per frame (clock-dependent)"),
+                       ("gfx_ms_per_frame", "Render thread CPU time, ms per frame (clock-dependent)"),
                        ("fps", "Frames per second")):
         values = [row[key] for row in rows]
         worst = min(values) if key == "fps" else max(values)
@@ -246,6 +289,7 @@ def main():
     parser.add_argument("--interval", type=float, default=5.0, help="seconds between samples")
     parser.add_argument("--player", default="best", choices=("best", "human"))
     parser.add_argument("--seed", type=int, default=7)
+    parser.add_argument("--fps", type=int, default=120, help="frame rate the session holds (default 120)")
     parser.add_argument("--label", default="run")
     return run(parser.parse_args())
 
