@@ -1,5 +1,7 @@
 var NAVTREEINDEX3 =
 {
+"PlatedRewardTuning_8cs.html":[7,0,1,3,11],
+"PlayerHealthController_8cs.html":[7,0,7,6,5],
 "PlayerNeed_8cs.html":[7,0,7,0,4],
 "PlayerPrefsRunSave_8cs.html":[7,0,7,8,17],
 "PointFocus_8cs.html":[7,0,7,2,16],
@@ -7,7 +9,7 @@ var NAVTREEINDEX3 =
 "PoolManagerExtensions_8cs.html":[7,0,14,4,13],
 "PoolManager_8cs.html":[7,0,14,9,10],
 "PoolableParticle_8cs.html":[7,0,14,9,8],
-"PopPulse_8cs.html":[7,0,3,0,18],
+"PopPulse_8cs.html":[7,0,3,0,19],
 "PopSheetLoader_8cs.html":[7,0,18,1,1],
 "PredictionSightProbe_8cs.html":[7,0,11,0],
 "PredictionSightSpiral_8cs.html":[7,0,8,28],
@@ -93,7 +95,7 @@ var NAVTREEINDEX3 =
 "RewardBalloonPayout_8cs.html":[7,0,1,3,13],
 "RewardBalloonPop_8cs.html":[7,0,1,3,14],
 "RewardBalloonService_8cs.html":[7,0,1,3,15],
-"RewardBalloonSettings_8cs.html":[7,0,3,0,19],
+"RewardBalloonSettings_8cs.html":[7,0,3,0,20],
 "RibbonClothSettings_8cs.html":[7,0,18,2,4],
 "RibbonCloth_8cs.html":[7,0,18,2,3],
 "RibbonGraphic_8cs.html":[7,0,18,1,2],
@@ -229,14 +231,14 @@ var NAVTREEINDEX3 =
 "SlotGridPierceItemField_8cs.html":[7,0,15,2,10],
 "SlotGridView_8cs.html":[7,0,15,2,11],
 "SlotGrid_8cs.html":[7,0,15,2,7],
-"SlotMove_8cs.html":[7,0,1,1,4],
+"SlotMove_8cs.html":[7,0,1,1,5],
 "SlotPlacementMode_8cs.html":[7,0,15,0,20],
 "SmokeFieldResources_8cs.html":[7,0,13,10],
 "SmokeFieldService_8cs.html":[7,0,13,11],
 "SmokeFieldSettings_8cs.html":[7,0,3,5,29],
 "SmokeFieldView_8cs.html":[7,0,13,0,4],
-"SnakeBody_8cs.html":[7,0,1,1,5],
-"SnakeWalk_8cs.html":[7,0,1,1,6],
+"SnakeBody_8cs.html":[7,0,1,1,6],
+"SnakeWalk_8cs.html":[7,0,1,1,7],
 "SnipeChanceRoll_8cs.html":[7,0,8,7,5],
 "SnipeDischargeBloom_8cs.html":[7,0,8,7,6],
 "SnipeItemHandler_8cs.html":[7,0,8,7,7],
@@ -247,7 +249,5 @@ var NAVTREEINDEX3 =
 "SnipeLanceTrace_8cs.html":[7,0,8,7,12],
 "SnipeRangePreview_8cs.html":[7,0,8,5,15],
 "SnipeWhirlwindView_8cs.html":[7,0,17,1],
-"SoapBubbleClusterVariant_8cs.html":[7,0,1,5,8],
-"SortingHelper_8cs.html":[7,0,14,10,11],
-"SortingLayerNameAttribute_8cs.html":[7,0,14,35]
+"SoapBubbleClusterVariant_8cs.html":[7,0,1,5,8]
 };

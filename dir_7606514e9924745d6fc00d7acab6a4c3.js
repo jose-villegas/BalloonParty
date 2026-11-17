@@ -26,5 +26,6 @@ var dir_7606514e9924745d6fc00d7acab6a4c3 =
     [ "SpawnBalloonLineCheat.cs", "SpawnBalloonLineCheat_8cs.html", null ],
     [ "StartFromLevelCheat.cs", "StartFromLevelCheat_8cs.html", null ],
     [ "TimeOfDayCheat.cs", "TimeOfDayCheat_8cs.html", null ],
+    [ "ToughSnakeSpringsCheat.cs", "ToughSnakeSpringsCheat_8cs.html", null ],
     [ "TriggerLevelUpCheat.cs", "TriggerLevelUpCheat_8cs.html", null ]
 ];

@@ -1,0 +1,5 @@
+<map id="BalloonParty.Configuration.Balloons.ToughSnakeSpringSettings" name="BalloonParty.Configuration.Balloons.ToughSnakeSpringSettings">
+<area shape="rect" id="Node000001" title=" " alt="" coords="7,98,260,143"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IToughSnakeSpringSettings.html" title="A trial look: a spring between each pair of neighbours in the tough snake, from knot to knot,..." alt="" coords="5,5,262,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="135,64,136,99,131,97,132,68"/>
+</map>

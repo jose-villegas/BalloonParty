@@ -16,5 +16,6 @@ var namespaceBalloonParty_1_1Balloon_1_1View =
     [ "NukeCloudView", "classBalloonParty_1_1Balloon_1_1View_1_1NukeCloudView.html", "classBalloonParty_1_1Balloon_1_1View_1_1NukeCloudView" ],
     [ "PaintDripOverlay", "classBalloonParty_1_1Balloon_1_1View_1_1PaintDripOverlay.html", "classBalloonParty_1_1Balloon_1_1View_1_1PaintDripOverlay" ],
     [ "ParticleColorableRenderer", "classBalloonParty_1_1Balloon_1_1View_1_1ParticleColorableRenderer.html", "classBalloonParty_1_1Balloon_1_1View_1_1ParticleColorableRenderer" ],
-    [ "SpriteColorableRenderer", "classBalloonParty_1_1Balloon_1_1View_1_1SpriteColorableRenderer.html", "classBalloonParty_1_1Balloon_1_1View_1_1SpriteColorableRenderer" ]
+    [ "SpriteColorableRenderer", "classBalloonParty_1_1Balloon_1_1View_1_1SpriteColorableRenderer.html", "classBalloonParty_1_1Balloon_1_1View_1_1SpriteColorableRenderer" ],
+    [ "ToughSnakeSpringView", "classBalloonParty_1_1Balloon_1_1View_1_1ToughSnakeSpringView.html", "classBalloonParty_1_1Balloon_1_1View_1_1ToughSnakeSpringView" ]
 ];

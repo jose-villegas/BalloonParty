@@ -4,6 +4,7 @@ var dir_3eb84c876e453da644c377a06d391947 =
     [ "FormationPlanner.cs", "FormationPlanner_8cs.html", "FormationPlanner_8cs" ],
     [ "FormationShape.cs", "FormationShape_8cs.html", "FormationShape_8cs" ],
     [ "IFormationReinforcements.cs", "IFormationReinforcements_8cs.html", "IFormationReinforcements_8cs" ],
+    [ "IToughSnakeBody.cs", "IToughSnakeBody_8cs.html", "IToughSnakeBody_8cs" ],
     [ "SlotMove.cs", "SlotMove_8cs.html", "SlotMove_8cs" ],
     [ "SnakeBody.cs", "SnakeBody_8cs.html", "SnakeBody_8cs" ],
     [ "SnakeWalk.cs", "SnakeWalk_8cs.html", "SnakeWalk_8cs" ],

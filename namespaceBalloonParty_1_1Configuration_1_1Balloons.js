@@ -14,11 +14,13 @@ var namespaceBalloonParty_1_1Configuration_1_1Balloons =
     [ "INukeFuseSettings", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeFuseSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeFuseSettings" ],
     [ "INukeOddsSettings", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeOddsSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeOddsSettings" ],
     [ "IRewardBalloonSettings", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings" ],
+    [ "IToughSnakeSpringSettings", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IToughSnakeSpringSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IToughSnakeSpringSettings" ],
     [ "IUnbreakableFormationSettings", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings" ],
     [ "NukeBlastSettings", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeBlastSettings.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeBlastSettings" ],
     [ "NukeFuseSettings", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeFuseSettings.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeFuseSettings" ],
     [ "NukeOddsSettings", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeOddsSettings.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeOddsSettings" ],
     [ "PopPulse", "classBalloonParty_1_1Configuration_1_1Balloons_1_1PopPulse.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1PopPulse" ],
     [ "RewardBalloonSettings", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings" ],
+    [ "ToughSnakeSpringSettings", "classBalloonParty_1_1Configuration_1_1Balloons_1_1ToughSnakeSpringSettings.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1ToughSnakeSpringSettings" ],
     [ "UnbreakableFormationSettings", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings" ]
 ];

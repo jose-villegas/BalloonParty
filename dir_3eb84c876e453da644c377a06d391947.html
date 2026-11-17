@@ -128,6 +128,8 @@ Files</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IFormationReinforcements_8cs.html">IFormationReinforcements.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IToughSnakeBody_8cs.html">IToughSnakeBody.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SlotMove_8cs.html">SlotMove.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SnakeBody_8cs.html">SnakeBody.cs</a></td></tr>
@@ -165,7 +167,9 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>UnbreakableFormationService</code>   </td><td class="markdownTableBodyNone">The controller. It decides when each formation forms, holds, changes and breaks up, marks members as in formation, rolls for reinforcements, and keeps the toughs' snake: starts it, takes each free tough in at its tail, and walks it through the board    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>IFormationReinforcements</code>   </td><td class="markdownTableBodyNone">The reinforcements the formations have called in. <code>BalloonSpawner</code> takes them at each wave's first line   </td></tr>
+<td class="markdownTableBodyNone"><code>IFormationReinforcements</code>   </td><td class="markdownTableBodyNone">The reinforcements the formations have called in. <code>BalloonSpawner</code> takes them at each wave's first line    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>IToughSnakeBody</code>   </td><td class="markdownTableBodyNone">The tough snake's members, head first, for the view that draws its springs (<code>Balloon/View/ToughSnakeSpringView</code>)   </td></tr>
 </table>
 <h1><a class="anchor" id="autotoc_md21"></a>
 The clock</h1>
@@ -203,7 +207,7 @@ Tough snakes</h1>
 <li><b>Walking until the last pops.</b> The tough snake has no other shape to change to, so it never holds or re-plans, and it doesn't break below <code>MinMembers</code>: it walks on with whoever is left. When its last member pops it ends, and the toughs on the board start another at once. It calls no reinforcements.</li>
 <li><b>No wall from toughs.</b> A tough gives way to enough hits, so it never counts toward the wall across the board (<code>ShotWall.Walls</code>), and the tough snake's step skips that check.</li>
 </ul>
-<p>Members are anchored (<code>IBalanceAnchor</code>) while in their snake, exactly as unbreakables are. A tough snake has no look of its own: its members look like any tough.</p>
+<p>Members are anchored (<code>IBalanceAnchor</code>) while in their snake, exactly as unbreakables are. Its members look like any tough. As a trial (<code>IBalloonsConfiguration.ToughSnakeSprings</code>, on; the Tough Snake Springs cheat flips it in play), a spring joins each pair of neighbours in the snake, tied to their knots (<code>Balloon/View/ToughSnakeSpringView</code>). Each is a line of points joined by springs between the two knots, the way the launch screen's spring line is simulated (<code>Shared/Math/SpringChain</code>): a little longer than the gap between neighbouring slots, so it sags while the pair stands side by side, stretches as the one ahead steps away and swings as the one behind catches up. A spring lasts as long as the same pair stands next to each other; a pop or a joiner ties a new one.</p>
 <h1><a class="anchor" id="autotoc_md25"></a>
 Reinforcements</h1>
 <p>A formation the player doesn't break calls for help. Reinforcements still count waves, not cycles, since they arrive with a wave's first line: at each wave start (<code>RollReinforcementsAtWaveStart</code>), every formation that has had no member pierced since it formed rolls <code>ReinforcementChance</code>, eased while the player is in need (<code>Game/Assist/ThreatEase</code>: half as likely on the last heart). Each success calls in one more unbreakable. A formation sits out the roll at the end of the wave it formed in, so the player always gets a whole wave to answer it. A formation keeps its record through shape changes: once pierced, it never calls again.</p>

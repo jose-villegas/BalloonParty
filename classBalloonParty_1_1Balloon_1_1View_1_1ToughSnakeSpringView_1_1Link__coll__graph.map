@@ -1,0 +1,5 @@
+<map id="BalloonParty.Balloon.View.ToughSnakeSpringView.Link" name="BalloonParty.Balloon.View.ToughSnakeSpringView.Link">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,115,207,160"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Shared_1_1Math_1_1SpringChain.html" title="A line of points joined by springs between two pinned ends, simulated the way the launch screen&#39;s spr..." alt="" coords="10,5,202,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="108,64,109,115,103,114,104,68"/>
+</map>

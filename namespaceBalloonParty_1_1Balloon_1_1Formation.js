@@ -3,6 +3,7 @@ var namespaceBalloonParty_1_1Balloon_1_1Formation =
     [ "FormationAssignment", "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html", "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment" ],
     [ "FormationPlanner", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner" ],
     [ "IFormationReinforcements", "interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IFormationReinforcements.html", "interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IFormationReinforcements" ],
+    [ "IToughSnakeBody", "interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IToughSnakeBody.html", "interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IToughSnakeBody" ],
     [ "SlotMove", "structBalloonParty_1_1Balloon_1_1Formation_1_1SlotMove.html", "structBalloonParty_1_1Balloon_1_1Formation_1_1SlotMove" ],
     [ "SnakeBody", "classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeBody.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeBody" ],
     [ "SnakeWalk", "classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeWalk.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeWalk" ],

@@ -1271,6 +1271,12 @@ var hierarchy =
     [ "BalloonParty.Shared.Pause.ITimeScaleClaims", "interfaceBalloonParty_1_1Shared_1_1Pause_1_1ITimeScaleClaims.html", [
       [ "BalloonParty.Shared.Pause.TimeScaleService", "classBalloonParty_1_1Shared_1_1Pause_1_1TimeScaleService.html", null ]
     ] ],
+    [ "BalloonParty.Balloon.Formation.IToughSnakeBody", "interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IToughSnakeBody.html", [
+      [ "BalloonParty.Balloon.Formation.UnbreakableFormationService", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html", null ]
+    ] ],
+    [ "BalloonParty.Configuration.Balloons.IToughSnakeSpringSettings", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IToughSnakeSpringSettings.html", [
+      [ "BalloonParty.Configuration.Balloons.ToughSnakeSpringSettings", "classBalloonParty_1_1Configuration_1_1Balloons_1_1ToughSnakeSpringSettings.html", null ]
+    ] ],
     [ "BalloonParty.Shared.Pool.ITrailEndpoint", "interfaceBalloonParty_1_1Shared_1_1Pool_1_1ITrailEndpoint.html", [
       [ "BalloonParty.Shared.Pool.TransformTrailEndpoint", "classBalloonParty_1_1Shared_1_1Pool_1_1TransformTrailEndpoint.html", null ],
       [ "BalloonParty.UI.Score.ColorProgressBar", "classBalloonParty_1_1UI_1_1Score_1_1ColorProgressBar.html", null ]
@@ -1359,6 +1365,7 @@ var hierarchy =
     [ "BalloonParty.Item.Lightning.LightningChain", "classBalloonParty_1_1Item_1_1Lightning_1_1LightningChain.html", null ],
     [ "BalloonParty.Item.Effects.LightningEffectParams", "structBalloonParty_1_1Item_1_1Effects_1_1LightningEffectParams.html", null ],
     [ "BalloonParty.Configuration.Items.LightningSettings", "classBalloonParty_1_1Configuration_1_1Items_1_1LightningSettings.html", null ],
+    [ "BalloonParty.Balloon.View.ToughSnakeSpringView.Link", "classBalloonParty_1_1Balloon_1_1View_1_1ToughSnakeSpringView_1_1Link.html", null ],
     [ "BalloonParty.Shared.Extensions.ListExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1ListExtensions.html", null ],
     [ "BalloonParty.Game.LaunchContinueView.LitMaterial", "structBalloonParty_1_1Game_1_1LaunchContinueView_1_1LitMaterial.html", null ],
     [ "BalloonParty.Shared.Diagnostics.Log", "classBalloonParty_1_1Shared_1_1Diagnostics_1_1Log.html", null ],
@@ -1402,6 +1409,7 @@ var hierarchy =
       [ "BalloonParty.Balloon.View.GrowingDiscView", "classBalloonParty_1_1Balloon_1_1View_1_1GrowingDiscView.html", null ],
       [ "BalloonParty.Balloon.View.NukeCloudView", "classBalloonParty_1_1Balloon_1_1View_1_1NukeCloudView.html", null ],
       [ "BalloonParty.Balloon.View.PaintDripOverlay", "classBalloonParty_1_1Balloon_1_1View_1_1PaintDripOverlay.html", null ],
+      [ "BalloonParty.Balloon.View.ToughSnakeSpringView", "classBalloonParty_1_1Balloon_1_1View_1_1ToughSnakeSpringView.html", null ],
       [ "BalloonParty.Cheats.DevLogConsole", "classBalloonParty_1_1Cheats_1_1DevLogConsole.html", null ],
       [ "BalloonParty.Display.CameraBackgroundTint", "classBalloonParty_1_1Display_1_1CameraBackgroundTint.html", null ],
       [ "BalloonParty.Display.CameraCullingMask", "classBalloonParty_1_1Display_1_1CameraCullingMask.html", null ],
@@ -1779,6 +1787,8 @@ var hierarchy =
     [ "BalloonParty.Editor.EffectPreview.PaintSplashPreviewModule.SplashInstance", "classBalloonParty_1_1Editor_1_1EffectPreview_1_1PaintSplashPreviewModule_1_1SplashInstance.html", null ],
     [ "BalloonParty.Balloon.Formation.FormationPlanner.Spot", "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Spot.html", null ],
     [ "BalloonParty.UI.ClothRibbon.RibbonCloth.Spring", "structBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonCloth_1_1Spring.html", null ],
+    [ "BalloonParty.Shared.Math.SpringChain", "classBalloonParty_1_1Shared_1_1Math_1_1SpringChain.html", null ],
+    [ "BalloonParty.Shared.Math.SpringChainTuning", "structBalloonParty_1_1Shared_1_1Math_1_1SpringChainTuning.html", null ],
     [ "BalloonParty.Shared.Extensions.SpriteRendererExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1SpriteRendererExtensions.html", null ],
     [ "BalloonParty.Configuration.Effects.StampProfile", "structBalloonParty_1_1Configuration_1_1Effects_1_1StampProfile.html", null ],
     [ "BalloonParty.Balloon.Formation.StandingFormation", "classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation.html", null ],

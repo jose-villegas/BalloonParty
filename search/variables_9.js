@@ -47,5 +47,6 @@ var searchData=
   ['itemspindegrees_44',['ItemSpinDegrees',['../structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewContext.html#a804a44111a08730f14813b10f1510889',1,'BalloonParty.Item.Preview.ItemPreviewContext.ItemSpinDegrees'],['../structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a6d4a3621ea83575e8312e07c7c3c28fc',1,'BalloonParty.Solver.ShotBalloonState.ItemSpinDegrees']]],
   ['itemspinrate_45',['ItemSpinRate',['../structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a98ce48454f46d6239b733264768cb0d0',1,'BalloonParty::Solver::ShotBalloonState']]],
   ['itemtypeaxisonly_46',['ItemTypeAxisOnly',['../classBalloonParty_1_1Game_1_1Telemetry_1_1MetricCatalog.html#abf46d019b5c97dc173dd4c0fc86fcd89',1,'BalloonParty::Game::Telemetry::MetricCatalog']]],
-  ['itemtypeaxissize_47',['ItemTypeAxisSize',['../classBalloonParty_1_1Game_1_1Telemetry_1_1MetricCatalog.html#a5ef61a20e7332f48568c2d2da3a515df',1,'BalloonParty::Game::Telemetry::MetricCatalog']]]
+  ['itemtypeaxissize_47',['ItemTypeAxisSize',['../classBalloonParty_1_1Game_1_1Telemetry_1_1MetricCatalog.html#a5ef61a20e7332f48568c2d2da3a515df',1,'BalloonParty::Game::Telemetry::MetricCatalog']]],
+  ['iterations_48',['Iterations',['../structBalloonParty_1_1Shared_1_1Math_1_1SpringChainTuning.html#ada71ee2914085ff960cf794754255226',1,'BalloonParty::Shared::Math::SpringChainTuning']]]
 ];

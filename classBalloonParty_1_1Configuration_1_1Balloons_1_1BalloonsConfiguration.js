@@ -25,6 +25,7 @@ var classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration =
     [ "_spawnEntryRowOffset", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html#ade835863a6832f6941be7d1e2b057110", null ],
     [ "_timeForBalloonsBalance", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html#a57dd550289de5cfc0ee45a14b137403d", null ],
     [ "_toughLayerSpacing", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html#a69ff9a937d29f0f1613d1f40395534b3", null ],
+    [ "_toughSnakeSprings", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html#a0ba1721968c9e6e2b806ad97dee038f5", null ],
     [ "_unbreakableFormation", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html#aa217c1eef329053b825d755f82ab4b18", null ],
     [ "BubbleMergeCue", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html#ac880531bcaefc3113168c40ab73ac650", null ],
     [ "BubbleMergeMax", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html#a579fcc1f7cd954ee6716bf0cfadf07c0", null ],
@@ -51,5 +52,6 @@ var classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration =
     [ "SpawnEntryRowOffset", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html#a6e48f580bbe142769105041de655f613", null ],
     [ "TimeForBalloonsBalance", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html#a4d939024a1c5c0fb3f20af4e6a20b689", null ],
     [ "ToughLayerSpacing", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html#af9276bf0862469b01df181a558c75a5a", null ],
+    [ "ToughSnakeSprings", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html#ae6202d89e8488301c70062aeb9d824e7", null ],
     [ "UnbreakableFormation", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html#aefc8677d1c9ad824295b00ad84d52a0c", null ]
 ];

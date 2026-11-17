@@ -115,5 +115,6 @@ var classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService =
     [ "ResetOrder", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a92670ecfb5b2b4094787d83b3fa35f00", null ],
     [ "SnakeStepsPerBeat", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#ace77eac335e6464fb0cee11440cf6a53", null ],
     [ "ToughSnakeLanded", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#afa4ea7c53178f0ffc8c4db3652101aed", null ],
+    [ "ToughSnakeMembers", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#ab090201cc42b0ae0174d3fbdf30c108e", null ],
     [ "ToughSnakeStepSeconds", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a965354256b6866657b321eccfb48c976", null ]
 ];

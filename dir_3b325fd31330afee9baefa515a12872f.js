@@ -16,5 +16,6 @@ var dir_3b325fd31330afee9baefa515a12872f =
     [ "NukeCloudView.cs", "NukeCloudView_8cs.html", "NukeCloudView_8cs" ],
     [ "PaintDripOverlay.cs", "PaintDripOverlay_8cs.html", "PaintDripOverlay_8cs" ],
     [ "ParticleColorableRenderer.cs", "ParticleColorableRenderer_8cs.html", "ParticleColorableRenderer_8cs" ],
-    [ "SpriteColorableRenderer.cs", "SpriteColorableRenderer_8cs.html", "SpriteColorableRenderer_8cs" ]
+    [ "SpriteColorableRenderer.cs", "SpriteColorableRenderer_8cs.html", "SpriteColorableRenderer_8cs" ],
+    [ "ToughSnakeSpringView.cs", "ToughSnakeSpringView_8cs.html", "ToughSnakeSpringView_8cs" ]
 ];

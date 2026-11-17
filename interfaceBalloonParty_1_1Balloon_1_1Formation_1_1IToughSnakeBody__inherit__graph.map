@@ -1,0 +1,5 @@
+<map id="BalloonParty.Balloon.Formation.IToughSnakeBody" name="BalloonParty.Balloon.Formation.IToughSnakeBody">
+<area shape="rect" id="Node000001" title="The tough snake as it stands, for views that draw it as one body." alt="" coords="5,5,234,50"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html" title="Gathers the board&#39;s unbreakables into formations, as many as there are members for." alt="" coords="5,98,234,143"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,64,122,99,117,97,118,68"/>
+</map>

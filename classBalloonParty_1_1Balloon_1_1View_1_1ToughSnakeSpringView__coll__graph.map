@@ -1,0 +1,23 @@
+<map id="BalloonParty.Balloon.View.ToughSnakeSpringView" name="BalloonParty.Balloon.View.ToughSnakeSpringView">
+<area shape="rect" id="Node000001" title="A trial look (IToughSnakeSpringSettings): a spring between each pair of neighbours in the tough snake..." alt="" coords="1009,81,1202,126"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="678,5,801,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="816,29,985,63,1038,80,1033,80,984,68,816,34"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IToughSnakeBody.html" title="The tough snake as it stands, for views that draw it as one body." alt="" coords="625,57,854,102"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="869,85,1011,97,1006,97,869,90"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" title=" " alt="" coords="653,126,826,171"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="841,133,1011,115,1006,115,841,139"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html" title="Tracks slots in&#45;transit from balance animations so spawn paths avoid them." alt="" coords="266,28,439,72"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="454,67,602,103,626,111,665,126,660,126,625,116,601,108,454,73"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,28,212,72"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="227,47,268,49,263,51,228,52"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html" title="Slot grid layout: size, spacing, and origin offset." alt="" coords="261,97,444,142"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="460,125,655,141,650,143,460,130"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="264,166,442,211"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="457,175,656,157,650,158,458,180"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="19,166,198,211"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="213,186,266,188,260,189,214,191"/>
+<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="264,236,442,280"/>
+<area shape="poly" id="edge9_Node000004_Node000010" title=" " alt="" coords="457,237,528,219,600,195,624,181,653,172,658,171,627,186,602,200,530,225,458,242"/>
+<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html" title=" " alt="" coords="625,196,854,240"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="855,188,984,151,1052,127,1057,125,986,156,856,194"/>
+</map>
