@@ -35,6 +35,9 @@ namespace BalloonParty.Balloon.View
             {
                 _renderer.enabled = false;
             }
+
+            // Every balloon carries one and almost none is dripping: asleep, it costs no Update call.
+            enabled = _playing;
         }
 
         private void Update()
@@ -64,6 +67,7 @@ namespace BalloonParty.Balloon.View
 
             _elapsed = 0f;
             _playing = true;
+            enabled = true;
             _renderer.enabled = true;
 
             _block ??= new MaterialPropertyBlock();
@@ -90,6 +94,7 @@ namespace BalloonParty.Balloon.View
         {
             _playing = false;
             _elapsed = 0f;
+            enabled = false;
 
             if (_renderer != null)
             {
