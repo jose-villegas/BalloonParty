@@ -42,13 +42,14 @@ Material:
     - _InkLook: 1
     m_Colors:
     - _BandHalf: {r: 0.27, g: 0.07, b: 0, a: 0}
-    - _Far: {r: 0.5, g: 0.75, b: 0, a: 0.3}
+    - _Far: {r: 0.75, g: 0.75, b: 3.5, a: 0.3}
     - _PenEdge: {r: 0.35, g: 0.12, b: 2.5, a: 0.18}
     - _PenGrain: {r: 0.45, g: 2, b: 6, a: 0}
     - _PenHand: {r: 0.012, g: 0.35, b: 0.25, a: 0.6}
+    - _PenLight: {r: 1, g: 0.4, b: 0.4, a: 0}
     - _PenRim: {r: 1.25, g: 0.7, b: 0.72, a: 0.45}
-    - _PenWet: {r: 0.8, g: 0.12, b: 0.2, a: 1}
-    - _Sketch: {r: 0, g: 0.022, b: 0.09, a: 0}
+    - _PenWet: {r: 1, g: 0.12, b: 0.2, a: 1}
+    - _Sketch: {r: 0.45, g: 0.022, b: 0.09, a: 0}
     - _TailColor: {r: 0.95, g: 0.95, b: 0.9098039, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

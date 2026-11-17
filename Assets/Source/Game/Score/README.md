@@ -155,12 +155,16 @@ static; the ticker hands the view one number a frame, how far every pen has move
   and lighter along it, has a ragged edge and paper specks (the heads-ups' pencil noise, laid along the stroke so
   the grain stays with the line as the shape tumbles), and runs on a little past each sharp corner. Its dials are
   on the `ShapeInk` material: `_PenHand`, `_PenEdge`, `_PenGrain`, `_PenWet`, `_Sketch` (a second, fainter stroke
-  beside the first, off as shipped), `_Far`.
-- The pen is a wet dot at the ink's head. Each segment of the mesh carries a spare square for it, which the
-  vertex stage moves to wherever on that segment a pen is and folds away while none is.
+  beside the first), `_Far`.
+- The ink takes the scene's light (`SceneLight.cginc`), as the gameplay surfaces do: the time of day tints and
+  dims it part-way (`_PenLight`), and a light passing close (a spark, a laser, lightning) colours and brightens
+  it, capped at white so the ink never blooms.
+- The pen is the stroke's own rounded end: a half disc in front of the pen, where the stroke has wavered to, as
+  wide as the stroke is pressed there and in the same wet ink, so the line ends round with no dot on it. Each segment of the mesh carries a spare square for it,
+  which the vertex stage moves to wherever on that segment a pen is and folds away while none is.
 - The mesh is drawn twice, by two materials: the half of the shape behind its centre first, then the half in
   front. The shapes are wire frames of rounded solids, so that puts the near side over the far side. The far half
-  is also drawn lighter and thinner (`_Far`), as hidden edges are.
+  is also drawn as hidden edges are: lighter, thinner and dashed (`_Far`).
 
 `ShapeInkMeshBuilder` bakes the mesh from a `FormationShape` the first time that shape flies (straight edges are
 one segment, arcs are cut every 6 degrees at points a pen passes through), and `ShapeInkPool`, owned by the
