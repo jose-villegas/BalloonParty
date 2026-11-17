@@ -23,6 +23,7 @@ using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pause;
+using BalloonParty.Shared.Rendering;
 using BalloonParty.Shared.SceneLight;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Actor.Archetype;
@@ -414,6 +415,9 @@ namespace BalloonParty.Editor.Staging
             var effect = Object.Instantiate(prefab, view.transform.position + offset, prefab.transform.rotation);
             effect.gameObject.name = $"Stage {prefab.name}";
             Effects.Add(effect.gameObject);
+
+            // Not pooled, so tracked here: the effects map renders only while its layer has something alive.
+            LayerPresence.Track(effect.gameObject);
             effect.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
             var material = MaterialSwap(settings);
             foreach (var system in effect.GetComponentsInChildren<ParticleSystem>())

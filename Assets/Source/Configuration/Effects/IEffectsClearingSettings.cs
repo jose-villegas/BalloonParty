@@ -57,7 +57,10 @@ namespace BalloonParty.Configuration.Effects
         /// <summary>Screen size over an effects map's size.</summary>
         int MapDownscale { get; }
 
-        /// <summary>Seconds the effects maps stay on after the last clearing closes, on game time.</summary>
+        /// <summary>
+        ///     Longest the effects maps stay on after the last clearing closes, on game time; each goes off sooner
+        ///     once nothing is alive on its layers.
+        /// </summary>
         float MapHoldSeconds { get; }
 
         Shader MaskShader { get; }

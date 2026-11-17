@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Diagnostics;
@@ -14,7 +15,9 @@ namespace BalloonParty.Display
     ///     and a camera-fitted quad lays the map back over the frame, faded where the mask is clear. With the mask
     ///     empty that is the same blend into the same frame, so it only runs while a clearing is open, and for
     ///     <see cref="IEffectsClearingSettings.MapHoldSeconds" /> after: otherwise the effects draw straight into
-    ///     the frame, as they would without it. The HUD camera has one for the score trails; the main camera one
+    ///     the frame, as they would without it. Within that, the effects camera renders only while something is
+    ///     alive on its layers (<see cref="LayerPresence" />): an empty map would lay back nothing. The quad stays
+    ///     while the glass is up, for its glint. The HUD camera has one for the score trails; the main camera one
     ///     for the chaos a ball flies through, in HDR so bloom and the tonemapper still see it.
     /// </summary>
     [RequireComponent(typeof(Camera))]
@@ -22,6 +25,9 @@ namespace BalloonParty.Display
     internal class EffectsMapCompositor : MonoBehaviour
     {
         private const float QuadDistance = 5f;
+#if UNITY_ENABLE_CHECKS
+        private const float UntrackedScanSeconds = 1f;
+#endif
 
         private static readonly int MapTexId = Shader.PropertyToID("_EffectsMapTex");
 
@@ -50,6 +56,10 @@ namespace BalloonParty.Display
 
         [Inject] private IEffectsClearingSettings _settings;
         [Inject] private EffectsClearingMaskView _mask;
+#if UNITY_ENABLE_CHECKS
+
+        private readonly HashSet<Renderer> _warned = new();
+#endif
 
         private Camera _camera;
         private Camera _effectsCamera;
@@ -59,12 +69,28 @@ namespace BalloonParty.Display
         private Transform _quadTransform;
         private CameraCullingMask _cullingMask;
         private float _holdRemaining;
-        private bool _live;
+        private bool _held;
+        private bool _rendering;
+        private bool _composing;
+        private bool _volumesFrozen;
         private bool _broken;
+#if UNITY_ENABLE_CHECKS
+        private float _scanIn;
+        private int _heldFrames;
+        private int _renderedFrames;
+#endif
 
         internal RenderTexture MapTexture => _map;
 
         internal bool Hdr => _hdr;
+#if UNITY_ENABLE_CHECKS
+
+        /// <summary>Frames the map was held for: each one it rendered, before it waited for its layers.</summary>
+        internal int HeldFrames => _heldFrames;
+
+        /// <summary>Frames the effects camera rendered.</summary>
+        internal int RenderedFrames => _renderedFrames;
+#endif
 
         private void Awake()
         {
@@ -79,32 +105,41 @@ namespace BalloonParty.Display
 
         private void OnEnable()
         {
-            Canvas.preWillRenderCanvases += MirrorProjection;
+            Canvas.preWillRenderCanvases += BeforeRender;
+#if UNITY_ENABLE_CHECKS
+            UnityEngine.Rendering.RenderPipelineManager.beginCameraRendering += CountRender;
+#endif
         }
 
         private void LateUpdate()
         {
-            var live = _settings != null && _settings.Enabled && _mask != null && Held()
-                       && _effectLayers.value != 0 && EnsureResources();
+            _held = _settings != null && _settings.Enabled && _mask != null && Held()
+                    && _effectLayers.value != 0 && EnsureResources();
 #if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
             var off = BalloonParty.Cheats.CheatState.PerfOff;
-            live &= (off & BalloonParty.Cheats.PerfOff.Lens) == 0
-                    && (_hdr || (off & BalloonParty.Cheats.PerfOff.HudMap) == 0);
+            _held &= (off & BalloonParty.Cheats.PerfOff.Lens) == 0
+                     && (_hdr || (off & BalloonParty.Cheats.PerfOff.HudMap) == 0);
 #endif
-
-            if (live)
+#if UNITY_ENABLE_CHECKS
+            if (_held)
             {
-                EnsureTarget();
+                _heldFrames++;
             }
 
-            SetLive(live);
+            WarnUntracked();
+#endif
+
+            Apply();
             MirrorProjection();
         }
 
         private void OnDisable()
         {
-            Canvas.preWillRenderCanvases -= MirrorProjection;
-            SetLive(false);
+            Canvas.preWillRenderCanvases -= BeforeRender;
+#if UNITY_ENABLE_CHECKS
+            UnityEngine.Rendering.RenderPipelineManager.beginCameraRendering -= CountRender;
+#endif
+            SetState(false, false);
         }
 
         private void OnDestroy()
@@ -134,36 +169,72 @@ namespace BalloonParty.Display
             return _holdRemaining > 0f;
         }
 
-        private void SetLive(bool live)
+        // Something can come alive after this LateUpdate (a late tick launches a trail), so the map looks again
+        // just before the frame renders.
+        private void BeforeRender()
         {
-            if (live == _live)
+            Apply();
+            MirrorProjection();
+        }
+
+        // The map renders only while something is alive on its layers: on any other frame it would lay back
+        // nothing, and the camera's own pass draws the same picture. The glint is the glass's, not the map's, so
+        // the quad stays while a clearing is open, map rendered or not, and never flickers as effects come and go.
+        private void Apply()
+        {
+            var rendering = _held && LayerPresence.Any(_effectLayers.value);
+            if (rendering)
+            {
+                EnsureTarget();
+            }
+
+            SetState(rendering, rendering || (_held && _mask.IsClearing));
+        }
+
+        private void SetState(bool rendering, bool composing)
+        {
+            if (rendering != _rendering)
+            {
+                _rendering = rendering;
+                ClaimLayers(rendering);
+                if (_effectsCamera != null)
+                {
+                    _effectsCamera.enabled = rendering;
+                    _volumesFrozen = _volumesFrozen || (rendering && CameraVolumes.TryFreeze(_effectsCamera));
+                }
+
+                // A map not rendered this frame holds an old one: the quad lays back only its glint.
+                if (_material != null)
+                {
+                    _material.SetTexture(MapTexId, rendering ? _map : Texture2D.blackTexture);
+                }
+            }
+
+            if (composing != _composing)
+            {
+                _composing = composing;
+                if (_quad != null)
+                {
+                    _quad.enabled = composing;
+                }
+            }
+        }
+
+        private void ClaimLayers(bool claim)
+        {
+            // Torn down with the camera, the owner may already be gone.
+            if (_cullingMask == null)
             {
                 return;
             }
 
-            _live = live;
-
-            // Torn down with the camera, the owner may already be gone.
-            if (_cullingMask != null)
+            if (claim)
             {
-                if (live)
-                {
-                    _cullingMask.Claim(_effectLayers.value);
-                }
-                else
-                {
-                    _cullingMask.Release(_effectLayers.value);
-                }
+                _cullingMask.Claim(_effectLayers.value);
             }
-
-            if (_effectsCamera != null)
+            else
             {
-                _effectsCamera.enabled = live;
-            }
-
-            if (_quad != null)
-            {
-                _quad.enabled = live;
+                _cullingMask.Release(_effectLayers.value);
             }
         }
 
@@ -171,7 +242,7 @@ namespace BalloonParty.Display
         // the map and the quad never frame last frame's view.
         private void MirrorProjection()
         {
-            if (!_live)
+            if (!_composing)
             {
                 return;
             }
@@ -280,5 +351,40 @@ namespace BalloonParty.Display
             _effectsCamera.targetTexture = _map;
             _material.SetTexture(MapTexId, _map);
         }
+#if UNITY_ENABLE_CHECKS
+
+        // A source neither pooled nor watched would draw straight into the frame, outside the glass, while the map
+        // skips its frames. Looked for now and then while the map is held with its layers said to be empty.
+        private void WarnUntracked()
+        {
+            if (!_held || LayerPresence.Any(_effectLayers.value))
+            {
+                return;
+            }
+
+            _scanIn -= Time.unscaledDeltaTime;
+            if (_scanIn > 0f)
+            {
+                return;
+            }
+
+            _scanIn = UntrackedScanSeconds;
+            var untracked = LayerPresence.FindUntracked(_effectLayers.value);
+            if (untracked != null && _warned.Add(untracked))
+            {
+                Log.Warn("EffectsMap", $"'{untracked.name}' draws on the map's layers but isn't pooled or watched " +
+                                       "(LayerPresence), so the map skips it and it shows outside the glass.",
+                    untracked);
+            }
+        }
+
+        private void CountRender(UnityEngine.Rendering.ScriptableRenderContext context, Camera camera)
+        {
+            if (camera == _effectsCamera)
+            {
+                _renderedFrames++;
+            }
+        }
+#endif
     }
 }

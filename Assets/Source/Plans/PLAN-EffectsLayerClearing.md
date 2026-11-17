@@ -146,7 +146,11 @@ taps, a few texels apart) as the glass's surface:
   over the whole dome, so they thin slowly from the rim and are near gone only over the ball, which stays
   readable.
 - **Glint.** A mirror highlight off the dome's normal and a thin bright rim (`LensHighlight`) are added
-  light, so the dome shows over the board too, not only over effects.
+  light, so the dome shows over the board too, not only over effects. It is the glass's, not a map's: each
+  composite quad stays on while a clearing is open, with a transparent texture standing in for a map not
+  rendered that frame. Both composites add it, the main one before bloom and the tonemapper and the HUD's
+  after; that second glint came with the main map (tuned at 0.6 when the HUD's was the only one), and is kept
+  so the look is unchanged.
 
 Decay subtracts evenly, so an older part of the dome keeps its slope and shrinks inward: the corridor behind
 a ball is a glass tube that narrows and closes. Outside the glass the composite branches to one plain map
@@ -213,8 +217,8 @@ this table.
 | Mask sample in the composite | 1 bilinear tap per pixel from a 650 kB texture | stays in cache |
 | The glass | 4 more mask taps and 3 map taps (not 1) per pixel under a dome | a few balls' worth of the screen |
 | HUD map, `ARGB32` | about 10 MB stored + 10 MB read back ≈ 1.2 GB/s | `MapDownscale` 2 quarters it, at the cost of softer lines. Default 1 |
-| Main map, `ARGBHalf` | about 2.4 GB/s at full size | the expensive one. Runs while a ball flies and `MapHoldSeconds` after; `MapDownscale` 2 quarters it |
-| Extra camera per map | one cull and one RenderGraph setup on the CPU | effect layers only, so few renderers |
+| Main map, `ARGBHalf` | about 2.4 GB/s at full size | the expensive one. Runs while a ball flies and something is alive on its layer, at most `MapHoldSeconds` after the last clearing; `MapDownscale` 2 quarters it |
+| Extra camera per map | one cull and one RenderGraph setup on the CPU, about a fifth of the main thread's frame on a device while both ran | only on frames its layer has something alive (`LayerPresence`); a ball before its first pop, or a hold whose effects are done, renders none |
 | Effects no longer drawn by their own camera | a saving | they draw once, into the map |
 
 The idle rule means none of this is paid while aiming. The HUD stack already pays one full-screen copy (see

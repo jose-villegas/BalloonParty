@@ -54,6 +54,7 @@ using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Pause;
 using BalloonParty.Shared.Pool;
+using BalloonParty.Shared.Rendering;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.SceneLight;
 using BalloonParty.Shared.Thermal;
@@ -275,6 +276,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<NukeFuse>().As<IRunResettable>();
             builder.RegisterComponentOnNewGameObject<NukeBlastView>(Lifetime.Singleton, "NukeBlast").As<INukeBlastView>();
             builder.RegisterComponentOnNewGameObject<NukeCloudView>(Lifetime.Singleton, "NukeCloud").As<INukeCloudView>();
+            builder.RegisterBuildCallback(WatchNukeCloud);
 
             // The blue ring round unbreakables in formation: their looks join the sources as they bind, and the
             // view, which nothing depends on, is built with the scope.
@@ -390,6 +392,15 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<ItemPreviewTicker>().AsSelf();
             builder.RegisterEntryPoint<ItemRangePreviewController>();
             builder.RegisterEntryPoint<ItemPreviewPoolBootstrap>();
+        }
+
+        // The nuke cloud isn't pooled: it shows and hides by its renderer, so that's what the effects map watches.
+        private static void WatchNukeCloud(IObjectResolver resolver)
+        {
+            if (resolver.Resolve<INukeCloudView>() is Component cloud)
+            {
+                LayerPresence.Watch(cloud.GetComponent<Renderer>());
+            }
         }
 
         internal static void RegisterPresentation(this IContainerBuilder builder)

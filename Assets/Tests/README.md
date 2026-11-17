@@ -747,6 +747,17 @@ The clearing mask's stamps (`Plans/PLAN-EffectsLayerClearing.md`): what each bal
 | The main map is HDR, and the `Effects` layer is drawn by the main camera (under post-processing) and by no other camera | 2 | The lightning and the laser clipped to 1 with no bloom, as they were on the HUD camera |
 | Culling-mask owner: a claim takes layers out of the base and gives them back, a new base keeps the claim, a release never brings back a layer the base dropped, one owner per camera | 4 | A navigation change while the main map runs drawing the effects twice, or the map going idle leaking them into the launch screen |
 
+### `LayerPresenceTests` — 8 tests
+
+Whether anything is alive on a layer, which decides whether an effects map renders.
+
+| Area | Tests | What could break |
+|---|---|---|
+| A tracked object counts on its renderers' layer while active, an inactive child's layer included, and not on other layers; without renderers it never counts; tracked twice it counts once | 4 | An effect out of the pool said absent, so it draws outside the glass, or one counted forever, so the map never skips a frame |
+| The layer stays present until the last object leaves, deactivated or destroyed; a mask sees any of its layers | 2 | The map going off under a second effect still alive |
+| A watched renderer counts only while shown, and not once destroyed | 1 | The nuke cloud missed, or a destroyed one keeping the map on |
+| A pooled effect counts from `Get` to `Return` | 1 | The pool's tracking unhooked, so every map skips every frame |
+
 ### `SfxThrottleGateTests` — 7 tests
 
 Tests the wall-clock cooldown and burst-coalescing window (deterministic via an injected clock).

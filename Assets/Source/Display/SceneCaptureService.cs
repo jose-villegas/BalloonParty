@@ -1,6 +1,7 @@
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Cadence;
 using BalloonParty.Shared.Diagnostics;
+using BalloonParty.Shared.Rendering;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using VContainer;
@@ -35,6 +36,7 @@ namespace BalloonParty.Display
         private RenderTexture _texture;
         private int _consumers;
         private float _captureAccumulator;
+        private bool _volumesFrozen;
 
         internal RenderTexture CaptureTexture => _texture;
 
@@ -91,6 +93,9 @@ namespace BalloonParty.Display
                 // ambient against this clear colour — a stale value would break its neutrality.
                 ApplyBackgroundColor();
                 _captureAccumulator -= captureInterval;
+
+                // The scenario's grade animates the main camera's volumes; this one post-processes nothing.
+                _volumesFrozen = _volumesFrozen || CameraVolumes.TryFreeze(_captureCamera);
             }
 
             _captureCamera.enabled = shouldRender;

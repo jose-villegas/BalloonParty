@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Shared.Diagnostics;
+using BalloonParty.Shared.Rendering;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -52,7 +53,7 @@ namespace BalloonParty.Shared.Pool
                 item = null;
             }
 
-            item ??= Create();
+            item ??= CreateTracked();
             item.gameObject.SetActive(true);
             item.OnSpawned();
             return item;
@@ -90,7 +91,7 @@ namespace BalloonParty.Shared.Pool
         {
             for (var i = 0; i < count; i++)
             {
-                PushWarm(Create());
+                PushWarm(CreateTracked());
             }
         }
 
@@ -99,12 +100,21 @@ namespace BalloonParty.Shared.Pool
             for (var i = 0; i < count; i++)
             {
                 ct.ThrowIfCancellationRequested();
-                PushWarm(Create());
+                PushWarm(CreateTracked());
                 await UniTask.Yield(ct);
             }
         }
 
         protected abstract TItem Create();
+
+        // Every pooled object is tracked by its renderers' layers from birth, so an effects map can tell when its
+        // layer is empty (LayerPresence).
+        private TItem CreateTracked()
+        {
+            var item = Create();
+            LayerPresence.Track(item.gameObject);
+            return item;
+        }
 
         private void PushWarm(TItem item)
         {
