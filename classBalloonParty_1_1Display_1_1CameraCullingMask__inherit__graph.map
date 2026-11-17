@@ -1,0 +1,5 @@
+<map id="BalloonParty.Display.CameraCullingMask" name="BalloonParty.Display.CameraCullingMask">
+<area shape="rect" id="Node000001" title="The one writer of a camera&#39;s culling mask: a base mask (navigation&#39;s, or the camera&#39;s own) less the l..." alt="" coords="5,81,213,126"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="47,5,171,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,47,111,81,107,79,107,51"/>
+</map>

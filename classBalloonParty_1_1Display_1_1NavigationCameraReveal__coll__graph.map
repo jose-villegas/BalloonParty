@@ -1,5 +1,8 @@
 <map id="BalloonParty.Display.NavigationCameraReveal" name="BalloonParty.Display.NavigationCameraReveal">
-<area shape="rect" id="Node000001" title="Reveals gameplay on the SINGLE persistent camera by widening its culling mask when Navigation leaves ..." alt="" coords="5,81,233,126"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="57,5,181,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,47,121,81,117,79,117,51"/>
+<area shape="rect" id="Node000001" title="Reveals gameplay on the SINGLE persistent camera by widening its culling mask when Navigation leaves ..." alt="" coords="5,192,233,237"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="52,5,175,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,47,121,192,116,191,112,49"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Display_1_1CameraCullingMask.html" title="The one writer of a camera&#39;s culling mask: a base mask (navigation&#39;s, or the camera&#39;s own) less the l..." alt="" coords="135,82,343,127"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="146,39,209,81,204,83,146,44"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="206,137,145,194,142,189,201,139"/>
 </map>

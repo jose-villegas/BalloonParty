@@ -617,7 +617,7 @@ var plans =
         [ "Orientation", "plan_effects_layer_clearing.html#autotoc_md468", null ],
         [ "The layer split", "plan_effects_layer_clearing.html#autotoc_md470", [
           [ "HUD effects map (phase 2)", "plan_effects_layer_clearing.html#autotoc_md471", null ],
-          [ "Main effects map (phase 3, open)", "plan_effects_layer_clearing.html#autotoc_md472", null ]
+          [ "Main effects map (phase 3, in part)", "plan_effects_layer_clearing.html#autotoc_md472", null ]
         ] ],
         [ "The clearing mask", "plan_effects_layer_clearing.html#autotoc_md474", [
           [ "The glass", "plan_effects_layer_clearing.html#autotoc_md475", null ]
@@ -630,7 +630,7 @@ var plans =
           [ "Phase 1: the clearing mask", "plan_effects_layer_clearing.html#autotoc_md483", null ],
           [ "Phase 2: the HUD effects map", "plan_effects_layer_clearing.html#autotoc_md484", null ],
           [ "As built (phases 1 and 2)", "plan_effects_layer_clearing.html#autotoc_md485", null ],
-          [ "Phase 3: the main effects map (gated)", "plan_effects_layer_clearing.html#autotoc_md486", null ]
+          [ "Phase 3: the main effects map (in part)", "plan_effects_layer_clearing.html#autotoc_md486", null ]
         ] ],
         [ "Out of scope", "plan_effects_layer_clearing.html#autotoc_md488", null ],
         [ "Open questions for the owner", "plan_effects_layer_clearing.html#autotoc_md490", null ]

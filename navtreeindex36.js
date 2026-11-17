@@ -1,5 +1,10 @@
 var NAVTREEINDEX36 =
 {
+"classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#a35f838bc93dafb7343aa9861e30b0d99":[5,0,0,3,9,30,20],
+"classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#a35f838bc93dafb7343aa9861e30b0d99":[6,0,0,3,9,30,20],
+"classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#a3e78d73164013bb0b2355f7ca015c88d":[5,0,0,3,9,30,7],
+"classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#a3e78d73164013bb0b2355f7ca015c88d":[6,0,0,3,9,30,7],
+"classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#a427fef3d19cac6e7d32f53ecf1017751":[5,0,0,3,9,30,21],
 "classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#a427fef3d19cac6e7d32f53ecf1017751":[6,0,0,3,9,30,21],
 "classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#a4b2636f51bca61697513151e0636ab75":[5,0,0,3,9,30,13],
 "classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#a4b2636f51bca61697513151e0636ab75":[6,0,0,3,9,30,13],
@@ -244,10 +249,5 @@ var NAVTREEINDEX36 =
 "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePaletteExtensions.html#a6260b0875f9692883e96516722d118bf":[5,0,0,3,10,1,0],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePaletteExtensions.html#a6260b0875f9692883e96516722d118bf":[6,0,0,3,10,1,0],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteChannelEncoding.html":[5,0,0,3,10,4],
-"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteChannelEncoding.html":[6,0,0,3,10,4],
-"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteChannelEncoding.html#a11a88d675b45dda25f39f93600bfada0":[5,0,0,3,10,4,0],
-"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteChannelEncoding.html#a11a88d675b45dda25f39f93600bfada0":[6,0,0,3,10,4,0],
-"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteChannelEncoding.html#af990fd3c49934d353e69b5a21c6636a1":[5,0,0,3,10,4,1],
-"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteChannelEncoding.html#af990fd3c49934d353e69b5a21c6636a1":[6,0,0,3,10,4,1],
-"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteColorMaskAttribute.html":[5,0,0,3,10,5]
+"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteChannelEncoding.html":[6,0,0,3,10,4]
 };

@@ -1404,6 +1404,7 @@ var hierarchy =
       [ "BalloonParty.Balloon.View.PaintDripOverlay", "classBalloonParty_1_1Balloon_1_1View_1_1PaintDripOverlay.html", null ],
       [ "BalloonParty.Cheats.DevLogConsole", "classBalloonParty_1_1Cheats_1_1DevLogConsole.html", null ],
       [ "BalloonParty.Display.CameraBackgroundTint", "classBalloonParty_1_1Display_1_1CameraBackgroundTint.html", null ],
+      [ "BalloonParty.Display.CameraCullingMask", "classBalloonParty_1_1Display_1_1CameraCullingMask.html", null ],
       [ "BalloonParty.Display.CameraShakeView", "classBalloonParty_1_1Display_1_1CameraShakeView.html", null ],
       [ "BalloonParty.Display.EffectsClearingMaskView", "classBalloonParty_1_1Display_1_1EffectsClearingMaskView.html", null ],
       [ "BalloonParty.Display.EffectsMapCompositor", "classBalloonParty_1_1Display_1_1EffectsMapCompositor.html", null ],

@@ -20,11 +20,11 @@ var searchData=
   ['3_20deflector_20bounce_20vfx_17',['1.3 Deflector Bounce VFX',['../plan_future_ideas.html#autotoc_md514',1,'']]],
   ['3_20edge_20cases_18',['6.3 Edge Cases',['../plan_future_ideas.html#autotoc_md548',1,'']]],
   ['3_20escalate_20tt_20leveldifficultyresolver_20fallbackparameters_20tt_20to_20a_20hard_20failure_19',['14.3 Escalate &lt;tt&gt;LevelDifficultyResolver.FallbackParameters&lt;/tt&gt; to a hard failure',['../plan_future_ideas.html#autotoc_md602',1,'']]],
-  ['3_20levelcontroller_20—_20the_20exact_20edits_20',['6.3 LevelController — the exact edits',['../plan_level_up_timing.html#autotoc_md785',1,'']]],
-  ['3_20model_20sketch_21',['8.3 Model Sketch',['../plan_future_ideas.html#autotoc_md555',1,'']]],
-  ['3_20model_20sketch_22',['13.3 Model sketch',['../plan_future_ideas.html#autotoc_md592',1,'']]],
-  ['3_20new_20balloon_20archetypes_20em_20from_20plan_20gridactorexpansion_20em_23',['5.3 New Balloon Archetypes &lt;em&gt;(from PLAN-GridActorExpansion)&lt;/em&gt;',['../plan_future_ideas.html#autotoc_md540',1,'']]],
-  ['3_20open_24',['Main effects map (phase 3, open)',['../plan_effects_layer_clearing.html#autotoc_md472',1,'']]],
+  ['3_20in_20part_20',['Main effects map (phase 3, in part)',['../plan_effects_layer_clearing.html#autotoc_md472',1,'']]],
+  ['3_20levelcontroller_20—_20the_20exact_20edits_21',['6.3 LevelController — the exact edits',['../plan_level_up_timing.html#autotoc_md785',1,'']]],
+  ['3_20model_20sketch_22',['8.3 Model Sketch',['../plan_future_ideas.html#autotoc_md555',1,'']]],
+  ['3_20model_20sketch_23',['13.3 Model sketch',['../plan_future_ideas.html#autotoc_md592',1,'']]],
+  ['3_20new_20balloon_20archetypes_20em_20from_20plan_20gridactorexpansion_20em_24',['5.3 New Balloon Archetypes &lt;em&gt;(from PLAN-GridActorExpansion)&lt;/em&gt;',['../plan_future_ideas.html#autotoc_md540',1,'']]],
   ['3_20overdraw_20look_20editor_25',['3. Overdraw look (editor)',['../plan_performance_recovery.html#autotoc_md817',1,'']]],
   ['3_20pacing_20—_20suggested_20actor_20introduction_20order_26',['4.3 Pacing — Suggested Actor Introduction Order',['../plan_future_ideas.html#autotoc_md533',1,'']]],
   ['3_20phases_27',['3. Phases',['../plan_fast_paced.html#autotoc_md495',1,'']]],
@@ -35,5 +35,5 @@ var searchData=
   ['3_3a_20architectural_20gated_20on_20step_200_20evidence_32',['Tier 3: Architectural (gated on Step 0 evidence)',['../plan_performance_recovery.html#autotoc_md843',1,'']]],
   ['3_3a_20docs_20and_20playtest_33',['Phase 3: Docs and playtest',['../plan_unbreakable_formations.html#autotoc_md930',1,'']]],
   ['3_3a_20spawn_20clock_34',['6. Phase 3: spawn clock',['../plan_fast_paced.html#autotoc_md501',1,'']]],
-  ['3_3a_20the_20main_20effects_20map_20gated_35',['Phase 3: the main effects map (gated)',['../plan_effects_layer_clearing.html#autotoc_md486',1,'']]]
+  ['3_3a_20the_20main_20effects_20map_20in_20part_35',['Phase 3: the main effects map (in part)',['../plan_effects_layer_clearing.html#autotoc_md486',1,'']]]
 ];

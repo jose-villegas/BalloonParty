@@ -166,7 +166,7 @@ var searchData=
   ['the_20look_163',['The look',['../plan_disco_balloon.html#autotoc_md462',1,'The look'],['../plan_nuke_balloon.html#autotoc_md804',1,'The look']]],
   ['the_20looks_164',['The looks',['../plan_reward_balloons.html#autotoc_md860',1,'']]],
   ['the_20loop_165',['2. The loop',['../plan_coins.html#autotoc_md397',1,'']]],
-  ['the_20main_20effects_20map_20gated_166',['Phase 3: the main effects map (gated)',['../plan_effects_layer_clearing.html#autotoc_md486',1,'']]],
+  ['the_20main_20effects_20map_20in_20part_166',['Phase 3: the main effects map (in part)',['../plan_effects_layer_clearing.html#autotoc_md486',1,'']]],
   ['the_20merge_167',['4. The merge',['../plan_water_scenario.html#autotoc_md941',1,'']]],
   ['the_20model_168',['2. The model',['../plan_level_up_timing.html#autotoc_md777',1,'']]],
   ['the_20natural_20fit_20puzzle_20bobble_20lineage_169',['12.1 Grid encroachment — the natural fit (Puzzle Bobble lineage)',['../plan_future_ideas.html#autotoc_md583',1,'']]],

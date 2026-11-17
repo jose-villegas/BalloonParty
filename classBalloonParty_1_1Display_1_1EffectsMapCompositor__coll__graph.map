@@ -1,17 +1,20 @@
 <map id="BalloonParty.Display.EffectsMapCompositor" name="BalloonParty.Display.EffectsMapCompositor">
-<area shape="rect" id="Node000001" title="An effects map (Effects Layer Clearing) for the camera it sits on." alt="" coords="658,61,858,106"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="65,5,188,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="203,22,399,39,634,63,660,68,655,69,634,68,399,44,204,28"/>
-<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Display_1_1EffectsClearingMaskView.html" title="The clearing mask (Effects Layer Clearing): a small two&#45;channel target, bound globally as _EffectsCle..." alt="" coords="363,138,563,183"/>
-<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="202,35,249,50,295,70,340,94,364,110,414,137,408,138,361,115,337,99,293,74,247,55,203,40"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IEffectsClearingSettings.html" title="Read&#45;only tuning for the effects clearing (see Effects Layer Clearing): how wide a clearing each ball..." alt="" coords="14,65,239,110"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="254,84,659,81,656,86,255,89"/>
-<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="246,111,272,116,365,138,360,140,271,121,247,116"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="575,131,633,116,682,105,677,107,635,121,576,136"/>
-<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Display_1_1EffectsClearingStamps.html" title="One frame&#39;s stamps for the clearing mask, as the shader takes them: each a capsule in mask UV (xy the..." alt="" coords="26,142,227,187"/>
-<area shape="poly" id="edge6_Node000004_Node000005" title=" " alt="" coords="242,165,339,164,365,165,360,167,339,169,243,170"/>
-<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Display_1_1IEffectsClearingSource.html" title="Where the clearing mask gets its stamps from." alt="" coords="24,212,229,256"/>
-<area shape="poly" id="edge7_Node000004_Node000006" title=" " alt="" coords="243,207,338,187,368,183,363,184,339,192,245,212"/>
-<area shape="rect" id="Node000007" href="$structBalloonParty_1_1Display_1_1ClearingView.html" title="What the camera frames this frame, for turning world positions into clearing&#45;mask UV." alt="" coords="5,280,248,308"/>
-<area shape="poly" id="edge8_Node000004_Node000007" title=" " alt="" coords="223,273,247,266,296,247,344,225,422,184,427,183,346,229,298,252,249,271,224,278"/>
+<area shape="rect" id="Node000001" title="An effects map (Effects Layer Clearing) for the camera it sits on." alt="" coords="707,81,907,126"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="65,63,188,91"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="204,77,708,97,705,102,204,83"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Display_1_1EffectsClearingMaskView.html" title="The clearing mask (Effects Layer Clearing): a small two&#45;channel target, bound globally as _EffectsCle..." alt="" coords="366,169,566,214"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="203,88,248,100,339,133,419,168,414,169,337,138,247,105,204,93"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Display_1_1CameraCullingMask.html" title="The one writer of a camera&#39;s culling mask: a base mask (navigation&#39;s, or the camera&#39;s own) less the l..." alt="" coords="363,5,570,50"/>
+<area shape="poly" id="edge10_Node000008_Node000002" title=" " alt="" coords="202,63,364,41,360,45,204,68"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IEffectsClearingSettings.html" title="Read&#45;only tuning for the effects clearing (see Effects Layer Clearing): how wide a clearing each ball..." alt="" coords="14,313,239,358"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="253,310,338,293,456,273,506,262,569,241,628,214,684,183,772,127,777,125,687,187,630,219,571,246,508,267,457,279,339,298,254,315"/>
+<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="222,306,338,262,386,238,428,215,433,213,388,242,340,267,224,311"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="569,162,720,126,715,127,571,168"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Display_1_1EffectsClearingStamps.html" title="One frame&#39;s stamps for the clearing mask, as the shader takes them: each a capsule in mask UV (xy the..." alt="" coords="26,115,227,159"/>
+<area shape="poly" id="edge6_Node000004_Node000005" title=" " alt="" coords="242,153,368,174,363,177,243,158"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Display_1_1IEffectsClearingSource.html" title="Where the clearing mask gets its stamps from." alt="" coords="24,184,229,229"/>
+<area shape="poly" id="edge7_Node000004_Node000006" title=" " alt="" coords="244,205,339,202,368,202,363,203,339,207,245,210"/>
+<area shape="rect" id="Node000007" href="$structBalloonParty_1_1Display_1_1ClearingView.html" title="What the camera frames this frame, for turning world positions into clearing&#45;mask UV." alt="" coords="5,252,248,280"/>
+<area shape="poly" id="edge8_Node000004_Node000007" title=" " alt="" coords="235,247,338,226,394,214,389,215,339,231,237,252"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="585,46,684,66,731,81,726,81,682,72,586,51"/>
 </map>

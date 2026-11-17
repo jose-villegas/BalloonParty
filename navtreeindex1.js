@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"FlightStatsService_8cs.html":[7,0,7,4,0],
 "FlyingTrail_8cs.html":[7,0,18,8,1],
 "FoldRule_8cs.html":[7,0,7,10,7],
 "ForceDestroyProjectileMessage_8cs.html":[7,0,14,7,12],
@@ -91,7 +92,7 @@ var NAVTREEINDEX1 =
 "HitPipeline_8cs.html":[7,0,7,17],
 "HitVfxOverrideDrawer_8cs.html":[7,0,3,4,2],
 "HitVfxOverride_8cs.html":[7,0,3,0,6],
-"HudCamera_8cs.html":[7,0,5,9],
+"HudCamera_8cs.html":[7,0,5,10],
 "IActiveLevelParameters_8cs.html":[7,0,7,7,1],
 "IActiveScenario_8cs.html":[7,0,13,6],
 "IAdService_8cs.html":[7,0,7,8,3],
@@ -147,7 +148,7 @@ var NAVTREEINDEX1 =
 "IEffectPreviewModule_8cs.html":[7,0,6,1,4],
 "IEffect_8cs.html":[7,0,14,20],
 "IEffectsClearingSettings_8cs.html":[7,0,3,5,9],
-"IEffectsClearingSource_8cs.html":[7,0,5,10],
+"IEffectsClearingSource_8cs.html":[7,0,5,11],
 "IFailureOffers_8cs.html":[7,0,7,8,6],
 "IFlightScope_8cs.html":[7,0,7,4,1],
 "IFlightStatsSource_8cs.html":[7,0,7,4,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "ISceneLightSettings_8cs.html":[7,0,3,5,15],
 "IScoreShapeCover_8cs.html":[7,0,7,9,0,4],
 "IScoreTrailBehaviourConfiguration_8cs.html":[7,0,3,17],
-"IScoreTrailBehaviour_8cs.html":[7,0,7,9,0,5],
-"IScoreTrailConfig_8cs.html":[7,0,14,28]
+"IScoreTrailBehaviour_8cs.html":[7,0,7,9,0,5]
 };

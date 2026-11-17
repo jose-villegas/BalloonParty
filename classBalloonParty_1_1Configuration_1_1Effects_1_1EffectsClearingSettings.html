@@ -159,6 +159,9 @@ Properties</h2></td></tr>
 <tr class="memitem:a59c0d57c521c787b67f0585e7103c7ab" id="r_a59c0d57c521c787b67f0585e7103c7ab"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a59c0d57c521c787b67f0585e7103c7ab">MapDownscale</a><code> [get]</code></td></tr>
 <tr class="memdesc:a59c0d57c521c787b67f0585e7103c7ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Screen size over an effects map's size.  <br /></td></tr>
 <tr class="separator:a59c0d57c521c787b67f0585e7103c7ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3b96eb7198b8809d49c6b42c6c150fd" id="r_ad3b96eb7198b8809d49c6b42c6c150fd"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3b96eb7198b8809d49c6b42c6c150fd">MapHoldSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:ad3b96eb7198b8809d49c6b42c6c150fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds the effects maps stay on after the last clearing closes, on game time.  <br /></td></tr>
+<tr class="separator:ad3b96eb7198b8809d49c6b42c6c150fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6c85ec15158a71a4c2afd6af6cdd514" id="r_ae6c85ec15158a71a4c2afd6af6cdd514"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae6c85ec15158a71a4c2afd6af6cdd514">MaskDownscale</a><code> [get]</code></td></tr>
 <tr class="memdesc:ae6c85ec15158a71a4c2afd6af6cdd514"><td class="mdescLeft">&#160;</td><td class="mdescRight">Screen size over the clearing mask's size.  <br /></td></tr>
 <tr class="separator:ae6c85ec15158a71a4c2afd6af6cdd514"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -203,6 +206,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:aeab976381e012927fba1eb2c26a7f033"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2fcf6e66dd6b2f49f0fd311e35f2a122" id="r_a2fcf6e66dd6b2f49f0fd311e35f2a122"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2fcf6e66dd6b2f49f0fd311e35f2a122">_mapDownscale</a> = 1</td></tr>
 <tr class="separator:a2fcf6e66dd6b2f49f0fd311e35f2a122"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e92957232457da3ce8d1b33dc960582" id="r_a3e92957232457da3ce8d1b33dc960582"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3e92957232457da3ce8d1b33dc960582">_mapHoldSeconds</a> = 1.5f</td></tr>
+<tr class="separator:a3e92957232457da3ce8d1b33dc960582"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad0070669bf49bda2aff6eaf3ff392c78" id="r_ad0070669bf49bda2aff6eaf3ff392c78"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad0070669bf49bda2aff6eaf3ff392c78">_maskDownscale</a> = 4</td></tr>
 <tr class="separator:ad0070669bf49bda2aff6eaf3ff392c78"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae87dc91c90241d42fa1c01f85a87e81e" id="r_ae87dc91c90241d42fa1c01f85a87e81e"><td class="memItemLeft" align="right" valign="top">Shader&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae87dc91c90241d42fa1c01f85a87e81e">_maskShader</a></td></tr>
@@ -410,6 +415,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">int BalloonParty.Configuration.Effects.EffectsClearingSettings._mapDownscale = 1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3e92957232457da3ce8d1b33dc960582" name="a3e92957232457da3ce8d1b33dc960582"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e92957232457da3ce8d1b33dc960582">&#9670;&#160;</a></span>_mapHoldSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Effects.EffectsClearingSettings._mapHoldSeconds = 1.5f</td>
         </tr>
       </table>
   </td>
@@ -825,6 +852,32 @@ Private Attributes</h2></td></tr>
 <p>Screen size over an effects map's size. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IEffectsClearingSettings.html#a348470b33abab069676033b88c5387e0">BalloonParty.Configuration.Effects.IEffectsClearingSettings</a>.</p>
+
+</div>
+</div>
+<a id="ad3b96eb7198b8809d49c6b42c6c150fd" name="ad3b96eb7198b8809d49c6b42c6c150fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3b96eb7198b8809d49c6b42c6c150fd">&#9670;&#160;</a></span>MapHoldSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Effects.EffectsClearingSettings.MapHoldSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds the effects maps stay on after the last clearing closes, on game time. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IEffectsClearingSettings.html#ae2318b2031fc9db30515753964c46e62">BalloonParty.Configuration.Effects.IEffectsClearingSettings</a>.</p>
 
 </div>
 </div>

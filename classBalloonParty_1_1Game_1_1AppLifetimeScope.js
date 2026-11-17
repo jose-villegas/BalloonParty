@@ -1,6 +1,7 @@
 var classBalloonParty_1_1Game_1_1AppLifetimeScope =
 [
     [ "Configure", "classBalloonParty_1_1Game_1_1AppLifetimeScope.html#af33ea4b79c57f24da02ef0c071597ece", null ],
+    [ "InjectEffectsMaps", "classBalloonParty_1_1Game_1_1AppLifetimeScope.html#a27c6db78ea787d8555ffb9cdbc0beb99", null ],
     [ "InjectUiSfxEmitters", "classBalloonParty_1_1Game_1_1AppLifetimeScope.html#a3326e031087dbe623af65bb101bba146", null ],
     [ "_audioMixerSettings", "classBalloonParty_1_1Game_1_1AppLifetimeScope.html#a6e8018c66986cc034a11b83d8eaaf9a8", null ],
     [ "_backgroundFieldSettings", "classBalloonParty_1_1Game_1_1AppLifetimeScope.html#a45c040b34eb439e957d5eb6a33453302", null ],

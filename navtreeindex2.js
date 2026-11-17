@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"IScoreTrailConfig_8cs.html":[7,0,14,28],
 "IScoreTrailReporter_8cs.html":[7,0,7,9,0,6],
 "IScreenSpaceLightSettings_8cs.html":[7,0,3,5,16],
 "ISealedMetrics_8cs.html":[7,0,7,10,11],
@@ -172,7 +173,7 @@ var NAVTREEINDEX2 =
 "MusicalNoteAttribute_8cs.html":[7,0,14,32],
 "MusicalNoteDrawer_8cs.html":[7,0,6,33],
 "MusicalPitchExtensions_8cs.html":[7,0,14,4,12],
-"NavigationCameraReveal_8cs.html":[7,0,5,11],
+"NavigationCameraReveal_8cs.html":[7,0,5,12],
 "NavigationReadyGate_8cs.html":[7,0,14,5,10],
 "NavigationService_8cs.html":[7,0,14,5,11],
 "NavigationSpawnGate_8cs.html":[7,0,15,4],
@@ -204,7 +205,7 @@ var NAVTREEINDEX2 =
 "NukeSchedule_8cs.html":[7,0,1,3,9],
 "NukeSoundRouter_8cs.html":[7,0,0,2,6],
 "NullAudioMixerRouter_8cs.html":[7,0,0,11],
-"OrthogonalSizeCameraController_8cs.html":[7,0,5,12],
+"OrthogonalSizeCameraController_8cs.html":[7,0,5,13],
 "OverflowHeartRequestedMessage_8cs.html":[7,0,14,7,29],
 "OverflowSettings_8cs.html":[7,0,3,20],
 "PaintBlobRenderer_8cs.html":[7,0,8,4,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "PlatedBalloonModel_8cs.html":[7,0,1,2,17],
 "PlatedRewardSchedule_8cs.html":[7,0,1,3,10],
 "PlatedRewardTuning_8cs.html":[7,0,1,3,11],
-"PlayerHealthController_8cs.html":[7,0,7,6,5],
-"PlayerNeed_8cs.html":[7,0,7,0,4]
+"PlayerHealthController_8cs.html":[7,0,7,6,5]
 };

@@ -1,5 +1,6 @@
 var NAVTREEINDEX23 =
 {
+"classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#a0a9fc42e0bfab776b25bcfcb286eb7eb":[5,0,0,3,0,1,4],
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#a0a9fc42e0bfab776b25bcfcb286eb7eb":[6,0,0,3,0,1,4],
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#a0f9df4db42bf65093cc04cecf0991785":[5,0,0,3,0,1,18],
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#a0f9df4db42bf65093cc04cecf0991785":[6,0,0,3,0,1,18],
@@ -248,6 +249,5 @@ var NAVTREEINDEX23 =
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1HitVfxOverride.html":[5,0,0,3,0,6],
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1HitVfxOverride.html":[6,0,0,3,0,6],
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1HitVfxOverride.html#a11c37860d808d41459dbcf5e27d76323":[5,0,0,3,0,6,1],
-"classBalloonParty_1_1Configuration_1_1Balloons_1_1HitVfxOverride.html#a11c37860d808d41459dbcf5e27d76323":[6,0,0,3,0,6,1],
-"classBalloonParty_1_1Configuration_1_1Balloons_1_1HitVfxOverride.html#a13592909d111755097ed1ea46be09cbe":[5,0,0,3,0,6,4]
+"classBalloonParty_1_1Configuration_1_1Balloons_1_1HitVfxOverride.html#a11c37860d808d41459dbcf5e27d76323":[6,0,0,3,0,6,1]
 };
