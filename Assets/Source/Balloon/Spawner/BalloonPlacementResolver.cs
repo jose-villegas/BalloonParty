@@ -60,6 +60,24 @@ namespace BalloonParty.Balloon.Spawner
             return count;
         }
 
+        /// <summary>
+        ///     Whether a clock line has room for any of its balloons: some column's entry is open, or pressure can
+        ///     shove one open. Nothing moves. A board can hold empty slots and still have no room, when they sit in
+        ///     pockets nothing rising can reach (above a wall of anchored toughs, a formation or bushes).
+        /// </summary>
+        public bool LineHasRoom()
+        {
+            for (var col = 0; col < _grid.Columns; col++)
+            {
+                if (FindFirstReachableEmptyRow(col).HasValue || _balancer.CanRelievePressure(col))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         /// <summary>Resolves the slot for <paramref name="col"/>, reaching beyond it per <paramref name="reach"/>.</summary>
         public Vector2Int? Resolve(int col, PlacementReach reach)
         {

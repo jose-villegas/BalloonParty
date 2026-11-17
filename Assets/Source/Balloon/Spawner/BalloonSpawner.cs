@@ -445,8 +445,10 @@ namespace BalloonParty.Balloon.Spawner
 
             _balancer.Balance(atWaveStart: waveStart);
 
-            var deficit = WaveDeficitCalculator.Calculate(
-                _grid.CountEmpty(), _grid.Columns, _grid.Columns);
+            // A line costs a heart when it has no room. Empty slots it can't reach don't count: a pocket sealed
+            // above a wall of anchored toughs (a tough snake lying across the board) would forgive every line.
+            var room = _placement.LineHasRoom() ? _grid.CountEmpty() : 0;
+            var deficit = WaveDeficitCalculator.Calculate(room, _grid.Columns, _grid.Columns);
 
             // A line that costs hearts still spawns, tagged doomed, so the overflow pile has balloons
             // for the strikethrough; the damage goes out after them for the same reason.

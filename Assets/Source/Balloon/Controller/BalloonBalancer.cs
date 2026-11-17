@@ -53,6 +53,7 @@ namespace BalloonParty.Balloon.Controller
         private readonly List<ISlotActorView> _liftedViews = new();
         private readonly Dictionary<IWriteableDynamicSlotActor, List<Vector3>> _paths = new();
         private readonly List<PressurePropagation.Move> _pressureMoves = new();
+        private readonly List<PressurePropagation.Move> _probeMoves = new();
         private readonly List<BalanceMove> _balanceMoves = new();
         private readonly Dictionary<IWriteableDynamicSlotActor, int> _turnSteps = new();
         private readonly List<RoamCandidate> _roamers = new();
@@ -451,6 +452,12 @@ namespace BalloonParty.Balloon.Controller
                 newPath.Add(targetPosition);
                 _paths[actor] = newPath;
             }
+        }
+
+        // Whether TryRelievePressure could open the column, without moving anything.
+        internal bool CanRelievePressure(int column)
+        {
+            return _pressurePropagation.TryResolve(column, _probeMoves);
         }
 
         // Shoves a column's bottom occupant toward a gap so a new balloon can spawn. Returns whether room was opened.

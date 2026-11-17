@@ -1,4 +1,5 @@
 using BalloonParty.Balloon.Controller;
+using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Spawner;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Shared;
@@ -115,6 +116,53 @@ namespace BalloonParty.Tests.Balloon
             Assert.AreEqual(1, _resolver.ReachableCapacity(1));
         }
 
+        [Test]
+        public void LineHasRoom_EmptySlotsSealedAboveAWall_HasNone()
+        {
+            // The level 25 report: a wall across the board (there a tough snake, anchored) with empty slots above it
+            // and balloons below. Nothing rising reaches the pocket, so a line there has no room and must cost a
+            // heart, though the board still holds empty slots.
+            BuildGrid(columns: 3, rows: 4);
+            for (var col = 0; col < 3; col++)
+            {
+                PlaceBushAt(col, row: 1);
+                PlaceBalloonAt(col, row: 2);
+                PlaceBalloonAt(col, row: 3);
+            }
+
+            Assert.AreEqual(3, _grid.CountEmpty(), "the pocket above the wall");
+            Assert.IsFalse(_resolver.LineHasRoom());
+        }
+
+        [Test]
+        public void LineHasRoom_AnOpenEntry_HasRoom()
+        {
+            BuildGrid(columns: 3, rows: 4);
+            for (var col = 0; col < 3; col++)
+            {
+                PlaceBushAt(col, row: 1);
+                PlaceBalloonAt(col, row: 2);
+            }
+
+            PlaceBalloonAt(0, row: 3);
+            PlaceBalloonAt(1, row: 3);
+
+            Assert.IsTrue(_resolver.LineHasRoom());
+        }
+
+        [Test]
+        public void LineHasRoom_AFullBoard_HasNone()
+        {
+            BuildGrid(columns: 2, rows: 2);
+            for (var col = 0; col < 2; col++)
+            {
+                PlaceBalloonAt(col, row: 0);
+                PlaceBalloonAt(col, row: 1);
+            }
+
+            Assert.IsFalse(_resolver.LineHasRoom());
+        }
+
         // Rebuilds the grid, balancer, and resolver together — the resolver is bound to a specific
         // grid instance, so tests using a non-default size must go through this rather than reassigning
         // the grid alone.
@@ -142,6 +190,11 @@ namespace BalloonParty.Tests.Balloon
         private void PlaceBushAt(int col, int row)
         {
             _grid.Place(new BushObstacleModel(), null, new Vector2Int(col, row));
+        }
+
+        private void PlaceBalloonAt(int col, int row)
+        {
+            _grid.Place(new BalloonModel(new BalloonModelConfig(hitsToPop: 1)), null, new Vector2Int(col, row));
         }
     }
 }
