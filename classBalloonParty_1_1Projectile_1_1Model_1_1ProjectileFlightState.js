@@ -1,5 +1,6 @@
 var classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState =
 [
+    [ "HasPendingPierceHit", "classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState.html#aacf3f6a34072cfe61a06b4985a7a26cc", null ],
     [ "BankedPierceCharges", "classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState.html#a3e94d4b87df9ba33e0cc8e20fa5e89fd", null ],
     [ "BankedRainbowPierceCharges", "classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState.html#acc102c7ef779104b25bed2756a620bd7", null ],
     [ "ConsecutiveSweeps", "classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState.html#a3e4c665e0ac5757788de5de268c33a89", null ],

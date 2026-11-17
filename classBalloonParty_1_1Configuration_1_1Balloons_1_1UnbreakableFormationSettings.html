@@ -159,6 +159,9 @@ Properties</h2></td></tr>
 <tr class="memitem:ad1f360877b29faa467fd44b79fd21b78" id="r_ad1f360877b29faa467fd44b79fd21b78"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad1f360877b29faa467fd44b79fd21b78">ItemCoverWeight</a><code> [get]</code></td></tr>
 <tr class="memdesc:ad1f360877b29faa467fd44b79fd21b78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pick weight of ringing an item; only in the pick while an item is on the board.  <br /></td></tr>
 <tr class="separator:ad1f360877b29faa467fd44b79fd21b78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54b257c309ca06e84eae8aebeaff85bc" id="r_a54b257c309ca06e84eae8aebeaff85bc"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a54b257c309ca06e84eae8aebeaff85bc">JoinSnakeChance</a><code> [get]</code></td></tr>
+<tr class="memdesc:a54b257c309ca06e84eae8aebeaff85bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Chance that each member of a formation changing shape on its cycle leaves it and flies to an unbreakable snake's tail instead, while that snake has room (<a class="el" href="#a8327aceebc4cc2d91f047ac53c595b11" title="Most unbreakables in one formation; the rest roam, or form a formation of their own.">MaxMembers</a>): snakes grow from the other formations rather than new ones forming.  <br /></td></tr>
+<tr class="separator:a54b257c309ca06e84eae8aebeaff85bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a224b550adbf386687e7f508aed357966" id="r_a224b550adbf386687e7f508aed357966"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a224b550adbf386687e7f508aed357966">LineHoldCycles</a><code> [get]</code></td></tr>
 <tr class="memdesc:a224b550adbf386687e7f508aed357966"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cycles a horizontal or diagonal line holds, counting the cycle it formed on.  <br /></td></tr>
 <tr class="separator:a224b550adbf386687e7f508aed357966"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -168,6 +171,9 @@ Properties</h2></td></tr>
 <tr class="memitem:a8327aceebc4cc2d91f047ac53c595b11" id="r_a8327aceebc4cc2d91f047ac53c595b11"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8327aceebc4cc2d91f047ac53c595b11">MaxMembers</a><code> [get]</code></td></tr>
 <tr class="memdesc:a8327aceebc4cc2d91f047ac53c595b11"><td class="mdescLeft">&#160;</td><td class="mdescRight">Most unbreakables in one formation; the rest roam, or form a formation of their own.  <br /></td></tr>
 <tr class="separator:a8327aceebc4cc2d91f047ac53c595b11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e2325c649973e1e38bad5b631248a41" id="r_a8e2325c649973e1e38bad5b631248a41"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8e2325c649973e1e38bad5b631248a41">MaxUnbreakableSnakes</a><code> [get]</code></td></tr>
+<tr class="memdesc:a8e2325c649973e1e38bad5b631248a41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Most unbreakable snakes on the board at once; a formation that would make one more picks another shape.  <br /></td></tr>
+<tr class="separator:a8e2325c649973e1e38bad5b631248a41"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a06177224e85e0e05d3922e61f7313cce" id="r_a06177224e85e0e05d3922e61f7313cce"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a06177224e85e0e05d3922e61f7313cce">MinMembers</a><code> [get]</code></td></tr>
 <tr class="memdesc:a06177224e85e0e05d3922e61f7313cce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fewest unbreakables on the board that form up.  <br /></td></tr>
 <tr class="separator:a06177224e85e0e05d3922e61f7313cce"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -227,12 +233,16 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ac9045b664c2f29d5d880f30fda56f9fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad9b2712aa818cc2681ef51558d78927b" id="r_ad9b2712aa818cc2681ef51558d78927b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad9b2712aa818cc2681ef51558d78927b">_itemCoverWeight</a> = 2f</td></tr>
 <tr class="separator:ad9b2712aa818cc2681ef51558d78927b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3d45019fa54d388e98f60eb4524d250" id="r_ad3d45019fa54d388e98f60eb4524d250"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3d45019fa54d388e98f60eb4524d250">_joinSnakeChance</a> = 0.35f</td></tr>
+<tr class="separator:ad3d45019fa54d388e98f60eb4524d250"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80a5d3bfa939bfeaae6d7c8412b8cc5f" id="r_a80a5d3bfa939bfeaae6d7c8412b8cc5f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a80a5d3bfa939bfeaae6d7c8412b8cc5f">_lineHoldCycles</a> = 2</td></tr>
 <tr class="separator:a80a5d3bfa939bfeaae6d7c8412b8cc5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31b856a89569091e5e55ad2038c4d351" id="r_a31b856a89569091e5e55ad2038c4d351"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31b856a89569091e5e55ad2038c4d351">_loneHoldCycles</a> = 3</td></tr>
 <tr class="separator:a31b856a89569091e5e55ad2038c4d351"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad829dea8fb7f2f599ae892c7d2f09cd" id="r_aad829dea8fb7f2f599ae892c7d2f09cd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aad829dea8fb7f2f599ae892c7d2f09cd">_maxMembers</a> = 5</td></tr>
 <tr class="separator:aad829dea8fb7f2f599ae892c7d2f09cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72abf6dcbd3ff3eacfc88cca14935cb9" id="r_a72abf6dcbd3ff3eacfc88cca14935cb9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a72abf6dcbd3ff3eacfc88cca14935cb9">_maxUnbreakableSnakes</a> = 2</td></tr>
+<tr class="separator:a72abf6dcbd3ff3eacfc88cca14935cb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e63b8b181d9a24fc94648b63fe8400c" id="r_a3e63b8b181d9a24fc94648b63fe8400c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3e63b8b181d9a24fc94648b63fe8400c">_minMembers</a> = 2</td></tr>
 <tr class="separator:a3e63b8b181d9a24fc94648b63fe8400c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a66df98d79f114edc2671d5626431bc69" id="r_a66df98d79f114edc2671d5626431bc69"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a66df98d79f114edc2671d5626431bc69">_reinforcementCeiling</a> = 4</td></tr>
@@ -479,6 +489,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ad3d45019fa54d388e98f60eb4524d250" name="ad3d45019fa54d388e98f60eb4524d250"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3d45019fa54d388e98f60eb4524d250">&#9670;&#160;</a></span>_joinSnakeChance</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.UnbreakableFormationSettings._joinSnakeChance = 0.35f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a80a5d3bfa939bfeaae6d7c8412b8cc5f" name="a80a5d3bfa939bfeaae6d7c8412b8cc5f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a80a5d3bfa939bfeaae6d7c8412b8cc5f">&#9670;&#160;</a></span>_lineHoldCycles</h2>
 
@@ -534,6 +566,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">int BalloonParty.Configuration.Balloons.UnbreakableFormationSettings._maxMembers = 5</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a72abf6dcbd3ff3eacfc88cca14935cb9" name="a72abf6dcbd3ff3eacfc88cca14935cb9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a72abf6dcbd3ff3eacfc88cca14935cb9">&#9670;&#160;</a></span>_maxUnbreakableSnakes</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.UnbreakableFormationSettings._maxUnbreakableSnakes = 2</td>
         </tr>
       </table>
   </td>
@@ -1067,6 +1121,32 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a54b257c309ca06e84eae8aebeaff85bc" name="a54b257c309ca06e84eae8aebeaff85bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54b257c309ca06e84eae8aebeaff85bc">&#9670;&#160;</a></span>JoinSnakeChance</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.UnbreakableFormationSettings.JoinSnakeChance</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Chance that each member of a formation changing shape on its cycle leaves it and flies to an unbreakable snake's tail instead, while that snake has room (<a class="el" href="#a8327aceebc4cc2d91f047ac53c595b11" title="Most unbreakables in one formation; the rest roam, or form a formation of their own.">MaxMembers</a>): snakes grow from the other formations rather than new ones forming. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#ae52b6e1a710126525f63a4d8ab40cfe0">BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings</a>.</p>
+
+</div>
+</div>
 <a id="a224b550adbf386687e7f508aed357966" name="a224b550adbf386687e7f508aed357966"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a224b550adbf386687e7f508aed357966">&#9670;&#160;</a></span>LineHoldCycles</h2>
 
@@ -1143,6 +1223,33 @@ Private Attributes</h2></td></tr>
 <p>Most unbreakables in one formation; the rest roam, or form a formation of their own. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a0b851ecb128d8c14a4b32708508885ac">BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings</a>.</p>
+
+</div>
+</div>
+<a id="a8e2325c649973e1e38bad5b631248a41" name="a8e2325c649973e1e38bad5b631248a41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e2325c649973e1e38bad5b631248a41">&#9670;&#160;</a></span>MaxUnbreakableSnakes</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.UnbreakableFormationSettings.MaxUnbreakableSnakes</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Most unbreakable snakes on the board at once; a formation that would make one more picks another shape. </p>
+<p>0 sets no cap. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a827c451cd892b2d5bea5bbd6a5241f3a">BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings</a>.</p>
 
 </div>
 </div>

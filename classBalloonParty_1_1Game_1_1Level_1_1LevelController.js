@@ -16,6 +16,7 @@ var classBalloonParty_1_1Game_1_1Level_1_1LevelController =
     [ "OnTrailArrived", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a065e093f8cdcfd69844655e0746b45b6", null ],
     [ "OnTransitionCompleted", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a3715b4c29f6d6f6364a4bd51777f06af", null ],
     [ "PresentLevelUp", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#aa346a5532956c4a427d150ba694b65a4", null ],
+    [ "PresentOrAbandon", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a094a03ce6afcc77699ace8a4a730a780", null ],
     [ "ReleaseCeremonyTimeScale", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#aec9de4d1d4d4e08f155682926bdf7348", null ],
     [ "ResetColorProgress", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#ad26c6945c11dfba4d0fee34da1584983", null ],
     [ "ResetRun", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#ac03363fd995630ce3b02288a1bc1b9b1", null ],
