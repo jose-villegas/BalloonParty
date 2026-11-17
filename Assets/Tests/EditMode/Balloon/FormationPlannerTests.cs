@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BalloonParty.Balloon.Formation;
 using BalloonParty.Balloon.Model;
+using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Shared;
@@ -204,13 +205,14 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void Horizontal_NeverFillsARowOtherUnbreakablesHalfHold()
         {
-            // Row 2 is the only row a line fits on, and another formation's four already stand at its west end:
-            // three more there would wall the board side to side.
+            // Row 2 is the only row a line fits on (toughs, which a formation never trades out, fill the others), and
+            // another formation's four already stand at its west end: three more there would wall the board side to
+            // side.
             _settings.HorizontalMaxMembers.Returns(3);
             BuildGrid(7, 6);
-            FillRow(0);
-            FillRow(1);
-            FillRow(3);
+            FillRowWithToughs(0);
+            FillRowWithToughs(1);
+            FillRowWithToughs(3);
             FillWithOutsiders(2, 0, 3);
             AddMembers(new Vector2Int(0, 4), new Vector2Int(2, 4), new Vector2Int(4, 5));
 
@@ -222,9 +224,9 @@ namespace BalloonParty.Tests.Balloon
         {
             _settings.HorizontalMaxMembers.Returns(3);
             BuildGrid(7, 6);
-            FillRow(0);
-            FillRow(1);
-            FillRow(3);
+            FillRowWithToughs(0);
+            FillRowWithToughs(1);
+            FillRowWithToughs(3);
             FillWithOutsiders(2, 0, 2);
             AddMembers(new Vector2Int(0, 4), new Vector2Int(2, 4), new Vector2Int(4, 5));
 
@@ -589,6 +591,16 @@ namespace BalloonParty.Tests.Balloon
             for (var col = 0; col < _grid.Columns; col++)
             {
                 _grid.Place(new BalloonModel(), null, new Vector2Int(col, row));
+            }
+        }
+
+        // A tough never walls, and no formation of unbreakables trades it out of a slot.
+        private void FillRowWithToughs(int row)
+        {
+            for (var col = 0; col < _grid.Columns; col++)
+            {
+                _grid.Place(new ToughBalloonModel(new BalloonModelConfig(BalloonType.Tough, hitsToPop: 1)), null,
+                    new Vector2Int(col, row));
             }
         }
 
