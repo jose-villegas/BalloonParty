@@ -134,6 +134,9 @@ Properties</h2></td></tr>
 <tr class="memitem:af562d1e5020c4db1b3f8ef4940ce7558" id="r_af562d1e5020c4db1b3f8ef4940ce7558"><td class="memItemLeft" align="right" valign="top">Material&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af562d1e5020c4db1b3f8ef4940ce7558">BlastMaterial</a><code> [get]</code></td></tr>
 <tr class="memdesc:af562d1e5020c4db1b3f8ef4940ce7558"><td class="mdescLeft">&#160;</td><td class="mdescRight">The disc's material, which draws the white flood, the core and the shock ring. Required: with none the disc isn't drawn.  <br /></td></tr>
 <tr class="separator:af562d1e5020c4db1b3f8ef4940ce7558"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c3768a60c649abec79b6434fd73612c" id="r_a8c3768a60c649abec79b6434fd73612c"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8c3768a60c649abec79b6434fd73612c">CloudLayerName</a><code> [get]</code></td></tr>
+<tr class="memdesc:a8c3768a60c649abec79b6434fd73612c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The physics layer the cloud draws on: the effects layer the glass over a ball clears, so a ball flying through the cloud stays in sight.  <br /></td></tr>
+<tr class="separator:a8c3768a60c649abec79b6434fd73612c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab4e378b928d9e91fe6d0760b853c3f21" id="r_ab4e378b928d9e91fe6d0760b853c3f21"><td class="memItemLeft" align="right" valign="top">Material&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab4e378b928d9e91fe6d0760b853c3f21">CloudMaterial</a><code> [get]</code></td></tr>
 <tr class="memdesc:ab4e378b928d9e91fe6d0760b853c3f21"><td class="mdescLeft">&#160;</td><td class="mdescRight">The mushroom cloud's material. Required: with none no cloud rises.  <br /></td></tr>
 <tr class="separator:ab4e378b928d9e91fe6d0760b853c3f21"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -185,6 +188,8 @@ Properties</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:ab990b7974d28da6a32907ee9ca35dffb" id="r_ab990b7974d28da6a32907ee9ca35dffb"><td class="memItemLeft" align="right" valign="top">Material&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab990b7974d28da6a32907ee9ca35dffb">_blastMaterial</a></td></tr>
 <tr class="separator:ab990b7974d28da6a32907ee9ca35dffb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba263a6a32e902f593455fa9c111bd83" id="r_aba263a6a32e902f593455fa9c111bd83"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aba263a6a32e902f593455fa9c111bd83">_cloudLayerName</a> = &quot;Trail&quot;</td></tr>
+<tr class="separator:aba263a6a32e902f593455fa9c111bd83"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d17ab87a33964ebef3fb9f3d8c72c6b" id="r_a2d17ab87a33964ebef3fb9f3d8c72c6b"><td class="memItemLeft" align="right" valign="top">Material&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2d17ab87a33964ebef3fb9f3d8c72c6b">_cloudMaterial</a></td></tr>
 <tr class="separator:a2d17ab87a33964ebef3fb9f3d8c72c6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a549f9f81bf0897299053db251749d51f" id="r_a549f9f81bf0897299053db251749d51f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a549f9f81bf0897299053db251749d51f">_cloudReach</a> = 5.5f</td></tr>
@@ -230,6 +235,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">Material BalloonParty.Configuration.Balloons.NukeBlastSettings._blastMaterial</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aba263a6a32e902f593455fa9c111bd83" name="aba263a6a32e902f593455fa9c111bd83"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba263a6a32e902f593455fa9c111bd83">&#9670;&#160;</a></span>_cloudLayerName</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string BalloonParty.Configuration.Balloons.NukeBlastSettings._cloudLayerName = &quot;Trail&quot;</td>
         </tr>
       </table>
   </td>
@@ -617,6 +644,32 @@ Private Attributes</h2></td></tr>
 <p>The disc's material, which draws the white flood, the core and the shock ring. Required: with none the disc isn't drawn. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeBlastSettings.html#ab76737eddce5f6f909176d06e4b5c437">BalloonParty.Configuration.Balloons.INukeBlastSettings</a>.</p>
+
+</div>
+</div>
+<a id="a8c3768a60c649abec79b6434fd73612c" name="a8c3768a60c649abec79b6434fd73612c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c3768a60c649abec79b6434fd73612c">&#9670;&#160;</a></span>CloudLayerName</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string BalloonParty.Configuration.Balloons.NukeBlastSettings.CloudLayerName</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The physics layer the cloud draws on: the effects layer the glass over a ball clears, so a ball flying through the cloud stays in sight. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeBlastSettings.html#a767fb93cad434a22302423f343beeb64">BalloonParty.Configuration.Balloons.INukeBlastSettings</a>.</p>
 
 </div>
 </div>

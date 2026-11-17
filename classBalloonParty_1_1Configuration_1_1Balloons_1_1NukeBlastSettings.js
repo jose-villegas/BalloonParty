@@ -1,6 +1,7 @@
 var classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeBlastSettings =
 [
     [ "_blastMaterial", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeBlastSettings.html#ab990b7974d28da6a32907ee9ca35dffb", null ],
+    [ "_cloudLayerName", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeBlastSettings.html#aba263a6a32e902f593455fa9c111bd83", null ],
     [ "_cloudMaterial", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeBlastSettings.html#a2d17ab87a33964ebef3fb9f3d8c72c6b", null ],
     [ "_cloudReach", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeBlastSettings.html#a549f9f81bf0897299053db251749d51f", null ],
     [ "_cloudSeconds", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeBlastSettings.html#a552da008ebbc29b9776009ca7e355178", null ],
@@ -18,6 +19,7 @@ var classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeBlastSettings =
     [ "_sortingLayerName", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeBlastSettings.html#a71a34a387779ad0265c3ef08d2582de4", null ],
     [ "_sortingOrder", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeBlastSettings.html#a9b7cb019e8c449496408bf149e49e375", null ],
     [ "BlastMaterial", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeBlastSettings.html#af562d1e5020c4db1b3f8ef4940ce7558", null ],
+    [ "CloudLayerName", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeBlastSettings.html#a8c3768a60c649abec79b6434fd73612c", null ],
     [ "CloudMaterial", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeBlastSettings.html#ab4e378b928d9e91fe6d0760b853c3f21", null ],
     [ "CloudReach", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeBlastSettings.html#a253179e12682dc4bd98305fc341904c3", null ],
     [ "CloudSeconds", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeBlastSettings.html#a9692503d97c5c35a94eb2254aba56330", null ],

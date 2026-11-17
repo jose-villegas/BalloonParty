@@ -1,5 +1,11 @@
 var NAVTREEINDEX118 =
 {
+"interfaceBalloonParty_1_1Slots_1_1Grid_1_1IShieldSlotPreference.html":[6,0,0,13,2,3],
+"interfaceBalloonParty_1_1Slots_1_1Grid_1_1IShieldSlotPreference.html#a33a24af686bd634243526a00e8c6d523":[5,0,0,13,2,3,0],
+"interfaceBalloonParty_1_1Slots_1_1Grid_1_1IShieldSlotPreference.html#a33a24af686bd634243526a00e8c6d523":[6,0,0,13,2,3,0],
+"interfaceBalloonParty_1_1Slots_1_1Spawner_1_1IGridSpawner.html":[5,0,0,13,3,1],
+"interfaceBalloonParty_1_1Slots_1_1Spawner_1_1IGridSpawner.html":[6,0,0,13,3,1],
+"interfaceBalloonParty_1_1Slots_1_1Spawner_1_1IGridSpawner.html#a00b9c88ab65536be281af22b69cfcad6":[5,0,0,13,3,1,1],
 "interfaceBalloonParty_1_1Slots_1_1Spawner_1_1IGridSpawner.html#a00b9c88ab65536be281af22b69cfcad6":[6,0,0,13,3,1,1],
 "interfaceBalloonParty_1_1Slots_1_1Spawner_1_1IGridSpawner.html#a3a78482b60eecad8116032c2df695b77":[5,0,0,13,3,1,0],
 "interfaceBalloonParty_1_1Slots_1_1Spawner_1_1IGridSpawner.html#a3a78482b60eecad8116032c2df695b77":[6,0,0,13,3,1,0],
@@ -243,11 +249,5 @@ var NAVTREEINDEX118 =
 "namespaceBalloonParty_1_1Game.html":[5,0,0,6],
 "namespaceBalloonParty_1_1Game_1_1Assist.html":[5,0,0,6,0],
 "namespaceBalloonParty_1_1Game_1_1CardReveal.html":[5,0,0,6,1],
-"namespaceBalloonParty_1_1Game_1_1Cinematics.html":[5,0,0,6,2],
-"namespaceBalloonParty_1_1Game_1_1Danger.html":[5,0,0,6,3],
-"namespaceBalloonParty_1_1Game_1_1Flight.html":[5,0,0,6,4],
-"namespaceBalloonParty_1_1Game_1_1HeadsUp.html":[5,0,0,6,5],
-"namespaceBalloonParty_1_1Game_1_1HeadsUp.html#a1a709e3252ec1c2f9caf67fa7f935995":[5,0,0,6,5,10],
-"namespaceBalloonParty_1_1Game_1_1HeadsUp.html#a1a709e3252ec1c2f9caf67fa7f935995a2ceea82aab3ac5bc623e79186b389481":[5,0,0,6,5,10,2],
-"namespaceBalloonParty_1_1Game_1_1HeadsUp.html#a1a709e3252ec1c2f9caf67fa7f935995a498f79c4c5bbde77f1bceb6c86fd0f6d":[5,0,0,6,5,10,1]
+"namespaceBalloonParty_1_1Game_1_1Cinematics.html":[5,0,0,6,2]
 };

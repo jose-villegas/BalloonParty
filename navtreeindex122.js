@@ -1,5 +1,11 @@
 var NAVTREEINDEX122 =
 {
+"plan_performance_recovery.html#autotoc_md812":[3,12,0,2],
+"plan_performance_recovery.html#autotoc_md813":[3,12,0,2,0],
+"plan_performance_recovery.html#autotoc_md814":[3,12,0,2,1],
+"plan_performance_recovery.html#autotoc_md815":[3,12,0,2,2],
+"plan_performance_recovery.html#autotoc_md816":[3,12,0,2,3],
+"plan_performance_recovery.html#autotoc_md817":[3,12,0,2,4],
 "plan_performance_recovery.html#autotoc_md818":[3,12,0,2,5],
 "plan_performance_recovery.html#autotoc_md819":[3,12,0,2,6],
 "plan_performance_recovery.html#autotoc_md820":[3,12,0,2,7],
@@ -243,11 +249,5 @@ var NAVTREEINDEX122 =
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1EdgeRecord.html#abaa53f92de72e9a18ec0a49554a508ac":[6,0,0,1,0,0,0,6],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1EdgeRecord.html#af6666cb3a0a3c48a3ae286638bba49dd":[5,0,0,1,0,0,0,5],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1EdgeRecord.html#af6666cb3a0a3c48a3ae286638bba49dd":[6,0,0,1,0,0,0,5],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1EdgeRecord.html#af8c74db7395a4e568dc9591b9a7f74ab":[5,0,0,1,0,0,0,1],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1EdgeRecord.html#af8c74db7395a4e568dc9591b9a7f74ab":[6,0,0,1,0,0,0,1],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1MoveRecord.html":[5,0,0,1,0,0,1],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1MoveRecord.html":[6,0,0,1,0,0,1],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1MoveRecord.html#a1782c2c46e2fb9144142cd8cbd402146":[5,0,0,1,0,0,1,2],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1MoveRecord.html#a1782c2c46e2fb9144142cd8cbd402146":[6,0,0,1,0,0,1,2],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1MoveRecord.html#a2a6071378e7905fca52f4dfa4d4a438b":[5,0,0,1,0,0,1,0]
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1EdgeRecord.html#af8c74db7395a4e568dc9591b9a7f74ab":[5,0,0,1,0,0,0,1]
 };

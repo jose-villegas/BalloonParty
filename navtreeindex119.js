@@ -1,5 +1,11 @@
 var NAVTREEINDEX119 =
 {
+"namespaceBalloonParty_1_1Game_1_1Danger.html":[5,0,0,6,3],
+"namespaceBalloonParty_1_1Game_1_1Flight.html":[5,0,0,6,4],
+"namespaceBalloonParty_1_1Game_1_1HeadsUp.html":[5,0,0,6,5],
+"namespaceBalloonParty_1_1Game_1_1HeadsUp.html#a1a709e3252ec1c2f9caf67fa7f935995":[5,0,0,6,5,10],
+"namespaceBalloonParty_1_1Game_1_1HeadsUp.html#a1a709e3252ec1c2f9caf67fa7f935995a2ceea82aab3ac5bc623e79186b389481":[5,0,0,6,5,10,2],
+"namespaceBalloonParty_1_1Game_1_1HeadsUp.html#a1a709e3252ec1c2f9caf67fa7f935995a498f79c4c5bbde77f1bceb6c86fd0f6d":[5,0,0,6,5,10,1],
 "namespaceBalloonParty_1_1Game_1_1HeadsUp.html#a1a709e3252ec1c2f9caf67fa7f935995a74339e8d9916761b9b69183a081076c6":[5,0,0,6,5,10,0],
 "namespaceBalloonParty_1_1Game_1_1HeadsUp_1_1Routing.html":[5,0,0,6,5,0],
 "namespaceBalloonParty_1_1Game_1_1Health.html":[5,0,0,6,6],
@@ -243,11 +249,5 @@ var NAVTREEINDEX119 =
 "namespaceBalloonParty_1_1Shared_1_1SceneLight.html#aba1f92fb89a50c3bfb7903105772e9b9aed8e37bad13d76c6dbeb58152440b41e":[5,0,0,12,11,7,1],
 "namespaceBalloonParty_1_1Shared_1_1Thermal.html":[5,0,0,12,12],
 "namespaceBalloonParty_1_1Slots.html":[5,0,0,13],
-"namespaceBalloonParty_1_1Slots_1_1Actor.html":[5,0,0,13,0],
-"namespaceBalloonParty_1_1Slots_1_1Actor.html#a62e521bc8cad6be75a1029d9b639d2cc":[5,0,0,13,0,25],
-"namespaceBalloonParty_1_1Slots_1_1Actor.html#a62e521bc8cad6be75a1029d9b639d2cca07df2154cc675e7ae4768130062deef6":[5,0,0,13,0,25,4],
-"namespaceBalloonParty_1_1Slots_1_1Actor.html#a62e521bc8cad6be75a1029d9b639d2cca3e4d3aabf5def7503b63d4e246745370":[5,0,0,13,0,25,2],
-"namespaceBalloonParty_1_1Slots_1_1Actor.html#a62e521bc8cad6be75a1029d9b639d2cca52557e239f11db73b54f27817dac5aac":[5,0,0,13,0,25,1],
-"namespaceBalloonParty_1_1Slots_1_1Actor.html#a62e521bc8cad6be75a1029d9b639d2cca6111722f15c613a723c91bec33c27995":[5,0,0,13,0,25,3],
-"namespaceBalloonParty_1_1Slots_1_1Actor.html#a62e521bc8cad6be75a1029d9b639d2cca8e42741ff46f887bb0109738fbae034d":[5,0,0,13,0,25,0]
+"namespaceBalloonParty_1_1Slots_1_1Actor.html":[5,0,0,13,0]
 };

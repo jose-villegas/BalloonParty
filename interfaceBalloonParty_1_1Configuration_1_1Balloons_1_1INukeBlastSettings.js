@@ -1,6 +1,7 @@
 var interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeBlastSettings =
 [
     [ "BlastMaterial", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeBlastSettings.html#ab76737eddce5f6f909176d06e4b5c437", null ],
+    [ "CloudLayerName", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeBlastSettings.html#a767fb93cad434a22302423f343beeb64", null ],
     [ "CloudMaterial", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeBlastSettings.html#abe1feb75211a14c8da60ea41427cf899", null ],
     [ "CloudReach", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeBlastSettings.html#a9f0615542e56418d74a2ebb1196b1863", null ],
     [ "CloudSeconds", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeBlastSettings.html#a6d1b95937831534cfe93653d6443794c", null ],

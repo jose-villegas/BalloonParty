@@ -169,8 +169,14 @@ HUD effects map (phase 2)</h3>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Heart trail, highlight trail, item-preview pens   </td><td class="markdownTableBodyNone"><code>Trail</code> layer, UI 100 (<code>FlyingTrail</code>'s default) / ScoreTrail 0–1   </td><td class="markdownTableBodyNone">yes    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Heads-ups (<code>HeadsUps.prefab</code>)   </td><td class="markdownTableBodyNone"><code>UI</code> layer, UI 0/1   </td><td class="markdownTableBodyNone"><b>not yet</b>: open question 4    </td></tr>
+<td class="markdownTableBodyNone">Balloon pops and armour breaks (<code>PSVFX_*Pop</code>)   </td><td class="markdownTableBodyNone"><code>Trail</code> (were <code>Default</code>), Default 0 / Balloons 199–200   </td><td class="markdownTableBodyNone">yes: open question 1    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Item effects: the bomb's smoke burst, the laser, the lightning chain, the paint splash, drips and flying blobs (<code>Items/BalloonItems/VFX/</code>)   </td><td class="markdownTableBodyNone"><code>Trail</code> (were <code>Items</code>), PowerUps   </td><td class="markdownTableBodyNone">yes: the chaos a ball has to stay readable in    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Nuke cloud (<code>NukeCloudView</code>, <code>INukeBlastSettings.CloudLayerName</code>)   </td><td class="markdownTableBodyNone"><code>Trail</code> (was <code>Default</code>), Balloons 40   </td><td class="markdownTableBodyNone">yes    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Heads-ups (<code>HeadsUps.prefab</code>)   </td><td class="markdownTableBodyNone"><code>UI</code> layer, UI 0/1   </td><td class="markdownTableBodyNone"><b>not yet</b>: open question 4    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Game canvas, hearts counter, launcher canvas   </td><td class="markdownTableBodyNone"><code>UI</code> layer   </td><td class="markdownTableBodyNone"><b>no</b>: that's the HUD, not effects   </td></tr>
 </table>
 <p>The <code>Trail</code> layer already holds the HUD's trails, so this phase needs no new physics layer. The composite quad draws at UI 3300, where the score trails draw today: above the canvases and popups (UI 3000), so trails still fly over the score bar, and under the card reveal (UI 31998). Inside the map the effects keep their own order. While the map runs, a heart or highlight trail sorts at 3300 instead of 100: over a popup, if one is open while a clearing is.</p>
@@ -182,20 +188,18 @@ Main effects map (phase 3, open)</h3>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Item range previews (<code>Item/Preview/</code>)   </td><td class="markdownTableBodyNone"><code>Items</code>, PowerUps 0–100   </td><td class="markdownTableBodyNone">yes    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Item VFX: paint splash and drip, flying blob, shield gain   </td><td class="markdownTableBodyNone"><code>Items</code>, PowerUps   </td><td class="markdownTableBodyNone">yes    </td></tr>
+<td class="markdownTableBodyNone">Shield item's gain burst (<code>PSVFX_ShieldGainPU</code>)   </td><td class="markdownTableBodyNone"><code>Items</code>, PowerUps 20   </td><td class="markdownTableBodyNone">yes: news about the ball, not chaos around it    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Shield bounce/gain/lose VFX   </td><td class="markdownTableBodyNone"><code>Projectile</code>, PowerUps 20   </td><td class="markdownTableBodyNone">yes    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Dust speck field (<code>SpeckField</code>)   </td><td class="markdownTableBodyNone"><code>Field</code>, Sky 0   </td><td class="markdownTableBodyNone">yes    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Balloon pop VFX (<code>PSVFX_*Pop</code>)   </td><td class="markdownTableBodyNone"><code>Default</code>, Default 0 / Balloons 199–200   </td><td class="markdownTableBodyNone"><b>open question 1</b>    </td></tr>
+<td class="markdownTableBodyNone">Nuke blast flood, disco wash, bubble merge cue, paint drip overlay   </td><td class="markdownTableBodyNone">Balloons layer, under or on the balloons   </td><td class="markdownTableBodyNone">no: the ground beneath the balloons or a balloon's own coat, never over the ball (open question 1)    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Nuke cloud, disc wave, bubble merge cue, paint drip overlay   </td><td class="markdownTableBodyNone">Balloons layer, various   </td><td class="markdownTableBodyNone">open question 1: these are pop-like    </td></tr>
-<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Ball trail (<code>ProjectileTrail</code>), snipe lance line, trace prediction   </td><td class="markdownTableBodyNone"><code>Projectile</code> / <code>TracePrediction</code>   </td><td class="markdownTableBodyNone">no: they <em>are</em> the ball's readout    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Danger walls (<code>Limits</code>), clouds, bushes, puffs, the wall net   </td><td class="markdownTableBodyNone">board layers   </td><td class="markdownTableBodyNone">no: gameplay information    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Danger walls (<code>Limits</code>), clouds, bushes, puffs, the wall net   </td><td class="markdownTableBodyNone">board layers   </td><td class="markdownTableBodyNone">no: gameplay information    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Screen-space light quad (<code>ScreenSpaceLightService</code>)   </td><td class="markdownTableBodyNone"><code>TransparentFX</code>, Sky 32000   </td><td class="markdownTableBodyNone">no: it lights the board, and the composite sorts below it   </td></tr>
 </table>
 <p>The main camera's effects live on several physics layers that also hold board pieces (<code>Items</code> holds the badges as well as item VFX, <code>Projectile</code> the ball as well as the shield VFX). So this phase needs a new physics layer, <code>Effects</code>, which <b>the owner adds in the Editor</b> (<code>TagManager.asset</code> is never edited by hand). The effect prefabs above then move to it. The composite collapses these effects to one sorting position: Sky −1, below the danger walls and the light quad. One visible change comes with that: item VFX on PowerUps draw under bushes and puffs (GridActors) today, and would draw over them.</p>
@@ -223,7 +227,7 @@ The glass</h3>
 <li><code>EffectsClearingController</code> loops <code>IProjectileRegistry.InFlightCount</code> / <code>InFlightPositionAt(i)</code> every frame. The registry already exists, is run-scoped and is cheap to walk.</li>
 <li><code>EffectsClearingStamper</code> remembers each ball's last position, keyed by its registry model, so a stamp is a capsule from last frame's position to this frame's. A fast ball leaves an unbroken corridor instead of a row of dots. A ball seen for the first time stamps a disc. A ball that retired drops out.</li>
 <li>Positions go to viewport space through the main camera. The radius is in world units and converted with the camera's orthographic size, so a cinematic zoom scales the clearing with the board.</li>
-<li><b>The radius follows the ball's shields</b>, as the owner asked: <code>MinClearRadius</code> (0.48) at one shield, growing evenly with each shield to <code>MaxClearRadius</code> (1.2) at <code>ShieldsForMaxRadius</code> (10), and no wider past it. A ball with no shields left, on its last leg, clears as one. The rejected attempt used a circle a little wider than the ball, and it read as nothing, so one shield is still about a balloon wide.</li>
+<li><b>The radius follows the ball's shields</b>, as the owner asked: <code>MinClearRadius</code> (0.6) at one shield, growing evenly with each shield to <code>MaxClearRadius</code> (1.2) at <code>ShieldsForMaxRadius</code> (10), and no wider past it. A ball with no shields left, on its last leg, clears as one. The rejected attempt used a circle a little wider than the ball, and it read as nothing, so one shield is still about a balloon wide.</li>
 <li>Δt is <b>game time</b> (<code>Time.deltaTime</code>) while a ball flies: slow-mo stretches a clearing along with the ball, and a pause holds it. Once no ball is in flight it's real time, so a freeze that starts after the shot can't hold a clearing open. <code>UseUnscaledTime</code> puts the flight on real time too.</li>
 </ul>
 <p><code>MaxStamps</code> caps the uniform array. It's a constant, not a setting: a shader array's size is fixed when it compiles. More balls than that in flight (a split shot, say) keep the nearest <code>MaxStamps</code> to the screen's centre. Nothing in today's shots comes close.</p>
@@ -314,7 +318,9 @@ Out of scope</h2>
 <h2><a class="anchor" id="autotoc_md489"></a>
 Open questions for the owner</h2>
 <ol type="1">
-<li><b>Pops.</b> Balloon pops draw over the balloons, so they hide what the ball just hit, but they are also the feedback that it hit. Should pops (and the pop-like nuke cloud, disc wave and merge cue) clear around the ball, or stay?</li>
+<li><p class="startli"><b>Pops.</b> Answered: pops go to the upper layer and clear like the other effects. All nine <code>PSVFX_*Pop</code> prefabs (the default pop, which also plays for recolours and bubble merges, and the heart, golden, disco, nuke, soap, tough, tougher and unbreakable pops and armour breaks) are on <code>Trail</code>, so the HUD map takes them and they draw over the board, balls included, except under the glass. That costs them the main camera's grading: they skip its tonemapper and contrast, and the scene-lit shards read a little lighter, most at night. Their legacy <code>Mobile/Particles/Alpha Blended</code> materials moved to <code>Sprites/Default</code>, which draws the same colour and writes coverage. The nuke blast's flood and the disco wash are discs on the ground beneath the balloons, and the blast lights the board itself, so they stay on the board: the glass can't lift a light.</p>
+<p class="startli">The owner widened it to the chaos a ball flies through: lightning, bombs, paint, the laser and the nuke. The item effects (the bomb's smoke burst, the laser, the lightning chain, the paint splash, drips and flying blobs) and the nuke cloud moved to <code>Trail</code> too, the bomb smoke and the paint splash off the legacy particle shader, and <code>PaintBlob</code> writes coverage. They draw over the board and over the ball now, as the pops do, and the glass opens a hole around the ball. The ball itself already drew above them all on the board, so what they hid was what it was about to hit. The shield item's gain burst stays: it's news about the ball.</p>
+</li>
 <li><b>Phase 3 at all.</b> The score shapes and trails are the HUD map. Should item VFX, range previews, shield VFX and the dust specks clear as well, at roughly twice the HUD map's cost?</li>
 <li><b>How clear is clear.</b> Answered: a hard cut near the rim read too strong. The clearing is now the glass dome above, its effects thinning slowly from the rim to near nothing over the ball, with the lens the owner picked from stills (refraction 0.5, dispersion 0.15). It still needs a look in play.</li>
 <li><b>Heads-ups.</b> They are on the <code>UI</code> layer with the canvases, so the HUD map can't take them alone. One way is an <code>Effects</code>-style physics layer for them, which you'd add in the Editor (the same one phase 3 needs). The other is the <code>Trail</code> layer, which needs no new layer but puts their text into the GI capture, so it shades the board a little under each line. Which one, or should they stay as they are? </li>

@@ -1,5 +1,11 @@
 var NAVTREEINDEX132 =
 {
+"structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html#ab494a2079fbea98efb848505178ec22e":[6,0,0,12,7,5,2],
+"structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html#ae91a9b00a1446efecdf08078f5e60c8c":[5,0,0,12,7,5,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html#ae91a9b00a1446efecdf08078f5e60c8c":[6,0,0,12,7,5,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html#af667ba77744a0b7ad053ce9c9f5757ce":[5,0,0,12,7,5,3],
+"structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html#af667ba77744a0b7ad053ce9c9f5757ce":[6,0,0,12,7,5,3],
+"structBalloonParty_1_1Shared_1_1Messages_1_1BubbleMergedMessage.html":[5,0,0,12,7,6],
 "structBalloonParty_1_1Shared_1_1Messages_1_1BubbleMergedMessage.html":[6,0,0,12,7,6],
 "structBalloonParty_1_1Shared_1_1Messages_1_1BubbleMergedMessage.html#a3a3902269a12a1534ff5f906695c50eb":[5,0,0,12,7,6,3],
 "structBalloonParty_1_1Shared_1_1Messages_1_1BubbleMergedMessage.html#a3a3902269a12a1534ff5f906695c50eb":[6,0,0,12,7,6,3],
@@ -243,11 +249,5 @@ var NAVTREEINDEX132 =
 "structBalloonParty_1_1Shared_1_1Messages_1_1RunResetMessage.html":[6,0,0,12,7,42],
 "structBalloonParty_1_1Shared_1_1Messages_1_1RunResetMessage.html#a2bdd6de2c39a24e3c0b233830f52f398":[5,0,0,12,7,42,1],
 "structBalloonParty_1_1Shared_1_1Messages_1_1RunResetMessage.html#a2bdd6de2c39a24e3c0b233830f52f398":[6,0,0,12,7,42,1],
-"structBalloonParty_1_1Shared_1_1Messages_1_1RunResetMessage.html#a39808537239ec677f159fc3bb27a252f":[5,0,0,12,7,42,0],
-"structBalloonParty_1_1Shared_1_1Messages_1_1RunResetMessage.html#a39808537239ec677f159fc3bb27a252f":[6,0,0,12,7,42,0],
-"structBalloonParty_1_1Shared_1_1Messages_1_1RunRestartCompletedMessage.html":[5,0,0,12,7,43],
-"structBalloonParty_1_1Shared_1_1Messages_1_1RunRestartCompletedMessage.html":[6,0,0,12,7,43],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ScoreLevelUpMessage.html":[5,0,0,12,7,44],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ScoreLevelUpMessage.html":[6,0,0,12,7,44],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ScoreLevelUpMessage.html#a5a183fb7d135213880a8bf7b0bb36104":[5,0,0,12,7,44,1]
+"structBalloonParty_1_1Shared_1_1Messages_1_1RunResetMessage.html#a39808537239ec677f159fc3bb27a252f":[5,0,0,12,7,42,0]
 };

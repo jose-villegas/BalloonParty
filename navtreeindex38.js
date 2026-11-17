@@ -1,5 +1,9 @@
 var NAVTREEINDEX38 =
 {
+"classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#a834f656ae0efac2706045e79da9c5a20":[6,0,0,3,34,14],
+"classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#a9873b04815aacabef0e7d8874e330164":[5,0,0,3,34,4],
+"classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#a9873b04815aacabef0e7d8874e330164":[6,0,0,3,34,4],
+"classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#ab0ce7f820c9862db68440b1b2e57b933":[5,0,0,3,34,8],
 "classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#ab0ce7f820c9862db68440b1b2e57b933":[6,0,0,3,34,8],
 "classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#ab8a8bf800875c74e56ace6cdc1d9a23c":[5,0,0,3,34,6],
 "classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#ab8a8bf800875c74e56ace6cdc1d9a23c":[6,0,0,3,34,6],
@@ -245,9 +249,5 @@ var NAVTREEINDEX38 =
 "classBalloonParty_1_1Display_1_1EffectsMapCompositor.html#a277b80eeb705b4fafcb62154934be9bb":[6,0,0,4,7,6],
 "classBalloonParty_1_1Display_1_1EffectsMapCompositor.html#a31598b141d2908d34b3acedd792543c7":[5,0,0,4,7,4],
 "classBalloonParty_1_1Display_1_1EffectsMapCompositor.html#a31598b141d2908d34b3acedd792543c7":[6,0,0,4,7,4],
-"classBalloonParty_1_1Display_1_1EffectsMapCompositor.html#a3ac7a6f0f56194c7bef44830735bcae3":[5,0,0,4,7,18],
-"classBalloonParty_1_1Display_1_1EffectsMapCompositor.html#a3ac7a6f0f56194c7bef44830735bcae3":[6,0,0,4,7,18],
-"classBalloonParty_1_1Display_1_1EffectsMapCompositor.html#a3f61ad78019274966595cb6c12c822ff":[5,0,0,4,7,17],
-"classBalloonParty_1_1Display_1_1EffectsMapCompositor.html#a3f61ad78019274966595cb6c12c822ff":[6,0,0,4,7,17],
-"classBalloonParty_1_1Display_1_1EffectsMapCompositor.html#a489f4009d1405fc9a35bb5cd6840062d":[5,0,0,4,7,25]
+"classBalloonParty_1_1Display_1_1EffectsMapCompositor.html#a3ac7a6f0f56194c7bef44830735bcae3":[5,0,0,4,7,18]
 };

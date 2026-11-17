@@ -1,5 +1,9 @@
 var NAVTREEINDEX24 =
 {
+"classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeFuseSettings.html#a81b726f5eceeee36c030a6bd29bb3807":[6,0,0,3,0,16,13],
+"classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeFuseSettings.html#a86f7b0ebd9c8551396521966fba3f649":[5,0,0,3,0,16,9],
+"classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeFuseSettings.html#a86f7b0ebd9c8551396521966fba3f649":[6,0,0,3,0,16,9],
+"classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeFuseSettings.html#a8b28134debe4de9a2a86717a8cb28bf2":[5,0,0,3,0,16,6],
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeFuseSettings.html#a8b28134debe4de9a2a86717a8cb28bf2":[6,0,0,3,0,16,6],
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeFuseSettings.html#a9544d507158ff0ff01942d238a5b1558":[5,0,0,3,0,16,10],
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeFuseSettings.html#a9544d507158ff0ff01942d238a5b1558":[6,0,0,3,0,16,10],
@@ -245,9 +249,5 @@ var NAVTREEINDEX24 =
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#aa58d346e1907852198a8bf1464ac80a6":[6,0,0,3,0,20,17],
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#aa60454dfcd1273fd3a73090aeca8534a":[5,0,0,3,0,20,14],
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#aa60454dfcd1273fd3a73090aeca8534a":[6,0,0,3,0,20,14],
-"classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#aaa3e32d684e6d9e90175c0bab38ff235":[5,0,0,3,0,20,18],
-"classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#aaa3e32d684e6d9e90175c0bab38ff235":[6,0,0,3,0,20,18],
-"classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#aad829dea8fb7f2f599ae892c7d2f09cd":[5,0,0,3,0,20,8],
-"classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#aad829dea8fb7f2f599ae892c7d2f09cd":[6,0,0,3,0,20,8],
-"classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#ab5c0ad5596ec2193680a896854ae5369":[5,0,0,3,0,20,20]
+"classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#aaa3e32d684e6d9e90175c0bab38ff235":[5,0,0,3,0,20,18]
 };
