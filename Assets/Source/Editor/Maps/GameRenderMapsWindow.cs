@@ -394,15 +394,23 @@ namespace BalloonParty.Editor.Maps
             return mask != null ? mask.MaskTexture : null;
         }
 
-        private static Texture FetchHudEffectsMap()
+        // The main camera's map is the HDR one, the HUD's the 8-bit one.
+        private static Texture FetchEffectsMap(bool hdr)
         {
             if (!Application.isPlaying)
             {
                 return null;
             }
 
-            var compositor = UnityEngine.Object.FindAnyObjectByType<EffectsMapCompositor>();
-            return compositor != null ? compositor.MapTexture : null;
+            foreach (var compositor in UnityEngine.Object.FindObjectsByType<EffectsMapCompositor>())
+            {
+                if (compositor.Hdr == hdr)
+                {
+                    return compositor.MapTexture;
+                }
+            }
+
+            return null;
         }
 
         private static MapDescriptor[] BuildDescriptors()
@@ -489,8 +497,17 @@ namespace BalloonParty.Editor.Maps
                     "Unused."),
 
                 new MapDescriptor(
+                    "Main Effects Map",
+                    () => FetchEffectsMap(true),
+                    "No effects map yet — it's made the first time a ball flies, and only renders while a clearing is open.",
+                    "Pops, item effects and the nuke cloud, premultiplied, HDR — red.",
+                    "Pops, item effects and the nuke cloud, premultiplied, HDR — green.",
+                    "Pops, item effects and the nuke cloud, premultiplied, HDR — blue.",
+                    "Coverage — how much of the frame the effects hide at each pixel."),
+
+                new MapDescriptor(
                     "HUD Effects Map",
-                    FetchHudEffectsMap,
+                    () => FetchEffectsMap(false),
                     "No effects map yet — it's made the first time a ball flies, and only renders while a clearing is open.",
                     "Score shapes and trails, premultiplied — red.",
                     "Score shapes and trails, premultiplied — green.",

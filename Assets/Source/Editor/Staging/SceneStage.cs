@@ -565,7 +565,10 @@ namespace BalloonParty.Editor.Staging
             var camera = Camera.main;
             var width = camera.pixelWidth;
             var height = camera.pixelHeight;
-            var target = RenderTexture.GetTemporary(width, height, 24, RenderTextureFormat.ARGB32);
+            // A float target, as the screen's HDR intermediate is: rendered into an 8-bit one, URP composites the
+            // main camera's HDR effects map differently from the Game view (wide, flat glows on the lightning).
+            // Read back into an 8-bit texture, it clamps as the screen does.
+            var target = RenderTexture.GetTemporary(width, height, 24, RenderTextureFormat.ARGBHalf);
             var previous = camera.targetTexture;
             camera.targetTexture = target;
             camera.Render();

@@ -23,11 +23,19 @@ namespace BalloonParty.Display
 
         private readonly CompositeDisposable _disposables = new();
 
+        private CameraCullingMask _cullingMask;
+
         private void Awake()
         {
             if (_camera == null)
             {
                 _camera = GetComponent<Camera>();
+            }
+
+            // Through the mask's owner, so a navigation change keeps the layers an effects map has claimed away.
+            if (_camera != null)
+            {
+                _cullingMask = CameraCullingMask.Of(_camera);
             }
         }
 
@@ -46,12 +54,12 @@ namespace BalloonParty.Display
 
         private void ApplyMask(NavigationState state)
         {
-            if (_camera == null)
+            if (_cullingMask == null)
             {
                 return;
             }
 
-            _camera.cullingMask = state == NavigationState.Launch ? _launchMask.value : _gameMask.value;
+            _cullingMask.SetBase(state == NavigationState.Launch ? _launchMask.value : _gameMask.value);
         }
     }
 }

@@ -27,5 +27,6 @@ MonoBehaviour:
   _useUnscaledTime: 0
   _maskDownscale: 4
   _mapDownscale: 1
+  _mapHoldSeconds: 1.5
   _maskShader: {fileID: 4800000, guid: b6ccd38396c64e55aa1ebc768dfa936a, type: 3}
   _compositeShader: {fileID: 4800000, guid: a38c88e6c07744c9a217eae63b9503cf, type: 3}

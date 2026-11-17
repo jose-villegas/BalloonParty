@@ -388,7 +388,7 @@ MonoBehaviour:
     _cloudSeconds: 5
     _cloudReach: 5.5
     _cloudSortingOrder: 40
-    _cloudLayerName: Trail
+    _cloudLayerName: Effects
   _nukeFuse:
     _seconds: 3
     _pullInterval: 0.5

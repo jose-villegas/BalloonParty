@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8142549391911035545}
   - component: {fileID: 2148469744637963286}
   - component: {fileID: 8326537744216015860}
-  m_Layer: 7
+  m_Layer: 17
   m_Name: PSVFX_SoapClusterPop
   m_TagString: Untagged
   m_Icon: {fileID: 0}

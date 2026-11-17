@@ -76,12 +76,12 @@ namespace BalloonParty.Game
             builder.RegisterComponentInHierarchy<CinematicCameraView>();
             builder.RegisterComponentInHierarchy<CameraShakeView>();
 
-            // The effects clearing (PLAN-EffectsLayerClearing): the mask on the main camera and the HUD camera's
-            // effects map. The run-scoped controller that feeds the mask from the balls in flight lives in the
-            // Game scope.
+            // The effects clearing (PLAN-EffectsLayerClearing): the mask on the main camera and an effects map on
+            // each camera, injected below (nothing resolves them). The run-scoped controller that feeds the mask
+            // from the balls in flight lives in the Game scope.
             builder.RegisterInstance<IEffectsClearingSettings>(_effectsClearingSettings);
             builder.RegisterComponentInHierarchy<EffectsClearingMaskView>();
-            builder.RegisterComponentInHierarchy<EffectsMapCompositor>();
+            builder.RegisterBuildCallback(InjectEffectsMaps);
 
             // The interactive backdrop fields — camera-independent, global-shader-driven. Hoisted here (out of
             // the Game scope) so the launcher's live/pokeable clouds are a first-class app-root guarantee
@@ -135,6 +135,14 @@ namespace BalloonParty.Game
 
             // Inject ISoundPlayer into any UiSfxEmitter instances already in the scene.
             builder.RegisterBuildCallback(InjectUiSfxEmitters);
+        }
+
+        private void InjectEffectsMaps(IObjectResolver resolver)
+        {
+            foreach (var compositor in GetComponentsInChildren<EffectsMapCompositor>(true))
+            {
+                resolver.Inject(compositor);
+            }
         }
 
         private static void InjectUiSfxEmitters(IObjectResolver resolver)

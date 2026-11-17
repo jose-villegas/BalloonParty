@@ -164,6 +164,7 @@ GameObject:
   - component: {fileID: 9034052619022030905}
   - component: {fileID: 977641122217208972}
   - component: {fileID: 5813402267195573151}
+  - component: {fileID: 7316250489461830417}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -287,7 +288,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Display.SceneCaptureService
   _capturedLayers:
     serializedVersion: 2
-    m_Bits: 130688
+    m_Bits: 261760
   _matchMainCameraBackground: 1
   _backgroundColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!114 &8597041690689265888
@@ -433,3 +434,23 @@ MonoBehaviour:
   _compositeLayerName: UI
   _sortingLayerName: UI
   _sortingOrder: 3300
+--- !u!114 &7316250489461830417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4370083120234301038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38fd8966528545c29346b81d50b5068d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Display.EffectsMapCompositor
+  _effectLayers:
+    serializedVersion: 2
+    m_Bits: 131072
+  _stackBase: {fileID: 0}
+  _hdr: 1
+  _compositeLayerName: Default
+  _sortingLayerName: Sky
+  _sortingOrder: -1

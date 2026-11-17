@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3702900025065173228}
   - component: {fileID: 2974752064676068089}
   - component: {fileID: 5822253737736993656}
-  m_Layer: 7
+  m_Layer: 17
   m_Name: Blob
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -132,7 +132,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2218876494609047904}
   - component: {fileID: 5465718436863261179}
-  m_Layer: 7
+  m_Layer: 17
   m_Name: LVFX_FlyingBlob
   m_TagString: Untagged
   m_Icon: {fileID: 0}

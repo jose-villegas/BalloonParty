@@ -12,8 +12,10 @@ namespace BalloonParty.Display
     ///     An effects map (@ref plan_effects_layer_clearing) for the camera it sits on. While the clearing mask is
     ///     open, the camera stops drawing its effect layers; an effects camera renders them into the map instead,
     ///     and a camera-fitted quad lays the map back over the frame, faded where the mask is clear. With the mask
-    ///     empty that is the same blend into the same frame, so it only runs while a clearing is open: otherwise
-    ///     the effects draw straight into the frame, as they would without it.
+    ///     empty that is the same blend into the same frame, so it only runs while a clearing is open, and for
+    ///     <see cref="IEffectsClearingSettings.MapHoldSeconds" /> after: otherwise the effects draw straight into
+    ///     the frame, as they would without it. The HUD camera has one for the score trails; the main camera one
+    ///     for the chaos a ball flies through, in HDR so bloom and the tonemapper still see it.
     /// </summary>
     [RequireComponent(typeof(Camera))]
     [DefaultExecutionOrder(EffectsClearingMaskView.ExecutionOrder + 1)]
@@ -31,7 +33,7 @@ namespace BalloonParty.Display
         [SerializeField] private Camera _stackBase;
 
         [Tooltip("An HDR map (ARGBHalf) for a camera that post-processes, so bloom still sees values over 1; an " +
-                 "8-bit map for one drawn after post.")]
+                 "8-bit map for one drawn after post. Its composite runs before post, so the effects are graded too.")]
         [SerializeField] private bool _hdr;
 
         [Header("Composite")]
@@ -55,15 +57,19 @@ namespace BalloonParty.Display
         private Material _material;
         private MeshRenderer _quad;
         private Transform _quadTransform;
-        private int _removedLayers;
+        private CameraCullingMask _cullingMask;
+        private float _holdRemaining;
         private bool _live;
         private bool _broken;
 
         internal RenderTexture MapTexture => _map;
 
+        internal bool Hdr => _hdr;
+
         private void Awake()
         {
             _camera = GetComponent<Camera>();
+            _cullingMask = CameraCullingMask.Of(_camera);
 
             if (_effectLayers.value == 0)
             {
@@ -78,7 +84,7 @@ namespace BalloonParty.Display
 
         private void LateUpdate()
         {
-            var live = _settings != null && _settings.Enabled && _mask != null && _mask.IsClearing
+            var live = _settings != null && _settings.Enabled && _mask != null && Held()
                        && _effectLayers.value != 0 && EnsureResources();
 
             if (live)
@@ -110,6 +116,19 @@ namespace BalloonParty.Display
             }
         }
 
+        // On game time, the clock the effects play on, so a level-up freeze holds the map with them.
+        private bool Held()
+        {
+            if (_mask.IsClearing)
+            {
+                _holdRemaining = _settings.MapHoldSeconds;
+                return true;
+            }
+
+            _holdRemaining -= Time.deltaTime;
+            return _holdRemaining > 0f;
+        }
+
         private void SetLive(bool live)
         {
             if (live == _live)
@@ -119,7 +138,18 @@ namespace BalloonParty.Display
 
             _live = live;
 
-            SuppressEffectLayers(live);
+            // Torn down with the camera, the owner may already be gone.
+            if (_cullingMask != null)
+            {
+                if (live)
+                {
+                    _cullingMask.Claim(_effectLayers.value);
+                }
+                else
+                {
+                    _cullingMask.Release(_effectLayers.value);
+                }
+            }
 
             if (_effectsCamera != null)
             {
@@ -129,29 +159,6 @@ namespace BalloonParty.Display
             if (_quad != null)
             {
                 _quad.enabled = live;
-            }
-        }
-
-        // The one place this writes its camera's culling mask. Fine on the HUD camera, which nothing else writes; the
-        // main camera's mask also belongs to NavigationCameraReveal, so phase 3 needs one owner for it (the plan).
-        private void SuppressEffectLayers(bool suppress)
-        {
-            // Torn down with the camera, the component may already be gone.
-            if (_camera == null)
-            {
-                return;
-            }
-
-            // Only the bits this took out go back, so a mask someone else changes meanwhile is left alone.
-            if (suppress)
-            {
-                _removedLayers = _camera.cullingMask & _effectLayers.value;
-                _camera.cullingMask &= ~_effectLayers.value;
-            }
-            else
-            {
-                _camera.cullingMask |= _removedLayers;
-                _removedLayers = 0;
             }
         }
 

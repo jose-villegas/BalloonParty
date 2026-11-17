@@ -75,9 +75,6 @@ camera, both read through the same mask.
 |---|---|---|
 | Score shapes, score trails (`ShapeFormationTicker`, `FlyingTrail`, `ScoreTrail.prefab`) | `Trail` layer, UI 3300 (set by `ScoreTrailService`) | yes |
 | Heart trail, highlight trail, item-preview pens | `Trail` layer, UI 100 (`FlyingTrail`'s default) / ScoreTrail 0–1 | yes |
-| Balloon pops and armour breaks (`PSVFX_*Pop`) | `Trail` (were `Default`), Default 0 / Balloons 199–200 | yes: open question 1 |
-| Item effects: the bomb's smoke burst, the laser, the lightning chain, the paint splash, drips and flying blobs (`Items/BalloonItems/VFX/`) | `Trail` (were `Items`), PowerUps | yes: the chaos a ball has to stay readable in |
-| Nuke cloud (`NukeCloudView`, `INukeBlastSettings.CloudLayerName`) | `Trail` (was `Default`), Balloons 40 | yes |
 | Heads-ups (`HeadsUps.prefab`) | `UI` layer, UI 0/1 | **not yet**: open question 4 |
 | Game canvas, hearts counter, launcher canvas | `UI` layer | **no**: that's the HUD, not effects |
 
@@ -87,10 +84,13 @@ still fly over the score bar, and under the card reveal (UI 31998). Inside the m
 order. While the map runs, a heart or highlight trail sorts at 3300 instead of 100: over a popup, if one is
 open while a clearing is.
 
-### Main effects map (phase 3, open)
+### Main effects map (phase 3, in part)
 
 | Family | Today | In the map |
 |---|---|---|
+| Balloon pops and armour breaks (`PSVFX_*Pop`) | `Effects` (were `Default`), Default 0 / Balloons 199–200 | **done**: open question 1 |
+| Item effects: the bomb's smoke burst, the laser, the lightning chain, the paint splash, drips and flying blobs (`Items/BalloonItems/VFX/`) | `Effects` (were `Items`), PowerUps | **done**: the chaos a ball has to stay readable in |
+| Nuke cloud (`NukeCloudView`, `INukeBlastSettings.CloudLayerName`) | `Effects` (was `Default`), Balloons 40 | **done** |
 | Item range previews (`Item/Preview/`) | `Items`, PowerUps 0–100 | yes |
 | Shield item's gain burst (`PSVFX_ShieldGainPU`) | `Items`, PowerUps 20 | yes: news about the ball, not chaos around it |
 | Shield bounce/gain/lose VFX | `Projectile`, PowerUps 20 | yes |
@@ -102,8 +102,8 @@ open while a clearing is.
 
 The main camera's effects live on several physics layers that also hold board pieces (`Items` holds the
 badges as well as item VFX, `Projectile` the ball as well as the shield VFX). So this phase needs a new
-physics layer, `Effects`, which **the owner adds in the Editor** (`TagManager.asset` is never edited by
-hand). The effect prefabs above then move to it. The composite collapses these effects to one sorting
+physics layer, `Effects` (17), added in the Editor (`TagManager.asset` is never edited by hand). The
+chaos effects above are on it; the rest of the table would move to it. The composite collapses these effects to one sorting
 position: Sky −1, below the danger walls and the light quad. One visible change comes with that: item VFX on
 PowerUps draw under bushes and puffs (GridActors) today, and would draw over them.
 
@@ -213,7 +213,7 @@ this table.
 | Mask sample in the composite | 1 bilinear tap per pixel from a 650 kB texture | stays in cache |
 | The glass | 4 more mask taps and 3 map taps (not 1) per pixel under a dome | a few balls' worth of the screen |
 | HUD map, `ARGB32` | about 10 MB stored + 10 MB read back ≈ 1.2 GB/s | `MapDownscale` 2 quarters it, at the cost of softer lines. Default 1 |
-| Main map, `ARGBHalf` | about 2.4 GB/s at full size | the expensive one, which is one reason phase 3 is gated |
+| Main map, `ARGBHalf` | about 2.4 GB/s at full size | the expensive one. Runs while a ball flies and `MapHoldSeconds` after; `MapDownscale` 2 quarters it |
 | Extra camera per map | one cull and one RenderGraph setup on the CPU | effect layers only, so few renderers |
 | Effects no longer drawn by their own camera | a saving | they draw once, into the map |
 
@@ -287,19 +287,24 @@ Each phase follows the per-phase review protocol: implement, review, curate, own
   (`[DefaultExecutionOrder]` 1000), and the compositor right after it, so the stamps frame the view this
   frame renders and the map turns on in the same frame as the first stamp.
 
-### Phase 3: the main effects map (gated)
+### Phase 3: the main effects map (in part)
 
-Only if phase 2 reads well on the phone and its cost leaves room, and after open questions 1 and 2 are
-answered. The owner adds the `Effects` physics layer. Effect prefabs move to it, and the main camera gets
-its own `EffectsMapCompositor` (`ARGBHalf`, composite at Sky −1). Its alpha audit covers the particle
-shaders.
+Started for the chaos effects, which open question 1 had put in the HUD map: there the lightning and the
+laser, made to pass the bloom threshold (`_HdrBoost` 2–3), were clipped to 1 with no bloom. The `Effects`
+physics layer is added, the pops, item effects and nuke cloud are on it, and the main camera has its own
+`EffectsMapCompositor` (`ARGBHalf`, composite at Sky −1, before post). The composite shader reads the map in
+`half`, since `fixed` is low precision on some mobile GPUs. The GI capture takes `Effects`, as it took them on
+`Trail`. The rest of the table above (range previews, shield VFX, the dust specks) waits on open question 2.
 
-The main camera's culling mask has two writers then: `NavigationCameraReveal` replaces the whole mask on
-each navigation change, and the compositor takes `Effects` out while it runs. A navigation change while
-live would put `Effects` back (drawn twice), or leak it into the launch screen at idle. So the mask gets
-one owner first, the way `TimeScaleService` owns the time scale: navigation sets the base mask (the game
+Off, the main camera draws these effects in their own sorting places: under the ball, and the pops on
+`Default` under the balloons. So the map stays on for `MapHoldSeconds` (1.5, game time) after the mask
+empties, past the pops a shot set off, and no shard mid-air slips under the balloons when it turns off.
+
+The main camera's culling mask has two writers: `NavigationCameraReveal` replaces the whole mask on each
+navigation change, and the compositor takes `Effects` out while it runs. So the mask has one owner,
+`CameraCullingMask`, the way `TimeScaleService` owns the time scale: navigation sets the base mask (the game
 mask *includes* `Effects`), compositors claim the layers they suppress, and the camera draws the base mask
-minus the claims. The compositor's mask writes are already in one method, `SuppressEffectLayers`.
+minus the claims.
 
 ---
 
@@ -318,21 +323,23 @@ minus the claims. The compositor's mask writes are already in one method, `Suppr
 
 1. **Pops.** Answered: pops go to the upper layer and clear like the other effects. All nine `PSVFX_*Pop`
    prefabs (the default pop, which also plays for recolours and bubble merges, and the heart, golden, disco,
-   nuke, soap, tough, tougher and unbreakable pops and armour breaks) are on `Trail`, so the HUD map takes them
-   and they draw over the board, balls included, except under the glass. That costs them the main camera's
-   grading: they skip its tonemapper and contrast, and the scene-lit shards read a little lighter, most at
-   night. Their legacy `Mobile/Particles/Alpha Blended` materials moved to `Sprites/Default`, which draws the
+   nuke, soap, tough, tougher and unbreakable pops and armour breaks) are on `Effects`, so the main camera's map
+   takes them and they draw over the board, balls included, except under the glass. They went to the HUD map
+   on `Trail` first, which cost them the main camera's bloom and grading, so phase 3 started for them. Their legacy `Mobile/Particles/Alpha Blended` materials moved to `Sprites/Default`, which draws the
    same colour and writes coverage. The nuke blast's flood and the disco wash are discs on the ground beneath
    the balloons, and the blast lights the board itself, so they stay on the board: the glass can't lift a light.
 
    The owner widened it to the chaos a ball flies through: lightning, bombs, paint, the laser and the nuke. The
    item effects (the bomb's smoke burst, the laser, the lightning chain, the paint splash, drips and flying blobs)
-   and the nuke cloud moved to `Trail` too, the bomb smoke and the paint splash off the legacy particle shader,
+   and the nuke cloud moved to `Effects` too, the bomb smoke and the paint splash off the legacy particle shader,
    and `PaintBlob` writes coverage. They draw over the board and over the ball now, as the pops do, and the
    glass opens a hole around the ball. The ball itself already drew above them all on the board, so what they
-   hid was what it was about to hit. The shield item's gain burst stays: it's news about the ball.
-2. **Phase 3 at all.** The score shapes and trails are the HUD map. Should item VFX, range
-   previews, shield VFX and the dust specks clear as well, at roughly twice the HUD map's cost?
+   hid was what it was about to hit. The shield item's gain burst stays: it's news about the ball. So does the
+   lightning's glow (`LVFX_LightningRange/Glow`, on `Items`): a light on the ground under the balloons, which
+   the map, laying everything over them, would lift over them.
+2. **The rest of phase 3.** The score shapes and trails are the HUD map, the chaos effects the main map. Should range
+   previews, shield VFX and the dust specks clear as well? The main map already runs while a ball flies, so
+   they would add only their own draws into it.
 3. **How clear is clear.** Answered: a hard cut near the rim read too strong. The clearing is now the
    glass dome above, its effects thinning slowly from the rim to near nothing over the ball, with the lens
    the owner picked from stills (refraction 0.5, dispersion 0.15). It still needs a look in play.

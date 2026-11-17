@@ -73,12 +73,14 @@ Shader "BalloonParty/Display/EffectsMapComposite"
                 return tex2Dlod(_EffectsClearMask, float4(uv, 0, 0)).rg;
             }
 
-            fixed4 Effects(float2 uv)
+            // Half, not fixed: the main camera's map holds HDR effects, and fixed is low precision on some
+            // mobile GPUs, clamped near 2.
+            half4 Effects(float2 uv)
             {
                 return tex2Dlod(_EffectsMapTex, float4(uv, 0, 0));
             }
 
-            fixed4 frag(v2f IN) : SV_Target
+            half4 frag(v2f IN) : SV_Target
             {
                 float2 uv = IN.texcoord;
                 float2 centre = Mask(uv);
@@ -110,10 +112,10 @@ Shader "BalloonParty/Display/EffectsMapComposite"
                 float2 bend = slope * (_EffectsClearLens.x * radius) * smoothstep(0.0, 0.12, mask);
                 bend.x /= aspect;
                 float spread = _EffectsClearLens.z;
-                fixed4 red = Effects(uv + bend * (1.0 + spread));
-                fixed4 green = Effects(uv + bend);
-                fixed4 blue = Effects(uv + bend * (1.0 - spread));
-                fixed4 effects = fixed4(red.r, green.g, blue.b, (red.a + green.a + blue.a) / 3.0);
+                half4 red = Effects(uv + bend * (1.0 + spread));
+                half4 green = Effects(uv + bend);
+                half4 blue = Effects(uv + bend * (1.0 - spread));
+                half4 effects = half4(red.r, green.g, blue.b, (red.a + green.a + blue.a) / 3.0);
 
                 half fade = 1.0 - _EffectsClearParams.z
                     * smoothstep(_EffectsClearParams.x, _EffectsClearParams.y, mask);
@@ -126,7 +128,7 @@ Shader "BalloonParty/Display/EffectsMapComposite"
                 float rim = pow(saturate(length(slope)), 4.0) * 0.35;
                 half glint = (mirror + rim) * _EffectsClearLens.w * glass;
 
-                fixed4 result = effects * fade;
+                half4 result = effects * fade;
                 result.rgb += glint;
                 return result;
             }

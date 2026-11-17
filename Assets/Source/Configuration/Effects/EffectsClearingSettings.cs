@@ -72,6 +72,13 @@ namespace BalloonParty.Configuration.Effects
         [Min(1)]
         [SerializeField] private int _mapDownscale = 1;
 
+        [Tooltip("Seconds the effects maps stay on after the last clearing closes, on game time. The main map " +
+                 "lays its effects over the ball and the board; off, they draw in their own places, under the " +
+                 "ball and some under the balloons. Held past the pops and bursts a shot set off, so none of them " +
+                 "slips under the balloons mid-air.")]
+        [Min(0f)]
+        [SerializeField] private float _mapHoldSeconds = 1.5f;
+
         [Tooltip("Hidden/BalloonParty/Display/EffectsClearingMask. Referenced here so builds keep it.")]
         [SerializeField] private Shader _maskShader;
 
@@ -93,6 +100,7 @@ namespace BalloonParty.Configuration.Effects
         public bool UseUnscaledTime => _useUnscaledTime;
         public int MaskDownscale => _maskDownscale;
         public int MapDownscale => _mapDownscale;
+        public float MapHoldSeconds => _mapHoldSeconds;
         public Shader MaskShader => _maskShader;
         public Shader CompositeShader => _compositeShader;
     }

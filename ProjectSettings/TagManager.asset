@@ -29,7 +29,7 @@ TagManager:
   - Thrower
   - Items
   - Field
-  - 
+  - Effects
   - 
   - 
   - 
@@ -71,3 +71,4 @@ TagManager:
     locked: 0
   m_RenderingLayers:
   - Default
+  m_MigratedRenderPipelines: []
