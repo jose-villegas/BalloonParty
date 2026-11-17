@@ -170,7 +170,7 @@ Package Functions</h2></td></tr>
 <tr class="memdesc:ad4763736a6c1ba93d1b50a400de4bbdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Every snake steps once: its head into the next open slot (<a class="el" href="classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeWalk.html" title="Where a snake&#39;s head steps next: on along its heading when that slot is open, else the gentlest open ...">SnakeWalk</a>), each member after it into the slot the one ahead just left.  <br /></td></tr>
 <tr class="separator:ad4763736a6c1ba93d1b50a400de4bbdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e2ee719685798aff649f58f620d0f76" id="r_a7e2ee719685798aff649f58f620d0f76"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7e2ee719685798aff649f58f620d0f76">TakeSnakeBeat</a> ()</td></tr>
-<tr class="memdesc:a7e2ee719685798aff649f58f620d0f76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Counts one balancer pulse; true when a snake on the board is due its step (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#ab87940dbc5b09c3fdfe62c7bd5c7b3cd" title="Balancer pulses between a snake&#39;s steps, so each step lands on the board&#39;s own beat.">IUnbreakableFormationSettings.SnakeStepPulses</a> pulses apart).  <br /></td></tr>
+<tr class="memdesc:a7e2ee719685798aff649f58f620d0f76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Counts one snake beat; true when a snake on the board is due its step (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#ab87940dbc5b09c3fdfe62c7bd5c7b3cd" title="Balancer pulses between a snake&#39;s steps, so each step lands on the board&#39;s own beat.">IUnbreakableFormationSettings.SnakeStepPulses</a> beats apart).  <br /></td></tr>
 <tr class="separator:a7e2ee719685798aff649f58f620d0f76"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
@@ -1100,8 +1100,8 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Counts one balancer pulse; true when a snake on the board is due its step (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#ab87940dbc5b09c3fdfe62c7bd5c7b3cd" title="Balancer pulses between a snake&#39;s steps, so each step lands on the board&#39;s own beat.">IUnbreakableFormationSettings.SnakeStepPulses</a> pulses apart). </p>
-<p>With no snake the count starts over, so a new snake's first step comes a full beat after it forms. </p>
+<p>Counts one snake beat; true when a snake on the board is due its step (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#ab87940dbc5b09c3fdfe62c7bd5c7b3cd" title="Balancer pulses between a snake&#39;s steps, so each step lands on the board&#39;s own beat.">IUnbreakableFormationSettings.SnakeStepPulses</a> beats apart). </p>
+<p>With no snake the count starts over, so a snake formed at wave start takes its first step a full beat later. Toughs that landed since the wave started start their snake on the beat, and it steps off at once. </p>
 
 </div>
 </div>
