@@ -170,9 +170,13 @@ unbreakables: they roam, and once two are free they form a formation of their ow
 
 ## Rules a formation keeps
 
-- **No pushing.** A formation slot must be empty or already hold one of the unbreakables it is planning
-  with. A formation never pushes another balloon aside, and never plans over another formation's
-  members.
+- **Room on a full board.** A formation slot must be empty, already hold one of the unbreakables it is
+  planning with, or hold a balloon that can trade places (one that moves and nothing holds:
+  `SnakeWalk.CanPassThrough`). That balloon goes to the nearest slot a member left, in the same batch, so a
+  full board doesn't keep the free unbreakables apart and red. Each balloon moved counts as
+  `FormationPlanner.DisplacedBalloonCost` (3) slots of travel, so where there is room the formation takes it
+  instead. A formation never plans over another formation's members, toughs, or anything anchored or
+  static.
 - **Spawn room.** It never uses the bottom `BottomClearance` rows, so spawn lines always have room to
   enter.
 - **No wall across the board.** Every formation keeps its own row short, but two of them, or one and a
@@ -200,8 +204,8 @@ unbreakables: they roam, and once two are free they form a formation of their ow
 - **A full ring holds the item.** Six leave the item's balloon nowhere to move. A smaller cover leaves
   the side above it open, so the item can float up out of it. If the item moves or pops, the cover stays
   where it is until the next change.
-- **A cover's slots must be free.** A neighbour holding an ordinary balloon rules the spot out, as for
-  every shape: the cover never pushes a balloon aside, and a balloon is no shield, since a shot pops it.
+- **A cover's slots take the balloons' places.** A balloon is no shield, since a shot pops it, so a
+  neighbour holding one trades it out to a slot a member left, as for every shape.
 
 ## Anchoring
 

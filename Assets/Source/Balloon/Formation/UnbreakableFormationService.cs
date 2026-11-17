@@ -59,6 +59,7 @@ namespace BalloonParty.Balloon.Formation
         private readonly List<Vector2Int> _headLine = new();
         private readonly List<Vector2Int> _groupFill = new();
         private readonly List<Vector2Int> _leftSlots = new();
+        private readonly List<Vector2Int> _vacated = new();
         private readonly List<IWriteableFormationMember> _freeToughs = new();
         private readonly List<IWriteableFormationMember> _gathered = new();
         private readonly List<FormationShape> _shapePool = new();
@@ -943,6 +944,7 @@ namespace BalloonParty.Balloon.Formation
                 }
             }
 
+            MoveBalloonsOutOfTheWay();
             relocate(_moves);
             formation.Shape = shape;
             formation.CyclesLeft = HoldCyclesOf(shape) - 1;
@@ -951,6 +953,57 @@ namespace BalloonParty.Balloon.Formation
             {
                 LineUpSnake(formation);
             }
+        }
+
+        // A balloon on a formation slot (FormationPlanner lets it plan over one that can trade places) goes to the
+        // nearest slot a member left, in the same batch: there are always as many of those as balloons, since every
+        // member that lands on a balloon left a slot the formation doesn't use.
+        private void MoveBalloonsOutOfTheWay()
+        {
+            _vacated.Clear();
+            for (var i = 0; i < _assignments.Count; i++)
+            {
+                var from = _assignments[i].Member.SlotIndex.Value;
+                if (!IsTarget(from))
+                {
+                    _vacated.Add(from);
+                }
+            }
+
+            for (var i = 0; i < _assignments.Count; i++)
+            {
+                var target = _assignments[i].Target;
+                if (_grid.IsEmpty(target.x, target.y) || _grid.At(target) is not IWriteableDynamicSlotActor balloon
+                    || balloon is IFormationMember || _vacated.Count == 0)
+                {
+                    continue;
+                }
+
+                var nearest = 0;
+                for (var v = 1; v < _vacated.Count; v++)
+                {
+                    if (HexCoordinates.Distance(_vacated[v], target) < HexCoordinates.Distance(_vacated[nearest], target))
+                    {
+                        nearest = v;
+                    }
+                }
+
+                _moves.Add(new SlotMove(balloon, _vacated[nearest]));
+                _vacated.RemoveAt(nearest);
+            }
+        }
+
+        private bool IsTarget(Vector2Int slot)
+        {
+            for (var i = 0; i < _assignments.Count; i++)
+            {
+                if (_assignments[i].Target == slot)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private int HoldCyclesOf(FormationShape shape)

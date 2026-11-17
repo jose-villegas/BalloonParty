@@ -12,8 +12,11 @@ namespace BalloonParty.Balloon.Formation
 {
     /// <summary>
     ///     Finds where a formation of one shape can stand and which candidate goes to which of its slots.
-    ///     Reads the grid only; the caller moves the members. A formation slot must be empty or already
-    ///     hold one of the candidates, so a formation never plans over another formation. It never sits in
+    ///     Reads the grid only; the caller moves the members. A formation slot must be empty, already hold one
+    ///     of the candidates, or hold a balloon that can trade places (<see cref="SnakeWalk.CanPassThrough" />),
+    ///     which the caller sends to a slot a member left; so a formation never plans over another formation, and
+    ///     a full board doesn't keep the unbreakables apart. Each balloon it moves costs
+    ///     <see cref="DisplacedBalloonCost" /> on top of the travel, so a spot with room wins. It never sits in
     ///     the bottom <see cref="IUnbreakableFormationSettings.BottomClearance" /> rows (a horizontal line, the
     ///     bottom <see cref="IUnbreakableFormationSettings.HorizontalBottomClearance" />), and never where it would
     ///     link the board's unbreakables side to side (<see cref="ShotWall" />). Among the spots that fit, the
@@ -25,6 +28,10 @@ namespace BalloonParty.Balloon.Formation
         // only once those are all taken the two above. Six closes the ring.
         internal const int CoverMembers = 6;
         internal const int CoverMinMembers = 3;
+
+        // A balloon a formation moves out of its way counts as this much travel, so where there is room the
+        // formation takes it rather than shuffling the board.
+        internal const int DisplacedBalloonCost = 3;
 
         // Hex directions (HexCoordinates.Step) in the order a cover takes them: below, the sides, above. The two
         // orders differ only in which of a pair comes first, so a cover with an odd count tries both.
@@ -148,12 +155,12 @@ namespace BalloonParty.Balloon.Formation
             SlotGrid grid, IReadOnlyList<IWriteableFormationMember> candidates, int count, Vector2Int anchor,
             int variant)
         {
-            if (!AllSlotsFree(grid, candidates))
+            if (!AllSlotsOpen(grid, candidates, out var displaced))
             {
                 return;
             }
 
-            var cost = Assign(candidates, count, _scratch);
+            var cost = Assign(candidates, count, _scratch) + displaced * DisplacedBalloonCost;
             if (ClosesWall(_scratch))
             {
                 return;
@@ -317,15 +324,30 @@ namespace BalloonParty.Balloon.Formation
             }
         }
 
-        private bool AllSlotsFree(SlotGrid grid, IReadOnlyList<IWriteableFormationMember> candidates)
+        // displaced: the balloons on the slots, which trade places with the members.
+        private bool AllSlotsOpen(SlotGrid grid, IReadOnlyList<IWriteableFormationMember> candidates, out int displaced)
         {
+            displaced = 0;
             for (var i = 0; i < _slots.Count; i++)
             {
                 var slot = _slots[i];
-                if (!grid.IsEmpty(slot.x, slot.y) && !IsCandidate(grid.At(slot), candidates))
+                if (grid.IsEmpty(slot.x, slot.y))
+                {
+                    continue;
+                }
+
+                var occupant = grid.At(slot);
+                if (IsCandidate(occupant, candidates))
+                {
+                    continue;
+                }
+
+                if (!SnakeWalk.CanPassThrough(occupant))
                 {
                     return false;
                 }
+
+                displaced++;
             }
 
             return true;

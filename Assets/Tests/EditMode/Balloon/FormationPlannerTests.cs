@@ -154,11 +154,12 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void SkipsSlotsHeldByOtherBalloons()
+        public void PrefersRoom_OverSlotsHeldByBalloons()
         {
             BuildGrid(5, 6);
 
-            // Rows 0, 1 and 3 are full of ordinary balloons, so row 2 is the only row a line fits on.
+            // Rows 0, 1 and 3 are full of ordinary balloons, so row 2 is the only row with room for a line; row 3,
+            // nearer, would cost three balloons moved.
             FillRow(0);
             FillRow(1);
             FillRow(3);
@@ -167,6 +168,21 @@ namespace BalloonParty.Tests.Balloon
             Assert.IsTrue(Plan(FormationShape.Horizontal));
 
             Assert.IsTrue(Targets().All(t => t.y == 2));
+        }
+
+        [Test]
+        public void OnAFullBoard_PlansOverBalloons()
+        {
+            BuildGrid(5, 6);
+            for (var row = 0; row < 4; row++)
+            {
+                FillRow(row);
+            }
+
+            AddMembers(new Vector2Int(0, 4), new Vector2Int(2, 4), new Vector2Int(4, 5));
+
+            Assert.IsTrue(Plan(FormationShape.Horizontal), "a full board doesn't keep them apart");
+            Assert.AreEqual(3, Targets().Count);
         }
 
         [Test]
@@ -368,12 +384,26 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void ItemCover_WithABelowSlotTaken_HasNoSpot()
+        public void ItemCover_WithABelowSlotHeldByABalloon_TakesItAll_TheSame()
         {
+            // A balloon is no shield: the cover trades it out rather than leave the item open below.
             BuildGrid(7, 8);
             var item = new Vector2Int(3, 2);
             PlaceItem(item);
             _grid.Place(new BalloonModel(), null, HexCoordinates.Step(item, 1));
+            AddMembers(new Vector2Int(0, 5), new Vector2Int(3, 5), new Vector2Int(6, 5));
+
+            Assert.IsTrue(Plan(FormationShape.ItemCover));
+            CollectionAssert.Contains(Targets(), HexCoordinates.Step(item, 1));
+        }
+
+        [Test]
+        public void ItemCover_WithABelowSlotHeldByAnOutsider_HasNoSpot()
+        {
+            BuildGrid(7, 8);
+            var item = new Vector2Int(3, 2);
+            PlaceItem(item);
+            _grid.Place(new UnbreakableBalloonModel(new BalloonModelConfig()), null, HexCoordinates.Step(item, 1));
             AddMembers(new Vector2Int(0, 5), new Vector2Int(3, 5), new Vector2Int(6, 5));
 
             Assert.IsFalse(Plan(FormationShape.ItemCover));
@@ -475,11 +505,11 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void ItemCover_NeverPushesABalloonOffTheRing()
+        public void ItemCover_NeverTakesTheRing_FromAnOutsider()
         {
             BuildGrid(7, 8);
             PlaceItem(new Vector2Int(3, 2));
-            _grid.Place(new BalloonModel(), null, new Vector2Int(2, 2));
+            _grid.Place(new UnbreakableBalloonModel(new BalloonModelConfig()), null, new Vector2Int(2, 2));
             AddSixMembers();
 
             Assert.IsFalse(Plan(FormationShape.ItemCover));

@@ -140,6 +140,35 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void ABalloonOnAFormationSlot_GoesToASlotAMemberLeft()
+        {
+            _settings.DiagonalWeight.Returns(0f);
+            for (var col = 0; col < _grid.Columns; col++)
+            {
+                for (var row = 0; row < _grid.Rows; row++)
+                {
+                    _grid.Place(new BalloonModel(), null, new Vector2Int(col, row));
+                }
+            }
+
+            var spots = new[] { new Vector2Int(0, 0), new Vector2Int(6, 4), new Vector2Int(3, 5) };
+            foreach (var spot in spots)
+            {
+                _grid.Remove(spot);
+            }
+
+            AddUnbreakables(spots);
+            var balloons = AllBalloons();
+
+            Arrange();
+
+            Assert.AreEqual(FormationShape.Horizontal, _service.CurrentShape, "a full board doesn't keep them apart");
+            Assert.IsTrue(_unbreakables.All(u => _grid.At(u.SlotIndex.Value) == u));
+            Assert.IsTrue(balloons.All(b => _grid.At(b.SlotIndex.Value) == b), "every balloon has a slot of its own");
+            Assert.AreEqual(_grid.Columns * _grid.Rows, balloons.Count + _unbreakables.Count, "none lost");
+        }
+
+        [Test]
         public void TwoUnbreakables_FormUp_WhenTheMinimumIsTwo()
         {
             _settings.MinMembers.Returns(2);
@@ -793,6 +822,23 @@ namespace BalloonParty.Tests.Balloon
             Arrange();
             Assert.AreEqual(FormationShape.Snake, _service.CurrentShape);
             return _service.Formations[0];
+        }
+
+        private List<BalloonModel> AllBalloons()
+        {
+            var balloons = new List<BalloonModel>();
+            for (var col = 0; col < _grid.Columns; col++)
+            {
+                for (var row = 0; row < _grid.Rows; row++)
+                {
+                    if (!_grid.IsEmpty(col, row) && _grid.At(new Vector2Int(col, row)) is BalloonModel balloon)
+                    {
+                        balloons.Add(balloon);
+                    }
+                }
+            }
+
+            return balloons;
         }
 
         private void Arrange()
