@@ -1,0 +1,25 @@
+var classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings =
+[
+    [ "_enabled", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#aecfc78ba9a1416e89a53ee6a745e543b", null ],
+    [ "_fadeDistance", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#ac3b42e4ac871bcaa977d75a74b2917c6", null ],
+    [ "_fill", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#a1a0684e36076203f168ba0e51bab5f13", null ],
+    [ "_fullDistance", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#a8307b4fa416a197b241d2ebf1842b73c", null ],
+    [ "_hdrBoost", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#aba1be41d164d927e01b11684cfab2437", null ],
+    [ "_reach", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#a3c4a62819b2f3c3896d439bd144fa2d2", null ],
+    [ "_ringRadius", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#aae1c1902a0556074abad7fd7b11f2585", null ],
+    [ "_ringWidth", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#a75977651f8e9be36c79cb1d6796992f7", null ],
+    [ "_shader", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#ab36f5419eaa918b49f7169773aed6185", null ],
+    [ "_sortingLayerName", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#ad1b73a7f600c05b18f86f265a60593fb", null ],
+    [ "_sortingOrder", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#aa58fbc59a875cb6a4a68110b51b39a46", null ],
+    [ "Enabled", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#a832816eb6bc232bf1dc530d5f19bb381", null ],
+    [ "FadeDistance", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#a5d3400723437087afbf8a9468edb6429", null ],
+    [ "Fill", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#ab49f618e23523f83a678cc9e9ebf8b09", null ],
+    [ "FullDistance", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#a885a826b329c0c444b674698cb58802b", null ],
+    [ "HdrBoost", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#abb98d8dfc31c815680fabab1e1450a31", null ],
+    [ "Reach", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#a948890c33afb9bcc46f747a91e505b48", null ],
+    [ "RingRadius", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#abba06dd0fd40442994c240bffb017afb", null ],
+    [ "RingWidth", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#a30f376f99e4e385aba2b55764ec15708", null ],
+    [ "Shader", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#a4934ac84acdf2e18a96c7c6355a0ad84", null ],
+    [ "SortingLayerName", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#af19dfe4e978d8d1affcfe4aad3e6f539", null ],
+    [ "SortingOrder", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html#a7c07f6d5dc3fa0a546bc219f7a2fed76", null ]
+];

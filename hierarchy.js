@@ -166,6 +166,8 @@ var hierarchy =
     [ "BalloonParty.Editor.EffectPreview.PaintSplashPreviewModule.FlightState", "classBalloonParty_1_1Editor_1_1EffectPreview_1_1PaintSplashPreviewModule_1_1FlightState.html", null ],
     [ "BalloonParty.Shared.Messages.ForceDestroyProjectileMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ForceDestroyProjectileMessage.html", null ],
     [ "BalloonParty.Balloon.Formation.FormationAssignment", "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html", null ],
+    [ "BalloonParty.Balloon.View.FormationGlowField", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField.html", null ],
+    [ "BalloonParty.Balloon.View.FormationGlowSources", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowSources.html", null ],
     [ "BalloonParty.Game.Score.Behaviours.ShapeFormationTicker.FormationGroup", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationGroup.html", null ],
     [ "BalloonParty.Balloon.Model.FormationMembership", "classBalloonParty_1_1Balloon_1_1Model_1_1FormationMembership.html", null ],
     [ "BalloonParty.Game.Score.Behaviours.FormationOverlapResolver", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationOverlapResolver.html", null ],
@@ -576,6 +578,12 @@ var hierarchy =
     ] ],
     [ "BalloonParty.Game.Flight.IFlightStatsWriter", "interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStatsWriter.html", [
       [ "BalloonParty.Game.Flight.FlightStatsService", "classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html", null ]
+    ] ],
+    [ "BalloonParty.Configuration.Balloons.IFormationGlowSettings", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html", [
+      [ "BalloonParty.Configuration.Balloons.FormationGlowSettings", "classBalloonParty_1_1Configuration_1_1Balloons_1_1FormationGlowSettings.html", null ]
+    ] ],
+    [ "BalloonParty.Balloon.View.IFormationGlowSource", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IFormationGlowSource.html", [
+      [ "BalloonParty.Balloon.Type.UnbreakableFormationLook", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html", null ]
     ] ],
     [ "BalloonParty.Balloon.Model.IFormationMember", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember.html", [
       [ "BalloonParty.Balloon.Model.IWriteableFormationMember", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html", [
@@ -1406,6 +1414,7 @@ var hierarchy =
       [ "BalloonParty.Balloon.View.BalanceGizmos", "classBalloonParty_1_1Balloon_1_1View_1_1BalanceGizmos.html", null ],
       [ "BalloonParty.Balloon.View.BalloonView", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html", null ],
       [ "BalloonParty.Balloon.View.BubbleMergeView", "classBalloonParty_1_1Balloon_1_1View_1_1BubbleMergeView.html", null ],
+      [ "BalloonParty.Balloon.View.FormationGlowView", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html", null ],
       [ "BalloonParty.Balloon.View.GrowingDiscView", "classBalloonParty_1_1Balloon_1_1View_1_1GrowingDiscView.html", null ],
       [ "BalloonParty.Balloon.View.NukeCloudView", "classBalloonParty_1_1Balloon_1_1View_1_1NukeCloudView.html", null ],
       [ "BalloonParty.Balloon.View.PaintDripOverlay", "classBalloonParty_1_1Balloon_1_1View_1_1PaintDripOverlay.html", null ],

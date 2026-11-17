@@ -8,6 +8,7 @@ var interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration
     [ "DiscoWave", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#a6b4963e95e20d56cac41002b5599c3a4", null ],
     [ "Entries", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#aff26d2f5807e3d5ac48c9ba4d3023ef7", null ],
     [ "FlightRebalanceInterval", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#a3bba664bd622094f3112fa2a546fbfa8", null ],
+    [ "FormationGlow", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#adc5a531ca687820ae9ed697db2be6c72", null ],
     [ "MoveSpeedVariation", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#a5cab970fcf1b7bfb1101f43207fb2890", null ],
     [ "NudgeDistance", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#a6d93e879a47729d5da259a6e0168ba01", null ],
     [ "NudgeDuration", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#aae2cfa34e601eb74e48c9805f86d8a9b", null ],

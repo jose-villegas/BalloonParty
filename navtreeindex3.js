@@ -1,5 +1,10 @@
 var NAVTREEINDEX3 =
 {
+"PityRoll_8cs.html":[7,0,7,0,3],
+"PitySettings_8cs.html":[7,0,3,21],
+"PlainCounterDisplay_8cs.html":[7,0,18,17],
+"PlatedBalloonModel_8cs.html":[7,0,1,2,17],
+"PlatedRewardSchedule_8cs.html":[7,0,1,3,10],
 "PlatedRewardTuning_8cs.html":[7,0,1,3,11],
 "PlayerHealthController_8cs.html":[7,0,7,6,5],
 "PlayerNeed_8cs.html":[7,0,7,0,4],
@@ -9,7 +14,7 @@ var NAVTREEINDEX3 =
 "PoolManagerExtensions_8cs.html":[7,0,14,4,13],
 "PoolManager_8cs.html":[7,0,14,9,10],
 "PoolableParticle_8cs.html":[7,0,14,9,8],
-"PopPulse_8cs.html":[7,0,3,0,19],
+"PopPulse_8cs.html":[7,0,3,0,21],
 "PopSheetLoader_8cs.html":[7,0,18,1,1],
 "PredictionSightProbe_8cs.html":[7,0,11,0],
 "PredictionSightSpiral_8cs.html":[7,0,8,28],
@@ -95,7 +100,7 @@ var NAVTREEINDEX3 =
 "RewardBalloonPayout_8cs.html":[7,0,1,3,13],
 "RewardBalloonPop_8cs.html":[7,0,1,3,14],
 "RewardBalloonService_8cs.html":[7,0,1,3,15],
-"RewardBalloonSettings_8cs.html":[7,0,3,0,20],
+"RewardBalloonSettings_8cs.html":[7,0,3,0,22],
 "RibbonClothSettings_8cs.html":[7,0,18,2,4],
 "RibbonCloth_8cs.html":[7,0,18,2,3],
 "RibbonGraphic_8cs.html":[7,0,18,1,2],
@@ -244,10 +249,5 @@ var NAVTREEINDEX3 =
 "SnipeItemHandler_8cs.html":[7,0,8,7,7],
 "SnipeLanceLinePrefab_8cs.html":[7,0,8,7,8],
 "SnipeLanceLineView_8cs.html":[7,0,8,7,10],
-"SnipeLanceLines_8cs.html":[7,0,8,7,9],
-"SnipeLanceStroke_8cs.html":[7,0,8,7,11],
-"SnipeLanceTrace_8cs.html":[7,0,8,7,12],
-"SnipeRangePreview_8cs.html":[7,0,8,5,15],
-"SnipeWhirlwindView_8cs.html":[7,0,17,1],
-"SoapBubbleClusterVariant_8cs.html":[7,0,1,5,8]
+"SnipeLanceLines_8cs.html":[7,0,8,7,9]
 };

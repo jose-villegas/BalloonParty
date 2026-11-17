@@ -1,7 +1,9 @@
 <map id="BalloonParty.Balloon.Type.UnbreakableFormationLook" name="BalloonParty.Balloon.Type.UnbreakableFormationLook">
-<area shape="rect" id="Node000001" title="Turns an unbreakable&#39;s red lights blue while it holds a formation: the core glow sprites,..." alt="" coords="58,98,258,143"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,14,129,42"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="92,50,139,97,133,98,90,55"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonViewBinding.html" title="Implemented by prefab MonoBehaviours that react to model binding; BalloonView discovers and calls the..." alt="" coords="153,5,346,50"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="219,60,181,100,178,96,214,62"/>
+<area shape="rect" id="Node000001" title="Turns an unbreakable&#39;s red lights blue while it holds a formation: the core glow sprites,..." alt="" coords="247,57,447,102"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="40,5,164,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="176,34,255,55,251,57,176,40"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonViewBinding.html" title="Implemented by prefab MonoBehaviours that react to model binding; BalloonView discovers and calls the..." alt="" coords="5,57,199,102"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="214,77,249,79,244,80,214,82"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Balloon_1_1View_1_1IFormationGlowSource.html" title="A balloon that can light the formation glow: an unbreakable&#39;s formation look." alt="" coords="5,126,199,171"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="197,119,263,103,268,101,199,124"/>
 </map>

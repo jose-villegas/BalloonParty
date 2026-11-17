@@ -1,0 +1,5 @@
+<map id="BalloonParty.Configuration.Balloons.FormationGlowSettings" name="BalloonParty.Configuration.Balloons.FormationGlowSettings">
+<area shape="rect" id="Node000001" title=" " alt="" coords="7,98,241,143"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html" title="The blue light ring around unbreakables in formation (Balloon/View/FormationGlowView): a ring round e..." alt="" coords="5,5,243,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="126,64,126,99,122,97,122,68"/>
+</map>
