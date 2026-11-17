@@ -170,10 +170,13 @@ Package Functions</h2></td></tr>
 <tr class="memdesc:a08aefc1544fa87df44e5ab626f965804"><td class="mdescLeft">&#160;</td><td class="mdescRight">Forms the toughs into one body: with no snake, the toughest landed tough starts one where it stands; then every free tough that has landed falls in behind the tail at once, along a line of slots on from it (<a class="el" href="classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeBody.html" title="Where the tough snake&#39;s free toughs fall in: a line of slots on from its tail, away from the body,...">SnakeBody</a>).  <br /></td></tr>
 <tr class="separator:a08aefc1544fa87df44e5ab626f965804"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4763736a6c1ba93d1b50a400de4bbdf" id="r_ad4763736a6c1ba93d1b50a400de4bbdf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad4763736a6c1ba93d1b50a400de4bbdf">StepSnakes</a> (Action&lt; IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Balloon_1_1Formation_1_1SlotMove.html">SlotMove</a> &gt; &gt; relocate, bool afterArranging=false)</td></tr>
-<tr class="memdesc:ad4763736a6c1ba93d1b50a400de4bbdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Every snake steps once: its head into the next open slot (<a class="el" href="classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeWalk.html" title="Where a snake&#39;s head steps next: on along its heading when that slot is open, else the gentlest open ...">SnakeWalk</a>), each member after it into the slot the one ahead just left.  <br /></td></tr>
+<tr class="memdesc:ad4763736a6c1ba93d1b50a400de4bbdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Every unbreakable snake steps once: its head into the next open slot (<a class="el" href="classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeWalk.html" title="Where a snake&#39;s head steps next: on along its heading when that slot is open, else the gentlest open ...">SnakeWalk</a>), each member after it into the slot the one ahead just left.  <br /></td></tr>
 <tr class="separator:ad4763736a6c1ba93d1b50a400de4bbdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5523c9dfb0cb79498c01197a1bcce869" id="r_a5523c9dfb0cb79498c01197a1bcce869"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5523c9dfb0cb79498c01197a1bcce869">StepToughSnake</a> (Action&lt; IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Balloon_1_1Formation_1_1SlotMove.html">SlotMove</a> &gt; &gt; relocate, bool afterArranging=false)</td></tr>
+<tr class="memdesc:a5523c9dfb0cb79498c01197a1bcce869"><td class="mdescLeft">&#160;</td><td class="mdescRight">The tough snake steps once, as <a class="el" href="#ad4763736a6c1ba93d1b50a400de4bbdf" title="Every unbreakable snake steps once: its head into the next open slot (SnakeWalk), each member after i...">StepSnakes</a> steps an unbreakable one, and the toughs that landed meanwhile fall in behind its new tail.  <br /></td></tr>
+<tr class="separator:a5523c9dfb0cb79498c01197a1bcce869"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e2ee719685798aff649f58f620d0f76" id="r_a7e2ee719685798aff649f58f620d0f76"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7e2ee719685798aff649f58f620d0f76">TakeSnakeBeat</a> ()</td></tr>
-<tr class="memdesc:a7e2ee719685798aff649f58f620d0f76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Counts one snake beat; true when a snake on the board is due its step (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#ab87940dbc5b09c3fdfe62c7bd5c7b3cd" title="Balancer pulses between a snake&#39;s steps, so each step lands on the board&#39;s own beat.">IUnbreakableFormationSettings.SnakeStepPulses</a> beats apart).  <br /></td></tr>
+<tr class="memdesc:a7e2ee719685798aff649f58f620d0f76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Counts one snake beat; true when an unbreakable snake on the board is due its step (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#ab87940dbc5b09c3fdfe62c7bd5c7b3cd" title="Balancer pulses between an unbreakable snake&#39;s steps, so each step lands on the board&#39;s own beat.">IUnbreakableFormationSettings.SnakeStepPulses</a> beats apart).  <br /></td></tr>
 <tr class="separator:a7e2ee719685798aff649f58f620d0f76"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa1a357daf1131118f047f8ef9e4f409" id="r_afa1a357daf1131118f047f8ef9e4f409"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa1a357daf1131118f047f8ef9e4f409">ToughsDueToGather</a> ()</td></tr>
 <tr class="memdesc:afa1a357daf1131118f047f8ef9e4f409"><td class="mdescLeft">&#160;</td><td class="mdescRight">True when the toughs can form up: none is still gliding in, and either <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a8a7e96cbdf0a2c82cb071c964262be84" title="Fewest unbreakables on the board that form up.">IUnbreakableFormationSettings.MinMembers</a> toughs are on the board with no snake yet, or a snake walks and a tough has landed free of it.  <br /></td></tr>
@@ -185,12 +188,16 @@ Properties</h2></td></tr>
 <tr class="separator:ad1d2ecf8b149e3f97de52a0586c09fd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7dd46d1a2b4baabf8be65259bf2b8bd2" id="r_a7dd46d1a2b4baabf8be65259bf2b8bd2"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation.html">StandingFormation</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7dd46d1a2b4baabf8be65259bf2b8bd2">Formations</a><code> [get]</code></td></tr>
 <tr class="separator:a7dd46d1a2b4baabf8be65259bf2b8bd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a925a1fa38cb7fe3c0043911a9496ba97" id="r_a925a1fa38cb7fe3c0043911a9496ba97"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a925a1fa38cb7fe3c0043911a9496ba97">HasToughSnake</a><code> [get]</code></td></tr>
+<tr class="separator:a925a1fa38cb7fe3c0043911a9496ba97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a645ca20096e67ab442f383b70189f95b" id="r_a645ca20096e67ab442f383b70189f95b"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html">IWriteableFormationMember</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a645ca20096e67ab442f383b70189f95b">Members</a><code> [get]</code></td></tr>
 <tr class="separator:a645ca20096e67ab442f383b70189f95b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97790f65e0d4a43b8e21a8a28e8ceb31" id="r_a97790f65e0d4a43b8e21a8a28e8ceb31"><td class="memItemLeft" align="right" valign="top">Func&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a97790f65e0d4a43b8e21a8a28e8ceb31">Random01</a> = () =&gt; Random.value<code> [get, set]</code></td></tr>
 <tr class="separator:a97790f65e0d4a43b8e21a8a28e8ceb31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a92670ecfb5b2b4094787d83b3fa35f00" id="r_a92670ecfb5b2b4094787d83b3fa35f00"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a92670ecfb5b2b4094787d83b3fa35f00">ResetOrder</a><code> [get]</code></td></tr>
 <tr class="separator:a92670ecfb5b2b4094787d83b3fa35f00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a965354256b6866657b321eccfb48c976" id="r_a965354256b6866657b321eccfb48c976"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a965354256b6866657b321eccfb48c976">ToughSnakeStepSeconds</a><code> [get]</code></td></tr>
+<tr class="separator:a965354256b6866657b321eccfb48c976"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -1230,8 +1237,40 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Every snake steps once: its head into the next open slot (<a class="el" href="classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeWalk.html" title="Where a snake&#39;s head steps next: on along its heading when that slot is open, else the gentlest open ...">SnakeWalk</a>), each member after it into the slot the one ahead just left. </p>
+<p>Every unbreakable snake steps once: its head into the next open slot (<a class="el" href="classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeWalk.html" title="Where a snake&#39;s head steps next: on along its heading when that slot is open, else the gentlest open ...">SnakeWalk</a>), each member after it into the slot the one ahead just left. </p>
 <p>A snake boxed in turns round and its tail leads. Like <a class="el" href="#a24aeb1ec5cb687e704818222d3a1d569" title="Runs once per wave start, before the roam pre-pass.">ArrangeAtWaveStart</a>, <em>relocate</em>  carries out each step's moves at once. <em>afterArranging</em> : the same balance just arranged at wave start, and a snake formed or re-planned there waits for the next beat rather than stepping off its slots the moment it lands. </p>
+
+</div>
+</div>
+<a id="a5523c9dfb0cb79498c01197a1bcce869" name="a5523c9dfb0cb79498c01197a1bcce869"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5523c9dfb0cb79498c01197a1bcce869">&#9670;&#160;</a></span>StepToughSnake()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Balloon.Formation.UnbreakableFormationService.StepToughSnake </td>
+          <td>(</td>
+          <td class="paramtype">Action&lt; IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Balloon_1_1Formation_1_1SlotMove.html">SlotMove</a> &gt; &gt;</td>          <td class="paramname"><span class="paramname"><em>relocate</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>afterArranging</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The tough snake steps once, as <a class="el" href="#ad4763736a6c1ba93d1b50a400de4bbdf" title="Every unbreakable snake steps once: its head into the next open slot (SnakeWalk), each member after i...">StepSnakes</a> steps an unbreakable one, and the toughs that landed meanwhile fall in behind its new tail. </p>
+<p><em>afterArranging</em> : as for <a class="el" href="#ad4763736a6c1ba93d1b50a400de4bbdf" title="Every unbreakable snake steps once: its head into the next open slot (SnakeWalk), each member after i...">StepSnakes</a>. </p>
 
 </div>
 </div>
@@ -1279,8 +1318,8 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Counts one snake beat; true when a snake on the board is due its step (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#ab87940dbc5b09c3fdfe62c7bd5c7b3cd" title="Balancer pulses between a snake&#39;s steps, so each step lands on the board&#39;s own beat.">IUnbreakableFormationSettings.SnakeStepPulses</a> beats apart). </p>
-<p>With no snake the count starts over, so a new snake takes its first step a full beat after it forms. </p>
+<p>Counts one snake beat; true when an unbreakable snake on the board is due its step (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#ab87940dbc5b09c3fdfe62c7bd5c7b3cd" title="Balancer pulses between an unbreakable snake&#39;s steps, so each step lands on the board&#39;s own beat.">IUnbreakableFormationSettings.SnakeStepPulses</a> beats apart). </p>
+<p>With no snake the count starts over, so a new snake takes its first step a full beat after it forms. The tough snake walks on a clock of its own (<a class="el" href="#a965354256b6866657b321eccfb48c976">ToughSnakeStepSeconds</a>). </p>
 
 </div>
 </div>
@@ -2123,6 +2162,28 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a925a1fa38cb7fe3c0043911a9496ba97" name="a925a1fa38cb7fe3c0043911a9496ba97"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a925a1fa38cb7fe3c0043911a9496ba97">&#9670;&#160;</a></span>HasToughSnake</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Balloon.Formation.UnbreakableFormationService.HasToughSnake</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a645ca20096e67ab442f383b70189f95b" name="a645ca20096e67ab442f383b70189f95b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a645ca20096e67ab442f383b70189f95b">&#9670;&#160;</a></span>Members</h2>
 
@@ -2188,6 +2249,28 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html#a347699f041bd2f73a8326aa24a351d81">BalloonParty.Game.Run.IRunResettable</a>.</p>
+
+</div>
+</div>
+<a id="a965354256b6866657b321eccfb48c976" name="a965354256b6866657b321eccfb48c976"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a965354256b6866657b321eccfb48c976">&#9670;&#160;</a></span>ToughSnakeStepSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Balloon.Formation.UnbreakableFormationService.ToughSnakeStepSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

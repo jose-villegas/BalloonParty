@@ -169,7 +169,7 @@ Properties</h2></td></tr>
 <tr class="memdesc:a81c3c54e098f5754dfc34f1201278e50"><td class="mdescLeft">&#160;</td><td class="mdescRight">Most unbreakables in a snake, the line that walks the board.  <br /></td></tr>
 <tr class="separator:a81c3c54e098f5754dfc34f1201278e50"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeac828bffe74a0739ca98c9f8e84be6c" id="r_aeac828bffe74a0739ca98c9f8e84be6c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeac828bffe74a0739ca98c9f8e84be6c">SnakeStepPulses</a><code> [get]</code></td></tr>
-<tr class="memdesc:aeac828bffe74a0739ca98c9f8e84be6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Balancer pulses between a snake's steps, so each step lands on the board's own beat.  <br /></td></tr>
+<tr class="memdesc:aeac828bffe74a0739ca98c9f8e84be6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Balancer pulses between an unbreakable snake's steps, so each step lands on the board's own beat.  <br /></td></tr>
 <tr class="separator:aeac828bffe74a0739ca98c9f8e84be6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a186aa4137e2010dd61e369cd2746228e" id="r_a186aa4137e2010dd61e369cd2746228e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a186aa4137e2010dd61e369cd2746228e">SnakeWeight</a><code> [get]</code></td></tr>
 <tr class="memdesc:a186aa4137e2010dd61e369cd2746228e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pick weight of a snake.  <br /></td></tr>
@@ -183,6 +183,9 @@ Properties</h2></td></tr>
 <tr class="memitem:ad90394008eac39f7d303295f5de7a6bd" id="r_ad90394008eac39f7d303295f5de7a6bd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad90394008eac39f7d303295f5de7a6bd">ToughSnakes</a><code> [get]</code></td></tr>
 <tr class="memdesc:ad90394008eac39f7d303295f5de7a6bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">The board's toughs walk as one snake of their own, ordered head to tail by hits left, through the balloons in its way.  <br /></td></tr>
 <tr class="separator:ad90394008eac39f7d303295f5de7a6bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6095b8f0869b5c9c3898c1d42cfd347d" id="r_a6095b8f0869b5c9c3898c1d42cfd347d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6095b8f0869b5c9c3898c1d42cfd347d">ToughSnakeStepSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:a6095b8f0869b5c9c3898c1d42cfd347d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds of play between the tough snake's steps, on a clock of its own.  <br /></td></tr>
+<tr class="separator:a6095b8f0869b5c9c3898c1d42cfd347d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -222,6 +225,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ac7344a28bdd942d3472fbeb79033e65e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa3e32d684e6d9e90175c0bab38ff235" id="r_aaa3e32d684e6d9e90175c0bab38ff235"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaa3e32d684e6d9e90175c0bab38ff235">_toughSnakes</a> = true</td></tr>
 <tr class="separator:aaa3e32d684e6d9e90175c0bab38ff235"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c490e5a0cc32db04ece1c2b753d479c" id="r_a0c490e5a0cc32db04ece1c2b753d479c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0c490e5a0cc32db04ece1c2b753d479c">_toughSnakeStepSeconds</a> = 1.5f</td></tr>
+<tr class="separator:a0c490e5a0cc32db04ece1c2b753d479c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a88838cb7d01d1dbde6216d9758885fec" name="a88838cb7d01d1dbde6216d9758885fec"></a>
@@ -620,6 +625,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a0c490e5a0cc32db04ece1c2b753d479c" name="a0c490e5a0cc32db04ece1c2b753d479c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c490e5a0cc32db04ece1c2b753d479c">&#9670;&#160;</a></span>_toughSnakeStepSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.UnbreakableFormationSettings._toughSnakeStepSeconds = 1.5f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Property Documentation</h2>
 <a id="ab5c0ad5596ec2193680a896854ae5369" name="ab5c0ad5596ec2193680a896854ae5369"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab5c0ad5596ec2193680a896854ae5369">&#9670;&#160;</a></span>BottomClearance</h2>
@@ -975,7 +1002,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Balancer pulses between a snake's steps, so each step lands on the board's own beat. </p>
+<p>Balancer pulses between an unbreakable snake's steps, so each step lands on the board's own beat. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#ab87940dbc5b09c3fdfe62c7bd5c7b3cd">BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings</a>.</p>
 
@@ -1083,6 +1110,32 @@ Private Attributes</h2></td></tr>
 <p><a class="el" href="#a06177224e85e0e05d3922e61f7313cce" title="Fewest unbreakables on the board that form up.">MinMembers</a> toughs on the board start it from the toughest, with every other landed tough lined up behind it at once; a tough that lands later joins at its tail. Only while <a class="el" href="#a7909bcc38346b71d0414ae7d06ce131a">Enabled</a>. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a11b522ef2c041a3e16995984ded83d73">BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings</a>.</p>
+
+</div>
+</div>
+<a id="a6095b8f0869b5c9c3898c1d42cfd347d" name="a6095b8f0869b5c9c3898c1d42cfd347d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6095b8f0869b5c9c3898c1d42cfd347d">&#9670;&#160;</a></span>ToughSnakeStepSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.UnbreakableFormationSettings.ToughSnakeStepSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds of play between the tough snake's steps, on a clock of its own. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a72a958f42f4d9e945064f71fa55525b9">BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings</a>.</p>
 
 </div>
 </div>

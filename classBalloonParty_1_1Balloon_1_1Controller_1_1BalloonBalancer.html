@@ -210,6 +210,10 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a6bb43d593342b493fe03b116aff3ca02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae46d6363e746207ecc98620a7ddeb989" id="r_ae46d6363e746207ecc98620a7ddeb989"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae46d6363e746207ecc98620a7ddeb989">StartBalanceMove</a> (<a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableDynamicSlotActor.html">IWriteableDynamicSlotActor</a> actor, List&lt; Vector3 &gt; path, <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html">ISlotActorView</a> view)</td></tr>
 <tr class="separator:ae46d6363e746207ecc98620a7ddeb989"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a907783e89ab84b00da60a11538930907" id="r_a907783e89ab84b00da60a11538930907"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a907783e89ab84b00da60a11538930907">TickSnakeBeat</a> (float deltaTime, float interval)</td></tr>
+<tr class="separator:a907783e89ab84b00da60a11538930907"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79664c81eb51b8a9ece296d6aee967f3" id="r_a79664c81eb51b8a9ece296d6aee967f3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a79664c81eb51b8a9ece296d6aee967f3">TickToughSnake</a> (float deltaTime)</td></tr>
+<tr class="separator:a79664c81eb51b8a9ece296d6aee967f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b84d6c31bc0e2c3434c1aac7ebaa3a6" id="r_a4b84d6c31bc0e2c3434c1aac7ebaa3a6"><td class="memItemLeft" align="right" valign="top">Vector3[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4b84d6c31bc0e2c3434c1aac7ebaa3a6">WaypointBuffer</a> (Vector3 currentPosition, IReadOnlyList&lt; Vector3 &gt; path)</td></tr>
 <tr class="separator:a4b84d6c31bc0e2c3434c1aac7ebaa3a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -276,6 +280,10 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ab59ef08e9040c718a85d96cbfc7100aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5fa767225272f884a819bc1a21bb4676" id="r_a5fa767225272f884a819bc1a21bb4676"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5fa767225272f884a819bc1a21bb4676">_toughGatherDue</a></td></tr>
 <tr class="separator:a5fa767225272f884a819bc1a21bb4676"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b4fc70069c848940a7e73d0d07ae43a" id="r_a0b4fc70069c848940a7e73d0d07ae43a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0b4fc70069c848940a7e73d0d07ae43a">_toughStepDue</a></td></tr>
+<tr class="separator:a0b4fc70069c848940a7e73d0d07ae43a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c16c60cb7f65a7e2e71ac04c5104b10" id="r_a7c16c60cb7f65a7e2e71ac04c5104b10"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7c16c60cb7f65a7e2e71ac04c5104b10">_toughStepElapsed</a></td></tr>
+<tr class="separator:a7c16c60cb7f65a7e2e71ac04c5104b10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed7b43dbc80744a8e0fc76e0a67486ce" id="r_aed7b43dbc80744a8e0fc76e0a67486ce"><td class="memItemLeft" align="right" valign="top">readonly Dictionary&lt; <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableDynamicSlotActor.html">IWriteableDynamicSlotActor</a>, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aed7b43dbc80744a8e0fc76e0a67486ce">_turnSteps</a> = new()</td></tr>
 <tr class="separator:aed7b43dbc80744a8e0fc76e0a67486ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7130d9f5c300efd2d677c372070f6234" id="r_a7130d9f5c300efd2d677c372070f6234"><td class="memItemLeft" align="right" valign="top">readonly Dictionary&lt; int, Vector3[]&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7130d9f5c300efd2d677c372070f6234">_waypointBuffers</a> = new()</td></tr>
@@ -911,6 +919,60 @@ Static Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a907783e89ab84b00da60a11538930907" name="a907783e89ab84b00da60a11538930907"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a907783e89ab84b00da60a11538930907">&#9670;&#160;</a></span>TickSnakeBeat()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Balloon.Controller.BalloonBalancer.TickSnakeBeat </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>deltaTime</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>interval</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a79664c81eb51b8a9ece296d6aee967f3" name="a79664c81eb51b8a9ece296d6aee967f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79664c81eb51b8a9ece296d6aee967f3">&#9670;&#160;</a></span>TickToughSnake()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Balloon.Controller.BalloonBalancer.TickToughSnake </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>deltaTime</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1577,6 +1639,50 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">bool BalloonParty.Balloon.Controller.BalloonBalancer._toughGatherDue</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0b4fc70069c848940a7e73d0d07ae43a" name="a0b4fc70069c848940a7e73d0d07ae43a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b4fc70069c848940a7e73d0d07ae43a">&#9670;&#160;</a></span>_toughStepDue</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Balloon.Controller.BalloonBalancer._toughStepDue</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7c16c60cb7f65a7e2e71ac04c5104b10" name="a7c16c60cb7f65a7e2e71ac04c5104b10"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c16c60cb7f65a7e2e71ac04c5104b10">&#9670;&#160;</a></span>_toughStepElapsed</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Balloon.Controller.BalloonBalancer._toughStepElapsed</td>
         </tr>
       </table>
   </td>

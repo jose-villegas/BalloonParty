@@ -35,6 +35,7 @@ var classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService =
     [ "StartHeading", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#aafc38b4cd0f994e6a0d9065245896281", null ],
     [ "StartToughSnake", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#af9f0cbec1a92172d4ec862f161d36d52", null ],
     [ "StepSnakes", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#ad4763736a6c1ba93d1b50a400de4bbdf", null ],
+    [ "StepToughSnake", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a5523c9dfb0cb79498c01197a1bcce869", null ],
     [ "TakeReinforcementCalls", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a4a560fce8570f772be1eeb81a5a49429", null ],
     [ "TakeSnakeBeat", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a7e2ee719685798aff649f58f620d0f76", null ],
     [ "TakeSpareFormation", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#adec67682bbe2ca148869e47c856486a9", null ],
@@ -73,7 +74,9 @@ var classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService =
     [ "Shapes", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#ae86e923654d0238d880864fe9dcd11e1", null ],
     [ "CurrentShape", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#ad1d2ecf8b149e3f97de52a0586c09fd5", null ],
     [ "Formations", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a7dd46d1a2b4baabf8be65259bf2b8bd2", null ],
+    [ "HasToughSnake", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a925a1fa38cb7fe3c0043911a9496ba97", null ],
     [ "Members", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a645ca20096e67ab442f383b70189f95b", null ],
     [ "Random01", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a97790f65e0d4a43b8e21a8a28e8ceb31", null ],
-    [ "ResetOrder", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a92670ecfb5b2b4094787d83b3fa35f00", null ]
+    [ "ResetOrder", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a92670ecfb5b2b4094787d83b3fa35f00", null ],
+    [ "ToughSnakeStepSeconds", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a965354256b6866657b321eccfb48c976", null ]
 ];
