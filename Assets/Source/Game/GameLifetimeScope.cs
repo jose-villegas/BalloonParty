@@ -1,3 +1,4 @@
+using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Item.Preview;
 using BalloonParty.Item.Snipe;
@@ -116,6 +117,9 @@ namespace BalloonParty.Game
             builder.RegisterComponentOnNewGameObject<ScenarioGradeView>(Lifetime.Singleton, "ScenarioGrade")
                 .UnderTransform(transform);
             builder.RegisterBuildCallback(resolver => resolver.Resolve<ScenarioGradeView>());
+            builder.RegisterComponentOnNewGameObject<ToughSnakeSpringView>(Lifetime.Singleton, "ToughSnakeSprings")
+                .UnderTransform(transform);
+            builder.RegisterBuildCallback(resolver => resolver.Resolve<ToughSnakeSpringView>());
         }
 
         // Kept here (not GameScopeRegistration) because it needs this component's serialized fields.

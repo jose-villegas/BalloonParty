@@ -82,6 +82,9 @@ namespace BalloonParty.Configuration.Balloons
         [Header("Unbreakable Formations")]
         [SerializeField] private UnbreakableFormationSettings _unbreakableFormation = new();
 
+        [Header("Tough Snake Springs")]
+        [SerializeField] private ToughSnakeSpringSettings _toughSnakeSprings = new();
+
         [Header("Reward Balloons")]
         [SerializeField] private RewardBalloonSettings _rewardBalloons = new();
 
@@ -118,6 +121,7 @@ namespace BalloonParty.Configuration.Balloons
         public int BubbleMergeMax => _bubbleMergeMax;
         public IBubbleMergeCueSettings BubbleMergeCue => _bubbleMergeCue;
         public IUnbreakableFormationSettings UnbreakableFormation => _unbreakableFormation;
+        public IToughSnakeSpringSettings ToughSnakeSprings => _toughSnakeSprings;
         public IRewardBalloonSettings RewardBalloons => _rewardBalloons;
         public IDiscoWaveSettings DiscoWave => _discoWave;
         public INukeOddsSettings NukeOdds => _nukeOdds;

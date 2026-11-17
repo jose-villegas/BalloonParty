@@ -39,6 +39,11 @@ namespace BalloonParty.Cheats
         /// schedule; read by <c>RunSeed.ResetRun</c>.</summary>
         public static bool KeepRunSeed;
 
+        /// <summary>Flips the tough snake's springs (<c>IToughSnakeSpringSettings.Enabled</c>) from what the
+        /// config says, to compare with and without them in play. Toggled by <see cref="ToughSnakeSpringsCheat" />;
+        /// read by <c>ToughSnakeSpringView</c>.</summary>
+        public static bool FlipToughSnakeSprings;
+
         /// <summary>One-shot: when not 0, the next run reset takes this seed instead of rolling one, then clears
         /// this, so a staged scene deals the same board every time. Set by the scene stage
         /// (<c>Editor/Staging</c>); read by <c>RunSeed.ResetRun</c>.</summary>

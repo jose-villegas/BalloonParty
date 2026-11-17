@@ -266,7 +266,7 @@ namespace BalloonParty.Game
             // Nothing depends on the view: it only listens, so build it with the scope.
             builder.RegisterBuildCallback(resolver => resolver.Resolve<BubbleMergeView>());
             builder.RegisterEntryPoint<UnbreakableFormationService>().AsSelf().As<IRunResettable>()
-                .As<IFormationReinforcements>();
+                .As<IFormationReinforcements>().As<IToughSnakeBody>();
             builder.RegisterEntryPoint<NukeOdds>().As<INukeOdds>().As<IRunResettable>();
             builder.RegisterEntryPoint<RewardBalloonService>().As<IRewardBalloonRequests>().As<IRunResettable>();
             builder.RegisterEntryPoint<RewardBalloonPayout>();
@@ -514,6 +514,7 @@ namespace BalloonParty.Game
             builder.Register<NearLevelUpCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<AwardScorePopCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<BlockLevelUpCheat>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<ToughSnakeSpringsCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<ForceGameOverCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<ForceRestartCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<FireBestShotCheat>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();

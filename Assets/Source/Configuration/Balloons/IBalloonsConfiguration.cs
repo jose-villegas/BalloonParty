@@ -59,6 +59,8 @@ namespace BalloonParty.Configuration.Balloons
 
         IUnbreakableFormationSettings UnbreakableFormation { get; }
 
+        IToughSnakeSpringSettings ToughSnakeSprings { get; }
+
         IRewardBalloonSettings RewardBalloons { get; }
 
         IDiscoWaveSettings DiscoWave { get; }

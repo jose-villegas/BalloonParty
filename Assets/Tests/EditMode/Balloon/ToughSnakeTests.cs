@@ -517,6 +517,24 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void TheBody_ListsTheToughSnake_HeadFirst_AndNothingOnceItsGone()
+        {
+            IToughSnakeBody body = _service;
+            Assert.AreEqual(0, body.ToughSnakeMembers.Count);
+
+            var snake = GrowSnake(3, 2, 1);
+
+            CollectionAssert.AreEqual(snake.Members, body.ToughSnakeMembers);
+
+            foreach (var member in snake.Members.ToList())
+            {
+                _grid.Remove(member.SlotIndex.Value);
+            }
+
+            Assert.AreEqual(0, body.ToughSnakeMembers.Count);
+        }
+
+        [Test]
         public void TheSnake_WalksOnAClockOfItsOwn_NotTheUnbreakablesBeat()
         {
             _settings.ToughSnakeStepSeconds.Returns(1.5f);

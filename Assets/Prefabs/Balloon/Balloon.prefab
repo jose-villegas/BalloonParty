@@ -594,6 +594,7 @@ MonoBehaviour:
   - {fileID: 6020316169838688404}
   _swayPivot: {fileID: 8217776062739370819}
   _sightProbe: {fileID: 6372032985936684347}
+  _knot: {fileID: 5015188092537337491}
   _baseSortingLayer: 50
 --- !u!114 &-4720687053981353126
 MonoBehaviour:

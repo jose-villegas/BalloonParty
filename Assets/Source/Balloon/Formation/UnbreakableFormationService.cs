@@ -28,7 +28,7 @@ namespace BalloonParty.Balloon.Formation
     ///     its last member pops.
     /// </summary>
     internal sealed class UnbreakableFormationService : IStartable, IRunResettable, IDisposable,
-        IFormationReinforcements
+        IFormationReinforcements, IToughSnakeBody
     {
         private static readonly FormationShape[] Shapes =
         {
@@ -101,6 +101,9 @@ namespace BalloonParty.Balloon.Formation
         // The tough snake's head has landed: a snake formed from toughs still rising takes no step until it has.
         internal bool ToughSnakeLanded => ToughSnake() is { MemberList: { Count: > 0 } members } && members[0].IsStable.Value;
         internal bool HasUnbreakableSnake => HasSnake();
+
+        public IReadOnlyList<ISlotActor> ToughSnakeMembers =>
+            ToughSnake() is { } snake ? snake.MemberList : Array.Empty<ISlotActor>();
 
         // The unbreakables' beat and the tough snake's step interval (IUnbreakableFormationSettings); the balancer
         // keeps the clocks.

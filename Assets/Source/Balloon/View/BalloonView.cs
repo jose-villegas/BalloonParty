@@ -60,6 +60,9 @@ namespace BalloonParty.Balloon.View
                  "read it instead of each re-tracing.")]
         [SerializeField] private PredictionSightProbe _sightProbe;
 
+        [Tooltip("The knot under the body: where the tough snake's springs tie on. Only toughs show it.")]
+        [SerializeField] private SpriteRenderer _knot;
+
         [Header("Sorting")] [SerializeField] private int _baseSortingLayer;
 
         [Inject] private IBalloonsConfiguration _balloonsConfig;
@@ -108,6 +111,7 @@ namespace BalloonParty.Balloon.View
         }
 
         internal ITransformCapture TransformCapture => _itemService?.TransformCapture;
+        internal SpriteRenderer Knot => _knot;
 
         // The same component TransformCapture exposes, narrowed to its non-destructive read-only face —
         // the aim telegraph must be able to read a Laser's angle without CaptureSnapshot stopping its spin.

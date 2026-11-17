@@ -30,6 +30,7 @@ biggest group, every other tough falls in behind its tail, and it walks through 
 | `StandingFormation` | One standing formation: its members, its shape, the waves it has left to hold, whether a member was pierced since it formed, and whether it is a tough snake (`Armoured`) |
 | `UnbreakableFormationService` | The controller. It decides when each formation forms, holds, changes and breaks up, marks members as in formation, rolls for reinforcements, and keeps the toughs' snake: starts it, takes each free tough in at its tail, and walks it through the board |
 | `IFormationReinforcements` | The reinforcements the formations have called in. `BalloonSpawner` takes them at each wave's first line |
+| `IToughSnakeBody` | The tough snake's members, head first, for the view that draws its springs (`Balloon/View/ToughSnakeSpringView`) |
 
 ## The clock
 
@@ -170,8 +171,14 @@ Toughs never join an unbreakable formation, and unbreakables never join theirs.
 - **No wall from toughs.** A tough gives way to enough hits, so it never counts toward the wall across the
   board (`ShotWall.Walls`), and the tough snake's step skips that check.
 
-Members are anchored (`IBalanceAnchor`) while in their snake, exactly as unbreakables are. A tough snake
-has no look of its own: its members look like any tough.
+Members are anchored (`IBalanceAnchor`) while in their snake, exactly as unbreakables are. Its members
+look like any tough. As a trial (`IBalloonsConfiguration.ToughSnakeSprings`, on; the Tough Snake Springs
+cheat flips it in play), a spring joins each pair of neighbours in the snake, tied to their knots
+(`Balloon/View/ToughSnakeSpringView`). Each is a line of points joined by springs between the two knots, the
+way the launch screen's spring line is simulated (`Shared/Math/SpringChain`): a little longer than the gap
+between neighbouring slots, so it sags while the pair stands side by side, stretches as the one ahead steps
+away and swings as the one behind catches up. A spring lasts as long as the same pair stands next to each
+other; a pop or a joiner ties a new one.
 
 ## Reinforcements
 
