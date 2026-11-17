@@ -1,7 +1,5 @@
 #if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
 using BalloonParty.Cheats;
-#endif
-#if UNITY_ENABLE_CHECKS
 using BalloonParty.Cheats.Autoplay;
 #endif
 
@@ -547,15 +545,12 @@ namespace BalloonParty.Game
             builder.RegisterComponentOnNewGameObject<CheatConsoleView>(Lifetime.Singleton, "CheatConsole");
             builder.RegisterBuildCallback(resolver => resolver.Resolve<CheatConsoleView>());
 
-#if UNITY_ENABLE_CHECKS
             RegisterAutoplay(builder);
-#endif
         }
-#endif
 
-#if UNITY_ENABLE_CHECKS
-        // Only for a launch that asks for it (Tools/playtest/device_bot.py); a normal launch registers nothing.
-        // Checked builds only, not release-with-cheats: the report reads the telemetry log, which they don't write.
+        // Only for a launch that asks for it (Tools/playtest/device_bot.py, Tools/perf/device_perf.py); a normal
+        // launch registers nothing. A release build with cheats plays itself too, for performance runs on the
+        // code that ships; only a checked build writes the telemetry log the playtest report reads.
         private static void RegisterAutoplay(IContainerBuilder builder)
         {
             var spec = AutoplayLaunchArgument.Read();

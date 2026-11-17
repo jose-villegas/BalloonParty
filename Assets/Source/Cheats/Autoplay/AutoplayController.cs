@@ -1,4 +1,4 @@
-#if UNITY_ENABLE_CHECKS
+#if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
 using System;
 using BalloonParty.Balloon.Spawner;
 using BalloonParty.Game;

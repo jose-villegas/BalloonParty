@@ -1,4 +1,4 @@
-#if UNITY_ENABLE_CHECKS
+#if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
 using System;
 using System.Globalization;
 using System.IO;

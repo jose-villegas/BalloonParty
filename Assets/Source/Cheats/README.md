@@ -25,8 +25,10 @@ Registration in `GameLifetimeScope` and the `CheatState` checks sprinkled throug
 ## Autoplay (device playtests)
 
 `Autoplay/` lets a checked build play itself, so `Tools/playtest/device_bot.py` can run playtest-bot sessions on
-emulators or phones while the Editor does something else. It compiles only under `UNITY_ENABLE_CHECKS` (not
-`CHEATS_IN_RELEASE`): its report reads the telemetry log, which only checked builds write.
+emulators or phones while the Editor does something else. It compiles wherever the cheats do. The playtest
+report needs a checked build, since it reads the telemetry log only those write; a release build with
+cheats (`CHEATS_IN_RELEASE`) plays itself too, for `Tools/perf/device_perf.py`, which measures the code that
+ships.
 
 - `AutoplayLaunchArgument` reads the spec the app was launched with: the intent's `autoplay` extra on
   Android (`adb shell am start -n <package>/<activity> -e autoplay 'player=human seconds=420'`), the argument
