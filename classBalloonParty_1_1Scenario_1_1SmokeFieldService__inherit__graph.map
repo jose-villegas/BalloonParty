@@ -1,11 +1,11 @@
 <map id="BalloonParty.Scenario.SmokeFieldService" name="BalloonParty.Scenario.SmokeFieldService">
-<area shape="rect" id="Node000001" title="Owns the smoke field: a persistent screen&#45;space RT that accumulates palette&#45;colored stamps and decays..." alt="" coords="104,98,314,143"/>
+<area shape="rect" id="Node000001" title="Owns the smoke field: a persistent screen&#45;space RT that accumulates palette&#45;colored stamps and decays..." alt="" coords="118,98,327,143"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="5,14,90,42"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="85,47,173,96,168,99,84,52"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="87,46,182,96,178,99,86,52"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="113,14,192,42"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="170,52,198,98,193,97,168,57"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="216,14,314,42"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="251,53,224,99,220,95,247,56"/>
-<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1Cadence_1_1ICadencedEffect.html" title="Implemented by field services that perform periodic RT blits on a cadence timer." alt="" coords="338,5,552,50"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="377,55,266,100,264,95,372,56"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="173,51,208,98,203,97,171,56"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="216,14,367,42"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="275,53,240,100,237,95,270,55"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1Cadence_1_1ICadencedEffect.html" title="Implemented by field services that perform periodic RT blits on a cadence timer." alt="" coords="391,5,605,50"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="421,55,289,100,287,95,415,56"/>
 </map>

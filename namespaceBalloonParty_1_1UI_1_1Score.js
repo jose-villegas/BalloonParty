@@ -8,6 +8,8 @@ var namespaceBalloonParty_1_1UI_1_1Score =
     [ "ProgressNoticePresenter", "classBalloonParty_1_1UI_1_1Score_1_1ProgressNoticePresenter.html", "classBalloonParty_1_1UI_1_1Score_1_1ProgressNoticePresenter" ],
     [ "ScoreCounterLabel", "classBalloonParty_1_1UI_1_1Score_1_1ScoreCounterLabel.html", "classBalloonParty_1_1UI_1_1Score_1_1ScoreCounterLabel" ],
     [ "ScoreUILifetimeScope", "classBalloonParty_1_1UI_1_1Score_1_1ScoreUILifetimeScope.html", "classBalloonParty_1_1UI_1_1Score_1_1ScoreUILifetimeScope" ],
+    [ "ShapeInkFrame", "structBalloonParty_1_1UI_1_1Score_1_1ShapeInkFrame.html", "structBalloonParty_1_1UI_1_1Score_1_1ShapeInkFrame" ],
+    [ "ShapeInkView", "classBalloonParty_1_1UI_1_1Score_1_1ShapeInkView.html", "classBalloonParty_1_1UI_1_1Score_1_1ShapeInkView" ],
     [ "TrailMotion", "namespaceBalloonParty_1_1UI_1_1Score.html#a86f03547512dfa6ce827879a999ee3db", [
       [ "Default", "namespaceBalloonParty_1_1UI_1_1Score.html#a86f03547512dfa6ce827879a999ee3dba7a1920d61156abc05a60135aefe8bc67", null ],
       [ "Return", "namespaceBalloonParty_1_1UI_1_1Score.html#a86f03547512dfa6ce827879a999ee3dba988fd738de9c6d177440c5dcf69e73ce", null ],

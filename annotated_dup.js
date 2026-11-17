@@ -394,6 +394,7 @@ var annotated_dup =
         [ "RunConfig", "classBalloonParty_1_1Configuration_1_1RunConfig.html", "classBalloonParty_1_1Configuration_1_1RunConfig" ],
         [ "ScoreTrailBehaviourConfiguration", "classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html", "classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration" ],
         [ "ScoreTrailBehaviourEntry", "structBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourEntry.html", "structBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourEntry" ],
+        [ "ShapeInkSettings", "structBalloonParty_1_1Configuration_1_1ShapeInkSettings.html", "structBalloonParty_1_1Configuration_1_1ShapeInkSettings" ],
         [ "ShieldChainSettings", "classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html", "classBalloonParty_1_1Configuration_1_1ShieldChainSettings" ],
         [ "SlotGridConfig", "classBalloonParty_1_1Configuration_1_1SlotGridConfig.html", "classBalloonParty_1_1Configuration_1_1SlotGridConfig" ],
         [ "ThermalGovernorSettings", "classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings.html", "classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings" ],
@@ -649,7 +650,10 @@ var annotated_dup =
             [ "ScoreTrailBehaviourResolver", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailBehaviourResolver.html", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailBehaviourResolver" ],
             [ "ScoreTrailContext", "structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailContext.html", "structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailContext" ],
             [ "ShapeCatalog", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog.html", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog" ],
-            [ "ShapeFormationTicker", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker" ]
+            [ "ShapeFormationTicker", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker" ],
+            [ "ShapeInkMeshBuilder", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkMeshBuilder.html", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkMeshBuilder" ],
+            [ "ShapeInkPool", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkPool.html", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkPool" ],
+            [ "ShapeInkRamp", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkRamp.html", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkRamp" ]
           ] ],
           [ "ColorStreak", "classBalloonParty_1_1Game_1_1Score_1_1ColorStreak.html", "classBalloonParty_1_1Game_1_1Score_1_1ColorStreak" ],
           [ "ColorStreakTracker", "classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html", "classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker" ],
@@ -1333,7 +1337,9 @@ var annotated_dup =
           [ "ProgressNotice", "classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice.html", "classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice" ],
           [ "ProgressNoticePresenter", "classBalloonParty_1_1UI_1_1Score_1_1ProgressNoticePresenter.html", "classBalloonParty_1_1UI_1_1Score_1_1ProgressNoticePresenter" ],
           [ "ScoreCounterLabel", "classBalloonParty_1_1UI_1_1Score_1_1ScoreCounterLabel.html", "classBalloonParty_1_1UI_1_1Score_1_1ScoreCounterLabel" ],
-          [ "ScoreUILifetimeScope", "classBalloonParty_1_1UI_1_1Score_1_1ScoreUILifetimeScope.html", "classBalloonParty_1_1UI_1_1Score_1_1ScoreUILifetimeScope" ]
+          [ "ScoreUILifetimeScope", "classBalloonParty_1_1UI_1_1Score_1_1ScoreUILifetimeScope.html", "classBalloonParty_1_1UI_1_1Score_1_1ScoreUILifetimeScope" ],
+          [ "ShapeInkFrame", "structBalloonParty_1_1UI_1_1Score_1_1ShapeInkFrame.html", "structBalloonParty_1_1UI_1_1Score_1_1ShapeInkFrame" ],
+          [ "ShapeInkView", "classBalloonParty_1_1UI_1_1Score_1_1ShapeInkView.html", "classBalloonParty_1_1UI_1_1Score_1_1ShapeInkView" ]
         ] ],
         [ "Shields", "namespaceBalloonParty_1_1UI_1_1Shields.html", [
           [ "ShieldCounterAnimation", "classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterAnimation.html", "classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterAnimation" ],

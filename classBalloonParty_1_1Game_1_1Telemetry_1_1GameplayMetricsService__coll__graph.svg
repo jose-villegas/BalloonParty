@@ -87,8 +87,8 @@ var sectionId = 'dynsection-1';
 <g id="Node000003" class="node">
 <title>Node3</title>
 <g id="a_Node000003"><a xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="672,-739.12 599,-739.12 599,-718.38 672,-718.38 672,-739.12"/>
-<text xml:space="preserve" text-anchor="middle" x="635.5" y="-725.62" font-family="Helvetica,sans-Serif" font-size="10.00">IDisposable</text>
+<polygon fill="white" stroke="#666666" points="691.88,-739.12 579.12,-739.12 579.12,-718.38 691.88,-718.38 691.88,-739.12"/>
+<text xml:space="preserve" text-anchor="middle" x="635.5" y="-725.62" font-family="Helvetica,sans-Serif" font-size="10.00">System.IDisposable</text>
 </a>
 </g>
 </g>
@@ -96,8 +96,8 @@ var sectionId = 'dynsection-1';
 <g id="edge2_Node000001_Node000003" class="edge">
 <title>Node3&#45;&gt;Node1</title>
 <g id="a_edge2_Node000001_Node000003"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M683.85,-728.82C773.89,-728.04 965.43,-721.71 1016.75,-682.75 1089.52,-627.52 1108.47,-508.36 1113.1,-463.92"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="683.84,-725.32 673.87,-728.89 683.89,-732.32 683.84,-725.32"/>
+<path fill="none" stroke="#63b8ff" d="M703.49,-728.58C799.22,-727.03 968.91,-719.06 1016.75,-682.75 1089.52,-627.52 1108.47,-508.36 1113.1,-463.92"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="703.66,-725.08 693.71,-728.72 703.76,-732.08 703.66,-725.08"/>
 </a>
 </g>
 </g>
@@ -115,8 +115,8 @@ var sectionId = 'dynsection-1';
 <g id="edge6_Node000006_Node000003" class="edge">
 <title>Node3&#45;&gt;Node6</title>
 <g id="a_edge6_Node000006_Node000003"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M683.32,-735.41C704.31,-738.39 729.65,-742 753.49,-745.39"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="684.04,-731.98 673.65,-734.03 683.06,-738.91 684.04,-731.98"/>
+<path fill="none" stroke="#63b8ff" d="M703.06,-738.22C719.19,-740.51 736.59,-742.99 753.27,-745.36"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="704.02,-734.82 693.63,-736.87 703.03,-741.75 704.02,-734.82"/>
 </a>
 </g>
 </g>

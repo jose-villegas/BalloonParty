@@ -6,7 +6,7 @@
 <!-- Title: BalloonParty.Slots.Actor.SpeckField Pages: 1 -->
 <svg width="975pt" height="471pt"
  viewBox="0.00 0.00 975.00 471.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 466.66)">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 466.51)">
 <title>BalloonParty.Slots.Actor.SpeckField</title>
 <!-- Node1 -->
 <g id="Node000001" class="node">
@@ -80,8 +80,8 @@
 <g id="Node000005" class="node">
 <title>Node5</title>
 <g id="a_Node000005"><a xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="384.88,-459.12 311.88,-459.12 311.88,-438.38 384.88,-438.38 384.88,-459.12"/>
-<text xml:space="preserve" text-anchor="middle" x="348.38" y="-445.62" font-family="Helvetica,sans-Serif" font-size="10.00">IDisposable</text>
+<polygon fill="white" stroke="#666666" points="404.75,-459.12 292,-459.12 292,-438.38 404.75,-438.38 404.75,-459.12"/>
+<text xml:space="preserve" text-anchor="middle" x="348.38" y="-445.62" font-family="Helvetica,sans-Serif" font-size="10.00">System.IDisposable</text>
 </a>
 </g>
 </g>
@@ -89,8 +89,8 @@
 <g id="edge4_Node000004_Node000005" class="edge">
 <title>Node5&#45;&gt;Node4</title>
 <g id="a_edge4_Node000004_Node000005"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M396.41,-459.12C436.68,-465.06 493.73,-466.05 530,-434.75 557.26,-411.22 523.37,-382.02 548,-355.75 553.97,-349.38 561.42,-344.55 569.44,-340.89"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="397.2,-455.71 386.76,-457.54 396.07,-462.61 397.2,-455.71"/>
+<path fill="none" stroke="#63b8ff" d="M411,-460.94C449.6,-464.86 497.93,-462.43 530,-434.75 557.26,-411.22 523.37,-382.02 548,-355.75 553.97,-349.38 561.42,-344.55 569.44,-340.89"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="411.72,-457.51 401.38,-459.8 410.9,-464.46 411.72,-457.51"/>
 </a>
 </g>
 </g>
@@ -108,8 +108,8 @@
 <g id="edge8_Node000006_Node000005" class="edge">
 <title>Node5&#45;&gt;Node6</title>
 <g id="a_edge8_Node000006_Node000005"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M395.99,-440.62C409.45,-437.61 424.01,-433.68 437,-428.75 481.07,-412.01 501.33,-415.17 530,-377.75 550.59,-350.88 524.67,-328.27 548,-303.75 551.17,-300.42 554.75,-297.5 558.6,-294.96"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="395.54,-437.14 386.48,-442.63 396.99,-443.99 395.54,-437.14"/>
+<path fill="none" stroke="#63b8ff" d="M416.32,-435.51C423.38,-433.51 430.39,-431.26 437,-428.75 481.07,-412.01 501.33,-415.17 530,-377.75 550.59,-350.88 524.67,-328.27 548,-303.75 551.17,-300.42 554.75,-297.5 558.6,-294.96"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="415.46,-432.11 406.69,-438.06 417.25,-438.88 415.46,-432.11"/>
 </a>
 </g>
 </g>

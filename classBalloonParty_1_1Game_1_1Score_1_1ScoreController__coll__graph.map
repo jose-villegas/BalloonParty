@@ -2,10 +2,10 @@
 <area shape="rect" id="Node000001" title="Score keeping only — level progression lives in LevelController." alt="" coords="714,249,902,294"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="399,5,483,33"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="498,10,543,9,594,13,645,26,691,49,716,70,737,94,770,149,792,204,804,249,800,247,787,206,766,152,733,97,712,73,689,53,643,31,593,19,543,14,500,15"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="51,57,148,85"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="162,66,242,65,339,69,444,78,550,95,624,115,655,129,692,152,721,174,749,200,792,249,787,248,745,203,718,178,688,156,652,134,622,120,548,100,444,83,338,74,242,71,165,71"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="24,57,175,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="190,66,358,70,455,79,550,95,624,115,655,129,692,152,721,174,749,200,792,249,787,248,745,203,718,178,688,156,652,134,622,120,548,100,454,84,358,75,191,71"/>
 <area shape="rect" id="Node000009" href="$classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html" title="Owns a ColorStreak per ball." alt="" coords="347,110,535,155"/>
-<area shape="poly" id="edge10_Node000009_Node000003" title=" " alt="" coords="162,80,348,114,344,117,164,85"/>
+<area shape="poly" id="edge10_Node000009_Node000003" title=" " alt="" coords="189,85,349,114,345,117,190,90"/>
 <area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="338,180,544,224"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="559,221,716,253,711,254,559,227"/>
 <area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunScore.html" title="Read&#45;only view of the live run score, snapshotted by RunController when a run ends." alt="" coords="338,249,544,294"/>

@@ -40,5 +40,6 @@ var searchData=
   ['exitby_37',['ExitBy',['../structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html#aa3e8ca64a0db06d08d23e7660e14fe76',1,'BalloonParty::Editor::CardRevealBuilder::Flight']]],
   ['exitspin_38',['ExitSpin',['../structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html#a976aa24c9ed82cc7aec123c26bfdf19d',1,'BalloonParty::Editor::CardRevealBuilder::Flight']]],
   ['expiry_39',['Expiry',['../structBalloonParty_1_1Projectile_1_1Buffs_1_1ProjectileBuffService_1_1Entry.html#a0a5eecaac53f4192d4188eec5e8722db',1,'BalloonParty::Projectile::Buffs::ProjectileBuffService::Entry']]],
-  ['exposureid_40',['ExposureId',['../classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#ae42ea92c77a1db3de00d3ebe911524c2',1,'BalloonParty::Editor::Maps::GameRenderMapsWindow']]]
+  ['exposureid_40',['ExposureId',['../classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#ae42ea92c77a1db3de00d3ebe911524c2',1,'BalloonParty::Editor::Maps::GameRenderMapsWindow']]],
+  ['extras_41',['Extras',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkMeshBuilder_1_1Buffers.html#a2862cc0d4c96ecd7265ab462117976c7',1,'BalloonParty::Game::Score::Behaviours::ShapeInkMeshBuilder::Buffers']]]
 ];

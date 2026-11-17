@@ -2,8 +2,8 @@
 <area shape="rect" id="Node000001" title="Counts what happens during play and hands immutable snapshots to the popups and the sink." alt="" coords="269,80,484,124"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="71,5,155,33"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="170,29,221,43,319,78,314,80,220,48,170,35"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="64,57,162,85"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="177,76,270,88,266,90,177,81"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="38,57,188,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="203,79,271,88,266,90,204,84"/>
 <area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="10,109,216,154"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="231,115,271,113,266,115,232,121"/>
 <area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView.html" title=" " alt="" coords="5,178,221,223"/>

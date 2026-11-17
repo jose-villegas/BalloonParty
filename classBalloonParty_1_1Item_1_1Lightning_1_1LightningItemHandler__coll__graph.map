@@ -33,8 +33,8 @@
 <area shape="poly" id="edge15_Node000015_Node000016" title=" " alt="" coords="436,226,539,246,655,274,732,298,727,300,654,279,538,251,437,231"/>
 <area shape="rect" id="Node000017" title=" " alt="" coords="340,256,419,284"/>
 <area shape="poly" id="edge16_Node000015_Node000017" title=" " alt="" coords="434,274,696,307,692,311,435,279"/>
-<area shape="rect" id="Node000018" title=" " alt="" coords="330,308,428,336"/>
-<area shape="poly" id="edge17_Node000015_Node000018" title=" " alt="" coords="443,319,696,320,692,323,444,324"/>
+<area shape="rect" id="Node000018" title=" " alt="" coords="304,308,454,336"/>
+<area shape="poly" id="edge17_Node000015_Node000018" title=" " alt="" coords="469,319,696,320,692,323,471,324"/>
 <area shape="rect" id="Node000019" href="$interfaceBalloonParty_1_1Shared_1_1Cadence_1_1ICadencedEffect.html" title="Implemented by field services that perform periodic RT blits on a cadence timer." alt="" coords="272,360,486,404"/>
 <area shape="poly" id="edge18_Node000015_Node000019" title=" " alt="" coords="500,362,696,335,692,338,503,367"/>
 <area shape="rect" id="Node000020" href="$interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html" title=" " alt="" coords="279,429,479,474"/>

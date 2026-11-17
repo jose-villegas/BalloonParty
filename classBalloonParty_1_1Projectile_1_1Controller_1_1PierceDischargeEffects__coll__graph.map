@@ -6,9 +6,9 @@
 <area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="527,591,587,574,652,544,710,501,781,434,833,377,837,374,785,438,714,505,655,548,589,579,528,596"/>
 <area shape="rect" id="Node000014" href="$classBalloonParty_1_1Shared_1_1Pause_1_1TimeScaleService.html" title="The only legal writer of Time.timeScale (style&#45;audit rule bans writes elsewhere); lowest active claim..." alt="" coords="756,632,952,676"/>
 <area shape="poly" id="edge17_Node000014_Node000002" title=" " alt="" coords="528,607,758,640,753,641,527,612"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="421,5,518,33"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="533,11,621,13,668,22,713,37,763,62,812,91,904,158,987,235,1061,315,1125,394,1178,466,1245,572,1240,570,1173,469,1121,397,1057,319,983,239,900,163,809,95,761,66,711,42,667,27,620,19,535,16"/>
-<area shape="poly" id="edge6_Node000004_Node000003" title=" " alt="" coords="533,25,637,43,682,56,714,72,744,100,770,133,792,169,810,206,836,276,851,331,846,329,831,277,805,208,787,172,766,136,740,104,710,76,680,61,635,48,535,30"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="395,5,545,33"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="559,10,636,15,676,24,713,37,763,62,812,91,904,158,987,235,1061,315,1125,394,1178,466,1245,572,1240,570,1173,469,1121,397,1057,319,983,239,900,163,809,95,761,66,711,42,674,29,636,21,561,15"/>
+<area shape="poly" id="edge6_Node000004_Node000003" title=" " alt="" coords="560,29,650,47,688,58,714,72,744,100,770,133,792,169,810,206,836,276,851,331,846,329,831,277,805,208,787,172,766,136,740,104,710,76,686,63,649,52,561,34"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="907,381,1221,571,1215,571,906,386"/>
 <area shape="rect" id="Node000005" title=" " alt="" coords="430,399,510,426"/>
 <area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="524,401,738,370,733,372,526,407"/>

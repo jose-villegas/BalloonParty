@@ -2,8 +2,8 @@
 <area shape="rect" id="Node000001" title="Counts each ball&#39;s deflects off balloons since it last touched a wall, announces the run from Deflect..." alt="" coords="310,80,545,124"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="55,5,139,33"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,30,286,63,340,78,334,79,285,68,154,36"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="48,57,146,85"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="161,74,311,89,307,93,162,80"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="22,57,172,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="188,77,312,90,307,92,188,82"/>
 <area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Shared_1_1IRunConfig.html" title="Run&#45;level rules: starting hit points, retry allowance, the level&#45;complete beat and upgrade cards." alt="" coords="5,109,189,154"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="204,119,312,111,307,113,205,124"/>
 <area shape="rect" id="Node000005" href="$classBalloonParty_1_1Projectile_1_1ProjectileTally.html" title="A running count per ball in the air: shields picked up this flight, deflects since the last wall." alt="" coords="12,178,182,223"/>

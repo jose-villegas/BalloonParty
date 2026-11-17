@@ -11,5 +11,8 @@ var dir_edeabde84bfb81c1c6ee2903a52894b6 =
     [ "ScoreTrailBehaviourResolver.cs", "ScoreTrailBehaviourResolver_8cs.html", "ScoreTrailBehaviourResolver_8cs" ],
     [ "ScoreTrailContext.cs", "ScoreTrailContext_8cs.html", "ScoreTrailContext_8cs" ],
     [ "ShapeCatalog.cs", "ShapeCatalog_8cs.html", "ShapeCatalog_8cs" ],
-    [ "ShapeFormationTicker.cs", "ShapeFormationTicker_8cs.html", "ShapeFormationTicker_8cs" ]
+    [ "ShapeFormationTicker.cs", "ShapeFormationTicker_8cs.html", "ShapeFormationTicker_8cs" ],
+    [ "ShapeInkMeshBuilder.cs", "ShapeInkMeshBuilder_8cs.html", "ShapeInkMeshBuilder_8cs" ],
+    [ "ShapeInkPool.cs", "ShapeInkPool_8cs.html", "ShapeInkPool_8cs" ],
+    [ "ShapeInkRamp.cs", "ShapeInkRamp_8cs.html", "ShapeInkRamp_8cs" ]
 ];

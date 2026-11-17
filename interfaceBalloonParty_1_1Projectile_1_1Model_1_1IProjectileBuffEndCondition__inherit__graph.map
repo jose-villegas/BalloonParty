@@ -1,9 +1,9 @@
 <map id="BalloonParty.Projectile.Model.IProjectileBuffEndCondition" name="BalloonParty.Projectile.Model.IProjectileBuffEndCondition">
-<area shape="rect" id="Node000001" title="Decides when a projectile buff ends." alt="" coords="151,40,393,85"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Projectile_1_1Buffs_1_1PierceEndedEndCondition.html" title="Ends the buff when the projectile stops piercing — the wall that spends the pierce after a tough plow..." alt="" coords="441,5,665,50"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="408,43,443,41,438,42,409,48"/>
-<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Projectile_1_1Buffs_1_1WallBounceEndCondition.html" title="Ends the buff when its shot loses a shield to a wall (a ShieldLostMessage)." alt="" coords="443,75,663,119"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="408,76,445,83,440,83,408,82"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,48,103,76"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,60,153,62,148,63,119,65"/>
+<area shape="rect" id="Node000001" title="Decides when a projectile buff ends." alt="" coords="204,40,446,85"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Projectile_1_1Buffs_1_1PierceEndedEndCondition.html" title="Ends the buff when the projectile stops piercing — the wall that spends the pierce after a tough plow..." alt="" coords="494,5,718,50"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="461,43,496,41,491,42,462,48"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Projectile_1_1Buffs_1_1WallBounceEndCondition.html" title="Ends the buff when its shot loses a shield to a wall (a ShieldLostMessage)." alt="" coords="496,75,716,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="461,76,498,83,493,83,461,82"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,48,156,76"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="171,60,206,62,200,63,172,65"/>
 </map>

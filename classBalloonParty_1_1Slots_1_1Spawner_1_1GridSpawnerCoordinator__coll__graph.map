@@ -2,8 +2,8 @@
 <area shape="rect" id="Node000001" title=" " alt="" coords="671,66,871,111"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="431,5,516,33"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="530,30,675,65,669,66,530,35"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="425,57,522,85"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="537,72,673,82,668,83,538,78"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="398,57,548,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="564,74,673,82,668,83,564,79"/>
 <area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IBoardResettable.html" title="Marks a resettable whose work is board population/teardown (clearing or respawning actors),..." alt="" coords="364,109,583,154"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="598,111,673,102,668,103,599,116"/>
 <area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="17,109,224,154"/>

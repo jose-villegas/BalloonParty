@@ -8,8 +8,8 @@
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="550,104,569,111,630,137,687,172,739,216,780,260,775,260,735,220,683,176,628,142,567,116,551,110"/>
 <area shape="rect" id="Node000005" title=" " alt="" coords="415,125,499,153"/>
 <area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="514,149,569,163,629,183,686,209,768,260,763,260,684,214,627,188,567,168,514,154"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="408,177,506,205"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="520,200,600,217,686,239,742,260,737,261,684,244,599,222,521,205"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="382,177,532,205"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="547,205,686,239,742,260,737,261,684,244,547,211"/>
 <area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Configuration_1_1Items_1_1IItemConfiguration.html" title=" " alt="" coords="359,229,555,274"/>
 <area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="570,259,711,274,706,276,571,264"/>
 <area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html" title=" " alt="" coords="5,301,202,346"/>

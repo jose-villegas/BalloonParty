@@ -1,7 +1,12 @@
 <map id="BalloonParty.Game.Score.Behaviours.ShapeFormationTicker" name="BalloonParty.Game.Score.Behaviours.ShapeFormationTicker">
-<area shape="rect" id="Node000001" title="Pooled, zero&#45;allocation per&#45;frame driver for every in&#45;flight shape formation." alt="" coords="29,98,273,143"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,14,113,42"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="84,50,132,97,126,98,82,55"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreShapeCover.html" title="How much of the board the BigScore shapes being drawn in the air take up right now." alt="" coords="136,5,352,50"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="214,60,174,100,171,96,209,62"/>
+<area shape="rect" id="Node000001" title="Pooled, zero&#45;allocation per&#45;frame driver for every in&#45;flight shape formation." alt="" coords="504,88,748,132"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="264,5,371,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="386,32,426,42,562,86,557,87,425,47,386,37"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreShapeCover.html" title="How much of the board the BigScore shapes being drawn in the air take up right now." alt="" coords="209,57,425,102"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="440,89,507,97,501,98,441,94"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,156,160,184"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="175,157,504,121,504,126,176,162"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkPool.html" title="Hands ShapeFormationTicker a ShapeInkView for each shape in flight and takes it back when the shape i..." alt="" coords="223,177,411,222"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="175,179,225,187,220,188,175,184"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="426,184,480,172,533,153,580,133,585,132,535,158,481,177,427,190"/>
 </map>

@@ -2,8 +2,8 @@
 <area shape="rect" id="Node000001" title=" " alt="" coords="1050,352,1239,396"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="750,5,835,33"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="850,26,907,43,974,77,1000,98,1028,128,1069,186,1101,248,1124,306,1139,352,1134,350,1119,308,1096,251,1064,189,1024,132,996,101,971,81,905,48,851,31"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="744,57,841,85"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="856,77,907,94,950,119,989,150,1023,185,1054,222,1104,294,1135,352,1130,350,1099,297,1050,225,1020,189,985,154,947,123,905,99,857,83"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="718,57,868,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="882,85,908,94,950,119,989,150,1023,185,1054,222,1104,294,1135,352,1130,350,1099,297,1050,225,1020,189,985,154,947,123,905,99,883,90"/>
 <area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="690,109,896,154"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="892,157,907,163,971,198,1028,243,1085,298,1128,352,1123,351,1081,302,1025,246,968,202,905,168,892,162"/>
 <area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ITransitionOutgoingContent.html" title="Keeps outgoing visuals on screen during a level transition so the Ascent&#39;s board clear doesn&#39;t blink ..." alt="" coords="694,178,892,223"/>

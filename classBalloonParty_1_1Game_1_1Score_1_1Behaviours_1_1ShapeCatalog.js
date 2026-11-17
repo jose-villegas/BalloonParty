@@ -46,5 +46,6 @@ var classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog =
     [ "MaxRadiusScale", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog.html#a3993db042bffb8c887e660ca7307f9e1", null ],
     [ "Phi", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog.html#ab4f6485edfd94485f5a6eacd94acf602", null ],
     [ "Shapes", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog.html#a93a30b9fb48856a106a258ec125e1579", null ],
+    [ "WaveAmplitude", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog.html#ac1aacdad86075312ae9a5f7b03a375a3", null ],
     [ "Denominations", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog.html#a93e48c807c5d47aaa7dbc419276a2cc7", null ]
 ];

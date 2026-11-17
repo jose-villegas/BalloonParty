@@ -6,8 +6,8 @@
 <area shape="poly" id="edge6_Node000006_Node000002" title=" " alt="" coords="165,29,275,55,270,58,166,35"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="331,125,410,153"/>
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="426,141,609,156,604,158,426,146"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="322,177,419,205"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="434,184,610,174,604,175,435,189"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="296,177,446,205"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="461,182,609,174,604,175,462,187"/>
 <area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html" title="Read&#45;only projectile flight configuration: physics, cruise, sweep, pierce, and doom tuning." alt="" coords="261,229,480,274"/>
 <area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="494,222,583,202,608,198,613,197,584,207,495,228"/>
 <area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="480,103,610,136,605,138,480,108"/>

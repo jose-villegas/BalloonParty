@@ -329,8 +329,8 @@ var sectionId = 'dynsection-1';
 <g id="Node000013" class="node">
 <title>Node13</title>
 <g id="a_Node000013"><a xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="384.88,-314.12 311.88,-314.12 311.88,-293.38 384.88,-293.38 384.88,-314.12"/>
-<text xml:space="preserve" text-anchor="middle" x="348.38" y="-300.62" font-family="Helvetica,sans-Serif" font-size="10.00">IDisposable</text>
+<polygon fill="white" stroke="#666666" points="404.75,-314.12 292,-314.12 292,-293.38 404.75,-293.38 404.75,-314.12"/>
+<text xml:space="preserve" text-anchor="middle" x="348.38" y="-300.62" font-family="Helvetica,sans-Serif" font-size="10.00">System.IDisposable</text>
 </a>
 </g>
 </g>
@@ -338,8 +338,8 @@ var sectionId = 'dynsection-1';
 <g id="edge13_Node000010_Node000013" class="edge">
 <title>Node13&#45;&gt;Node10</title>
 <g id="a_edge13_Node000010_Node000013"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M396.6,-295.67C437.52,-288.66 497.82,-278.34 547.61,-269.82"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="396.1,-292.2 386.83,-297.34 397.28,-299.1 396.1,-292.2"/>
+<path fill="none" stroke="#63b8ff" d="M416.49,-292.26C455.57,-285.57 505.3,-277.06 547.5,-269.83"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="416,-288.79 406.74,-293.93 417.19,-295.69 416,-288.79"/>
 </a>
 </g>
 </g>
@@ -347,8 +347,8 @@ var sectionId = 'dynsection-1';
 <g id="edge26_Node000022_Node000013" class="edge">
 <title>Node13&#45;&gt;Node22</title>
 <g id="a_edge26_Node000022_Node000013"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M396.41,-299.97C434.28,-298.87 487.95,-301.79 530,-321.75 572.24,-341.81 607.3,-386.06 624.39,-410.57"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="396.56,-296.46 386.71,-300.37 396.84,-303.46 396.56,-296.46"/>
+<path fill="none" stroke="#63b8ff" d="M416.09,-299.81C451.48,-300.27 494.81,-305.04 530,-321.75 572.24,-341.81 607.3,-386.06 624.39,-410.57"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="416.41,-296.31 406.41,-299.8 416.41,-303.31 416.41,-296.31"/>
 </a>
 </g>
 </g>

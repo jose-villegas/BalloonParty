@@ -1,9 +1,9 @@
 <map id="BalloonParty.Prediction.PredictionTraceLights" name="BalloonParty.Prediction.PredictionTraceLights">
 <area shape="rect" id="Node000001" title="Optional capsule (segment) lights mirroring the prediction line while the player aims — one per trace..." alt="" coords="731,196,905,240"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="75,5,172,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="187,26,273,40,365,61,476,92,585,128,761,194,756,196,583,133,474,98,364,66,272,45,189,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="48,5,199,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="213,30,288,43,365,61,476,92,585,128,761,194,756,196,583,133,474,98,364,66,287,48,215,35"/>
 <area shape="rect" id="Node000004" href="$classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html" title="Owns the scene&#45;light FIELD — a small screen/world&#45;space RT (the disturbance&#45;field architecture applie..." alt="" coords="397,196,604,240"/>
-<area shape="poly" id="edge6_Node000004_Node000002" title=" " alt="" coords="186,28,243,43,307,70,366,106,427,151,477,195,472,195,423,155,363,111,304,75,241,48,188,33"/>
+<area shape="poly" id="edge6_Node000004_Node000002" title=" " alt="" coords="213,35,243,43,307,70,366,106,427,151,477,195,472,195,423,155,363,111,304,75,241,48,215,40"/>
 <area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html" title="Prediction trace settings: how the line is segmented, how far it reaches, how many reflections it giv..." alt="" coords="389,265,612,310"/>
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="620,258,733,236,728,238,622,263"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="619,215,733,217,728,219,620,220"/>

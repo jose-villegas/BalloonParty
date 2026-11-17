@@ -47,7 +47,7 @@
   </g>
 </defs>
 <script type="application/ecmascript">
-var viewWidth = 503;
+var viewWidth = 543;
 var viewHeight = 94;
 var sectionId = 'dynsection-0';
 </script>
@@ -59,9 +59,9 @@ var sectionId = 'dynsection-0';
 <g id="Node000001" class="node">
 <title>Node1</title>
 <g id="a_Node000001"><a xlink:title="Decides when a projectile buff ends.">
-<polygon fill="#999999" stroke="#666666" points="290.75,-59.5 109,-59.5 109,-26 290.75,-26 290.75,-59.5"/>
-<text xml:space="preserve" text-anchor="start" x="117" y="-46" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Projectile.</text>
-<text xml:space="preserve" text-anchor="middle" x="199.88" y="-33.25" font-family="Helvetica,sans-Serif" font-size="10.00">Model.IProjectileBuffEndCondition</text>
+<polygon fill="#999999" stroke="#666666" points="330.5,-59.5 148.75,-59.5 148.75,-26 330.5,-26 330.5,-59.5"/>
+<text xml:space="preserve" text-anchor="start" x="156.75" y="-46" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Projectile.</text>
+<text xml:space="preserve" text-anchor="middle" x="239.62" y="-33.25" font-family="Helvetica,sans-Serif" font-size="10.00">Model.IProjectileBuffEndCondition</text>
 </a>
 </g>
 </g>
@@ -69,9 +69,9 @@ var sectionId = 'dynsection-0';
 <g id="Node000003" class="node">
 <title>Node3</title>
 <g id="a_Node000003"><a xlink:href="classBalloonParty_1_1Projectile_1_1Buffs_1_1PierceEndedEndCondition.html" target="_top" xlink:title="Ends the buff when the projectile stops piercing — the wall that spends the pierce after a tough plow...">
-<polygon fill="white" stroke="#666666" points="495,-85.5 326.75,-85.5 326.75,-52 495,-52 495,-85.5"/>
-<text xml:space="preserve" text-anchor="start" x="334.75" y="-72" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Projectile.</text>
-<text xml:space="preserve" text-anchor="middle" x="410.88" y="-59.25" font-family="Helvetica,sans-Serif" font-size="10.00">Buffs.PierceEndedEndCondition</text>
+<polygon fill="white" stroke="#666666" points="534.75,-85.5 366.5,-85.5 366.5,-52 534.75,-52 534.75,-85.5"/>
+<text xml:space="preserve" text-anchor="start" x="374.5" y="-72" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Projectile.</text>
+<text xml:space="preserve" text-anchor="middle" x="450.62" y="-59.25" font-family="Helvetica,sans-Serif" font-size="10.00">Buffs.PierceEndedEndCondition</text>
 </a>
 </g>
 </g>
@@ -79,8 +79,8 @@ var sectionId = 'dynsection-0';
 <g id="edge2_Node000001_Node000003" class="edge">
 <title>Node1&#45;&gt;Node3</title>
 <g id="a_edge2_Node000001_Node000003"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M302.34,-55.37C310.36,-56.37 318.41,-57.37 326.29,-58.35"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="302.88,-51.91 292.53,-54.15 302.02,-58.86 302.88,-51.91"/>
+<path fill="none" stroke="#63b8ff" d="M342.09,-55.37C350.11,-56.37 358.16,-57.37 366.04,-58.35"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="342.63,-51.91 332.28,-54.15 341.77,-58.86 342.63,-51.91"/>
 </a>
 </g>
 </g>
@@ -88,9 +88,9 @@ var sectionId = 'dynsection-0';
 <g id="Node000004" class="node">
 <title>Node4</title>
 <g id="a_Node000004"><a xlink:href="classBalloonParty_1_1Projectile_1_1Buffs_1_1WallBounceEndCondition.html" target="_top" xlink:title="Ends the buff when its shot loses a shield to a wall (a ShieldLostMessage).">
-<polygon fill="white" stroke="#666666" points="493.5,-33.5 328.25,-33.5 328.25,0 493.5,0 493.5,-33.5"/>
-<text xml:space="preserve" text-anchor="start" x="336.25" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Projectile.</text>
-<text xml:space="preserve" text-anchor="middle" x="410.88" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">Buffs.WallBounceEndCondition</text>
+<polygon fill="white" stroke="#666666" points="533.25,-33.5 368,-33.5 368,0 533.25,0 533.25,-33.5"/>
+<text xml:space="preserve" text-anchor="start" x="376" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Projectile.</text>
+<text xml:space="preserve" text-anchor="middle" x="450.62" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">Buffs.WallBounceEndCondition</text>
 </a>
 </g>
 </g>
@@ -98,8 +98,8 @@ var sectionId = 'dynsection-0';
 <g id="edge3_Node000001_Node000004" class="edge">
 <title>Node1&#45;&gt;Node4</title>
 <g id="a_edge3_Node000001_Node000004"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M302.29,-30.13C310.89,-29.06 319.51,-27.99 327.93,-26.94"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="302.02,-26.64 292.53,-31.35 302.88,-33.59 302.02,-26.64"/>
+<path fill="none" stroke="#63b8ff" d="M342.04,-30.13C350.64,-29.06 359.26,-27.99 367.68,-26.94"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="341.77,-26.64 332.28,-31.35 342.63,-33.59 341.77,-26.64"/>
 </a>
 </g>
 </g>
@@ -107,8 +107,8 @@ var sectionId = 'dynsection-0';
 <g id="Node000002" class="node">
 <title>Node2</title>
 <g id="a_Node000002"><a xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="73,-53.12 0,-53.12 0,-32.38 73,-32.38 73,-53.12"/>
-<text xml:space="preserve" text-anchor="middle" x="36.5" y="-39.62" font-family="Helvetica,sans-Serif" font-size="10.00">IDisposable</text>
+<polygon fill="white" stroke="#666666" points="112.75,-53.12 0,-53.12 0,-32.38 112.75,-32.38 112.75,-53.12"/>
+<text xml:space="preserve" text-anchor="middle" x="56.38" y="-39.62" font-family="Helvetica,sans-Serif" font-size="10.00">System.IDisposable</text>
 </a>
 </g>
 </g>
@@ -116,8 +116,8 @@ var sectionId = 'dynsection-0';
 <g id="edge1_Node000001_Node000002" class="edge">
 <title>Node2&#45;&gt;Node1</title>
 <g id="a_edge1_Node000001_Node000002"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M84.82,-42.75C92.43,-42.75 100.51,-42.75 108.73,-42.75"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="84.83,-39.25 74.83,-42.75 84.83,-46.25 84.83,-39.25"/>
+<path fill="none" stroke="#63b8ff" d="M124.7,-42.75C132.4,-42.75 140.33,-42.75 148.27,-42.75"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="124.75,-39.25 114.75,-42.75 124.75,-46.25 124.75,-39.25"/>
 </a>
 </g>
 </g>

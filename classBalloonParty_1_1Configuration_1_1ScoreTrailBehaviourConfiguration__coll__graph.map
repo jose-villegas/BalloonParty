@@ -1,13 +1,15 @@
 <map id="BalloonParty.Configuration.ScoreTrailBehaviourConfiguration" name="BalloonParty.Configuration.ScoreTrailBehaviourConfiguration">
-<area shape="rect" id="Node000001" title=" " alt="" coords="415,126,652,171"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="62,5,190,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="205,31,247,42,372,83,479,125,474,126,370,88,246,47,206,37"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1IScoreTrailBehaviourConfiguration.html" title="Read&#45;only view of the score&#45;trail choreography table — the ordered ScoreTrailBehaviourEntry list the ..." alt="" coords="5,57,247,102"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="262,100,417,127,412,130,262,105"/>
-<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Shared_1_1IScoreTrailConfig.html" title="Score trail presentation: timing, scatter, burst, and pool prewarm sizes." alt="" coords="29,126,223,171"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="238,146,416,147,412,150,239,151"/>
-<area shape="rect" id="Node000005" href="$structBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourEntry.html" title="One row of the choreography table: the handler to use once a group clears MinPoints." alt="" coords="28,196,224,240"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="239,196,416,167,412,170,240,201"/>
-<area shape="rect" id="Node000006" href="$structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html" title="Global knobs shared by every BigScore formation: radius, pen speed, coverage, spin and the scale&#45;over..." alt="" coords="27,265,225,310"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="237,258,313,237,390,211,484,172,489,171,392,216,314,242,238,263"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="690,126,927,171"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="337,5,466,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="480,31,523,42,647,83,754,125,749,126,645,88,521,47,481,37"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1IScoreTrailBehaviourConfiguration.html" title="Read&#45;only view of the score&#45;trail choreography table — the ordered ScoreTrailBehaviourEntry list the ..." alt="" coords="281,57,522,102"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="537,100,692,128,687,129,538,105"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Shared_1_1IScoreTrailConfig.html" title="Score trail presentation: timing, scatter, burst, and pool prewarm sizes." alt="" coords="304,126,498,171"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="514,146,692,148,687,149,514,151"/>
+<area shape="rect" id="Node000005" href="$structBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourEntry.html" title="One row of the choreography table: the handler to use once a group clears MinPoints." alt="" coords="303,196,500,240"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="515,196,692,168,687,169,516,201"/>
+<area shape="rect" id="Node000006" href="$structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html" title="Global knobs shared by every BigScore formation: radius, pen speed, coverage, spin and the scale&#45;over..." alt="" coords="303,265,500,310"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="512,258,588,237,665,211,760,172,765,171,667,216,589,242,513,263"/>
+<area shape="rect" id="Node000007" href="$structBalloonParty_1_1Configuration_1_1ShapeInkSettings.html" title="How a score shape&#39;s ink is drawn when the shape is one baked mesh (ShapeInkView) instead of a trail p..." alt="" coords="5,265,202,310"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="217,285,305,287,299,287,218,290"/>
 </map>

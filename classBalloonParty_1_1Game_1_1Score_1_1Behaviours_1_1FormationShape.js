@@ -2,6 +2,8 @@ var classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationShape =
 [
     [ "FormationShape", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationShape.html#a213b2728cb32aae173e0fe921ed4f914", null ],
     [ "DistributePens", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationShape.html#a2b4a91fb868ba69b11eb1e63b3f970d7", null ],
+    [ "Interpolate", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationShape.html#a85d9e738d1d9e63eda63972e5b1badaa", null ],
+    [ "PointOnWalk", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationShape.html#a8ddb1cfbae05674c5eaaf467907ce194", null ],
     [ "AlignToHit", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationShape.html#ac1e24281eb967e4f7cc4c923f18a703a", null ],
     [ "Cumulative", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationShape.html#a216f9c12c6dd6b2f3956d953b5034027", null ],
     [ "Denomination", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationShape.html#a61fa5bcef7c473e75ba0290ad880e40e", null ],

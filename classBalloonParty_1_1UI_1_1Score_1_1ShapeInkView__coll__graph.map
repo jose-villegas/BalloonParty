@@ -1,0 +1,5 @@
+<map id="BalloonParty.UI.Score.ShapeInkView" name="BalloonParty.UI.Score.ShapeInkView">
+<area shape="rect" id="Node000001" title="Draws one score shape as a single mesh: the shape&#39;s baked wire mesh with the ink shader (BalloonParty..." alt="" coords="5,81,209,126"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="45,5,169,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,47,109,81,105,79,105,51"/>
+</map>

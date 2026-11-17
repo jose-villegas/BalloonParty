@@ -1,9 +1,9 @@
 <map id="BalloonParty.Item.ItemAssigner" name="BalloonParty.Item.ItemAssigner">
-<area shape="rect" id="Node000001" title=" " alt="" coords="50,98,275,126"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="76,98,302,126"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="5,14,90,42"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="79,48,146,96,141,99,77,53"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="114,14,211,42"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="164,56,165,99,160,96,160,59"/>
-<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="235,5,441,50"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="280,57,191,100,189,95,275,57"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="84,47,168,96,164,99,83,52"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="114,14,264,42"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="191,56,191,99,187,96,187,59"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="288,5,495,50"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="326,56,222,100,220,95,321,57"/>
 </map>

@@ -12,6 +12,7 @@ var classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1
     [ "Group", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#ac7e66b5ffc3ce5d38f15eee6aecabecb", null ],
     [ "Guide", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a1976318db9f85a34b9cc161834d2d6d0", null ],
     [ "InitialRotation", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a4f6b2b5d70ca65ce67afb974b077448d", null ],
+    [ "Ink", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#ac4d1d76abc918e1d0a292a652de86f23", null ],
     [ "IsPrincipal", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a4853db3c4c16c6721a50ce541c244945", null ],
     [ "LastScale", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a01e2eb8118fb26d33c61d463b86a11c6", null ],
     [ "LiveTarget", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a186e7e6f7add178729a71097648cea70", null ],

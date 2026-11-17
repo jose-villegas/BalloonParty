@@ -1,5 +1,11 @@
 var NAVTREEINDEX16 =
 {
+"classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#a7320e0383d52ee64c5f9bdf780a3511f":[5,0,0,1,3,1,28],
+"classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#a7320e0383d52ee64c5f9bdf780a3511f":[6,0,0,1,3,1,28],
+"classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#a777f9cb228f8f625a840c5620ce1e6e2":[5,0,0,1,3,1,9],
+"classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#a777f9cb228f8f625a840c5620ce1e6e2":[6,0,0,1,3,1,9],
+"classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#a83773ac8c5c0adff6b0ddf2f76800828":[5,0,0,1,3,1,31],
+"classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#a83773ac8c5c0adff6b0ddf2f76800828":[6,0,0,1,3,1,31],
 "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#a89bc5450c07fec3dd39d87443edcd3b4":[5,0,0,1,3,1,10],
 "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#a89bc5450c07fec3dd39d87443edcd3b4":[6,0,0,1,3,1,10],
 "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#a89eb52786d2075457928fcac55da46b8":[5,0,0,1,3,1,14],
@@ -243,11 +249,5 @@ var NAVTREEINDEX16 =
 "classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#a016a50d4a7bfccd1677eaefcee3e5eaf":[5,0,0,1,3,10,12],
 "classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#a016a50d4a7bfccd1677eaefcee3e5eaf":[6,0,0,1,3,10,12],
 "classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#a3910986bf90c1a2fd1b91fb2cc632661":[5,0,0,1,3,10,13],
-"classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#a3910986bf90c1a2fd1b91fb2cc632661":[6,0,0,1,3,10,13],
-"classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#a54d3547473cc132af026a69ef87f09d6":[5,0,0,1,3,10,10],
-"classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#a54d3547473cc132af026a69ef87f09d6":[6,0,0,1,3,10,10],
-"classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#a699e5fb5a3756ad954627d4102b1a126":[5,0,0,1,3,10,1],
-"classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#a699e5fb5a3756ad954627d4102b1a126":[6,0,0,1,3,10,1],
-"classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#a865038994d540bffdbf72d7547100bc0":[5,0,0,1,3,10,7],
-"classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#a865038994d540bffdbf72d7547100bc0":[6,0,0,1,3,10,7]
+"classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#a3910986bf90c1a2fd1b91fb2cc632661":[6,0,0,1,3,10,13]
 };

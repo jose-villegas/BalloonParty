@@ -1,7 +1,9 @@
 <map id="BalloonParty.Game.Score.Behaviours.ShapeFormationTicker" name="BalloonParty.Game.Score.Behaviours.ShapeFormationTicker">
-<area shape="rect" id="Node000001" title="Pooled, zero&#45;allocation per&#45;frame driver for every in&#45;flight shape formation." alt="" coords="29,98,273,143"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,14,113,42"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="84,50,132,97,126,98,82,55"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreShapeCover.html" title="How much of the board the BigScore shapes being drawn in the air take up right now." alt="" coords="136,5,352,50"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="214,60,174,100,171,96,209,62"/>
+<area shape="rect" id="Node000001" title="Pooled, zero&#45;allocation per&#45;frame driver for every in&#45;flight shape formation." alt="" coords="270,57,513,102"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="60,5,167,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="182,31,287,55,282,57,182,36"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreShapeCover.html" title="How much of the board the BigScore shapes being drawn in the air take up right now." alt="" coords="5,57,222,102"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="237,77,272,79,267,80,237,82"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="36,125,191,153"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="196,119,282,103,287,102,197,124"/>
 </map>

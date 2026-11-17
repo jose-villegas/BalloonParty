@@ -2,6 +2,6 @@
 <area shape="rect" id="Node000001" title="Ends the buff when the projectile stops piercing — the wall that spends the pierce after a tough plow..." alt="" coords="14,174,239,218"/>
 <area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileBuffEndCondition.html" title="Decides when a projectile buff ends." alt="" coords="5,81,248,126"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="128,139,129,175,124,172,125,143"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="78,5,175,33"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="51,5,202,33"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="128,46,129,81,124,80,125,51"/>
 </map>

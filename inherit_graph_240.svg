@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Game_1_1Assist_1_1ThreatEase.html" target="_top" xlink:title="Eases the threats that come by chance while the player is in need: a threat&#39;s chance scaled down by I...">
+<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Game_1_1Assist_1_1PityRoll.html" target="_top" xlink:title="A chance roll that forgives a player in trouble.">
 <polygon fill="white" stroke="#666666" points="143.5,-33.5 0,-33.5 0,0 143.5,0 143.5,-33.5"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Game.Assist.</text>
-<text xml:space="preserve" text-anchor="middle" x="71.75" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">ThreatEase</text>
+<text xml:space="preserve" text-anchor="middle" x="71.75" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">PityRoll</text>
 </a>
 </g>
 </g>

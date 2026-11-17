@@ -8,10 +8,10 @@
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="851,174,1002,190,997,191,852,179"/>
 <area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Score_1_1IColorStreak.html" title="Read&#45;only access to the current same&#45;colour pop streak, for HUD feedback." alt="" coords="261,51,449,95"/>
 <area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="464,92,607,125,667,143,662,144,606,130,465,98"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="306,188,404,216"/>
-<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="419,194,649,174,645,177,420,199"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="280,188,430,216"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="445,191,650,174,645,176,446,197"/>
 <area shape="rect" id="Node000017" href="$classBalloonParty_1_1Projectile_1_1Controller_1_1ShotPaintLedger.html" title="Which balloons each shot painted rainbow itself (the disco ball&#39;s wave, PLAN&#45;DiscoBalloon)." alt="" coords="645,283,839,327"/>
-<area shape="poly" id="edge17_Node000017_Node000006" title=" " alt="" coords="419,196,463,197,512,203,561,215,608,236,617,244,621,253,625,261,632,268,654,282,648,282,629,272,620,264,616,255,612,247,605,241,560,220,511,208,463,202,420,201"/>
+<area shape="poly" id="edge17_Node000017_Node000006" title=" " alt="" coords="445,196,486,199,528,206,569,218,608,236,617,244,621,253,625,261,632,268,654,282,648,282,629,272,620,264,616,255,612,247,605,241,567,223,526,211,485,205,447,201"/>
 <area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html" title="Which shots exist right now: the one held in the thrower, and every one in flight (oldest first)." alt="" coords="270,240,440,285"/>
 <area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="454,246,529,231,605,210,629,199,665,188,661,190,631,203,607,215,531,236,456,251"/>
 <area shape="poly" id="edge18_Node000017_Node000007" title=" " alt="" coords="430,288,474,301,561,309,647,311,642,313,561,315,473,306,430,293"/>

@@ -2,8 +2,8 @@
 <area shape="rect" id="Node000001" title="The rainbow Snipe&#39;s discharge payoff: when a rainbow lance shatters the tough balloons it plowed thro..." alt="" coords="952,80,1131,124"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="681,5,766,33"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="781,29,928,66,967,79,962,79,927,71,781,35"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="675,57,772,85"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="788,75,954,93,948,94,788,80"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="648,57,799,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="814,77,954,93,948,94,814,82"/>
 <area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Configuration_1_1Items_1_1IItemConfiguration.html" title=" " alt="" coords="625,109,822,154"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="837,118,954,110,949,111,838,123"/>
 <area shape="rect" id="Node000005" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" title=" " alt="" coords="637,178,810,223"/>

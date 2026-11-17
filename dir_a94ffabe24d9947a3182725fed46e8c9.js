@@ -8,5 +8,7 @@ var dir_a94ffabe24d9947a3182725fed46e8c9 =
     [ "ProgressNoticePresenter.cs", "ProgressNoticePresenter_8cs.html", "ProgressNoticePresenter_8cs" ],
     [ "ScoreCounterLabel.cs", "ScoreCounterLabel_8cs.html", "ScoreCounterLabel_8cs" ],
     [ "ScoreUILifetimeScope.cs", "ScoreUILifetimeScope_8cs.html", "ScoreUILifetimeScope_8cs" ],
+    [ "ShapeInkFrame.cs", "ShapeInkFrame_8cs.html", "ShapeInkFrame_8cs" ],
+    [ "ShapeInkView.cs", "ShapeInkView_8cs.html", "ShapeInkView_8cs" ],
     [ "TrailMotion.cs", "TrailMotion_8cs.html", "TrailMotion_8cs" ]
 ];

@@ -315,8 +315,8 @@ var sectionId = 'dynsection-1';
 <g id="Node000011" class="node">
 <title>Node11</title>
 <g id="a_Node000011"><a xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="384.88,-332.12 311.88,-332.12 311.88,-311.38 384.88,-311.38 384.88,-332.12"/>
-<text xml:space="preserve" text-anchor="middle" x="348.38" y="-318.62" font-family="Helvetica,sans-Serif" font-size="10.00">IDisposable</text>
+<polygon fill="white" stroke="#666666" points="404.75,-332.12 292,-332.12 292,-311.38 404.75,-311.38 404.75,-332.12"/>
+<text xml:space="preserve" text-anchor="middle" x="348.38" y="-318.62" font-family="Helvetica,sans-Serif" font-size="10.00">System.IDisposable</text>
 </a>
 </g>
 </g>
@@ -324,8 +324,8 @@ var sectionId = 'dynsection-1';
 <g id="edge11_Node000008_Node000011" class="edge">
 <title>Node11&#45;&gt;Node8</title>
 <g id="a_edge11_Node000008_Node000011"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M396.68,-316.05C436.94,-313.95 493.84,-317.83 530,-349.75 551.83,-369.02 536.24,-386.11 548,-412.75 569.17,-460.72 604.21,-511.84 622.92,-537.68"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="396.53,-312.56 386.79,-316.73 397.01,-319.54 396.53,-312.56"/>
+<path fill="none" stroke="#63b8ff" d="M416.64,-315.59C454.23,-315.85 499.49,-322.82 530,-349.75 551.83,-369.02 536.24,-386.11 548,-412.75 569.17,-460.72 604.21,-511.84 622.92,-537.68"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="416.72,-312.09 406.76,-315.69 416.8,-319.09 416.72,-312.09"/>
 </a>
 </g>
 </g>
@@ -333,8 +333,8 @@ var sectionId = 'dynsection-1';
 <g id="edge25_Node000019_Node000011" class="edge">
 <title>Node11&#45;&gt;Node19</title>
 <g id="a_edge25_Node000019_Node000011"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M396.31,-309.66C433.47,-302.26 486.24,-296.64 530,-310.75 565.91,-322.33 599.92,-351.14 619.22,-369.78"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="395.84,-306.18 386.78,-311.68 397.29,-313.03 395.84,-306.18"/>
+<path fill="none" stroke="#63b8ff" d="M401.23,-308.71C438.03,-301.81 488.13,-297.25 530,-310.75 565.91,-322.33 599.92,-351.14 619.22,-369.78"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="400.86,-305.22 391.74,-310.61 402.23,-312.08 400.86,-305.22"/>
 </a>
 </g>
 </g>

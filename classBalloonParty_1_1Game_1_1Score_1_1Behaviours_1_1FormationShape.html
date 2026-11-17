@@ -109,6 +109,7 @@ $(function(){initNavTree('classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1Fo
 <div class="header">
   <div class="summary">
 <a href="#pac-methods">Package Functions</a> &#124;
+<a href="#pac-static-methods">Static Package Functions</a> &#124;
 <a href="#pac-attribs">Package Attributes</a> &#124;
 <a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationShape-members.html">List of all members</a>  </div>
@@ -130,6 +131,14 @@ $(function(){initNavTree('classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1Fo
 Package Functions</h2></td></tr>
 <tr class="memitem:a213b2728cb32aae173e0fe921ed4f914" id="r_a213b2728cb32aae173e0fe921ed4f914"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a213b2728cb32aae173e0fe921ed4f914">FormationShape</a> (int denomination, float radiusScale, Vector3[] vertices, <a class="el" href="structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationWalk.html">FormationWalk</a>[] walks, bool alignToHit=false, float spinScale=1f, float penSpeedScale=1f, <a class="el" href="namespaceBalloonParty_1_1Game_1_1Score_1_1Behaviours.html#a33bff20e5951e5e2eee9701fe3db921a">VertexDisplacer</a> displacer=null, float displacementScale=1f, float displacementSpeed=1f)</td></tr>
 <tr class="separator:a213b2728cb32aae173e0fe921ed4f914"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ddb1cfbae05674c5eaaf467907ce194" id="r_a8ddb1cfbae05674c5eaaf467907ce194"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8ddb1cfbae05674c5eaaf467907ce194">PointOnWalk</a> (int w, float distance, ref int segment)</td></tr>
+<tr class="memdesc:a8ddb1cfbae05674c5eaaf467907ce194"><td class="mdescLeft">&#160;</td><td class="mdescRight">The point <em>distance</em>  along a closed walk, by LOCAL arc length (so a pen moving at a steady distance per second travels at a steady speed between vertices).  <br /></td></tr>
+<tr class="separator:a8ddb1cfbae05674c5eaaf467907ce194"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
+Static Package Functions</h2></td></tr>
+<tr class="memitem:a85d9e738d1d9e63eda63972e5b1badaa" id="r_a85d9e738d1d9e63eda63972e5b1badaa"><td class="memItemLeft" align="right" valign="top">static Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a85d9e738d1d9e63eda63972e5b1badaa">Interpolate</a> (Vector3 a, Vector3 b, float t, bool arc)</td></tr>
+<tr class="separator:a85d9e738d1d9e63eda63972e5b1badaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-attribs" name="pac-attribs"></a>
 Package Attributes</h2></td></tr>
@@ -265,6 +274,82 @@ Static Private Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a85d9e738d1d9e63eda63972e5b1badaa" name="a85d9e738d1d9e63eda63972e5b1badaa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85d9e738d1d9e63eda63972e5b1badaa">&#9670;&#160;</a></span>Interpolate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static Vector3 BalloonParty.Game.Score.Behaviours.FormationShape.Interpolate </td>
+          <td>(</td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>a</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>b</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>t</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>arc</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8ddb1cfbae05674c5eaaf467907ce194" name="a8ddb1cfbae05674c5eaaf467907ce194"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ddb1cfbae05674c5eaaf467907ce194">&#9670;&#160;</a></span>PointOnWalk()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector3 BalloonParty.Game.Score.Behaviours.FormationShape.PointOnWalk </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>w</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>distance</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ref int</td>          <td class="paramname"><span class="paramname"><em>segment</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The point <em>distance</em>  along a closed walk, by LOCAL arc length (so a pen moving at a steady distance per second travels at a steady speed between vertices). </p>
+<p>Arc walks bend their segments round the sphere, chords run them straight. <em>segment</em>  is the caller's memory of the segment the last call landed in: a pen only moves forward within a lap, so the search resumes there and only a lap wrap rescans from the top. </p>
 
 </div>
 </div>

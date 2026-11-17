@@ -1,5 +1,11 @@
 var NAVTREEINDEX23 =
 {
+"classBalloonParty_1_1Balloon_1_1View_1_1NukeBlastView.html#a15b93e35c2326367bdeaf1cf241174cf":[5,0,0,1,6,17,2],
+"classBalloonParty_1_1Balloon_1_1View_1_1NukeBlastView.html#a15b93e35c2326367bdeaf1cf241174cf":[6,0,0,1,6,17,2],
+"classBalloonParty_1_1Balloon_1_1View_1_1NukeBlastView.html#a1e5d0f7b30429b6515a48c641dbecdf8":[5,0,0,1,6,17,8],
+"classBalloonParty_1_1Balloon_1_1View_1_1NukeBlastView.html#a1e5d0f7b30429b6515a48c641dbecdf8":[6,0,0,1,6,17,8],
+"classBalloonParty_1_1Balloon_1_1View_1_1NukeBlastView.html#a3ac2b2b74f6241104ebe8fdd0334daad":[5,0,0,1,6,17,5],
+"classBalloonParty_1_1Balloon_1_1View_1_1NukeBlastView.html#a3ac2b2b74f6241104ebe8fdd0334daad":[6,0,0,1,6,17,5],
 "classBalloonParty_1_1Balloon_1_1View_1_1NukeBlastView.html#a3d4eb684b4b7b46b8b24e22af680fd3b":[5,0,0,1,6,17,21],
 "classBalloonParty_1_1Balloon_1_1View_1_1NukeBlastView.html#a3d4eb684b4b7b46b8b24e22af680fd3b":[6,0,0,1,6,17,21],
 "classBalloonParty_1_1Balloon_1_1View_1_1NukeBlastView.html#a50970c6019ec32d5c652d14538b10269":[5,0,0,1,6,17,20],
@@ -243,11 +249,5 @@ var NAVTREEINDEX23 =
 "classBalloonParty_1_1Balloon_1_1View_1_1ToughSnakeSpringView_1_1Link.html#af4458ead2a01c350182709a6c5d2fcf6":[5,0,0,1,6,22,0,0],
 "classBalloonParty_1_1Balloon_1_1View_1_1ToughSnakeSpringView_1_1Link.html#af4458ead2a01c350182709a6c5d2fcf6":[6,0,0,1,6,22,0,0],
 "classBalloonParty_1_1Cheats_1_1DevLogConsole.html":[5,0,0,2,0],
-"classBalloonParty_1_1Cheats_1_1DevLogConsole.html":[6,0,0,2,0],
-"classBalloonParty_1_1Cheats_1_1DevLogConsole.html#ac208ffe803544ccaf27d528454c7d4d8":[5,0,0,2,0,0],
-"classBalloonParty_1_1Cheats_1_1DevLogConsole.html#ac208ffe803544ccaf27d528454c7d4d8":[6,0,0,2,0,0],
-"classBalloonParty_1_1Configuration_1_1AssistSettings.html":[5,0,0,3,12],
-"classBalloonParty_1_1Configuration_1_1AssistSettings.html":[6,0,0,3,12],
-"classBalloonParty_1_1Configuration_1_1AssistSettings.html#a0a8c53088b6a7b47202182a685010456":[5,0,0,3,12,10],
-"classBalloonParty_1_1Configuration_1_1AssistSettings.html#a0a8c53088b6a7b47202182a685010456":[6,0,0,3,12,10]
+"classBalloonParty_1_1Cheats_1_1DevLogConsole.html":[6,0,0,2,0]
 };

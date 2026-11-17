@@ -1,9 +1,9 @@
 <map id="BalloonParty.Projectile.Controller.ActiveProjectilePierce" name="BalloonParty.Projectile.Controller.ActiveProjectilePierce">
-<area shape="rect" id="Node000001" title="Folds every live shot&#39;s piercing state into one shared signal, so systems that must hold off while a ..." alt="" coords="151,115,382,160"/>
+<area shape="rect" id="Node000001" title="Folds every live shot&#39;s piercing state into one shared signal, so systems that must hold off while a ..." alt="" coords="248,83,478,128"/>
 <area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Projectile_1_1Controller_1_1IActiveProjectilePierce.html" title="Whether any live shot is currently piercing, and which shot just started to." alt="" coords="5,5,200,67"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="166,73,233,114,228,115,165,78"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="224,22,309,50"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="268,64,269,116,264,113,265,67"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="332,22,430,50"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="357,59,293,117,290,112,352,61"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="214,63,279,82,274,83,214,69"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="60,92,145,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="160,103,250,105,245,106,161,108"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="27,144,178,171"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="190,137,245,129,250,128,191,143"/>
 </map>

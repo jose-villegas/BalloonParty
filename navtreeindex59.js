@@ -1,5 +1,11 @@
 var NAVTREEINDEX59 =
 {
+"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a3281fcf814ddf692f3bcfc54cbda87df":[5,0,0,6,6,5,13],
+"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a3281fcf814ddf692f3bcfc54cbda87df":[6,0,0,6,6,5,13],
+"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a3aac7f8ca1f5f1b53f582a4e86436db3":[5,0,0,6,6,5,14],
+"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a3aac7f8ca1f5f1b53f582a4e86436db3":[6,0,0,6,6,5,14],
+"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a4c0ef1fd4bf12d69e22e48efcfd7d5eb":[5,0,0,6,6,5,15],
+"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a4c0ef1fd4bf12d69e22e48efcfd7d5eb":[6,0,0,6,6,5,15],
 "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a53f16f08a5726486f628853c3e1a6444":[5,0,0,6,6,5,2],
 "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a53f16f08a5726486f628853c3e1a6444":[6,0,0,6,6,5,2],
 "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a857041de69699e39bf646c1904938e32":[5,0,0,6,6,5,12],
@@ -243,11 +249,5 @@ var NAVTREEINDEX59 =
 "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a40cf66bfb32f2c8c19e68618f25e946e":[5,0,0,6,7,6,38],
 "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a40cf66bfb32f2c8c19e68618f25e946e":[6,0,0,6,7,6,38],
 "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a4638af687e20a8e0725461b360d4fe42":[5,0,0,6,7,6,10],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a4638af687e20a8e0725461b360d4fe42":[6,0,0,6,7,6,10],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a4f9d5569b41364790ef387bb72bf6b86":[5,0,0,6,7,6,70],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a4f9d5569b41364790ef387bb72bf6b86":[6,0,0,6,7,6,70],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a54d627703f75834995d38965961b0eb5":[5,0,0,6,7,6,40],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a54d627703f75834995d38965961b0eb5":[6,0,0,6,7,6,40],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a557026036d62421d97855b27c2c8795a":[5,0,0,6,7,6,32],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a557026036d62421d97855b27c2c8795a":[6,0,0,6,7,6,32]
+"classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a4638af687e20a8e0725461b360d4fe42":[6,0,0,6,7,6,10]
 };

@@ -14,12 +14,12 @@
 <area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="680,361,840,373,835,375,681,366"/>
 <area shape="rect" id="Node000008" href="$classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html" title="Parent transform for scenario static content; a level transition moves this root, not each child." alt="" coords="479,404,658,448"/>
 <area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="672,410,840,392,835,394,674,416"/>
-<area shape="rect" id="Node000009" title=" " alt="" coords="213,525,310,553"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="186,525,337,553"/>
 <area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="305,516,369,487,442,458,482,448,477,450,444,463,371,492,307,521"/>
 <area shape="rect" id="Node000015" href="$classBalloonParty_1_1Scenario_1_1View_1_1WaterCausticBuffer.html" title="The light the water&#39;s surface focuses on the bottom, published as the global _WaterCausticTex that Ba..." alt="" coords="468,473,669,518"/>
-<area shape="poly" id="edge15_Node000015_Node000009" title=" " alt="" coords="325,528,470,508,466,511,327,533"/>
+<area shape="poly" id="edge15_Node000015_Node000009" title=" " alt="" coords="352,524,470,508,465,511,353,529"/>
 <area shape="rect" id="Node000016" href="$classBalloonParty_1_1Scenario_1_1View_1_1WaterRippleBuffer.html" title="The water&#39;s surface simulation, published as the global _WaterRippleTex (r = surface height,..." alt="" coords="468,542,669,587"/>
-<area shape="poly" id="edge17_Node000016_Node000009" title=" " alt="" coords="326,542,470,555,466,557,326,547"/>
+<area shape="poly" id="edge17_Node000016_Node000009" title=" " alt="" coords="352,544,470,555,465,557,353,549"/>
 <area shape="rect" id="Node000017" href="$classBalloonParty_1_1Scenario_1_1View_1_1GrassWakeBuffer.html" title="The grass&#39;s own short memory of the disturbance field, published as the global _GrassWakeTex the blad..." alt="" coords="468,612,669,656"/>
 <area shape="poly" id="edge19_Node000017_Node000009" title=" " alt="" coords="319,556,444,597,486,611,480,611,443,602,319,561"/>
 <area shape="rect" id="Node000010" href="$classBalloonParty_1_1Scenario_1_1WaterImpactCollector.html" title="Holds this frame&#39;s impacts (every outward disturbance stamp: a ball&#39;s steps, pops,..." alt="" coords="467,681,670,726"/>

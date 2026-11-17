@@ -4,8 +4,8 @@
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1109,99,1146,102,1140,102,1110,104"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="678,5,762,33"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="777,32,815,43,901,71,896,72,814,48,777,38"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="671,57,769,85"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="784,76,901,91,895,91,784,81"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="645,57,795,85"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="811,79,901,91,896,91,811,84"/>
 <area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ISlotClusterSource.html" title="Non&#45;generic read&#45;only facade so consumers can access cluster geometry without knowing the model type." alt="" coords="625,109,815,154"/>
 <area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="829,117,901,112,895,113,830,122"/>
 <area shape="rect" id="Node000006" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" title=" " alt="" coords="634,178,806,223"/>

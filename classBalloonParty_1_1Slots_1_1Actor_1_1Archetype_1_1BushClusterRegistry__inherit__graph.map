@@ -1,11 +1,11 @@
 <map id="BalloonParty.Slots.Actor.Archetype.BushClusterRegistry" name="BalloonParty.Slots.Actor.Archetype.BushClusterRegistry">
-<area shape="rect" id="Node000001" title="Bush slots never change at runtime, so the grid subscription is dormant after initial placement." alt="" coords="50,208,274,252"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterRegistry-1-g.html" title="When setupOnly is true, builds once at startup and never subscribes to grid changes." alt="" coords="64,98,260,160"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="164,174,165,208,160,206,160,177"/>
+<area shape="rect" id="Node000001" title="Bush slots never change at runtime, so the grid subscription is dormant after initial placement." alt="" coords="77,208,300,252"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterRegistry-1-g.html" title="When setupOnly is true, builds once at startup and never subscribes to grid changes." alt="" coords="91,98,286,160"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="191,174,191,209,187,206,187,177"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="5,14,90,42"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="74,49,130,97,125,99,74,55"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="114,14,211,42"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="163,54,165,98,160,97,161,59"/>
-<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ISlotClusterSource.html" title="Non&#45;generic read&#45;only facade so consumers can access cluster geometry without knowing the model type." alt="" coords="236,5,425,50"/>
-<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="278,60,215,100,212,95,282,57"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="79,48,148,96,144,99,78,53"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="114,14,264,42"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="190,55,191,98,186,97,188,59"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ISlotClusterSource.html" title="Non&#45;generic read&#45;only facade so consumers can access cluster geometry without knowing the model type." alt="" coords="288,5,477,50"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="324,59,249,100,247,95,329,56"/>
 </map>

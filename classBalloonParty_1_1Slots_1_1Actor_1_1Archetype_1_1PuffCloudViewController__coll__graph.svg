@@ -127,8 +127,8 @@ var sectionId = 'dynsection-1';
 <g id="Node000004" class="node">
 <title>Node4</title>
 <g id="a_Node000004"><a xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="572.5,-269.12 499.5,-269.12 499.5,-248.38 572.5,-248.38 572.5,-269.12"/>
-<text xml:space="preserve" text-anchor="middle" x="536" y="-255.62" font-family="Helvetica,sans-Serif" font-size="10.00">IDisposable</text>
+<polygon fill="white" stroke="#666666" points="592.38,-269.12 479.62,-269.12 479.62,-248.38 592.38,-248.38 592.38,-269.12"/>
+<text xml:space="preserve" text-anchor="middle" x="536" y="-255.62" font-family="Helvetica,sans-Serif" font-size="10.00">System.IDisposable</text>
 </a>
 </g>
 </g>
@@ -136,8 +136,8 @@ var sectionId = 'dynsection-1';
 <g id="edge3_Node000002_Node000004" class="edge">
 <title>Node4&#45;&gt;Node2</title>
 <g id="a_edge3_Node000002_Node000004"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M584.1,-268.03C609.44,-272.55 641.3,-277.5 670,-279.75 776.36,-288.1 811.05,-297.63 908.75,-254.75 931.89,-244.59 956.03,-229.66 974.57,-217.11"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="584.9,-264.62 574.44,-266.26 583.64,-271.5 584.9,-264.62"/>
+<path fill="none" stroke="#63b8ff" d="M603.86,-271.4C624.94,-274.83 648.37,-278.05 670,-279.75 776.36,-288.1 811.05,-297.63 908.75,-254.75 931.89,-244.59 956.03,-229.66 974.57,-217.11"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="604.68,-267.99 594.24,-269.79 603.52,-274.89 604.68,-267.99"/>
 </a>
 </g>
 </g>
@@ -164,8 +164,8 @@ var sectionId = 'dynsection-1';
 <g id="edge18_Node000015_Node000004" class="edge">
 <title>Node4&#45;&gt;Node15</title>
 <g id="a_edge18_Node000015_Node000004"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M584.23,-257.61C611.71,-256.94 646.79,-256.09 677.01,-255.36"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="584.37,-254.1 574.46,-257.84 584.54,-261.1 584.37,-254.1"/>
+<path fill="none" stroke="#63b8ff" d="M604.11,-257.12C627.55,-256.56 653.85,-255.92 677.22,-255.35"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="604.27,-253.62 594.36,-257.36 604.44,-260.62 604.27,-253.62"/>
 </a>
 </g>
 </g>

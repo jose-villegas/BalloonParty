@@ -1,5 +1,11 @@
 var NAVTREEINDEX4 =
 {
+"SlotGridPierceItemField_8cs.html":[7,0,15,2,10],
+"SlotGridView_8cs.html":[7,0,15,2,11],
+"SlotGrid_8cs.html":[7,0,15,2,7],
+"SlotMove_8cs.html":[7,0,1,1,5],
+"SlotPlacementMode_8cs.html":[7,0,15,0,20],
+"SmokeFieldResources_8cs.html":[7,0,13,10],
 "SmokeFieldService_8cs.html":[7,0,13,11],
 "SmokeFieldSettings_8cs.html":[7,0,3,5,29],
 "SmokeFieldView_8cs.html":[7,0,13,0,4],
@@ -71,7 +77,7 @@ var NAVTREEINDEX4 =
 "TextureAuditWindow_8cs.html":[7,0,6,52],
 "TexturePreviewBox_8cs.html":[7,0,6,53],
 "ThermalFrameRateGovernor_8cs.html":[7,0,14,12,3],
-"ThermalGovernorSettings_8cs.html":[7,0,3,28],
+"ThermalGovernorSettings_8cs.html":[7,0,3,29],
 "ThreatEase_8cs.html":[7,0,7,0,5],
 "ThrowerController_8cs.html":[7,0,17,2],
 "ThrowerLifetimeScope_8cs.html":[7,0,17,3],
@@ -112,7 +118,7 @@ var NAVTREEINDEX4 =
 "TrailFlightRegistry_8cs.html":[7,0,14,9,15],
 "TrailFlight_8cs.html":[7,0,14,9,14],
 "TrailId_8cs.html":[7,0,7,9,6],
-"TrailMotion_8cs.html":[7,0,18,8,8],
+"TrailMotion_8cs.html":[7,0,18,8,10],
 "TrailSpawner_8cs.html":[7,0,14,9,16],
 "TransformCapturedMessage_8cs.html":[7,0,14,7,58],
 "TransformExtensions_8cs.html":[7,0,14,4,20],
@@ -135,7 +141,7 @@ var NAVTREEINDEX4 =
 "UpgradeCardSlotBuilder_8cs.html":[7,0,6,56],
 "UpgradeCardText_8cs.html":[7,0,14,38],
 "UpgradeCardView_8cs.html":[7,0,18,7,2],
-"UpgradeSettings_8cs.html":[7,0,3,29],
+"UpgradeSettings_8cs.html":[7,0,3,30],
 "VariationPicker_8cs.html":[7,0,0,18],
 "VectorExtensions_8cs.html":[7,0,14,4,21],
 "VectorMathExtensions_8cs.html":[7,0,14,4,22],
@@ -243,11 +249,5 @@ var NAVTREEINDEX4 =
 "classBalloonParty_1_1Audio_1_1AudioChannelController.html#a538305d426ebea0d9e3968b407746fcd":[5,0,0,0,4,4],
 "classBalloonParty_1_1Audio_1_1AudioChannelController.html#a538305d426ebea0d9e3968b407746fcd":[6,0,0,0,4,4],
 "classBalloonParty_1_1Audio_1_1AudioChannelController.html#a6f9c80b901ee39a477b48c012aa09348":[5,0,0,0,4,5],
-"classBalloonParty_1_1Audio_1_1AudioChannelController.html#a6f9c80b901ee39a477b48c012aa09348":[6,0,0,0,4,5],
-"classBalloonParty_1_1Audio_1_1AudioChannelController.html#a78fbf8bf9db505739419eb0232b02fa1":[5,0,0,0,4,0],
-"classBalloonParty_1_1Audio_1_1AudioChannelController.html#a78fbf8bf9db505739419eb0232b02fa1":[6,0,0,0,4,0],
-"classBalloonParty_1_1Audio_1_1AudioChannelController.html#a827e32e93d90ea580f8bc17b9aae2a9f":[5,0,0,0,4,6],
-"classBalloonParty_1_1Audio_1_1AudioChannelController.html#a827e32e93d90ea580f8bc17b9aae2a9f":[6,0,0,0,4,6],
-"classBalloonParty_1_1Audio_1_1AudioChannelController.html#abcc274c1ecba2c30dc8563aae0fab8a1":[5,0,0,0,4,8],
-"classBalloonParty_1_1Audio_1_1AudioChannelController.html#abcc274c1ecba2c30dc8563aae0fab8a1":[6,0,0,0,4,8]
+"classBalloonParty_1_1Audio_1_1AudioChannelController.html#a6f9c80b901ee39a477b48c012aa09348":[6,0,0,0,4,5]
 };

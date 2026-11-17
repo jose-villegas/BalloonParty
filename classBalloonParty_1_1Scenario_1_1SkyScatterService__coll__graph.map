@@ -2,8 +2,8 @@
 <area shape="rect" id="Node000001" title="Owns the sky&#45;scatter backdrop: a single stationary quad rendered immediately after the camera&#39;s flat ..." alt="" coords="317,109,505,154"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="63,5,148,33"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="162,30,207,43,289,74,363,108,357,109,287,79,205,48,163,36"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="57,57,154,85"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="170,81,318,111,314,114,170,86"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="30,57,181,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="194,86,318,111,314,114,195,91"/>
 <area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Scenario_1_1ISkyBackdrop.html" title="The sky&#45;scatter backdrop, as an opaque backdrop drawn over it (the ground) sees it." alt="" coords="9,109,202,154"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="217,129,319,130,314,132,218,134"/>
 <area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISkyScatterSettings.html" title="Read&#45;only tuning for the sky&#45;scatter backdrop (see SkyScatterService)." alt="" coords="7,178,204,223"/>

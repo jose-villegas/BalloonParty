@@ -1,9 +1,9 @@
 <map id="BalloonParty.Game.Telemetry.ITelemetrySink" name="BalloonParty.Game.Telemetry.ITelemetrySink">
-<area shape="rect" id="Node000001" title=" " alt="" coords="151,40,366,85"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Game_1_1Telemetry_1_1CompositeTelemetrySink.html" title=" " alt="" coords="414,5,629,50"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="381,43,416,41,411,42,382,49"/>
-<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetrySinkBase.html" title=" " alt="" coords="414,75,629,119"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="382,76,416,83,411,83,381,81"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,48,103,76"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,60,153,62,148,63,119,65"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="204,40,419,85"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Game_1_1Telemetry_1_1CompositeTelemetrySink.html" title=" " alt="" coords="467,5,682,50"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="434,43,469,41,464,42,435,49"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetrySinkBase.html" title=" " alt="" coords="467,75,682,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="435,76,469,83,464,83,434,81"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,48,156,76"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="171,60,206,62,201,63,171,65"/>
 </map>

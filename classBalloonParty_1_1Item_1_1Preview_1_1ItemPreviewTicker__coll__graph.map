@@ -2,8 +2,8 @@
 <area shape="rect" id="Node000001" title="Drives the pens of the one visible item&#45;range figure, closed&#45;form off a single clock — no tweens,..." alt="" coords="651,210,845,255"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="350,5,457,33"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="472,32,508,43,571,67,629,102,659,128,688,157,732,210,727,209,684,160,656,132,625,107,569,72,506,48,473,37"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="355,57,452,85"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="467,83,508,94,570,113,628,139,680,173,724,210,719,209,677,178,626,144,568,118,506,99,467,88"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="328,57,478,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="482,87,508,94,570,113,628,139,680,173,724,210,719,209,677,178,626,144,568,118,506,99,483,92"/>
 <area shape="rect" id="Node000004" href="$classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html" title=" " alt="" coords="310,109,496,154"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="511,155,628,187,688,209,683,210,626,192,512,160"/>
 <area shape="rect" id="Node000005" href="$classBalloonParty_1_1Item_1_1Preview_1_1HighlightTrail.html" title="One pen of an item&#45;range telegraph: a head sprite dragging a TrailRenderer ribbon,..." alt="" coords="306,178,500,223"/>

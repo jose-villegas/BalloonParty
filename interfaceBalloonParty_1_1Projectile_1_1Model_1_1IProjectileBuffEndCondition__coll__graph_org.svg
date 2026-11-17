@@ -22,8 +22,8 @@
 <g id="Node000002" class="node">
 <title>Node2</title>
 <g id="a_Node000002"><a xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="127.38,-90.25 54.38,-90.25 54.38,-69.5 127.38,-69.5 127.38,-90.25"/>
-<text xml:space="preserve" text-anchor="middle" x="90.88" y="-76.75" font-family="Helvetica,sans-Serif" font-size="10.00">IDisposable</text>
+<polygon fill="white" stroke="#666666" points="147.25,-90.25 34.5,-90.25 34.5,-69.5 147.25,-69.5 147.25,-90.25"/>
+<text xml:space="preserve" text-anchor="middle" x="90.88" y="-76.75" font-family="Helvetica,sans-Serif" font-size="10.00">System.IDisposable</text>
 </a>
 </g>
 </g>

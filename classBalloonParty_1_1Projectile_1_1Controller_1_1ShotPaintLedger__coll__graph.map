@@ -1,7 +1,7 @@
 <map id="BalloonParty.Projectile.Controller.ShotPaintLedger" name="BalloonParty.Projectile.Controller.ShotPaintLedger">
-<area shape="rect" id="Node000001" title="Which balloons each shot painted rainbow itself (the disco ball&#39;s wave, PLAN&#45;DiscoBalloon)." alt="" coords="36,115,229,160"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,14,103,42"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="74,52,120,114,114,115,71,57"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html" title="Which shots exist right now: the one held in the thrower, and every one in flight (oldest first)." alt="" coords="126,5,296,50"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="189,62,150,116,147,112,184,64"/>
+<area shape="rect" id="Node000001" title="Which balloons each shot painted rainbow itself (the disco ball&#39;s wave, PLAN&#45;DiscoBalloon)." alt="" coords="76,115,269,160"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,14,156,42"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,51,157,114,152,115,101,56"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html" title="Which shots exist right now: the one held in the thrower, and every one in flight (oldest first)." alt="" coords="179,5,350,50"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="239,61,193,116,189,112,234,63"/>
 </map>

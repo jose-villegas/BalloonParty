@@ -271,8 +271,8 @@
 <g id="Node000014" class="node">
 <title>Node14</title>
 <g id="a_Node000014"><a xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="125.12,-280.12 52.12,-280.12 52.12,-259.38 125.12,-259.38 125.12,-280.12"/>
-<text xml:space="preserve" text-anchor="middle" x="88.62" y="-266.62" font-family="Helvetica,sans-Serif" font-size="10.00">IDisposable</text>
+<polygon fill="white" stroke="#666666" points="145,-280.12 32.25,-280.12 32.25,-259.38 145,-259.38 145,-280.12"/>
+<text xml:space="preserve" text-anchor="middle" x="88.62" y="-266.62" font-family="Helvetica,sans-Serif" font-size="10.00">System.IDisposable</text>
 </a>
 </g>
 </g>
@@ -280,8 +280,8 @@
 <g id="edge14_Node000011_Node000014" class="edge">
 <title>Node14&#45;&gt;Node11</title>
 <g id="a_edge14_Node000011_Node000014"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M136.72,-274.5C180.93,-278.96 247.86,-285.72 299.86,-290.97"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="137.25,-271.04 126.95,-273.52 136.54,-278 137.25,-271.04"/>
+<path fill="none" stroke="#63b8ff" d="M156.82,-276.53C199.66,-280.85 255.31,-286.47 299.94,-290.97"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="157.18,-273.05 146.88,-275.53 156.48,-280.01 157.18,-273.05"/>
 </a>
 </g>
 </g>

@@ -7,6 +7,7 @@ var classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail =
     [ "Awake", "classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a8c0ce01705fee2916c03ff1ea8f4fb48", null ],
     [ "BeginMotionGradient", "classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a73ea01597f5da731c8762f8d3032c37a", null ],
     [ "ClearRibbon", "classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a7ac34fa1cd9ac48fe2636fdc1b24ad06", null ],
+    [ "CopyRibbonSorting", "classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a9c0b29cc845ab67184444966d9167642", null ],
     [ "DisableMoveTween", "classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#ab8c60eb77236547f802d1ab4fe093709", null ],
     [ "FreezeRibbon", "classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a5884cbb46a96f4844ad8122dffbf22dd", null ],
     [ "MoveCurveFor", "classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a9c099eb45247dfe338f34e56f5de4a5c", null ],

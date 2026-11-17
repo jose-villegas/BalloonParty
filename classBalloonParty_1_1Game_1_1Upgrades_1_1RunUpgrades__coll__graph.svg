@@ -220,8 +220,8 @@ var sectionId = 'dynsection-1';
 <g id="Node000010" class="node">
 <title>Node10</title>
 <g id="a_Node000010"><a xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="122.12,-332.12 49.12,-332.12 49.12,-311.38 122.12,-311.38 122.12,-332.12"/>
-<text xml:space="preserve" text-anchor="middle" x="85.62" y="-318.62" font-family="Helvetica,sans-Serif" font-size="10.00">IDisposable</text>
+<polygon fill="white" stroke="#666666" points="142,-332.12 29.25,-332.12 29.25,-311.38 142,-311.38 142,-332.12"/>
+<text xml:space="preserve" text-anchor="middle" x="85.62" y="-318.62" font-family="Helvetica,sans-Serif" font-size="10.00">System.IDisposable</text>
 </a>
 </g>
 </g>
@@ -229,8 +229,8 @@ var sectionId = 'dynsection-1';
 <g id="edge9_Node000001_Node000010" class="edge">
 <title>Node10&#45;&gt;Node1</title>
 <g id="a_edge9_Node000001_Node000010"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M133.62,-328.43C174.07,-334.19 233.31,-342.61 281.16,-349.41"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="134.37,-325 123.98,-327.06 133.38,-331.93 134.37,-325"/>
+<path fill="none" stroke="#63b8ff" d="M153.55,-331.27C192.07,-336.75 240.72,-343.66 281.21,-349.42"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="154.35,-327.85 143.95,-329.9 153.36,-334.78 154.35,-327.85"/>
 </a>
 </g>
 </g>

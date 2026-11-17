@@ -1,11 +1,11 @@
 <map id="BalloonParty.Slots.Spawner.GridSpawnerCoordinator" name="BalloonParty.Slots.Spawner.GridSpawnerCoordinator">
-<area shape="rect" id="Node000001" title=" " alt="" coords="62,191,262,235"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="89,191,289,235"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="5,106,90,134"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="77,141,137,189,132,191,75,147"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="114,106,211,134"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="164,148,165,191,160,189,160,151"/>
-<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IBoardResettable.html" title="Marks a resettable whose work is board population/teardown (clearing or respawning actors),..." alt="" coords="235,98,454,143"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="290,149,207,193,205,188,285,151"/>
-<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="242,5,448,50"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="346,63,347,99,343,97,343,68"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="81,140,157,189,153,191,80,145"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="114,106,264,134"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="191,148,191,191,186,189,187,151"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IBoardResettable.html" title="Marks a resettable whose work is board population/teardown (clearing or respawning actors),..." alt="" coords="288,98,508,143"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="337,149,240,193,238,188,331,150"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="295,5,501,50"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="400,63,400,99,396,96,397,68"/>
 </map>

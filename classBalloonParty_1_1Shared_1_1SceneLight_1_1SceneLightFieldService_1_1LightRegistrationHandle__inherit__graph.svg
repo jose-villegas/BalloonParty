@@ -34,8 +34,8 @@
 <g id="Node000002" class="node">
 <title>Node2</title>
 <g id="a_Node000002"><a xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="127.75,-103 54.75,-103 54.75,-82.25 127.75,-82.25 127.75,-103"/>
-<text xml:space="preserve" text-anchor="middle" x="91.25" y="-89.5" font-family="Helvetica,sans-Serif" font-size="10.00">IDisposable</text>
+<polygon fill="white" stroke="#666666" points="147.62,-103 34.88,-103 34.88,-82.25 147.62,-82.25 147.62,-103"/>
+<text xml:space="preserve" text-anchor="middle" x="91.25" y="-89.5" font-family="Helvetica,sans-Serif" font-size="10.00">System.IDisposable</text>
 </a>
 </g>
 </g>

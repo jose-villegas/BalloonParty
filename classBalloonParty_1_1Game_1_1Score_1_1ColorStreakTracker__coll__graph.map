@@ -2,8 +2,8 @@
 <area shape="rect" id="Node000001" title="Owns a ColorStreak per ball." alt="" coords="333,96,521,141"/>
 <area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Game_1_1Score_1_1IColorStreak.html" title="Read&#45;only access to the current same&#45;colour pop streak, for HUD feedback." alt="" coords="5,5,194,50"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="203,52,309,81,352,95,347,96,308,86,203,57"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="51,74,148,102"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="163,91,334,108,330,111,164,96"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="24,74,175,102"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="190,93,334,108,330,111,191,99"/>
 <area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html" title="Which shots exist right now: the one held in the thrower, and every one in flight (oldest first)." alt="" coords="14,125,185,170"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="200,136,335,125,330,128,201,141"/>
 <area shape="rect" id="Node000005" href="$classBalloonParty_1_1Game_1_1Score_1_1ColorStreak.html" title="One ball&#39;s same&#45;colour pop streak." alt="" coords="5,195,194,239"/>

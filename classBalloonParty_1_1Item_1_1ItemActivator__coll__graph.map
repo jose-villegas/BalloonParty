@@ -1,7 +1,7 @@
 <map id="BalloonParty.Item.ItemActivator" name="BalloonParty.Item.ItemActivator">
 <area shape="rect" id="Node000001" title=" " alt="" coords="5,81,234,109"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="20,5,104,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="83,43,112,80,107,81,80,48"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="128,5,226,33"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="160,44,131,83,128,79,155,46"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="7,5,91,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="73,42,110,80,104,81,71,47"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="115,5,265,33"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="170,43,134,83,130,78,165,45"/>
 </map>

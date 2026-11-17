@@ -16,8 +16,8 @@
 <area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="237,460,383,485,378,488,239,465"/>
 <area shape="rect" id="Node000009" title=" " alt="" coords="77,490,162,518"/>
 <area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="176,501,382,502,378,506,178,506"/>
-<area shape="rect" id="Node000010" title=" " alt="" coords="71,542,168,570"/>
-<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="182,544,382,517,379,521,185,549"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="44,542,195,570"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="209,541,382,517,378,521,211,545"/>
 <area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html" title="Read&#45;only projectile flight configuration: physics, cruise, sweep, pierce, and doom tuning." alt="" coords="10,593,229,638"/>
 <area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="243,587,356,555,439,525,435,528,358,561,245,592"/>
 <area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Shared_1_1IUpgradeSettings.html" title="When the level&#45;up deals cards, how many, and from which deck." alt="" coords="13,663,226,707"/>
