@@ -41,7 +41,7 @@ Shader "BalloonParty/Sprite/ShapeInk"
         [Header(Drop shadow)]
         _InkShadow ("Drawn as the drop shadow (set by ShapeInkPool)", Float) = 0
         _ShadowColor ("Shadow Color", Color) = (0.08, 0.1, 0.18, 1)
-        _Shadow ("Shadow: distance from the ink in world units (x), opacity (y), edge softness (z), width over the ink's (w)", Vector) = (0.07, 0.5, 0.45, 1.25)
+        _Shadow ("Shadow: distance from the ink in world units (x), opacity (y), edge softness (z), width over the ink's (w)", Vector) = (0.035, 0.45, 0.85, 1.5)
         // The shadow's stencil, set by ShapeInkPool: it writes and tests a bit of its own, the ink ignores it.
         [HideInInspector] _ShadowStencilComp ("Shadow Stencil Comp", Float) = 8
         [HideInInspector] _ShadowStencilPass ("Shadow Stencil Pass", Float) = 0
