@@ -86,7 +86,7 @@ Toughs never join an unbreakable formation, and unbreakables never join theirs.
 - **Starting as one body.** The initial fill deals the toughs side by side on one line, most hits at
   the west end (`Balloon/Spawner/README.md`), so they rise together and land as the snake's body. The
   toughs form up once none is still gliding in: with no tough snake and `MinMembers` toughs on the board,
-  the toughest (`IsStable`: landed) starts it, where it stands. Ties go to the higher row, then farther
+  the toughest (`IsStable`: landed) starts it, where it stands. Ties go to the deeper row, then farther
   west. The head is never one in the bottom `HorizontalBottomClearance` rows, which a snake never walks.
   It heads away from a free tough beside it, so toughs that landed side by side are its body as they
   stand; with none beside it, it heads toward the nearer edge, so its body has room behind it. Every

@@ -685,7 +685,8 @@ namespace BalloonParty.Balloon.Formation
             return false;
         }
 
-        // More armour, then the higher row, then farther west.
+        // More armour, then the deeper row, then farther west: the west end of the initial fill's tough run, which
+        // bends onto the line above at its east end.
         private static bool LeadsBetter(IWriteableFormationMember tough, IWriteableFormationMember than)
         {
             var armour = ArmourOrder.Of(tough);
@@ -697,7 +698,7 @@ namespace BalloonParty.Balloon.Formation
 
             var slot = tough.SlotIndex.Value;
             var thanSlot = than.SlotIndex.Value;
-            return slot.y != thanSlot.y ? slot.y < thanSlot.y : slot.x < thanSlot.x;
+            return slot.y != thanSlot.y ? slot.y > thanSlot.y : slot.x < thanSlot.x;
         }
 
         private StandingFormation ToughSnake()
