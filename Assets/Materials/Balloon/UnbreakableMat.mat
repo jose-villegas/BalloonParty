@@ -69,7 +69,7 @@ Material:
     - _DeflectFlash: 0
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _ExcludeLightPaletteMask: 64
+    - _ExcludeLightPaletteMask: 576
     - _ExhaustCenter: 0.141
     - _ExhaustFalloff: 3
     - _ExhaustFlicker: 8

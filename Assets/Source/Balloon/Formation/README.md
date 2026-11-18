@@ -309,9 +309,11 @@ rings stay apart light apart. Each group casts one capsule light between its two
 apart: exact for a line or a diagonal, close for a ring round an item or a bent snake. At most 8 groups
 cast one. The light's strength is `LightIntensity` (0.6) times the group's average of brightness times
 presence, so it rises as members draw close and falls away with a dissolving ring. It reaches
-`LightRadius` (1.3) from that line and falls off by `LightFalloffPower` (2). A light is registered only
+`LightRadius` (1.43) from that line and falls off by `LightFalloffPower` (2). A light is registered only
 while its group glows, and a formation standing still changes none of its values, so the field does not
-re-render for it.
+re-render for it. The unbreakables themselves are not lit by it: `UnbreakableMat`'s `Exclude Light Palettes`
+mask names both `Unbreakable` (the red light a member casts as it moves) and `UnbreakableFormation`, so a
+member keeps its chrome under its formation's blue.
 
 ## Settings
 

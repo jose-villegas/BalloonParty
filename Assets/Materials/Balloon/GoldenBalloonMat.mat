@@ -41,6 +41,7 @@ Material:
     - _EdgePower: 3
     - _EnvHorizon: -0.05
     - _EnvStrength: 0.4
+    - _ExcludeLightPaletteMask: 1024
     - _GapShadow: 0.3
     - _GapWidth: 0.11
     - _GlintIntensity: 2.4

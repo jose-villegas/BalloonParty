@@ -27,6 +27,9 @@ Shader "BalloonParty/Balloon/HeartShine"
         _CoreSoftness ("Core Edge Softness", Range(0.01, 0.5)) = 0.12
 
         [Header(Light Response)]
+        // The palette colours whose local light this balloon ignores: its own rays' light, so it glows without being
+        // lit by itself (SceneLight.cginc, "Palette-mask light exclusion").
+        [PaletteMask] _ExcludeLightPaletteMask ("Exclude Light Palettes", Float) = 0
         _AmbientHue ("Ambient Hue", Range(0, 1)) = 0.25
         _AmbientDimming ("Ambient Dimming", Range(0, 1)) = 0.4
         _AlphaFullAt ("Alpha Full-Light Level", Range(0.1, 3)) = 1.73
@@ -98,6 +101,7 @@ Shader "BalloonParty/Balloon/HeartShine"
             float _CoreThreshold;
             float _CoreSoftness;
             float _AmbientHue;
+            float _ExcludeLightPaletteMask;
             float _AmbientDimming;
             float _AlphaFullAt;
             float _AlphaFalloff;
@@ -123,7 +127,7 @@ Shader "BalloonParty/Balloon/HeartShine"
                 OUT.halfway = normalize(toLight + float3(0, 0, 1));
 
                 float2 worldCenter = mul(unity_ObjectToWorld, float4(0, 0, 0, 1)).xy;
-                OUT.lightTint = SceneLightTintAtLOD(worldCenter) + SceneLightAmbientRegrade(_AmbientHue, _AmbientDimming);
+                OUT.lightTint = SceneLightTintMaskedAtLOD(worldCenter, _ExcludeLightPaletteMask) + SceneLightAmbientRegrade(_AmbientHue, _AmbientDimming);
 
 #ifdef PIXELSNAP_ON
                 OUT.vertex = UnityPixelSnap(OUT.vertex);

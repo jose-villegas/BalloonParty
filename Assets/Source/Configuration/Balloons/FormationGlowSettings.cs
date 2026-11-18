@@ -60,7 +60,7 @@ namespace BalloonParty.Configuration.Balloons
 
         [Tooltip("World reach of that light, from the line between a group's two members furthest apart.")]
         [Min(0.1f)]
-        [SerializeField] private float _lightRadius = 1.3f;
+        [SerializeField] private float _lightRadius = 1.43f;
 
         [Tooltip("How fast that light falls off toward its reach: 1 is a straight ramp, higher keeps it closer in.")]
         [Min(0.1f)]

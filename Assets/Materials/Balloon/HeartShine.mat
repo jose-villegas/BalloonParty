@@ -37,6 +37,7 @@ Material:
     - _CorePower: 90
     - _CoreSoftness: 0.12
     - _CoreThreshold: 0.6
+    - _ExcludeLightPaletteMask: 2048
     - _GlowIntensity: 0.45
     - _GlowPower: 12
     - _LightHeight: 0.7

@@ -37,6 +37,7 @@ Material:
     - _EdgePower: 6
     - _EnvHorizon: -0.1
     - _EnvStrength: 0.35
+    - _ExcludeLightPaletteMask: 4096
     - _FlashIntensity: 2.5
     - _FlashPower: 40
     - _FormShade: 0.45

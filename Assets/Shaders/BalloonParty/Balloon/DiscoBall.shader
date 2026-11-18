@@ -40,6 +40,9 @@ Shader "BalloonParty/Balloon/DiscoBall"
         _EdgeColor   ("Edge", Color) = (0.38, 0.40, 0.44, 1)
         _EdgePower   ("Edge Falloff", Range(1, 8)) = 6
         _LightHeight ("Light Height", Range(0.1, 3)) = 0.9
+        // The palette colours whose local light this balloon ignores: its own rays' light, so it glows without being
+        // lit by itself (SceneLight.cginc, "Palette-mask light exclusion").
+        [PaletteMask] _ExcludeLightPaletteMask ("Exclude Light Palettes", Float) = 0
         // The ball as one sphere: how dark its far side gets, and how far the light wraps round it.
         _FormShade   ("Form Shade", Range(0, 1)) = 0.45
         _FormWrap    ("Form Wrap", Range(0, 1)) = 0.35
@@ -159,6 +162,7 @@ Shader "BalloonParty/Balloon/DiscoBall"
             half4  _EdgeColor;
             float  _EdgePower;
             float  _LightHeight;
+            float  _ExcludeLightPaletteMask;
             float  _FormShade;
             float  _FormWrap;
 
@@ -215,9 +219,9 @@ Shader "BalloonParty/Balloon/DiscoBall"
                                                    unity_ObjectToWorld._m20));
                 OUT.worldData = float3(worldCenter.xy, worldExtent);
 
-                OUT.toLight   = normalize(float3(SceneLightDirectionAtLOD(worldCenter.xy), _LightHeight));
+                OUT.toLight   = normalize(float3(SceneLightDirectionMaskedAtLOD(worldCenter.xy, _ExcludeLightPaletteMask), _LightHeight));
                 OUT.halfway   = normalize(OUT.toLight + float3(0, 0, 1));
-                OUT.lightTint = SceneLightTintAtLOD(worldCenter.xy) + SceneLightAmbientRegrade(_AmbientHue, _AmbientDimming);
+                OUT.lightTint = SceneLightTintMaskedAtLOD(worldCenter.xy, _ExcludeLightPaletteMask) + SceneLightAmbientRegrade(_AmbientHue, _AmbientDimming);
 
                 // Where the ball sits on the capture, and how far one radius reaches there, the way
                 // UnbreakableBalloon maps its mirror onto it.

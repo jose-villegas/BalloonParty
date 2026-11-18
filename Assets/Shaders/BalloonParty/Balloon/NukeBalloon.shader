@@ -31,6 +31,9 @@ Shader "BalloonParty/Balloon/NukeBalloon"
         _EnvHorizon  ("Horizon Height", Range(-0.8, 0.8)) = -0.05
         // The light's height over the board: low rakes across the ball, high lights it face-on.
         _LightHeight ("Light Height", Range(0.1, 3)) = 0.9
+        // The palette colours whose local light this balloon ignores: its own rays' light, so it glows without being
+        // lit by itself (SceneLight.cginc, "Palette-mask light exclusion").
+        [PaletteMask] _ExcludeLightPaletteMask ("Exclude Light Palettes", Float) = 0
 
         [Header(Plates)]
         _PlateScale       ("Plates Across the Radius", Range(1, 8)) = 2.3
@@ -213,6 +216,7 @@ Shader "BalloonParty/Balloon/NukeBalloon"
             float  _EnvStrength;
             float  _EnvHorizon;
             float  _LightHeight;
+            float  _ExcludeLightPaletteMask;
 
             float  _PlateScale;
             float  _BevelWidth;
@@ -499,10 +503,10 @@ Shader "BalloonParty/Balloon/NukeBalloon"
                 // The sphere is shaded in the sprite's own space, which turns with the balloon's sway;
                 // the light isn't turned to match, so it drifts a little with the sway, accepted as on
                 // ToughBalloon's grain.
-                OUT.toLight = normalize(float3(SceneLightDirectionAtLOD(worldCenter), _LightHeight));
+                OUT.toLight = normalize(float3(SceneLightDirectionMaskedAtLOD(worldCenter, _ExcludeLightPaletteMask), _LightHeight));
                 OUT.halfway = normalize(OUT.toLight + float3(0, 0, 1));
                 // The other balloons' night response, so the lead dims with the board.
-                OUT.lightTint = SceneLightTintAtLOD(worldCenter) + SceneLightAmbientRegrade(_AmbientHue, _AmbientDimming);
+                OUT.lightTint = SceneLightTintMaskedAtLOD(worldCenter, _ExcludeLightPaletteMask) + SceneLightAmbientRegrade(_AmbientHue, _AmbientDimming);
 
 #ifdef PIXELSNAP_ON
                 OUT.vertex = UnityPixelSnap(OUT.vertex);
