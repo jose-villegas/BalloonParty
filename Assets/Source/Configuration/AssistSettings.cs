@@ -32,6 +32,20 @@ namespace BalloonParty.Configuration
             "lands.")]
         [SerializeField] [Min(1f)] private float _armourSecondsForFull = 30f;
 
+        [Tooltip("How much a bomb left under a formation's cover counts toward the Snipe roll's need, 0 to 1: a " +
+            "bomb that has stayed covered for Covered Bomb Seconds For Full reads this much need, so the lance that " +
+            "can reach it grows likelier the longer the player is kept from it. The roll takes the largest of this, " +
+            "the armour's and the player's need. 0 = a covered bomb never counts.")]
+        [SerializeField] [Range(0f, 1f)] private float _coveredBombNeedWeight = 0.6f;
+
+        [Tooltip("Seconds of game time a bomb stays covered before it counts in full; it counts from 0 as the cover " +
+            "closes, and from 0 again if the cover opens.")]
+        [SerializeField] [Min(1f)] private float _coveredBombSecondsForFull = 20f;
+
+        [Tooltip("How many of the six slots round a balloon carrying a bomb must hold unbreakables in formation for " +
+            "the bomb to count as covered. The item-cover formation starts at 3, below the bomb.")]
+        [SerializeField] [Range(1, 6)] private int _coveredBombMinCover = 3;
+
         [Tooltip("Bounces off the run's first golden balloon after which the next pen loaded is a Snipe lance, " +
             "whatever the Sharpshooter roll, so the player learns what pops it. Once a run. 0 = never.")]
         [SerializeField] [Min(0)] private int _firstGoldenSnipeAfterDeflects = 3;
@@ -55,6 +69,9 @@ namespace BalloonParty.Configuration
         public float ArmourNeedWeight => _armourNeedWeight;
         public float ArmourCountForFull => _armourCountForFull;
         public float ArmourSecondsForFull => _armourSecondsForFull;
+        public float CoveredBombNeedWeight => _coveredBombNeedWeight;
+        public float CoveredBombSecondsForFull => _coveredBombSecondsForFull;
+        public int CoveredBombMinCover => _coveredBombMinCover;
         public int FirstGoldenSnipeAfterDeflects => _firstGoldenSnipeAfterDeflects;
         public IPitySettings HeartPity => _heartPity;
         public IPitySettings ItemPity => _itemPity;

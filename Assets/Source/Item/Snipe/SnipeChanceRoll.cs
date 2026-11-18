@@ -24,8 +24,9 @@ namespace BalloonParty.Item.Snipe
     ///     The Sharpshooter card's roll, once per ball the thrower loads. A hit arms the ball through the Snipe's own
     ///     path (<see cref="ISnipeArmer" />), so it is a Snipe lance in every way, pencil line included. The card's
     ///     chance is low; pity (<see cref="IAssistSettings.SnipePity" />) raises it for each ball loaded without a
-    ///     Snipe while the player is in trouble (<see cref="IPlayerNeed" />) or armour has stood on the board too long
-    ///     (<see cref="IArmourNeed" />), whichever is the more. After a hit, no load rolls for
+    ///     Snipe while the player is in trouble (<see cref="IPlayerNeed" />), armour has stood on the board too long
+    ///     (<see cref="IArmourNeed" />) or a bomb has sat under a formation's cover (<see cref="ICoveredBombNeed" />),
+    ///     whichever is the most. After a hit, no load rolls for
     ///     <see cref="IUpgradeSettings.SnipeCooldownSeconds" />, so rapid fire can't chain lances. A purple level
     ///     raises the card's chance (<see cref="IUpgradeSettings.PurpleLevelSnipeChanceScale" />). A guaranteed
     ///     load (<see cref="ISnipeGuarantee" />, the first golden balloon's lesson) arms with no roll and no cooldown.
@@ -37,6 +38,7 @@ namespace BalloonParty.Item.Snipe
         private readonly IUpgradeSettings _settings;
         private readonly IPlayerNeed _need;
         private readonly IArmourNeed _armour;
+        private readonly ICoveredBombNeed _coveredBomb;
         private readonly IActiveLevelParameters _level;
         private readonly PityRoll _pity;
 
@@ -49,13 +51,14 @@ namespace BalloonParty.Item.Snipe
         public int ResetOrder => RunResetOrder.Counters;
 
         internal SnipeChanceRoll(IWeaponStats weapon, ISnipeArmer armer, IUpgradeSettings settings, IPlayerNeed need,
-            IArmourNeed armour, IAssistSettings assist, IActiveLevelParameters level)
+            IArmourNeed armour, ICoveredBombNeed coveredBomb, IAssistSettings assist, IActiveLevelParameters level)
         {
             _weapon = weapon;
             _armer = armer;
             _settings = settings;
             _need = need;
             _armour = armour;
+            _coveredBomb = coveredBomb;
             _level = level;
             _pity = new PityRoll(assist.SnipePity);
         }
@@ -92,7 +95,7 @@ namespace BalloonParty.Item.Snipe
                 chance *= _settings.PurpleLevelSnipeChanceScale;
             }
 
-            var need = Mathf.Max(_need.Need, _armour.Need);
+            var need = Mathf.Max(_need.Need, _armour.Need, _coveredBomb.Need);
             if (!_pity.Roll(chance, need, Random01()))
             {
                 return false;

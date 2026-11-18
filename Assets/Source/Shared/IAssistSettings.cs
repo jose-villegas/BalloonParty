@@ -30,6 +30,19 @@ namespace BalloonParty.Shared
         float ArmourSecondsForFull { get; }
 
         /// <summary>
+        ///     How much a bomb left under a formation's cover counts toward the Snipe roll's need, 0 to 1: once a
+        ///     bomb has stayed covered <see cref="CoveredBombSecondsForFull" /> the roll reads this much need. The
+        ///     roll takes the largest of this, the armour's and the player's need. 0 = a covered bomb never counts.
+        /// </summary>
+        float CoveredBombNeedWeight { get; }
+
+        /// <summary>Seconds of game time a bomb stays covered before it counts in full; it counts from 0 as the cover closes.</summary>
+        float CoveredBombSecondsForFull { get; }
+
+        /// <summary>How many of the six slots round a bomb must hold unbreakables in formation for it to be covered.</summary>
+        int CoveredBombMinCover { get; }
+
+        /// <summary>
         ///     Bounces off the run's first golden balloon after which the next ball loaded is a Snipe lance, whatever
         ///     the Sharpshooter roll, so the player learns what pops it. Once a run. 0 = never.
         /// </summary>

@@ -23,6 +23,7 @@ namespace BalloonParty.Tests.Item
         private IUpgradeSettings _settings;
         private IPlayerNeed _need;
         private IArmourNeed _armour;
+        private ICoveredBombNeed _coveredBomb;
         private IAssistSettings _assist;
         private ILevelParameters _levelNow;
         private IActiveLevelParameters _level;
@@ -37,6 +38,7 @@ namespace BalloonParty.Tests.Item
             _settings = Substitute.For<IUpgradeSettings>();
             _need = Substitute.For<IPlayerNeed>();
             _armour = Substitute.For<IArmourNeed>();
+            _coveredBomb = Substitute.For<ICoveredBombNeed>();
             var pity = Substitute.For<IPitySettings>();
             pity.GrowthPerMiss.Returns(4f);
             pity.MaxChance.Returns(0.5f);
@@ -46,7 +48,7 @@ namespace BalloonParty.Tests.Item
             _levelNow = Substitute.For<ILevelParameters>();
             _level = Substitute.For<IActiveLevelParameters>();
             _level.Current.Returns(_levelNow);
-            _roll = new SnipeChanceRoll(_weapon, _armer, _settings, _need, _armour, _assist, _level)
+            _roll = new SnipeChanceRoll(_weapon, _armer, _settings, _need, _armour, _coveredBomb, _assist, _level)
             {
                 Now = () => 0f
             };
@@ -152,7 +154,7 @@ namespace BalloonParty.Tests.Item
             // Two stacks of 0.15 from the real card arithmetic: a draw of 0.25 misses one stack, hits two.
             var rig = new UpgradeRig(Substitute.For<IProjectileFlightConfig>());
             var card = UpgradeRig.Card(UpgradeKind.SnipeChance, 0.15f);
-            var roll = new SnipeChanceRoll(rig.Upgrades, _armer, rig.Settings, _need, _armour, _assist, _level)
+            var roll = new SnipeChanceRoll(rig.Upgrades, _armer, rig.Settings, _need, _armour, _coveredBomb, _assist, _level)
             {
                 Random01 = () => 0.25f,
                 Now = () => 0f

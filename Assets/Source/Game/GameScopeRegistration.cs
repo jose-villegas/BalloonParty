@@ -337,6 +337,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<SpaceDanger>().AsSelf().As<IDangerLevel>();
             builder.Register<PlayerNeed>(Lifetime.Singleton).As<IPlayerNeed>();
             builder.RegisterEntryPoint<ArmourNeed>().As<IArmourNeed>().As<IRunResettable>();
+            builder.RegisterEntryPoint<CoveredBombNeed>().As<ICoveredBombNeed>().As<IRunResettable>();
             builder.Register<ThreatEase>(Lifetime.Singleton);
             builder.Register<HeartTrailTracker>(Lifetime.Singleton).AsSelf().As<IRunResettable>();
             builder.Register<DefaultScoreTrailBehaviour>(Lifetime.Singleton).AsSelf();
