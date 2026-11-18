@@ -1,5 +1,7 @@
 var NAVTREEINDEX136 =
 {
+"structBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce_1_1Tracked.html#a90b6106f9b5061b3da539902f18a05c8":[5,0,0,10,1,0,0,0],
+"structBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce_1_1Tracked.html#a90b6106f9b5061b3da539902f18a05c8":[6,0,0,10,1,0,0,0],
 "structBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce_1_1Tracked.html#af868e6fe41ff1d7ecee870ed1517b6c8":[5,0,0,10,1,0,0,2],
 "structBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce_1_1Tracked.html#af868e6fe41ff1d7ecee870ed1517b6c8":[6,0,0,10,1,0,0,2],
 "structBalloonParty_1_1Projectile_1_1Controller_1_1PierceCastCandidate.html":[5,0,0,10,1,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX136 =
 "structBalloonParty_1_1Shared_1_1Math_1_1SpringChainTuning.html#ada71ee2914085ff960cf794754255226":[5,0,0,12,6,3,3],
 "structBalloonParty_1_1Shared_1_1Math_1_1SpringChainTuning.html#ada71ee2914085ff960cf794754255226":[6,0,0,12,6,3,3],
 "structBalloonParty_1_1Shared_1_1Math_1_1SpringChainTuning.html#ae332f5faf81ae243fe3823506148b822":[5,0,0,12,6,3,0],
-"structBalloonParty_1_1Shared_1_1Math_1_1SpringChainTuning.html#ae332f5faf81ae243fe3823506148b822":[6,0,0,12,6,3,0],
-"structBalloonParty_1_1Shared_1_1Math_1_1SpringChainTuning.html#aeac34157ac3a328c522c326ea41c801d":[5,0,0,12,6,3,1],
-"structBalloonParty_1_1Shared_1_1Math_1_1SpringChainTuning.html#aeac34157ac3a328c522c326ea41c801d":[6,0,0,12,6,3,1]
+"structBalloonParty_1_1Shared_1_1Math_1_1SpringChainTuning.html#ae332f5faf81ae243fe3823506148b822":[6,0,0,12,6,3,0]
 };

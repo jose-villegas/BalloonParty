@@ -1,5 +1,7 @@
 var NAVTREEINDEX137 =
 {
+"structBalloonParty_1_1Shared_1_1Math_1_1SpringChainTuning.html#aeac34157ac3a328c522c326ea41c801d":[5,0,0,12,6,3,1],
+"structBalloonParty_1_1Shared_1_1Math_1_1SpringChainTuning.html#aeac34157ac3a328c522c326ea41c801d":[6,0,0,12,6,3,1],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html":[5,0,0,12,7,0],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html":[6,0,0,12,7,0],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html#a0aa269ff62131f09d555a98d633db416":[5,0,0,12,7,0,1],
@@ -247,7 +249,5 @@ var NAVTREEINDEX137 =
 "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseStartedMessage.html#a6670b4300d2374a6255800d9fbd315a8":[5,0,0,12,7,35,0],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseStartedMessage.html#a6670b4300d2374a6255800d9fbd315a8":[6,0,0,12,7,35,0],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseStartedMessage.html#acf3c096a6322dc1a74ba9fda76a97248":[5,0,0,12,7,35,2],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseStartedMessage.html#acf3c096a6322dc1a74ba9fda76a97248":[6,0,0,12,7,35,2],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseStartedMessage.html#af419d8104ea3c5066d6ad6e27f07abd1":[5,0,0,12,7,35,1],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseStartedMessage.html#af419d8104ea3c5066d6ad6e27f07abd1":[6,0,0,12,7,35,1]
+"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseStartedMessage.html#acf3c096a6322dc1a74ba9fda76a97248":[6,0,0,12,7,35,2]
 };

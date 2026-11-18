@@ -3,6 +3,7 @@ var classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow =
     [ "MapDescriptor", "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html", "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor" ],
     [ "BuildDescriptors", "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#a122d6e4bcfcac3b1089d8a549c2a4144", null ],
     [ "ChannelTooltip", "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#ac1bf26e583c3ca57c07b40d346a06e2c", null ],
+    [ "CurrentMaps", "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#a9b23b6328b646b25c7c5d400504b2b0c", null ],
     [ "DrawChannelToggles", "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#a083d58b7642bc1671a60b4f6313d7fa2", null ],
     [ "DrawInfoBar", "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#a32fd9e24dfef942deb7dbdaab1552762", null ],
     [ "DrawMapSelector", "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#a50508760bf4f28fad36a0657976b22b1", null ],

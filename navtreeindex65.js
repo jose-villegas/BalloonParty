@@ -1,5 +1,7 @@
 var NAVTREEINDEX65 =
 {
+"classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html#a8edd102d0a60ee41fd7b859a2514e292":[5,0,0,6,9,2,12],
+"classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html#a8edd102d0a60ee41fd7b859a2514e292":[6,0,0,6,9,2,12],
 "classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html#a9778eadbe1f5d0726f447420f32c4350":[5,0,0,6,9,2,5],
 "classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html#a9778eadbe1f5d0726f447420f32c4350":[6,0,0,6,9,2,5],
 "classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html#ab1485888efb5222902fb0f508be3fd85":[5,0,0,6,9,2,6],
@@ -247,7 +249,5 @@ var NAVTREEINDEX65 =
 "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a2530cd5d52e8d0cffd4097d3f281a58a":[5,0,0,6,10,7,24],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a2530cd5d52e8d0cffd4097d3f281a58a":[6,0,0,6,10,7,24],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a27212cfac9da6513b81f81c3002ad112":[5,0,0,6,10,7,22],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a27212cfac9da6513b81f81c3002ad112":[6,0,0,6,10,7,22],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a2f0095c038d019c4c23c541c5c9ea8e2":[5,0,0,6,10,7,87],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a2f0095c038d019c4c23c541c5c9ea8e2":[6,0,0,6,10,7,87]
+"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a27212cfac9da6513b81f81c3002ad112":[6,0,0,6,10,7,22]
 };

@@ -1,5 +1,7 @@
 var NAVTREEINDEX54 =
 {
+"classBalloonParty_1_1Editor_1_1TexturePreviewBox.html#a9dbf361d4637747d3a62f000c8d846ea":[5,0,0,5,50,8],
+"classBalloonParty_1_1Editor_1_1TexturePreviewBox.html#a9dbf361d4637747d3a62f000c8d846ea":[6,0,0,5,50,8],
 "classBalloonParty_1_1Editor_1_1TexturePreviewBox.html#ae7d01c47beaf04e49a1d43c8e6121dd5":[5,0,0,5,50,9],
 "classBalloonParty_1_1Editor_1_1TexturePreviewBox.html#ae7d01c47beaf04e49a1d43c8e6121dd5":[6,0,0,5,50,9],
 "classBalloonParty_1_1Editor_1_1UnitCircleDrawer.html":[5,0,0,5,51],
@@ -247,7 +249,5 @@ var NAVTREEINDEX54 =
 "classBalloonParty_1_1Game_1_1BalloonWanderSettings.html#ac69a21b303ba0d4e8b70971dcf6006ec":[5,0,0,6,14,11],
 "classBalloonParty_1_1Game_1_1BalloonWanderSettings.html#ac69a21b303ba0d4e8b70971dcf6006ec":[6,0,0,6,14,11],
 "classBalloonParty_1_1Game_1_1BalloonWanderSettings.html#acb781866e7bb8611a816f324134c0bf2":[5,0,0,6,14,5],
-"classBalloonParty_1_1Game_1_1BalloonWanderSettings.html#acb781866e7bb8611a816f324134c0bf2":[6,0,0,6,14,5],
-"classBalloonParty_1_1Game_1_1BalloonWanderSettings.html#adfdfa361acfad627a9ed4a99dca3888d":[5,0,0,6,14,3],
-"classBalloonParty_1_1Game_1_1BalloonWanderSettings.html#adfdfa361acfad627a9ed4a99dca3888d":[6,0,0,6,14,3]
+"classBalloonParty_1_1Game_1_1BalloonWanderSettings.html#acb781866e7bb8611a816f324134c0bf2":[6,0,0,6,14,5]
 };

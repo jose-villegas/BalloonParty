@@ -1,5 +1,7 @@
 var NAVTREEINDEX109 =
 {
+"classBalloonParty_1_1UI_1_1Score_1_1LevelLabel.html#aa0ecb99e2e9733e4c07d294e32b184e2":[5,0,0,16,8,3,15],
+"classBalloonParty_1_1UI_1_1Score_1_1LevelLabel.html#aa0ecb99e2e9733e4c07d294e32b184e2":[6,0,0,16,8,3,15],
 "classBalloonParty_1_1UI_1_1Score_1_1LevelLabel.html#aa5049fa786f74e5e87c1a18f76e8b6e3":[5,0,0,16,8,3,17],
 "classBalloonParty_1_1UI_1_1Score_1_1LevelLabel.html#aa5049fa786f74e5e87c1a18f76e8b6e3":[6,0,0,16,8,3,17],
 "classBalloonParty_1_1UI_1_1Score_1_1LevelLabel.html#aa84a5a7d943e0da255b656205f4d252b":[5,0,0,16,8,3,12],
@@ -247,7 +249,5 @@ var NAVTREEINDEX109 =
 "classBalloonParty_1_1UI_1_1Telemetry_1_1MetricLabel.html#a8828b7d7fcbdaca9975957609e1fcbc2":[5,0,0,16,10,1,9],
 "classBalloonParty_1_1UI_1_1Telemetry_1_1MetricLabel.html#a8828b7d7fcbdaca9975957609e1fcbc2":[6,0,0,16,10,1,9],
 "classBalloonParty_1_1UI_1_1Telemetry_1_1MetricLabel.html#a9311952c7dd0a9f5620aee844488e381":[5,0,0,16,10,1,5],
-"classBalloonParty_1_1UI_1_1Telemetry_1_1MetricLabel.html#a9311952c7dd0a9f5620aee844488e381":[6,0,0,16,10,1,5],
-"classBalloonParty_1_1UI_1_1Telemetry_1_1MetricLabel.html#aa43b4f456d287c118558eef5c3dc64e3":[5,0,0,16,10,1,1],
-"classBalloonParty_1_1UI_1_1Telemetry_1_1MetricLabel.html#aa43b4f456d287c118558eef5c3dc64e3":[6,0,0,16,10,1,1]
+"classBalloonParty_1_1UI_1_1Telemetry_1_1MetricLabel.html#a9311952c7dd0a9f5620aee844488e381":[6,0,0,16,10,1,5]
 };

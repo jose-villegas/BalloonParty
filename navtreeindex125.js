@@ -1,5 +1,7 @@
 var NAVTREEINDEX125 =
 {
+"namespaces.html":[5,0],
+"pages.html":[],
 "plan_audio.html":[3,14],
 "plan_audio.html#autotoc_md320":[3,14,0],
 "plan_audio.html#autotoc_md322":[3,14,0,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX125 =
 "plan_gameplay_telemetry.html#autotoc_md636":[3,12,0,5],
 "plan_gameplay_telemetry.html#autotoc_md637":[3,12,0,5,0],
 "plan_gameplay_telemetry.html#autotoc_md638":[3,12,0,5,0,0],
-"plan_gameplay_telemetry.html#autotoc_md639":[3,12,0,5,0,1],
-"plan_gameplay_telemetry.html#autotoc_md640":[3,12,0,5,1],
-"plan_gameplay_telemetry.html#autotoc_md642":[3,12,0,6]
+"plan_gameplay_telemetry.html#autotoc_md639":[3,12,0,5,0,1]
 };

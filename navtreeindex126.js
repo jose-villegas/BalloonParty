@@ -1,5 +1,7 @@
 var NAVTREEINDEX126 =
 {
+"plan_gameplay_telemetry.html#autotoc_md640":[3,12,0,5,1],
+"plan_gameplay_telemetry.html#autotoc_md642":[3,12,0,6],
 "plan_grid_actor_expansion.html":[3,3],
 "plan_grid_actor_expansion.html#autotoc_md643":[3,3,0],
 "plan_grid_actor_expansion.html#autotoc_md645":[3,3,0,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX126 =
 "plan_terrain_biomes.html#autotoc_md919":[3,9,0,2],
 "plan_terrain_biomes.html#autotoc_md920":[3,9,0,2,0],
 "plan_terrain_biomes.html#autotoc_md921":[3,9,0,2,1],
-"plan_terrain_biomes.html#autotoc_md922":[3,9,0,2,2],
-"plan_terrain_biomes.html#autotoc_md923":[3,9,0,2,3],
-"plan_terrain_biomes.html#autotoc_md924":[3,9,0,2,4]
+"plan_terrain_biomes.html#autotoc_md922":[3,9,0,2,2]
 };

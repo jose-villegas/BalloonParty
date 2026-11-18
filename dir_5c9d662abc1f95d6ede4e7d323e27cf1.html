@@ -158,7 +158,9 @@ Files</h2></td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>ClearEffects()</code>   </td><td class="markdownTableBodyNone">Removes the frozen pops and the staged balls (retired from the registry), and shows the balloons the pops hid    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>Capture(path, around, size)</code>   </td><td class="markdownTableBodyNone">Renders the main camera straight to a texture (fresh even while the Editor is unfocused): the frame, or a square around a balloon or a world point   </td></tr>
+<td class="markdownTableBodyNone"><code>Capture(path, around, size)</code>   </td><td class="markdownTableBodyNone">Renders the main camera straight to a texture (fresh even while the Editor is unfocused): the frame, or a square around a balloon or a world point    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>Maps(directory)</code>   </td><td class="markdownTableBodyNone">Writes every render map the Game Render Maps window lists (<code>Editor/Maps</code>, through <code>GameRenderMapsWindow.CurrentMaps</code>) as it stands this frame, at its own resolution: <code>name-rgb.png</code> for its colour channels and <code>name-a.png</code> for its alpha as grey. Channels brighter than 1 are scaled down to fit, and the answer gives each map's size and its brightest colour and alpha, or <code>none</code> for a map that doesn't exist yet   </td></tr>
 </table>
 <p>A <code>.shader</code> file passed to <code>FreezePop</code> is compiled without importing it, its relative includes rewritten to project paths from its own folder. So a shader in a worktree can be tried in the Editor, which has the main checkout open, before it's merged; it has to compile against the main checkout's includes.</p>
 <p>Gated on <code>UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE</code>, like the cheats it drives. Public, unlike the rest of this assembly, so an eval script can call it without reflection. </p>

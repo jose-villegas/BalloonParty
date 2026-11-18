@@ -1,5 +1,7 @@
 var NAVTREEINDEX142 =
 {
+"style_guide.html#autotoc_md1029":[1,0,7,0],
+"style_guide.html#autotoc_md1030":[1,0,7,1],
 "style_guide.html#autotoc_md1032":[1,0,8],
 "style_guide.html#autotoc_md1034":[1,0,9],
 "style_guide.html#autotoc_md1036":[1,0,10],
