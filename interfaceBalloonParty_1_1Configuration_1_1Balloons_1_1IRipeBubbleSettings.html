@@ -192,6 +192,12 @@ Properties</h2></td></tr>
 <tr class="memitem:ab0c4f134f39db55b8e7873582279f5fe" id="r_ab0c4f134f39db55b8e7873582279f5fe"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab0c4f134f39db55b8e7873582279f5fe">FuseSeconds</a><code> [get]</code></td></tr>
 <tr class="memdesc:ab0c4f134f39db55b8e7873582279f5fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds of level clock from ripening to the fuse running out. 0 or less: clusters never ripen.  <br /></td></tr>
 <tr class="separator:ab0c4f134f39db55b8e7873582279f5fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa16bb8d645fb12fb4b46c2e3babc59e1" id="r_aa16bb8d645fb12fb4b46c2e3babc59e1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa16bb8d645fb12fb4b46c2e3babc59e1">MaxRipeClusters</a><code> [get]</code></td></tr>
+<tr class="memdesc:aa16bb8d645fb12fb4b46c2e3babc59e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">The most clusters that are full (ripe, or about to ripen) at once, at least 1: while that many are, a merge or a foam's hand-out fills a cluster to one bubble short of the cap, where it waits.  <br /></td></tr>
+<tr class="separator:aa16bb8d645fb12fb4b46c2e3babc59e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10ddfb749b258aed2b9bd0bbe0f39ca8" id="r_a10ddfb749b258aed2b9bd0bbe0f39ca8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a10ddfb749b258aed2b9bd0bbe0f39ca8">MergeOffBeat</a><code> [get]</code></td></tr>
+<tr class="memdesc:a10ddfb749b258aed2b9bd0bbe0f39ca8"><td class="mdescLeft">&#160;</td><td class="mdescRight">When in each beat of the board (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#af878da69efc6cff720ede5832a9b476a" title="Seconds of play between the unbreakables&#39; beats.">IUnbreakableFormationSettings.BeatSeconds</a>) bubble clusters merge, as a share of the beat after it falls (0 to 1): the bubbles' off-beat.  <br /></td></tr>
+<tr class="separator:a10ddfb749b258aed2b9bd0bbe0f39ca8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a543462610c0931c54142f086fc037d6e" id="r_a543462610c0931c54142f086fc037d6e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a543462610c0931c54142f086fc037d6e">RingSeconds</a><code> [get]</code></td></tr>
 <tr class="memdesc:a543462610c0931c54142f086fc037d6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds the ring a player's burst sends over the water takes to spread to the edge of the blast (<a class="el" href="#a6c79c18bb9d2540a672dbd94cf7d6ff6" title="How far a ripe cluster&#39;s ripple reaches, in world units between slot centres, the edge included: ever...">RippleRadius</a>) and fade.  <br /></td></tr>
 <tr class="separator:a543462610c0931c54142f086fc037d6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -201,6 +207,9 @@ Properties</h2></td></tr>
 <tr class="memitem:ac1c2e7384d85277befde8a0c9f444ec5" id="r_ac1c2e7384d85277befde8a0c9f444ec5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac1c2e7384d85277befde8a0c9f444ec5">RingSortingOrder</a><code> [get]</code></td></tr>
 <tr class="memdesc:ac1c2e7384d85277befde8a0c9f444ec5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The ring's order on its layer: below the balloons, so it reads as on the water.  <br /></td></tr>
 <tr class="separator:ac1c2e7384d85277befde8a0c9f444ec5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2dfae2e2a0c4e40966290bb123c58d7f" id="r_a2dfae2e2a0c4e40966290bb123c58d7f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2dfae2e2a0c4e40966290bb123c58d7f">RipenCooldownBeats</a><code> [get]</code></td></tr>
+<tr class="memdesc:a2dfae2e2a0c4e40966290bb123c58d7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many of the bubbles' off-beats (<a class="el" href="#a10ddfb749b258aed2b9bd0bbe0f39ca8" title="When in each beat of the board (IUnbreakableFormationSettings.BeatSeconds) bubble clusters merge,...">MergeOffBeat</a>) pass after a ripe cluster ends (burst by a hit, or its fuse run out) before another cluster is filled to the cap.  <br /></td></tr>
+<tr class="separator:a2dfae2e2a0c4e40966290bb123c58d7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a325467b58e077d0cf10edceff1cc7d87" id="r_a325467b58e077d0cf10edceff1cc7d87"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a325467b58e077d0cf10edceff1cc7d87">RippleDamage</a><code> [get]</code></td></tr>
 <tr class="memdesc:a325467b58e077d0cf10edceff1cc7d87"><td class="mdescLeft">&#160;</td><td class="mdescRight">The hit each balloon the ripple reaches takes.  <br /></td></tr>
 <tr class="separator:a325467b58e077d0cf10edceff1cc7d87"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -824,6 +833,59 @@ Properties</h2></td></tr>
 
 </div>
 </div>
+<a id="aa16bb8d645fb12fb4b46c2e3babc59e1" name="aa16bb8d645fb12fb4b46c2e3babc59e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa16bb8d645fb12fb4b46c2e3babc59e1">&#9670;&#160;</a></span>MaxRipeClusters</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.IRipeBubbleSettings.MaxRipeClusters</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The most clusters that are full (ripe, or about to ripen) at once, at least 1: while that many are, a merge or a foam's hand-out fills a cluster to one bubble short of the cap, where it waits. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RipeBubbleSettings.html#aa947fa8dea97b0201118bcba7f2f7f22">BalloonParty.Configuration.Balloons.RipeBubbleSettings</a>.</p>
+
+</div>
+</div>
+<a id="a10ddfb749b258aed2b9bd0bbe0f39ca8" name="a10ddfb749b258aed2b9bd0bbe0f39ca8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10ddfb749b258aed2b9bd0bbe0f39ca8">&#9670;&#160;</a></span>MergeOffBeat</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.IRipeBubbleSettings.MergeOffBeat</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>When in each beat of the board (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#af878da69efc6cff720ede5832a9b476a" title="Seconds of play between the unbreakables&#39; beats.">IUnbreakableFormationSettings.BeatSeconds</a>) bubble clusters merge, as a share of the beat after it falls (0 to 1): the bubbles' off-beat. </p>
+<p>Clusters merge only then, one pass an off-beat. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RipeBubbleSettings.html#a377589fc9b186113d1a1dfd914cc1b7e">BalloonParty.Configuration.Balloons.RipeBubbleSettings</a>.</p>
+
+</div>
+</div>
 <a id="a543462610c0931c54142f086fc037d6e" name="a543462610c0931c54142f086fc037d6e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a543462610c0931c54142f086fc037d6e">&#9670;&#160;</a></span>RingSeconds</h2>
 
@@ -899,6 +961,33 @@ Properties</h2></td></tr>
 <p>The ring's order on its layer: below the balloons, so it reads as on the water. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RipeBubbleSettings.html#a2ce7b9b059a4e5467eccf96acace9ad4">BalloonParty.Configuration.Balloons.RipeBubbleSettings</a>.</p>
+
+</div>
+</div>
+<a id="a2dfae2e2a0c4e40966290bb123c58d7f" name="a2dfae2e2a0c4e40966290bb123c58d7f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2dfae2e2a0c4e40966290bb123c58d7f">&#9670;&#160;</a></span>RipenCooldownBeats</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.IRipeBubbleSettings.RipenCooldownBeats</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How many of the bubbles' off-beats (<a class="el" href="#a10ddfb749b258aed2b9bd0bbe0f39ca8" title="When in each beat of the board (IUnbreakableFormationSettings.BeatSeconds) bubble clusters merge,...">MergeOffBeat</a>) pass after a ripe cluster ends (burst by a hit, or its fuse run out) before another cluster is filled to the cap. </p>
+<p>0: none. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RipeBubbleSettings.html#af6e0eb29058cace8a64e575f068f5de4">BalloonParty.Configuration.Balloons.RipeBubbleSettings</a>.</p>
 
 </div>
 </div>

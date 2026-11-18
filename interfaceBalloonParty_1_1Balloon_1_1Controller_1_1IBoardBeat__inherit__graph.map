@@ -1,0 +1,5 @@
+<map id="BalloonParty.Balloon.Controller.IBoardBeat" name="BalloonParty.Balloon.Controller.IBoardBeat">
+<area shape="rect" id="Node000001" title="The board&#39;s rhythm, for whatever else on the board keeps time with it: the unbreakables&#39; beat (IUnbre..." alt="" coords="5,5,231,50"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html" title=" " alt="" coords="5,98,231,143"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="120,64,120,99,116,97,116,68"/>
+</map>

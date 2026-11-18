@@ -74,10 +74,12 @@ var annotated_dup =
           [ "BubbleMergeRule", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeRule.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeRule" ],
           [ "BubbleMergeService", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeService.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeService" ],
           [ "IBalloonPopper", "interfaceBalloonParty_1_1Balloon_1_1Controller_1_1IBalloonPopper.html", "interfaceBalloonParty_1_1Balloon_1_1Controller_1_1IBalloonPopper" ],
+          [ "IBoardBeat", "interfaceBalloonParty_1_1Balloon_1_1Controller_1_1IBoardBeat.html", "interfaceBalloonParty_1_1Balloon_1_1Controller_1_1IBoardBeat" ],
           [ "PressurePropagation", "classBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation" ],
           [ "RipeBubbleBurst", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleBurst.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleBurst" ],
           [ "RipeBubbleRule", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleRule.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleRule" ],
           [ "RipeBubbleService", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleService.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleService" ],
+          [ "RipeRoom", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeRoom.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeRoom" ],
           [ "RoamRests", "classBalloonParty_1_1Balloon_1_1Controller_1_1RoamRests.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1RoamRests" ]
         ] ],
         [ "Formation", "namespaceBalloonParty_1_1Balloon_1_1Formation.html", [
@@ -878,6 +880,7 @@ var annotated_dup =
           [ "PierceCastCandidate", "structBalloonParty_1_1Projectile_1_1Controller_1_1PierceCastCandidate.html", "structBalloonParty_1_1Projectile_1_1Controller_1_1PierceCastCandidate" ],
           [ "PierceDischargeEffects", "classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects" ],
           [ "PierceTelegraphScan", "classBalloonParty_1_1Projectile_1_1Controller_1_1PierceTelegraphScan.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1PierceTelegraphScan" ],
+          [ "PierceWake", "classBalloonParty_1_1Projectile_1_1Controller_1_1PierceWake.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1PierceWake" ],
           [ "ProjectileDoomedTimeScaleController", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController" ],
           [ "ProjectileHitResolver", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver" ],
           [ "ProjectileMotionResolver", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileMotionResolver.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileMotionResolver" ],
@@ -921,6 +924,7 @@ var annotated_dup =
           [ "SmokeFieldView", "classBalloonParty_1_1Scenario_1_1View_1_1SmokeFieldView.html", "classBalloonParty_1_1Scenario_1_1View_1_1SmokeFieldView" ],
           [ "WallNetView", "classBalloonParty_1_1Scenario_1_1View_1_1WallNetView.html", "classBalloonParty_1_1Scenario_1_1View_1_1WallNetView" ],
           [ "WaterCausticBuffer", "classBalloonParty_1_1Scenario_1_1View_1_1WaterCausticBuffer.html", "classBalloonParty_1_1Scenario_1_1View_1_1WaterCausticBuffer" ],
+          [ "WaterCrater", "structBalloonParty_1_1Scenario_1_1View_1_1WaterCrater.html", "structBalloonParty_1_1Scenario_1_1View_1_1WaterCrater" ],
           [ "WaterRippleBuffer", "classBalloonParty_1_1Scenario_1_1View_1_1WaterRippleBuffer.html", "classBalloonParty_1_1Scenario_1_1View_1_1WaterRippleBuffer" ]
         ] ],
         [ "ActiveScenario", "classBalloonParty_1_1Scenario_1_1ActiveScenario.html", "classBalloonParty_1_1Scenario_1_1ActiveScenario" ],

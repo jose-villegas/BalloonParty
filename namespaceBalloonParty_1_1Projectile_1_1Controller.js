@@ -6,6 +6,7 @@ var namespaceBalloonParty_1_1Projectile_1_1Controller =
     [ "PierceCastCandidate", "structBalloonParty_1_1Projectile_1_1Controller_1_1PierceCastCandidate.html", "structBalloonParty_1_1Projectile_1_1Controller_1_1PierceCastCandidate" ],
     [ "PierceDischargeEffects", "classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects" ],
     [ "PierceTelegraphScan", "classBalloonParty_1_1Projectile_1_1Controller_1_1PierceTelegraphScan.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1PierceTelegraphScan" ],
+    [ "PierceWake", "classBalloonParty_1_1Projectile_1_1Controller_1_1PierceWake.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1PierceWake" ],
     [ "ProjectileDoomedTimeScaleController", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController" ],
     [ "ProjectileHitResolver", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver" ],
     [ "ProjectileMotionResolver", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileMotionResolver.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileMotionResolver" ],

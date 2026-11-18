@@ -113,7 +113,7 @@ $(function(){initNavTree('plan_ripe_bubble_cluster.html',''); initResizable(true
 <div class="textblock"><h1><a class="anchor" id="autotoc_md875"></a>
 The ripe bubble cluster: a full cluster is a bomb with a fuse</h1>
 <blockquote class="doxtable">
-<p>On water, a bubble cluster that reaches the cap of 6 becomes <b>ripe</b>. It swells, and a fuse starts. Popped before the fuse runs out, its burst is the player's: a small bomb, whose ripple knocks a hit off every balloon within its radius. Left alone, its burst is the level's: it hands its bubbles out as foam and leaves. Each neighbouring balloon gets a one-bubble coat that must be popped first and washes the shot's colour; neighbouring clusters get the bubbles left after that. Planned 2026-11-18; the owner settled the open decisions the same day, and the player's burst was reworked into a blast after it was played on a phone (decisions 13 to 17). <b>Status: building.</b> </p>
+<p>On water, a bubble cluster that reaches the cap of 6 becomes <b>ripe</b>. It swells, and a fuse starts. Popped before the fuse runs out, its burst is the player's: a small bomb, whose ripple knocks a hit off every balloon within its radius. Left alone, its burst is the level's: it hands its bubbles out as foam and leaves. Each neighbouring balloon gets a one-bubble coat that must be popped first and washes the shot's colour; neighbouring clusters get the bubbles left after that. Planned 2026-11-18; the owner settled the open decisions the same day, and the player's burst was reworked into a blast after it was played on a phone (decisions 13 to 17). A later run on a phone turned into one explosion after another, so the number of clusters full at once is now limited and spaced out (decision 18), and merging itself was put on the board's beat, with the gap counted in beats (decision 19). <b>Status: building.</b> </p>
 </blockquote>
 <hr  />
 <h2><a class="anchor" id="autotoc_md877"></a>
@@ -136,6 +136,17 @@ to anything closer, until it runs out." Its two questions were answered the same
 <li>"so it behaves like a bomb, just a smaller scale bomb"</li>
 </ul>
 <p>This is about the hit ending only: the fuse-out ending, the foam's hand-out to the six neighbours, stays as it was. Decisions 13 to 17 record what was built from it.</p>
+<p>On how many clusters are full at once, from a later run on a phone:</p>
+<p>"we need to make a way to reduce the amount of full bubble clusters in higher spawn clocks and higher levels
+it converts into a chain of constant explosions, so it becomes full spam, this happened in my current play"</p>
+<p>Decision 18 records what was built from it.</p>
+<p>On hearing that rule, the owner asked for the merging itself to keep time with the rest of the board:</p>
+<ul>
+<li>"Maybe in the spirit of other mechanics the bubbles could merge under syncopation"</li>
+<li>"It's what we use for the unbreakable cycles"</li>
+<li>"Or the snake movement of toughs everything has a rhythm"</li>
+</ul>
+<p>Decision 19 records what was built from it.</p>
 <h2><a class="anchor" id="autotoc_md878"></a>
 What exists (verified 2026-11-18)</h2>
 <table class="markdownTable">
@@ -189,6 +200,29 @@ Ripening and the fuse</h3>
 <p>A cluster is ripe when its count reaches <code>BubbleMergeMax</code>: the existing cap is the threshold, with no second number. Ripening starts a fuse of <code>FuseSeconds</code> (6) on <code>ISpawnClock.SecondsOnLevel</code>, held as a deadline.</p>
 <p>The fuse is in seconds on the level clock, not in spawn lines. Lines arrive anywhere from 0.55 s to 1.7 s apart, and their rate is multiplied by things the player cannot see (up to 8 times faster on a sparse board, 3 times faster in flight, slower in a breather). The level clock holds through exactly the moments a timed threat would be unfair: pause, the level-up cinematic, game over.</p>
 <h3><a class="anchor" id="autotoc_md881"></a>
+Merging on the beat</h3>
+<p>Clusters merge on the board's rhythm (decision 19), the one the unbreakables keep: a beat is <code>IUnbreakableFormationSettings.BeatSeconds</code> (1.7 s of play), an unbreakable snake steps on the beat and half a beat in, and two beats make a cycle. The bubbles' <b>off-beat</b> falls <code>MergeOffBeat</code> (0.25) of a beat after each beat: a quarter beat, between the snake's two steps, so a merge never lands on a snake's step.</p>
+<ul>
+<li><code>BubbleMergeService</code> runs a merge pass only on an off-beat, and at most one on each. A pass still picks pairs that share no cluster (<code>BubbleMergeRule.Choose</code>), so a cluster takes part in one merge a beat, and a group gathers a step a beat where it gathered a step a frame.</li>
+<li>Whatever could open room no longer sets a pass off at once. It marks that there is something to look at on the next off-beat: the grid changing, a hit on a cluster, a merge of the last pass, or a merge the room for full clusters held back. With nothing marked, an off-beat scans nothing.</li>
+<li>The beat is <code>BalloonBalancer</code>'s own clock, read through <code>IBoardBeat.OffBeats(share)</code>: how many off-beats have passed in the run. A reader keeps no timer, only the count it last saw. The clock runs with no unbreakable and no snake on the board, so it ticks on every water level. A pause holds it. A doomed shot's last glide does not: the rhythm comes first there, as it does for the snake's step. A new run starts the count over, which a reader takes as a start and not as an off-beat.</li>
+<li>Who gives to whom, how long an absorbed cluster takes to slide in (<code>BubbleMergeSeconds</code>) and the fuse, on the level clock, are as they were.</li>
+</ul>
+<h3><a class="anchor" id="autotoc_md882"></a>
+Room for full clusters</h3>
+<p>Not every cluster may be filled to the cap at any time (decision 18). <code>RipeRoom</code> answers what a cluster may be filled to right now, and everything that gives a cluster bubbles asks it: the merge pass (<code>BubbleMergeService</code>) and the foam's hand-out (<code>RipeBubbleBurst</code>).</p>
+<ul>
+<li>It is <code>BubbleMergeMax</code> while fewer than <code>MaxRipeClusters</code> (2) clusters on the board are <b>full</b>, and <code>RipenCooldownBeats</code> (2, one cycle) of the bubbles' off-beats have passed since a ripe cluster last ended, by a hit or by its fuse running out. Otherwise it is <code>BubbleMergeMax - 1</code>: the cluster stops at 5 and waits there, unripe. The gap was 4 seconds of level clock when decision 18 was built; decision 19 put it on the beat, so it is over on an off-beat, exactly when the merge service looks. Two off-beats is between one beat and two of play, by where in the beat the cluster ended.</li>
+<li>A full cluster is one holding <code>BubbleMergeMax</code> bubbles or more, ripe or about to ripen. Counting by bubbles, not by the ripe flag, covers the tick between a merge filling a cluster and the service ripening it.</li>
+<li>The count runs through a pass. A merge pass counts the board's full clusters once as it starts and adds each cluster it fills, so two merges of one pass cannot both fill a cluster when there is room for one: the second stops a bubble short, or gives nothing. A foam's hand-out counts the same way, leaving out the foaming cluster itself, which is on its way off the board.</li>
+<li>It limits what a cluster is given, never what it holds. A cluster already at the cap keeps its bubbles and ripens as before, whatever the count and the cooldown say.</li>
+<li>Only a cluster at the cap is ripe, so six bubbles still always means it is about to blow.</li>
+<li>A foam's hand-out comes at the moment its cluster ends, so the cooldown that ending starts already holds it: with a cooldown above 0 a hand-out tops neighbouring clusters up to 5 and fills none, and the bubble it holds back pops as a leftover.</li>
+<li>The off-beat count of the last ending is kept with the level it ended on. The beat runs on from one level into the next, but a level starts with no gap to wait out, whatever ended on the one before. A run reset clears it too, and a count that has fallen below the one kept (the beat started over before the reset reached the room) reads as no gap.</li>
+<li>When the gap is over, nothing on the board changes. A merge pass that held a merge back marks it as something to look at, so the service scans again on each off-beat until the merge is made: a cluster waiting at 5 beside a giver fills on the off-beat the gap ends on, with no change on the board.</li>
+<li>With ripeness off (<code>FuseSeconds</code> 0) nothing is limited.</li>
+</ul>
+<h3><a class="anchor" id="autotoc_md883"></a>
 Popped in time: the ripple</h3>
 <p><b>A ripe cluster is fragile: any hit bursts the whole cluster.</b> A cluster loses one bubble a hit, so without this the first hit on a ripe 5 would make it a 4 and the choice would be between two bad rules. If that hit defused it, the ripple could only come from a one-shot pop (a pierce, a bomb, a laser) and the reward would be out of reach. If it stayed ripe, the ripple would cost five hits and five streak breaks. Fragile makes the answer one accurate shot.</p>
 <p>The burst is a small bomb (decision 13; this section first described a ripple into the six neighbours, which it replaced). It sends one hit to every balloon on a slot whose centre lies within <code>RippleRadius</code> (1.35 world units) of the burst's slot centre, through <code>IHitDispatcher</code>, so scoring, items and chains behave as for any other hit. Slots are 0.75 apart, so the radius takes the first ring at 0.75 and, of the next, the six slots at 1.30 but not the six at 1.50: 12 slots on an open board. (The bomb item's kill radius is 1.25, by collider overlap.) The reach is measured between slot centres, not by physics overlap and not from where a balloon is drawn on its way to a slot, so it is the same on every run and the shot solver repeats it exactly. One pure rule, <code>RipeBubbleRule.RippleReaches</code>, answers for the game and the solver.</p>
@@ -203,12 +237,12 @@ Popped in time: the ripple</h3>
 <li>A ripple strips foam coats, so popping a ripe cluster cleans the foam round it.</li>
 <li>A burst scores the bubbles the cluster held.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md882"></a>
+<h3><a class="anchor" id="autotoc_md884"></a>
 Fuse runs out: the foam</h3>
 <p>The cluster hands its bubbles out and leaves. <code>RipeBubbleBurst.PlanFoam</code> decides where each bubble goes (<code>RipeBubbleRule.PlanHandout</code>), in this order:</p>
 <ol type="1">
 <li>A <b>coat</b> to each neighbouring plain balloon (<code>ICoatable</code>: the plain balloon and its silver, gold and rainbow skins, item carriers included), up to <code>CoatLayers</code>.</li>
-<li>Then one bubble at a time to <b>neighbouring clusters</b> with room below <code>BubbleMergeMax</code>: one per cluster a round, in <code>HexCoordinates.HexNeighborIndices</code> order, until the bubbles or the room run out. A cluster this fills to the cap ripens on the next tick and starts its own fuse.</li>
+<li>Then one bubble at a time to <b>neighbouring clusters</b> with room below <code>BubbleMergeMax</code>: one per cluster a round, in <code>HexCoordinates.HexNeighborIndices</code> order, until the bubbles or the room run out. The bubble that would fill a cluster to the cap is given only while the board has room for another full cluster (see <em>Room for full clusters</em>); with the shipped cooldown it never is, so a hand-out tops clusters up to 5. A cluster a hand-out does fill (a cooldown of 0) ripens on the next tick and starts its own fuse.</li>
 <li>Any bubbles still left pop harmlessly.</li>
 </ol>
 <p><code>RipeBubbleBurst.HandOut</code> applies the plan. It only sets state: it dispatches no hit. The cluster then leaves the board through <code>IBalloonPopper.TryLeave</code>: its slot is freed at once, with no pop, no hit and no score, while its view stays for <code>FoamLeaveSeconds</code> to hand the bubbles out. It stays ripe to the end, so it keeps its warning colour. Bubbles are only moved or lost, never made, so the board's bubbles only fall.</p>
@@ -219,9 +253,9 @@ Fuse runs out: the foam</h3>
 <li>A piercing or beam hit pops the balloon, coat and all. That contact does not wash: the coat went with the balloon, so the shot steals the balloon's colour as from any pop.</li>
 <li>One coat at most (<code>CoatLayers</code>, 1). Toughs, unbreakables, reward balloons and grid actors take nothing. Clusters take bubbles, never a coat.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md883"></a>
+<h2><a class="anchor" id="autotoc_md885"></a>
 Architecture</h2>
-<p>State sits on the models. One small controller beside <code>BubbleMergeService</code> makes the decisions, woken the same way. The merge service itself stays as it is: it has no state and no teardown, and the fuse has both.</p>
+<p>State sits on the models. One small controller beside <code>BubbleMergeService</code> makes the decisions, woken the same way. The merge service keeps the merging: it has no fuse and no teardown, and ripeness has both. Since decision 18 it asks <code>RipeRoom</code> what it may fill a cluster to, as the foam's hand-out does.</p>
 <div class="fragment"><div class="line">classDiagram</div>
 <div class="line">    class ICoatable {</div>
 <div class="line">        &lt;&lt;interface&gt;&gt;</div>
@@ -248,7 +282,9 @@ Architecture</h2>
 <div class="line">        +RippleReaches(Vector2 burst, Vector2 slot, float radius) bool</div>
 <div class="line">        +RippleTakes(ISlotActor) bool</div>
 <div class="line">        +FoamTakes(ISlotActor, int maxLayers) bool</div>
-<div class="line">        +PlanHandout(int bubbles, coatRoom, clusterRoom) int</div>
+<div class="line">        +PlanHandout(int bubbles, coatRoom, clusterRoom, int clusterFills) int</div>
+<div class="line">        +FillsLeft(int full, int maxRipe, int offBeatsSinceEnded, int cooldownBeats) int</div>
+<div class="line">        +FillLimit(int max, int full, int maxRipe, int offBeatsSinceEnded, int cooldownBeats) int</div>
 <div class="line">        +FoldCount(float elapsed, float burst, int from) int</div>
 <div class="line">        +FoldPulse(float elapsed, float burst, int from, float strength) float</div>
 <div class="line">        +SpiralTurnRate(float turns, bool fast) float</div>
@@ -265,6 +301,24 @@ Architecture</h2>
 <div class="line">        +Ripple(Vector2Int, DamageContext) int</div>
 <div class="line">        +PlanFoam(Vector2Int, int bubbles) int</div>
 <div class="line">        +HandOut(BubbleClusterModel, int handout)</div>
+<div class="line">    }</div>
+<div class="line">    class RipeRoom {</div>
+<div class="line">        +CountFull(ISlotActor leaving) int</div>
+<div class="line">        +FillsLeft(int fullClusters) int</div>
+<div class="line">        +FillLimit(int fullClusters) int</div>
+<div class="line">        +RipeEnded()</div>
+<div class="line">        +ResetRun(int)</div>
+<div class="line">    }</div>
+<div class="line">    class BubbleMergeService {</div>
+<div class="line">        +Tick()</div>
+<div class="line">    }</div>
+<div class="line">    class IBoardBeat {</div>
+<div class="line">        &lt;&lt;interface&gt;&gt;</div>
+<div class="line">        +OffBeats(float share) int</div>
+<div class="line">    }</div>
+<div class="line">    class BalloonBalancer {</div>
+<div class="line">        +OffBeats(float share) int</div>
+<div class="line">        +OffBeatsAt(int beats, float phase, float share)$ int</div>
 <div class="line">    }</div>
 <div class="line">    class IBalloonPopper {</div>
 <div class="line">        &lt;&lt;interface&gt;&gt;</div>
@@ -300,6 +354,13 @@ Architecture</h2>
 <div class="line">    RipeBubbleService --&gt; RipeBubbleRule</div>
 <div class="line">    RipeBubbleService --&gt; RipeBubbleBurst</div>
 <div class="line">    RipeBubbleService --&gt; BubbleClusterModel : ripens and runs fuse</div>
+<div class="line">    RipeBubbleService --&gt; RipeRoom : a ripe cluster ended</div>
+<div class="line">    RipeBubbleBurst --&gt; RipeRoom : what a hand-out may fill</div>
+<div class="line">    BubbleMergeService --&gt; RipeRoom : what a merge may fill</div>
+<div class="line">    BubbleMergeService --&gt; IBoardBeat : one pass an off-beat</div>
+<div class="line">    RipeRoom --&gt; IBoardBeat : off-beats since the last ending</div>
+<div class="line">    BalloonBalancer ..|&gt; IBoardBeat</div>
+<div class="line">    RipeRoom --&gt; RipeBubbleRule</div>
 <div class="line">    RipeBubbleBurst --&gt; IHitDispatcher : ripple hits</div>
 <div class="line">    RipeBubbleBurst ..&gt; NudgeMessage : shockwave before the hits</div>
 <div class="line">    RipeBubbleBurst --&gt; DisturbanceFieldService : pull then shock</div>
@@ -325,26 +386,32 @@ Architecture</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>BalloonModel</code> (new field), <code>ICoatable</code>   </td><td class="markdownTableBodyNone">Model   </td><td class="markdownTableBodyNone"><code>Coat</code>; a coated balloon's first ordinary hit removes the coat and passes through    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>RipeBubbleRule</code>   </td><td class="markdownTableBodyNone">pure static   </td><td class="markdownTableBodyNone">when a cluster is ripe, how far a ripple reaches and whom it hits, which neighbours take a coat, where a foam's bubbles go, the fold's schedule with its pumps and the hand-out's, and the turn rate the spiral arm and the cluster share    </td></tr>
+<td class="markdownTableBodyNone"><code>RipeBubbleRule</code>   </td><td class="markdownTableBodyNone">pure static   </td><td class="markdownTableBodyNone">when a cluster is ripe, what a cluster may be filled to and how many more may be filled (<code>FillLimit</code>, <code>FillsLeft</code>), how far a ripple reaches and whom it hits, which neighbours take a coat, where a foam's bubbles go, the fold's schedule with its pumps and the hand-out's, and the turn rate the spiral arm and the cluster share    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>RipeBubbleService</code>   </td><td class="markdownTableBodyNone">Controller (<code>IStartable</code>, <code>ITickable</code>, <code>IRunResettable</code>)   </td><td class="markdownTableBodyNone">ripens clusters at the cap, runs each fuse, queues bursts <code>BurstSeconds</code> after their hit, hands a foamed cluster's bubbles out, stops on level change, game over and run reset    </td></tr>
+<td class="markdownTableBodyNone"><code>RipeRoom</code>   </td><td class="markdownTableBodyNone">Controller (plain singleton, <code>IRunResettable</code>)   </td><td class="markdownTableBodyNone">what a cluster may be filled to right now: counts the board's full clusters, and remembers the off-beat count (and the level) a ripe cluster last ended on. It depends on the grid, the board's beat, the level and the configuration only, so the merge service and both ripe classes can ask it without a cycle    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>IBoardBeat</code>   </td><td class="markdownTableBodyNone">seam, implemented by <code>BalloonBalancer</code>   </td><td class="markdownTableBodyNone">the board's rhythm for whatever keeps time with it: <code>OffBeats(share)</code>, how many off-beats have passed in the run, an off-beat falling that share of a beat after each beat. The balancer answers from the unbreakables' clock it already keeps (<code>OffBeatsAt</code>, the pure count); tests substitute it    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>BubbleMergeService</code> (changed)   </td><td class="markdownTableBodyNone">Controller   </td><td class="markdownTableBodyNone">runs one merge pass on each of the bubbles' off-beats when there is something to look at, and fills a receiver to <code>RipeRoom</code>'s limit with a count that runs through the pass    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>RipeBubbleService</code>   </td><td class="markdownTableBodyNone">Controller (<code>IStartable</code>, <code>ITickable</code>, <code>IRunResettable</code>)   </td><td class="markdownTableBodyNone">ripens clusters at the cap, runs each fuse, queues bursts <code>BurstSeconds</code> after their hit, hands a foamed cluster's bubbles out, tells <code>RipeRoom</code> of both endings, stops on level change, game over and run reset    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>RipeBubbleBurst</code>   </td><td class="markdownTableBodyNone">Controller   </td><td class="markdownTableBodyNone">the ripple's blast: its hits over the radius, the shockwave nudge, the pull and shock on the disturbance field and the flash; the foam's plan (<code>PlanFoam</code>) and hand-out (<code>HandOut</code>: coats, bubbles for clusters, then the cluster leaves, and a press on the water). The ripple returns how many hits landed; the plan is the foam's message    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>IBalloonPopper.TryLeave</code>, <code>BalloonController.Leave</code>   </td><td class="markdownTableBodyNone">Controller   </td><td class="markdownTableBodyNone">takes a balloon out of play with no pop, hit or score, and returns its view to the pool after a linger    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>IBalloonPopPrelude</code>   </td><td class="markdownTableBodyNone">View seam   </td><td class="markdownTableBodyNone">a view binding that plays before its balloon's pop; <code>BalloonView.TryPlayPopPrelude</code> asks each binding, and the controller presents the pop when the prelude ends    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>SoapBubbleClusterVariant</code>   </td><td class="markdownTableBodyNone">View, on the cluster prefab   </td><td class="markdownTableBodyNone">swell, faster float, throb, tint and the spin that matches the spiral, from <code>Ripe</code> and <code>FuseLeft</code>; the fold with its pumps, as the cluster's <code>IBalloonPopPrelude</code>    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>IRipeSpin</code>   </td><td class="markdownTableBodyNone">View seam   </td><td class="markdownTableBodyNone">the way round a ripe cluster turns, which its variant gives and the spiral arm follows    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>FoamCoatOverlay</code>   </td><td class="markdownTableBodyNone">View, made in code by <code>BalloonView</code> the first time its balloon is coated   </td><td class="markdownTableBodyNone">a child sprite with the soap material showing one bubble round the balloon, shown while <code>Coat</code> is above 0 and hidden as the pop starts. It fits itself on every show from the body's local transforms up to the balloon's root, so the balloon's own world scale (a spawn tween, a pool at zero scale) never enters the fit    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>SoapBubbleShader</code>   </td><td class="markdownTableBodyNone">shared static   </td><td class="markdownTableBodyNone">the soap bubble shader's property IDs and look defaults, the float rebase, a lone bubble's look and size, used by the cluster variant, the coat and the burst view    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>RipeBubbleBurstView</code>   </td><td class="markdownTableBodyNone">View   </td><td class="markdownTableBodyNone">the spiral arm; the ripple's ring and the bubbles it throws, out to the blast's radius; and the foam's hand-out: a bubble at a time hopping to each taker or drifting off    </td></tr>
+<td class="markdownTableBodyNone"><code>SoapBubbleShader</code>   </td><td class="markdownTableBodyNone">shared static   </td><td class="markdownTableBodyNone">the soap bubble shader's property IDs and look defaults, the float rebase, a lone bubble's look and size, used by the cluster variant, the coat and the burst view    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>RipeBubbleBurstView</code>   </td><td class="markdownTableBodyNone">View   </td><td class="markdownTableBodyNone">the spiral arm; the ripple's ring and the bubbles it throws, out to the blast's radius; and the foam's hand-out: a bubble at a time hopping to each taker or drifting off    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>SoapBubbleHop</code>, <code>SoapBubbleSprites</code>   </td><td class="markdownTableBodyNone">View helpers   </td><td class="markdownTableBodyNone">the hop's arc and the pool of loose bubbles, shared by <code>BubbleMergeView</code> and <code>RipeBubbleBurstView</code>   </td></tr>
 </table>
 <p>New messages: <code>BubbleRipenedMessage</code>, <code>RipeFuseBeatMessage</code> (each fast throb near the end of a fuse) and <code>RipeBubbleBurstMessage</code>, built by <code>Ripple</code> or <code>Foam</code> (decision 14). A ripple's carries its centre, its radius and how many hits landed, which is what the view and telemetry need for a blast. A foam's carries which neighbours it coated, one bit per direction in the order <code>HexCoordinates.HexNeighborIndices</code> lists them, and their count. A foam's message also carries its plan in one <code>int</code>, four bits a bubble in the order they leave (a coat or a cluster and its direction, or a leftover) and the count above them, so it allocates nothing. A coat coming off needs none: it is already an <code>ActorHitMessage</code> with <code>PassThrough</code>, which <code>ActorHitMessageExtensions.TookCoat</code> tells apart from a resist.</p>
@@ -381,7 +448,7 @@ Architecture</h2>
 <div class="line">    Burst-&gt;&gt;Burst: stamp pull then shock, flash the light</div>
 <div class="line">    Burst--&gt;&gt;Ripe: how many hits landed</div>
 <div class="line">    Ripe-&gt;&gt;Ripe: publish RipeBubbleBurstMessage</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md884"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md886"></a>
 The coat: why it is state on the balloon</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -396,7 +463,7 @@ The coat: why it is state on the balloon</h3>
 <td class="markdownTableBodyNone">A service that intercepts hits outside the model   </td><td class="markdownTableBodyNone">Hits are evaluated inside the model by six or more callers; the check has to live there   </td></tr>
 </table>
 <p>Nothing is saved mid-level and models are built new for each spawn, so ripe state and coats need no reset or save work of their own.</p>
-<h2><a class="anchor" id="autotoc_md885"></a>
+<h2><a class="anchor" id="autotoc_md887"></a>
 Presentation</h2>
 <p>All of it is done from C# with the soap shader's existing properties; nothing here edits a shader.</p>
 <ul>
@@ -412,7 +479,7 @@ Presentation</h2>
 <li>A digit counting the fuse down, and foam drawn on the water's surface, are both shader edits. Neither is in the plan.</li>
 </ul>
 <p>All of it needs a look and a listen in the Editor.</p>
-<h2><a class="anchor" id="autotoc_md886"></a>
+<h2><a class="anchor" id="autotoc_md888"></a>
 Settings</h2>
 <p><code>IRipeBubbleSettings</code>, a block on <code>IBalloonsConfiguration</code> beside <code>BubbleMergeMax</code>.</p>
 <table class="markdownTable">
@@ -421,53 +488,59 @@ Settings</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>FuseSeconds</code>   </td><td class="markdownTableBodyNone">6   </td><td class="markdownTableBodyNone">seconds of level clock from ripe to foam; 0 turns ripeness off    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>MaxRipeClusters</code>   </td><td class="markdownTableBodyNone">2   </td><td class="markdownTableBodyNone">the most clusters full (ripe or about to ripen) at once, at least 1; past it a cluster is filled to one bubble short of the cap    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>RipenCooldownBeats</code>   </td><td class="markdownTableBodyNone">2   </td><td class="markdownTableBodyNone">how many of the bubbles' off-beats pass after a ripe cluster ends before a cluster is filled to the cap: one cycle of the unbreakables' clock; 0 for none    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>MergeOffBeat</code>   </td><td class="markdownTableBodyNone">0.25   </td><td class="markdownTableBodyNone">when in each beat clusters merge, as a share of the beat after it falls: a quarter beat, between an unbreakable snake's step on the beat and its step half a beat in    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>BurstSeconds</code>   </td><td class="markdownTableBodyNone">0.22   </td><td class="markdownTableBodyNone">level clock from a ripe cluster's pop to its ripple, the fold's time; a chain waits as long at each link    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>RippleDamage</code>   </td><td class="markdownTableBodyNone">1   </td><td class="markdownTableBodyNone">the hit each balloon in the blast takes    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>RippleRadius</code>   </td><td class="markdownTableBodyNone">1.35   </td><td class="markdownTableBodyNone">how far the blast reaches, in world units between slot centres    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>FoldGrowth</code>, <code>FoldPulse</code>   </td><td class="markdownTableBodyNone">0.4, 0.08   </td><td class="markdownTableBodyNone">how much bigger than the cluster the one bubble it folds into is, and how far each step of the fold kicks the scale out    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>FoamStepSeconds</code>   </td><td class="markdownTableBodyNone">0.12   </td><td class="markdownTableBodyNone">the gap between the bubbles a foaming cluster hands out    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>CoatLayers</code>   </td><td class="markdownTableBodyNone">1   </td><td class="markdownTableBodyNone">the most coats a balloon holds    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>CoatMaterial</code>, <code>CoatSprite</code>   </td><td class="markdownTableBodyNone"><code>SoapClusterMaterial</code>, the cluster prefab's sprite   </td><td class="markdownTableBodyNone">what the coat is drawn with    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>CoatScale</code>   </td><td class="markdownTableBodyNone">1.15   </td><td class="markdownTableBodyNone">the coat bubble's radius over the balloon body's    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>SwellScale</code>, <code>SwellSeconds</code>   </td><td class="markdownTableBodyNone">1.12, 0.25   </td><td class="markdownTableBodyNone">a ripe cluster's size over its rest size, and how fast it gets there    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>ThrobStrength</code>, <code>ThrobSeconds</code>   </td><td class="markdownTableBodyNone">0.22, 0.3   </td><td class="markdownTableBodyNone">each throb's punch and how long it takes to settle    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>ThrobFastSeconds</code>   </td><td class="markdownTableBodyNone">2   </td><td class="markdownTableBodyNone">the end of the fuse that throbs twice a second, and is heard    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>WarnTint</code>, <code>WarnStart</code>   </td><td class="markdownTableBodyNone">(1, 0.55, 0.4), 0.35   </td><td class="markdownTableBodyNone">the colour a ripe cluster fills with, and how far it has filled the moment it ripens    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>SpiralInterval</code>, <code>SpiralSeconds</code>, <code>SpiralReach</code>   </td><td class="markdownTableBodyNone">0.045, 1.4, 1.3   </td><td class="markdownTableBodyNone">seconds between the spiral's bubbles, how long each lives, how far it gets (slot spacings)    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>SpiralTurnsPerSecond</code>, <code>SpiralFastSpeedup</code>, <code>SpiralBubbleRadius</code>   </td><td class="markdownTableBodyNone">1, 1.6, 0.14   </td><td class="markdownTableBodyNone">how fast the arm and the cluster turn, how much faster the arm sheds in the last seconds, a bubble's size at the arm's end    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>FloatSpeedup</code>   </td><td class="markdownTableBodyNone">1.6   </td><td class="markdownTableBodyNone">a ripe cluster's float speed over its rest speed    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>CoatPuffSeconds</code>, <code>CoatPuffScale</code>   </td><td class="markdownTableBodyNone">0.12, 1.3   </td><td class="markdownTableBodyNone">how long a coat taken off takes to puff away, and how big it gets    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>RingSeconds</code>   </td><td class="markdownTableBodyNone">0.35   </td><td class="markdownTableBodyNone">how long the ripple's ring takes to spread to the blast's radius and fade    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>BlastNudgeOverrides</code>   </td><td class="markdownTableBodyNone">a shockwave of 1.2 over 0.35 s, falloff 1.2   </td><td class="markdownTableBodyNone">the outward shove of the board as a ripe cluster bursts (the bomb's is 3 over 0.4 s, falloff 0.75)    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>BlastImplosionRadiusScale</code>, <code>BlastImplosionStrengthScale</code>, <code>BlastImplosionSeconds</code>   </td><td class="markdownTableBodyNone">1.4, 8, 0.05   </td><td class="markdownTableBodyNone">the inward pull before the shock, as multiples of the <code>BubbleRipple</code> profile's radius and strength, and how long it takes    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>BlastLightRadius</code>, <code>BlastLightIntensity</code>, <code>BlastLightSeconds</code>   </td><td class="markdownTableBodyNone">5, 2, 0.3   </td><td class="markdownTableBodyNone">the flash: its radius in world units, its peak, how long it is held    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>BlastBubbles</code>, <code>BlastBubbleSeconds</code>, <code>BlastBubbleRadius</code>   </td><td class="markdownTableBodyNone">14, 0.32, 0.2   </td><td class="markdownTableBodyNone">how many bubbles a burst throws, how long each takes to reach the edge and fade, its radius there in slot spacings    </td></tr>
+<td class="markdownTableBodyNone"><code>BlastLightRadius</code>, <code>BlastLightIntensity</code>, <code>BlastLightSeconds</code>   </td><td class="markdownTableBodyNone">5, 2, 0.3   </td><td class="markdownTableBodyNone">the flash: its radius in world units, its peak, how long it is held    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>BlastBubbles</code>, <code>BlastBubbleSeconds</code>, <code>BlastBubbleRadius</code>   </td><td class="markdownTableBodyNone">14, 0.32, 0.2   </td><td class="markdownTableBodyNone">how many bubbles a burst throws, how long each takes to reach the edge and fade, its radius there in slot spacings    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>RingSortingLayerName</code>, <code>RingSortingOrder</code>   </td><td class="markdownTableBodyNone"><code>Balloons</code>, -1   </td><td class="markdownTableBodyNone">where the ring draws: under the balloons   </td></tr>
 </table>
 <p>The foam's hops reuse <code>IBubbleMergeCueSettings</code> (<code>HopSeconds</code>, <code>ArcHeight</code>, <code>BubbleScale</code>, <code>SortingOrderOffset</code>), so the two kinds of hopping bubble stay alike; they leave one per <code>FoamStepSeconds</code> rather than the merge's <code>HopStagger</code>. The fold's share of <code>BurstSeconds</code> (<code>FoldShare</code>) and the arm's quickening in the last seconds (<code>FastTurnSpeedup</code>) are constants in <code>RipeBubbleRule</code>; a leftover's drift and how ragged a burst's throw is are constants in <code>RipeBubbleBurstView</code>; and the sounds' pitches and volumes are constants in <code>CombatSoundRouter</code>. The stamps on the disturbance field are profiles in <code>DisturbanceFieldSettings</code>: <code>BubbleRipple</code> (radius 2.4, strength 6, over 0.12 s) for the blast and <code>BubbleFoam</code> (1.6, 6, 0.2 s, the numbers both endings shared before) for the foam.</p>
 <p>No water-only switch is needed: clusters spawn only on water, and the board clears on every level change.</p>
-<h2><a class="anchor" id="autotoc_md887"></a>
+<h2><a class="anchor" id="autotoc_md889"></a>
 Owner decisions (2026-11-18)</h2>
 <p>Eight decisions were put to the owner, each with a recommendation. The answer: "Go with your
 recommendations, build the ripe cluster".</p>
@@ -501,7 +574,23 @@ recommendations, build the ripe cluster".</p>
 <li><b>The spin matches the spiral.</b> "the spinning is too slow compared to the shape of the spiral so it
     doesn't match". While ripe, the cluster turns at the angular speed of the arm it sheds and the same way round, in the slow phase and the fast one: both read <code>RipeBubbleRule.SpiralTurnRate</code>, the cluster changes pace on the same throb the arm does, and the arm takes its direction from the cluster (<code>IRipeSpin</code>). <code>SpinSpeedup</code>, a multiplier on the idle drift, was removed.</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md888"></a>
+<p>Full clusters were then limited, on the owner's report from a later run on a phone (quoted at the top): on a fast spawn clock at high levels they "convert into a chain of constant explosions". This one was decided for the owner from that report and built; its two numbers are for play to settle.</p>
+<ol type="1">
+<li><b>Few clusters are full at once, and they come with a gap.</b> A merge or a foam's hand-out fills a cluster to the cap only while fewer than <code>MaxRipeClusters</code> (2) clusters on the board are full and <code>RipenCooldownSeconds</code> (4) of level clock have passed since a ripe cluster last ended, by a hit or by its fuse; otherwise it fills it to 5, where it waits (<code>RipeRoom</code>, <code>RipeBubbleRule.FillLimit</code>). The count runs through a merge pass and through a hand-out, so neither fills more clusters than there is room for. A cluster already at 6 is never reduced, and every cluster at 6 still ripens. When a cooldown ends, the merge service looks again if a merge was waiting on it. <b>This changes decision 11</b>: with the shipped cooldown a foam's hand-out no longer fills a neighbouring cluster, because the hand-out is the ending that starts the cooldown. <em>Why this way.</em> The spam came from how many clusters reach the cap, so the cap on filling is where to limit it. Limiting which full clusters ripen instead would leave clusters sitting at 6 without a fuse, and six bubbles would stop meaning "about to blow". Stopping at 5 keeps that reading whole and takes nothing away from the player: a waiting cluster is still worth 5 and fills as soon as there is room. The limit is on danger and noise, not on score (the standing rule). The cooldown is on the level clock for the reason the fuse is (decision 2): it holds through pause and the level-up, and unlike a count of spawn lines it does not shrink when the clock runs fast, which is exactly when the spam happened. <em>(Amended by decision 19: the gap is counted in the bubbles' off-beats, <code>RipenCooldownBeats</code>, not in seconds of level clock, and nothing watches for its end, since the merge service looks on every off-beat while a merge waits.)</em></li>
+</ol>
+<p>Merging was then put on the board's rhythm, on the owner's words after hearing decision 18 (quoted at the top): "the bubbles could merge under syncopation", as "the unbreakable cycles" and "the snake movement of
+toughs" do, since "everything has a rhythm". This one was decided for the owner from those words and built; its two numbers are for play to settle.</p>
+<ol type="1">
+<li><b>Clusters merge on the bubbles' off-beat, and the gap is counted in beats.</b> This amends decision 18.<ul>
+<li>The beat is the unbreakables' (<code>BeatSeconds</code>, 1.7 s), kept by <code>BalloonBalancer</code> and read through a small seam, <code>IBoardBeat.OffBeats(share)</code>. The bubbles' off-beat is <code>MergeOffBeat</code> (0.25) of a beat after each beat.</li>
+<li><code>BubbleMergeService</code> runs one merge pass on each off-beat, and only then. A board change or a hit marks that there is something to look at, and the "look again next frame" chain is gone: a follow-up merge waits for the next off-beat, so a cluster takes part in one merge a beat. An off-beat with nothing to look at scans nothing.</li>
+<li>The gap after a ripe cluster ends is <code>RipenCooldownBeats</code> (2, one cycle) off-beats, replacing <code>RipenCooldownSeconds</code> (4). <code>RipeRoom</code> counts off-beats since the ending; a new level and a run reset still clear it.</li>
+<li>The watch the merge service kept on the gap's end is gone: a merge held back is something to look at, so it is tried on every off-beat until it is made.</li>
+<li>Unchanged: the cap of <code>MaxRipeClusters</code>, who gives to whom, <code>BubbleMergeSeconds</code>, the fuse on the level clock, and a foam's hand-out topping neighbours up to 5 because the hand-out is itself the ending (decision 18). <em>Why this way.</em> A merge that ran the frame after any change had no rhythm and could not be read: a group of clusters gathered in a handful of frames. On the beat a merge is an event the player can expect and see, one step a beat, in time with what the snakes do. A quarter beat keeps it off both of a snake's steps, so the two never move in the same instant. Counting the gap on the same rhythm makes it end on an off-beat, which is the only moment a cluster can be filled anyway; a gap in seconds would end between two off-beats and be rounded up by an amount the settings do not show. The fuse stays in seconds: it is a threat the player times a shot against, not a step in the board's dance. <em>What it costs.</em> Clusters gather more slowly: a pair that used to merge at once now waits up to a beat, and a group of n takes about n beats. On a fast clock more small clusters stand on the board at once, which is the compacted board the owner called the only pressure water had.</li>
+</ul>
+</li>
+</ol>
+<h2><a class="anchor" id="autotoc_md890"></a>
 Phases</h2>
 <p>Each phase can be played and checked on its own.</p>
 <table class="markdownTable">
@@ -522,16 +611,23 @@ Phases</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">6   </td><td class="markdownTableBodyNone">The endings reworked (decisions 10 to 12): the fold and the delayed ripple, the foam's hand-out and the cluster leaving   </td><td class="markdownTableBodyNone">a ripe pop folds into one bubble before its ring; an ignored one empties a bubble at a time into its neighbours and is gone. <b>Built</b>; not yet seen or heard   </td><td class="markdownTableBodyNone">the pop prelude touches every pop's path; clusters fed by foam ripening in a run    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">7   </td><td class="markdownTableBodyNone">The player's burst as a smaller bomb (decisions 13 to 17): the radius, the message, the blast's nudge, pull and shock, flash and thrown bubbles, the faster pumping fold, the spin that matches the spiral, and the solver's mirror of the radius   </td><td class="markdownTableBodyNone">a ripe pop pumps into one big bubble in a fifth of a second and blasts two rings; the cluster and its arm turn as one. <b>Built</b>; compiled and unit-tested only, not yet seen or run   </td><td class="markdownTableBodyNone">a blast of 12 slots is stronger than one of 6, so water levels get easier where clusters ripen: the bot runs of phase 4 now have to be made with it; every value of the blast's look   </td></tr>
+<td class="markdownTableBodyNone">7   </td><td class="markdownTableBodyNone">The player's burst as a smaller bomb (decisions 13 to 17): the radius, the message, the blast's nudge, pull and shock, flash and thrown bubbles, the faster pumping fold, the spin that matches the spiral, and the solver's mirror of the radius   </td><td class="markdownTableBodyNone">a ripe pop pumps into one big bubble in a fifth of a second and blasts two rings; the cluster and its arm turn as one. <b>Built</b>; compiled and unit-tested only, not yet seen or run   </td><td class="markdownTableBodyNone">a blast of 12 slots is stronger than one of 6, so water levels get easier where clusters ripen: the bot runs of phase 4 now have to be made with it; every value of the blast's look    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">8   </td><td class="markdownTableBodyNone">Room for full clusters (decision 18): <code>RipeRoom</code>, the two settings, the merge pass and the hand-out filling to its limit with a running count, the wake when a cooldown ends   </td><td class="markdownTableBodyNone">with two clusters ripe, others stop at 5; after a burst nothing ripens for a while (4 s then, 2 off-beats since phase 9), then a cluster waiting at 5 beside a giver fills. <b>Built</b>; compiled and unit-tested only, not yet played   </td><td class="markdownTableBodyNone">whether 2 at once is the right number on a fast clock; a hand-out that no longer fills a cluster makes the foam ending a little weaker    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">9   </td><td class="markdownTableBodyNone">Merging on the beat (decision 19): <code>IBoardBeat</code> on the balancer, <code>MergeOffBeat</code>, one merge pass an off-beat, <code>RipenCooldownBeats</code> in place of the seconds   </td><td class="markdownTableBodyNone">clusters merge a step a beat, a quarter beat after an unbreakable snake's step, on a water level with no unbreakable too; after a burst the next cluster fills two off-beats later. <b>Built</b>; compiled and unit-tested only, not yet played   </td><td class="markdownTableBodyNone">slower gathering leaves more small clusters on a fast clock; whether a quarter beat reads as rhythm or as lag; the bot's water baselines move again   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md889"></a>
+<h2><a class="anchor" id="autotoc_md891"></a>
 Tests</h2>
 <ul>
-<li><code>RipeBubbleRule</code>: the ripe threshold; how far a ripple reaches (the radius between slot centres, and the 12 slots the shipped radius takes on the game's lattice), whom it hits and who takes foam (rewards, deflectors, clusters, already coated); fuse left from the deadline; the hand-out plan (coats first, then clusters a round at a time up to the cap, then leftovers); the fold's schedule, its growth a step at a time and its six pumps; the hand-out's schedule; the arm's turn rate, and the cluster's spin turning the drawn cluster with the arm, slow and fast, either way round.</li>
+<li><code>RipeBubbleRule</code>: the ripe threshold; what a cluster may be filled to and how many more may be filled, by the count of full clusters and the time since a ripe one ended (<code>FillLimit</code>, <code>FillsLeft</code>); how far a ripple reaches (the radius between slot centres, and the 12 slots the shipped radius takes on the game's lattice), whom it hits and who takes foam (rewards, deflectors, clusters, already coated); fuse left from the deadline; the hand-out plan (coats first, then clusters a round at a time up to the cap, then leftovers; no more clusters filled than it may, the rest a bubble short, coats never held back); the fold's schedule, its growth a step at a time and its six pumps; the hand-out's schedule; the arm's turn rate, and the cluster's spin turning the drawn cluster with the arm, slow and fast, either way round.</li>
 <li><code>SoapBubbleClusterVariant</code> (<code>RipeClusterSpinTests</code>): bound to a real cluster, it gives the shader the arm's rate from the ripening, steps up on the first fast throb, and goes back to its own drift when the cluster stops being ripe or the binding is dropped.</li>
 <li><code>BubbleClusterModel</code> when ripe: ordinary, piercing and indirect damage all pop it; it scores what it held.</li>
 <li><code>BalloonModel</code> with a coat: an ordinary hit removes the coat and the balloon survives; piercing and beam pop it; indirect damage removes the coat.</li>
-<li><code>RipeBubbleService</code>: ripens at the cap; the fuse fires foam once; stops on level change, game over and reset; follows a moved cluster; a burst heard during a dispatch is not dispatched inside it; two ripe neighbours each burst once; the ripple waits <code>BurstSeconds</code>, a chain as long at each link, and game over during the wait drops it; the ripple reaches past the neighbours to every slot within its radius and leaves out a neighbour a smaller radius does not reach, hits column by column, bursts a ripe cluster that is inside the radius without being next door (which then ripples from its own slot), hits a balloon moved into the burst's own slot, and sends its shockwave before its hits; the foam coats six, or coats three and leaves three over, fills a cluster to the cap (which ripens a tick later), coats before it gives to clusters, gives a full cluster nothing, and the cluster leaves.</li>
+<li><code>RipeBubbleService</code>: ripens at the cap; the fuse fires foam once; stops on level change, game over and reset; follows a moved cluster; a burst heard during a dispatch is not dispatched inside it; two ripe neighbours each burst once; the ripple waits <code>BurstSeconds</code>, a chain as long at each link, and game over during the wait drops it; the ripple reaches past the neighbours to every slot within its radius and leaves out a neighbour a smaller radius does not reach, hits column by column, bursts a ripe cluster that is inside the radius without being next door (which then ripples from its own slot), hits a balloon moved into the burst's own slot, and sends its shockwave before its hits; the foam coats six, or coats three and leaves three over, fills a cluster to the cap (which ripens a tick later), coats before it gives to clusters, gives a full cluster nothing, and the cluster leaves. With the room narrowed: a burst by a hit and a fuse running out each start the cooldown, counted in off-beats whatever the level clock does, and the pop of an unripe cluster starts none; a foam under a cooldown stops a cluster a bubble short; a foam fills only as many clusters as the board has room for; clusters already at the cap all ripen and keep their bubbles; a new level does not inherit the cooldown.</li>
+<li><code>RipeRoom</code> (<code>RipeRoomTests</code>, with a real <code>BubbleMergeService</code> and a beat the tests step): the count of full clusters and the one left out; the limit by count and by cooldown in off-beats, a later ending starting the cooldown again, a cooldown of 0, a new level and a run reset clearing it, a beat that started over before the reset holding nothing, ripeness off limiting nothing, the off-beat read at the settings' share; a merge stopping a bubble short and staying there while the most clusters are full; two merges of one pass filling only one cluster, the second giving nothing or stopping short; a cluster at the cap keeping its bubbles; a merge held back happening on the off-beat the cooldown ends on with no change on the board, also after being held by the count first; nothing scanned on an off-beat with nothing to look at; a new level letting a waiting merge through.</li>
+<li><code>BubbleMergeService</code> (<code>BubbleMergeServiceTests</code>): nothing merges between off-beats and one pass runs on each; a board change or a hit between off-beats waits for the next; two merges for one cluster take two off-beats; the beat's count starting over is no off-beat; an off-beat with nothing changed scans nothing.</li>
+<li><code>BalloonBalancer</code> as <code>IBoardBeat</code> (<code>BalloonBalancerTests</code>): the pure count (<code>OffBeatsAt</code>); the off-beat counted a quarter beat after each beat on a board with no unbreakable, tough or snake, never falling or jumping; another share; a pause holding it and a doomed glide not; the count still kept with the flight pulse off; a run reset starting it over; no beat with no formation service.</li>
 <li><code>ProjectileHitResolver</code>: a coated balloon washes the shot and does not count as a one-hit pop; a ripe cluster is not ploughed through; a coated rainbow's coat hit carries no streak.</li>
 <li><code>ItemActivator</code>: a coat hit on a carrier releases nothing; the pop releases the item.</li>
 <li><code>FoamCoatOverlay</code>: the fit does not change with the balloon's world scale, survives a zero scale, and follows the body on every show.</li>
@@ -539,10 +635,12 @@ Tests</h2>
 <li>Presentation: the throb schedule and the warning curve (<code>RipeBubbleRuleTests</code>); the float rebase, the hop's path, the burst message's blast (centre, radius, hits landed), a foam's direction bits and its hand-out entries (<code>RipeBubblePresentationTests</code>); the fast beats the service announces; the router's cue for a coat hit, a resist, a ripple's pops and a ripe cluster's fold (<code>CombatSoundRouterTests</code>); a cluster leaving the board wakes the merge (<code>BubbleMergeServiceTests</code>); the six counters (<code>GameplayMetricsServiceTests</code>, <code>MetricCatalogFoldTests</code>).</li>
 <li>Existing: <code>BubbleClusterModelTests</code>, <code>ProjectileHitResolverTests</code>, the solver's <code>EffectBoardMirrorTests</code>.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md890"></a>
+<h2><a class="anchor" id="autotoc_md892"></a>
 What to watch</h2>
 <p>A ripe cluster in the middle of a crowd cannot merge or move out of the way, so the fuse partly rewards how the board happens to lie. One-hit bursts and a 6 s fuse should keep that fair; the bot runs in phase 4 are where to check it.</p>
-<p>The blast now takes up to 12 slots where the ring took 6, and a chain reaches a ripe cluster two slots away. That makes a ripe pop a bigger reward and water levels easier wherever clusters ripen. The owner's balance target (difficulty picks up after level 10) has not been checked against it: the same bot runs, with and without ripeness, are where to see what the wider blast did. </p>
+<p>The blast now takes up to 12 slots where the ring took 6, and a chain reaches a ripe cluster two slots away. That makes a ripe pop a bigger reward and water levels easier wherever clusters ripen. The owner's balance target (difficulty picks up after level 10) has not been checked against it: the same bot runs, with and without ripeness, are where to see what the wider blast did.</p>
+<p>The room for full clusters (decision 18) pulls the other way: fewer blasts, and a foam that no longer fills a neighbour. Its numbers (2 at once, 2 off-beats apart) are a first guess from one report, not measured. Watch a fast clock at high levels for whether the blasts now come one at a time with air between them, and a slow one for whether ripe clusters have become too rare to be a mechanic. A cluster waiting at 5 looks like any other 5: nothing tells the player it is being held, which is fine while the wait is short.</p>
+<p>Merging on the beat (decision 19) slows how fast clusters gather: one step a beat, 1.7 s, where a group used to gather in a few frames. That alone means fewer clusters reach 6, on top of the room above, so the two together may be more than the report needed: if ripe clusters turn rare, raise <code>MaxRipeClusters</code> or drop <code>RipenCooldownBeats</code> before touching the beat. The beat is shared: <code>BeatSeconds</code> and <code>SnakeStepsPerBeat</code> are the unbreakables' settings, and changing them now moves the bubbles too. </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->

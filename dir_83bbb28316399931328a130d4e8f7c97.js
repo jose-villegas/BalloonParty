@@ -13,9 +13,11 @@ var dir_83bbb28316399931328a130d4e8f7c97 =
     [ "BubbleMergeRule.cs", "BubbleMergeRule_8cs.html", "BubbleMergeRule_8cs" ],
     [ "BubbleMergeService.cs", "BubbleMergeService_8cs.html", "BubbleMergeService_8cs" ],
     [ "IBalloonPopper.cs", "IBalloonPopper_8cs.html", "IBalloonPopper_8cs" ],
+    [ "IBoardBeat.cs", "IBoardBeat_8cs.html", "IBoardBeat_8cs" ],
     [ "PressurePropagation.cs", "PressurePropagation_8cs.html", "PressurePropagation_8cs" ],
     [ "RipeBubbleBurst.cs", "RipeBubbleBurst_8cs.html", "RipeBubbleBurst_8cs" ],
     [ "RipeBubbleRule.cs", "RipeBubbleRule_8cs.html", "RipeBubbleRule_8cs" ],
     [ "RipeBubbleService.cs", "RipeBubbleService_8cs.html", "RipeBubbleService_8cs" ],
+    [ "RipeRoom.cs", "RipeRoom_8cs.html", "RipeRoom_8cs" ],
     [ "RoamRests.cs", "RoamRests_8cs.html", "RoamRests_8cs" ]
 ];

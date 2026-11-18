@@ -1,5 +1,9 @@
 <map id="BalloonParty.Scenario.View.WaterRippleBuffer" name="BalloonParty.Scenario.View.WaterRippleBuffer">
-<area shape="rect" id="Node000001" title="The water&#39;s surface simulation, published as the global _WaterRippleTex (r = surface height,..." alt="" coords="5,81,206,126"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="30,5,181,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,47,108,81,103,79,104,51"/>
+<area shape="rect" id="Node000001" title="The water&#39;s surface simulation, published as the global _WaterRippleTex (r = surface height,..." alt="" coords="5,225,206,269"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="9,124,159,151"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="92,165,104,225,99,224,88,169"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Scenario_1_1View_1_1WaterRippleBuffer_1_1Dig.html" title=" " alt="" coords="184,115,384,160"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="238,168,143,226,140,222,232,168"/>
+<area shape="rect" id="Node000004" href="$structBalloonParty_1_1Scenario_1_1View_1_1WaterCrater.html" title="The crater a blast (a bomb, the nuke) leaves in the water, and the shape it is dug in." alt="" coords="184,5,384,50"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="286,64,287,115,282,113,283,68"/>
 </map>

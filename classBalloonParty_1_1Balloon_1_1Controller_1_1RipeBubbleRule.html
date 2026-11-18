@@ -130,6 +130,12 @@ Static Package Functions</h2></td></tr>
 <tr class="memitem:abf5fb2c53cd5f476ea093fd5344fcb66" id="r_abf5fb2c53cd5f476ea093fd5344fcb66"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abf5fb2c53cd5f476ea093fd5344fcb66">CoatedNeighbours</a> (int handout)</td></tr>
 <tr class="memdesc:abf5fb2c53cd5f476ea093fd5344fcb66"><td class="mdescLeft">&#160;</td><td class="mdescRight">The neighbours a hand-out coats, a bit per direction as <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#ad3cb08338a787276b0cbb8e1b33c3d57" title="The neighbours a foam coated, a bit per direction; 0 for a ripple, which is not bound to them.">RipeBubbleBurstMessage.Neighbours</a> carries them.  <br /></td></tr>
 <tr class="separator:abf5fb2c53cd5f476ea093fd5344fcb66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7adf38301ce9ee6d17a4736c4223a0b3" id="r_a7adf38301ce9ee6d17a4736c4223a0b3"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7adf38301ce9ee6d17a4736c4223a0b3">FillLimit</a> (int max, int fullClusters, int maxRipe, int offBeatsSinceEnded, int cooldownBeats)</td></tr>
+<tr class="memdesc:a7adf38301ce9ee6d17a4736c4223a0b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">What a merge or a foam's hand-out may fill a cluster to right now: <em>max</em> , the merge cap, while another cluster may still be filled (<a class="el" href="#a7c9f6b81eac9be13355f8773b9362b9b" title="How many more clusters may be filled to the merge cap right now, which is what keeps ripe clusters fe...">FillsLeft</a>), otherwise one bubble short of it, where the cluster waits without ripening.  <br /></td></tr>
+<tr class="separator:a7adf38301ce9ee6d17a4736c4223a0b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c9f6b81eac9be13355f8773b9362b9b" id="r_a7c9f6b81eac9be13355f8773b9362b9b"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7c9f6b81eac9be13355f8773b9362b9b">FillsLeft</a> (int fullClusters, int maxRipe, int offBeatsSinceEnded, int cooldownBeats)</td></tr>
+<tr class="memdesc:a7c9f6b81eac9be13355f8773b9362b9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many more clusters may be filled to the merge cap right now, which is what keeps ripe clusters few and apart: none until <em>cooldownBeats</em>  of the bubbles' off-beats have passed since a ripe cluster last ended (<em>offBeatsSinceEnded</em> , int.MaxValue when none has), then what is left of <em>maxRipe</em>  (at least 1) after the <em>fullClusters</em>  already at the cap.  <br /></td></tr>
+<tr class="separator:a7c9f6b81eac9be13355f8773b9362b9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acdbbf1091789821307408ea724fc5696" id="r_acdbbf1091789821307408ea724fc5696"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acdbbf1091789821307408ea724fc5696">FoamDepartSeconds</a> (int bubble, float step)</td></tr>
 <tr class="memdesc:acdbbf1091789821307408ea724fc5696"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds from the fuse running out to the hand-out's bubble <em>bubble</em>  (0 first) leaving: one every <em>step</em> , the first a step in.  <br /></td></tr>
 <tr class="separator:acdbbf1091789821307408ea724fc5696"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -166,9 +172,9 @@ Static Package Functions</h2></td></tr>
 <tr class="memitem:ad7f915b51e52506aafb93aed7f27c2a4" id="r_ad7f915b51e52506aafb93aed7f27c2a4"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad7f915b51e52506aafb93aed7f27c2a4">IsRipe</a> (int bubbles, int max)</td></tr>
 <tr class="memdesc:ad7f915b51e52506aafb93aed7f27c2a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">A cluster is ripe at the merge cap; a cap of 0 or less ripens nothing.  <br /></td></tr>
 <tr class="separator:ad7f915b51e52506aafb93aed7f27c2a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a5eaf6ed0d530b894d24b99ab074f90" id="r_a1a5eaf6ed0d530b894d24b99ab074f90"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1a5eaf6ed0d530b894d24b99ab074f90">PlanHandout</a> (int bubbles, int[] coatRoom, int[] clusterRoom)</td></tr>
-<tr class="memdesc:a1a5eaf6ed0d530b894d24b99ab074f90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where a cluster whose fuse ran out hands its <em>bubbles</em>  (at most <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#aa9e3d77de5442ba08bdc7f9e15507e8d" title="The most bubbles a hand-out carries: one per neighbour.">RipeBubbleBurstMessage.MaxHandout</a>), encoded as <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#a3b8c7f5020a4bdaf0b2cf3919354196a">RipeBubbleBurstMessage.Handout</a>.  <br /></td></tr>
-<tr class="separator:a1a5eaf6ed0d530b894d24b99ab074f90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ef2282f8d9dd9913b2edde313bf2c84" id="r_a9ef2282f8d9dd9913b2edde313bf2c84"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9ef2282f8d9dd9913b2edde313bf2c84">PlanHandout</a> (int bubbles, int[] coatRoom, int[] clusterRoom, int clusterFills)</td></tr>
+<tr class="memdesc:a9ef2282f8d9dd9913b2edde313bf2c84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where a cluster whose fuse ran out hands its <em>bubbles</em>  (at most <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#aa9e3d77de5442ba08bdc7f9e15507e8d" title="The most bubbles a hand-out carries: one per neighbour.">RipeBubbleBurstMessage.MaxHandout</a>), encoded as <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#a3b8c7f5020a4bdaf0b2cf3919354196a">RipeBubbleBurstMessage.Handout</a>.  <br /></td></tr>
+<tr class="separator:a9ef2282f8d9dd9913b2edde313bf2c84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c598e4498fdcc37b6ee3f867f26e50b" id="r_a2c598e4498fdcc37b6ee3f867f26e50b"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2c598e4498fdcc37b6ee3f867f26e50b">RippleReaches</a> (Vector2 burstCentre, Vector2 slotCentre, float radius)</td></tr>
 <tr class="memdesc:a2c598e4498fdcc37b6ee3f867f26e50b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether a ripe cluster's burst at <em>burstCentre</em>  reaches the slot whose centre is <em>slotCentre</em> : within <em>radius</em>  world units, the edge included.  <br /></td></tr>
 <tr class="separator:a2c598e4498fdcc37b6ee3f867f26e50b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -198,8 +204,8 @@ Static Package Attributes</h2></td></tr>
 Static Private Member Functions</h2></td></tr>
 <tr class="memitem:a2d22331bdc55646cfdb51c2265755e56" id="r_a2d22331bdc55646cfdb51c2265755e56"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2d22331bdc55646cfdb51c2265755e56">FoldStepsTaken</a> (float elapsed, float step, int from)</td></tr>
 <tr class="separator:a2d22331bdc55646cfdb51c2265755e56"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63c0628d9318aa8e9f6470ca7a05bb1a" id="r_a63c0628d9318aa8e9f6470ca7a05bb1a"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a63c0628d9318aa8e9f6470ca7a05bb1a">GiveRound</a> (ref int handout, ref int left, int[] room, <a class="el" href="namespaceBalloonParty_1_1Shared_1_1Messages.html#a59eaf814cb0fd69d1473c2377bee7918">FoamGift</a> gift)</td></tr>
-<tr class="separator:a63c0628d9318aa8e9f6470ca7a05bb1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af335a5a802f4c8f763885d33a932f138" id="r_af335a5a802f4c8f763885d33a932f138"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af335a5a802f4c8f763885d33a932f138">GiveRound</a> (ref int handout, ref int left, int[] room, <a class="el" href="namespaceBalloonParty_1_1Shared_1_1Messages.html#a59eaf814cb0fd69d1473c2377bee7918">FoamGift</a> gift, ref int fills)</td></tr>
+<tr class="separator:af335a5a802f4c8f763885d33a932f138"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2397966184fff4df3670ce7e94a7517" id="r_aa2397966184fff4df3670ce7e94a7517"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa2397966184fff4df3670ce7e94a7517">ThrobBeat</a> (float left, float fastSeconds)</td></tr>
 <tr class="separator:aa2397966184fff4df3670ce7e94a7517"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -298,6 +304,94 @@ Static Private Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The neighbours a hand-out coats, a bit per direction as <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#ad3cb08338a787276b0cbb8e1b33c3d57" title="The neighbours a foam coated, a bit per direction; 0 for a ripple, which is not bound to them.">RipeBubbleBurstMessage.Neighbours</a> carries them. </p>
+
+</div>
+</div>
+<a id="a7adf38301ce9ee6d17a4736c4223a0b3" name="a7adf38301ce9ee6d17a4736c4223a0b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7adf38301ce9ee6d17a4736c4223a0b3">&#9670;&#160;</a></span>FillLimit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int BalloonParty.Balloon.Controller.RipeBubbleRule.FillLimit </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>max</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>fullClusters</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>maxRipe</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>offBeatsSinceEnded</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>cooldownBeats</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>What a merge or a foam's hand-out may fill a cluster to right now: <em>max</em> , the merge cap, while another cluster may still be filled (<a class="el" href="#a7c9f6b81eac9be13355f8773b9362b9b" title="How many more clusters may be filled to the merge cap right now, which is what keeps ripe clusters fe...">FillsLeft</a>), otherwise one bubble short of it, where the cluster waits without ripening. </p>
+<p>It is a limit on what a cluster is given, never on what it holds: one already at the cap keeps its bubbles. A cap of 1 or less has no bubble to hold back. </p>
+
+</div>
+</div>
+<a id="a7c9f6b81eac9be13355f8773b9362b9b" name="a7c9f6b81eac9be13355f8773b9362b9b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c9f6b81eac9be13355f8773b9362b9b">&#9670;&#160;</a></span>FillsLeft()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int BalloonParty.Balloon.Controller.RipeBubbleRule.FillsLeft </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>fullClusters</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>maxRipe</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>offBeatsSinceEnded</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>cooldownBeats</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How many more clusters may be filled to the merge cap right now, which is what keeps ripe clusters few and apart: none until <em>cooldownBeats</em>  of the bubbles' off-beats have passed since a ripe cluster last ended (<em>offBeatsSinceEnded</em> , int.MaxValue when none has), then what is left of <em>maxRipe</em>  (at least 1) after the <em>fullClusters</em>  already at the cap. </p>
 
 </div>
 </div>
@@ -675,8 +769,8 @@ Static Private Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a63c0628d9318aa8e9f6470ca7a05bb1a" name="a63c0628d9318aa8e9f6470ca7a05bb1a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a63c0628d9318aa8e9f6470ca7a05bb1a">&#9670;&#160;</a></span>GiveRound()</h2>
+<a id="af335a5a802f4c8f763885d33a932f138" name="af335a5a802f4c8f763885d33a932f138"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af335a5a802f4c8f763885d33a932f138">&#9670;&#160;</a></span>GiveRound()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -702,7 +796,12 @@ Static Private Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceBalloonParty_1_1Shared_1_1Messages.html#a59eaf814cb0fd69d1473c2377bee7918">FoamGift</a></td>          <td class="paramname"><span class="paramname"><em>gift</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="namespaceBalloonParty_1_1Shared_1_1Messages.html#a59eaf814cb0fd69d1473c2377bee7918">FoamGift</a></td>          <td class="paramname"><span class="paramname"><em>gift</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ref int</td>          <td class="paramname"><span class="paramname"><em>fills</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -776,8 +875,8 @@ Static Private Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a1a5eaf6ed0d530b894d24b99ab074f90" name="a1a5eaf6ed0d530b894d24b99ab074f90"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1a5eaf6ed0d530b894d24b99ab074f90">&#9670;&#160;</a></span>PlanHandout()</h2>
+<a id="a9ef2282f8d9dd9913b2edde313bf2c84" name="a9ef2282f8d9dd9913b2edde313bf2c84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ef2282f8d9dd9913b2edde313bf2c84">&#9670;&#160;</a></span>PlanHandout()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -798,7 +897,12 @@ Static Private Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int[]</td>          <td class="paramname"><span class="paramname"><em>clusterRoom</em></span>&#160;)</td>
+          <td class="paramtype">int[]</td>          <td class="paramname"><span class="paramname"><em>clusterRoom</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>clusterFills</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -809,7 +913,7 @@ Static Private Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Where a cluster whose fuse ran out hands its <em>bubbles</em>  (at most <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#aa9e3d77de5442ba08bdc7f9e15507e8d" title="The most bubbles a hand-out carries: one per neighbour.">RipeBubbleBurstMessage.MaxHandout</a>), encoded as <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#a3b8c7f5020a4bdaf0b2cf3919354196a">RipeBubbleBurstMessage.Handout</a>. </p>
-<p>One bubble per taker a round, in direction order, coats (<em>coatRoom</em> , layers each plain neighbour can still take) before clusters (<em>clusterRoom</em> , bubbles each neighbouring cluster can still take); rounds run until the bubbles or the room run out, and any bubbles left over pop as leftovers. Both arrays are indexed by direction and used up as the plan takes from them. </p>
+<p>One bubble per taker a round, in direction order, coats (<em>coatRoom</em> , layers each plain neighbour can still take) before clusters (<em>clusterRoom</em> , bubbles each neighbouring cluster can still take); rounds run until the bubbles or the room run out, and any bubbles left over pop as leftovers. Only <em>clusterFills</em>  clusters (<a class="el" href="#a7c9f6b81eac9be13355f8773b9362b9b" title="How many more clusters may be filled to the merge cap right now, which is what keeps ripe clusters fe...">FillsLeft</a>) take the last bubble of their room, the one that fills them to the cap: counted as the plan fills them, so one hand-out never fills more than that, and every other cluster stops a bubble short. Both arrays are indexed by direction and used up as the plan takes from them. </p>
 
 </div>
 </div>

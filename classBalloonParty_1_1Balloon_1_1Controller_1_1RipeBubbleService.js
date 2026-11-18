@@ -2,7 +2,7 @@ var classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleService =
 [
     [ "PendingBurst", "structBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleService_1_1PendingBurst.html", "structBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleService_1_1PendingBurst" ],
     [ "RipeFuse", "structBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleService_1_1RipeFuse.html", "structBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleService_1_1RipeFuse" ],
-    [ "RipeBubbleService", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleService.html#addac04a6d87c6df9a232f306c4dbb094", null ],
+    [ "RipeBubbleService", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleService.html#abd7a038a25a4b6bd831ffe942bee2af1", null ],
     [ "AdvanceFuses", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleService.html#a4b0cf703bf316ce44499cf190621f97c", null ],
     [ "Dispose", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleService.html#acb8fb0627e92290f2162839e94821bcf", null ],
     [ "DrainPendingBursts", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleService.html#a25ca607960bfe25b79bde27271f621a9", null ],
@@ -29,6 +29,7 @@ var classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleService =
     [ "_mergedSubscriber", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleService.html#acccd2df9f89ec1fae693516cfb8a852c", null ],
     [ "_pendingBursts", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleService.html#ad25114ae43a7e89faa4df9bf08b9951d", null ],
     [ "_ripenedPublisher", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleService.html#ad5f896813c7f37221c231211e559d197", null ],
+    [ "_room", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleService.html#ab32e980b57b579145b4a3527ef6d800f", null ],
     [ "_seenVersion", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleService.html#a47f92c73449b5523030f1aa463b91a50", null ],
     [ "_settings", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleService.html#a92a14a3e52ecfaea8d50d48cca69841b", null ],
     [ "_stops", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleService.html#a15eddf5f4e7c381e84b9aa96bdb36aab", null ],

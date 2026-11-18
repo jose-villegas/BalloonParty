@@ -199,7 +199,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Types and utilities used across multiple features.</p>
-<h1><a class="anchor" id="autotoc_md1138"></a>
+<h1><a class="anchor" id="autotoc_md1141"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -233,7 +233,7 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>EditorAssetCache&lt;T&gt;</code>   </td><td class="markdownTableBodyNone">Editor-only lazy cache for a config <code>ScriptableObject</code> asset by type — lives in the <code>com.balloonparty.editorui</code> package (<code>EditorUI.Utilities</code>). Editor config lookups go through this instead of inlining <code>FindAssets</code> + <code>LoadAssetAtPath</code>    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>ImpactEventBus</code>   </td><td class="markdownTableBodyNone">Frame-scoped list of impact events (position, radius, and the heading of the stamp that made it: a ball's travel, zero for a burst); written via <code>Report</code>, cleared every <code>LateTick</code> (before MonoBehaviour LateUpdate, so a view reads it through a collector that copies it after Update, as <code>Scenario/WaterImpactCollector</code> does)    </td></tr>
+<td class="markdownTableBodyNone"><code>ImpactEventBus</code>   </td><td class="markdownTableBodyNone">Frame-scoped list of impact events (position, radius, the heading of the stamp that made it: a ball's travel, zero for a burst; and for an explosion a <code>Blast</code>: the radius it clears, its strength with a bomb as 1, its seconds, and for a piercing shot's flight the line it runs, which the water digs a crater or a furrow from. The default is no blast, an ordinary impact); written via <code>Report</code>, cleared every <code>LateTick</code> (before MonoBehaviour LateUpdate, so a view reads it through a collector that copies it after Update, as <code>Scenario/WaterImpactCollector</code> does)    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>PathTrace</code>   </td><td class="markdownTableBodyNone">Shared skeleton for tracing a projectile's wall-reflected path ahead (<code>IsClearAhead</code>) — reflects off each wall via <code>WallLimits</code>, leaving the per-segment occupancy test to the caller    </td></tr>
 <tr class="markdownTableRowOdd">
@@ -256,7 +256,7 @@ Contents</h1>
 <td class="markdownTableBodyNone"><code>StreakShieldRule</code>   </td><td class="markdownTableBodyNone">The one place a continued colour streak's shield refund is decided, called by both the live <code>ProjectileHitResolver</code> and the shot solver's <code>ShotSimulator</code> so the two can't drift apart   </td></tr>
 </table>
 <p>This table covers the folders and the types other features reach for most; a few small editor-only attributes living alongside these files aren't broken out separately.</p>
-<h1><a class="anchor" id="autotoc_md1139"></a>
+<h1><a class="anchor" id="autotoc_md1142"></a>
 Messages</h1>
 <p>Messages are the signals that decouple systems from one another. A publisher fires a message; any number of subscribers react independently.</p>
 <p><b>This table is a curated subset, not an index.</b> It lists the gameplay-visible consumers of each message — the ones whose absence would break a mechanic — not every subscriber. <code>Game/Telemetry</code>'s <code>GameplayMetricsService</code> and <code>Game/Flight</code>'s <code>FlightStatsService</code> between them subscribe to roughly 21 of these messages without being named in a single row below; they read the game, they don't drive it, so listing them on every row would bury the consumers that do. Check the publisher's own file for the exhaustive subscriber list when it matters.</p>

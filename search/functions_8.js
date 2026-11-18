@@ -2,7 +2,7 @@ var searchData=
 [
   ['icon_0',['Icon',['../classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder.html#a4f32b093be344ec91bd80d5541415cdb',1,'BalloonParty::Editor::GameOverLayoutBuilder']]],
   ['icosahedralfacenormals_1',['IcosahedralFaceNormals',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog.html#a9b1f9bf88bb1cf9725c91c6c3a890cb4',1,'BalloonParty::Game::Score::Behaviours::ShapeCatalog']]],
-  ['impact_2',['Impact',['../structBalloonParty_1_1Shared_1_1ImpactEventBus_1_1Impact.html#add1e2a3c4aa46186861b51fd17d28be7',1,'BalloonParty::Shared::ImpactEventBus::Impact']]],
+  ['impact_2',['Impact',['../structBalloonParty_1_1Shared_1_1ImpactEventBus_1_1Impact.html#af60310000271ce933dc1a8da54e77e03',1,'BalloonParty::Shared::ImpactEventBus::Impact']]],
   ['implode_3',['Implode',['../interfaceBalloonParty_1_1Balloon_1_1View_1_1INukeBlastView.html#a6ad7fc26f32db1e20f52bf7388b133cb',1,'BalloonParty.Balloon.View.INukeBlastView.Implode()'],['../classBalloonParty_1_1Balloon_1_1View_1_1NukeBlastView.html#a9f90d2312717025c74769d5a263765cb',1,'BalloonParty.Balloon.View.NukeBlastView.Implode()']]],
   ['importasdata_4',['ImportAsData',['../classBalloonParty_1_1Editor_1_1CardRevealBuilder.html#aea1342af7c27765a97cdf3d4db37ef85',1,'BalloonParty::Editor::CardRevealBuilder']]],
   ['importassprite_5',['ImportAsSprite',['../classBalloonParty_1_1Editor_1_1ShadowBake_1_1ShadowBakeUtility.html#a604faff653dd6629cdcc871ce1c6f56b',1,'BalloonParty.Editor.ShadowBake.ShadowBakeUtility.ImportAsSprite()'],['../classBalloonParty_1_1Editor_1_1SpriteCombine_1_1SpriteLayerCombinerEditor.html#ac5fbfa0bf68cacbb7a3dc05f79ae418d',1,'BalloonParty.Editor.SpriteCombine.SpriteLayerCombinerEditor.ImportAsSprite()']]],

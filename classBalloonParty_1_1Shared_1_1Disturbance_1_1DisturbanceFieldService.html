@@ -148,21 +148,24 @@ Package Functions</h2></td></tr>
 <tr class="memitem:a124f14683a35d103f0099e384def4786" id="r_a124f14683a35d103f0099e384def4786"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1Configuration_1_1Effects_1_1StampProfile.html">StampProfile</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a124f14683a35d103f0099e384def4786">GetProfile</a> (<a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0e">StampSource</a> source)</td></tr>
 <tr class="memdesc:a124f14683a35d103f0099e384def4786"><td class="mdescLeft">&#160;</td><td class="mdescRight">Profile for a source, so callers needn't inject <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IDisturbanceFieldSettings.html">IDisturbanceFieldSettings</a>.  <br /></td></tr>
 <tr class="separator:a124f14683a35d103f0099e384def4786"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9f537f1df8e106596377fdfcdbf4904" id="r_ae9f537f1df8e106596377fdfcdbf4904"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae9f537f1df8e106596377fdfcdbf4904">ReportBlast</a> (Vector3 worldPosition, ImpactEventBus.Blast blast)</td></tr>
+<tr class="memdesc:ae9f537f1df8e106596377fdfcdbf4904"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reports a blast with no stamp of its own: each stretch of a piercing shot's wake (<code>PierceWake</code>), which the shot's own flight stamps can't carry, being two to a stretch.  <br /></td></tr>
+<tr class="separator:ae9f537f1df8e106596377fdfcdbf4904"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79244a21b3b8f5a79a4145daba7dfe71" id="r_a79244a21b3b8f5a79a4145daba7dfe71"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a79244a21b3b8f5a79a4145daba7dfe71">Stamp</a> (<a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0e">StampSource</a> source, Vector3 worldPosition, Vector2 direction, float radiusScale, int paletteIndex=-1)</td></tr>
 <tr class="memdesc:a79244a21b3b8f5a79a4145daba7dfe71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Profile stamp with its radius scaled — e.g. a heavy balloon's deflect stamping wider than a light one's.  <br /></td></tr>
 <tr class="separator:a79244a21b3b8f5a79a4145daba7dfe71"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a694c80e17dec5648a7f99345c4e63c31" id="r_a694c80e17dec5648a7f99345c4e63c31"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a694c80e17dec5648a7f99345c4e63c31">Stamp</a> (<a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0e">StampSource</a> source, Vector3 worldPosition, Vector2 direction, int paletteIndex=-1)</td></tr>
-<tr class="memdesc:a694c80e17dec5648a7f99345c4e63c31"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stamps using the source's configured profile (radius/strength/duration). <em>paletteIndex</em>  tags the stamped region with a palette color (field A channel); -1 = none.  <br /></td></tr>
-<tr class="separator:a694c80e17dec5648a7f99345c4e63c31"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b7c8637e6e131080eb22b58125ca472" id="r_a6b7c8637e6e131080eb22b58125ca472"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6b7c8637e6e131080eb22b58125ca472">Stamp</a> (Vector3 worldPosition, float radius, float strength, Vector2 direction, float duration=0f, int paletteIndex=-1, bool reportImpact=true)</td></tr>
-<tr class="memdesc:a6b7c8637e6e131080eb22b58125ca472"><td class="mdescLeft">&#160;</td><td class="mdescRight">A positive <em>duration</em>  ramps the stamp over time for a smooth shockwave instead of a single-frame pop.  <br /></td></tr>
-<tr class="separator:a6b7c8637e6e131080eb22b58125ca472"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c1bb465dd7287f19590cd944af3706c" id="r_a6c1bb465dd7287f19590cd944af3706c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6c1bb465dd7287f19590cd944af3706c">Stamp</a> (<a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0e">StampSource</a> source, Vector3 worldPosition, Vector2 direction, int paletteIndex=-1, ImpactEventBus.Blast blast=default)</td></tr>
+<tr class="memdesc:a6c1bb465dd7287f19590cd944af3706c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stamps using the source's configured profile (radius/strength/duration). <em>paletteIndex</em>  tags the stamped region with a palette color (field A channel); -1 = none. <em>blast</em>  as in the explicit overload.  <br /></td></tr>
+<tr class="separator:a6c1bb465dd7287f19590cd944af3706c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5bb397a6d93d7d532df3ff50cd913a8" id="r_af5bb397a6d93d7d532df3ff50cd913a8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af5bb397a6d93d7d532df3ff50cd913a8">Stamp</a> (Vector3 worldPosition, float radius, float strength, Vector2 direction, float duration=0f, int paletteIndex=-1, bool reportImpact=true, ImpactEventBus.Blast blast=default)</td></tr>
+<tr class="memdesc:af5bb397a6d93d7d532df3ff50cd913a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">A positive <em>duration</em>  ramps the stamp over time for a smooth shockwave instead of a single-frame pop.  <br /></td></tr>
+<tr class="separator:af5bb397a6d93d7d532df3ff50cd913a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a224b6eb019bbd7659d0804fb39d43212" id="r_a224b6eb019bbd7659d0804fb39d43212"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a224b6eb019bbd7659d0804fb39d43212">StampCone</a> (<a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0e">StampSource</a> source, Vector3 origin, Vector2 direction, int paletteIndex=-1)</td></tr>
 <tr class="memdesc:a224b6eb019bbd7659d0804fb39d43212"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stamps a cone from the source's profile: <code>Interval</code>-many stamps marched from <em>origin</em>  along <em>direction</em>  (spaced by Radius), the radius growing by RadiusGrowth and the strength fading by StrengthFalloff toward the tip.  <br /></td></tr>
 <tr class="separator:a224b6eb019bbd7659d0804fb39d43212"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acd15c70ecd920901d45796b90c446915" id="r_acd15c70ecd920901d45796b90c446915"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acd15c70ecd920901d45796b90c446915">StampShieldLoss</a> (<a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0e">StampSource</a> source, Vector3 worldPosition, float velocityT, int paletteIndex=-1)</td></tr>
-<tr class="memdesc:acd15c70ecd920901d45796b90c446915"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stamps the source's profile with radius+strength scaled by the shot's velocity-normalized <em>velocityT</em>  (see <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IDisturbanceFieldSettings.html#acee902b0c5c7b942a429aa34e70fad63" title="Scales the projectile&#39;s shield-loss wall-impact stamp (radius + strength) by its velocity,...">IDisturbanceFieldSettings.ShieldLossVelocityCurve</a>) — used for the projectile's shield-loss wall impact only.  <br /></td></tr>
-<tr class="separator:acd15c70ecd920901d45796b90c446915"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76769f214dc69b4eba1b52547cac44e2" id="r_a76769f214dc69b4eba1b52547cac44e2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a76769f214dc69b4eba1b52547cac44e2">StampShieldLoss</a> (<a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0e">StampSource</a> source, Vector3 worldPosition, float velocityT, int paletteIndex=-1, ImpactEventBus.Blast blast=default)</td></tr>
+<tr class="memdesc:a76769f214dc69b4eba1b52547cac44e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stamps the source's profile with radius+strength scaled by the shot's velocity-normalized <em>velocityT</em>  (see <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IDisturbanceFieldSettings.html#acee902b0c5c7b942a429aa34e70fad63" title="Scales the projectile&#39;s shield-loss wall-impact stamp (radius + strength) by its velocity,...">IDisturbanceFieldSettings.ShieldLossVelocityCurve</a>) — used for the projectile's shield-loss wall impact only.  <br /></td></tr>
+<tr class="separator:a76769f214dc69b4eba1b52547cac44e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -479,6 +482,38 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ae9f537f1df8e106596377fdfcdbf4904" name="ae9f537f1df8e106596377fdfcdbf4904"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9f537f1df8e106596377fdfcdbf4904">&#9670;&#160;</a></span>ReportBlast()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Shared.Disturbance.DisturbanceFieldService.ReportBlast </td>
+          <td>(</td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>worldPosition</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ImpactEventBus.Blast</td>          <td class="paramname"><span class="paramname"><em>blast</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reports a blast with no stamp of its own: each stretch of a piercing shot's wake (<code>PierceWake</code>), which the shot's own flight stamps can't carry, being two to a stretch. </p>
+<p>The impact has no radius, so nothing that reads an impact's reach (the bushes, the water's ordinary press) answers it. </p>
+
+</div>
+</div>
 <a id="af990351860256596b1e88ff1a83f97ab" name="af990351860256596b1e88ff1a83f97ab"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af990351860256596b1e88ff1a83f97ab">&#9670;&#160;</a></span>SetDiffusionUniforms()</h2>
 
@@ -550,8 +585,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a694c80e17dec5648a7f99345c4e63c31" name="a694c80e17dec5648a7f99345c4e63c31"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a694c80e17dec5648a7f99345c4e63c31">&#9670;&#160;</a></span>Stamp() <span class="overload">[2/3]</span></h2>
+<a id="a6c1bb465dd7287f19590cd944af3706c" name="a6c1bb465dd7287f19590cd944af3706c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c1bb465dd7287f19590cd944af3706c">&#9670;&#160;</a></span>Stamp() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -577,7 +612,12 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>paletteIndex</em></span><span class="paramdefsep"> = </span><span class="paramdefval">-1</span>&#160;)</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>paletteIndex</em></span><span class="paramdefsep"> = </span><span class="paramdefval">-1</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ImpactEventBus.Blast</td>          <td class="paramname"><span class="paramname"><em>blast</em></span><span class="paramdefsep"> = </span><span class="paramdefval">default</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -587,12 +627,12 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Stamps using the source's configured profile (radius/strength/duration). <em>paletteIndex</em>  tags the stamped region with a palette color (field A channel); -1 = none. </p>
+<p>Stamps using the source's configured profile (radius/strength/duration). <em>paletteIndex</em>  tags the stamped region with a palette color (field A channel); -1 = none. <em>blast</em>  as in the explicit overload. </p>
 
 </div>
 </div>
-<a id="a6b7c8637e6e131080eb22b58125ca472" name="a6b7c8637e6e131080eb22b58125ca472"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6b7c8637e6e131080eb22b58125ca472">&#9670;&#160;</a></span>Stamp() <span class="overload">[3/3]</span></h2>
+<a id="af5bb397a6d93d7d532df3ff50cd913a8" name="af5bb397a6d93d7d532df3ff50cd913a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5bb397a6d93d7d532df3ff50cd913a8">&#9670;&#160;</a></span>Stamp() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -633,7 +673,12 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>reportImpact</em></span><span class="paramdefsep"> = </span><span class="paramdefval">true</span>&#160;)</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>reportImpact</em></span><span class="paramdefsep"> = </span><span class="paramdefval">true</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ImpactEventBus.Blast</td>          <td class="paramname"><span class="paramname"><em>blast</em></span><span class="paramdefsep"> = </span><span class="paramdefval">default</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -644,7 +689,7 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>A positive <em>duration</em>  ramps the stamp over time for a smooth shockwave instead of a single-frame pop. </p>
-<p><em>reportImpact</em>  false suppresses the bush rustle — for constant emitters (rainbow/tough pulses) rather than one-off hits. </p>
+<p><em>reportImpact</em>  false suppresses the bush rustle — for constant emitters (rainbow/tough pulses) rather than one-off hits. <em>blast</em>  rides on the stamp's impact report (a bomb, the nuke), for what an explosion throws aside: on water, a crater. It changes nothing in the field itself. </p>
 
 </div>
 </div>
@@ -690,8 +735,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="acd15c70ecd920901d45796b90c446915" name="acd15c70ecd920901d45796b90c446915"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acd15c70ecd920901d45796b90c446915">&#9670;&#160;</a></span>StampShieldLoss()</h2>
+<a id="a76769f214dc69b4eba1b52547cac44e2" name="a76769f214dc69b4eba1b52547cac44e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76769f214dc69b4eba1b52547cac44e2">&#9670;&#160;</a></span>StampShieldLoss()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -717,7 +762,12 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>paletteIndex</em></span><span class="paramdefsep"> = </span><span class="paramdefval">-1</span>&#160;)</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>paletteIndex</em></span><span class="paramdefsep"> = </span><span class="paramdefval">-1</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ImpactEventBus.Blast</td>          <td class="paramname"><span class="paramname"><em>blast</em></span><span class="paramdefsep"> = </span><span class="paramdefval">default</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -728,7 +778,7 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Stamps the source's profile with radius+strength scaled by the shot's velocity-normalized <em>velocityT</em>  (see <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IDisturbanceFieldSettings.html#acee902b0c5c7b942a429aa34e70fad63" title="Scales the projectile&#39;s shield-loss wall-impact stamp (radius + strength) by its velocity,...">IDisturbanceFieldSettings.ShieldLossVelocityCurve</a>) — used for the projectile's shield-loss wall impact only. </p>
-<p>An unauthored curve evaluates to 0 everywhere, so appliedValue = base until it's authored. </p>
+<p>An unauthored curve evaluates to 0 everywhere, so appliedValue = base until it's authored. <em>blast</em>  rides on its impact report, as in <code>Stamp</code>: the small crater a lance leaves in the water where its charge ends. </p>
 
 </div>
 </div>

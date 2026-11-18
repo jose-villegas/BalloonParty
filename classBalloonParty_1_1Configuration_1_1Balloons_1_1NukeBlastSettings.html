@@ -149,6 +149,15 @@ Properties</h2></td></tr>
 <tr class="memitem:a922a995ee230718e348dd19304a821eb" id="r_a922a995ee230718e348dd19304a821eb"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a922a995ee230718e348dd19304a821eb">CloudSortingOrder</a><code> [get]</code></td></tr>
 <tr class="memdesc:a922a995ee230718e348dd19304a821eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">The cloud's sorting order on <a class="el" href="#a216aefe4529bcda472781d6b6aa6ebf9">SortingLayerName</a>: above the balloons.  <br /></td></tr>
 <tr class="separator:a922a995ee230718e348dd19304a821eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2b47a9ca30684ccfc5f364fe4cca7c0" id="r_af2b47a9ca30684ccfc5f364fe4cca7c0"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af2b47a9ca30684ccfc5f364fe4cca7c0">ImpactRadius</a><code> [get]</code></td></tr>
+<tr class="memdesc:af2b47a9ca30684ccfc5f364fe4cca7c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">World radius the blast throws aside what it lands in, reported with the push's impact: on water, its crater's edge.  <br /></td></tr>
+<tr class="separator:af2b47a9ca30684ccfc5f364fe4cca7c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16063c13aec2310ab8e59ae643b2bcdb" id="r_a16063c13aec2310ab8e59ae643b2bcdb"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a16063c13aec2310ab8e59ae643b2bcdb">ImpactSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:a16063c13aec2310ab8e59ae643b2bcdb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds it goes on throwing it aside, hardest at the start: how long the water's crater is held open.  <br /></td></tr>
+<tr class="separator:a16063c13aec2310ab8e59ae643b2bcdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d1b9aa20e620b54ea5d1bdd8784811d" id="r_a8d1b9aa20e620b54ea5d1bdd8784811d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8d1b9aa20e620b54ea5d1bdd8784811d">ImpactStrength</a><code> [get]</code></td></tr>
+<tr class="memdesc:a8d1b9aa20e620b54ea5d1bdd8784811d"><td class="mdescLeft">&#160;</td><td class="mdescRight">How hard it throws, a bomb being 1 (the water's crater is as deep); 0 reports no blast.  <br /></td></tr>
+<tr class="separator:a8d1b9aa20e620b54ea5d1bdd8784811d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a59d647a7624a2f4e0b383fcf7a72e02b" id="r_a59d647a7624a2f4e0b383fcf7a72e02b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a59d647a7624a2f4e0b383fcf7a72e02b">LightAtEdge</a><code> [get]</code></td></tr>
 <tr class="memdesc:a59d647a7624a2f4e0b383fcf7a72e02b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The share of the light's intensity left when the disc reaches the board's far edge.  <br /></td></tr>
 <tr class="separator:a59d647a7624a2f4e0b383fcf7a72e02b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -198,6 +207,12 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a552da008ebbc29b9776009ca7e355178"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a154acf018a3e0232b89d340bac74e97e" id="r_a154acf018a3e0232b89d340bac74e97e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a154acf018a3e0232b89d340bac74e97e">_cloudSortingOrder</a> = 40</td></tr>
 <tr class="separator:a154acf018a3e0232b89d340bac74e97e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2baceff49569806435e6bc40c35e8cbe" id="r_a2baceff49569806435e6bc40c35e8cbe"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2baceff49569806435e6bc40c35e8cbe">_impactRadius</a> = 3.5f</td></tr>
+<tr class="separator:a2baceff49569806435e6bc40c35e8cbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a469694d266d1a9ed4fed4145fb56f0c7" id="r_a469694d266d1a9ed4fed4145fb56f0c7"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a469694d266d1a9ed4fed4145fb56f0c7">_impactSeconds</a> = 1f</td></tr>
+<tr class="separator:a469694d266d1a9ed4fed4145fb56f0c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04a37aff5f840b76e8aa5bf43ff5f987" id="r_a04a37aff5f840b76e8aa5bf43ff5f987"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a04a37aff5f840b76e8aa5bf43ff5f987">_impactStrength</a> = 1.5f</td></tr>
+<tr class="separator:a04a37aff5f840b76e8aa5bf43ff5f987"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7634e62d64a9a7e9d71357650a9ec88" id="r_ab7634e62d64a9a7e9d71357650a9ec88"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab7634e62d64a9a7e9d71357650a9ec88">_lightAtEdge</a> = 0.5f</td></tr>
 <tr class="separator:ab7634e62d64a9a7e9d71357650a9ec88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab40b2f98b8af180bf5c86152a508f9d1" id="r_ab40b2f98b8af180bf5c86152a508f9d1"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab40b2f98b8af180bf5c86152a508f9d1">_lightIntensity</a> = 6f</td></tr>
@@ -345,6 +360,72 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">int BalloonParty.Configuration.Balloons.NukeBlastSettings._cloudSortingOrder = 40</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2baceff49569806435e6bc40c35e8cbe" name="a2baceff49569806435e6bc40c35e8cbe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2baceff49569806435e6bc40c35e8cbe">&#9670;&#160;</a></span>_impactRadius</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.NukeBlastSettings._impactRadius = 3.5f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a469694d266d1a9ed4fed4145fb56f0c7" name="a469694d266d1a9ed4fed4145fb56f0c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a469694d266d1a9ed4fed4145fb56f0c7">&#9670;&#160;</a></span>_impactSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.NukeBlastSettings._impactSeconds = 1f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a04a37aff5f840b76e8aa5bf43ff5f987" name="a04a37aff5f840b76e8aa5bf43ff5f987"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a04a37aff5f840b76e8aa5bf43ff5f987">&#9670;&#160;</a></span>_impactStrength</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.NukeBlastSettings._impactStrength = 1.5f</td>
         </tr>
       </table>
   </td>
@@ -774,6 +855,84 @@ Private Attributes</h2></td></tr>
 <p>The cloud's sorting order on <a class="el" href="#a216aefe4529bcda472781d6b6aa6ebf9">SortingLayerName</a>: above the balloons. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeBlastSettings.html#ad0619021ac6c0062a1543709385cbb2b">BalloonParty.Configuration.Balloons.INukeBlastSettings</a>.</p>
+
+</div>
+</div>
+<a id="af2b47a9ca30684ccfc5f364fe4cca7c0" name="af2b47a9ca30684ccfc5f364fe4cca7c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2b47a9ca30684ccfc5f364fe4cca7c0">&#9670;&#160;</a></span>ImpactRadius</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.NukeBlastSettings.ImpactRadius</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>World radius the blast throws aside what it lands in, reported with the push's impact: on water, its crater's edge. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeBlastSettings.html#ace4158678d5bb26d0619fa5a6f2f8aa5">BalloonParty.Configuration.Balloons.INukeBlastSettings</a>.</p>
+
+</div>
+</div>
+<a id="a16063c13aec2310ab8e59ae643b2bcdb" name="a16063c13aec2310ab8e59ae643b2bcdb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16063c13aec2310ab8e59ae643b2bcdb">&#9670;&#160;</a></span>ImpactSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.NukeBlastSettings.ImpactSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds it goes on throwing it aside, hardest at the start: how long the water's crater is held open. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeBlastSettings.html#a29a24c28bb8c8ac9b38631b82382286a">BalloonParty.Configuration.Balloons.INukeBlastSettings</a>.</p>
+
+</div>
+</div>
+<a id="a8d1b9aa20e620b54ea5d1bdd8784811d" name="a8d1b9aa20e620b54ea5d1bdd8784811d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d1b9aa20e620b54ea5d1bdd8784811d">&#9670;&#160;</a></span>ImpactStrength</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.NukeBlastSettings.ImpactStrength</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How hard it throws, a bomb being 1 (the water's crater is as deep); 0 reports no blast. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeBlastSettings.html#acaf259e14641bbb3e2ce0070cb60ee02">BalloonParty.Configuration.Balloons.INukeBlastSettings</a>.</p>
 
 </div>
 </div>

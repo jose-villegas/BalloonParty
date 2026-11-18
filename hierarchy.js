@@ -47,6 +47,8 @@ var hierarchy =
     [ "BalloonParty.Configuration.BigScoreFormationSettings", "structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html", null ],
     [ "BalloonParty.Game.Score.Behaviours.BigScoreGroupRequest", "structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreGroupRequest.html", null ],
     [ "BalloonParty.Scenario.View.GrassBladeMesh.BladeVertex", "structBalloonParty_1_1Scenario_1_1View_1_1GrassBladeMesh_1_1BladeVertex.html", null ],
+    [ "BalloonParty.Scenario.View.WaterRippleBuffer.Blast", "structBalloonParty_1_1Scenario_1_1View_1_1WaterRippleBuffer_1_1Blast.html", null ],
+    [ "BalloonParty.Shared.ImpactEventBus.Blast", "structBalloonParty_1_1Shared_1_1ImpactEventBus_1_1Blast.html", null ],
     [ "BalloonParty.Balloon.View.RipeBubbleBurstView.BlastBubble", "structBalloonParty_1_1Balloon_1_1View_1_1RipeBubbleBurstView_1_1BlastBubble.html", null ],
     [ "BalloonParty.Item.Paint.PaintSplashView.BlobFlight", "classBalloonParty_1_1Item_1_1Paint_1_1PaintSplashView_1_1BlobFlight.html", null ],
     [ "BalloonParty.Item.Paint.BlobFlightSnapshot", "structBalloonParty_1_1Item_1_1Paint_1_1BlobFlightSnapshot.html", null ],
@@ -118,6 +120,7 @@ var hierarchy =
     [ "BalloonParty.Shared.Messages.DeflectChainMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1DeflectChainMessage.html", null ],
     [ "BalloonParty.Shared.DeflectChainRule", "classBalloonParty_1_1Shared_1_1DeflectChainRule.html", null ],
     [ "BalloonParty.Shared.DeflectorCircle", "structBalloonParty_1_1Shared_1_1DeflectorCircle.html", null ],
+    [ "BalloonParty.Scenario.View.WaterRippleBuffer.Dig", "structBalloonParty_1_1Scenario_1_1View_1_1WaterRippleBuffer_1_1Dig.html", null ],
     [ "BalloonParty.Shared.Messages.DiscoWaveAdvancedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveAdvancedMessage.html", null ],
     [ "BalloonParty.Shared.Messages.DiscoWaveReachedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveReachedMessage.html", null ],
     [ "BalloonParty.Shared.Disturbance.DisturbanceFieldCoordinates", "classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldCoordinates.html", null ],
@@ -318,6 +321,9 @@ var hierarchy =
       [ "BalloonParty.Balloon.Type.ToughBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1ToughBalloonVariant.html", null ],
       [ "BalloonParty.Balloon.Type.UnbreakableBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html", null ],
       [ "BalloonParty.Balloon.Type.UnbreakableFormationLook", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html", null ]
+    ] ],
+    [ "BalloonParty.Balloon.Controller.IBoardBeat", "interfaceBalloonParty_1_1Balloon_1_1Controller_1_1IBoardBeat.html", [
+      [ "BalloonParty.Balloon.Controller.BalloonBalancer", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html", null ]
     ] ],
     [ "BalloonParty.Game.Cinematics.IBoardEffect", "interfaceBalloonParty_1_1Game_1_1Cinematics_1_1IBoardEffect.html", [
       [ "BalloonParty.Game.Cinematics.BoardFloatAwayEffect", "classBalloonParty_1_1Game_1_1Cinematics_1_1BoardFloatAwayEffect.html", null ],
@@ -980,6 +986,7 @@ var hierarchy =
       [ "BalloonParty.Audio.SfxService", "classBalloonParty_1_1Audio_1_1SfxService.html", null ],
       [ "BalloonParty.Balloon.Controller.BalloonBalancer", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html", null ],
       [ "BalloonParty.Balloon.Controller.RipeBubbleService", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleService.html", null ],
+      [ "BalloonParty.Balloon.Controller.RipeRoom", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeRoom.html", null ],
       [ "BalloonParty.Balloon.Formation.UnbreakableFormationService", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html", null ],
       [ "BalloonParty.Balloon.Reward.DiscoWave", "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html", null ],
       [ "BalloonParty.Balloon.Reward.NukeBlast", "classBalloonParty_1_1Balloon_1_1Reward_1_1NukeBlast.html", null ],
@@ -1635,6 +1642,7 @@ var hierarchy =
     [ "BalloonParty.Shared.Messages.PierceDischargedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1PierceDischargedMessage.html", null ],
     [ "BalloonParty.Shared.PierceItemCircle", "structBalloonParty_1_1Shared_1_1PierceItemCircle.html", null ],
     [ "BalloonParty.Projectile.Controller.PierceTelegraphScan", "classBalloonParty_1_1Projectile_1_1Controller_1_1PierceTelegraphScan.html", null ],
+    [ "BalloonParty.Projectile.Controller.PierceWake", "classBalloonParty_1_1Projectile_1_1Controller_1_1PierceWake.html", null ],
     [ "BalloonParty.Shared.Messages.PierceWallReachedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1PierceWallReachedMessage.html", null ],
     [ "BalloonParty.Editor.CardRevealBuilder.PinImages", "structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1PinImages.html", null ],
     [ "BalloonParty.Game.Assist.PityRoll", "classBalloonParty_1_1Game_1_1Assist_1_1PityRoll.html", null ],
@@ -1935,6 +1943,7 @@ var hierarchy =
     [ "BalloonParty.Game.Score.Behaviours.ShapeInkMeshBuilder.Walk", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkMeshBuilder_1_1Walk.html", null ],
     [ "BalloonParty.Shared.Messages.WallHitMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage.html", null ],
     [ "BalloonParty.Shared.WallLimits", "structBalloonParty_1_1Shared_1_1WallLimits.html", null ],
+    [ "BalloonParty.Scenario.View.WaterCrater", "structBalloonParty_1_1Scenario_1_1View_1_1WaterCrater.html", null ],
     [ "BalloonParty.Shared.Messages.WaveDamageMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html", null ],
     [ "BalloonParty.Game.Health.WaveDeficit", "structBalloonParty_1_1Game_1_1Health_1_1WaveDeficit.html", null ],
     [ "BalloonParty.Game.Health.WaveDeficitCalculator", "classBalloonParty_1_1Game_1_1Health_1_1WaveDeficitCalculator.html", null ],

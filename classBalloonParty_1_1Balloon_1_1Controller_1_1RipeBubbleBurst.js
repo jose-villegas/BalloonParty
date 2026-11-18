@@ -1,8 +1,9 @@
 var classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleBurst =
 [
-    [ "RipeBubbleBurst", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleBurst.html#af003ab8e3c15acc042a2bcf2ce84c477", null ],
+    [ "RipeBubbleBurst", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleBurst.html#a5ab82d54063fb2217ad0b95d08bb9a4d", null ],
     [ "CollectBlast", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleBurst.html#aa14f1d3cf919fb2a89423470eba05fb3", null ],
     [ "CollectNeighbors", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleBurst.html#a9fc7f9c08638c9ae0b47460194cf930c", null ],
+    [ "GiveBubble", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleBurst.html#aeb9c5fcf7291ee211c694ea33df4e227", null ],
     [ "HandOut", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleBurst.html#adcdc1bb2afcb17ac2cc4d47dffbf8282", null ],
     [ "PlanFoam", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleBurst.html#a8ecb484d104aa68fdfd321fa269b773b", null ],
     [ "Ripple", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleBurst.html#ac1a31bc51ef5b0a098fe165a7d430350", null ],
@@ -20,6 +21,7 @@ var classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleBurst =
     [ "_neighborSlots", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleBurst.html#a7f150661c0f3233a6eccd6d6bbd47913", null ],
     [ "_nudgePublisher", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleBurst.html#a0c254dc5be354b23931fdf48976e8d07", null ],
     [ "_popper", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleBurst.html#a4e9d5c3a807ef1243cccb55d10e8ba14", null ],
+    [ "_room", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleBurst.html#a7c4a1f91d03408862ffb672b16807b3d", null ],
     [ "_settings", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleBurst.html#a950e3686b179eaf05e52e14a4035c928", null ],
     [ "BlastCapacity", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleBurst.html#adc85e31c9a648f18d5f3052a57c73447", null ]
 ];

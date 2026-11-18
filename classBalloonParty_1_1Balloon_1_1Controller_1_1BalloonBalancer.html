@@ -126,7 +126,7 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonB
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer__inherit__graph.svg" width="550" height="148"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer__inherit__graph.svg" width="510" height="279"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for BalloonParty.Balloon.Controller.BalloonBalancer:</div>
@@ -145,6 +145,9 @@ Classes</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a58292c87979b78a1d819628be6b6db4a" id="r_a58292c87979b78a1d819628be6b6db4a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a58292c87979b78a1d819628be6b6db4a">Dispose</a> ()</td></tr>
 <tr class="separator:a58292c87979b78a1d819628be6b6db4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2950da4b2af61d63142df9e3f896c2d6" id="r_a2950da4b2af61d63142df9e3f896c2d6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2950da4b2af61d63142df9e3f896c2d6">OffBeats</a> (float share)</td></tr>
+<tr class="memdesc:a2950da4b2af61d63142df9e3f896c2d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many off-beats have passed in this run.  <br /></td></tr>
+<tr class="separator:a2950da4b2af61d63142df9e3f896c2d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a346054885258462660eb4cc8b3d862" id="r_a1a346054885258462660eb4cc8b3d862"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1a346054885258462660eb4cc8b3d862">ResetRun</a> (int generation)</td></tr>
 <tr class="memdesc:a1a346054885258462660eb4cc8b3d862"><td class="mdescLeft">&#160;</td><td class="mdescRight"><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -178,6 +181,9 @@ Package Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
 Static Package Functions</h2></td></tr>
+<tr class="memitem:a835df6225349e154723d724c7c44390f" id="r_a835df6225349e154723d724c7c44390f"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a835df6225349e154723d724c7c44390f">OffBeatsAt</a> (int beats, float phase, float share)</td></tr>
+<tr class="memdesc:a835df6225349e154723d724c7c44390f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The off-beats passed once <em>beats</em>  beats have fallen and the clock stands <em>phase</em>  (0 to 1) of the way to the next: one <em>share</em>  of a beat after the run's start and after each beat.  <br /></td></tr>
+<tr class="separator:a835df6225349e154723d724c7c44390f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab99565165f76c01a61fccf6ccbc19d93" id="r_ab99565165f76c01a61fccf6ccbc19d93"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab99565165f76c01a61fccf6ccbc19d93">TickStepClock</a> (ref float elapsed, float interval, bool walking, bool ready, float deltaTime)</td></tr>
 <tr class="separator:ab99565165f76c01a61fccf6ccbc19d93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -192,12 +198,16 @@ Properties</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:a453f5cdbfefb770457ed33fe80a06eca" id="r_a453f5cdbfefb770457ed33fe80a06eca"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a453f5cdbfefb770457ed33fe80a06eca">AdvanceBeat</a> (float deltaTime)</td></tr>
+<tr class="separator:a453f5cdbfefb770457ed33fe80a06eca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9beadd5ebf1d19dc39d7fa4866cdc59e" id="r_a9beadd5ebf1d19dc39d7fa4866cdc59e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9beadd5ebf1d19dc39d7fa4866cdc59e">AnimatePaths</a> (Dictionary&lt; <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableDynamicSlotActor.html">IWriteableDynamicSlotActor</a>, List&lt; Vector3 &gt; &gt; paths)</td></tr>
 <tr class="separator:a9beadd5ebf1d19dc39d7fa4866cdc59e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0740c78aa316d6f37f7b8585c8db7600" id="r_a0740c78aa316d6f37f7b8585c8db7600"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0740c78aa316d6f37f7b8585c8db7600">ApplyBalanceMoves</a> ()</td></tr>
 <tr class="separator:a0740c78aa316d6f37f7b8585c8db7600"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d6c38f58490e0bbde06bb26885d595b" id="r_a7d6c38f58490e0bbde06bb26885d595b"><td class="memItemLeft" align="right" valign="top">async UniTaskVoid&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7d6c38f58490e0bbde06bb26885d595b">BalanceNextFrameAsync</a> (int generation)</td></tr>
 <tr class="separator:a7d6c38f58490e0bbde06bb26885d595b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6976b09948899ec0dbd047361305d59" id="r_ad6976b09948899ec0dbd047361305d59"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad6976b09948899ec0dbd047361305d59">BeatPhase</a> ()</td></tr>
+<tr class="separator:ad6976b09948899ec0dbd047361305d59"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b6e0dafc21d5add44944754ddd12dd6" id="r_a3b6e0dafc21d5add44944754ddd12dd6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3b6e0dafc21d5add44944754ddd12dd6">CollectRestingSlots</a> ()</td></tr>
 <tr class="separator:a3b6e0dafc21d5add44944754ddd12dd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3cfbc66806223590e6f2d7fda1b48dc8" id="r_a3cfbc66806223590e6f2d7fda1b48dc8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3cfbc66806223590e6f2d7fda1b48dc8">CollectRoamers</a> ()</td></tr>
@@ -398,6 +408,31 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a453f5cdbfefb770457ed33fe80a06eca" name="a453f5cdbfefb770457ed33fe80a06eca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a453f5cdbfefb770457ed33fe80a06eca">&#9670;&#160;</a></span>AdvanceBeat()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Balloon.Controller.BalloonBalancer.AdvanceBeat </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>deltaTime</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a9beadd5ebf1d19dc39d7fa4866cdc59e" name="a9beadd5ebf1d19dc39d7fa4866cdc59e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9beadd5ebf1d19dc39d7fa4866cdc59e">&#9670;&#160;</a></span>AnimatePaths()</h2>
 
@@ -486,6 +521,31 @@ Static Private Attributes</h2></td></tr>
           <td class="memname">async UniTaskVoid BalloonParty.Balloon.Controller.BalloonBalancer.BalanceNextFrameAsync </td>
           <td>(</td>
           <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>generation</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad6976b09948899ec0dbd047361305d59" name="ad6976b09948899ec0dbd047361305d59"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6976b09948899ec0dbd047361305d59">&#9670;&#160;</a></span>BeatPhase()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Balloon.Controller.BalloonBalancer.BeatPhase </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -716,6 +776,65 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2950da4b2af61d63142df9e3f896c2d6" name="a2950da4b2af61d63142df9e3f896c2d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2950da4b2af61d63142df9e3f896c2d6">&#9670;&#160;</a></span>OffBeats()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Balloon.Controller.BalloonBalancer.OffBeats </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>share</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>How many off-beats have passed in this run. </p>
+<p>An off-beat falls <em>share</em>  of a beat (0 to 1) after each beat, the first one that far into the run. The count never rises by more than one between two reads a frame apart, and falls only when a run starts over, back to 0. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Controller_1_1IBoardBeat.html#a93e1f3dfd825c6d6e747d9724e90b67e">BalloonParty.Balloon.Controller.IBoardBeat</a>.</p>
+
+</div>
+</div>
+<a id="a835df6225349e154723d724c7c44390f" name="a835df6225349e154723d724c7c44390f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a835df6225349e154723d724c7c44390f">&#9670;&#160;</a></span>OffBeatsAt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int BalloonParty.Balloon.Controller.BalloonBalancer.OffBeatsAt </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>beats</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>phase</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>share</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The off-beats passed once <em>beats</em>  beats have fallen and the clock stands <em>phase</em>  (0 to 1) of the way to the next: one <em>share</em>  of a beat after the run's start and after each beat. </p>
+<p>A share of 0 puts the off-beat on the beat itself. </p>
 
 </div>
 </div>

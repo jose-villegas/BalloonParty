@@ -1,5 +1,8 @@
 var NAVTREEINDEX4 =
 {
+"ShotWall_8cs.html":[7,0,15,2,5],
+"ShoveVector_8cs.html":[7,0,15,2,6],
+"ShowIfEnumAttribute_8cs.html":[7,0,14,34],
 "ShowIfEnumDrawer_8cs.html":[7,0,6,49],
 "SightFadeReaction_8cs.html":[7,0,8,30],
 "SightGlitterDriftReaction_8cs.html":[7,0,8,31],
@@ -174,8 +177,9 @@ var NAVTREEINDEX4 =
 "WallLimits_8cs.html":[7,0,14,39],
 "WallNetView_8cs.html":[7,0,13,0,5],
 "WaterCausticBuffer_8cs.html":[7,0,13,0,6],
+"WaterCrater_8cs.html":[7,0,13,0,7],
 "WaterImpactCollector_8cs.html":[7,0,13,12],
-"WaterRippleBuffer_8cs.html":[7,0,13,0,7],
+"WaterRippleBuffer_8cs.html":[7,0,13,0,8],
 "WaveDamageMessage_8cs.html":[7,0,14,7,64],
 "WaveDeficitCalculator_8cs.html":[7,0,7,6,7],
 "WaveDeficit_8cs.html":[7,0,7,6,6],
@@ -245,9 +249,5 @@ var NAVTREEINDEX4 =
 "arch_spawner_coordination.html#autotoc_md121":[2,5,0,0],
 "arch_spawner_coordination.html#autotoc_md122":[2,5,0,1],
 "arch_static_state.html":[2,12],
-"arch_static_state.html#autotoc_md123":[2,12,0],
-"arch_static_state.html#autotoc_md124":[2,12,0,0],
-"arch_static_state.html#autotoc_md125":[2,12,0,1],
-"arch_trail_composition.html":[2,9],
-"arch_trail_composition.html#autotoc_md126":[2,9,0]
+"arch_static_state.html#autotoc_md123":[2,12,0]
 };

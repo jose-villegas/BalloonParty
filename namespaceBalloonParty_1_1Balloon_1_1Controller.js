@@ -15,9 +15,11 @@ var namespaceBalloonParty_1_1Balloon_1_1Controller =
     [ "BubbleMergeRule", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeRule.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeRule" ],
     [ "BubbleMergeService", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeService.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeService" ],
     [ "IBalloonPopper", "interfaceBalloonParty_1_1Balloon_1_1Controller_1_1IBalloonPopper.html", "interfaceBalloonParty_1_1Balloon_1_1Controller_1_1IBalloonPopper" ],
+    [ "IBoardBeat", "interfaceBalloonParty_1_1Balloon_1_1Controller_1_1IBoardBeat.html", "interfaceBalloonParty_1_1Balloon_1_1Controller_1_1IBoardBeat" ],
     [ "PressurePropagation", "classBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation" ],
     [ "RipeBubbleBurst", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleBurst.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleBurst" ],
     [ "RipeBubbleRule", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleRule.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleRule" ],
     [ "RipeBubbleService", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleService.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleService" ],
+    [ "RipeRoom", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeRoom.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeRoom" ],
     [ "RoamRests", "classBalloonParty_1_1Balloon_1_1Controller_1_1RoamRests.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1RoamRests" ]
 ];

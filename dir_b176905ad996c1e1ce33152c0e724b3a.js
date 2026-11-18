@@ -4,6 +4,7 @@ var dir_b176905ad996c1e1ce33152c0e724b3a =
     [ "DeflectChainController.cs", "DeflectChainController_8cs.html", "DeflectChainController_8cs" ],
     [ "PierceDischargeEffects.cs", "PierceDischargeEffects_8cs.html", "PierceDischargeEffects_8cs" ],
     [ "PierceTelegraphScan.cs", "PierceTelegraphScan_8cs.html", "PierceTelegraphScan_8cs" ],
+    [ "PierceWake.cs", "PierceWake_8cs.html", "PierceWake_8cs" ],
     [ "ProjectileDoomedTimeScaleController.cs", "ProjectileDoomedTimeScaleController_8cs.html", "ProjectileDoomedTimeScaleController_8cs" ],
     [ "ProjectileHitResolver.cs", "ProjectileHitResolver_8cs.html", "ProjectileHitResolver_8cs" ],
     [ "ProjectileHitVisual.cs", "ProjectileHitVisual_8cs.html", "ProjectileHitVisual_8cs" ],

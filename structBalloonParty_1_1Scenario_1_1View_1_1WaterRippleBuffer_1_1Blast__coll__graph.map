@@ -1,0 +1,5 @@
+<map id="BalloonParty.Scenario.View.WaterRippleBuffer.Blast" name="BalloonParty.Scenario.View.WaterRippleBuffer.Blast">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,115,206,160"/>
+<area shape="rect" id="Node000002" href="$structBalloonParty_1_1Scenario_1_1View_1_1WaterCrater.html" title="The crater a blast (a bomb, the nuke) leaves in the water, and the shape it is dug in." alt="" coords="5,5,206,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,64,108,115,103,114,104,68"/>
+</map>

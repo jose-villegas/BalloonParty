@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"IPuffCloudSettings_8cs.html":[7,0,3,5,12],
 "IRainbowLines_8cs.html":[7,0,1,3,4],
 "IReactiveBindable_8cs.html":[7,0,18,0,1],
 "IReadOnlyMetricSet_8cs.html":[7,0,7,10,10],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "PaintSplashPreviewModule_8cs.html":[7,0,6,1,6],
 "PaintSplashViewEditor_8cs.html":[7,0,6,36],
 "PaintSplashView_8cs.html":[7,0,8,4,3],
-"PaintSpread_8cs.html":[7,0,8,4,4],
-"PaintTargets_8cs.html":[7,0,8,4,5]
+"PaintSpread_8cs.html":[7,0,8,4,4]
 };

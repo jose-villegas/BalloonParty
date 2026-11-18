@@ -133,6 +133,7 @@ var NAVTREEINDEX1 =
 "IBalloonVariant_8cs.html":[7,0,1,5,4],
 "IBalloonViewBinding_8cs.html":[7,0,1,6,13],
 "IBalloonsConfiguration_8cs.html":[7,0,3,0,11],
+"IBoardBeat_8cs.html":[7,0,1,0,13],
 "IBoardEffect_8cs.html":[7,0,7,2,12],
 "IBoardFill_8cs.html":[7,0,1,4,5],
 "IBoardResettable_8cs.html":[7,0,7,8,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "IProjectileModel_8cs.html":[7,0,12,2,4],
 "IProjectileRegistryWriter_8cs.html":[7,0,12,6],
 "IProjectileRegistry_8cs.html":[7,0,12,5],
-"IProjectileVisualConfig_8cs.html":[7,0,3,5,11],
-"IPuffCloudSettings_8cs.html":[7,0,3,5,12]
+"IProjectileVisualConfig_8cs.html":[7,0,3,5,11]
 };

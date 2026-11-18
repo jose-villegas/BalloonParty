@@ -1,29 +1,29 @@
 var plans =
 [
-    [ "Plans", "plans.html#autotoc_md980", null ],
+    [ "Plans", "plans.html#autotoc_md983", null ],
     [ "Unbreakable Formations", "plan_unbreakable_formations.html", [
-      [ "Unbreakable Formations", "plan_unbreakable_formations.html#autotoc_md933", [
-        [ "Goals", "plan_unbreakable_formations.html#autotoc_md935", null ],
-        [ "How unbreakables move today", "plan_unbreakable_formations.html#autotoc_md937", null ],
-        [ "What makes an unbreakable red", "plan_unbreakable_formations.html#autotoc_md939", null ],
-        [ "The glitter effect", "plan_unbreakable_formations.html#autotoc_md941", null ],
-        [ "Design", "plan_unbreakable_formations.html#autotoc_md943", [
-          [ "Rules", "plan_unbreakable_formations.html#autotoc_md944", null ],
-          [ "Shapes on the hex grid", "plan_unbreakable_formations.html#autotoc_md945", null ],
-          [ "Architecture", "plan_unbreakable_formations.html#autotoc_md946", null ],
-          [ "Settings (IUnbreakableFormationSettings)", "plan_unbreakable_formations.html#autotoc_md947", null ]
+      [ "Unbreakable Formations", "plan_unbreakable_formations.html#autotoc_md935", [
+        [ "Goals", "plan_unbreakable_formations.html#autotoc_md937", null ],
+        [ "How unbreakables move today", "plan_unbreakable_formations.html#autotoc_md939", null ],
+        [ "What makes an unbreakable red", "plan_unbreakable_formations.html#autotoc_md941", null ],
+        [ "The glitter effect", "plan_unbreakable_formations.html#autotoc_md943", null ],
+        [ "Design", "plan_unbreakable_formations.html#autotoc_md945", [
+          [ "Rules", "plan_unbreakable_formations.html#autotoc_md946", null ],
+          [ "Shapes on the hex grid", "plan_unbreakable_formations.html#autotoc_md947", null ],
+          [ "Architecture", "plan_unbreakable_formations.html#autotoc_md948", null ],
+          [ "Settings (IUnbreakableFormationSettings)", "plan_unbreakable_formations.html#autotoc_md949", null ]
         ] ],
-        [ "Open questions", "plan_unbreakable_formations.html#autotoc_md949", null ],
-        [ "Decisions", "plan_unbreakable_formations.html#autotoc_md950", null ],
-        [ "As built", "plan_unbreakable_formations.html#autotoc_md952", [
-          [ "Second pass: several formations and reinforcements (2026-11-13)", "plan_unbreakable_formations.html#autotoc_md953", null ]
+        [ "Open questions", "plan_unbreakable_formations.html#autotoc_md951", null ],
+        [ "Decisions", "plan_unbreakable_formations.html#autotoc_md952", null ],
+        [ "As built", "plan_unbreakable_formations.html#autotoc_md954", [
+          [ "Second pass: several formations and reinforcements (2026-11-13)", "plan_unbreakable_formations.html#autotoc_md955", null ]
         ] ],
-        [ "Phases", "plan_unbreakable_formations.html#autotoc_md954", [
-          [ "Phase 1: Formation logic", "plan_unbreakable_formations.html#autotoc_md955", null ],
-          [ "Phase 2: Visuals", "plan_unbreakable_formations.html#autotoc_md956", null ],
-          [ "Phase 3: Docs and playtest", "plan_unbreakable_formations.html#autotoc_md957", null ]
+        [ "Phases", "plan_unbreakable_formations.html#autotoc_md956", [
+          [ "Phase 1: Formation logic", "plan_unbreakable_formations.html#autotoc_md957", null ],
+          [ "Phase 2: Visuals", "plan_unbreakable_formations.html#autotoc_md958", null ],
+          [ "Phase 3: Docs and playtest", "plan_unbreakable_formations.html#autotoc_md959", null ]
         ] ],
-        [ "Risks", "plan_unbreakable_formations.html#autotoc_md959", null ]
+        [ "Risks", "plan_unbreakable_formations.html#autotoc_md961", null ]
       ] ]
     ] ],
     [ "Bubble Cluster Hit Feedback", "plan_bubble_cluster_hit_feedback.html", [
@@ -302,36 +302,38 @@ var plans =
       ] ]
     ] ],
     [ "Terrain & Biomes", "plan_terrain_biomes.html", [
-      [ "Terrain & Biomes: sky and ground scenarios", "plan_terrain_biomes.html#autotoc_md916", [
-        [ "Why now", "plan_terrain_biomes.html#autotoc_md918", null ],
-        [ "Verified inventory (2026-11-08)", "plan_terrain_biomes.html#autotoc_md919", null ],
-        [ "The smallest version", "plan_terrain_biomes.html#autotoc_md920", [
-          [ "Which levels are ground", "plan_terrain_biomes.html#autotoc_md921", null ],
-          [ "How it looks", "plan_terrain_biomes.html#autotoc_md922", null ],
-          [ "Performance (mobile, 120 Hz = 8.33 ms frame)", "plan_terrain_biomes.html#autotoc_md923", null ],
-          [ "What it reuses", "plan_terrain_biomes.html#autotoc_md924", null ],
-          [ "Shape (MVC)", "plan_terrain_biomes.html#autotoc_md925", null ],
-          [ "Phases", "plan_terrain_biomes.html#autotoc_md926", null ]
+      [ "Terrain & Biomes: sky and ground scenarios", "plan_terrain_biomes.html#autotoc_md918", [
+        [ "Why now", "plan_terrain_biomes.html#autotoc_md920", null ],
+        [ "Verified inventory (2026-11-08)", "plan_terrain_biomes.html#autotoc_md921", null ],
+        [ "The smallest version", "plan_terrain_biomes.html#autotoc_md922", [
+          [ "Which levels are ground", "plan_terrain_biomes.html#autotoc_md923", null ],
+          [ "How it looks", "plan_terrain_biomes.html#autotoc_md924", null ],
+          [ "Performance (mobile, 120 Hz = 8.33 ms frame)", "plan_terrain_biomes.html#autotoc_md925", null ],
+          [ "What it reuses", "plan_terrain_biomes.html#autotoc_md926", null ],
+          [ "Shape (MVC)", "plan_terrain_biomes.html#autotoc_md927", null ],
+          [ "Phases", "plan_terrain_biomes.html#autotoc_md928", null ]
         ] ],
-        [ "Decisions (signed off 2026-11-08)", "plan_terrain_biomes.html#autotoc_md927", null ],
-        [ "In-editor checks for phase 1", "plan_terrain_biomes.html#autotoc_md928", null ],
-        [ "In-editor checks for phase 2", "plan_terrain_biomes.html#autotoc_md929", null ],
-        [ "Follow-ups from the phase 1 optimizer review", "plan_terrain_biomes.html#autotoc_md930", null ],
-        [ "Later: the full biome system (unscheduled)", "plan_terrain_biomes.html#autotoc_md932", null ]
+        [ "Decisions (signed off 2026-11-08)", "plan_terrain_biomes.html#autotoc_md929", null ],
+        [ "In-editor checks for phase 1", "plan_terrain_biomes.html#autotoc_md930", null ],
+        [ "In-editor checks for phase 2", "plan_terrain_biomes.html#autotoc_md931", null ],
+        [ "Follow-ups from the phase 1 optimizer review", "plan_terrain_biomes.html#autotoc_md932", null ],
+        [ "Later: the full biome system (unscheduled)", "plan_terrain_biomes.html#autotoc_md934", null ]
       ] ]
     ] ],
     [ "Water Scenario & Bubble Merge", "plan_water_scenario.html", [
-      [ "Water scenario, rising bubbles and the bubble merge", "plan_water_scenario.html#autotoc_md960", [
-        [ "Owner direction (2026-11-10)", "plan_water_scenario.html#autotoc_md962", null ],
-        [ "What exists (verified 2026-11-10)", "plan_water_scenario.html#autotoc_md963", null ],
-        [ "Design", "plan_water_scenario.html#autotoc_md964", [
-          [ "Water in the schedule", "plan_water_scenario.html#autotoc_md965", null ],
-          [ "The water backdrop", "plan_water_scenario.html#autotoc_md966", null ],
-          [ "Bubbles that build up on water", "plan_water_scenario.html#autotoc_md967", null ],
-          [ "The merge", "plan_water_scenario.html#autotoc_md968", null ]
+      [ "Water scenario, rising bubbles and the bubble merge", "plan_water_scenario.html#autotoc_md962", [
+        [ "Owner direction (2026-11-10)", "plan_water_scenario.html#autotoc_md964", null ],
+        [ "What exists (verified 2026-11-10)", "plan_water_scenario.html#autotoc_md965", null ],
+        [ "Design", "plan_water_scenario.html#autotoc_md966", [
+          [ "Water in the schedule", "plan_water_scenario.html#autotoc_md967", null ],
+          [ "The water backdrop", "plan_water_scenario.html#autotoc_md968", [
+            [ "Blasts dig craters (2026-11-18)", "plan_water_scenario.html#autotoc_md969", null ]
+          ] ],
+          [ "Bubbles that build up on water", "plan_water_scenario.html#autotoc_md970", null ],
+          [ "The merge", "plan_water_scenario.html#autotoc_md971", null ]
         ] ],
-        [ "Owner decisions (2026-11-10)", "plan_water_scenario.html#autotoc_md969", null ],
-        [ "Phases", "plan_water_scenario.html#autotoc_md970", null ]
+        [ "Owner decisions (2026-11-10)", "plan_water_scenario.html#autotoc_md972", null ],
+        [ "Phases", "plan_water_scenario.html#autotoc_md973", null ]
       ] ]
     ] ],
     [ "Ripe Bubble Cluster", "plan_ripe_bubble_cluster.html", [
@@ -340,18 +342,20 @@ var plans =
         [ "What exists (verified 2026-11-18)", "plan_ripe_bubble_cluster.html#autotoc_md878", null ],
         [ "The mechanic", "plan_ripe_bubble_cluster.html#autotoc_md879", [
           [ "Ripening and the fuse", "plan_ripe_bubble_cluster.html#autotoc_md880", null ],
-          [ "Popped in time: the ripple", "plan_ripe_bubble_cluster.html#autotoc_md881", null ],
-          [ "Fuse runs out: the foam", "plan_ripe_bubble_cluster.html#autotoc_md882", null ]
+          [ "Merging on the beat", "plan_ripe_bubble_cluster.html#autotoc_md881", null ],
+          [ "Room for full clusters", "plan_ripe_bubble_cluster.html#autotoc_md882", null ],
+          [ "Popped in time: the ripple", "plan_ripe_bubble_cluster.html#autotoc_md883", null ],
+          [ "Fuse runs out: the foam", "plan_ripe_bubble_cluster.html#autotoc_md884", null ]
         ] ],
-        [ "Architecture", "plan_ripe_bubble_cluster.html#autotoc_md883", [
-          [ "The coat: why it is state on the balloon", "plan_ripe_bubble_cluster.html#autotoc_md884", null ]
+        [ "Architecture", "plan_ripe_bubble_cluster.html#autotoc_md885", [
+          [ "The coat: why it is state on the balloon", "plan_ripe_bubble_cluster.html#autotoc_md886", null ]
         ] ],
-        [ "Presentation", "plan_ripe_bubble_cluster.html#autotoc_md885", null ],
-        [ "Settings", "plan_ripe_bubble_cluster.html#autotoc_md886", null ],
-        [ "Owner decisions (2026-11-18)", "plan_ripe_bubble_cluster.html#autotoc_md887", null ],
-        [ "Phases", "plan_ripe_bubble_cluster.html#autotoc_md888", null ],
-        [ "Tests", "plan_ripe_bubble_cluster.html#autotoc_md889", null ],
-        [ "What to watch", "plan_ripe_bubble_cluster.html#autotoc_md890", null ]
+        [ "Presentation", "plan_ripe_bubble_cluster.html#autotoc_md887", null ],
+        [ "Settings", "plan_ripe_bubble_cluster.html#autotoc_md888", null ],
+        [ "Owner decisions (2026-11-18)", "plan_ripe_bubble_cluster.html#autotoc_md889", null ],
+        [ "Phases", "plan_ripe_bubble_cluster.html#autotoc_md890", null ],
+        [ "Tests", "plan_ripe_bubble_cluster.html#autotoc_md891", null ],
+        [ "What to watch", "plan_ripe_bubble_cluster.html#autotoc_md892", null ]
       ] ]
     ] ],
     [ "Gameplay Telemetry", "plan_gameplay_telemetry.html", [
@@ -472,43 +476,43 @@ var plans =
       ] ]
     ] ],
     [ "Shot Solver Accuracy", "plan_shot_solver_accuracy.html", [
-      [ "Shot Solver Accuracy", "plan_shot_solver_accuracy.html#autotoc_md891", [
-        [ "Diagnostic", "plan_shot_solver_accuracy.html#autotoc_md893", null ],
-        [ "Goals & non-goals", "plan_shot_solver_accuracy.html#autotoc_md894", null ],
-        [ "Architecture decisions (settled)", "plan_shot_solver_accuracy.html#autotoc_md895", null ],
-        [ "Phases", "plan_shot_solver_accuracy.html#autotoc_md896", [
-          [ "Phase 0 — Prerequisite refactors (no behavior change; the existing 22-test suite stays green)", "plan_shot_solver_accuracy.html#autotoc_md897", null ],
-          [ "Phase A — Interactive static geometry (G1) — depends on 0b", "plan_shot_solver_accuracy.html#autotoc_md898", null ],
-          [ "Phase B — Weight-system fidelity (G2) — depends on 0b; parallel to A", "plan_shot_solver_accuracy.html#autotoc_md899", null ],
-          [ "Phase D-core — Rainbow scoring + in-sim buff state (G4-scoring, G8) — depends on 0a", "plan_shot_solver_accuracy.html#autotoc_md900", null ],
-          [ "✅ Phase C — Item carriers (G3) — depends on B + D-core", "plan_shot_solver_accuracy.html#autotoc_md901", null ],
-          [ "Phase E — Flight residuals (G5, G6, G7 + E4) — depends on 0a; E2 folds C6", "plan_shot_solver_accuracy.html#autotoc_md902", null ],
-          [ "Phase F — Nondeterminism policy + instrumentation (G9) — last", "plan_shot_solver_accuracy.html#autotoc_md903", null ],
-          [ "Phase G — Headless level diagnostics (follow-up tier; scoped 2026-07-25)", "plan_shot_solver_accuracy.html#autotoc_md904", null ]
+      [ "Shot Solver Accuracy", "plan_shot_solver_accuracy.html#autotoc_md893", [
+        [ "Diagnostic", "plan_shot_solver_accuracy.html#autotoc_md895", null ],
+        [ "Goals & non-goals", "plan_shot_solver_accuracy.html#autotoc_md896", null ],
+        [ "Architecture decisions (settled)", "plan_shot_solver_accuracy.html#autotoc_md897", null ],
+        [ "Phases", "plan_shot_solver_accuracy.html#autotoc_md898", [
+          [ "Phase 0 — Prerequisite refactors (no behavior change; the existing 22-test suite stays green)", "plan_shot_solver_accuracy.html#autotoc_md899", null ],
+          [ "Phase A — Interactive static geometry (G1) — depends on 0b", "plan_shot_solver_accuracy.html#autotoc_md900", null ],
+          [ "Phase B — Weight-system fidelity (G2) — depends on 0b; parallel to A", "plan_shot_solver_accuracy.html#autotoc_md901", null ],
+          [ "Phase D-core — Rainbow scoring + in-sim buff state (G4-scoring, G8) — depends on 0a", "plan_shot_solver_accuracy.html#autotoc_md902", null ],
+          [ "✅ Phase C — Item carriers (G3) — depends on B + D-core", "plan_shot_solver_accuracy.html#autotoc_md903", null ],
+          [ "Phase E — Flight residuals (G5, G6, G7 + E4) — depends on 0a; E2 folds C6", "plan_shot_solver_accuracy.html#autotoc_md904", null ],
+          [ "Phase F — Nondeterminism policy + instrumentation (G9) — last", "plan_shot_solver_accuracy.html#autotoc_md905", null ],
+          [ "Phase G — Headless level diagnostics (follow-up tier; scoped 2026-07-25)", "plan_shot_solver_accuracy.html#autotoc_md906", null ]
         ] ],
-        [ "Test plan (per test-everything; full detail in the review transcript)", "plan_shot_solver_accuracy.html#autotoc_md905", null ],
-        [ "Verification workflow", "plan_shot_solver_accuracy.html#autotoc_md906", null ],
-        [ "Open decisions", "plan_shot_solver_accuracy.html#autotoc_md907", null ],
-        [ "Remaining work — detailed status (2026-07-26)", "plan_shot_solver_accuracy.html#autotoc_md908", [
-          [ "E — flight residuals (next; ONE architect memo for all four, they interact)", "plan_shot_solver_accuracy.html#autotoc_md909", null ],
-          [ "F — instrumentation + acceptance (after E)", "plan_shot_solver_accuracy.html#autotoc_md910", null ],
-          [ "Live repoint track (any time; separable commits)", "plan_shot_solver_accuracy.html#autotoc_md911", null ],
-          [ "José's gates (accumulated)", "plan_shot_solver_accuracy.html#autotoc_md912", null ],
-          [ "Deferred code follow-ups (small, none blocking)", "plan_shot_solver_accuracy.html#autotoc_md913", null ],
-          [ "G — headless level diagnostics (follow-up tier; unchanged spec in §4 Phase G)", "plan_shot_solver_accuracy.html#autotoc_md914", null ],
-          [ "Design questions parked for José", "plan_shot_solver_accuracy.html#autotoc_md915", null ]
+        [ "Test plan (per test-everything; full detail in the review transcript)", "plan_shot_solver_accuracy.html#autotoc_md907", null ],
+        [ "Verification workflow", "plan_shot_solver_accuracy.html#autotoc_md908", null ],
+        [ "Open decisions", "plan_shot_solver_accuracy.html#autotoc_md909", null ],
+        [ "Remaining work — detailed status (2026-07-26)", "plan_shot_solver_accuracy.html#autotoc_md910", [
+          [ "E — flight residuals (next; ONE architect memo for all four, they interact)", "plan_shot_solver_accuracy.html#autotoc_md911", null ],
+          [ "F — instrumentation + acceptance (after E)", "plan_shot_solver_accuracy.html#autotoc_md912", null ],
+          [ "Live repoint track (any time; separable commits)", "plan_shot_solver_accuracy.html#autotoc_md913", null ],
+          [ "José's gates (accumulated)", "plan_shot_solver_accuracy.html#autotoc_md914", null ],
+          [ "Deferred code follow-ups (small, none blocking)", "plan_shot_solver_accuracy.html#autotoc_md915", null ],
+          [ "G — headless level diagnostics (follow-up tier; unchanged spec in §4 Phase G)", "plan_shot_solver_accuracy.html#autotoc_md916", null ],
+          [ "Design questions parked for José", "plan_shot_solver_accuracy.html#autotoc_md917", null ]
         ] ]
       ] ]
     ] ],
     [ "Web Demo Hosting", "plan_web_demo_hosting.html", [
-      [ "Web Demo Hosting", "plan_web_demo_hosting.html#autotoc_md971", [
-        [ "Why keep it", "plan_web_demo_hosting.html#autotoc_md973", null ],
-        [ "What survived", "plan_web_demo_hosting.html#autotoc_md974", null ],
-        [ "The recipe, if resumed", "plan_web_demo_hosting.html#autotoc_md975", null ],
-        [ "The blocker", "plan_web_demo_hosting.html#autotoc_md976", null ],
-        [ "Residue from the attempt", "plan_web_demo_hosting.html#autotoc_md977", null ],
-        [ "If web stays dead", "plan_web_demo_hosting.html#autotoc_md978", null ],
-        [ "Decision log", "plan_web_demo_hosting.html#autotoc_md979", null ]
+      [ "Web Demo Hosting", "plan_web_demo_hosting.html#autotoc_md974", [
+        [ "Why keep it", "plan_web_demo_hosting.html#autotoc_md976", null ],
+        [ "What survived", "plan_web_demo_hosting.html#autotoc_md977", null ],
+        [ "The recipe, if resumed", "plan_web_demo_hosting.html#autotoc_md978", null ],
+        [ "The blocker", "plan_web_demo_hosting.html#autotoc_md979", null ],
+        [ "Residue from the attempt", "plan_web_demo_hosting.html#autotoc_md980", null ],
+        [ "If web stays dead", "plan_web_demo_hosting.html#autotoc_md981", null ],
+        [ "Decision log", "plan_web_demo_hosting.html#autotoc_md982", null ]
       ] ]
     ] ],
     [ "Level-Up Timing", "plan_level_up_timing.html", [
