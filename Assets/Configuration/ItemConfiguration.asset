@@ -38,6 +38,8 @@ MonoBehaviour:
       _implosionRadiusScale: 1.5
       _implosionStrengthScale: 15
       _implosionDuration: 0.05
+      _impactStrength: 1
+      _impactSeconds: 0.6
     _laser:
       _laserRaycastDistance: 20
       _laserCircleCastRadius: 0.065
@@ -202,6 +204,8 @@ MonoBehaviour:
       _implosionRadiusScale: 1.5
       _implosionStrengthScale: 1.5
       _implosionDuration: 0.05
+      _impactStrength: 1
+      _impactSeconds: 0.6
     _laser:
       _laserRaycastDistance: 20
       _laserCircleCastRadius: 0.065
@@ -366,6 +370,8 @@ MonoBehaviour:
       _implosionRadiusScale: 1.5
       _implosionStrengthScale: 1.5
       _implosionDuration: 0.05
+      _impactStrength: 1
+      _impactSeconds: 0.6
     _laser:
       _laserRaycastDistance: 20
       _laserCircleCastRadius: 0.065
@@ -530,6 +536,8 @@ MonoBehaviour:
       _implosionRadiusScale: 1.5
       _implosionStrengthScale: 1.5
       _implosionDuration: 0.05
+      _impactStrength: 1
+      _impactSeconds: 0.6
     _laser:
       _laserRaycastDistance: 20
       _laserCircleCastRadius: 0.065
@@ -694,6 +702,8 @@ MonoBehaviour:
       _implosionRadiusScale: 1.5
       _implosionStrengthScale: 1.5
       _implosionDuration: 0.05
+      _impactStrength: 1
+      _impactSeconds: 0.6
     _laser:
       _laserRaycastDistance: 20
       _laserCircleCastRadius: 0.065
@@ -893,6 +903,8 @@ MonoBehaviour:
       _implosionRadiusScale: 1.5
       _implosionStrengthScale: 1.5
       _implosionDuration: 0.05
+      _impactStrength: 1
+      _impactSeconds: 0.6
     _laser:
       _laserRaycastDistance: 20
       _laserCircleCastRadius: 0.065

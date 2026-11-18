@@ -50,6 +50,18 @@ namespace BalloonParty.Configuration.Balloons
         /// <summary>Seconds the push ramps over, its radius growing with it.</summary>
         float PushSeconds { get; }
 
+        /// <summary>
+        ///     World radius the blast throws aside what it lands in, reported with the push's impact: on water, its
+        ///     crater's edge.
+        /// </summary>
+        float ImpactRadius { get; }
+
+        /// <summary>How hard it throws, a bomb being 1 (the water's crater is as deep); 0 reports no blast.</summary>
+        float ImpactStrength { get; }
+
+        /// <summary>Seconds it goes on throwing it aside, hardest at the start: how long the water's crater is held open.</summary>
+        float ImpactSeconds { get; }
+
         /// <summary>The mushroom cloud's material. Required: with none no cloud rises.</summary>
         Material CloudMaterial { get; }
 

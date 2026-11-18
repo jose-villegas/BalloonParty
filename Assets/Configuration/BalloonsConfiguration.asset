@@ -447,6 +447,9 @@ MonoBehaviour:
     _pushRadius: 12
     _pushStrength: 9
     _pushSeconds: 0.8
+    _impactRadius: 3.5
+    _impactStrength: 1.5
+    _impactSeconds: 1
     _cloudMaterial: {fileID: 2100000, guid: 0a530a8f2fd24668800e16d6cf2a90b4, type: 2}
     _cloudSeconds: 5
     _cloudReach: 5.5

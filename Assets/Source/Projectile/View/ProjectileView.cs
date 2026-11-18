@@ -518,7 +518,8 @@ namespace BalloonParty.Projectile.View
             var wasPiercing = _model.IsPiercing.Value;
             var tapsBefore = _model.Flight.TotalCruiseTaps;
             var segmentOrigin = (Vector3)_model.Flight.SegmentStartPosition;
-            var step = _motionResolver.Step(_model, transform.position, Time.fixedDeltaTime);
+            var stepFrom = transform.position;
+            var step = _motionResolver.Step(_model, stepFrom, Time.fixedDeltaTime);
 
             if (step.Outcome != ProjectileStepOutcome.Moved)
             {
@@ -528,7 +529,11 @@ namespace BalloonParty.Projectile.View
             if (step.Outcome == ProjectileStepOutcome.Destroyed)
             {
                 var velocityT = ComputeVelocityT(step.Speed);
-                _disturbanceField.StampShieldLoss(StampSource.ProjectileImpact, step.WallContact, velocityT);
+                // A lance that dies at this wall ends its charge here: the wall stamp's impact carries the small
+                // blast that ends its wake on water.
+                _disturbanceField.StampShieldLoss(
+                    StampSource.ProjectileImpact, step.WallContact, velocityT,
+                    blast: PierceWake.WallBlast(_flightConfig, step.Outcome, wasPiercing, false, 0));
                 FlashShieldLoss(step.WallContact, velocityT);
                 // DestroyProjectile below flushes whatever is pending, so a pending plow means this wall
                 // is where the lance discharges.
@@ -538,6 +543,8 @@ namespace BalloonParty.Projectile.View
                         _model, step.WallContact, _model.Flight.PendingPierceHits.Count > 0));
                 }
 
+                PierceWake.Report(
+                    _disturbanceField, _flightConfig, stepFrom, step, wasPiercing, false, Time.fixedDeltaTime);
                 DestroyProjectile();
                 return;
             }
@@ -574,7 +581,14 @@ namespace BalloonParty.Projectile.View
                 // brief Sparks-colour light flash at the same point — both scaled by the shot's
                 // velocity at this exact shield-loss instant (see ComputeVelocityT).
                 var velocityT = ComputeVelocityT(step.Speed);
-                _disturbanceField.StampShieldLoss(StampSource.ProjectileImpact, step.WallContact, velocityT);
+                // A lance whose charge ends at this wall (it plowed toughs, which shatter below) ends its wake
+                // here: the wall stamp's impact carries a small blast for the water. The discharge's own stamp,
+                // back at the shattered line, carries none, so one wall hit digs one crater.
+                _disturbanceField.StampShieldLoss(
+                    StampSource.ProjectileImpact, step.WallContact, velocityT,
+                    blast: PierceWake.WallBlast(
+                        _flightConfig, step.Outcome, wasPiercing, _model.IsPiercing.Value,
+                        _model.Flight.PendingPierceHits.Count));
                 FlashShieldLoss(step.WallContact, velocityT);
 
                 // The cruise-triggered speck burst: one request per bounce while cruising (including the
@@ -588,6 +602,9 @@ namespace BalloonParty.Projectile.View
             }
 
             var discharged = ResolvePierceAtBounce(step, segmentOrigin, wasPiercing);
+            PierceWake.Report(
+                _disturbanceField, _flightConfig, stepFrom, step, wasPiercing, _model.IsPiercing.Value,
+                Time.fixedDeltaTime);
 
             // After the discharge, so a listener reads whether the lance carries on past this wall.
             if (wasPiercing && step.Outcome == ProjectileStepOutcome.Bounced)

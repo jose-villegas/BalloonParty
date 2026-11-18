@@ -129,6 +129,62 @@ the floor's, through `IGroundSettings`.
   The tile's cell wrap uses `id - n·floor((id + 0.5)/n)`, not `fmod`: GPU division is
   approximate, `fmod(10, 5)` can return 5, and the tile then shows a seam.
 
+#### Blasts dig craters (2026-11-18)
+
+Owner: "What is the strongest wave in terms of height we can pull in the water scenario? Can it
+reach the point of raising so strong it clears and shows the floor?", then "I basically want the
+bomb and the nuke to create a volume effect". Until then a wave's height only shaded the surface, a
+bomb's press (wide, 0.12 s) moved the water by under a tenth of a rest depth, and the height was
+clamped to 2 rest depths while a deep channel lies 11 down, so the floor could never show.
+
+What was built is in `Scenario/README.md` (Water): the bomb and the nuke report a blast with their
+impact, the simulation moves the water under it out into a rim along a potential, and `Water.shader`
+fades the water column and the surface out below a trough height. What it took to get there:
+
+- **A stronger press was not enough.** The water answers pressure at the wave speed (1.5 world
+  units a second), so a crater pressed open takes as long to form as it is wide, and to form it
+  faster the press must be many times stronger than the depth wanted, after which the flow it
+  started carries on. So a blast moves the water directly instead, across each cell edge, on top of
+  the flow: the crater has the shape and the timing asked for, and the water's own rules take over
+  from there.
+- **A steep wall stood as a dam.** The break rule took flow from any face steeper than the break
+  slope. A crater's wall is that steep from top to bottom, so the water could not run down it and a
+  crater a little too deep stayed open for seconds. Now only flow climbing a steep face breaks.
+  Ordinary impacts stay under the break slope and are unchanged (a ball's whole flight differs by
+  under a thousandth of a rest depth).
+- **The walls.** Water carried toward a wall all landed in the last cell, a spike that never
+  relaxed. Each blast is mirrored in the walls, so its water piles up short of them.
+- **Half floats.** Drawn into the force target like a press, the potential lost the water it moves
+  to rounding (the difference of two large values). The step shader evaluates it instead.
+- **The explosion hides the crater.** A crater dug in a tenth of a second closed again before the
+  bomb's own fireball had cleared (about 0.35 s). The dig is now hardest at its start and eases off
+  over the blast's seconds, which opens the crater at once and then holds it open.
+- **Foam.** The rim is too smooth to fold, so nothing foamed; a blast now foams where it piles
+  water up. At a gain of 3 that was one flat white ring; at 1.5 the crest is solid and the rest lace.
+- **The Snipe lance.** Owner, the same day: "Extra challenge would be to make sure snipe discharge
+  also creates a considerable wave that opens the floor but by very little". Three shapes were
+  built before the one that stayed. A ring at the centre of the shattered line (owner: "The snipe
+  needs to be seen as it would actually follow the lance during the discharge"). A furrow along the
+  shattered toughs, laid down at the discharge (owner: "seems it only starts to disturb at the
+  point it hits the toughs but really the wave should start for the moment the lance charges and
+  ends when it hits the wall"). So the water answers the lance's flight, not its discharge: every
+  stretch a piercing shot flies digs a furrow under it, toughs in the way or none, and the wake
+  grows behind the lance from the cannon to the wall. Then: "It should create a small impact at the
+  wall hit, smaller than the bomb", and, on a first version that reported it as an event of its
+  own, "I think that already happens in the disturbance field": the shot's existing wall stamp
+  carries the small blast, once, where the lance's charge ends; the discharge's own stamp back at
+  the shattered line carries none.
+  What the furrow took: a crater's bottom is flat, so a furrow deep enough to bare the floor bares
+  most of its width, and a big wave with a thin bare sliver can't come from one. The wake is two
+  furrows, a wide one too shallow to thin the water and a narrow strong one. Deeper or longer-lived
+  settings left bands of sand beside the path, wider than the sliver: the trough the narrow furrow
+  leaves beside itself as it floods back, on top of the wide one's depth, crossed the depth the
+  water thins at. The dig is in proportion to the way flown, so a path digs the same however the
+  fixed steps cut it up and a stalled lance digs nothing. And a lance crosses the board in a tenth
+  of a second, 0.75 world units a simulation step against a sliver 0.2 wide: dug in step with the
+  lance the sliver was a row of holes, so each stretch's narrow dig is given the time to run no
+  faster than its own width allows, a few hundredths of a second behind the lance.
+
 ### 3. Bubbles that build up on water
 
 Bubbles arrive **with the clock's lines**, taking a growing share of each line the longer the level

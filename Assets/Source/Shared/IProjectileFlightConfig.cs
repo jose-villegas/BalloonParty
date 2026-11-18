@@ -30,6 +30,37 @@ namespace BalloonParty.Shared
         AnimationCurve PierceArmRampCurve { get; }
         float PierceDischargeTimeScale { get; }
         float PierceDischargeTimeScaleDuration { get; }
+
+        /// <summary>
+        ///     A piercing shot in flight (a Snipe lance, a cruise pierce) reports two blasts along each stretch it
+        ///     flies, which on water part it under the shot: a wake. This is the first's world radius: wide and too
+        ///     weak to bare the floor (<see cref="PierceWakeWaveStrength" />), it throws the wave out to both sides.
+        /// </summary>
+        float PierceWakeWaveRadius { get; }
+
+        /// <summary>How hard the wave's blast throws, a bomb being 1; 0 reports none.</summary>
+        float PierceWakeWaveStrength { get; }
+
+        /// <summary>
+        ///     The second blast's world radius. Narrow and strong (<see cref="PierceWakeHeartStrength" />), it is
+        ///     the thin sliver of floor the water bares under the shot's path.
+        /// </summary>
+        float PierceWakeHeartRadius { get; }
+
+        /// <summary>How hard the heart's blast throws, a bomb being 1; 0 reports none.</summary>
+        float PierceWakeHeartStrength { get; }
+
+        /// <summary>
+        ///     The one blast a piercing shot reports at the wall its charge ends at (where it shatters what it plowed,
+        ///     or dies): the world radius it clears. On water, a small crater at the end of the wake.
+        /// </summary>
+        float PierceWallImpactRadius { get; }
+
+        /// <summary>How hard the wall's blast throws, a bomb being 1; 0 reports none.</summary>
+        float PierceWallImpactStrength { get; }
+
+        /// <summary>Seconds the wall's blast goes on throwing, hardest at the start.</summary>
+        float PierceWallImpactSeconds { get; }
         AnimationCurve LastShieldApproachCurve { get; }
         float LastShieldApproachDuration { get; }
         AnimationCurve LastShieldTimeScaleCurve { get; }

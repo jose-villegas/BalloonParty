@@ -136,11 +136,14 @@ namespace BalloonParty.Shared.Disturbance
             return _settings.GetProfile(source);
         }
 
-        /// <summary>Stamps using the source's configured profile (radius/strength/duration). <paramref name="paletteIndex"/> tags the stamped region with a palette color (field A channel); -1 = none.</summary>
-        internal void Stamp(StampSource source, Vector3 worldPosition, Vector2 direction, int paletteIndex = -1)
+        /// <summary>Stamps using the source's configured profile (radius/strength/duration). <paramref name="paletteIndex"/> tags the stamped region with a palette color (field A channel); -1 = none. <paramref name="blast"/> as in the explicit overload.</summary>
+        internal void Stamp(
+            StampSource source, Vector3 worldPosition, Vector2 direction, int paletteIndex = -1,
+            ImpactEventBus.Blast blast = default)
         {
             var profile = _settings.GetProfile(source);
-            Stamp(worldPosition, profile.Radius, profile.Strength, direction, profile.Duration, paletteIndex);
+            Stamp(worldPosition, profile.Radius, profile.Strength, direction, profile.Duration, paletteIndex,
+                blast: blast);
         }
 
         /// <summary>Profile stamp with its radius scaled — e.g. a heavy balloon's deflect stamping wider than a light one's.</summary>
@@ -155,10 +158,12 @@ namespace BalloonParty.Shared.Disturbance
         ///     A positive <paramref name="duration"/> ramps the stamp over time for a smooth shockwave
         ///     instead of a single-frame pop. <paramref name="reportImpact"/> false suppresses the bush
         ///     rustle — for constant emitters (rainbow/tough pulses) rather than one-off hits.
+        ///     <paramref name="blast"/> rides on the stamp's impact report (a bomb, the nuke), for what an
+        ///     explosion throws aside: on water, a crater. It changes nothing in the field itself.
         /// </summary>
         internal void Stamp(
             Vector3 worldPosition, float radius, float strength, Vector2 direction, float duration = 0f,
-            int paletteIndex = -1, bool reportImpact = true)
+            int paletteIndex = -1, bool reportImpact = true, ImpactEventBus.Blast blast = default)
         {
             // Signed strength: > 0 repels (bumps R up), < 0 attracts (digs R down), 0 is a pure colour
             // tag with no force. Only the outward push of repulsion rustles bushes and shoves the wind.
@@ -167,7 +172,8 @@ namespace BalloonParty.Shared.Disturbance
 
             if (repels && reportImpact)
             {
-                _impactBus.Report(worldPosition, radius, direction);
+                // Once, here: the sub-stamps a ramped stamp is spread into report without it.
+                _impactBus.Report(worldPosition, radius, direction, blast);
             }
 
             if (duration > 0f)
@@ -212,6 +218,19 @@ namespace BalloonParty.Shared.Disturbance
             });
         }
 
+        /// <summary>
+        ///     Reports a blast with no stamp of its own: each stretch of a piercing shot's wake (<c>PierceWake</c>),
+        ///     which the shot's own flight stamps can't carry, being two to a stretch. The impact has no radius, so
+        ///     nothing that reads an impact's reach (the bushes, the water's ordinary press) answers it.
+        /// </summary>
+        internal void ReportBlast(Vector3 worldPosition, ImpactEventBus.Blast blast)
+        {
+            if (blast.IsBlast)
+            {
+                _impactBus.Report(worldPosition, 0f, default, blast);
+            }
+        }
+
         /// <summary>Stamps a cone from the source's profile: <c>Interval</c>-many stamps marched from
         /// <paramref name="origin" /> along <paramref name="direction" /> (spaced by Radius), the radius growing
         /// by RadiusGrowth and the strength fading by StrengthFalloff toward the tip. Only the first (muzzle)
@@ -235,14 +254,17 @@ namespace BalloonParty.Shared.Disturbance
         /// <summary>Stamps the source's profile with radius+strength scaled by the shot's velocity-normalized
         /// <paramref name="velocityT"/> (see <see cref="IDisturbanceFieldSettings.ShieldLossVelocityCurve"/>) —
         /// used for the projectile's shield-loss wall impact only. An unauthored curve evaluates to 0
-        /// everywhere, so appliedValue = base until it's authored.</summary>
-        internal void StampShieldLoss(StampSource source, Vector3 worldPosition, float velocityT, int paletteIndex = -1)
+        /// everywhere, so appliedValue = base until it's authored. <paramref name="blast"/> rides on its impact report,
+        /// as in <c>Stamp</c>: the small crater a lance leaves in the water where its charge ends.</summary>
+        internal void StampShieldLoss(
+            StampSource source, Vector3 worldPosition, float velocityT, int paletteIndex = -1,
+            ImpactEventBus.Blast blast = default)
         {
             var profile = _settings.GetProfile(source);
             var curve = _settings.ShieldLossVelocityCurve;
             var radius = curve.ScaleByVelocity(profile.Radius, velocityT);
             var strength = curve.ScaleByVelocity(profile.Strength, velocityT);
-            Stamp(worldPosition, radius, strength, Vector2.zero, profile.Duration, paletteIndex);
+            Stamp(worldPosition, radius, strength, Vector2.zero, profile.Duration, paletteIndex, blast: blast);
         }
 
         private void FlushPendingStamps()

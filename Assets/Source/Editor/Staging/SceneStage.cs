@@ -19,6 +19,7 @@ using BalloonParty.Game;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
 using BalloonParty.Game.Score;
+using BalloonParty.Item.Snipe;
 using BalloonParty.Projectile;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.GameState;
@@ -30,6 +31,8 @@ using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Actor.Archetype;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
+using BalloonParty.Solver;
+using BalloonParty.Thrower;
 using BalloonParty.UI;
 using DG.Tweening;
 using UnityEditor;
@@ -558,6 +561,45 @@ namespace BalloonParty.Editor.Staging
             EditorApplication.update += FlyTick;
             Advance(seconds);
             return $"ball flying to {x:0.##},{y:0.##} over {seconds:0.##} s";
+        }
+
+        /// <summary>
+        ///     Fires the ball loaded in the thrower for real, at <paramref name="degrees" /> (0 = right, 90 = straight
+        ///     up), through <c>ThrowerController.FireAt</c> as the Fire Best Shot cheat does: it flies, bounces, hits and
+        ///     scores as a player's shot would, once game time runs (<see cref="Advance" />). With
+        ///     <paramref name="lance" /> it is armed as a Snipe lance first (<c>ISnipeArmer</c>, the Sharpshooter
+        ///     card's path), so it plows the toughs in its way and shatters them at the next wall. An error if the
+        ///     thrower is not up, holds no ball, or would not fire (a level-up, or the most balls already in flight).
+        /// </summary>
+        public static string Fire(float degrees, bool lance = false)
+        {
+            var scope = Object.FindAnyObjectByType<ThrowerLifetimeScope>();
+            if (scope == null)
+            {
+                return "error: no thrower in the scene";
+            }
+
+            var registry = scope.Container.Resolve<IProjectileRegistry>();
+            if (registry.Loaded is not IWriteableProjectileModel loaded)
+            {
+                return "error: no ball loaded in the thrower";
+            }
+
+            if (lance)
+            {
+                scope.Container.Resolve<ISnipeArmer>().Arm(loaded);
+            }
+
+            var from = Object.FindAnyObjectByType<ThrowerView>().SpawnPointPosition;
+            var inFlight = registry.InFlightCount;
+            scope.Container.Resolve<ThrowerController>().FireAt(ShotBoardGather.DirectionFromDegrees(degrees));
+            if (registry.InFlightCount <= inFlight)
+            {
+                return "error: the thrower would not fire";
+            }
+
+            return string.Format(CultureInfo.InvariantCulture, "fired {0} at {1:0.##} degrees from {2:0.##},{3:0.##}",
+                lance ? "a lance" : "a ball", degrees, from.x, from.y);
         }
 
         /// <summary>

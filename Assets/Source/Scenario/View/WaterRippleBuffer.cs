@@ -14,9 +14,11 @@ namespace BalloonParty.Scenario.View
     ///     disturbance field's bounds (<c>Hidden/BalloonParty/Scenario/WaterRipple</c>): height and flow trade back and
     ///     forth so waves travel, surface tension sends short ripples ahead of long ones, the screen's edges reflect,
     ///     crests foam where they fold over sharply, and the foam rides along with them. Each impact the game reports
-    ///     presses the water for a moment and drags it along the impact's heading, so a ball leaves a wake. Fixed
-    ///     steps on game time: the same at any frame rate, held by a pause, slowed by the pop slow-mo. Only while
-    ///     water shows.
+    ///     presses the water for a moment and drags it along the impact's heading, so a ball leaves a wake. An
+    ///     impact that carries a blast (a bomb, the nuke) also digs a crater (<see cref="WaterCrater" />): its water
+    ///     is thrown out into a rim, which travels off as a wave while the rest floods back in. A blast that runs a
+    ///     line (each stretch a piercing shot flies) digs a furrow along it, so a lance leaves a wake. Fixed steps on game
+    ///     time: the same at any frame rate, held by a pause, slowed by the pop slow-mo. Only while water shows.
     /// </summary>
     internal sealed class WaterRippleBuffer : IDisposable
     {
@@ -30,6 +32,11 @@ namespace BalloonParty.Scenario.View
         private const int MaxPresses = 64;
         // The splat quad's half-size, in impact radii: the shader's Gaussian is gone well inside it.
         private const float SplatExtent = 2.5f;
+        // Craters being dug at once (the step shader's array): past it the oldest stops where it is. The fastest
+        // lance (93 world units a second) has about eight stretches of its wake being dug at a time.
+        private const int MaxBlasts = 12;
+        // The step shader's variant that moves the craters' water: on only while one is being dug.
+        private const string BlastsKeyword = "BLASTS_ON";
         private const int SplatPass = 0;
         private const int StepPass = 1;
 
@@ -39,6 +46,10 @@ namespace BalloonParty.Scenario.View
         private static readonly int StepSecondsId = Shader.PropertyToID("_StepSeconds");
         private static readonly int TexelsPerUnitId = Shader.PropertyToID("_TexelsPerUnit");
         private static readonly int PressRadiusId = Shader.PropertyToID("_PressRadius");
+        private static readonly int BlastRadiusId = Shader.PropertyToID("_BlastRadius");
+        private static readonly int BlastDepthId = Shader.PropertyToID("_BlastDepth");
+        private static readonly int BlastsId = Shader.PropertyToID("_Blasts");
+        private static readonly int BlastCountId = Shader.PropertyToID("_BlastCount");
         private static readonly int WaterRippleTexId = Shader.PropertyToID("_WaterRippleTex");
         private static readonly int WaterRippleTexelId = Shader.PropertyToID("_WaterRippleTexel");
 
@@ -46,10 +57,15 @@ namespace BalloonParty.Scenario.View
         private readonly float _texelsPerUnit;
         private readonly RenderTexture[] _state = new RenderTexture[2];
         private readonly List<Press> _presses = new();
+        private readonly List<Blast> _blasts = new();
+        private readonly Vector4[] _blastUniforms = new Vector4[MaxBlasts];
+        private readonly Dig[] _digs = new Dig[MaxBlasts];
 
         private RenderTexture _force;
         private int _read;
         private float _pendingSeconds;
+        private bool _blasting;
+        private int _digCount;
 
         internal WaterRippleBuffer(Material rippleMaterial, float texelsPerUnit)
         {
@@ -82,6 +98,7 @@ namespace BalloonParty.Scenario.View
         internal void Restart()
         {
             _presses.Clear();
+            _blasts.Clear();
             _pendingSeconds = 0f;
             Clear(_state[0]);
             Clear(_state[1]);
@@ -108,6 +125,7 @@ namespace BalloonParty.Scenario.View
 
             deltaTime = Mathf.Max(0f, deltaTime);
             AgePresses(deltaTime);
+            AgeBlasts(deltaTime);
             AddPresses(impacts, fieldMin, fieldSize);
 
             _pendingSeconds = Mathf.Min(_pendingSeconds + deltaTime, StepSeconds * MaxStepsPerFrame);
@@ -116,11 +134,17 @@ namespace BalloonParty.Scenario.View
             if (steps > 0)
             {
                 Splat(fieldMin, fieldSize);
+                var digging = BeginDigs();
                 _material.SetTexture(ForceTexId, _force);
                 _material.SetFloat(StepSecondsId, StepSeconds);
                 _material.SetFloat(TexelsPerUnitId, _texelsPerUnit);
                 for (var i = 0; i < steps; i++)
                 {
+                    if (digging)
+                    {
+                        DigStep(i, steps, fieldMin, fieldSize, new Vector2(width, height));
+                    }
+
                     Graphics.Blit(_state[_read], _state[1 - _read], _material, StepPass);
                     _read = 1 - _read;
                 }
@@ -147,6 +171,16 @@ namespace BalloonParty.Scenario.View
             }
         }
 
+        private void AgeBlasts(float deltaTime)
+        {
+            for (var i = 0; i < _blasts.Count; i++)
+            {
+                var blast = _blasts[i];
+                blast.Age += deltaTime;
+                _blasts[i] = blast;
+            }
+        }
+
         // Off-field impacts (past the camera) press nothing.
         private void AddPresses(IReadOnlyList<ImpactEventBus.Impact> impacts, Vector2 fieldMin, Vector2 fieldSize)
         {
@@ -160,6 +194,11 @@ namespace BalloonParty.Scenario.View
                 if (origin.x < fieldMin.x || origin.x > fieldMax.x || origin.y < fieldMin.y || origin.y > fieldMax.y)
                 {
                     continue;
+                }
+
+                if (impact.Blast.IsBlast)
+                {
+                    AddBlast(origin, impact.Blast);
                 }
 
                 var strength = Mathf.Clamp01(impact.Radius * 1.5f);
@@ -176,6 +215,100 @@ namespace BalloonParty.Scenario.View
                 _presses.Add(new Press(
                     origin, Mathf.Max(impact.Radius * radiusScale, minRadius), strength, direction));
             }
+        }
+
+        private void AddBlast(Vector2 origin, ImpactEventBus.Blast blast)
+        {
+            var crater = WaterCrater.From(
+                blast, _material.GetFloat(BlastRadiusId), _material.GetFloat(BlastDepthId), StepSeconds);
+            if (crater.Radius <= 0f || crater.Depth <= 0f)
+            {
+                return;
+            }
+
+            // The stretches of one straight flight reported this frame (several fixed steps in a long frame) are
+            // dug as one furrow, so a hitch can't flood the blasts and push stretches out, leaving gaps in a wake.
+            for (var i = _blasts.Count - 1; i >= 0 && _blasts[i].Age <= 0f; i--)
+            {
+                if (WaterCrater.TryJoin(_blasts[i].Origin, _blasts[i].Crater, origin, crater, out var at, out var joined))
+                {
+                    _blasts[i] = new Blast(at, joined);
+                    return;
+                }
+            }
+
+            if (_blasts.Count >= MaxBlasts)
+            {
+                _blasts.RemoveAt(0);
+            }
+
+            _blasts.Add(new Blast(origin, crater));
+        }
+
+        // Notes how much of each crater this frame's steps dig: the share its dig has come on since the last steps
+        // ran. So the whole of a dig is done at any frame rate, whichever frames ran steps. False with none to dig.
+        private bool BeginDigs()
+        {
+            if (_blasts.Count == 0)
+            {
+                if (_blasting)
+                {
+                    _blasting = false;
+                    _material.DisableKeyword(BlastsKeyword);
+                }
+
+                return false;
+            }
+
+            _digCount = _blasts.Count;
+            for (var i = _digCount - 1; i >= 0; i--)
+            {
+                var blast = _blasts[i];
+                var dug = blast.Crater.DugBy(blast.Age);
+                _digs[i] = new Dig(blast, dug, _texelsPerUnit);
+                blast.Dug = dug;
+                if (dug >= 1f)
+                {
+                    _blasts.RemoveAt(i);
+                }
+                else
+                {
+                    _blasts[i] = blast;
+                }
+            }
+
+            _material.SetFloat(BlastCountId, _digCount);
+            if (!_blasting)
+            {
+                _blasting = true;
+                _material.EnableKeyword(BlastsKeyword);
+            }
+
+            return true;
+        }
+
+        // Hands the step shader each crater's dig for one of the frame's steps: an even share of the frame's, and
+        // where the dig stands by then. A furrow's dig runs its line, so each step has its own place on it: handed
+        // over once a frame, a furrow would be dug as a row of holes, one per frame.
+        private void DigStep(int step, int steps, Vector2 fieldMin, Vector2 fieldSize, Vector2 texels)
+        {
+            for (var i = 0; i < MaxBlasts; i++)
+            {
+                _blastUniforms[i] = Vector4.zero;
+            }
+
+            for (var i = 0; i < _digCount; i++)
+            {
+                var dig = _digs[i];
+                var share = (dig.To - dig.From) / steps;
+                var at = dig.Origin + dig.Crater.OffsetAt(dig.From + (step + 0.5f) * share);
+                var middle = (at - fieldMin) / fieldSize * texels;
+                var spreadTexels = dig.Crater.Spread * _texelsPerUnit;
+                _blastUniforms[i] = new Vector4(
+                    middle.x, middle.y, 1f / (spreadTexels * spreadTexels), dig.Scale * share);
+            }
+
+            _material.SetVectorArray(BlastsId, _blastUniforms);
         }
 
         // Draws every press into the force target, one additive quad each, at the strength its ease is at now.
@@ -298,6 +431,44 @@ namespace BalloonParty.Scenario.View
                 Strength = strength;
                 Direction = direction;
                 Age = 0f;
+            }
+        }
+
+        private struct Blast
+        {
+            public readonly Vector2 Origin;
+            public readonly WaterCrater Crater;
+            public float Age;
+            // The share of the crater the steps have dug so far.
+            public float Dug;
+
+            public Blast(Vector2 origin, WaterCrater crater)
+            {
+                Origin = origin;
+                Crater = crater;
+                Age = 0f;
+                Dug = 0f;
+            }
+        }
+
+        // One crater's dig over one frame's steps.
+        private readonly struct Dig
+        {
+            public readonly Vector2 Origin;
+            public readonly WaterCrater Crater;
+            // The shares of the dig done before this frame's steps and after them.
+            public readonly float From;
+            public readonly float To;
+            // What the whole dig scales the potential by.
+            public readonly float Scale;
+
+            public Dig(Blast blast, float dug, float texelsPerUnit)
+            {
+                Origin = blast.Origin;
+                Crater = blast.Crater;
+                From = blast.Dug;
+                To = dug;
+                Scale = blast.Crater.PotentialScale(texelsPerUnit);
             }
         }
     }

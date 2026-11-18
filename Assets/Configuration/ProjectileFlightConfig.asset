@@ -84,6 +84,13 @@ MonoBehaviour:
     m_RotationOrder: 4
   _pierceDischargeTimeScale: 0.4
   _pierceDischargeTimeScaleDuration: 0.5
+  _pierceWakeWaveRadius: 1.75
+  _pierceWakeWaveStrength: 0.133
+  _pierceWakeHeartRadius: 0.35
+  _pierceWakeHeartStrength: 0.5
+  _pierceWallImpactRadius: 0.75
+  _pierceWallImpactStrength: 0.35
+  _pierceWallImpactSeconds: 0.3
   _lastShieldApproachCurve:
     serializedVersion: 2
     m_Curve:

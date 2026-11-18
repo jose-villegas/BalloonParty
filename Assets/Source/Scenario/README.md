@@ -196,6 +196,17 @@ bounce reference to `WaterBounceReference`.
   over it, and its hue at 0.7 (a warm evening tints the water rather than turning it olive), with
   light above full eased in so a pop's glow doesn't clip to white; premultiplied by `GroundCoverageAt`,
   like the floor.
+  Where the simulated surface is pressed far below rest, which only a blast's crater does (below), the
+  water is gone and the sand shows bare. The water thins from a trough `_BareFrom` (0.9) rest depths down
+  and is gone at `_BareAt` (1.4), whatever the bottom's depth there: a deep channel lies 4.5 world units
+  down, far below any trough (a rest depth draws as 0.4), so the column is faded between the two heights,
+  not subtracted from. Everything of the surface fades with it: absorption and the water's colour, the
+  veil, the bend of the bottom, the caustics and the waves' focus bands, crest shade, sheen, highlight,
+  glints and foam. What is left is the sand, `_BareShade` (0.12) darker for being wet. Ordinary impacts
+  never reach the first height (a ball's wake dips about 0.45), and every term is multiplied by the share
+  of water left or loses a share of what is gone, so anywhere outside a crater each value is exactly what
+  it was without craters. It costs about 25 arithmetic statements a pixel (the compiled fragment program
+  grew by 5%) and no texture read (37 before and after): the height it works from is already sampled.
 - `Shaders/BalloonParty/Include/WaterSurface.cginc`: the surface's slope: a slow swell of two noise layers
   on different headings (the smaller slower, as shorter waves are), travelling with the board, plus the
   simulated waves (below). The slope is what bends the bottom and catches the light.
@@ -206,8 +217,9 @@ bounce reference to `WaterBounceReference`.
   second of game time, at most 4 a frame, so a pause holds it) flow runs from high water to low and the
   heights follow, so a dip travels out as a wave. The screen's edges are walls: waves reflect and the water
   sloshes between them. Surface tension pulls on curvature, so short ripples outrun long ones and a splash
-  spreads into a train of wavelets; viscosity smooths the flow at the grid's own scale. A crest steeper than
-  the break slope loses some of its flow. Foam shows only where a crest (past the foam height) folds
+  spreads into a train of wavelets; viscosity smooths the flow at the grid's own scale. A face steeper than
+  the break slope loses some of the flow climbing it (flow running down it is never held back, or a
+  crater's wall would stand as a dam). Foam shows only where a crest (past the foam height) folds
   over sharply in its sharpest direction (past the foam fold), where the normal turns suddenly, and lasts
   a tenth of a second, so it sits on the fold and moves with the crest. Every
   impact the game reports to `Shared/ImpactEventBus` (each step of a ball's flight, pops, bombs, balloons
@@ -218,6 +230,51 @@ bounce reference to `WaterBounceReference`.
   whenever water appears. `WaterImpactCollector` (Game scope, `IPostTickable`) copies the bus after Update,
   because the bus clears in VContainer's LateTick, which runs before `GroundView`'s LateUpdate. The tuning
   (wave speed, tension, fade, push, drag, break slope, foam) is on the ripple material.
+  **Blasts dig craters.** A press only leans on the water for a moment, and a bomb's is too wide and brief
+  to move it. So the bomb and the nuke report a blast with their impact
+  (`ImpactEventBus.Blast`: a radius, a strength, seconds), and the water answers it by moving a volume
+  (`View/WaterCrater`). While the blast
+  lasts, the step shader's `BLASTS_ON` variant carries water across each cell edge by the difference of a
+  potential centred on the blast, on top of whatever the flow is doing. The potential,
+  `(1 + 2u/3 + u²/6)·e^-u` with `u` the distance in spreads squared, is chosen for what that leaves: a
+  crater flat over its inner half, a wall, and past the edge (`_BlastRadius` times the blast's radius) a
+  rim a third as tall as the crater is deep. What leaves the middle is what stands in the rim, so no water
+  is made or lost, walls included (nothing crosses them, and each blast is mirrored in the four walls and
+  corners so its water piles up short of a wall as if thrown back, not all in the last cell). The dig takes
+  `_BlastDepth` (3) rest depths per unit of strength out of the middle, fastest at the start and easing to
+  nothing over the blast's seconds: the crater opens in the first tenth of a second and is then held open
+  against the water flooding back. All along the water answers by its own rules: the rim runs off as a
+  wave, and when the dig tires the crater closes from its edge at the wave speed and overshoots into a
+  dome in the middle. Where a blast piles water up it foams (`_BlastFoam`). A bomb (radius 1.25, strength
+  1, 0.6 s) bares a disc about 0.8 world units in radius for half a second; the nuke (3.5, 1.5, 1 s) bares
+  some 4 world units across, to the nearer side of the board, and closes about 2 s after it goes off.
+  **A lance leaves a wake.** A piercing shot (a Snipe lance, or a cruise-earned pierce, which is the same
+  state on the shot) parts the water under it for its whole flight, from where it is armed to the wall its
+  charge ends at (`Projectile/Controller/PierceWake`). Each fixed step it reports two blasts with a line:
+  the stretch it flew that step. A blast with a line digs a furrow, not a crater: the same potential runs
+  the line from end to end at a steady pace, digging in proportion to the way run, so stretch after stretch
+  makes one unbroken furrow, as deep down its middle however the path is cut up, and a shot that stalls
+  digs nothing. The furrow opens in the order the lance flew and floods back behind it in the same order.
+  One furrow can't both throw a wave and bare only a sliver, since one deep enough to bare the floor bares
+  most of its width, so the wake is two: a wide weak one (radius 1.75, strength 0.133: 0.4 of a rest depth
+  down, well short of where the water thins) whose water leaves to both sides as two fronts, about as tall
+  as a bomb's wave; and a narrow strong one (0.35, 0.5) that bares a sliver of sand about 0.3 world units
+  wide under the shot for a tenth of a second. A lance outruns the simulation (up to 93 world units a
+  second, 0.75 a step, against a sliver 0.2 wide), so a furrow's dig is given the time to run its stretch
+  no faster than 0.8 of its own spreads a step: the sliver follows up to a tenth of a second behind the
+  lance instead of breaking into a row of holes. The stretches one straight flight reports in a frame are
+  joined into one furrow (`WaterCrater.TryJoin`), so a long frame, which runs many fixed steps at once,
+  asks for two digs and not two a step: the fastest lance has about eight going at a time, under the twelve
+  the step shader takes, and a hitch can't push stretches out and leave gaps. At the wall where the charge ends (the lance shatters
+  what it plowed there, or dies) the wall stamp every shot already leaves carries one small round blast
+  (0.75, 0.35, 0.3 s), the wake's full stop: a crater smaller than a bomb's every way, whose ring leaves
+  from the wall. A wall a lance only bounces off, still armed, gets none: the wake turns with it.
+  The potential is evaluated in the step shader
+  from up to 12 blasts handed over as uniforms, not drawn into the force target: the water moved is the
+  small difference of two large values, which half floats are too coarse for. `WaterRippleBuffer` gives
+  each step the share of the dig its ease came on since the last steps ran, so a crater is as deep at any
+  frame rate. The height clamp (8 rest depths either way, from 2) is only a guard: a crater in a corner,
+  twice mirrored, reaches 6 down, and clamping what the water really reaches would lose water.
   Three earlier versions failed. Rings drawn straight from the field's push (`sin(k·push + ωt)`) stayed in
   the push's shape and wobbled in place like gel. A wave equation over the height alone, driven by the
   field, sloshed in board-wide blobs, and driven by the impacts its rings interfered into a chop. Rings

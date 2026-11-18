@@ -149,6 +149,13 @@ namespace BalloonParty.Tests.PlayMode
             public AnimationCurve PierceArmRampCurve => null;
             public float PierceDischargeTimeScale => 0f;
             public float PierceDischargeTimeScaleDuration => 0f;
+            public float PierceWakeWaveRadius => 0f;
+            public float PierceWakeWaveStrength => 0f;
+            public float PierceWakeHeartRadius => 0f;
+            public float PierceWakeHeartStrength => 0f;
+            public float PierceWallImpactRadius => 0f;
+            public float PierceWallImpactStrength => 0f;
+            public float PierceWallImpactSeconds => 0f;
             public AnimationCurve LastShieldApproachCurve => null;
             public float LastShieldApproachDuration => 0f;
             public AnimationCurve LastShieldTimeScaleCurve => null;

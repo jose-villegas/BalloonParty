@@ -1,5 +1,6 @@
 using System;
 using BalloonParty.Configuration.Balloons;
+using BalloonParty.Shared;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.SceneLight;
 using DG.Tweening;
@@ -14,7 +15,8 @@ namespace BalloonParty.Balloon.View
     ///     that blinds the board as it spreads, a white-hot core and a shock ring at the edge
     ///     (<see cref="GrowingDiscView" />). It carries a scene light whose radius follows the disc, so the board itself
     ///     is lit white as the disc crosses it, fading once the disc covers the board. The blast's start gives the
-    ///     disturbance field its strongest push, and the fuse before it an implosion that pulls the field in.
+    ///     disturbance field its strongest push, whose impact report carries the blast that digs the water's crater
+    ///     on a water level, and the fuse before it an implosion that pulls the field in.
     /// </summary>
     internal sealed class NukeBlastView : GrowingDiscView, INukeBlastView
     {
@@ -49,7 +51,11 @@ namespace BalloonParty.Balloon.View
             ReleaseLight();
             _light = new Light(center, _settings.LightReach, _settings.LightIntensity);
             _lightRegistration = _sceneLight.RegisterLight(_light);
-            _disturbance.Stamp(center, _settings.PushRadius, _settings.PushStrength, Vector2.zero, _settings.PushSeconds);
+            // The push's impact carries the blast, which on water digs the crater.
+            _disturbance.Stamp(
+                center, _settings.PushRadius, _settings.PushStrength, Vector2.zero, _settings.PushSeconds,
+                blast: new ImpactEventBus.Blast(
+                    _settings.ImpactRadius, _settings.ImpactStrength, _settings.ImpactSeconds));
         }
 
         public override void SetRadius(float radius, float progress)

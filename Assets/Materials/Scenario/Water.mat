@@ -33,6 +33,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _BareAt: 1.4
+    - _BareFrom: 0.9
+    - _BareShade: 0.12
     - _CausticDepthBlur: 1.8
     - _CausticSecondScale: 1.73
     - _CausticShift: 0.35

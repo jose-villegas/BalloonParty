@@ -11,6 +11,8 @@ Shader "BalloonParty/Scenario/Water"
     // (WaterRippleBuffer) sets moving at every impact (WaterSurface.cginc). Each wave throws a bright and a dark band
     // on the sand and sheens the surface whatever the sun's angle, and its crest reads lighter than its trough; the
     // slopes also catch a soft highlight, crests turned to the sun glint, and the simulation's foam lies on top.
+    // Where a blast has dug a crater in the simulated surface the water is gone: the column thins to nothing and
+    // the surface fades with it, leaving wet sand until the water floods back.
     Properties
     {
         [NoScaleOffset] _NoiseTex ("Noise (R, linear)", 2D) = "gray" {}
@@ -88,6 +90,17 @@ Shader "BalloonParty/Scenario/Water"
         _SurfaceOpacity   ("Surface Opacity",             Range(0, 1))    = 0.08
         _HighlightColor   ("Highlight Colour",            Color)          = (0.92, 0.98, 1.0, 1)
         _HighlightStrength("Highlight Strength",          Range(0, 1))    = 0.25
+
+        [Header(Bared Bottom)]
+        // Where a blast (a bomb, the nuke) has pressed the surface far down, the water is gone and the sand shows
+        // bare, however deep the bottom lies there. The water thins from the first trough depth and is gone at the
+        // second, both in rest depths of the simulation below rest; everything of the surface fades with it. The
+        // first sits under the troughs ordinary impacts leave (a ball's wake reaches about 0.45), so only a
+        // blast's crater (WaterRipple's Crater Depth) thins the water.
+        _BareFrom         ("Thins From (rest depths)",    Float)          = 0.9
+        _BareAt           ("Bare At (rest depths)",       Float)          = 1.4
+        // How much darker the bared sand reads than sand seen through no water at all: it is wet.
+        _BareShade        ("Wet Sand Shade",              Range(0, 1))    = 0.12
 
         [Header(Glints)]
         // How much steeper the swell and the rings stand to the sun than to the eye: more = more of their crests
@@ -184,6 +197,9 @@ Shader "BalloonParty/Scenario/Water"
             half   _SurfaceOpacity;
             half4  _HighlightColor;
             half   _HighlightStrength;
+            float  _BareFrom;
+            float  _BareAt;
+            half   _BareShade;
             float  _GlintSteepness;
             float  _GlintPower;
             half   _GlintStrength;
@@ -291,33 +307,46 @@ Shader "BalloonParty/Scenario/Water"
                 half deep = DeepAt(GroundPointAt(wp));
                 float depth = lerp(_ShallowDepth, _DeepDepth, deep);
 
+                // How much of the water is left here: all of it (1) everywhere but in a blast's crater, where the
+                // surface is pressed so far down that the water thins and then is gone (0), whatever the bottom's
+                // depth: the simulation's trough never reaches a deep channel's bottom by arithmetic. The column
+                // thins by it, and everything of the surface below is scaled by it. Each use multiplies by it or
+                // subtracts a share of what is gone, so where the water is whole (exactly 1, nothing gone) every
+                // value is exactly what it was before craters existed.
+                half gone = (half)smoothstep(_BareFrom, max(_BareAt, _BareFrom + 1e-3), -ripple.w);
+                half wet = 1.0h - gone;
+                float column = depth * wet;
+
                 // Seen from a camera above the middle of the screen (the world origin): a deeper bottom shows a wider
                 // patch of itself, so it shrinks toward the middle and slides slower than the surface when the board
                 // scrolls. Through the surface: its slope bends the view, more over deeper water.
                 float2 seenPos = GroundPointAt(wp * (1.0 + depth * _Perspective));
-                float2 bottomPos = seenPos + slope * (depth * _Refraction);
+                float2 bottomPos = seenPos + slope * (column * _Refraction);
                 // The grains are too fine to bend with the rest: the surface's slope changes faster than they
                 // repeat, and smears them into contour lines. A little of the bend keeps them on the moving sand.
-                float2 grainPos = seenPos + slope * (depth * _Refraction * 0.15);
+                float2 grainPos = seenPos + slope * (column * _Refraction * 0.15);
 
                 // The sand and the light the surface focuses on it, which reaches the deep bottom weaker and softer.
-                // Shaded around the sand's own colour, so nothing blooms.
-                half3 caustic = CausticAt(bottomPos, deep) * (_CausticStrength * lerp(1.0h, 0.45h, deep));
+                // Shaded around the sand's own colour, so nothing blooms. Bared sand has no water to focus light on
+                // it, and reads a little darker: it is wet.
+                half3 caustic = CausticAt(bottomPos, deep) * (_CausticStrength * lerp(1.0h, 0.45h, deep) * wet);
                 half3 bottom = SandAt(bottomPos, grainPos, wp) * (1.0h - 0.3h * _CausticStrength)
                              * lerp(half3(1.0h, 1.0h, 1.0h), _CausticColor.rgb * 1.6h, saturate(caustic));
-                bottom *= 1.0h + clamp((half)ripple.z * _RippleFocus, -0.25h, 0.7h);
+                bottom *= 1.0h + clamp((half)ripple.z * _RippleFocus, -0.25h, 0.7h) * wet;
+                bottom *= 1.0h - _BareShade * gone;
 
                 // The water between: each colour fades out of the bottom by its own absorption, and the water's
                 // own colour takes its place.
-                half3 transmit = (half3)exp(-_Absorption.rgb * depth);
+                half3 transmit = (half3)exp(-_Absorption.rgb * column);
                 half3 color = bottom * transmit + _WaterColor.rgb * (1.0h - transmit);
 
-                color = lerp(color, _SurfaceColor.rgb, _SurfaceOpacity);
-                color *= 1.0h + clamp((half)ripple.w * _CrestShade, -0.35h, 0.35h);
-                color = lerp(color, _HighlightColor.rgb, saturate((half)length(ripple.xy) * _RippleSheen - 0.05h));
+                color = lerp(color, _SurfaceColor.rgb, _SurfaceOpacity * wet);
+                color *= 1.0h + clamp((half)ripple.w * _CrestShade, -0.35h, 0.35h) * wet;
+                color = lerp(color, _HighlightColor.rgb,
+                    saturate((half)length(ripple.xy) * _RippleSheen - 0.05h) * wet);
 
                 // The swell's and the rings' slopes facing the sun catch a soft highlight; those facing away darken.
-                half facing = (half)dot(slope, _SceneLightDir.xy);
+                half facing = (half)dot(slope, _SceneLightDir.xy) * wet;
                 color = lerp(color, _HighlightColor.rgb, saturate(facing * _HighlightStrength));
                 color *= 1.0h - saturate(-facing) * 0.25h * _HighlightStrength;
 
@@ -326,7 +355,7 @@ Shader "BalloonParty/Scenario/Water"
                 float3 normal = normalize(float3(-slope * _GlintSteepness, 1.0));
                 float3 toSun = normalize(float3(_SceneLightDir.xy, 0.8));
                 float3 halfway = normalize(toSun + float3(0.0, 0.0, 1.0));
-                half glint = (half)pow(saturate(dot(normal, halfway)), _GlintPower) * _GlintStrength;
+                half glint = (half)pow(saturate(dot(normal, halfway)), _GlintPower) * _GlintStrength * wet;
                 color += _HighlightColor.rgb * glint;
 
                 // Foam: two octaves of noise make a lace; the thicker the foam, the more of the lace it fills, so
@@ -337,7 +366,7 @@ Shader "BalloonParty/Scenario/Water"
                 half lace = tex2D(_NoiseTex, lacePos * 0.5 + float2(0.19, 0.83)).r * 0.7h
                           + tex2D(_NoiseTex, lacePos * 1.3 + float2(0.71, 0.07)).r * 0.3h;
                 half cover = smoothstep(1.0h - foam - _FoamSoftness, 1.0h - foam + _FoamSoftness, lace);
-                color = lerp(color, _FoamColor.rgb, cover * smoothstep(0.02h, 0.25h, foam) * _FoamStrength);
+                color = lerp(color, _FoamColor.rgb, cover * smoothstep(0.02h, 0.25h, foam) * _FoamStrength * wet);
 
                 // Per pixel and field-aware, like the meadow floor: the time of day plus the local light of pops.
                 // The light's brightness in full, so night darkens the pale water as much as the balloons over it

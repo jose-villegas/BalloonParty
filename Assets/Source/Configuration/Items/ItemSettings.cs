@@ -75,6 +75,16 @@ namespace BalloonParty.Configuration.Items
         [Tooltip("Duration of the inward pull — keep it very short; the outward shock follows it.")]
         [SerializeField] [Min(0f)] private float _implosionDuration = 0.05f;
 
+        [Tooltip("How hard the blast throws aside what it lands in, reported with its impact over the kill " +
+                 "radius: on water, the depth of the crater it digs (WaterRipple's Crater Depth is per unit of " +
+                 "this). 0 reports no blast.")]
+        [SerializeField] [Min(0f)] private float _impactStrength = 1f;
+
+        [Tooltip("Seconds the blast goes on throwing it aside, hardest at the start: on water the crater opens at " +
+                 "once and is held open against the water flooding back for the rest, so this is about how long the " +
+                 "bottom stays bare. Longer than the explosion's cloud takes to clear, or the crater is never seen.")]
+        [SerializeField] [Min(0f)] private float _impactSeconds = 0.6f;
+
         public float Radius => _bombRadius;
 
         /// <summary>Visual-only: scales a rainbow bomb's activation-effect transform so the blast reads bigger. Does not change the kill radius.</summary>
@@ -102,6 +112,12 @@ namespace BalloonParty.Configuration.Items
 
         /// <summary>Duration of the pre-blast inward pull — short; the outward shock follows it.</summary>
         public float ImplosionDuration => _implosionDuration;
+
+        /// <summary>How hard the blast throws aside what it lands in (the water's crater), 1 being the bomb's own; 0 reports no blast.</summary>
+        public float ImpactStrength => _impactStrength;
+
+        /// <summary>Seconds the blast goes on throwing it aside, hardest at the start: about how long the water's crater stays open.</summary>
+        public float ImpactSeconds => _impactSeconds;
     }
 
     [Serializable]

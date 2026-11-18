@@ -204,6 +204,10 @@ stays); `NukeDetonatedMessage` plays the boom. Then a disc grows from the nuke o
 (`IBalloonsConfiguration.NukeBlast`), by `BoardDisc`, as the disco wave does. `NukeBlastView` draws it on
 `Sprite/NukeBlast.shader` (a white flood over the board, white-hot core, ragged orange ring, scorch), lights the
 scene with a blinding light that fades as the disc spreads, and gives the disturbance field the strongest push on it.
+That push's impact report carries the blast (`ImpactEventBus.Blast`: `INukeBlastSettings.ImpactRadius` 3.5,
+`ImpactStrength` 1.5, `ImpactSeconds` 1), which on a water level digs a crater some 4 world units across down to the
+bare sand, its water piled against the sides of the board, and lets it flood back about 2 seconds after
+(`Scenario/README.md`, Water).
 `NukeCloudView` spreads a mushroom cloud seen from above (`Sprite/NukeCloud.shader`, material `NukeCloud`: a
 billowing cap that starts as fire and cools to lit smoke, its shadow on the board, and a dust ring racing out). Every balloon and grid actor gets an outward nudge `NudgeLead` ahead of the edge, and
 every balloon the edge reaches pops through `IBalloonPopper` (`BalloonControllerRegistry.TryPopSingle`): its pop

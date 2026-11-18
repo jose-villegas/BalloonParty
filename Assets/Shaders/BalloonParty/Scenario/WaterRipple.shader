@@ -6,12 +6,19 @@ Shader "Hidden/BalloonParty/Scenario/WaterRipple"
     // a wave reflects where the screen ends: the edges are walls, and the water rings and sloshes between them.
     // Surface tension pulls on curvature, so short ripples run ahead of long ones and a splash spreads into a train
     // of wavelets instead of one ring. Viscosity smooths the flow at the grid's own scale, where waves would go
-    // jagged. A crest steeper than the break slope loses some of its flow. Foam shows only on ridges, where a crest
-    // folds over sharply and the normal turns suddenly, and lasts a moment, so it rides along with the crest.
+    // jagged. A face steeper than the break slope loses some of the flow climbing it. Foam shows only on ridges,
+    // where a crest folds over sharply and the normal turns suddenly, and lasts a moment, so it rides along with
+    // the crest.
     //
     // Pass 0 (Splat) draws each impact WaterRippleBuffer is pressing into the force target, additively: a soft
     // pressure that pushes the water away and a drag along the impact's heading. Pass 1 (Step) advances the water
     // one fixed step.
+    //
+    // A blast (a bomb, the nuke) does more than press: it digs a crater (WaterCrater). While it lasts, the step's
+    // BLASTS_ON variant carries the water under it outward, down the slope of a potential, so the middle empties
+    // and what left it stands as a rim round the edge. The dig is fastest at its start and eases off, so the
+    // crater opens at once and is then held open. All the while the water answers on its own: the rim runs off as a
+    // wave, and once the dig tires the crater floods back in, overshooting into a dome where it closes.
     //
     // Each cell computes the flow across all four of its edges, and both cells on an edge compute it from the same
     // texels in the same order, so the water one cell loses the next one gains exactly: no water appears or leaves.
@@ -42,10 +49,23 @@ Shader "Hidden/BalloonParty/Scenario/WaterRipple"
         _Drag         ("Drag (world/s²)",               Float) = 6
         // An impact's press radius per world unit of its disturbance radius (read by WaterRippleBuffer).
         _PressRadius  ("Press Radius (× impact)",       Float) = 0.5
+        [Header(Blasts)]
+        // World units from a blast's middle to its crater's edge, where the rim starts, per world unit of the
+        // blast's reported radius (read by WaterRippleBuffer). The bottom shows bare over about the inner three
+        // quarters of that, so under 1 keeps a bomb's bare patch nearer half its kill radius.
+        _BlastRadius  ("Crater Radius (× blast)",       Float) = 0.85
+        // Rest depths a blast of strength 1 (a bomb) takes out of its middle over its seconds (read by
+        // WaterRippleBuffer). The water flooding back meanwhile takes some of it away: a bomb's 3 over 0.6 s
+        // leaves its middle about 2.6 down. The rim stands a third as tall. Water.shader bares the bottom below
+        // its own Bare At.
+        _BlastDepth   ("Crater Depth (per strength)",   Float) = 3
+        // Foam a blast makes where it piles its water up, per rest depth piled: the rim, white while it rises.
+        // At 3 the whole rim was one flat white ring; at 1.5 its crest is solid and the rest a lace.
+        _BlastFoam    ("Rim Foam (per depth)",          Float) = 1.5
         [Header(Breakup)]
-        // Height change across a texel past which a crest breaks and loses flow.
+        // Height change across a texel past which a face breaks: flow climbing it loses strength.
         _BreakSlope   ("Break Slope (per texel)",       Float) = 0.15
-        // How much of a breaking crest's flow it loses each second per unit past the break slope.
+        // How much of the flow climbing a breaking face is lost each second per unit past the break slope.
         _BreakLoss    ("Break Loss",                    Float) = 150
         // How tall a crest must stand to foam, in rest depths: above the slosh the game leaves everywhere.
         _FoamHeight   ("Foam Height",                   Float) = 0.15
@@ -114,7 +134,12 @@ Shader "Hidden/BalloonParty/Scenario/WaterRipple"
             CGPROGRAM
             #pragma vertex vert_img
             #pragma fragment frag
+            // On only while a blast is digging its crater (WaterRippleBuffer), so every other step pays nothing
+            // for it.
+            #pragma multi_compile_local __ BLASTS_ON
             #include "UnityCG.cginc"
+
+            #define MAX_BLASTS 12
 
             sampler2D _MainTex;
             float4    _MainTex_TexelSize;
@@ -137,6 +162,51 @@ Shader "Hidden/BalloonParty/Scenario/WaterRipple"
             float _StepSeconds;
             float _TexelsPerUnit;
 
+        #ifdef BLASTS_ON
+            float _BlastFoam;
+            // The craters being dug: xy = the blast's middle, in texels; z = 1 over its spread squared, in texels;
+            // w = its potential's scale for this step (the share of the crater this step digs).
+            float4 _Blasts[MAX_BLASTS];
+            float  _BlastCount;
+
+            // The blasts' potential at a cell's middle: this step, water moves between two cells by the
+            // difference of it. Computed here rather than drawn into the force target, whose half floats are too
+            // coarse for it: the water moved is the small difference of two large values. Its shape
+            // (WaterCrater.Potential) digs a flat-bottomed crater and piles what it dug in a rim past the edge.
+            // Each blast is mirrored in the four walls and corners, so its water piles up short of a wall as if
+            // thrown back by it, rather than all in the last cell.
+            float BlastPotentialAt(float2 cell)
+            {
+                float2 size = _MainTex_TexelSize.zw;
+                float total = 0.0;
+                for (int i = 0; i < MAX_BLASTS && i < _BlastCount; i++)
+                {
+                    float4 blast = _Blasts[i];
+                    float3 xs = float3(blast.x, -blast.x, 2.0 * size.x - blast.x);
+                    float3 ys = float3(blast.y, -blast.y, 2.0 * size.y - blast.y);
+                    float potential = 0.0;
+                    for (int a = 0; a < 3; a++)
+                    {
+                        for (int b = 0; b < 3; b++)
+                        {
+                            float2 away = cell - float2(xs[a], ys[b]);
+                            float u = dot(away, away) * blast.z;
+                            // Five spreads out the potential is under a hundred millionth of its middle: most cells are
+                            // that far from most blasts and their mirrors, and skip the exponential.
+                            if (u < 25.0)
+                            {
+                                potential += (1.0 + u * (2.0 / 3.0 + u / 6.0)) * exp(-u);
+                            }
+                        }
+                    }
+
+                    total += potential * blast.w;
+                }
+
+                return total;
+            }
+        #endif
+
             float4 StateAt(float2 uv, float2 offset)
             {
                 return tex2Dlod(_MainTex, float4(uv + offset * _MainTex_TexelSize.xy, 0.0, 0.0));
@@ -156,7 +226,11 @@ Shader "Hidden/BalloonParty/Scenario/WaterRipple"
                 float headA = heightA + pressA * _Push - rates.y * curveA;
                 float headB = heightB + pressB * _Push - rates.y * curveB;
                 flow += _StepSeconds * (rates.x * (headA - headB) + rates.z * flowCurve + drag);
-                float breaking = max(0.0, abs(heightA - heightB) - _BreakSlope);
+                // Only flow climbing the slope breaks: it is what would steepen the face further. Flow running
+                // down it is never held back. Braked both ways, a crater's wall (steeper than the break slope from
+                // top to bottom) stood for seconds as a dam the water could not run down.
+                float climb = heightB - heightA;
+                float breaking = flow * climb > 0.0 ? max(0.0, abs(climb) - _BreakSlope) : 0.0;
                 flow *= exp(-_StepSeconds / max(_Fade, 0.05)) * saturate(1.0 - _StepSeconds * _BreakLoss * breaking);
                 return flow * open;
             }
@@ -234,7 +308,24 @@ Shader "Hidden/BalloonParty/Scenario/WaterRipple"
                 float peak = c.r > _FoamHeight ? max(0.0, fold - _FoamFold) : 0.0;
                 foam += _StepSeconds * _FoamGain * peak;
 
-                return float4(clamp(height, -2.0, 2.0), right, top, saturate(foam));
+            #ifdef BLASTS_ON
+                // A blast carries water across each edge by the difference of its potential (the same for both
+                // cells on the edge, and nothing across a wall, so none is made or lost), whatever the flow is
+                // doing: the crater is dug in the blast's own time, and only then does the water answer. Where it
+                // piles the water up, the rim, it foams.
+                float2 middle = floor(cell) + 0.5;
+                float liftC = BlastPotentialAt(middle);
+                float thrown = (liftC - BlastPotentialAt(middle + float2(1.0, 0.0))) * openRight
+                             + (liftC - BlastPotentialAt(middle - float2(1.0, 0.0))) * openLeft
+                             + (liftC - BlastPotentialAt(middle + float2(0.0, 1.0))) * openTop
+                             + (liftC - BlastPotentialAt(middle - float2(0.0, 1.0))) * openBottom;
+                height -= thrown;
+                foam += _BlastFoam * max(0.0, -thrown);
+            #endif
+
+                // The clamp is only a guard against a runaway: a crater dug in a corner (twice mirrored) reaches
+                // about 6 rest depths down, and clamping what the water really reaches would make or lose water.
+                return float4(clamp(height, -8.0, 8.0), right, top, saturate(foam));
             }
             ENDCG
         }

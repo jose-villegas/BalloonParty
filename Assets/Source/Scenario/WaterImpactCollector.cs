@@ -29,9 +29,17 @@ namespace BalloonParty.Scenario
         void IPostTickable.PostTick()
         {
             var pending = _bus.Pending;
-            for (var i = 0; i < pending.Count && _impacts.Count < MaxImpacts; i++)
+            for (var i = 0; i < pending.Count; i++)
             {
-                _impacts.Add(pending[i]);
+                if (_impacts.Count < MaxImpacts)
+                {
+                    _impacts.Add(pending[i]);
+                }
+                else if (pending[i].Blast.IsBlast)
+                {
+                    // A blast is never the one dropped: it takes the last dip's place.
+                    _impacts[MaxImpacts - 1] = pending[i];
+                }
             }
         }
 

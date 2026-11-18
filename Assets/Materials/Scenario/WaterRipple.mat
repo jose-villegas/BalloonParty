@@ -25,6 +25,9 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
+    - _BlastDepth: 3
+    - _BlastFoam: 1.5
+    - _BlastRadius: 0.85
     - _BreakLoss: 150
     - _BreakSlope: 0.15
     - _Drag: 6

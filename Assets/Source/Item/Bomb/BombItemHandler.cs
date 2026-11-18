@@ -3,6 +3,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Nudge;
+using BalloonParty.Shared;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
@@ -106,8 +107,11 @@ namespace BalloonParty.Item.Bomb
                 settings.Bomb.ImplosionDuration,
                 paletteIndex);
 
-            // The normal outward repulsion (ramped Bomb profile).
-            _disturbanceField.Stamp(StampSource.Bomb, worldPosition, Vector2.zero, paletteIndex: paletteIndex);
+            // The normal outward repulsion (ramped Bomb profile). Its impact carries the blast over the kill radius,
+            // which on water digs a crater; a rainbow bomb's is no wider, as its kill radius isn't.
+            _disturbanceField.Stamp(
+                StampSource.Bomb, worldPosition, Vector2.zero, paletteIndex,
+                new ImpactEventBus.Blast(settings.Bomb.Radius, settings.Bomb.ImpactStrength, settings.Bomb.ImpactSeconds));
 
             // A blast-coloured flash light scaled off the blast radius (visual scale for a rainbow bomb),
             // held for the effect then released.

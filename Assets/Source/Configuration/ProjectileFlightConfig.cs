@@ -88,6 +88,39 @@ namespace BalloonParty.Configuration
         [Tooltip("How long the pierce-discharge slow-mo dip holds, in UNSCALED seconds.")]
         [SerializeField] [Min(0f)] private float _pierceDischargeTimeScaleDuration = 0.15f;
 
+        [Tooltip("A piercing shot's wake on water (a Snipe lance, a cruise pierce). World radius of the first of " +
+                 "two blasts it reports along every stretch it flies: a wide, shallow furrow (WaterRipple's Crater " +
+                 "Radius, 0.85, times this to its edge) whose water leaves to both sides as the wave.")]
+        [SerializeField] [Min(0f)] private float _pierceWakeWaveRadius = 1.75f;
+
+        [Tooltip("How hard the wave's blast throws, a bomb being 1 (WaterRipple's Crater Depth, 3, is per unit of " +
+                 "this: the furrow's depth down its middle). Kept well under where the water thins (Water's Thins " +
+                 "From, 0.9 rest depths), with room for the trough the heart leaves beside itself as it floods back, " +
+                 "or bands of sand show beside the path. 0 reports none.")]
+        [SerializeField] [Min(0f)] private float _pierceWakeWaveStrength = 0.133f;
+
+        [Tooltip("The sliver of floor the shot bares on water. World radius of the second blast: narrow, so the " +
+                 "sliver is thin (about as wide as this).")]
+        [SerializeField] [Min(0f)] private float _pierceWakeHeartRadius = 0.35f;
+
+        [Tooltip("How hard the heart's blast throws, a bomb being 1. A furrow this narrow floods back in a tenth " +
+                 "of a second, so it must dig past where the bottom shows bare (Water's Bare At, 1.4 rest depths) " +
+                 "to be seen at all. 0 reports none: a wave and no bare sliver.")]
+        [SerializeField] [Min(0f)] private float _pierceWakeHeartStrength = 0.5f;
+
+        [Tooltip("Where a piercing shot's charge ends at a wall (it shatters what it plowed there, or dies): world " +
+                 "radius of the one round blast it reports. On water a small crater, the full stop at the end of " +
+                 "the wake: smaller than a bomb's (1.25).")]
+        [SerializeField] [Min(0f)] private float _pierceWallImpactRadius = 0.75f;
+
+        [Tooltip("How hard the wall's blast throws, a bomb being 1. The wall throws its water back, which about " +
+                 "doubles what it digs. 0 reports none.")]
+        [SerializeField] [Min(0f)] private float _pierceWallImpactStrength = 0.35f;
+
+        [Tooltip("Seconds the wall's blast goes on throwing, hardest at the start: about how long its crater stays " +
+                 "open (a bomb's is 0.6).")]
+        [SerializeField] [Min(0f)] private float _pierceWallImpactSeconds = 0.3f;
+
         [Header("Last Breath")]
 
         [Tooltip("Position easing across a doomed 0-shield segment, sampled on NORMALIZED TIME over " +
@@ -156,6 +189,13 @@ namespace BalloonParty.Configuration
         public AnimationCurve PierceArmRampCurve => _pierceArmRampCurve;
         public float PierceDischargeTimeScale => _pierceDischargeTimeScale;
         public float PierceDischargeTimeScaleDuration => _pierceDischargeTimeScaleDuration;
+        public float PierceWakeWaveRadius => _pierceWakeWaveRadius;
+        public float PierceWakeWaveStrength => _pierceWakeWaveStrength;
+        public float PierceWakeHeartRadius => _pierceWakeHeartRadius;
+        public float PierceWakeHeartStrength => _pierceWakeHeartStrength;
+        public float PierceWallImpactRadius => _pierceWallImpactRadius;
+        public float PierceWallImpactStrength => _pierceWallImpactStrength;
+        public float PierceWallImpactSeconds => _pierceWallImpactSeconds;
         public AnimationCurve LastShieldApproachCurve => _lastShieldApproachCurve;
         public float LastShieldApproachDuration => _lastShieldApproachDuration;
         public AnimationCurve LastShieldTimeScaleCurve => _lastShieldTimeScaleCurve;

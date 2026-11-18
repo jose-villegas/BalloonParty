@@ -55,6 +55,19 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("Seconds the push ramps over, its radius growing with it.")]
         [SerializeField] [Min(0f)] private float _pushSeconds = 0.8f;
 
+        [Tooltip("World radius the blast throws aside what it lands in, reported with the push's impact: on water, " +
+                 "its crater's edge is WaterRipple's Crater Radius (0.85) times this. Past the board's half width, " +
+                 "so the water it throws piles against the sides.")]
+        [SerializeField] [Min(0f)] private float _impactRadius = 3.5f;
+
+        [Tooltip("How hard it throws, a bomb being 1: on water, the depth of the crater (WaterRipple's Crater " +
+                 "Depth is per unit of this). 0 reports no blast.")]
+        [SerializeField] [Min(0f)] private float _impactStrength = 1.5f;
+
+        [Tooltip("Seconds it goes on throwing it aside, hardest at the start: on water the crater opens at once and " +
+                 "is held open against the water flooding back for the rest. It closes about a second after.")]
+        [SerializeField] [Min(0f)] private float _impactSeconds = 1f;
+
         [Tooltip("The mushroom cloud's material (BalloonParty/Sprite/NukeCloud). Required: with none no cloud rises.")]
         [SerializeField] private Material _cloudMaterial;
 
@@ -84,6 +97,9 @@ namespace BalloonParty.Configuration.Balloons
         public float PushRadius => _pushRadius;
         public float PushStrength => _pushStrength;
         public float PushSeconds => _pushSeconds;
+        public float ImpactRadius => _impactRadius;
+        public float ImpactStrength => _impactStrength;
+        public float ImpactSeconds => _impactSeconds;
         public Material CloudMaterial => _cloudMaterial;
         public float CloudSeconds => _cloudSeconds;
         public float CloudReach => _cloudReach;
