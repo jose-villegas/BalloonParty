@@ -1,7 +1,7 @@
 Shader "BalloonParty/Balloon/SoapBubbleCluster"
 {
     // ── Investigation prototype ───────────────────────────────────────────────
-    // Renders a cluster of up to 5 discrete soap bubbles on a single quad.
+    // Renders a cluster of up to 6 discrete soap bubbles on a single quad.
     // Each bubble is an independent circle SDF with its own radius — they do
     // NOT merge (unlike metaballs).  The Voronoi region of each circle
     // determines ownership.
@@ -13,7 +13,7 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
     //   • overlapZone   — pixels inside both bubbles simultaneously get a
     //                     slight opacity boost (two film surfaces, denser).
     //
-    // _BubbleCount (1–5) shrinks the cluster via MaterialPropertyBlock.
+    // _BubbleCount (1–6) shrinks the cluster via MaterialPropertyBlock.
     // Bubbles are removed highest-index first for coherent degradation.
     // ─────────────────────────────────────────────────────────────────────────
     Properties
@@ -23,7 +23,7 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
 
         [Header(Cluster)]
         _SpriteScale    ("Sprite Scale",   Range(0.50, 1.00))  = 0.80
-        _BubbleCount    ("Bubble Count",   Range(1, 5))        = 5
+        _BubbleCount    ("Bubble Count",   Range(1, 6))        = 5
         _BubbleRadius   ("Bubble Radius",  Range(0.08, 0.30))  = 0.17
         _RadiusVariance ("Radius Variance",Range(0, 0.35))     = 0.18
 
@@ -31,6 +31,14 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
         _FilmWidth      ("Film Width",     Range(0.005, 0.10)) = 0.040
         _FilmAlpha      ("Film Alpha",     Range(0, 1))        = 0.92
         _InteriorAlpha  ("Interior Alpha", Range(0, 0.40))     = 0.10
+
+        [Header(Flush)]
+        // Set per renderer by SoapBubbleClusterVariant: a ripe cluster fills with this colour as its fuse runs
+        // out. Alpha is how far it has filled; 0 leaves the bubble as it is. A clear film can't carry a tint
+        // of its own, so the warning has to be painted inside it.
+        _Flush          ("Flush (rgb colour, a amount)", Color) = (1.0, 0.45, 0.3, 0.0)
+        _FlushStrength  ("Flush Strength (how far the colour takes over)", Range(0, 1)) = 0.75
+        _FlushOpacity   ("Flush Opacity (how solid the inside becomes)",   Range(0, 1)) = 0.6
 
         [Header(Junction Membrane)]
         // The LINE is the Voronoi boundary through the cluster interior.
@@ -159,6 +167,9 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
             float  _FilmWidth;
             float  _FilmAlpha;
             float  _InteriorAlpha;
+            fixed4 _Flush;
+            float  _FlushStrength;
+            float  _FlushOpacity;
             float  _JunctionLineWidth;
             float  _JunctionLineAlpha;
             float  _JunctionOverlapAlpha;
@@ -197,8 +208,9 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
             // smaller layout, which naturally collapses the shape coherently.
 
             // count = 1 — single centred bubble
-            static const float2 kLayout1[5] =
+            static const float2 kLayout1[6] =
             {
+                float2( 0.000,  0.000),
                 float2( 0.000,  0.000),
                 float2( 0.000,  0.000),
                 float2( 0.000,  0.000),
@@ -207,10 +219,11 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
             };
 
             // count = 2 — horizontal pair
-            static const float2 kLayout2[5] =
+            static const float2 kLayout2[6] =
             {
                 float2(-0.110,  0.000),
                 float2( 0.110,  0.000),
+                float2( 0.000,  0.000),
                 float2( 0.000,  0.000),
                 float2( 0.000,  0.000),
                 float2( 0.000,  0.000),
@@ -218,34 +231,50 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
 
             // count = 3 — equilateral triangle (point up), spacing 0.22
             //   centroid at y ≈ 0 (base at y=-0.063, apex at y=+0.127)
-            static const float2 kLayout3[5] =
+            static const float2 kLayout3[6] =
             {
                 float2(-0.110, -0.063),
                 float2( 0.110, -0.063),
                 float2( 0.000,  0.127),
                 float2( 0.000,  0.000),
                 float2( 0.000,  0.000),
+                float2( 0.000,  0.000),
             };
 
             // count = 4 — square, spacing 0.22
-            static const float2 kLayout4[5] =
+            static const float2 kLayout4[6] =
             {
                 float2(-0.110, -0.110),
                 float2( 0.110, -0.110),
                 float2(-0.110,  0.110),
                 float2( 0.110,  0.110),
                 float2( 0.000,  0.000),
+                float2( 0.000,  0.000),
             };
 
             // count = 5 — regular pentagon (point up)
             //   circumradius ≈ 0.187, adjacent spacing ≈ 0.22
-            static const float2 kLayout5[5] =
+            static const float2 kLayout5[6] =
             {
                 float2( 0.000,  0.187),
                 float2( 0.178,  0.058),
                 float2( 0.110, -0.151),
                 float2(-0.110, -0.151),
                 float2(-0.178,  0.058),
+                float2( 0.000,  0.000),
+            };
+
+            // count = 6 — regular hexagon (point up): one bubble toward each of a slot's six neighbours.
+            //   circumradius 0.19, a little tighter than the pentagon's spacing, so the ring
+            //   nearly closes round its middle and stays inside the quad with its shadow.
+            static const float2 kLayout6[6] =
+            {
+                float2( 0.000,  0.190),
+                float2( 0.165,  0.095),
+                float2( 0.165, -0.095),
+                float2( 0.000, -0.190),
+                float2(-0.165, -0.095),
+                float2(-0.165,  0.095),
             };
 
             // Returns the canonical rest position for bubble i at a given count.
@@ -255,19 +284,21 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
                 if (count == 2) return kLayout2[i];
                 if (count == 3) return kLayout3[i];
                 if (count == 4) return kLayout4[i];
-                return kLayout5[i];
+                if (count == 5) return kLayout5[i];
+                return kLayout6[i];
             }
 
             // Per-bubble radius offset in [-1, 1].
             // Final radius = _BubbleRadius * (1 + _RadiusVariance * kRadiusVar[i]).
             // Values chosen so no single bubble dominates visually.
-            static const float kRadiusVar[5] =
+            static const float kRadiusVar[6] =
             {
                  0.00,   // 0 — centre bubble, base size
                 -0.15,   // 1 — slightly smaller
                  0.14,   // 2 — slightly larger
                 -0.22,   // 3 — noticeably smaller (top-right)
                  0.20,   // 4 — noticeably larger  (top-left)
+                -0.08,   // 5 — a touch smaller
             };
 
             // Compact HSV → RGB (branch-free)
@@ -328,6 +359,7 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
                 float r2 = _BubbleRadius * (1.0 + _RadiusVariance * kRadiusVar[2]);
                 float r3 = _BubbleRadius * (1.0 + _RadiusVariance * kRadiusVar[3]);
                 float r4 = _BubbleRadius * (1.0 + _RadiusVariance * kRadiusVar[4]);
+                float r5 = _BubbleRadius * (1.0 + _RadiusVariance * kRadiusVar[5]);
 
                 // ── Cluster breathe ────────────────────────────────────────
                 float breathe = 1.0 + _BreatheAmount * sin(t * _BreatheSpeed);
@@ -338,6 +370,7 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
                 float2 c2 = ClusterCentre(2, cnt) * breathe + float2(sin(t + 2.2),  cos(t * 0.61 + 1.0)) * _FloatAmount;
                 float2 c3 = ClusterCentre(3, cnt) * breathe + float2(sin(t + 3.3),  cos(t * 0.92 + 3.7)) * _FloatAmount;
                 float2 c4 = ClusterCentre(4, cnt) * breathe + float2(sin(t + 4.4),  cos(t * 0.77 + 0.5)) * _FloatAmount;
+                float2 c5 = ClusterCentre(5, cnt) * breathe + float2(sin(t + 5.5),  cos(t * 0.67 + 4.2)) * _FloatAmount;
 
                 const float kFar = -9999.0;
                 const float kEps = 0.0002;
@@ -347,8 +380,9 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
                 float sdf2 = (cnt >= 3) ? (r2 - length(uv - c2)) : kFar;
                 float sdf3 = (cnt >= 4) ? (r3 - length(uv - c3)) : kFar;
                 float sdf4 = (cnt >= 5) ? (r4 - length(uv - c4)) : kFar;
+                float sdf5 = (cnt >= 6) ? (r5 - length(uv - c5)) : kFar;
 
-                float bestSdf = max(max(max(max(sdf0, sdf1), sdf2), sdf3), sdf4);
+                float bestSdf = max(max(max(max(max(sdf0, sdf1), sdf2), sdf3), sdf4), sdf5);
 
                 // ── Shadow (rim + seams only, no interior fill) ────────────
                 // Computed before the main early-discard so shadow-only pixels
@@ -369,8 +403,9 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
                 float sh2 = (cnt >= 3) ? (r2 - length(sUV - c2)) : kFar;
                 float sh3 = (cnt >= 4) ? (r3 - length(sUV - c3)) : kFar;
                 float sh4 = (cnt >= 5) ? (r4 - length(sUV - c4)) : kFar;
+                float sh5 = (cnt >= 6) ? (r5 - length(sUV - c5)) : kFar;
 
-                float shBest = max(max(max(max(sh0, sh1), sh2), sh3), sh4);
+                float shBest = max(max(max(max(max(sh0, sh1), sh2), sh3), sh4), sh5);
 
                 // Shadow film: a band of fixed width _ShadowFilmWidth at the bubble surface.
                 // Kept independent of _FilmWidth so the shadow rim can be much thinner
@@ -385,7 +420,8 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
                 float shm2 = (sh2 < shBest - kEps) ? sh2 : kFar;
                 float shm3 = (sh3 < shBest - kEps) ? sh3 : kFar;
                 float shm4 = (sh4 < shBest - kEps) ? sh4 : kFar;
-                float shSecond  = max(max(max(max(shm0, shm1), shm2), shm3), shm4);
+                float shm5 = (sh5 < shBest - kEps) ? sh5 : kFar;
+                float shSecond  = max(max(max(max(max(shm0, shm1), shm2), shm3), shm4), shm5);
                 float shBorderGap  = shBest - shSecond;
                 float shadowSeam   = smoothstep(_ShadowSeamWidth, 0.0, shBorderGap)
                                    * step(0.0, shSecond);
@@ -412,6 +448,7 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
                 if (sdf2 > max(sdf0, sdf1))                    ownCentre = c2;
                 if (sdf3 > max(max(sdf0, sdf1), sdf2))         ownCentre = c3;
                 if (sdf4 > max(max(max(sdf0,sdf1),sdf2),sdf3)) ownCentre = c4;
+                if (sdf5 > max(max(max(max(sdf0,sdf1),sdf2),sdf3),sdf4)) ownCentre = c5;
 
                 // ── Second-highest SDF ─────────────────────────────────────
                 float m0 = (sdf0 < bestSdf - kEps) ? sdf0 : kFar;
@@ -419,7 +456,8 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
                 float m2 = (sdf2 < bestSdf - kEps) ? sdf2 : kFar;
                 float m3 = (sdf3 < bestSdf - kEps) ? sdf3 : kFar;
                 float m4 = (sdf4 < bestSdf - kEps) ? sdf4 : kFar;
-                float secondSdf = max(max(max(max(m0, m1), m2), m3), m4);
+                float m5 = (sdf5 < bestSdf - kEps) ? sdf5 : kFar;
+                float secondSdf = max(max(max(max(max(m0, m1), m2), m3), m4), m5);
 
                 // ── Junction membrane ──────────────────────────────────────
                 float borderGap    = bestSdf - secondSdf;
@@ -465,6 +503,10 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
                 // same response as Sprite/Diffuse. The specular below carries its own tint.
                 col *= lerp(float3(1.0, 1.0, 1.0), IN.lightTint, _LightInfluence);
 
+                // The flush is lit as the body is, and laid under the specular so the glint stays on top.
+                fixed3 flushColor = _Flush.rgb * lerp(float3(1.0, 1.0, 1.0), IN.lightTint, _LightInfluence);
+                col = lerp(col, flushColor, _Flush.a * _FlushStrength);
+
                 // Specular sits inside the bubble where filmMask = 0, so it
                 // must NOT be gated by filmMask.  We also boost alpha at the
                 // specular position so it punches through the transparent interior.
@@ -476,6 +518,7 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
                 alpha += junctionLine * _JunctionLineAlpha  * (1.0 - filmMask);
                 alpha += overlapZone  * _JunctionOverlapAlpha;
                 alpha  = max(alpha, specMask * _SpecColor.a);
+                alpha  = max(alpha, _Flush.a * _FlushOpacity);
                 alpha  = saturate(alpha) * IN.color.a;
 
                 // ── Composite shadow behind main layer ─────────────────────

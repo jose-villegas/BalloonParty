@@ -170,7 +170,9 @@ namespace BalloonParty.Projectile.Controller
                         | (isPiercing ? DamageFlags.Piercing : DamageFlags.Normal)
                         | DamageFlags.DirectHit;
             var damageContext = new DamageContext(1, flags, projectile.ColorName.Value, projectile);
-            var wasOneHitBalloon = balloon is IHasDurability durable && durable.HitsRemaining.Value == 1;
+            var wasOneHitBalloon = IsOneContactPop(balloon, isPiercing);
+            // Read before the hit: the hit that takes a coat's last layer off leaves none to read.
+            var washes = balloon.WashesProjectileColor();
             var outcome = balloon.EvaluateHit(damageContext);
 
             if (outcome == HitOutcome.Absorb)
@@ -183,8 +185,10 @@ namespace BalloonParty.Projectile.Controller
             }
 
             // A wildcard (rainbow) pop keeps the projectile's colour — that's what lets its streak
-            // carry — even though the balloon is otherwise IHasColor.
-            var isWildcardPop = balloon is IHasColor wildcard && wildcard.Color.Value == GamePalette.RainbowColorId;
+            // carry — even though the balloon is otherwise IHasColor. Only a pop: a coated rainbow's coat hit leaves
+            // the rainbow standing, so it carries nothing.
+            var isWildcardPop = outcome == HitOutcome.Pop
+                                && balloon is IHasColor wildcard && wildcard.Color.Value == GamePalette.RainbowColorId;
 
             // A rainbow this shot painted itself (the disco ball's wave) scores but can't climb its streak, nor
             // refund a shield below: painting the board must not feed the shot that painted it.
@@ -208,7 +212,7 @@ namespace BalloonParty.Projectile.Controller
                     projectile);
             }
 
-            var recolored = ApplyColorChange(projectile, balloon, outcome, isWildcardPop);
+            var recolored = ApplyColorChange(projectile, balloon, outcome, isWildcardPop, washes);
 
             _hitDispatcher.Dispatch(new ActorHitMessage(
                 balloon, balloonWorldPosition, projectile.Direction, outcome, damageContext));
@@ -245,12 +249,24 @@ namespace BalloonParty.Projectile.Controller
             return recolored ? ProjectileHitVisual.Recolored : ProjectileHitVisual.None;
         }
 
-        // Soap washes the projectile colourless on any contact; otherwise a normal (non-wildcard) pop
-        // steals the balloon's colour. Returns whether the projectile's colour actually changed.
-        private static bool ApplyColorChange(
-            IWriteableProjectileModel projectile, IBalloonModel balloon, HitOutcome outcome, bool isWildcardPop)
+        // Whether this contact keeps the segment a clean sweep: a durable balloon that one contact pops. HitsToPop
+        // answers 1 for a balloon with no durability too; the durability check keeps that one out. A coat counts as a
+        // hit of its own, so a coated balloon is not one to an ordinary shot; under a pierce only non-toughs get
+        // here, and each pops on contact, coat and all.
+        private static bool IsOneContactPop(IBalloonModel balloon, bool isPiercing)
         {
-            if (balloon is IWashesProjectileColor)
+            return balloon is IHasDurability && (isPiercing || balloon.HitsToPop() == 1);
+        }
+
+        // Soap (a cluster, or a balloon's coat) washes the projectile colourless on contact; otherwise a normal
+        // (non-wildcard) pop steals the balloon's colour. Returns whether the projectile's colour actually changed.
+        // washed is read before the hit. A coat popped with its balloon (a pierce) never took the contact, so that
+        // pop steals the colour as any pop does; a soap cluster is soap through and through and washes as it pops.
+        private static bool ApplyColorChange(
+            IWriteableProjectileModel projectile, IBalloonModel balloon, HitOutcome outcome, bool isWildcardPop,
+            bool washed)
+        {
+            if (washed && (balloon is IWashesProjectileColor || outcome != HitOutcome.Pop))
             {
                 if (string.IsNullOrEmpty(projectile.ColorName.Value))
                 {

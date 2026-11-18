@@ -23,6 +23,30 @@ namespace BalloonParty.Audio.Routing
     {
         private const int MaxRampSemitones = 12;
 
+        // The ripe cluster's cues are the plain pop moved about, so they sit in the colour pops' key. Each passes
+        // a melodic streak of 0, so none of them moves the ambient key either.
+        // Ripening: a high, quiet blip, an octave up.
+        private const int RipenSemitones = 12;
+        private const float RipenVolume = 0.6f;
+
+        // The hit that pops a ripe cluster: a soft blip a fifth up, the cluster folding in on itself. Its pop is the
+        // burst, heard when the big bubble it folds into bursts.
+        private const int FoldSemitones = 7;
+        private const float FoldVolume = 0.5f;
+
+        // The player's burst: a fourth down and loud, the ripple's own pops following it at their colours.
+        private const int RippleBurstSemitones = -5;
+        private const float RippleBurstVolume = 1.5f;
+
+        // A cluster's fuse running out, as it starts handing its bubbles out: an octave down, soft, a fizzle rather
+        // than a pop.
+        private const int FoamSemitones = -12;
+        private const float FoamVolume = 0.8f;
+
+        // A coat taken off: a light pop a fourth up, so it reads apart from the balloon's own pop.
+        private const int CoatOffSemitones = 5;
+        private const float CoatOffVolume = 0.5f;
+
         private readonly ISoundPlayer _player;
         private readonly ISubscriber<ActorHitMessage> _hitSubscriber;
         private readonly ISubscriber<ProjectileFiredMessage> _firedSubscriber;
@@ -38,6 +62,9 @@ namespace BalloonParty.Audio.Routing
         private readonly ISubscriber<WallHitMessage> _wallHitSubscriber;
         private readonly ISubscriber<SpeedTapMintedMessage> _speedTapSubscriber;
         private readonly ISubscriber<StreakChangedMessage> _streakChangedSubscriber;
+        private readonly ISubscriber<BubbleRipenedMessage> _ripenedSubscriber;
+        private readonly ISubscriber<RipeFuseBeatMessage> _fuseBeatSubscriber;
+        private readonly ISubscriber<RipeBubbleBurstMessage> _ripeBurstSubscriber;
         private readonly IProjectileFlightConfig _flightConfig;
         private readonly IActiveProjectilePierce _activePierce;
         private readonly IFlightStatsSource _flightStats;
@@ -69,6 +96,9 @@ namespace BalloonParty.Audio.Routing
             ISubscriber<WallHitMessage> wallHitSubscriber,
             ISubscriber<SpeedTapMintedMessage> speedTapSubscriber,
             ISubscriber<StreakChangedMessage> streakChangedSubscriber,
+            ISubscriber<BubbleRipenedMessage> ripenedSubscriber,
+            ISubscriber<RipeFuseBeatMessage> fuseBeatSubscriber,
+            ISubscriber<RipeBubbleBurstMessage> ripeBurstSubscriber,
             IProjectileFlightConfig flightConfig,
             IActiveProjectilePierce activePierce,
             IFlightStatsSource flightStats,
@@ -90,6 +120,9 @@ namespace BalloonParty.Audio.Routing
             _wallHitSubscriber = wallHitSubscriber;
             _speedTapSubscriber = speedTapSubscriber;
             _streakChangedSubscriber = streakChangedSubscriber;
+            _ripenedSubscriber = ripenedSubscriber;
+            _fuseBeatSubscriber = fuseBeatSubscriber;
+            _ripeBurstSubscriber = ripeBurstSubscriber;
             _flightConfig = flightConfig;
             _activePierce = activePierce;
             _flightStats = flightStats;
@@ -116,6 +149,9 @@ namespace BalloonParty.Audio.Routing
             _wallHitSubscriber.Subscribe(OnWallHit).AddTo(_subscriptions);
             _speedTapSubscriber.Subscribe(OnSpeedTapMinted).AddTo(_subscriptions);
             _streakChangedSubscriber.Subscribe(OnStreakChanged).AddTo(_subscriptions);
+            _ripenedSubscriber.Subscribe(OnRipened).AddTo(_subscriptions);
+            _fuseBeatSubscriber.Subscribe(OnFuseBeat).AddTo(_subscriptions);
+            _ripeBurstSubscriber.Subscribe(OnRipeBurst).AddTo(_subscriptions);
             _activePierce.IsPiercing.Subscribe(OnPierceStateChanged).AddTo(_subscriptions);
 
             // A ball scaled away by game over or a reset publishes neither CruiseEnded nor Destroyed.
@@ -132,25 +168,7 @@ namespace BalloonParty.Audio.Routing
             var outcome = message.Outcome;
             if ((outcome & HitOutcome.Pop) != 0)
             {
-                var popId = message.Actor is IBalloonModel balloon
-                    ? PopSoundFor(balloon.TypeName)
-                    : GameSoundId.BalloonPop;
-
-                if (popId == GameSoundId.BalloonPop && message.Actor is IHasColor colored)
-                {
-                    var color = colored.Color.Value;
-                    var colorPops = ColorPopsOf(message.Context.Projectile);
-                    colorPops.TryGetValue(color, out var count);
-                    var rootOffset = MusicalPitchExtensions.ColorRootOffset(_palette.ProgressColorNames, color);
-                    var ramp = Math.Min(count * MusicalPitchExtensions.WholeToneSemitones, MaxRampSemitones);
-                    _player.Play(popId, message.WorldPosition, semitoneOffset: rootOffset + ramp);
-                    colorPops[color] = count + 1;
-                }
-                else
-                {
-                    var offset = PopSemitoneOffset(popId, message.Actor, message.Context.Projectile);
-                    _player.Play(popId, message.WorldPosition, semitoneOffset: offset);
-                }
+                PlayPop(message);
             }
             else if ((outcome & HitOutcome.Deflect) != 0)
             {
@@ -180,9 +198,82 @@ namespace BalloonParty.Audio.Routing
                     _player.Play(deflectId, message.WorldPosition);
                 }
             }
+            else if (message.TookCoat())
+            {
+                _player.Play(GameSoundId.BalloonPop, message.WorldPosition, melodicStreak: 0,
+                    semitoneOffset: CoatOffSemitones, volumeScale: CoatOffVolume);
+            }
             else if ((outcome & (HitOutcome.Absorb | HitOutcome.PassThrough)) != 0)
             {
                 _player.Play(GameSoundId.BalloonResist, message.WorldPosition);
+            }
+        }
+
+        // A ripe cluster's hit plays its fold; its pop is the burst, heard when the big bubble bursts. Any other pop
+        // plays its own.
+        private void PlayPop(ActorHitMessage message)
+        {
+            if (message.Actor is BubbleClusterModel { Ripe: { Value: true } })
+            {
+                _player.Play(GameSoundId.BalloonPop, message.WorldPosition, melodicStreak: 0,
+                    semitoneOffset: FoldSemitones, volumeScale: FoldVolume);
+                return;
+            }
+
+            var popId = message.Actor is IBalloonModel balloon
+                ? PopSoundFor(balloon.TypeName)
+                : GameSoundId.BalloonPop;
+
+            if (popId == GameSoundId.BalloonPop && message.Actor is IHasColor colored)
+            {
+                var color = colored.Color.Value;
+                var colorPops = ColorPopsOf(message.Context.Projectile);
+                colorPops.TryGetValue(color, out var count);
+                var rootOffset = MusicalPitchExtensions.ColorRootOffset(_palette.ProgressColorNames, color);
+                var ramp = Math.Min(count * MusicalPitchExtensions.WholeToneSemitones, MaxRampSemitones);
+                _player.Play(popId, message.WorldPosition, semitoneOffset: rootOffset + ramp);
+                // A ripple's pops sound where the shot's ramp stands without climbing it: the cluster burst for
+                // the shot, and a ring of neighbours would otherwise run its colour up the scale at once.
+                if (!message.IsRipple())
+                {
+                    colorPops[color] = count + 1;
+                }
+            }
+            else
+            {
+                var offset = PopSemitoneOffset(popId, message.Actor, message.Context.Projectile);
+                _player.Play(popId, message.WorldPosition, semitoneOffset: offset);
+            }
+        }
+
+        private void OnRipened(BubbleRipenedMessage message)
+        {
+            _player.Play(GameSoundId.BalloonPop, message.Position, melodicStreak: 0,
+                semitoneOffset: RipenSemitones, volumeScale: RipenVolume);
+        }
+
+        // Only the fast beats at the end of a fuse are heard; the slow ones are only seen.
+        private void OnFuseBeat(RipeFuseBeatMessage message)
+        {
+            if (!message.Fast)
+            {
+                return;
+            }
+
+            _player.Play(GameSoundId.DiscoWaveTick, message.Position);
+        }
+
+        private void OnRipeBurst(RipeBubbleBurstMessage message)
+        {
+            if (message.Kind == RipeBurstKind.Ripple)
+            {
+                _player.Play(GameSoundId.BalloonPop, message.Position, melodicStreak: 0,
+                    semitoneOffset: RippleBurstSemitones, volumeScale: RippleBurstVolume);
+            }
+            else
+            {
+                _player.Play(GameSoundId.BalloonPop, message.Position, melodicStreak: 0,
+                    semitoneOffset: FoamSemitones, volumeScale: FoamVolume);
             }
         }
 

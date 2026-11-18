@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Game.Flight;
@@ -836,6 +837,68 @@ namespace BalloonParty.Tests.Game
             Assert.AreEqual(2, level.Metrics[MetricId.Strikethroughs]);
             Assert.AreEqual(1, level.Metrics[MetricId.ShieldsGained]);
             Assert.AreEqual(2, level.Metrics[MetricId.ShieldsSpent], "spent, not gained");
+        }
+
+        [Test]
+        public void RipeClusters_CountRipenings_Bursts_TheirNeighbours_AndFuses()
+        {
+            _harness.EnterGame();
+            Play();
+            var slot = new Vector2Int(2, 3);
+            _harness.ClusterRipened.Handle(new BubbleRipenedMessage(slot, Vector3.zero));
+            _harness.ClusterRipened.Handle(new BubbleRipenedMessage(slot, Vector3.zero));
+            _harness.RipeBurst.Handle(new RipeBubbleBurstMessage(RipeBurstKind.Ripple, slot, Vector3.zero, 0b111));
+            _harness.RipeBurst.Handle(new RipeBubbleBurstMessage(RipeBurstKind.Ripple, slot, Vector3.zero, 0));
+            _harness.RipeBurst.Handle(new RipeBubbleBurstMessage(RipeBurstKind.Foam, slot, Vector3.zero, 0b100001));
+            _harness.CompleteLevel(2);
+
+            var level = _harness.LastOf(RecordKind.Level);
+            Assert.AreEqual(2, level.Metrics[MetricId.ClustersRipened]);
+            Assert.AreEqual(2, level.Metrics[MetricId.RippleBursts], "a ripple that reached nobody still burst");
+            Assert.AreEqual(3, level.Metrics[MetricId.RippleNeighboursHit]);
+            Assert.AreEqual(1, level.Metrics[MetricId.FusesRunOut]);
+            Assert.AreEqual(2, level.Metrics[MetricId.CoatsApplied]);
+        }
+
+        [Test]
+        public void ACoatHit_CountsAsACoatRemoved_NotAnAbsorb()
+        {
+            _harness.EnterGame();
+            Play();
+            var coated = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
+            coated.TryCoat(1);
+            _harness.ActorHit.Handle(ActorHitMessage.From(coated, Vector3.zero, Vector3.zero,
+                new DamageContext(1, DamageFlags.Normal, "", null)));
+            // A hit that does no damage passes through a coat without taking it: an absorb as before.
+            var stillCoated = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
+            stillCoated.TryCoat(1);
+            _harness.ActorHit.Handle(ActorHitMessage.From(stillCoated, Vector3.zero, Vector3.zero,
+                new DamageContext(0, DamageFlags.Normal, "", null)));
+            _harness.CompleteLevel(2);
+
+            var level = _harness.LastOf(RecordKind.Level);
+            Assert.AreEqual(1, level.Metrics[MetricId.CoatsRemoved]);
+            Assert.AreEqual(1, level.Metrics[MetricId.Absorbs]);
+        }
+
+        // Like every level counter, these stop at the end of the run, not at the level-up: what lands during
+        // the ceremony belongs to the level's flush record (the gap between its two snapshots is data).
+        [Test]
+        public void RipeClusterMessages_AfterGameOver_CountNothing()
+        {
+            _harness.EnterGame();
+            Play();
+            _harness.GameOver.Handle(new GameOverMessage(2, 100));
+            var written = _harness.Sink.Written.Count;
+            var slot = new Vector2Int(2, 3);
+
+            _harness.ClusterRipened.Handle(new BubbleRipenedMessage(slot, Vector3.zero));
+            _harness.RipeBurst.Handle(new RipeBubbleBurstMessage(RipeBurstKind.Foam, slot, Vector3.zero, 1));
+
+            Assert.AreEqual(written, _harness.Sink.Written.Count);
+            var level = _harness.LastOf(RecordKind.Level);
+            Assert.AreEqual(0, level.Metrics[MetricId.ClustersRipened]);
+            Assert.AreEqual(0, level.Metrics[MetricId.FusesRunOut]);
         }
 
         // Danger is a 0..1 float and MetricSet is int-only, so the catalog stores hundredths — its unit

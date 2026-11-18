@@ -368,7 +368,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Balloon.Type.SoapBubbleClusterVariant
   _renderer: {fileID: 2116047971379092042}
-  _maxBubbles: 5
+  _maxBubbles: 6
   _floatSpeed: 5
   _previewBubbleCount: 5
 --- !u!4 &2493941375785477983 stripped

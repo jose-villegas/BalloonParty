@@ -95,6 +95,7 @@ namespace BalloonParty.Tests.Game
             Assert.IsFalse(Enum.IsDefined(typeof(MetricId), 13), "13 was hold_speed_up_flights");
             Assert.AreEqual(14, (int)MetricId.PointsBanked);
             Assert.AreEqual(30, (int)MetricId.TotalScore);
+            Assert.AreEqual(36, (int)MetricId.CoatsRemoved, "the ripe cluster's counters follow TotalScore");
 
             var set = new MetricSet(1);
             set.Add(MetricId.TotalScore, 7);
@@ -170,6 +171,12 @@ namespace BalloonParty.Tests.Game
             yield return new GoldenRow(nameof(MetricId.LevelsCompleted), "levels_completed", "count", nameof(FoldRule.Sum), nameof(MetricScopeKind.Run));
             yield return new GoldenRow(nameof(MetricId.RetriesUsed), "retries_used", "count", nameof(FoldRule.Last), nameof(MetricScopeKind.Run));
             yield return new GoldenRow(nameof(MetricId.TotalScore), "total_score", "points", nameof(FoldRule.Last), nameof(MetricScopeKind.Run));
+            yield return new GoldenRow(nameof(MetricId.ClustersRipened), "clusters_ripened", "count", nameof(FoldRule.Sum), nameof(MetricScopeKind.Level));
+            yield return new GoldenRow(nameof(MetricId.RippleBursts), "ripple_bursts", "count", nameof(FoldRule.Sum), nameof(MetricScopeKind.Level));
+            yield return new GoldenRow(nameof(MetricId.RippleNeighboursHit), "ripple_neighbours_hit", "count", nameof(FoldRule.Sum), nameof(MetricScopeKind.Level));
+            yield return new GoldenRow(nameof(MetricId.FusesRunOut), "fuses_run_out", "count", nameof(FoldRule.Sum), nameof(MetricScopeKind.Level));
+            yield return new GoldenRow(nameof(MetricId.CoatsApplied), "coats_applied", "count", nameof(FoldRule.Sum), nameof(MetricScopeKind.Level));
+            yield return new GoldenRow(nameof(MetricId.CoatsRemoved), "coats_removed", "count", nameof(FoldRule.Sum), nameof(MetricScopeKind.Level));
         }
 
         public readonly struct GoldenRow

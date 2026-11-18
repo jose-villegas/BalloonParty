@@ -30,7 +30,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: workingSet);
+                workingSet: workingSet, rippleDamage: 1);
 
             Assert.AreEqual(1 + 2 + 3, result.RawScore, "streak multiplier climbs 1, 2, 3 through the column");
             Assert.AreEqual(3, result.Pops);
@@ -51,7 +51,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.right, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: workingSet);
+                workingSet: workingSet, rippleDamage: 1);
 
             Assert.AreEqual(5, result.RawScore, "single green, first pop of its colour — multiplier 1");
             Assert.AreEqual(1, result.Pops);
@@ -72,7 +72,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: workingSet);
+                workingSet: workingSet, rippleDamage: 1);
 
             Assert.AreEqual(4, result.RawScore, "tough pops flat ScoreValue regardless of streak");
             Assert.AreEqual(1, result.Pops);
@@ -80,6 +80,43 @@ namespace BalloonParty.Tests.ShotSolver
             Assert.AreEqual(3, result.Events, "deflect, wall bounce, pop");
             Assert.IsTrue(result.BoardCleared);
             Assert.IsFalse(result.Died);
+        }
+
+        [Test]
+        public void Simulate_BubbleCluster_PassesTheShotThroughAndScoresWhatItHeldEachHit()
+        {
+            // Fired dead-centre at a 3-bubble cluster between two walls: each surviving hit lets the shot fly on
+            // unbent to the far wall and back, and the third hit pops it. Every hit scores the bubbles it held,
+            // flat, as the game's cluster does: 3, then 2, then 1.
+            var walls = new Vector4(5f, 1000f, -1f, -1000f);
+            var board = new[] { ShotBalloonSnapshot.ForBubbleClusterTarget(new Vector2(0f, 2f), 0.3f, 3) };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var result = ShotSimulator.Simulate(
+                board, walls, Vector2.zero, Vector2.up, startingShields: 3, projectileContactRadius: 0f,
+                workingSet: workingSet, rippleDamage: 1);
+
+            Assert.AreEqual(3 + 2 + 1, result.RawScore);
+            Assert.AreEqual(1, result.Pops);
+            Assert.AreEqual(1, result.ToughsCleared, "only the pop clears it");
+            Assert.AreEqual(5, result.Events, "pass, top wall, pass, bottom wall, pop");
+            Assert.IsTrue(result.BoardCleared);
+            Assert.IsFalse(result.Died);
+        }
+
+        [Test]
+        public void Simulate_BubbleCluster_APiercingShotPopsItForTheBubblesItHeld()
+        {
+            var board = new[] { ShotBalloonSnapshot.ForBubbleClusterTarget(new Vector2(0f, 2f), 0.3f, 4) };
+            var workingSet = new ShotBalloonState[board.Length];
+            var seed = ShotFlightSeed.Armed(0f);
+
+            var result = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
+                workingSet: workingSet, rippleDamage: 1, seed: seed);
+
+            Assert.AreEqual(4, result.RawScore);
+            Assert.AreEqual(1, result.Pops);
         }
 
         [Test]
@@ -94,7 +131,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.right, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: workingSet);
+                workingSet: workingSet, rippleDamage: 1);
 
             Assert.IsTrue(result.Died, "second bounce drops shields below zero");
             Assert.AreEqual(2, result.Events);
@@ -120,7 +157,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var refundingResult = ShotSimulator.Simulate(
                 refundingBoard, walls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: refundingWorkingSet);
+                workingSet: refundingWorkingSet, rippleDamage: 1);
 
             Assert.IsFalse(refundingResult.Died, "the streak-of-two refund covers the top-wall bounce");
             Assert.IsTrue(refundingResult.BoardCleared);
@@ -135,7 +172,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var nonRefundingResult = ShotSimulator.Simulate(
                 nonRefundingBoard, walls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: nonRefundingWorkingSet);
+                workingSet: nonRefundingWorkingSet, rippleDamage: 1);
 
             Assert.IsTrue(nonRefundingResult.Died, "without a same-colour streak of two, no refund covers the bounce");
         }
@@ -153,7 +190,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.right, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: workingSet, projectileSpeed: 2f, timestampsOut: timestamps);
+                workingSet: workingSet, rippleDamage: 1, projectileSpeed: 2f, timestampsOut: timestamps);
 
             Assert.IsTrue(result.Died);
             Assert.AreEqual(3, timestamps.Count, "origin + two wall events");
@@ -177,7 +214,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.right, startingShields: 2, projectileContactRadius: 0f,
-                workingSet: workingSet, projectileSpeed: 1f, cruiseConfig: cruise, timestampsOut: timestamps);
+                workingSet: workingSet, rippleDamage: 1, projectileSpeed: 1f, cruiseConfig: cruise, timestampsOut: timestamps);
 
             Assert.IsTrue(result.Died);
             Assert.AreEqual(4, timestamps.Count);
@@ -204,7 +241,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.up, startingShields: 6, projectileContactRadius: 0f,
-                workingSet: workingSet, projectileSpeed: 1f, cruiseConfig: cruise, timestampsOut: timestamps);
+                workingSet: workingSet, rippleDamage: 1, projectileSpeed: 1f, cruiseConfig: cruise, timestampsOut: timestamps);
 
             Assert.IsTrue(result.Died);
             Assert.AreEqual(8, timestamps.Count);
@@ -242,13 +279,13 @@ namespace BalloonParty.Tests.ShotSolver
             var rampTimestamps = new List<float>();
             ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.up, startingShields: 6, projectileContactRadius: 0f,
-                workingSet: new ShotBalloonState[board.Length], projectileSpeed: 1f, cruiseConfig: withRamp,
+                workingSet: new ShotBalloonState[board.Length], rippleDamage: 1, projectileSpeed: 1f, cruiseConfig: withRamp,
                 timestampsOut: rampTimestamps);
 
             var plainTimestamps = new List<float>();
             ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.up, startingShields: 6, projectileContactRadius: 0f,
-                workingSet: new ShotBalloonState[board.Length], projectileSpeed: 1f, cruiseConfig: noRamp,
+                workingSet: new ShotBalloonState[board.Length], rippleDamage: 1, projectileSpeed: 1f, cruiseConfig: noRamp,
                 timestampsOut: plainTimestamps);
 
             Assert.AreEqual(plainTimestamps.Count, rampTimestamps.Count, "the ramp costs time, never a path");
@@ -294,7 +331,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, new Vector2(0.6f, 0.8f), startingShields: 5,
-                projectileContactRadius: 0f, workingSet: new ShotBalloonState[board.Length],
+                projectileContactRadius: 0f, workingSet: new ShotBalloonState[board.Length], rippleDamage: 1,
                 projectileSpeed: 1f, cruiseConfig: cruise, timestampsOut: timestamps);
 
             Assert.AreEqual(1, result.Pops, "the mid-leg balloon pops");
@@ -330,7 +367,7 @@ namespace BalloonParty.Tests.ShotSolver
             var sweptPath = new List<Vector2>();
             var swept = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, new Vector2(0.6f, 0.8f), startingShields: 6,
-                projectileContactRadius: 0f, workingSet: new ShotBalloonState[board.Length],
+                projectileContactRadius: 0f, workingSet: new ShotBalloonState[board.Length], rippleDamage: 1,
                 projectileSpeed: 1f,
                 cruiseConfig: new ShotCruiseConfig(
                     wallBounceThreshold: 99, speedGainPerTap: 1f, piercingTapThreshold: 2, sweepEnabled: true,
@@ -340,7 +377,7 @@ namespace BalloonParty.Tests.ShotSolver
             var controlPath = new List<Vector2>();
             var control = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, new Vector2(0.6f, 0.8f), startingShields: 6,
-                projectileContactRadius: 0f, workingSet: new ShotBalloonState[board.Length],
+                projectileContactRadius: 0f, workingSet: new ShotBalloonState[board.Length], rippleDamage: 1,
                 projectileSpeed: 1f,
                 cruiseConfig: new ShotCruiseConfig(
                     wallBounceThreshold: 99, speedGainPerTap: 1f, piercingTapThreshold: 2, sweepEnabled: false,
@@ -373,14 +410,14 @@ namespace BalloonParty.Tests.ShotSolver
             var cruised = new List<float>();
             ShotSimulator.Simulate(
                 board, walls, Vector2.zero, new Vector2(0.6f, 0.8f), startingShields: 5,
-                projectileContactRadius: 0f, workingSet: new ShotBalloonState[board.Length],
+                projectileContactRadius: 0f, workingSet: new ShotBalloonState[board.Length], rippleDamage: 1,
                 projectileSpeed: 1f, cruiseConfig: new ShotCruiseConfig(wallBounceThreshold: 1, speedGainPerTap: 1f),
                 timestampsOut: cruised);
 
             var control = new List<float>();
             ShotSimulator.Simulate(
                 board, walls, Vector2.zero, new Vector2(0.6f, 0.8f), startingShields: 5,
-                projectileContactRadius: 0f, workingSet: new ShotBalloonState[board.Length],
+                projectileContactRadius: 0f, workingSet: new ShotBalloonState[board.Length], rippleDamage: 1,
                 projectileSpeed: 1f, cruiseConfig: new ShotCruiseConfig(wallBounceThreshold: 0, speedGainPerTap: 1f),
                 timestampsOut: control);
 
@@ -412,7 +449,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.right, startingShields: 2, projectileContactRadius: 0f,
-                workingSet: workingSet, projectileSpeed: 1f, cruiseConfig: cruise, timestampsOut: timestamps);
+                workingSet: workingSet, rippleDamage: 1, projectileSpeed: 1f, cruiseConfig: cruise, timestampsOut: timestamps);
 
             Assert.IsTrue(result.Died);
             Assert.AreEqual(1, result.Pops, "the corridor blocker is popped en route");
@@ -444,7 +481,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.right, startingShields: 2, projectileContactRadius: 0f,
-                workingSet: workingSet, projectileSpeed: 1f, cruiseConfig: cruise, timestampsOut: timestamps);
+                workingSet: workingSet, rippleDamage: 1, projectileSpeed: 1f, cruiseConfig: cruise, timestampsOut: timestamps);
 
             Assert.AreEqual(4, timestamps.Count);
             Assert.AreEqual(1f, timestamps[1], 1e-3f, "entry bounce lands on time; its lag applies after");
@@ -469,7 +506,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: workingSet, projectileSpeed: 7f, cruiseConfig: cruise);
+                workingSet: workingSet, rippleDamage: 1, projectileSpeed: 7f, cruiseConfig: cruise);
 
             Assert.AreEqual(1 + 2 + 3, result.RawScore);
             Assert.AreEqual(3, result.Pops);
@@ -624,12 +661,12 @@ namespace BalloonParty.Tests.ShotSolver
 
             var staticResult = ShotSimulator.Simulate(
                 board, walls, origin, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet, projectileSpeed: 1f);
+                workingSet: workingSet, rippleDamage: 1, projectileSpeed: 1f);
             Assert.AreEqual(0, staticResult.Pops, "statically the hanging balloon is 0.5 off the line — a miss");
 
             var dynamicResult = ShotSimulator.Simulate(
                 board, walls, origin, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet, projectileSpeed: 1f, dynamics: dynamics);
+                workingSet: workingSet, rippleDamage: 1, projectileSpeed: 1f, dynamics: dynamics);
             Assert.AreEqual(1, dynamicResult.Pops, "the rebalance pulse drops it onto the flight line in time");
             Assert.IsTrue(dynamicResult.BoardCleared);
         }
@@ -670,7 +707,7 @@ namespace BalloonParty.Tests.ShotSolver
             var result = ShotSimulator.Simulate(
                 board, new Vector4(1000f, 1000f, -1000f, -1000f), new Vector2(slot0.x, slot0.y - 5f),
                 Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet, projectileSpeed: 1f, dynamics: delayedDynamics);
+                workingSet: workingSet, rippleDamage: 1, projectileSpeed: 1f, dynamics: delayedDynamics);
 
             Assert.AreEqual(0, result.Pops, "the delayed pulse never fires before the shot passes");
         }
@@ -695,7 +732,7 @@ namespace BalloonParty.Tests.ShotSolver
                 wallBounceThreshold: 1, speedGainPerTap: 0f, piercingTapThreshold: 3);
             var armedResult = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, new Vector2(1f, 0.25f), startingShields: 6,
-                projectileContactRadius: 0f, workingSet: workingSet, cruiseConfig: armed);
+                projectileContactRadius: 0f, workingSet: workingSet, rippleDamage: 1, cruiseConfig: armed);
 
             Assert.AreEqual(1, armedResult.Pops, "armed at tap 3 — the deflector pops on contact");
             Assert.AreEqual(1, armedResult.ToughsCleared);
@@ -704,7 +741,7 @@ namespace BalloonParty.Tests.ShotSolver
             var unarmed = new ShotCruiseConfig(wallBounceThreshold: 1, speedGainPerTap: 0f);
             var unarmedResult = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, new Vector2(1f, 0.25f), startingShields: 6,
-                projectileContactRadius: 0f, workingSet: workingSet, cruiseConfig: unarmed);
+                projectileContactRadius: 0f, workingSet: workingSet, rippleDamage: 1, cruiseConfig: unarmed);
 
             Assert.AreEqual(0, unarmedResult.Pops, "without the piercing grant it only ever deflects");
         }
@@ -724,14 +761,14 @@ namespace BalloonParty.Tests.ShotSolver
 
             var filtered = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: workingSet, targetColorId: "Blue");
+                workingSet: workingSet, rippleDamage: 1, targetColorId: "Blue");
 
             Assert.AreEqual(0, filtered.RawScore, "no Blue on the board — nothing attributes");
             Assert.AreEqual(3, filtered.Pops, "pops still happen, they just don't score");
 
             var matching = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: workingSet, targetColorId: "Red");
+                workingSet: workingSet, rippleDamage: 1, targetColorId: "Red");
 
             Assert.AreEqual(1 + 2 + 3, matching.RawScore, "matching colour attributes with its true streaks");
         }
@@ -746,12 +783,12 @@ namespace BalloonParty.Tests.ShotSolver
 
             var unbiased = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet);
+                workingSet: workingSet, rippleDamage: 1);
             Assert.AreEqual(0, unbiased.Pops);
 
             var biased = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet, radiusBias: 0.1f);
+                workingSet: workingSet, rippleDamage: 1, radiusBias: 0.1f);
             Assert.AreEqual(1, biased.Pops, "the fattened circle covers the wobble band");
         }
 
@@ -771,11 +808,11 @@ namespace BalloonParty.Tests.ShotSolver
 
             var omitted = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: workingSet);
+                workingSet: workingSet, rippleDamage: 1);
 
             var explicitDefault = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: workingSet, seed: default(ShotFlightSeed));
+                workingSet: workingSet, rippleDamage: 1, seed: default(ShotFlightSeed));
 
             Assert.AreEqual(omitted.RawScore, explicitDefault.RawScore);
             Assert.AreEqual(omitted.Pops, explicitDefault.Pops);
@@ -809,7 +846,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: workingSet, dynamics: dynamics);
+                workingSet: workingSet, rippleDamage: 1, dynamics: dynamics);
 
             Assert.AreEqual(1, result.Pops, "the static contact still pops at its literal snapshot position");
             Assert.IsTrue(result.BoardCleared);
@@ -846,7 +883,7 @@ namespace BalloonParty.Tests.ShotSolver
             // (once, up front), which is the only thing this test needs to have happened.
             ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: workingSet, dynamics: dynamics, maxEvents: 0);
+                workingSet: workingSet, rippleDamage: 1, dynamics: dynamics, maxEvents: 0);
 
             Assert.IsNotNull(workingSet[0].Actor, "a BalanceProfile-carrying snapshot still gets a live stub");
         }

@@ -108,7 +108,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: workingSet);
+                workingSet: workingSet, rippleDamage: 1);
 
             Assert.AreEqual(0, result.Pops);
             Assert.AreEqual(0, RewardPops(result));
@@ -135,7 +135,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet, items: CreateSnipeItemLayer());
+                workingSet: workingSet, rippleDamage: 1, items: CreateSnipeItemLayer());
 
             Assert.AreEqual(1 + 10 * 2, result.RawScore, "the plated balloon pays nothing and the streak climbs through it");
             Assert.AreEqual(3, result.Pops);
@@ -158,7 +158,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet, items: CreateSnipeItemLayer());
+                workingSet: workingSet, rippleDamage: 1, items: CreateSnipeItemLayer());
 
             Assert.AreEqual(1, result.RawScore, "only the host scores");
             Assert.AreEqual(2, result.Pops);
@@ -178,7 +178,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet, items: CreateBombItemLayer());
+                workingSet: workingSet, rippleDamage: 1, items: CreateBombItemLayer());
 
             Assert.AreEqual(2, result.Pops, "the plated balloon pops beside the bomb");
             Assert.AreEqual(1, result.RawScore, "only the host scores");
@@ -192,7 +192,7 @@ namespace BalloonParty.Tests.ShotSolver
             };
             var controlResult = ShotSimulator.Simulate(
                 control, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: new ShotBalloonState[control.Length], items: CreateBombItemLayer());
+                workingSet: new ShotBalloonState[control.Length], rippleDamage: 1, items: CreateBombItemLayer());
 
             Assert.AreEqual(2, controlResult.Pops, "the same board with an unbreakable beside the bomb does pop it");
         }
@@ -213,7 +213,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet, items: CreateLaserItemLayer());
+                workingSet: workingSet, rippleDamage: 1, items: CreateLaserItemLayer());
 
             Assert.AreEqual(3, result.Pops, "host, the Blue and the plated balloon in the corridor");
             Assert.AreEqual(1, RewardPops(result));

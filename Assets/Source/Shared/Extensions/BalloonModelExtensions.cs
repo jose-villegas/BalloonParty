@@ -40,13 +40,29 @@ namespace BalloonParty.Shared.Extensions
             return isHeavy ? model.GetImpactColorId() : color;
         }
 
-        /// <summary>Whether a piercing shot plows this actor rather than one-shotting it — a durable
-        /// balloon with more than one hit left (the nuke too), or one that deflects an ordinary hit (an unbreakable, the golden
-        /// balloon).</summary>
+        /// <summary>How many ordinary hits this balloon takes to pop: its coat's layers (<see cref="ICoatable" />), each
+        /// taking a hit of its own, on top of the hits under it (<see cref="HitsUnderCoat" />).</summary>
+        internal static int HitsToPop(this IBalloonModel model)
+        {
+            var hits = model.HitsUnderCoat();
+            return model is ICoatable coatable ? hits + coatable.Coat.Value : hits;
+        }
+
+        /// <summary>Whether a piercing shot plows this actor rather than one-shotting it — a balloon that takes more
+        /// than one hit to pop (the nuke too), or one that deflects an ordinary hit (an unbreakable, the golden
+        /// balloon). A coat does not count, unlike in <see cref="HitsToPop" />: a pierce pops a coated balloon on
+        /// contact, coat and all, so there is nothing to plow and discharge at the wall.</summary>
         internal static bool IsTough(this IBalloonModel model)
         {
-            return (model is IHasDurability durable && durable.HitsRemaining.Value > 1)
-                   || model is IDeflectsShots { DeflectsOrdinaryHit: true };
+            return model.HitsUnderCoat() > 1 || model is IDeflectsShots { DeflectsOrdinaryHit: true };
+        }
+
+        /// <summary>Whether this balloon's contact washes the shot's stolen colour: a soap cluster
+        /// (<see cref="IWashesProjectileColor" />) or a balloon wearing foam. Read before the hit is evaluated: the hit
+        /// that takes the last layer off leaves no coat to read.</summary>
+        internal static bool WashesProjectileColor(this IBalloonModel model)
+        {
+            return model is IWashesProjectileColor || model is ICoatable { Coat: { Value: > 0 } };
         }
 
         // Cube direction vectors for the six hex edges (used by the ring walk).
@@ -142,6 +158,18 @@ namespace BalloonParty.Shared.Extensions
             }
 
             return color;
+        }
+
+        // 1 for a ripe bubble cluster, which bursts whole, otherwise the hits a durable balloon has left, and 1 for
+        // anything without durability.
+        private static int HitsUnderCoat(this IBalloonModel model)
+        {
+            if (model is BubbleClusterModel { Ripe: { Value: true } })
+            {
+                return 1;
+            }
+
+            return model is IHasDurability durable ? durable.HitsRemaining.Value : 1;
         }
     }
 }

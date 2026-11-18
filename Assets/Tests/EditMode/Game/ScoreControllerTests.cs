@@ -625,6 +625,74 @@ namespace BalloonParty.Tests.Game
             Assert.AreEqual(1, _streakTracker.For(painter).CurrentStreak);
         }
 
+        // A ripe cluster's ripple lands after the pop that set it off, while the shot flies on: it scores at the
+        // streak the shot has by then and never changes it.
+        [Test]
+        public void Streak_ARippleHitOnAnotherColour_ScoresAtTheStreak_AndLeavesIt()
+        {
+            var ball = NewBall();
+            FirePopFrom(ball, Red);
+            FirePopFrom(ball, Red);
+            _scoredPublisher.ClearReceivedCalls();
+
+            FirePopFrom(ball, Blue, Vector3.zero, DamageFlags.Ripple);
+
+            Assert.AreEqual(2, _streakTracker.For(ball).CurrentStreak);
+            Assert.AreEqual(Red, _streakTracker.For(ball).LastColor);
+            _scoredPublisher.Received(1).Publish(Arg.Is<ScorePointsGroupMessage>(m =>
+                m.ColorName == Blue && m.Multiplier == 2));
+        }
+
+        [Test]
+        public void Streak_ARippleHitOnACluster_DoesNotBreakIt()
+        {
+            var ball = NewBall();
+            FirePopFrom(ball, Red);
+            FirePopFrom(ball, Red);
+
+            var cluster = new BubbleClusterModel(
+                new BalloonModelConfig(hitsToPop: 3, scoreValue: 1), _palette, new[] { Red, Blue });
+            var context = new DamageContext(1, DamageFlags.Ripple, "", ball);
+            _controller.OnActorHit(new ActorHitMessage(
+                cluster, Vector3.zero, Vector3.up, cluster.EvaluateHit(context), context));
+
+            Assert.AreEqual(2, _streakTracker.For(ball).CurrentStreak);
+            Assert.AreEqual(Red, _streakTracker.For(ball).LastColor);
+        }
+
+        [Test]
+        public void Streak_ARippleHit_GivesNoHeadStartOnItsColour()
+        {
+            var ball = NewBall();
+            FirePopFrom(ball, Blue, Vector3.zero, DamageFlags.Ripple);
+
+            FirePopFrom(ball, Blue);
+
+            Assert.AreEqual(1, _streakTracker.For(ball).CurrentStreak);
+        }
+
+        // Decision 6 of the ripe cluster plan: the hit that takes a balloon's coat off washes the shot and does
+        // nothing else.
+        [Test]
+        public void ACoatHit_ScoresNothing_AndLeavesTheStreakAsItWas()
+        {
+            var ball = NewBall();
+            FirePopFrom(ball, Red);
+            FirePopFrom(ball, Red);
+            _scoredPublisher.ClearReceivedCalls();
+
+            var coated = new BalloonModel(new BalloonModelConfig(scoreValue: 1, hitsToPop: 1));
+            coated.Color.Value = Blue;
+            coated.TryCoat(1);
+            var context = new DamageContext(1, DamageFlags.DirectHit, "", ball);
+            _controller.OnActorHit(new ActorHitMessage(
+                coated, Vector3.zero, Vector3.up, coated.EvaluateHit(context), context));
+
+            _scoredPublisher.DidNotReceive().Publish(Arg.Any<ScorePointsGroupMessage>());
+            Assert.AreEqual(2, _streakTracker.For(ball).CurrentStreak);
+            Assert.AreEqual(Red, _streakTracker.For(ball).LastColor);
+        }
+
         [Test]
         public void Streak_HitNoBallCaused_RecordsOnTheSharedStreak_NotOnAnyBall()
         {

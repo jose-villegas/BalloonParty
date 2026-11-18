@@ -17,9 +17,10 @@ namespace BalloonParty.Balloon.Controller
     ///     Merges bubble clusters that sit in neighbouring slots (<see cref="BubbleMergeRule" />): the smaller gives
     ///     the larger as many bubbles as it has room for, up to a full cluster, and is absorbed once it has given
     ///     them all. Looks again the frame after anything could open room: the grid changing (a spawn, a pop, the
-    ///     board settling), a cluster being hit, or a merge of its own. Each cluster merges at most once a pass, so
-    ///     a group gathers a step a frame. Each merge publishes <see cref="BubbleMergedMessage" /> just before the counts
-    ///     change, which <c>BubbleMergeView</c> plays as bubbles hopping across.
+    ///     board settling, a ripe cluster leaving once it has handed its bubbles out), a cluster being hit, or a merge
+    ///     of its own. Each cluster merges at most once a pass, so a group gathers a step a frame. Each merge publishes
+    ///     <see cref="BubbleMergedMessage" /> just before the counts change, which <c>BubbleMergeView</c> plays as
+    ///     bubbles hopping across.
     /// </summary>
     internal sealed class BubbleMergeService : IStartable, ITickable, IDisposable
     {

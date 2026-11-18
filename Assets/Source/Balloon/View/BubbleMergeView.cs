@@ -21,22 +21,15 @@ namespace BalloonParty.Balloon.View
     /// </summary>
     internal sealed class BubbleMergeView : MonoBehaviour
     {
-        // A hop's size over its flight: a swell mid-hop, and smaller as it sinks into the receiver.
-        private const float LandingScale = 0.7f;
-        private const float MidHopSwell = 0.15f;
-
-        private static readonly int BubbleCountId = Shader.PropertyToID("_BubbleCount");
-
         private readonly List<Hop> _hops = new();
         private readonly Stack<MergeEnds> _freeEnds = new();
-        private readonly Stack<SpriteRenderer> _freeBubbles = new();
         private readonly CompositeDisposable _subscriptions = new();
 
         private SlotGrid _grid;
         private IBalloonsConfiguration _balloons;
         private IBubbleMergeCueSettings _settings;
         private PoolManager _poolManager;
-        private MaterialPropertyBlock _block;
+        private SoapBubbleSprites _bubbles;
 
         private void Update()
         {
@@ -68,7 +61,7 @@ namespace BalloonParty.Balloon.View
             _balloons = balloons;
             _settings = balloons.BubbleMergeCue;
             _poolManager = poolManager;
-            _block = new MaterialPropertyBlock();
+            _bubbles = new SoapBubbleSprites(transform, "MergeBubble");
             mergedSubscriber.Subscribe(OnMerged).AddTo(_subscriptions);
         }
 
@@ -185,15 +178,8 @@ namespace BalloonParty.Balloon.View
                 return;
             }
 
-            var to = hop.Ends.LastTo;
-            var line = (Vector2)(to - hop.From);
-            var side = line.sqrMagnitude > 1e-6f ? new Vector2(-line.y, line.x).normalized * hop.Side : Vector2.up;
-            var eased = 0.5f - 0.5f * Mathf.Cos(Mathf.PI * t);
-            var bow = Mathf.Sin(Mathf.PI * t);
-            var position = Vector3.Lerp(hop.From, to, eased) + (Vector3)(side * (_settings.ArcHeight * bow));
-            var bubble = hop.Bubble.transform;
-            bubble.position = position;
-            bubble.localScale = hop.Scale * (Mathf.Lerp(1f, LandingScale, t) * (1f + MidHopSwell * bow));
+            SoapBubbleHop.Place(
+                hop.Bubble.transform, hop.From, hop.Ends.LastTo, hop.Side, _settings.ArcHeight, hop.Scale, t);
         }
 
         private void Land(ref Hop hop)
@@ -214,7 +200,7 @@ namespace BalloonParty.Balloon.View
 
         private void Finish(ref Hop hop)
         {
-            ReturnBubble(hop.Bubble);
+            _bubbles.Return(hop.Bubble);
             hop.Bubble = null;
             var ends = hop.Ends;
             ends.HopsLeft--;
@@ -247,41 +233,11 @@ namespace BalloonParty.Balloon.View
                 return null;
             }
 
-            SpriteRenderer bubble;
-            if (_freeBubbles.Count > 0)
-            {
-                bubble = _freeBubbles.Pop();
-            }
-            else
-            {
-                bubble = new GameObject("MergeBubble").AddComponent<SpriteRenderer>();
-                bubble.transform.SetParent(transform, worldPositionStays: false);
-            }
-
             var target = ends.ReceiverCue.BubbleRenderer;
-            bubble.sprite = source.sprite;
-            bubble.sharedMaterial = source.sharedMaterial;
-            bubble.color = source.color;
-            bubble.sortingLayerID = source.sortingLayerID;
             var topOrder = target != null ? Mathf.Max(source.sortingOrder, target.sortingOrder) : source.sortingOrder;
-            bubble.sortingOrder = topOrder + _settings.SortingOrderOffset;
-            source.GetPropertyBlock(_block);
-            _block.SetFloat(BubbleCountId, 1f);
-            bubble.SetPropertyBlock(_block);
+            var bubble = _bubbles.RentLike(source, topOrder + _settings.SortingOrderOffset);
             bubble.transform.localScale = sourceCue.BubbleWorldScale * _settings.BubbleScale;
-            bubble.enabled = true;
             return bubble;
-        }
-
-        private void ReturnBubble(SpriteRenderer bubble)
-        {
-            if (bubble == null)
-            {
-                return;
-            }
-
-            bubble.enabled = false;
-            _freeBubbles.Push(bubble);
         }
 
         // The two clusters one merge joins, shared by its hops. A cluster counts as gone once its binding changed

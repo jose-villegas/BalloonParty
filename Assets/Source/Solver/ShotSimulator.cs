@@ -100,14 +100,18 @@ namespace BalloonParty.Solver
         /// </summary>
         public readonly bool StreakGrantsShields;
 
+        /// <summary>The hit a ripe cluster's ripple deals each neighbour (<c>IRipeBubbleSettings.RippleDamage</c>).</summary>
+        public readonly int RippleDamage;
+
         public ShotScoreRules(
             string targetColorId, IReadOnlyList<string> allowedColors, string rainbowColorId,
-            bool streakGrantsShields = true)
+            bool streakGrantsShields, int rippleDamage)
         {
             TargetColorId = targetColorId;
             AllowedColors = allowedColors;
             RainbowColorId = rainbowColorId;
             StreakGrantsShields = streakGrantsShields;
+            RippleDamage = rippleDamage;
         }
     }
 
@@ -130,9 +134,16 @@ namespace BalloonParty.Solver
         public readonly bool Capped;
         public readonly bool Absorbed;
 
+        /// <summary>The colour the shot carries when the flight ends: null once soap or a coat has washed it.</summary>
+        public readonly string FinalColor;
+
+        /// <summary>The shot's colour streak when the flight ends: 0 once a cluster or a tough has broken it.</summary>
+        public readonly int FinalStreak;
+
         public ShotSimulationResult(
             int rawScore, int pops, int toughsCleared, bool boardCleared, int events, bool died, bool capped,
-            bool absorbed, int goldenPops, int heartPops, int discoPops, int nukePops = 0)
+            bool absorbed, int goldenPops, int heartPops, int discoPops, int nukePops = 0, string finalColor = null,
+            int finalStreak = 0)
         {
             RawScore = rawScore;
             Pops = pops;
@@ -146,6 +157,8 @@ namespace BalloonParty.Solver
             Died = died;
             Capped = capped;
             Absorbed = absorbed;
+            FinalColor = finalColor;
+            FinalStreak = finalStreak;
         }
     }
 
@@ -196,6 +209,12 @@ namespace BalloonParty.Solver
         // Phase C2) — same single-threaded scratch-buffer convention as NeighborBuffer/ItemHitsScratch.
         private static readonly List<Vector2Int> EffectHitSlotsScratch = new();
 
+        // The ripe clusters a shot has burst whose ripple has not run yet, by slot, and the neighbours of the one
+        // running. Same single-threaded scratch convention as NeighborBuffer: a ripple's own pops only add to the
+        // queue, never re-enter it, so a chain runs in one index loop.
+        private static readonly List<Vector2Int> RippleQueueScratch = new();
+        private static readonly Vector2Int[] RippleNeighborBuffer = new Vector2Int[6];
+
         /// <summary>Simulates one aim direction to completion. <paramref name="workingSet" /> is a
         /// caller-owned scratch buffer (sized to at least <paramref name="board" />.Count) reused
         /// across calls — with <paramref name="dynamics" /> null the only per-call cost is copying the
@@ -206,7 +225,9 @@ namespace BalloonParty.Solver
         /// timeline). Leave both null during a bulk sweep. <paramref name="projectileSpeed" /> and
         /// <paramref name="cruiseConfig" /> drive the timeline even without a dynamic board;
         /// <paramref name="dynamics" />, when supplied, additionally runs flight-rebalance pulses and
-        /// nudge impulses against a real <c>SlotGrid</c> (see <see cref="ShotBoardDynamics" />).</summary>
+        /// nudge impulses against a real <c>SlotGrid</c> (see <see cref="ShotBoardDynamics" />).
+        /// <paramref name="rippleDamage" /> is the hit a ripe cluster's ripple deals each neighbour
+        /// (<c>IRipeBubbleSettings.RippleDamage</c>); it has no default, so a caller cannot forget it.</summary>
         internal static ShotSimulationResult Simulate(
             IReadOnlyList<ShotBalloonSnapshot> board,
             Vector4 wallLimitsClockwise,
@@ -215,6 +236,7 @@ namespace BalloonParty.Solver
             int startingShields,
             float projectileContactRadius,
             ShotBalloonState[] workingSet,
+            int rippleDamage,
             int maxEvents = DefaultMaxEvents,
             List<Vector2> pathOut = null,
             float projectileSpeed = 1f,
@@ -241,7 +263,8 @@ namespace BalloonParty.Solver
             // already-established streak once a buff takes over) without a full item layer in place.
             var state = new ShotFlightState(origin, direction, startingShields, in seed);
             var scoreRules = new ShotScoreRules(
-                targetColorId, allowedColors, rainbowColorId, streakGrantsShields);
+                targetColorId, allowedColors, rainbowColorId, streakGrantsShields, rippleDamage);
+            RippleQueueScratch.Clear();
 
             if (pathOut != null)
             {
@@ -317,7 +340,7 @@ namespace BalloonParty.Solver
             return new ShotSimulationResult(
                 state.RawScore, state.Pops, state.ToughsCleared, activeCount == 0, state.Events, state.Died,
                 state.Capped, state.Absorbed, state.GoldenPops, state.HeartPops, state.DiscoPops,
-                state.NukePops);
+                state.NukePops, state.ProjectileColor, state.StreakCount);
         }
 
         private static bool TryFindNearestBalloonEntryAny(
@@ -730,7 +753,10 @@ namespace BalloonParty.Solver
             // Soap washes the projectile colourless on ANY contact (deflect or pop alike) — mirrors
             // ApplyColorChange running ahead of/independent from the deflect-vs-pop branch below
             // (ProjectileHitResolver.cs:193-201).
-            if (balloon.WashesProjectileColor && !string.IsNullOrEmpty(state.ProjectileColor))
+            // A coat is the exception: a pierce pops its balloon, coat and all, and that pop steals the colour as any
+            // pop does (ApplyColorChange washes a coat's contact only when the balloon survives it).
+            var coatWashes = balloon.Coat > 0 && !state.IsPiercing;
+            if ((balloon.WashesProjectileColor || coatWashes) && !string.IsNullOrEmpty(state.ProjectileColor))
             {
                 state.ProjectileColor = null;
             }
@@ -757,6 +783,16 @@ namespace BalloonParty.Solver
 
             var center = CurrentBalloonCenter(workingSet, index, tHit, dynamics);
 
+            // A coat takes an ordinary hit of its own (BalloonModel.EvaluateHit): a layer comes off, the balloon stays,
+            // the shot flies on unbent having been washed above, and nothing scores or touches the streak. It is no
+            // one-contact pop, so the segment is no clean sweep.
+            var flags = state.IsPiercing ? DamageFlags.Piercing : DamageFlags.DirectHit;
+            if (CoatStops(ref balloon, flags, 1))
+            {
+                state.SegmentSweepValid = false;
+                return;
+            }
+
             // A nuke never pops on contact (NukeBalloonModel): its last dent, or a pierce, arms it and the ball
             // bounces off, and once armed it bounces every ball. A pierce with dents to spare plows on through,
             // arming it on the way. Its blast comes a fuse later, past this flight, so arming is what's counted.
@@ -769,9 +805,29 @@ namespace BalloonParty.Solver
                 return;
             }
 
+            // Every hit on a cluster scores the bubbles it held (BubbleClusterModel.ResolveScoreAttribution).
+            if (balloon.ContactKind == ShotContactKind.PassThrough)
+            {
+                balloon.ScoreValue = balloon.HitsRemaining;
+            }
+
+            // A cluster survives an ordinary hit as a pass-through (BalloonModelBase's default survive outcome): the
+            // hit is scored like a pop, the shot flies on unbent, and the cluster stays a bubble smaller. A ripe one
+            // has one hit under it (HitsUnderCoat): it bursts.
+            if (balloon.ContactKind == ShotContactKind.PassThrough && !state.IsPiercing && balloon.HitsUnderCoat > 1)
+            {
+                state.SegmentSweepValid = false;
+                var survivingCause = ShotPopCause.ProjectileContact(
+                    state.HasRainbowBuff, false, isRainbowTargetCarry: false, projectileColor: state.ProjectileColor,
+                    isOwnPaint: false);
+                ScoreSurvivingClusterHit(in balloon, in scoreRules, in survivingCause, ref state);
+                balloon.HitsRemaining--;
+                return;
+            }
+
             // A piercing shot pops EVERYTHING it touches (DamageFlags.Piercing — unbreakables
             // included) and flies on unbent; only unarmed shots deflect off durable actors.
-            if (armsNuke || (!state.IsPiercing && balloon.HitsRemaining > 1))
+            if (armsNuke || (!state.IsPiercing && balloon.HitsUnderCoat > 1))
             {
                 if (armsNuke)
                 {
@@ -815,11 +871,11 @@ namespace BalloonParty.Solver
             // toward the segment, and only a target that was at 1 HP when struck leaves the segment
             // sweepable — so a piercing tough plow disqualifies it, as live's plow does.
             state.SegmentPopCount++;
-            state.SegmentSweepValid &= balloon.HitsRemaining <= 1;
+            state.SegmentSweepValid &= balloon.HitsUnderCoat <= 1;
 
             // Plowing a tough (>1-hit) actor while piercing halves the cruise speed (floored at base
-            // in CurrentSpeed) — mirrors ProjectileHitResolver.
-            if (state.IsPiercing && balloon.HitsRemaining > 1)
+            // in CurrentSpeed) — mirrors ProjectileHitResolver. A ripe cluster is no tough: it bursts on contact.
+            if (state.IsPiercing && balloon.HitsUnderCoat > 1)
             {
                 state.PierceSpeedScale *= 0.5f;
             }
@@ -886,6 +942,16 @@ namespace BalloonParty.Solver
                     items, in host, center, state.Direction, tHit, workingSet, ref activeCount, dynamics,
                     in scoreRules, ref state);
             }
+
+            // A ripe cluster's burst ripples into its neighbours. The game runs it BurstSeconds after the contact (and
+            // each chained burst as long after its own); the simulation resolves the whole chain here. Items its
+            // pops release join the item queue, drained after it as any chained item is.
+            if (host.Ripe)
+            {
+                RippleQueueScratch.Add(host.SlotIndex);
+                RunRipples(workingSet, ref activeCount, dynamics, tHit, in scoreRules, items, ref state);
+                DrainItemQueue(items, tHit, workingSet, ref activeCount, dynamics, in scoreRules, ref state);
+            }
         }
 
         // Pop-site item hook (@ref plan_shot_solver_accuracy Phase C1): the host's own item is the
@@ -902,6 +968,20 @@ namespace BalloonParty.Solver
                 host.ItemSpinDegrees + (host.ItemSpinRate * tHit), isDirectHit: true);
 
             if (!items.TryBeginActivation(in activation))
+            {
+                return;
+            }
+
+            DrainItemQueue(items, tHit, workingSet, ref activeCount, dynamics, in scoreRules, ref state);
+        }
+
+        // Breadth-first over the item queue: an activation whose hits pop another carrier (or burst a ripe cluster
+        // whose ripple does) enqueues it, and it resolves on a later iteration here.
+        private static void DrainItemQueue(
+            ShotItemLayer items, float tHit, ShotBalloonState[] workingSet, ref int activeCount,
+            ShotBoardDynamics dynamics, in ShotScoreRules scoreRules, ref ShotFlightState state)
+        {
+            if (items == null)
             {
                 return;
             }
@@ -1015,6 +1095,19 @@ namespace BalloonParty.Solver
                     continue;
                 }
 
+                if (CoatStops(ref workingSet[index], flags, outcome.Damage))
+                {
+                    continue;
+                }
+
+                var isCluster = workingSet[index].ContactKind == ShotContactKind.PassThrough;
+                if (isCluster)
+                {
+                    workingSet[index].ScoreValue = workingSet[index].HitsRemaining;
+                }
+
+                // A ripe cluster bursts whole on any damaging hit (BubbleClusterModel.EvaluateHit).
+                pops |= workingSet[index].Ripe && outcome.Damage > 0;
                 if (!pops)
                 {
                     workingSet[index].HitsRemaining -= outcome.Damage;
@@ -1027,7 +1120,16 @@ namespace BalloonParty.Solver
                         items, workingSet, ref activeCount, index, tHit, dynamics, in scoreRules,
                         activation.SourceColorId, flags, ref state);
                 }
+                else if (isCluster)
+                {
+                    // Every hit on a cluster scores the bubbles it held and breaks the streak, an item's too.
+                    var cause = ShotPopCause.ItemEffect(activation.SourceColorId, flags);
+                    ScoreSurvivingClusterHit(in workingSet[index], in scoreRules, in cause, ref state);
+                }
             }
+
+            // After every hit of the activation has landed, as the game's ripple comes a tick after the blast.
+            RunRipples(workingSet, ref activeCount, dynamics, tHit, in scoreRules, items, ref state);
         }
 
         private static int FindActiveIndex(ShotBalloonState[] workingSet, int activeCount, Vector2Int slot)
@@ -1086,6 +1188,12 @@ namespace BalloonParty.Solver
             }
 
             RemoveActive(workingSet, ref activeCount, index);
+
+            // Its ripple runs once the hits in hand have landed (RunRipples): a ripple's own pops only queue more.
+            if (popped.Ripe)
+            {
+                RippleQueueScratch.Add(popped.SlotIndex);
+            }
 
             if (items != null && popped.Item != ItemType.None)
             {
@@ -1223,6 +1331,25 @@ namespace BalloonParty.Solver
                     ? cause.SourceColorId
                     : allowedColors[0];
             }
+            else if (cause.Flags.HasFlag(DamageFlags.Ripple))
+            {
+                // Mirrors ScoreController's Ripple: the ripple lands after the pop that set it off, so it scores at the
+                // streak as it stands and never changes it, not even to break it on a cluster or a tough.
+                multiplier = Math.Max(1, state.StreakCount);
+                if (string.IsNullOrEmpty(balloon.ColorId) && !balloon.PaysSourceColor)
+                {
+                    var countsRipple = string.IsNullOrEmpty(targetColorId);
+                    state.RawScore += (countsRipple ? balloon.ScoreValue : 0) * multiplier;
+                    state.ToughsCleared++;
+                    return;
+                }
+
+                attributedColorId = !balloon.IsRainbow
+                    ? balloon.ColorId
+                    : ContainsColor(allowedColors, cause.SourceColorId)
+                        ? cause.SourceColorId
+                        : allowedColors[0];
+            }
             else if (cause.Flags.HasFlag(DamageFlags.WildcardStreak))
             {
                 multiplier = ++state.StreakCount;
@@ -1293,6 +1420,124 @@ namespace BalloonParty.Solver
                     state.ProjectileColor))
             {
                 state.Shields++;
+            }
+        }
+
+        // A cluster's surviving hit scores as its pop would (the bubbles it held, and the streak rule its cause brings),
+        // but nothing left the board, so it is no tough cleared.
+        private static void ScoreSurvivingClusterHit(
+            in ShotBalloonState cluster, in ShotScoreRules scoreRules, in ShotPopCause cause, ref ShotFlightState state)
+        {
+            var cleared = state.ToughsCleared;
+            ResolvePopScore(in cluster, in scoreRules, in cause, ref state);
+            state.ToughsCleared = cleared;
+        }
+
+        // The ripple of every ripe cluster queued in RippleQueueScratch (RipeBubbleBurst.Ripple): one hit of
+        // RippleDamage, flagged Ripple, to each neighbour RippleTakes. A ripe neighbour it bursts joins the queue, so a
+        // chain runs to its end in this one index loop; each cluster leaves the board as it bursts, so the chain is
+        // bounded. Neighbours are the six hex slots round the burst's slot, found in the working set by slot as the
+        // rainbow side-conversion and the item effect board find theirs (the slots are the ones gathered).
+        private static void RunRipples(
+            ShotBalloonState[] workingSet, ref int activeCount, ShotBoardDynamics dynamics, float tHit,
+            in ShotScoreRules scoreRules, ShotItemLayer items, ref ShotFlightState state)
+        {
+            for (var q = 0; q < RippleQueueScratch.Count; q++)
+            {
+                var origin = RippleQueueScratch[q];
+                HexCoordinates.HexNeighborIndices(origin.x, origin.y, RippleNeighborBuffer);
+                for (var n = 0; n < RippleNeighborBuffer.Length; n++)
+                {
+                    var index = FindActiveIndex(workingSet, activeCount, RippleNeighborBuffer[n]);
+                    if (index >= 0 && RippleTakes(in workingSet[index]))
+                    {
+                        ApplyRippleHit(workingSet, ref activeCount, index, dynamics, tHit, in scoreRules, items, ref state);
+                    }
+                }
+            }
+
+            RippleQueueScratch.Clear();
+        }
+
+        // Mirrors BalloonModel.EvaluateHit on a coated balloon: a piercing or beam hit takes the coat whole and goes on
+        // to the balloon; any other hit takes a layer (if it does damage) and goes no further. Returns whether the coat
+        // stopped the hit.
+        private static bool CoatStops(ref ShotBalloonState target, DamageFlags flags, int damage)
+        {
+            if (target.Coat <= 0)
+            {
+                return false;
+            }
+
+            if ((flags & (DamageFlags.Piercing | DamageFlags.Beam)) != 0)
+            {
+                target.Coat = 0;
+                return false;
+            }
+
+            if (damage > 0)
+            {
+                target.Coat--;
+            }
+
+            return true;
+        }
+
+        // Mirrors RipeBubbleRule.RippleTakes: any balloon but a reward balloon or one that deflects an ordinary hit
+        // (a colourless target with more than one hit left: a tough, an unbreakable). Grid actors are no balloons.
+        private static bool RippleTakes(in ShotBalloonState target)
+        {
+            var deflects = target.ContactKind == ShotContactKind.Poppable && string.IsNullOrEmpty(target.ColorId)
+                && target.HitsRemaining > 1;
+            return !target.IsStatic && !target.Scoreless && !deflects;
+        }
+
+        // One ripple hit, as the game's models take it: a coat loses a layer and nothing else happens; a ripe cluster
+        // bursts; anything else takes the damage. A surviving cluster scores what it held at the streak as it stands;
+        // a pop goes the way an item's pop goes (PopItemHit), so a carrier it pops chains its item, and a ripe cluster
+        // it bursts queues its own ripple.
+        private static void ApplyRippleHit(
+            ShotBalloonState[] workingSet, ref int activeCount, int index, ShotBoardDynamics dynamics, float tHit,
+            in ShotScoreRules scoreRules, ShotItemLayer items, ref ShotFlightState state)
+        {
+            // A ripple of no damage is no hit: nothing nudges, no coat comes off, nothing scores.
+            var damage = scoreRules.RippleDamage;
+            if (damage <= 0)
+            {
+                return;
+            }
+
+            ref var target = ref workingSet[index];
+            NudgeItemHit(dynamics, target, tHit);
+
+            if (CoatStops(ref target, DamageFlags.Ripple, damage))
+            {
+                return;
+            }
+
+            var isCluster = target.ContactKind == ShotContactKind.PassThrough;
+            if (isCluster)
+            {
+                target.ScoreValue = target.HitsRemaining;
+            }
+
+            var pops = target.Ripe && damage > 0;
+            if (!pops)
+            {
+                target.HitsRemaining -= damage;
+                pops = target.HitsRemaining <= 0;
+            }
+
+            if (pops)
+            {
+                PopItemHit(
+                    items, workingSet, ref activeCount, index, tHit, dynamics, in scoreRules, string.Empty,
+                    DamageFlags.Ripple, ref state);
+            }
+            else if (isCluster)
+            {
+                var cause = ShotPopCause.ItemEffect(string.Empty, DamageFlags.Ripple);
+                ScoreSurvivingClusterHit(in target, in scoreRules, in cause, ref state);
             }
         }
 

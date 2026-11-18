@@ -10,11 +10,15 @@ using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Balloon.Model
 {
+    /// <summary>The plain balloon (and its silver, gold and rainbow skins): paintable, carries an item, scores its
+    /// own colour. It can wear foam (<see cref="ICoatable" />): while coated, an ordinary hit takes a layer off and
+    /// passes through, scoring nothing; a piercing or beam hit pops it, coat and all.</summary>
     internal class BalloonModel : BalloonModelBase, IPaintable, IHasWriteableItemSlot,
-        IHasDurability, IHasScore, IHasScoreColor
+        IHasDurability, IHasScore, IHasScoreColor, ICoatable
     {
         private readonly ColorSource _colorSource;
         private readonly float _balanceBias;
+        private readonly ReactiveProperty<int> _coat = new();
 
         public ReactiveProperty<string> Color { get; } = new();
         public ReactiveProperty<ItemType> Item { get; } = new(ItemType.None);
@@ -32,6 +36,9 @@ namespace BalloonParty.Balloon.Model
         int IHasDurability.MaxHitPoints => MaxHitPoints;
         IReadOnlyReactiveProperty<int> IHasDurability.HitsRemaining => HitsRemaining;
 
+        /// <summary>Layers of foam: each takes an ordinary hit of its own before the balloon can be hurt.</summary>
+        public IReadOnlyReactiveProperty<int> Coat => _coat;
+
         internal BalloonModel() : this(new BalloonModelConfig(hitsToPop: 1)) { }
 
         internal BalloonModel(
@@ -43,6 +50,44 @@ namespace BalloonParty.Balloon.Model
             ScoreValue = config.ScoreValue;
             NudgeOverrides = config.NudgeOverrides;
             ItemActivationWeight = config.ItemActivationWeight;
+        }
+
+        // A coat comes off whole under a piercing or beam hit, which goes on to pop the balloon as it would have.
+        // Any other hit that does damage only takes a layer off: HitsRemaining is untouched, so the surviving hit
+        // scores nothing (ResolveScoreAttribution returns while HitsRemaining > 0).
+        public override HitOutcome EvaluateHit(DamageContext context)
+        {
+            if (_coat.Value <= 0)
+            {
+                return base.EvaluateHit(context);
+            }
+
+            if ((context.Flags & (DamageFlags.Piercing | DamageFlags.Beam)) != 0)
+            {
+                _coat.Value = 0;
+                return base.EvaluateHit(context);
+            }
+
+            if (context.Damage <= 0)
+            {
+                return SurviveOutcome;
+            }
+
+            _coat.Value--;
+            return SurviveOutcome;
+        }
+
+        /// <summary>Adds a layer of foam unless the balloon already wears <paramref name="maxLayers" />; returns
+        /// whether it did.</summary>
+        internal bool TryCoat(int maxLayers)
+        {
+            if (_coat.Value >= maxLayers)
+            {
+                return false;
+            }
+
+            _coat.Value++;
+            return true;
         }
 
         // Single-colour attribution — ignores incompleteColors (only scatter pops avoid a completed bar;

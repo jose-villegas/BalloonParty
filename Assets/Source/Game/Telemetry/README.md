@@ -254,6 +254,19 @@ with its flight is silent, so a flight ending is never a break. At level-up the 
 clears every streak and announces it once, so the service forgets the remembered values
 too.
 
+## Ripe bubble clusters
+
+Six level counters follow the ripe bubble cluster (`Balloon/Controller/RipeBubbleService`).
+`clusters_ripened` counts `BubbleRipenedMessage`. Each `RipeBubbleBurstMessage` is either a
+ripple, the player popping a ripe cluster in time, or foam, its fuse running out. A ripple adds
+one to `ripple_bursts` and the neighbours its hits reached to `ripple_neighbours_hit`. A ripple
+goes out `BurstSeconds` after the pop, so one still waiting when the level ends is dropped and
+counts nothing. Foam adds one to `fuses_run_out` and the balloons it coated to `coats_applied`;
+the bubbles it hands to neighbouring clusters, and those left over, are not counted. `coats_removed` counts the
+hits that took a coat off (`ActorHitMessageExtensions.TookCoat`). Such a hit passes through like
+an absorb, but the foam caused it, not the balloon, so it is counted here and not in `absorbs`.
+A piercing or beam hit pops a coated balloon whole and counts as a pop.
+
 ## Pause handling
 
 Subscribes `PauseService.IsAnyPaused` directly (reference-counted and reset-safe) rather

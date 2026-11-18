@@ -14,7 +14,7 @@ unit-testable outside the editor.
 |---|---|---|
 | `ShotSolverWindow` | `Editor/ShotSolver/` | `Tools > BalloonParty > Shot Solver` — play-mode-only window. Snapshots the live board (`SlotGrid`, resolved via `GameLifetimeScope.Container`), thrower origin, and projectile contact radius; sweeps N angles across a configurable arc; refines qualifying-window edges by bisection; plots score vs. angle as a strip of `EditorGUI` rect fills; lists qualifying windows; can draw the best window's centre-angle flight path into the Scene view; **Fire Best** re-sweeps and forces the shot via `ThrowerController.FireAt`, then samples the latest ball in flight from `IProjectileRegistry.TryGetLatestInFlight` |
 | `ShotSimulator` | `Solver/` | Pure, headless, static class — simulates one aim direction to completion, event-to-event (next analytic wall crossing, next analytic balloon-corridor entry, or next due balance pulse), never fixed-step. Reuses `ProjectileMotionResolver.TryComputeContactNormal` for deflect contacts. Mirrors the runtime's pop/deflect/shield/streak/rainbow rules, including Phase A's interactive statics (see below), on a `ShotBalloonSnapshot` board — no `MonoBehaviour`, no live model, no allocation beyond the caller-owned working-set buffer. Events carry timestamps (`t += distance / speed(segment)`), and speed mirrors the cruise ramp exactly |
-| `ShotBoardSnapshot` | `Solver/` | The board's data types: `ShotBalloonSnapshot` (one target's geometry, `ColorProfile` colour identity, optional `BalanceProfile`, `ShotContactKind`, item), built only via its named factories (`ForColorTarget`/`ForToughTarget`/`ForRainbowTarget`/`ForGoldenTarget`/`ForDiscoTarget`/`ForNukeTarget`/`ForStaticContact`) so every caller's field mapping stays honest as the struct grows; `ShotBalloonState`, its mutable per-simulation copy |
+| `ShotBoardSnapshot` | `Solver/` | The board's data types: `ShotBalloonSnapshot` (one target's geometry, `ColorProfile` colour identity, optional `BalanceProfile`, `ShotContactKind`, item), built only via its named factories (`ForColorTarget`/`ForToughTarget`/`ForBubbleClusterTarget`/`ForRainbowTarget`/`ForGoldenTarget`/`ForDiscoTarget`/`ForNukeTarget`/`ForStaticContact`) so every caller's field mapping stays honest as the struct grows; `ShotBalloonState`, its mutable per-simulation copy |
 | `ShotFlightState` | `Solver/` | Mutable per-flight state passed by `ref` through `Simulate` — position/direction/shields/elapsed, cruise/pierce state, and the Phase D-core buff/streak/colour fields (`HasRainbowBuff`, `SpeedBuffMultiplier`, `StreakColor`/`StreakCount`, `DeferredPops`, `ProjectileColor`) |
 | `ShotBoardGather` | `Solver/` | Snapshots the live board/thrower/projectile into the sim's input structs (`ShotBoardGather.Gather`) and converts sweep angles to world directions (`DirectionFromDegrees`). The sweep's sample grid (`ResolveSweepSampleCount`/`ResolveSweepAngle`, see below) lives on `Shared/AimAngleGrid` instead — `ShotBoardGather` consumes it rather than owning it. Called by `ShotSolverWindow` |
 | `ShotRanking` | `Solver/` | Orders simulated shots for the Fire Best Shot cheat (and the bots and autoplay aiming with it): a golden balloon popped beats any score, then a heart balloon popped while its heart counts (up to the hearts missing, or any on a purple level), then a nuke popped (the room it clears outweighs score), then a disco ball popped (its rainbow board pays the shots after this one), then `RawScore` |
@@ -164,6 +164,36 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
   AoE pop too, matching the live code, which has none). An armed lance is barred from later
   entering cruise (`ProjectileView.TryEnterCruise`'s own bar, mirrored by `HandleWallBounce`'s
   `!state.IsPiercing` guard), so it can never layer cruise's per-shield speed tap on top.
+- **Ripe clusters** (`PLAN-RipeBubbleCluster`) — `ForBubbleClusterTarget` carries the cluster's `Ripe`
+  flag at gather. A ripe cluster bursts whole on any damaging hit (the shot's contact, an item's hit, a
+  ripple), mirroring `BubbleClusterModel.EvaluateHit`: it scores the bubbles it held through the
+  flat/streak-breaking tough rule, washes the shot as any cluster does, and is never ploughed through
+  (`HitsUnderCoat` is 1, so a pierce bursts it too). Its burst ripples into its six hex neighbours
+  (`RunRipples`): one hit of `ShotSolveContext.RippleDamage` each (read from
+  `IBalloonsConfiguration.RipeBubble` at gather, and passed explicitly to `Simulate`, which has no
+  default for it; a damage of 0 or less is no hit), flagged `DamageFlags.Ripple`, to every neighbour
+  `RipeBubbleRule.RippleTakes` would take — not a reward balloon, not a static, not a target that
+  deflects an ordinary hit. A ripple hit strips a coat layer and stops, pops a one-hit balloon, takes a
+  bubble off an unripe cluster, or bursts a ripe one, which queues its own ripple, so a chain runs to its
+  end. Its pops score at \f$\max(1, \text{streak})\f$ and never change the streak (`ScoreController`'s
+  `Ripple` branch); a rainbow it pops pays as any item-popped rainbow does, the ripple carrying no
+  source colour (`RipeBubbleBurst` sends `string.Empty`). A carrier it pops chains its item through the item queue, as an item's pop
+  does. The simulation resolves a ripple and its whole chain at the contact; the game lands each one
+  `BurstSeconds` (0.35) later, after the cluster's fold, while the shot flies on. So where the shot reaches
+  a rippled neighbour inside that window, or its streak changes in it, the two can differ by that neighbour's
+  score. `RipeClusterMirrorTests` runs the game with `BurstSeconds` at 0 for that reason. The fuse's foam
+  needs no mirror: it runs on the level's clock and gives no hit or score.
+- **Foam coats** — `ShotBalloonSnapshot.Coat` carries a coloured or rainbow balloon's coat layers
+  (`ICoatable`) at gather. The shot's non-piercing contact on a coated balloon strips one layer, flies
+  on unbent, washes the shot, scores nothing, leaves the streak alone and is not a pop; the segment's
+  sweep is invalidated as on any contact. A piercing contact takes the coat with the balloon: it pops
+  and the shot adopts its colour as an ordinary pop. An item's hit strips one layer unless it is
+  `Piercing` or `Beam`, which pops the balloon under it (`BalloonModel.EvaluateHit`). The wash is
+  decided per contact, since a coat can come off mid-flight: a contact washes when the target is soap,
+  or when it wears a coat and the hit is not piercing; the snapshot's `WashesProjectileColor` stays keyed to the real
+  `IWashesProjectileColor` marker, which is what the item effect board's resist-paint rule reads.
+- `ShotSimulationResult.FinalColor` and `FinalStreak` report the colour and streak the shot ends the
+  flight with, so the mirror tests can compare them with the game's.
 
 ## Accepted approximations (plan §7)
 
@@ -220,11 +250,30 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
   buffs and no in-progress streak (G8). It exists so tests exercise D-core's scoring/end-condition
   mirrors and the item layer's mid-flight buff grants without needing a live projectile to seed
   from.
-- Pre-existing gap (E4, found during the D-core review): the sim's non-piercing
-  `HitsRemaining > 1` branch always deflects a surviving multi-hit target, but live only
-  `ToughBalloonModel`/`UnbreakableBalloonModel` actually return `HitOutcome.Deflect` — a surviving
-  multi-HP soap cluster (`BubbleClusterModel`) returns `PassThrough` and flies through unbent
-  instead. Planned fix is Phase E4 (a survive-outcome discriminator on the snapshot).
+- Bubble clusters gather through `ForBubbleClusterTarget` as `ShotContactKind.PassThrough`: a surviving
+  ordinary hit lets the shot fly on unbent and the cluster loses a bubble, where the sim's other
+  `HitsRemaining > 1` targets deflect (live, only `ToughBalloonModel`/`UnbreakableBalloonModel` return
+  `HitOutcome.Deflect`; `BubbleClusterModel` returns `PassThrough`). Every hit on a cluster, surviving or
+  popping, scores the bubbles it held through the flat/streak-breaking tough rule, mirroring
+  `BubbleClusterModel.ResolveScoreAttribution`; only the pop counts as a tough cleared. An item's (or a
+  ripple's) surviving hit on a cluster scores the same way.
+- **The ripple's timing.** Live, a ripe burst's ripple lands `IRipeBubbleSettings.BurstSeconds` (0.35 s of
+  level clock) after the hit that popped the cluster, as the big bubble it folds into pops, and each chained
+  burst as long after its own hit; the sim resolves the whole chain at the contact that set it off (or,
+  for an item's blast, once every hit of that activation has landed). It scores at the streak as it stands
+  at that moment. A shot that reaches a ripple's neighbour before the ripple would, or changes its streak
+  in the meantime, is mispredicted: the sim gives the neighbour to the ripple and the game to the shot.
+- **Ripple adjacency** is the six hex slots round the burst's *gathered* slot, looked up in the working
+  set by slot (as the rainbow side-conversion and the item effect board do). A balance pulse mid-flight
+  moves balloons but not their slots, so after one the ripple reaches the gathered neighbours, not the
+  current ones.
+- **No ripening, no fuse, no foam inside a shot.** Ripeness and coats are read once at gather; a cluster
+  that ripens mid-flight, a fuse that runs out, or foam that coats a balloon during the flight is not
+  simulated. The board the shot is ranked against is the board at fire time.
+- **Blast-hit order and the streak.** The sim lands an item's hits in the effect board's order, which
+  need not be the order the game's physics delivers them; when a blast mixes coloured pops with a
+  cluster or tough that breaks the streak, the final streak can differ though the score agrees
+  (`RipeClusterMirrorTests` compares only the score for that case).
 - Balance fidelity honours `WeightBias`/`OmnidirectionalBalance` only — `ShoveVector` pop-pressure
   shoves are never exercised by a flight-rebalance pulse, so a board effect that leans on pressure
   propagation diverges from the sim.

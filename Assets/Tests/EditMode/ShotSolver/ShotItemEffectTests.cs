@@ -207,7 +207,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var granted = ShotSimulator.Simulate(
                 grantingBoard, walls, Vector2.zero, Vector2.right, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: grantingWorkingSet, items: CreateItemLayer());
+                workingSet: grantingWorkingSet, rippleDamage: 1, items: CreateItemLayer());
 
             Assert.IsFalse(granted.Died, "the item's granted shield covers the wall bounce");
             Assert.IsTrue(granted.BoardCleared);
@@ -218,7 +218,7 @@ namespace BalloonParty.Tests.ShotSolver
             var controlWorkingSet = new ShotBalloonState[grantingBoard.Length];
             var control = ShotSimulator.Simulate(
                 grantingBoard, walls, Vector2.zero, Vector2.right, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: controlWorkingSet);
+                workingSet: controlWorkingSet, rippleDamage: 1);
 
             Assert.IsTrue(control.Died, "without the item layer, no shield ever covers the bounce");
             Assert.AreEqual(1, control.Pops, "the flight dies at the wall, never reaching the return-path balloon");
@@ -244,7 +244,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.right, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet, items: CreateItemLayer(), allowedColors: new[] { "Red" });
+                workingSet: workingSet, rippleDamage: 1, items: CreateItemLayer(), allowedColors: new[] { "Red" });
 
             // Red(5*1) + rainbow CarryStreak(1*2) + Blue buffed(10*3) + Green carry(100*4).
             Assert.AreEqual((5 * 1) + (1 * 2) + (10 * 3) + (100 * 4), result.RawScore);
@@ -265,10 +265,10 @@ namespace BalloonParty.Tests.ShotSolver
 
             var itemResult = ShotSimulator.Simulate(
                 itemBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: itemWorkingSet);
+                workingSet: itemWorkingSet, rippleDamage: 1);
             var plainResult = ShotSimulator.Simulate(
                 plainBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: plainWorkingSet);
+                workingSet: plainWorkingSet, rippleDamage: 1);
 
             Assert.AreEqual(plainResult.RawScore, itemResult.RawScore);
             Assert.AreEqual(plainResult.Pops, itemResult.Pops);
@@ -295,10 +295,10 @@ namespace BalloonParty.Tests.ShotSolver
 
             var withoutLayer = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: withoutLayerWorkingSet);
+                workingSet: withoutLayerWorkingSet, rippleDamage: 1);
             var withLayer = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: withLayerWorkingSet, items: CreateItemLayer());
+                workingSet: withLayerWorkingSet, rippleDamage: 1, items: CreateItemLayer());
 
             Assert.AreEqual(withoutLayer.RawScore, withLayer.RawScore);
             Assert.AreEqual(withoutLayer.Pops, withLayer.Pops);
@@ -332,7 +332,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.right, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet, items: CreateItemLayer());
+                workingSet: workingSet, rippleDamage: 1, items: CreateItemLayer());
 
             // Shields 0 -> +1 (refund, streak reaches 2 on "Red") -> +1 (the item's own grant) = 2.
             // Bounce 1 (right wall, event 3) spends one and survives; bounce 2 (left wall, event 4)
@@ -376,7 +376,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.right, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet, items: CreateItemLayer(), allowedColors: new[] { "Green" });
+                workingSet: workingSet, rippleDamage: 1, items: CreateItemLayer(), allowedColors: new[] { "Green" });
 
             Assert.AreEqual(6 + 40 + 500, result.RawScore);
             Assert.AreEqual(5, result.Pops);
@@ -404,7 +404,7 @@ namespace BalloonParty.Tests.ShotSolver
             var insideWorkingSet = new ShotBalloonState[insideBoard.Length];
             var insideResult = ShotSimulator.Simulate(
                 insideBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: insideWorkingSet, items: CreateBombItemLayer(radius: 1.0f, damage: 1));
+                workingSet: insideWorkingSet, rippleDamage: 1, items: CreateBombItemLayer(radius: 1.0f, damage: 1));
 
             Assert.AreEqual(2, insideResult.Pops, "distance 1.19 is inside the 1.2 combined radius — the target dies");
             Assert.IsTrue(insideResult.BoardCleared);
@@ -420,7 +420,7 @@ namespace BalloonParty.Tests.ShotSolver
             var outsideWorkingSet = new ShotBalloonState[outsideBoard.Length];
             var outsideResult = ShotSimulator.Simulate(
                 outsideBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: outsideWorkingSet, items: CreateBombItemLayer(radius: 1.0f, damage: 1));
+                workingSet: outsideWorkingSet, rippleDamage: 1, items: CreateBombItemLayer(radius: 1.0f, damage: 1));
 
             Assert.AreEqual(1, outsideResult.Pops, "distance 1.21 is outside the 1.2 combined radius — no hit at all");
             Assert.IsFalse(outsideResult.BoardCleared);
@@ -451,7 +451,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet, items: CreateBombItemLayer(radius: 1.0f, damage: 1));
+                workingSet: workingSet, rippleDamage: 1, items: CreateBombItemLayer(radius: 1.0f, damage: 1));
 
             Assert.AreEqual(2, result.Pops, "host + the near hex-neighbour only — the far neighbour and the near non-neighbour both survive");
             Assert.IsFalse(result.BoardCleared);
@@ -477,7 +477,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet,
+                workingSet: workingSet, rippleDamage: 1,
                 items: CreateBombItemLayer(
                     radius: 1.0f, damage: 1, rainbowConversionRange: 1.0f, rainbowColorId: GamePalette.RainbowColorId),
                 rainbowColorId: GamePalette.RainbowColorId, allowedColors: new[] { "Blue" });
@@ -507,7 +507,7 @@ namespace BalloonParty.Tests.ShotSolver
             var insideWorkingSet = new ShotBalloonState[insideBoard.Length];
             var insideResult = ShotSimulator.Simulate(
                 insideBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: insideWorkingSet,
+                workingSet: insideWorkingSet, rippleDamage: 1,
                 items: CreateBombItemLayer(
                     radius: 1.0f, damage: 1, rainbowConversionRange: 1.0f, rainbowColorId: GamePalette.RainbowColorId),
                 rainbowColorId: GamePalette.RainbowColorId, allowedColors: new[] { "Blue" });
@@ -525,7 +525,7 @@ namespace BalloonParty.Tests.ShotSolver
             var outsideWorkingSet = new ShotBalloonState[outsideBoard.Length];
             var outsideResult = ShotSimulator.Simulate(
                 outsideBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: outsideWorkingSet,
+                workingSet: outsideWorkingSet, rippleDamage: 1,
                 items: CreateBombItemLayer(
                     radius: 1.0f, damage: 1, rainbowConversionRange: 1.0f, rainbowColorId: GamePalette.RainbowColorId),
                 rainbowColorId: GamePalette.RainbowColorId, allowedColors: new[] { "Blue" });
@@ -552,7 +552,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet, items: CreateBombItemLayer(radius: 1.0f, damage: 3));
+                workingSet: workingSet, rippleDamage: 1, items: CreateBombItemLayer(radius: 1.0f, damage: 3));
 
             Assert.AreEqual(2, result.Pops);
             Assert.AreEqual(1, result.ToughsCleared, "the item pop still routes an ordinary Tough through the flat rule");
@@ -592,7 +592,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet, dynamics: dynamics, items: CreateBombItemLayer(radius: 1.0f, damage: 3));
+                workingSet: workingSet, rippleDamage: 1, dynamics: dynamics, items: CreateBombItemLayer(radius: 1.0f, damage: 3));
 
             Assert.AreEqual(1, result.Pops, "only the host itself pops — the tough survives the damage-3 hit");
             Assert.IsFalse(result.BoardCleared);
@@ -623,7 +623,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet, items: CreateBombItemLayer(radius: 1.0f, damage: 3));
+                workingSet: workingSet, rippleDamage: 1, items: CreateBombItemLayer(radius: 1.0f, damage: 3));
 
             Assert.AreEqual(1, result.Pops, "only the host pops — the tough survives with exactly 1 hit remaining");
             Assert.IsFalse(result.BoardCleared);
@@ -673,7 +673,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet, items: CreateBombItemLayer(radius: 1.0f, damage: 1));
+                workingSet: workingSet, rippleDamage: 1, items: CreateBombItemLayer(radius: 1.0f, damage: 1));
 
             Assert.AreEqual(2, result.Pops, "host (direct) and the Shield carrier (bomb-triggered) both pop");
             Assert.IsFalse(result.BoardCleared, "the far-off filler survives untouched");
@@ -714,7 +714,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet, items: CreateBombItemLayer(radius: 1.0f, damage: 1));
+                workingSet: workingSet, rippleDamage: 1, items: CreateBombItemLayer(radius: 1.0f, damage: 1));
 
             // Host(2*streak1=2) + the Unbreakable's item pop, paying "Red" and EXTENDING the same streak
             // to 2 (RecordColor, not ResolveToughPop's flat/reset rule): 9*2=18. Total 2+18=20.
@@ -763,7 +763,7 @@ namespace BalloonParty.Tests.ShotSolver
             var workingSet = new ShotBalloonState[board.Length];
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet, items: CreateBombItemLayer(radius: 1.0f, damage: 1));
+                workingSet: workingSet, rippleDamage: 1, items: CreateBombItemLayer(radius: 1.0f, damage: 1));
 
             Assert.AreEqual(33, result.Pops, "domino[0] direct + 32 chained pops (the budget's own cap), then the chain starves");
             Assert.IsFalse(result.BoardCleared, "the 7 dominoes past the budget's reach never get blasted");
@@ -797,7 +797,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.right, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet,
+                workingSet: workingSet, rippleDamage: 1,
                 items: CreateBombItemLayer(radius: 1.0f, damage: 1, rainbowColorId: GamePalette.RainbowColorId),
                 rainbowColorId: GamePalette.RainbowColorId,
                 seed: ShotFlightSeed.WithRainbowBuff(
@@ -843,17 +843,17 @@ namespace BalloonParty.Tests.ShotSolver
             var plainWorkingSet = new ShotBalloonState[plainBoard.Length];
             var plainResult = ShotSimulator.Simulate(
                 plainBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: plainWorkingSet);
+                workingSet: plainWorkingSet, rippleDamage: 1);
 
             var itemsNullWorkingSet = new ShotBalloonState[bombBoard.Length];
             var itemsNullResult = ShotSimulator.Simulate(
                 bombBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: itemsNullWorkingSet);
+                workingSet: itemsNullWorkingSet, rippleDamage: 1);
 
             var missingConfigWorkingSet = new ShotBalloonState[bombBoard.Length];
             var missingConfigResult = ShotSimulator.Simulate(
                 bombBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: missingConfigWorkingSet, items: CreateItemLayer());
+                workingSet: missingConfigWorkingSet, rippleDamage: 1, items: CreateItemLayer());
 
             AssertResultsMatch(plainResult, itemsNullResult);
             AssertResultsMatch(plainResult, missingConfigResult);
@@ -893,7 +893,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet,
+                workingSet: workingSet, rippleDamage: 1,
                 items: CreateLaserItemLayer(castRadius: 0.1f, castDistance: 3f, damage: 1, flags: DamageFlags.Piercing));
 
             Assert.AreEqual(3, result.Pops, "host + both right-arm targets, including the int.MaxValue unbreakable");
@@ -920,7 +920,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet,
+                workingSet: workingSet, rippleDamage: 1,
                 items: CreateLaserItemLayer(castRadius: 0.1f, castDistance: 3f, damage: 3, flags: DamageFlags.Normal));
 
             Assert.AreEqual(1, result.Pops, "only the host pops — the tough merely takes damage");
@@ -949,7 +949,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet,
+                workingSet: workingSet, rippleDamage: 1,
                 items: CreateLaserItemLayer(castRadius: 0.3f, castDistance: 1f, damage: 1, flags: DamageFlags.Normal));
 
             Assert.AreEqual(2, result.Pops, "the overlap-at-origin occupant pops exactly once, not once per arm");
@@ -982,7 +982,7 @@ namespace BalloonParty.Tests.ShotSolver
             var axisAlignedWorkingSet = new ShotBalloonState[axisAlignedBoard.Length];
             var axisAlignedResult = ShotSimulator.Simulate(
                 axisAlignedBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0,
-                projectileContactRadius: 0f, workingSet: axisAlignedWorkingSet, items: itemLayer);
+                projectileContactRadius: 0f, workingSet: axisAlignedWorkingSet, rippleDamage: 1, items: itemLayer);
 
             Assert.AreEqual(2, axisAlignedResult.Pops, "spin 0 keeps the arm on-axis — the target is hit");
             Assert.IsTrue(axisAlignedResult.BoardCleared);
@@ -997,7 +997,7 @@ namespace BalloonParty.Tests.ShotSolver
             var rotatedWorkingSet = new ShotBalloonState[rotatedBoard.Length];
             var rotatedResult = ShotSimulator.Simulate(
                 rotatedBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: rotatedWorkingSet, items: CreateLaserItemLayer(castRadius: 0.05f, castDistance: 1.0f, damage: 1, flags: DamageFlags.Normal));
+                workingSet: rotatedWorkingSet, rippleDamage: 1, items: CreateLaserItemLayer(castRadius: 0.05f, castDistance: 1.0f, damage: 1, flags: DamageFlags.Normal));
 
             Assert.AreEqual(1, rotatedResult.Pops, "spin 45 rotates every arm off-axis — the identical target now misses");
             Assert.IsFalse(rotatedResult.BoardCleared);
@@ -1029,7 +1029,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet,
+                workingSet: workingSet, rippleDamage: 1,
                 items: CreateLaserItemLayer(
                     castRadius: 0.1f, castDistance: 2f, damage: 1, flags: DamageFlags.Normal,
                     rainbowColorId: GamePalette.RainbowColorId),
@@ -1080,7 +1080,7 @@ namespace BalloonParty.Tests.ShotSolver
             var insideWorkingSet = new ShotBalloonState[insideBoard.Length];
             var insideResult = ShotSimulator.Simulate(
                 insideBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: insideWorkingSet,
+                workingSet: insideWorkingSet, rippleDamage: 1,
                 items: CreateLaserItemLayer(castRadius: 0f, castDistance: 1.0f, damage: 1, flags: DamageFlags.Normal));
 
             Assert.AreEqual(2, insideResult.Pops, "distance 0.99 is inside castDistance 1.0 — the target dies");
@@ -1097,7 +1097,7 @@ namespace BalloonParty.Tests.ShotSolver
             var outsideWorkingSet = new ShotBalloonState[outsideBoard.Length];
             var outsideResult = ShotSimulator.Simulate(
                 outsideBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: outsideWorkingSet,
+                workingSet: outsideWorkingSet, rippleDamage: 1,
                 items: CreateLaserItemLayer(castRadius: 0f, castDistance: 1.0f, damage: 1, flags: DamageFlags.Normal));
 
             Assert.AreEqual(1, outsideResult.Pops, "distance 1.01 is outside castDistance 1.0 — no hit at all");
@@ -1136,7 +1136,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet, items: CreateLightningItemLayer(damage: 1));
+                workingSet: workingSet, rippleDamage: 1, items: CreateLightningItemLayer(damage: 1));
 
             Assert.AreEqual(4, result.Pops);
             Assert.AreEqual(1000 + 2 + 30 + 400, result.RawScore);
@@ -1169,7 +1169,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet,
+                workingSet: workingSet, rippleDamage: 1,
                 items: CreateLightningItemLayer(damage: 1, rainbowColorId: GamePalette.RainbowColorId),
                 rainbowColorId: GamePalette.RainbowColorId, allowedColors: new[] { "Red" },
                 seed: ShotFlightSeed.Fresh(projectileColor: "Red"));
@@ -1221,7 +1221,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet,
+                workingSet: workingSet, rippleDamage: 1,
                 items: CreateLightningItemLayer(damage: 1, rainbowColorId: GamePalette.RainbowColorId),
                 rainbowColorId: GamePalette.RainbowColorId, allowedColors: new[] { "Green" });
 
@@ -1265,7 +1265,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet,
+                workingSet: workingSet, rippleDamage: 1,
                 items: CreateLightningItemLayer(damage: 1, rainbowColorId: GamePalette.RainbowColorId),
                 rainbowColorId: GamePalette.RainbowColorId, allowedColors: new[] { "Green" },
                 seed: ShotFlightSeed.Fresh(projectileColor: GamePalette.RainbowColorId));
@@ -1305,7 +1305,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet, items: CreateLightningItemLayer(damage: 1));
+                workingSet: workingSet, rippleDamage: 1, items: CreateLightningItemLayer(damage: 1));
 
             Assert.AreEqual(
                 2, result.Pops,
@@ -1360,7 +1360,7 @@ namespace BalloonParty.Tests.ShotSolver
             var workingSet = new ShotBalloonState[board.Length];
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.right, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet, items: CreateLightningItemLayer(damage: 1));
+                workingSet: workingSet, rippleDamage: 1, items: CreateLightningItemLayer(damage: 1));
 
             Assert.AreEqual(
                 1 + fillerCount + 1, result.Pops,
@@ -1400,7 +1400,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet,
+                workingSet: workingSet, rippleDamage: 1,
                 items: CreatePaintItemLayer(spreadOffset: 0f, spreadLength: r, spreadBaseWidth: 4f * r, spreadBlobRadius: r));
 
             Assert.AreEqual(2, result.Pops);
@@ -1438,7 +1438,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet,
+                workingSet: workingSet, rippleDamage: 1,
                 items: CreatePaintItemLayer(spreadOffset: 0f, spreadLength: r, spreadBaseWidth: 4f * r, spreadBlobRadius: r),
                 rainbowColorId: GamePalette.RainbowColorId, allowedColors: new[] { "Green" });
 
@@ -1470,7 +1470,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet,
+                workingSet: workingSet, rippleDamage: 1,
                 items: CreatePaintItemLayer(spreadOffset: 0f, spreadLength: r, spreadBaseWidth: 4f * r, spreadBlobRadius: r),
                 rainbowColorId: GamePalette.RainbowColorId);
 
@@ -1534,7 +1534,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.right, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet, items: items);
+                workingSet: workingSet, rippleDamage: 1, items: items);
 
             Assert.AreEqual(2, result.Pops, "host (direct) and B (bomb-triggered) pop; T survives untouched by either");
             Assert.IsFalse(result.BoardCleared);
@@ -1569,7 +1569,7 @@ namespace BalloonParty.Tests.ShotSolver
             var insideWorkingSet = new ShotBalloonState[insideBoard.Length];
             var insideResult = ShotSimulator.Simulate(
                 insideBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: insideWorkingSet,
+                workingSet: insideWorkingSet, rippleDamage: 1,
                 items: CreatePaintItemLayer(
                     spreadOffset: 0f, spreadLength: r, spreadBaseWidth: 4f * r, spreadBlobRadius: r,
                     lattice: insideLattice));
@@ -1590,7 +1590,7 @@ namespace BalloonParty.Tests.ShotSolver
             var outsideWorkingSet = new ShotBalloonState[outsideBoard.Length];
             var outsideResult = ShotSimulator.Simulate(
                 outsideBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: outsideWorkingSet,
+                workingSet: outsideWorkingSet, rippleDamage: 1,
                 items: CreatePaintItemLayer(
                     spreadOffset: 0f, spreadLength: r, spreadBaseWidth: 4f * r, spreadBlobRadius: r,
                     lattice: outsideLattice));
@@ -1621,17 +1621,17 @@ namespace BalloonParty.Tests.ShotSolver
             var plainWorkingSet = new ShotBalloonState[plainBoard.Length];
             var plainResult = ShotSimulator.Simulate(
                 plainBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: plainWorkingSet);
+                workingSet: plainWorkingSet, rippleDamage: 1);
 
             var itemsNullWorkingSet = new ShotBalloonState[paintBoard.Length];
             var itemsNullResult = ShotSimulator.Simulate(
                 paintBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: itemsNullWorkingSet);
+                workingSet: itemsNullWorkingSet, rippleDamage: 1);
 
             var missingConfigWorkingSet = new ShotBalloonState[paintBoard.Length];
             var missingConfigResult = ShotSimulator.Simulate(
                 paintBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: missingConfigWorkingSet, items: CreateItemLayer());
+                workingSet: missingConfigWorkingSet, rippleDamage: 1, items: CreateItemLayer());
 
             AssertResultsMatch(plainResult, itemsNullResult);
             AssertResultsMatch(plainResult, missingConfigResult);
@@ -1712,7 +1712,7 @@ namespace BalloonParty.Tests.ShotSolver
             var grantingWorkingSet = new ShotBalloonState[grantingBoard.Length];
             var granted = ShotSimulator.Simulate(
                 grantingBoard, walls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: grantingWorkingSet,
+                workingSet: grantingWorkingSet, rippleDamage: 1,
                 items: CreatePaintItemLayer(spreadOffset: 0f, spreadLength: r, spreadBaseWidth: 4f * r, spreadBlobRadius: r),
                 rainbowColorId: GamePalette.RainbowColorId);
 
@@ -1728,7 +1728,7 @@ namespace BalloonParty.Tests.ShotSolver
             var controlWorkingSet = new ShotBalloonState[controlBoard.Length];
             var control = ShotSimulator.Simulate(
                 controlBoard, walls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: controlWorkingSet,
+                workingSet: controlWorkingSet, rippleDamage: 1,
                 items: CreatePaintItemLayer(spreadOffset: 0f, spreadLength: r, spreadBaseWidth: 4f * r, spreadBlobRadius: r),
                 rainbowColorId: GamePalette.RainbowColorId);
 
@@ -1758,7 +1758,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet, items: CreateSnipeItemLayer(speedBuffMultiplier: 1.5f));
+                workingSet: workingSet, rippleDamage: 1, items: CreateSnipeItemLayer(speedBuffMultiplier: 1.5f));
 
             Assert.AreEqual(
                 3, result.Pops,
@@ -1779,7 +1779,7 @@ namespace BalloonParty.Tests.ShotSolver
             var controlWorkingSet = new ShotBalloonState[controlBoard.Length];
             var control = ShotSimulator.Simulate(
                 controlBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: controlWorkingSet);
+                workingSet: controlWorkingSet, rippleDamage: 1);
 
             Assert.AreEqual(1, control.Pops, "without piercing, the deflector bounces the ray away — Blue is never reached");
             Assert.IsFalse(control.BoardCleared);
@@ -1820,7 +1820,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet, projectileSpeed: 1f, timestampsOut: timestamps,
+                workingSet: workingSet, rippleDamage: 1, projectileSpeed: 1f, timestampsOut: timestamps,
                 items: CreateSnipeItemLayer(speedBuffMultiplier: 2.0f));
 
             Assert.AreEqual(3, result.Pops);
@@ -1846,7 +1846,7 @@ namespace BalloonParty.Tests.ShotSolver
             var controlTimestamps = new List<float>();
             ShotSimulator.Simulate(
                 controlBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: controlWorkingSet, projectileSpeed: 1f, timestampsOut: controlTimestamps);
+                workingSet: controlWorkingSet, rippleDamage: 1, projectileSpeed: 1f, timestampsOut: controlTimestamps);
 
             Assert.AreEqual(
                 3.95f, controlTimestamps[3], 1e-4f,
@@ -1886,7 +1886,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.right, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet, items: CreateSnipeItemLayer(speedBuffMultiplier: 1.5f),
+                workingSet: workingSet, rippleDamage: 1, items: CreateSnipeItemLayer(speedBuffMultiplier: 1.5f),
                 allowedColors: new[] { "Red" });
 
             // Red(5*1) + rainbow anchors "Red"(1*2, +1 refund) + Blue buffed(10*3, no refund) + Green
@@ -1926,7 +1926,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             ShotSimulator.Simulate(
                 armedBoard, walls, Vector2.zero, Vector2.right, startingShields: 10, projectileContactRadius: 0f,
-                workingSet: armedWorkingSet, projectileSpeed: 1f, cruiseConfig: cruise, timestampsOut: armedTimestamps,
+                workingSet: armedWorkingSet, rippleDamage: 1, projectileSpeed: 1f, cruiseConfig: cruise, timestampsOut: armedTimestamps,
                 items: CreateSnipeItemLayer(speedBuffMultiplier: 1f));
 
             // [0]=origin, [1]=Snipe contact (t~0.05), [2..4]=wall bounces at constant +4s intervals.
@@ -1946,7 +1946,7 @@ namespace BalloonParty.Tests.ShotSolver
             var controlTimestamps = new List<float>();
             ShotSimulator.Simulate(
                 controlBoard, walls, Vector2.zero, Vector2.right, startingShields: 10,
-                projectileContactRadius: 0f, workingSet: controlWorkingSet, projectileSpeed: 1f, cruiseConfig: cruise,
+                projectileContactRadius: 0f, workingSet: controlWorkingSet, rippleDamage: 1, projectileSpeed: 1f, cruiseConfig: cruise,
                 timestampsOut: controlTimestamps);
 
             var controlFirstInterval = controlTimestamps[2] - controlTimestamps[1];
@@ -1976,17 +1976,17 @@ namespace BalloonParty.Tests.ShotSolver
             var plainWorkingSet = new ShotBalloonState[plainBoard.Length];
             var plainResult = ShotSimulator.Simulate(
                 plainBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: plainWorkingSet);
+                workingSet: plainWorkingSet, rippleDamage: 1);
 
             var itemsNullWorkingSet = new ShotBalloonState[snipeBoard.Length];
             var itemsNullResult = ShotSimulator.Simulate(
                 snipeBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: itemsNullWorkingSet);
+                workingSet: itemsNullWorkingSet, rippleDamage: 1);
 
             var missingConfigWorkingSet = new ShotBalloonState[snipeBoard.Length];
             var missingConfigResult = ShotSimulator.Simulate(
                 snipeBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: missingConfigWorkingSet, items: CreateItemLayer());
+                workingSet: missingConfigWorkingSet, rippleDamage: 1, items: CreateItemLayer());
 
             AssertResultsMatch(plainResult, itemsNullResult);
             AssertResultsMatch(plainResult, missingConfigResult);
@@ -2022,7 +2022,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet,
+                workingSet: workingSet, rippleDamage: 1,
                 items: CreateBombAndSnipeItemLayer(bombRadius: 0.5f, snipeSpeedBuffMultiplier: 1.5f));
 
             Assert.AreEqual(
@@ -2036,7 +2036,7 @@ namespace BalloonParty.Tests.ShotSolver
             var controlWorkingSet = new ShotBalloonState[board.Length];
             var control = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: controlWorkingSet);
+                workingSet: controlWorkingSet, rippleDamage: 1);
 
             Assert.AreEqual(
                 1, control.Pops, "without items, only the bomb host's own direct hit pops — no blast, no chain, no pierce");
@@ -2085,7 +2085,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, new Vector2(0.6f, -0.8f), startingShields: 10, projectileContactRadius: 0f,
-                workingSet: workingSet, projectileSpeed: 1f, cruiseConfig: cruise, timestampsOut: timestamps,
+                workingSet: workingSet, rippleDamage: 1, projectileSpeed: 1f, cruiseConfig: cruise, timestampsOut: timestamps,
                 items: CreateSnipeItemLayer(speedBuffMultiplier: 2.0f));
 
             Assert.AreEqual(4, result.Pops);
@@ -2103,7 +2103,7 @@ namespace BalloonParty.Tests.ShotSolver
             var controlTimestamps = new List<float>();
             ShotSimulator.Simulate(
                 board, walls, Vector2.zero, new Vector2(0.6f, -0.8f), startingShields: 10,
-                projectileContactRadius: 0f, workingSet: controlWorkingSet, projectileSpeed: 1f,
+                projectileContactRadius: 0f, workingSet: controlWorkingSet, rippleDamage: 1, projectileSpeed: 1f,
                 cruiseConfig: cruise, timestampsOut: controlTimestamps);
 
             for (var i = 0; i <= 5; i++)

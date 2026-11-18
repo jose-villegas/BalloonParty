@@ -27,7 +27,7 @@ nudge puts them closer to a neighbor bubble."
 | Backdrop | `Scenario/View/GroundView` | floor quad + grass blades + mist reveal; `GroundRevealPlanner` and `GroundRevealCurve` assume the non-sky side is `Ground` |
 | Ground-only content | `IContentPiece.RequiresGround`, `LevelGenerator` | bushes stay off sky levels |
 | Disturbance field | `Shared/Disturbance/DisturbanceFieldService` | global `_DisturbanceTex`: R = signed density (0.5 rest), GB = displacement (0.5 rest), held and spread over seconds |
-| Bubbles | `BalloonType.BubbleCluster`, `BubbleClusterModel`, `SoapBubbleClusterVariant`, shader `BalloonParty/Balloon/SoapBubbleCluster` | a balloon whose `HitsRemaining` (1–5) is its bubble count; the catalogue entry is `Withheld` until the merge exists |
+| Bubbles | `BalloonType.BubbleCluster`, `BubbleClusterModel`, `SoapBubbleClusterVariant`, shader `BalloonParty/Balloon/SoapBubbleCluster` | a balloon whose `HitsRemaining` (1–6; 1–5 when this was planned) is its bubble count; the catalogue entry is `Withheld` until the merge exists |
 | Bubbles drifting together | `BalanceBiasKind.Clump` | the balancer already prefers slots near another bubble |
 | Merge | `PLAN-FutureIdeas.md` §5.1 | design sketch only: no merge code exists yet |
 | Nudge | `Nudge/NudgeService` | a transient impulse (out and back) on `INudgeable` views: `Neighbor` (the six neighbours of a hit, away from it), `Deflect`, `Shockwave` (every actor, away from the origin) |
@@ -162,7 +162,8 @@ merged something, and merges every neighbouring pair where the larger still has 
 `BubbleMergeRule` is the pure rule, tested on its own.
 
 - The smaller cluster gives its bubbles to the larger (between equals, the slot order decides),
-  as many as fill the larger to 5 (`BubbleMergeMax` in the balloons configuration). That cap, not the
+  as many as fill the larger to 6 (`BubbleMergeMax` in the balloons configuration; 5 until the ripe
+  cluster, `PLAN-RipeBubbleCluster.md`). That cap, not the
   `HitsToPop` a cluster spawns with (3), is the limit, so a spawned cluster still has room. A giver
   left with none leaves the grid silently and slides into the receiver; one with bubbles left stays
   where it is, smaller: a 3 beside a 3 makes a 5 and a 1.

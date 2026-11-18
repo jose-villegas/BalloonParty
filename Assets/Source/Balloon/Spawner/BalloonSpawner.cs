@@ -409,7 +409,8 @@ namespace BalloonParty.Balloon.Spawner
             if (_waterBatch && model is BubbleClusterModel bubble)
             {
                 var bubbles = _pacing.BubbleRise.StartBubblesForLevel(_levelProgress.Level.Value);
-                bubble.SetBubbles(Mathf.Min(bubbles, _balloonsConfig.BubbleMergeMax));
+                // One below the cap, so a cluster only ripens through a merge on the board.
+                bubble.SetBubbles(Mathf.Min(bubbles, _balloonsConfig.BubbleMergeMax - 1));
             }
 
             if (onLeft == null)

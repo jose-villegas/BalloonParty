@@ -164,3 +164,11 @@ MonoBehaviour:
     Spacing: 0.4
     RadiusGrowth: 0
     StrengthFalloff: 0
+  - Sources: 16384
+    Radius: 1.6
+    Strength: 6
+    Duration: 0.2
+    Interval: 0
+    Spacing: 0
+    RadiusGrowth: 0
+    StrengthFalloff: 0

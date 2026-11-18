@@ -96,11 +96,13 @@ namespace BalloonParty.Solver
     /// plain scoring target and a durable static (Deflector/Gatekeeper) — durability, not this enum,
     /// decides whether a given hit deflects or pops (an int.MaxValue <see cref="ShotBalloonSnapshot.HitsRemaining" />
     /// deflects forever, exactly like the existing Unbreakable-target pattern). <see cref="Absorb" />
-    /// (Phase A's Absorber) ends the flight outright instead.</summary>
+    /// (Phase A's Absorber) ends the flight outright instead. <see cref="PassThrough" /> (the bubble cluster) lets
+    /// the shot fly on unbent through a hit it survives, and every hit on it scores the bubbles it held.</summary>
     internal enum ShotContactKind
     {
         Poppable,
-        Absorb
+        Absorb,
+        PassThrough
     }
 
     /// <summary>One board actor as the solver sees it — enough to reproduce pop/deflect/score rules
@@ -108,7 +110,8 @@ namespace BalloonParty.Solver
     /// a geometry/scoring core, a <see cref="ColorProfile" />, an optional <see cref="BalanceProfile" />
     /// (null ⇒ no dynamic stub backs this entry — see <see cref="ShotBoardDynamics" />'s null-<c>Actor</c>
     /// gating), a <see cref="ShotContactKind" />, and an optional <see cref="ItemProfile" /> (data-only
-    /// in this phase — the item layer reads it starting Phase C1).
+    /// in this phase — the item layer reads it starting Phase C1). A plain balloon may wear foam
+    /// (<see cref="Coat" />) and a bubble cluster may be <see cref="Ripe" />.
     /// Construct via the named factories, never the (private) field-order constructor directly — that is
     /// what keeps every caller's field mapping honest as the struct grows.</summary>
     internal readonly struct ShotBalloonSnapshot
@@ -134,6 +137,14 @@ namespace BalloonParty.Solver
         /// reward balloon is <c>IHasScoreColor</c>, so <c>ScoreController</c> skips it).</summary>
         public readonly ShotRewardKind Reward;
 
+        /// <summary>Layers of foam on a plain balloon (<c>ICoatable.Coat</c>): each takes an ordinary hit of its own,
+        /// which washes the shot and scores nothing.</summary>
+        public readonly int Coat;
+
+        /// <summary>A bubble cluster at the merge cap (<c>BubbleClusterModel.Ripe</c>): any damaging hit bursts it
+        /// whole and ripples into its neighbours.</summary>
+        public readonly bool Ripe;
+
         /// <summary>Passthrough so downstream reads stay tidy — null/empty means colourless, exactly as
         /// <see cref="ColorProfile.ColorId" /> does.</summary>
         public string ColorId => Color.ColorId;
@@ -141,7 +152,7 @@ namespace BalloonParty.Solver
         private ShotBalloonSnapshot(
             Vector2 position, float radius, int scoreValue, int hitsRemaining, ColorProfile color,
             BalanceProfile? balance, ShotContactKind contactKind, ItemProfile? item, Vector2Int? staticSlotIndex,
-            ShotRewardKind reward = ShotRewardKind.None)
+            ShotRewardKind reward = ShotRewardKind.None, int coat = 0, bool ripe = false)
         {
             Position = position;
             Radius = radius;
@@ -153,32 +164,46 @@ namespace BalloonParty.Solver
             Item = item;
             StaticSlotIndex = staticSlotIndex;
             Reward = reward;
+            Coat = coat;
+            Ripe = ripe;
         }
 
         /// <summary>A poppable/deflectable colour-scoring target — mirrors a live balloon with
         /// <c>IHasColor</c> (streak + colour adoption rules apply).</summary>
         public static ShotBalloonSnapshot ForColorTarget(
             Vector2 position, float radius, string colorId, int scoreValue, int hitsRemaining,
-            BalanceProfile? balance = null, ItemProfile? item = null)
+            BalanceProfile? balance = null, ItemProfile? item = null, int coat = 0)
         {
             return new ShotBalloonSnapshot(
                 position, radius, scoreValue, hitsRemaining, new ColorProfile(colorId, false, false), balance,
-                ShotContactKind.Poppable, item, null);
+                ShotContactKind.Poppable, item, null, coat: coat);
         }
 
         /// <summary>A colourless target scored via the flat/streak-breaking tough rule — mirrors
         /// <c>ToughBalloonModel</c> (durable), an Unbreakable (<c>hitsRemaining == int.MaxValue</c>,
         /// forever-deflecting, <paramref name="paysSourceColor" /> true — see <see cref="ColorProfile.PaysSourceColor" />'s
-        /// doc), or a soap-washing cluster (<paramref name="washesProjectileColor" /> — mirrors
-        /// <c>BubbleClusterModel</c>'s <c>IWashesProjectileColor</c>).</summary>
+        /// doc). A bubble cluster has its own factory, <see cref="ForBubbleClusterTarget" />. A plain balloon with no
+        /// colour lands here too, so it carries its <paramref name="coat" /> as a coloured one does.</summary>
         public static ShotBalloonSnapshot ForToughTarget(
             Vector2 position, float radius, int scoreValue, int hitsRemaining, BalanceProfile? balance = null,
-            bool washesProjectileColor = false, bool paysSourceColor = false)
+            bool washesProjectileColor = false, bool paysSourceColor = false, int coat = 0)
         {
             return new ShotBalloonSnapshot(
                 position, radius, scoreValue, hitsRemaining,
                 new ColorProfile(null, false, washesProjectileColor, paysSourceColor),
-                balance, ShotContactKind.Poppable, null, null);
+                balance, ShotContactKind.Poppable, null, null, coat: coat);
+        }
+
+        /// <summary>A bubble cluster: colourless, washes the shot's colour on any contact, loses a bubble to each ordinary
+        /// hit while the shot flies on, and scores the bubbles it held on every hit, breaking the streak. A
+        /// <paramref name="ripe" /> one bursts whole on any damaging hit and ripples into its neighbours. Mirrors
+        /// <c>BubbleClusterModel</c>.</summary>
+        public static ShotBalloonSnapshot ForBubbleClusterTarget(
+            Vector2 position, float radius, int bubbles, BalanceProfile? balance = null, bool ripe = false)
+        {
+            return new ShotBalloonSnapshot(
+                position, radius, bubbles, bubbles, new ColorProfile(null, false, true), balance,
+                ShotContactKind.PassThrough, null, null, ripe: ripe);
         }
 
         /// <summary>The golden reward balloon — see <see cref="ForPlatedTarget" />.</summary>
@@ -222,11 +247,11 @@ namespace BalloonParty.Solver
         /// colourless-deferred, or colour-anchored) — see <c>ShotSimulator.ResolvePopScore</c>.</summary>
         public static ShotBalloonSnapshot ForRainbowTarget(
             Vector2 position, float radius, string colorId, int scoreValue, int hitsRemaining,
-            BalanceProfile? balance = null, ItemProfile? item = null)
+            BalanceProfile? balance = null, ItemProfile? item = null, int coat = 0)
         {
             return new ShotBalloonSnapshot(
                 position, radius, scoreValue, hitsRemaining, new ColorProfile(colorId, true, false), balance,
-                ShotContactKind.Poppable, item, null);
+                ShotContactKind.Poppable, item, null, coat: coat);
         }
 
         /// <summary>A collision-only archetype with no score and no balance-grid presence — Phase A's
@@ -281,9 +306,14 @@ namespace BalloonParty.Solver
         public ShotRewardKind Reward;
         // Painted rainbow by this shot's own disco ball pop: mirrors ShotPaintLedger, for the one shot simulated.
         public bool OwnPaint;
+        public int Coat;
+        public bool Ripe;
         public ShotSimDynamicActor Actor;
 
         public bool Scoreless => Reward != ShotRewardKind.None;
+
+        /// <summary>Mirrors <c>BalloonModelExtensions.HitsToPop</c> under the coat: a ripe cluster bursts in one.</summary>
+        public int HitsUnderCoat => Ripe ? 1 : HitsRemaining;
 
         public ShotBalloonState(in ShotBalloonSnapshot snapshot)
         {
@@ -303,6 +333,8 @@ namespace BalloonParty.Solver
             IsStatic = snapshot.StaticSlotIndex.HasValue;
             Reward = snapshot.Reward;
             OwnPaint = false;
+            Coat = snapshot.Coat;
+            Ripe = snapshot.Ripe;
             Actor = null;
         }
     }

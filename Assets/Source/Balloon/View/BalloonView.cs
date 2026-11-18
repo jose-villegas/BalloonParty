@@ -87,6 +87,12 @@ namespace BalloonParty.Balloon.View
         private Material _originalBodyMaterial;
         private MaterialPropertyBlock _rainbowBlock;
 
+        // Created the first time this view's balloon wears foam; most balloons never do.
+        private FoamCoatOverlay _foamCoat;
+
+        // A first coat waits out of sight while the foam that brings it hops over (RipeBubbleBurstView).
+        private bool _coatHeld;
+
         // The child the sway ticker turns, set once this prefab's Animator is found to play the controller the
         // ticker's sway was baked from. Null leaves the Animator in charge: a variant with a controller of its
         // own, which animates more than a sway (tough, unbreakable, golden, disco, nuke).
@@ -124,6 +130,9 @@ namespace BalloonParty.Balloon.View
         internal ITransformCapture TransformCapture => _itemService?.TransformCapture;
         internal SpriteRenderer Knot => _knot;
         internal SpriteRenderer BakedShadow => _bakedShadow;
+
+        /// <summary>The sorting order the foam coat draws at: over everything the balloon owns.</summary>
+        internal int CoatSortingOrder => Model != null ? CoatOrder(Model.SlotIndex.Value) : 0;
 
         // The same component TransformCapture exposes, narrowed to its non-destructive read-only face —
         // the aim telegraph must be able to read a Laser's angle without CaptureSnapshot stopping its spin.
@@ -191,6 +200,8 @@ namespace BalloonParty.Balloon.View
             _itemService?.Unbind();
             SetBodyMaterial(_originalBodyMaterial);
             _paintDrip?.Stop();
+            _coatHeld = false;
+            HideCoat();
             Model = null;
             _hitVfxOverrides = null;
         }
@@ -257,6 +268,16 @@ namespace BalloonParty.Balloon.View
                 .Subscribe(ApplySortingOrder)
                 .AddTo(_bindDisposables);
 
+            // A pooled view may last have shown a coated balloon, or held one back.
+            _coatHeld = false;
+            HideCoat();
+            if (model is ICoatable coatable)
+            {
+                coatable.Coat
+                    .Subscribe(ShowCoat)
+                    .AddTo(_bindDisposables);
+            }
+
             if (_animator != null)
             {
                 model.IsStable
@@ -289,15 +310,68 @@ namespace BalloonParty.Balloon.View
             }
         }
 
-        /// <summary>Swells the popped balloon to the pulse's peak and shrinks it away, then calls
-        /// <paramref name="onDone"/> to hand it back to the pool. Its collider goes at once, so nothing hits it.</summary>
-        public void PlayPopPulse(PopPulse pulse, Action onDone)
+        /// <summary>
+        ///     Keeps the coat out of sight while the foam that brings it is on its way; <see cref="ReleaseCoat" /> shows
+        ///     it as the foam lands. Binding another balloon or despawning lets go.
+        /// </summary>
+        internal void HoldCoat()
+        {
+            _coatHeld = true;
+            HideCoat();
+        }
+
+        /// <summary>Shows the coat the balloon wears now, if it still wears one, after <see cref="HoldCoat" />.</summary>
+        internal void ReleaseCoat()
+        {
+            if (!_coatHeld)
+            {
+                return;
+            }
+
+            _coatHeld = false;
+            if (Model is ICoatable coatable)
+            {
+                ShowCoat(coatable.Coat.Value);
+            }
+        }
+
+        /// <summary>
+        ///     Lets a binding with a pop prelude (<see cref="IBalloonPopPrelude" />) play it on the balloon just popped,
+        ///     calling <paramref name="onDone" /> when the pop should show. False when none has one. Its collider goes
+        ///     at once, so nothing hits a balloon already out of play.
+        /// </summary>
+        internal bool TryPlayPopPrelude(Action onDone)
+        {
+            foreach (var binding in _viewBindings)
+            {
+                if (binding is IBalloonPopPrelude prelude && prelude.TryPlayPopPrelude(onDone))
+                {
+                    DisableContact();
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>Turns the collider off while the balloon's look stays on screen: it has left play, and nothing
+        /// should hit it. Spawning turns it back on.</summary>
+        internal void DisableContact()
         {
             if (_collider != null)
             {
                 _collider.enabled = false;
             }
+        }
 
+        /// <summary>Swells the popped balloon to the pulse's peak and shrinks it away, then calls
+        /// <paramref name="onDone"/> to hand it back to the pool. Its collider goes at once, so nothing hits it.</summary>
+        public void PlayPopPulse(PopPulse pulse, Action onDone)
+        {
+            DisableContact();
+
+            // A pop that never went through the balloon's own hit (a cheat, the stage tool) can leave a coat on.
+            HideCoat();
             _itemService?.Unbind();
             transform.DOKill();
             DOTween.Sequence()
@@ -321,6 +395,7 @@ namespace BalloonParty.Balloon.View
                 _collider.enabled = false;
             }
 
+            HideCoat();
             _itemService?.Unbind();
         }
 
@@ -507,6 +582,7 @@ namespace BalloonParty.Balloon.View
         private void ApplyItemDependentSorting(Vector2Int slotIndex)
         {
             ApplyAboveItemSorting(slotIndex);
+            ApplyFoamCoatSorting(slotIndex);
             ApplyPaintDripSorting(slotIndex);
         }
 
@@ -524,8 +600,8 @@ namespace BalloonParty.Balloon.View
             SortingHelper.ApplySortingOrder(_aboveItemRenderers, baseOrder + _spriteLayerRenderers.Length + itemCount);
         }
 
-        // The paint drip sits above everything the balloon owns — body, hosted item, and the above-item
-        // layer — so the splash always reads on top. Placed programmatically (not wired into
+        // The paint drip sits above everything the balloon owns — body, hosted item, the above-item layer and
+        // a foam coat — so the splash always reads on top. Placed programmatically (not wired into
         // _aboveItemRenderers) so a prefab without a drip overlay simply skips it.
         private void ApplyPaintDripSorting(Vector2Int slotIndex)
         {
@@ -537,7 +613,64 @@ namespace BalloonParty.Balloon.View
             var baseOrder = SortingHelper.SlotBaseSortingOrder(slotIndex, _config.SlotsSize, _baseSortingLayer);
             var itemCount = _itemService != null ? _itemService.ActiveItemSortingCount : 0;
             var aboveCount = _aboveItemRenderers?.Length ?? 0;
-            _paintDrip.ApplySortingOrder(baseOrder + _spriteLayerRenderers.Length + itemCount + aboveCount + 1);
+            _paintDrip.ApplySortingOrder(baseOrder + _spriteLayerRenderers.Length + itemCount + aboveCount + 2);
+        }
+
+        // The coat wraps the whole balloon, item included, so it sorts over everything the balloon owns, one below
+        // the paint drip.
+        private void ApplyFoamCoatSorting(Vector2Int slotIndex)
+        {
+            if (_foamCoat == null)
+            {
+                return;
+            }
+
+            _foamCoat.ApplySortingOrder(CoatOrder(slotIndex));
+        }
+
+        private int CoatOrder(Vector2Int slotIndex)
+        {
+            var baseOrder = SortingHelper.SlotBaseSortingOrder(slotIndex, _config.SlotsSize, _baseSortingLayer);
+            var itemCount = _itemService != null ? _itemService.ActiveItemSortingCount : 0;
+            var aboveCount = _aboveItemRenderers?.Length ?? 0;
+            return baseOrder + _spriteLayerRenderers.Length + itemCount + aboveCount + 1;
+        }
+
+        // A coat that drops while it shows was taken off by a hit, so it puffs away; bind, pop and despawn hide it
+        // outright (HideCoat).
+        private void ShowCoat(int layers)
+        {
+            if (layers <= 0)
+            {
+                if (_foamCoat != null)
+                {
+                    _foamCoat.PuffAndHide();
+                }
+
+                return;
+            }
+
+            if (_coatHeld)
+            {
+                return;
+            }
+
+            if (_foamCoat == null)
+            {
+                _foamCoat = FoamCoatOverlay.Create(transform, _bodyRenderer, _balloonsConfig.RipeBubble);
+                ApplyFoamCoatSorting(Model.SlotIndex.Value);
+            }
+
+            _foamCoat.Show();
+        }
+
+        // An explicit check, not ?.: the overlay is a UnityEngine.Object, and ?. would skip Unity's destroyed check.
+        private void HideCoat()
+        {
+            if (_foamCoat != null)
+            {
+                _foamCoat.Hide();
+            }
         }
 
         // Rainbow mode replaces the normal per-colour tint with the banded material — the tint would

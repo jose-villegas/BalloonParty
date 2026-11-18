@@ -215,6 +215,14 @@ namespace BalloonParty.Game.Score
                 return Math.Max(1, streak.CurrentStreak);
             }
 
+            // A ripe cluster's ripple lands the burst delay after the pop that set it off, while the shot
+            // has flown on: a break or a restart here would act on a streak the shot built since, and a cluster's
+            // breaksStreak would end it. So a ripple hit scores at the streak as it stands and leaves it alone.
+            if (flags.HasFlag(DamageFlags.Ripple))
+            {
+                return Math.Max(1, streak.CurrentStreak);
+            }
+
             // A colour-agnostic (rainbow-buffed) projectile keeps the streak climbing on any pop.
             // WildcardStreak is only ever set on the shot's own hits, never an item/AOE one, so this
             // branch already excludes bombs/lasers/lightning without needing its own DirectHit check.

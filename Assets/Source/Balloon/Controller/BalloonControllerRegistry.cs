@@ -112,6 +112,17 @@ namespace BalloonParty.Balloon.Controller
             return true;
         }
 
+        public bool TryLeave(IBalloonModel model, float lingerSeconds)
+        {
+            if (!TryResolve(model, out var controller))
+            {
+                return false;
+            }
+
+            controller.Leave(lingerSeconds);
+            return true;
+        }
+
         // Internal for direct test invocation.
         internal bool TryResolve(IBalloonModel model, out BalloonController controller)
         {

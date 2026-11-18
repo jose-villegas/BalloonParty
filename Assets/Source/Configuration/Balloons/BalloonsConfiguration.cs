@@ -72,12 +72,15 @@ namespace BalloonParty.Configuration.Balloons
         [SerializeField] private float _bubbleMergeSeconds = 0.18f;
 
         [Tooltip("Most bubbles a merge fills a cluster to, whatever HitsToPop it spawned with. The cluster " +
-                 "shader draws at most 5.")]
-        [Range(1, 5)]
-        [SerializeField] private int _bubbleMergeMax = 5;
+                 "shader draws at most 6: a full cluster is a ring with one bubble toward each neighbouring slot.")]
+        [Range(1, 6)]
+        [SerializeField] private int _bubbleMergeMax = 6;
 
         [Tooltip("How a merge looks: the bubbles hop across and the receiver wobbles as each lands.")]
         [SerializeField] private BubbleMergeCueSettings _bubbleMergeCue = new();
+
+        [Tooltip("A cluster at the merge cap ripens: any hit bursts it whole, and a fuse runs until it is spent.")]
+        [SerializeField] private RipeBubbleSettings _ripeBubble = new();
 
         [Header("Unbreakable Formations")]
         [SerializeField] private UnbreakableFormationSettings _unbreakableFormation = new();
@@ -126,6 +129,7 @@ namespace BalloonParty.Configuration.Balloons
         public float BubbleMergeSeconds => _bubbleMergeSeconds;
         public int BubbleMergeMax => _bubbleMergeMax;
         public IBubbleMergeCueSettings BubbleMergeCue => _bubbleMergeCue;
+        public IRipeBubbleSettings RipeBubble => _ripeBubble;
         public IUnbreakableFormationSettings UnbreakableFormation => _unbreakableFormation;
         public IToughSnakeSpringSettings ToughSnakeSprings => _toughSnakeSprings;
         public IFormationGlowSettings FormationGlow => _formationGlow;

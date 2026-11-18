@@ -57,7 +57,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet, allowedColors: TwoColors, rainbowColorId: GamePalette.RainbowColorId,
+                workingSet: workingSet, rippleDamage: 1, allowedColors: TwoColors, rainbowColorId: GamePalette.RainbowColorId,
                 items: CreateSnipeItemLayer());
 
             Assert.AreEqual(1, result.DiscoPops);
@@ -78,7 +78,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet, allowedColors: TwoColors, rainbowColorId: GamePalette.RainbowColorId,
+                workingSet: workingSet, rippleDamage: 1, allowedColors: TwoColors, rainbowColorId: GamePalette.RainbowColorId,
                 items: CreateSnipeItemLayer());
 
             // Two pops swap-removed the line's balloons, leaving the off-line Blue first in the working set.

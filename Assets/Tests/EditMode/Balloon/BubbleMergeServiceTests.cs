@@ -57,7 +57,8 @@ namespace BalloonParty.Tests.Balloon
             _countsAtPublish.Clear();
             _left = null;
             _right = null;
-            _service = new BubbleMergeService(_grid, registry, balloonsConfig, CaptureHits(), CaptureMerges());
+            _service = new BubbleMergeService(
+                _grid, registry, balloonsConfig, CaptureHits(), CaptureMerges());
             _service.Start();
         }
 
@@ -104,6 +105,24 @@ namespace BalloonParty.Tests.Balloon
 
             full.SetBubbles(4);
             _hitHandler.Handle(new ActorHitMessage(full, Vector3.zero, Vector3.up, HitOutcome.PassThrough));
+            _service.Tick();
+
+            Assert.AreEqual(5, full.HitsRemaining.Value);
+            Assert.AreEqual(2, giver.HitsRemaining.Value);
+        }
+
+        [Test]
+        public void AClusterLeavingTheBoard_LooksAgainOnTheNextFrame()
+        {
+            var full = Place(Left, 5);
+            var giver = Place(Right, 3);
+            var leaving = Place(new Vector2Int(3, 3), 1);
+            _service.Tick();
+
+            // A count changed with no hit, then a ripe cluster that handed its bubbles out leaves the board: the
+            // grid change alone says to look again.
+            full.SetBubbles(4);
+            _grid.Remove(leaving.SlotIndex.Value);
             _service.Tick();
 
             Assert.AreEqual(5, full.HitsRemaining.Value);

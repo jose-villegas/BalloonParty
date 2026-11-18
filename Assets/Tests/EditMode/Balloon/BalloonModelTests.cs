@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration.Palette;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Actor;
 using NUnit.Framework;
@@ -10,6 +11,9 @@ namespace BalloonParty.Tests.Balloon
     [TestFixture]
     public class BalloonModelTests
     {
+        private const string Red = "Red";
+        private const string Blue = "Blue";
+
         private BalloonModel _model;
 
         [SetUp]
@@ -202,6 +206,178 @@ namespace BalloonParty.Tests.Balloon
 
             Assert.AreEqual(1, results.FindAll(a => a.IsPrimary).Count);
             Assert.AreEqual("Red", results.Find(a => a.IsPrimary).ColorId);
+        }
+
+        [Test]
+        public void Coat_AnOrdinaryHit_TakesItOff_TheBalloonSurvives_AndScoresNothing()
+        {
+            var model = Coated(Red);
+
+            var outcome = model.EvaluateHit(new DamageContext(1, DamageFlags.DirectHit, Blue));
+
+            Assert.AreEqual(HitOutcome.PassThrough, outcome);
+            Assert.AreEqual(0, model.Coat.Value);
+            Assert.AreEqual(1, model.HitsRemaining.Value);
+            var results = new List<ScoreAttribution>();
+            model.ResolveScoreAttribution(new DamageContext(1, DamageFlags.DirectHit, Blue), null, results);
+            Assert.IsEmpty(results);
+        }
+
+        [Test]
+        public void Coat_APiercingHit_PopsTheBalloon_CoatAndAll()
+        {
+            var model = Coated(Red);
+
+            var outcome = model.EvaluateHit(new DamageContext(1, DamageFlags.Piercing | DamageFlags.DirectHit));
+
+            Assert.AreEqual(HitOutcome.Pop, outcome);
+            Assert.AreEqual(0, model.Coat.Value);
+            Assert.AreEqual(0, model.HitsRemaining.Value);
+        }
+
+        [Test]
+        public void Coat_ABeam_PopsTheBalloon()
+        {
+            var model = Coated(Red);
+
+            Assert.AreEqual(HitOutcome.Pop, model.EvaluateHit(new DamageContext(1, DamageFlags.Beam)));
+            Assert.AreEqual(0, model.Coat.Value);
+        }
+
+        // An item's blast on a neighbour: no DirectHit, one damage, not piercing.
+        [Test]
+        public void Coat_AnItemStyleHit_TakesItOff_TheBalloonSurvives()
+        {
+            var model = Coated(Red);
+
+            Assert.AreEqual(HitOutcome.PassThrough, model.EvaluateHit(new DamageContext(1)));
+            Assert.AreEqual(0, model.Coat.Value);
+            Assert.AreEqual(1, model.HitsRemaining.Value);
+        }
+
+        // A laser beam carries both flags.
+        [Test]
+        public void Coat_APiercingBeam_PopsTheBalloon()
+        {
+            var model = Coated(Red);
+
+            var outcome = model.EvaluateHit(new DamageContext(1, DamageFlags.Piercing | DamageFlags.Beam));
+
+            Assert.AreEqual(HitOutcome.Pop, outcome);
+            Assert.AreEqual(0, model.Coat.Value);
+        }
+
+        [Test]
+        public void Coat_ARippleHit_TakesItOff()
+        {
+            var model = Coated(Red);
+
+            Assert.AreEqual(HitOutcome.PassThrough, model.EvaluateHit(new DamageContext(1, DamageFlags.Ripple)));
+            Assert.AreEqual(0, model.Coat.Value);
+            Assert.AreEqual(1, model.HitsRemaining.Value);
+        }
+
+        [Test]
+        public void Coat_TheSecondOrdinaryHit_PopsTheBalloon()
+        {
+            var model = Coated(Red);
+            model.EvaluateHit(new DamageContext(1, DamageFlags.DirectHit));
+
+            Assert.AreEqual(HitOutcome.Pop, model.EvaluateHit(new DamageContext(1, DamageFlags.DirectHit)));
+            var results = new List<ScoreAttribution>();
+            model.ResolveScoreAttribution(new DamageContext(1, DamageFlags.DirectHit), null, results);
+            Assert.AreEqual(1, results.Count);
+            Assert.AreEqual(Red, results[0].ColorId);
+        }
+
+        [Test]
+        public void Coat_AZeroDamageProbe_ChangesNothing()
+        {
+            var model = Coated(Red);
+
+            model.EvaluateHit(new DamageContext(0));
+
+            Assert.AreEqual(1, model.Coat.Value);
+            Assert.AreEqual(1, model.HitsRemaining.Value);
+        }
+
+        [Test]
+        public void TryCoat_StopsAtTheMax()
+        {
+            var model = new BalloonModel();
+
+            Assert.IsTrue(model.TryCoat(2));
+            Assert.IsTrue(model.TryCoat(2));
+            Assert.IsFalse(model.TryCoat(2));
+            Assert.AreEqual(2, model.Coat.Value);
+        }
+
+        [Test]
+        public void Coat_TwoLayers_TakeTwoOrdinaryHits_ThenTheThirdPops()
+        {
+            var model = new BalloonModel();
+            model.TryCoat(2);
+            model.TryCoat(2);
+
+            Assert.AreEqual(HitOutcome.PassThrough, model.EvaluateHit(new DamageContext(1)));
+            Assert.AreEqual(HitOutcome.PassThrough, model.EvaluateHit(new DamageContext(1)));
+            Assert.AreEqual(HitOutcome.Pop, model.EvaluateHit(new DamageContext(1)));
+        }
+
+        [Test]
+        public void Uncoated_ADurableBalloonsSurvivingHit_IsUnchanged()
+        {
+            var model = new BalloonModel(new BalloonModelConfig(hitsToPop: 2));
+
+            Assert.AreEqual(HitOutcome.PassThrough, model.EvaluateHit(new DamageContext(1)));
+            Assert.AreEqual(1, model.HitsRemaining.Value);
+            Assert.AreEqual(HitOutcome.Pop, model.EvaluateHit(new DamageContext(1)));
+        }
+
+        [Test]
+        public void HitsToPop_CountsTheCoat_ButIsToughDoesNot()
+        {
+            var model = new BalloonModel();
+            Assert.AreEqual(1, model.HitsToPop());
+            Assert.IsFalse(model.IsTough());
+
+            model.TryCoat(1);
+
+            Assert.AreEqual(2, model.HitsToPop());
+            Assert.IsFalse(model.IsTough(), "a piercing shot pops a coated balloon on contact, it does not plow it");
+        }
+
+        [Test]
+        public void IsTough_ADurablePlainBalloon_StillIs_CoatedOrNot()
+        {
+            var model = new BalloonModel(new BalloonModelConfig(hitsToPop: 2));
+            Assert.IsTrue(model.IsTough());
+
+            model.TryCoat(1);
+
+            Assert.AreEqual(3, model.HitsToPop());
+            Assert.IsTrue(model.IsTough());
+        }
+
+        [Test]
+        public void WashesProjectileColor_OnlyWhileCoated()
+        {
+            var model = new BalloonModel();
+            Assert.IsFalse(model.WashesProjectileColor());
+
+            model.TryCoat(1);
+            Assert.IsTrue(model.WashesProjectileColor());
+
+            model.EvaluateHit(new DamageContext(1));
+            Assert.IsFalse(model.WashesProjectileColor());
+        }
+
+        private static BalloonModel Coated(string color)
+        {
+            var model = new BalloonModel();
+            model.Color.Value = color;
+            Assert.IsTrue(model.TryCoat(1));
+            return model;
         }
     }
 }

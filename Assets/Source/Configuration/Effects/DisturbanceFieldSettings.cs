@@ -21,6 +21,7 @@ namespace BalloonParty.Configuration.Effects
         UnbreakableBurst = 1 << 11,
         PierceDischarge = 1 << 12,
         SnipeSkyLight = 1 << 13,
+        BubbleRipple = 1 << 14,
     }
 
     [Serializable]
@@ -129,6 +130,7 @@ namespace BalloonParty.Configuration.Effects
             new StampProfile { Sources = StampSource.ToughWarning, Radius = 0.4f, Strength = 0.3f, Duration = 0f, Interval = 1f },
             new StampProfile { Sources = StampSource.RainbowColor, Radius = 0.7f, Strength = 0f, Duration = 0f, Interval = 0.6f },
             new StampProfile { Sources = StampSource.UnbreakableBurst, Radius = 0.9f, Strength = 1f, Duration = 0f, Interval = 2f },
+            new StampProfile { Sources = StampSource.BubbleRipple, Radius = 1.6f, Strength = 6f, Duration = 0.2f },
         };
 
         public int TexelsPerUnit => _texelsPerUnit;

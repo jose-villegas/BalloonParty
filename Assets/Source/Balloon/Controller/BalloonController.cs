@@ -40,10 +40,12 @@ namespace BalloonParty.Balloon.Controller
         private readonly IGamePalette _palette;
         private readonly BalloonPopPresenter _popPresenter;
         private readonly PopPulse _popPulse;
+        private readonly Action _presentPop;
 
         private Action _onReturned;
         private IDisposable _itemActivatedSubscription;
         private bool _popped;
+        private Vector3 _popDirection;
 
         public BalloonController(
             IWriteableBalloonModel model,
@@ -70,6 +72,8 @@ namespace BalloonParty.Balloon.Controller
             _smokeField = context.SmokeField;
             _palette = context.Palette;
             _popPresenter = context.PopPresenter;
+            // Cached, so a pop allocates no callback for a prelude it may not have.
+            _presentPop = PresentPop;
         }
 
         public void Start()
@@ -170,18 +174,7 @@ namespace BalloonParty.Balloon.Controller
         // its type count free), while the view flows into the survivor and then goes back to the pool.
         internal void AbsorbInto(Vector3 target, float seconds)
         {
-            _popped = true;
-            LifecycleHelper.DisposeAndClear(ref _itemActivatedSubscription);
-            _registry.Unregister(_model);
-
-            var slot = _model.SlotIndex.Value;
-            if (ReferenceEquals(_grid.At(slot), _model))
-            {
-                _grid.Remove(slot);
-            }
-
-            _onReturned?.Invoke();
-            _onReturned = null;
+            LeavePlay();
 
             var view = _view.transform;
             var restScale = view.localScale;
@@ -193,6 +186,25 @@ namespace BalloonParty.Balloon.Controller
                 view.localScale = restScale;
                 _poolManager.Return(_poolKey, _view);
             });
+        }
+
+        // Leaves the board as AbsorbInto does, out of play at once, but stays where it is: its look plays out for
+        // lingerSeconds (a ripe cluster handing its bubbles out), then the view goes back to the pool. The wait is
+        // a tween on the view's transform, so a view taken back to the pool sooner drops it. It runs on game time,
+        // as the look it waits for does: on real time a pause or slow motion would take the view away mid-look.
+        internal void Leave(float lingerSeconds)
+        {
+            LeavePlay();
+            _view.DisableContact();
+            if (lingerSeconds <= 0f)
+            {
+                _poolManager.Return(_poolKey, _view);
+                return;
+            }
+
+            DOVirtual.DelayedCall(lingerSeconds, () => _poolManager.Return(_poolKey, _view), false)
+                .SetTarget(_view.transform)
+                .SetLink(_view.gameObject);
         }
 
         internal void ReturnToPool()
@@ -235,6 +247,26 @@ namespace BalloonParty.Balloon.Controller
                 NudgeType.Deflect));
         }
 
+        // A pop prelude's end: the pop the player sees, the balloon already out of play.
+        private void PresentPop()
+        {
+            _popPresenter.Present(_model, _view.transform.position, _view, hitDirection: _popDirection);
+            EndPop();
+        }
+
+        // Only its look lingers while it shrinks, or straight back to the pool.
+        private void EndPop()
+        {
+            if (_popPulse is { Enabled: true })
+            {
+                _view.PlayPopPulse(_popPulse, () => _poolManager.Return(_poolKey, _view));
+            }
+            else
+            {
+                _poolManager.Return(_poolKey, _view);
+            }
+        }
+
         private void OnItemActivated(ItemActivatedMessage msg)
         {
             if (msg.Balloon != _model)
@@ -248,29 +280,52 @@ namespace BalloonParty.Balloon.Controller
             _poolManager.Return(_poolKey, _view);
         }
 
+        // Out of play at once, with no score, no pop and nothing published: off the grid and the registry, its
+        // type count freed.
+        private void LeavePlay()
+        {
+            _popped = true;
+            LifecycleHelper.DisposeAndClear(ref _itemActivatedSubscription);
+            _registry.Unregister(_model);
+
+            var slot = _model.SlotIndex.Value;
+            if (ReferenceEquals(_grid.At(slot), _model))
+            {
+                _grid.Remove(slot);
+            }
+
+            _onReturned?.Invoke();
+            _onReturned = null;
+        }
+
         private void Pop(Vector3 hitDirection)
         {
             _popped = true;
 
-            _popPresenter.Present(_model, _view.transform.position, _view, hitDirection: hitDirection);
-            _grid.Remove(_model.SlotIndex.Value);
-
             if (_model is not IHasItemSlot itemSlot || itemSlot.Item.Value == ItemType.None)
             {
+                // A view with a prelude (a ripe cluster folding into one bubble) plays it first and shows the pop
+                // as it ends; out of play already, only its look lingers meanwhile.
+                _popDirection = hitDirection;
+                var prelude = _view.TryPlayPopPrelude(_presentPop);
+                if (!prelude)
+                {
+                    _popPresenter.Present(_model, _view.transform.position, _view, hitDirection: hitDirection);
+                }
+
+                _grid.Remove(_model.SlotIndex.Value);
                 _registry.Unregister(_model);
                 _onReturned?.Invoke();
-                if (_popPulse is { Enabled: true })
+                if (!prelude)
                 {
-                    // Out of play already (grid, registry, type count): only its look lingers while it shrinks.
-                    _view.PlayPopPulse(_popPulse, () => _poolManager.Return(_poolKey, _view));
-                }
-                else
-                {
-                    _poolManager.Return(_poolKey, _view);
+                    EndPop();
                 }
             }
             else
             {
+                _popPresenter.Present(_model, _view.transform.position, _view, hitDirection: hitDirection);
+                _grid.Remove(_model.SlotIndex.Value);
+
                 var transformCapture = _view.TransformCapture;
                 if (transformCapture != null)
                 {

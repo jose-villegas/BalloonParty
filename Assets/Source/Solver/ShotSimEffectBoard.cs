@@ -96,7 +96,7 @@ namespace BalloonParty.Solver
                 // Mirrors `model is IResistsPaint` (@ref plan_shot_solver_accuracy Phase C5, verified
                 // 2026-07-25): only ToughBalloonModel/UnbreakableBalloonModel implement it, and both
                 // gather as a colourless ForToughTarget entry with WashesProjectileColor false.
-                // BubbleClusterModel is ALSO a colourless ForToughTarget entry (soap) but does NOT
+                // BubbleClusterModel is ALSO a colourless entry (ForBubbleClusterTarget) but does NOT
                 // implement IResistsPaint — WashesProjectileColor true is exactly its own marker, so a
                 // colourless, non-washing entry resists paint and a colourless washing one doesn't, with
                 // no new snapshot field needed. Failure mode: a FUTURE colourless model that is neither

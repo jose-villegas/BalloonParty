@@ -80,7 +80,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: workingSet, allowedColors: new[] { "Red" });
+                workingSet: workingSet, rippleDamage: 1, allowedColors: new[] { "Red" });
 
             var expectedScore = (2 * expectedMultipliers[0]) + (2 * expectedMultipliers[1]) + (2 * expectedMultipliers[2]);
             Assert.AreEqual(expectedScore, result.RawScore);
@@ -107,7 +107,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: workingSet, allowedColors: new[] { "Red" });
+                workingSet: workingSet, rippleDamage: 1, allowedColors: new[] { "Red" });
 
             Assert.AreEqual(1, expectedFirst, "sanity: the first rainbow pop scores x1");
             Assert.AreEqual(2, expectedSecond, "sanity: the second climbs to x2");
@@ -144,7 +144,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: workingSet, rainbowColorId: GamePalette.RainbowColorId,
+                workingSet: workingSet, rippleDamage: 1, rainbowColorId: GamePalette.RainbowColorId,
                 seed: ShotFlightSeed.WithRainbowBuff(untilWall: true));
 
             // multiplier climbs 1 (Blue), 2 (tough — NOT reset), 3 (Green) — RawScore reflects it.
@@ -169,7 +169,7 @@ namespace BalloonParty.Tests.ShotSolver
             var unfilteredWorkingSet = new ShotBalloonState[unfilteredBoard.Length];
             var unfiltered = ShotSimulator.Simulate(
                 unfilteredBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1,
-                projectileContactRadius: 0f, workingSet: unfilteredWorkingSet, allowedColors: allowedColors);
+                projectileContactRadius: 0f, workingSet: unfilteredWorkingSet, rippleDamage: 1, allowedColors: allowedColors);
 
             Assert.AreEqual(10 * allowedColors.Length, unfiltered.RawScore, "an unfiltered rainbow pays every allowed colour");
 
@@ -180,7 +180,7 @@ namespace BalloonParty.Tests.ShotSolver
             var filteredWorkingSet = new ShotBalloonState[filteredBoard.Length];
             var filtered = ShotSimulator.Simulate(
                 filteredBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1,
-                projectileContactRadius: 0f, workingSet: filteredWorkingSet, allowedColors: allowedColors,
+                projectileContactRadius: 0f, workingSet: filteredWorkingSet, rippleDamage: 1, allowedColors: allowedColors,
                 targetColorId: "Purple");
 
             Assert.AreEqual(10, filtered.RawScore, "a filter narrows payColors to 1 but never zeroes a rainbow's count");
@@ -209,7 +209,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: workingSet, allowedColors: new[] { "Red", "Blue" });
+                workingSet: workingSet, rippleDamage: 1, allowedColors: new[] { "Red", "Blue" });
 
             // Blue(1*1) + rainbow paying both allowed colours at the extended streak(10*2*2) +
             // Blue continuing the SAME streak(100*3) — 1 + 40 + 300. A corrupted ProjectileColor
@@ -239,7 +239,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: workingSet, allowedColors: new[] { "Red" });
+                workingSet: workingSet, rippleDamage: 1, allowedColors: new[] { "Red" });
 
             // Red(2*1) + washer's tough pop(5, ALSO clears the streak) + the colourless shot's rainbow
             // starts a fresh streak(3*1) + Blue takes the carried streak(7*2).
@@ -271,7 +271,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: workingSet, allowedColors: new[] { "Red" });
+                workingSet: workingSet, rippleDamage: 1, allowedColors: new[] { "Red" });
 
             // green(2*1) + rainbow climbing the kept streak(3*2) + washer's tough pop(7)
             Assert.AreEqual(2 + 6 + 7, result.RawScore);
@@ -299,7 +299,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.right, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: workingSet, seed: ShotFlightSeed.WithRainbowBuff(untilWall: true));
+                workingSet: workingSet, rippleDamage: 1, seed: ShotFlightSeed.WithRainbowBuff(untilWall: true));
 
             Assert.AreEqual((2 * 1) + (3 * 1), result.RawScore, "the buff ended at the wall — the colour change resets the streak");
             Assert.AreEqual(2, result.Pops);
@@ -327,7 +327,7 @@ namespace BalloonParty.Tests.ShotSolver
             var refundingWorkingSet = new ShotBalloonState[refundingBoard.Length];
             var refunding = ShotSimulator.Simulate(
                 refundingBoard, walls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: refundingWorkingSet,
+                workingSet: refundingWorkingSet, rippleDamage: 1,
                 seed: ShotFlightSeed.WithRainbowBuff(
                     untilWall: true, projectileColor: "Red", streakColor: "Red", streakCount: 1));
 
@@ -350,7 +350,7 @@ namespace BalloonParty.Tests.ShotSolver
             var nonRefundingWorkingSet = new ShotBalloonState[nonRefundingBoard.Length];
             var nonRefunding = ShotSimulator.Simulate(
                 nonRefundingBoard, walls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: nonRefundingWorkingSet,
+                workingSet: nonRefundingWorkingSet, rippleDamage: 1,
                 seed: ShotFlightSeed.WithRainbowBuff(untilWall: true, projectileColor: "Red", streakColor: "Red"));
 
             Assert.IsTrue(nonRefunding.Died, "without an already-established streak of two, no refund covers the bounce");
@@ -421,7 +421,7 @@ namespace BalloonParty.Tests.ShotSolver
             var paysSourceColorWorkingSet = new ShotBalloonState[paysSourceColorBoard.Length];
             var paysSourceColorResult = ShotSimulator.Simulate(
                 paysSourceColorBoard, walls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: paysSourceColorWorkingSet);
+                workingSet: paysSourceColorWorkingSet, rippleDamage: 1);
 
             Assert.AreEqual(
                 (2 * 1) + (7 * 2) + (3 * 3), paysSourceColorResult.RawScore,
@@ -457,7 +457,7 @@ namespace BalloonParty.Tests.ShotSolver
             var ordinaryWorkingSet = new ShotBalloonState[ordinaryBoard.Length];
             var ordinaryResult = ShotSimulator.Simulate(
                 ordinaryBoard, walls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: ordinaryWorkingSet);
+                workingSet: ordinaryWorkingSet, rippleDamage: 1);
 
             Assert.AreEqual(
                 paysSourceColorResult.RawScore, ordinaryResult.RawScore, "identical scoring — only the refund differs");

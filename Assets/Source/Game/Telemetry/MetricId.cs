@@ -37,6 +37,12 @@ namespace BalloonParty.Game.Telemetry
         BoardCleared,
         LevelsCompleted,
         RetriesUsed,
-        TotalScore
+        TotalScore,
+        ClustersRipened,
+        RippleBursts,
+        RippleNeighboursHit,
+        FusesRunOut,
+        CoatsApplied,
+        CoatsRemoved
     }
 }

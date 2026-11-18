@@ -33,6 +33,12 @@ namespace BalloonParty.Slots.Capabilities
         /// <summary>The shot popped a balloon it painted rainbow itself (the disco ball's wave,
         /// <c>ShotPaintLedger</c>): the pop scores at the streak as it stands and leaves it unchanged, so a
         /// shot can't climb on paint it laid.</summary>
-        OwnPaint = 1 << 6
+        OwnPaint = 1 << 6,
+
+        /// <summary>A ripe bubble cluster's ripple struck the actor (<c>RipeBubbleBurst</c>). It lands after the pop
+        /// that set it off, so it scores at the shot's streak as it stands and never changes it, not even to break it
+        /// (<c>ScoreController.RecordStreakMultiplier</c>). It carries no <see cref="DirectHit" />, so it earns no
+        /// pop-spawn either. Audio and telemetry can tell it apart by this flag.</summary>
+        Ripple = 1 << 7
     }
 }

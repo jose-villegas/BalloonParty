@@ -54,7 +54,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet);
+                workingSet: workingSet, rippleDamage: 1);
 
             Assert.AreEqual(3, result.Pops);
             Assert.AreEqual(1 + 10 * 2, result.RawScore, "the heart pays nothing and the streak climbs through it");
@@ -76,7 +76,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: workingSet, items: CreateBombItemLayer());
+                workingSet: workingSet, rippleDamage: 1, items: CreateBombItemLayer());
 
             Assert.AreEqual(2, result.Pops, "the host, then the heart beside it");
             Assert.AreEqual(1, result.HeartPops, "an item's pop counts too");

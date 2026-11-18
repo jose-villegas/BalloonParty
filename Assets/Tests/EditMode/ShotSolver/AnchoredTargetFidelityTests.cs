@@ -73,7 +73,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             return ShotSimulator.Simulate(
                 board, new Vector4(1000f, 1000f, -1000f, -1000f), new Vector2(1.5f, -10f), Vector2.up,
-                startingShields: 1, projectileContactRadius: 0f, workingSet: workingSet, projectileSpeed: 1f,
+                startingShields: 1, projectileContactRadius: 0f, workingSet: workingSet, rippleDamage: 1, projectileSpeed: 1f,
                 dynamics: dynamics);
         }
 

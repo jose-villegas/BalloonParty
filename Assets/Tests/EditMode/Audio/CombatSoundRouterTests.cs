@@ -39,6 +39,9 @@ namespace BalloonParty.Tests.Audio
         private IMessageHandler<SpeedTapMintedMessage> _speedTapHandler;
         private IMessageHandler<ProjectileDestroyedMessage> _destroyedHandler;
         private IMessageHandler<StreakChangedMessage> _streakHandler;
+        private IMessageHandler<BubbleRipenedMessage> _ripenedHandler;
+        private IMessageHandler<RipeFuseBeatMessage> _fuseBeatHandler;
+        private IMessageHandler<RipeBubbleBurstMessage> _ripeBurstHandler;
 
         private IMessageHandler<PierceDischargedMessage> _pierceHandler;
 
@@ -70,6 +73,9 @@ namespace BalloonParty.Tests.Audio
             var wallHitSubscriber = CaptureSubscriber<WallHitMessage>(wallHitFanout.Add);
             var speedTapSubscriber = CaptureSubscriber<SpeedTapMintedMessage>(h => _speedTapHandler = h);
             var streakChangedSubscriber = CaptureSubscriber<StreakChangedMessage>(h => _streakHandler = h);
+            var ripenedSubscriber = CaptureSubscriber<BubbleRipenedMessage>(h => _ripenedHandler = h);
+            var fuseBeatSubscriber = CaptureSubscriber<RipeFuseBeatMessage>(h => _fuseBeatHandler = h);
+            var ripeBurstSubscriber = CaptureSubscriber<RipeBubbleBurstMessage>(h => _ripeBurstHandler = h);
 
             var flightConfig = Substitute.For<IProjectileFlightConfig>();
             flightConfig.ShieldToneThreshold.Returns(5);
@@ -92,7 +98,8 @@ namespace BalloonParty.Tests.Audio
                 _player, hitSubscriber, firedSubscriber, loadedSubscriber, readySubscriber,
                 cruiseStartedSubscriber, cruiseEndedSubscriber, doomedSubscriber, destroyedSubscriber,
                 pierceSubscriber, shieldGainedSubscriber, shieldLostSubscriber, wallHitSubscriber,
-                speedTapSubscriber, streakChangedSubscriber, flightConfig, activePierce, flightStats, _registry, palette);
+                speedTapSubscriber, streakChangedSubscriber, ripenedSubscriber, fuseBeatSubscriber, ripeBurstSubscriber,
+                flightConfig, activePierce, flightStats, _registry, palette);
             router.Start();
 
             // Each of these mirrors its real publisher, which records into flight stats immediately
@@ -348,6 +355,104 @@ namespace BalloonParty.Tests.Audio
             _hitHandler.Handle(new ActorHitMessage(null, Vector3.zero, Vector3.zero, HitOutcome.PassThrough));
 
             _player.Received(1).Play(GameSoundId.BalloonResist, Vector3.zero);
+        }
+
+        [Test]
+        public void OnActorHit_ACoatTakenOff_PlaysTheCoatOffPop_NotTheResist()
+        {
+            var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
+            balloon.TryCoat(1);
+            var hit = ActorHitMessage.From(balloon, Vector3.one, Vector3.zero,
+                new DamageContext(1, DamageFlags.Normal, "", _ball));
+
+            _hitHandler.Handle(hit);
+
+            Assert.AreEqual(HitOutcome.PassThrough, hit.Outcome);
+            _player.Received(1).Play(GameSoundId.BalloonPop, Vector3.one, 0, 5, 0.5f);
+            _player.DidNotReceive().Play(GameSoundId.BalloonResist, Arg.Any<Vector3?>(), Arg.Any<int?>(),
+                Arg.Any<int>(), Arg.Any<float>());
+        }
+
+        [Test]
+        public void OnActorHit_AHarmlessPassThroughOnACoatableBalloon_StillPlaysTheResist()
+        {
+            var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
+            balloon.TryCoat(1);
+
+            _hitHandler.Handle(ActorHitMessage.From(balloon, Vector3.zero, Vector3.zero,
+                new DamageContext(0, DamageFlags.Normal, "", _ball)));
+
+            _player.Received(1).Play(GameSoundId.BalloonResist, Vector3.zero);
+            Assert.AreEqual(1, balloon.Coat.Value);
+        }
+
+        [Test]
+        public void OnActorHit_RipplePops_SoundAtTheRampWithoutClimbingIt()
+        {
+            var root = BlueRoot();
+
+            Pop("Blue", _ball);
+            Pop("Blue", _ball, DamageFlags.Ripple);
+            Pop("Blue", _ball, DamageFlags.Ripple);
+            Pop("Blue", _ball);
+
+            _player.Received(1).Play(GameSoundId.BalloonPop, Vector3.zero, null, root, 1f);
+            _player.Received(3).Play(GameSoundId.BalloonPop, Vector3.zero, null, root + 2, 1f);
+        }
+
+        [Test]
+        public void ARipeClustersCues_EachPlayOnce_OffTheAmbientKey()
+        {
+            var at = new Vector3(2f, 3f, 0f);
+            var slot = new Vector2Int(1, 1);
+
+            _ripenedHandler.Handle(new BubbleRipenedMessage(slot, at));
+            _fuseBeatHandler.Handle(new RipeFuseBeatMessage(slot, at, fast: true));
+            _ripeBurstHandler.Handle(new RipeBubbleBurstMessage(RipeBurstKind.Ripple, slot, at, 0b101));
+            _ripeBurstHandler.Handle(new RipeBubbleBurstMessage(RipeBurstKind.Foam, slot, at, 0));
+
+            _player.Received(1).Play(GameSoundId.BalloonPop, at, 0, 12, 0.6f);
+            _player.Received(1).Play(GameSoundId.DiscoWaveTick, at);
+            _player.Received(1).Play(GameSoundId.BalloonPop, at, 0, -5, 1.5f);
+            _player.Received(1).Play(GameSoundId.BalloonPop, at, 0, -12, 0.8f);
+        }
+
+        [Test]
+        public void ARipeClusterPopped_PlaysTheSoftFold_NotItsPop_TheBurstFollowsLater()
+        {
+            var palette = Substitute.For<IGamePalette>();
+            palette.Colors.Returns(new List<PaletteEntry>());
+            var cluster = new BubbleClusterModel(new BalloonModelConfig(hitsToPop: 3), palette);
+            cluster.SetBubbles(6);
+            cluster.Ripen();
+            var at = new Vector3(1f, 2f, 0f);
+
+            _hitHandler.Handle(new ActorHitMessage(cluster, at, Vector3.up, HitOutcome.Pop));
+
+            _player.Received(1).Play(GameSoundId.BalloonPop, at, 0, 7, 0.5f);
+            _player.ReceivedWithAnyArgs(1).Play(default, default);
+        }
+
+        [Test]
+        public void AnUnripeClusterPopped_PlaysItsOwnPop()
+        {
+            var palette = Substitute.For<IGamePalette>();
+            palette.Colors.Returns(new List<PaletteEntry>());
+            var cluster = new BubbleClusterModel(new BalloonModelConfig(hitsToPop: 3), palette);
+            var at = new Vector3(1f, 2f, 0f);
+
+            _hitHandler.Handle(new ActorHitMessage(cluster, at, Vector3.up, HitOutcome.Pop));
+
+            _player.DidNotReceive().Play(GameSoundId.BalloonPop, at, 0, 7, 0.5f);
+            _player.ReceivedWithAnyArgs(1).Play(default, default);
+        }
+
+        [Test]
+        public void ASlowFuseBeat_IsSeenNotHeard()
+        {
+            _fuseBeatHandler.Handle(new RipeFuseBeatMessage(new Vector2Int(1, 1), Vector3.zero, fast: false));
+
+            _player.DidNotReceive().Play(GameSoundId.DiscoWaveTick, Arg.Any<Vector3>());
         }
 
         [Test]
@@ -825,13 +930,13 @@ namespace BalloonParty.Tests.Audio
         }
 
         // A plain colour pop credited to the given ball, as the hit pipeline would stamp it.
-        private void Pop(string color, IProjectileModel ball)
+        private void Pop(string color, IProjectileModel ball, DamageFlags flags = DamageFlags.Normal)
         {
             var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
             balloon.Color.Value = color;
             _hitHandler.Handle(new ActorHitMessage(
                 balloon, Vector3.zero, Vector3.zero, HitOutcome.Pop,
-                new DamageContext(1, DamageFlags.Normal, "", ball)));
+                new DamageContext(1, flags, "", ball)));
         }
 
         private static ISubscriber<T> CaptureSubscriber<T>(Action<IMessageHandler<T>> capture)

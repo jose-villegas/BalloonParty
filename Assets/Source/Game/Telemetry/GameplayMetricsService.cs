@@ -9,6 +9,7 @@ using BalloonParty.Game.Run;
 using BalloonParty.Projectile;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Diagnostics;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pause;
@@ -57,6 +58,8 @@ namespace BalloonParty.Game.Telemetry
         private readonly ISubscriber<LevelUpAbandonedMessage> _levelUpAbandonedSubscriber;
         private readonly ISubscriber<LevelTransitionCompletedMessage> _transitionCompletedSubscriber;
         private readonly ISubscriber<GameOverMessage> _gameOverSubscriber;
+        private readonly ISubscriber<BubbleRipenedMessage> _ripenedSubscriber;
+        private readonly ISubscriber<RipeBubbleBurstMessage> _ripeBurstSubscriber;
 
         private readonly ITelemetrySink _sink;
         private readonly SessionTelemetryContext _sessionContext;
@@ -155,6 +158,8 @@ namespace BalloonParty.Game.Telemetry
             ISubscriber<LevelUpAbandonedMessage> levelUpAbandonedSubscriber,
             ISubscriber<LevelTransitionCompletedMessage> transitionCompletedSubscriber,
             ISubscriber<GameOverMessage> gameOverSubscriber,
+            ISubscriber<BubbleRipenedMessage> ripenedSubscriber,
+            ISubscriber<RipeBubbleBurstMessage> ripeBurstSubscriber,
             ITelemetrySink sink,
             SessionTelemetryContext sessionContext,
             IProjectileRegistry projectiles,
@@ -187,6 +192,8 @@ namespace BalloonParty.Game.Telemetry
             _levelUpAbandonedSubscriber = levelUpAbandonedSubscriber;
             _transitionCompletedSubscriber = transitionCompletedSubscriber;
             _gameOverSubscriber = gameOverSubscriber;
+            _ripenedSubscriber = ripenedSubscriber;
+            _ripeBurstSubscriber = ripeBurstSubscriber;
             _sink = sink;
             _sessionContext = sessionContext;
             _projectiles = projectiles;
@@ -250,6 +257,8 @@ namespace BalloonParty.Game.Telemetry
             _levelUpAbandonedSubscriber.Subscribe(OnCeremonyLeft).AddTo(_subscriptions);
             _transitionCompletedSubscriber.Subscribe(OnLevelTransitionCompleted).AddTo(_subscriptions);
             _gameOverSubscriber.Subscribe(OnGameOver).AddTo(_subscriptions);
+            _ripenedSubscriber.Subscribe(OnClusterRipened).AddTo(_subscriptions);
+            _ripeBurstSubscriber.Subscribe(OnRipeBurst).AddTo(_subscriptions);
 
             _navigation.Current.Subscribe(OnNavigationChanged).AddTo(_subscriptions);
 
@@ -481,6 +490,14 @@ namespace BalloonParty.Game.Telemetry
                 return;
             }
 
+            // A coat hit passes through like an absorb, but it is the foam's doing, not the balloon's: counted
+            // apart so absorbs stay what the balloons themselves soak up.
+            if (message.TookCoat())
+            {
+                _levelMetrics.Increment(MetricId.CoatsRemoved);
+                return;
+            }
+
             // The one outcome family where two values share a metric, hence a mask rather than the
             // repo's usual == comparison.
             if ((message.Outcome & (HitOutcome.Absorb | HitOutcome.PassThrough)) != 0)
@@ -654,6 +671,40 @@ namespace BalloonParty.Game.Telemetry
             if (message.Balloon is IHasItemSlot slot)
             {
                 _levelMetrics.IncrementAxis(MetricId.ItemsActivated, MetricAxis.ItemType, (int)slot.Item.Value);
+            }
+        }
+
+        private void OnClusterRipened(BubbleRipenedMessage message)
+        {
+            if (_state == LevelState.Ended)
+            {
+                return;
+            }
+
+            _levelDirty = true;
+
+            _levelMetrics.Increment(MetricId.ClustersRipened);
+        }
+
+        // A ripple's neighbours are the hits that landed; the foam's are the coats it put on.
+        private void OnRipeBurst(RipeBubbleBurstMessage message)
+        {
+            if (_state == LevelState.Ended)
+            {
+                return;
+            }
+
+            _levelDirty = true;
+
+            if (message.Kind == RipeBurstKind.Ripple)
+            {
+                _levelMetrics.Increment(MetricId.RippleBursts);
+                _levelMetrics.Add(MetricId.RippleNeighboursHit, message.Reached);
+            }
+            else
+            {
+                _levelMetrics.Increment(MetricId.FusesRunOut);
+                _levelMetrics.Add(MetricId.CoatsApplied, message.Reached);
             }
         }
 

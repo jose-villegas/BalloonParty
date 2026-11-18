@@ -66,6 +66,8 @@ namespace BalloonParty.Tests.Game
         internal IMessageHandler<LevelUpAbandonedMessage> LevelUpAbandoned;
         internal IMessageHandler<LevelTransitionCompletedMessage> TransitionCompleted;
         internal IMessageHandler<GameOverMessage> GameOver;
+        internal IMessageHandler<BubbleRipenedMessage> ClusterRipened;
+        internal IMessageHandler<RipeBubbleBurstMessage> RipeBurst;
 
         // The single time seam (the plan forbids a test-only Advance hook): tests bump this between
         // handler invocations and every scope's clocks move with it.
@@ -126,6 +128,8 @@ namespace BalloonParty.Tests.Game
                 Capture<LevelUpAbandonedMessage>(h => LevelUpAbandoned = h),
                 Capture<LevelTransitionCompletedMessage>(h => TransitionCompleted = h),
                 Capture<GameOverMessage>(h => GameOver = h),
+                Capture<BubbleRipenedMessage>(h => ClusterRipened = h),
+                Capture<RipeBubbleBurstMessage>(h => RipeBurst = h),
                 Wired,
                 new SessionTelemetryContext(),
                 projectiles,

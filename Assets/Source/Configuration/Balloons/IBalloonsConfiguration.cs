@@ -57,6 +57,10 @@ namespace BalloonParty.Configuration.Balloons
         /// <summary>How a merge looks: the bubbles hopping across and the receiver taking them in.</summary>
         IBubbleMergeCueSettings BubbleMergeCue { get; }
 
+        /// <summary>What a cluster at <see cref="BubbleMergeMax" /> does: it ripens, bursts whole on any hit, and is
+        /// spent when its fuse runs out.</summary>
+        IRipeBubbleSettings RipeBubble { get; }
+
         IUnbreakableFormationSettings UnbreakableFormation { get; }
 
         IToughSnakeSpringSettings ToughSnakeSprings { get; }

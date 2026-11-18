@@ -57,13 +57,16 @@ namespace BalloonParty.Solver
         /// a ball armed in the thrower plans as the lance it is. <c>default</c> for a plain ball.</summary>
         public readonly ShotFlightSeed LoadedSeed;
 
+        /// <summary>The hit a ripe cluster's ripple deals each neighbour (<c>IRipeBubbleSettings.RippleDamage</c>).</summary>
+        public readonly int RippleDamage;
+
         public ShotSolveContext(
             IReadOnlyList<ShotBalloonSnapshot> board, Vector4 wallLimitsClockwise, Vector2 throwerPivot,
             Vector3 spawnLocalOffset, int startingShields, bool streakGrantsShields,
             float projectileContactRadius,
             float projectileSpeed, ShotCruiseConfig cruiseConfig, ShotBoardDynamics dynamics,
             float nudgeAmplitude, IReadOnlyList<string> allowedColors, string rainbowColorId, ShotItemLayer items,
-            in ShotFlightSeed loadedSeed = default)
+            int rippleDamage, in ShotFlightSeed loadedSeed = default)
         {
             Board = board;
             WallLimitsClockwise = wallLimitsClockwise;
@@ -80,6 +83,7 @@ namespace BalloonParty.Solver
             RainbowColorId = rainbowColorId;
             Items = items;
             LoadedSeed = loadedSeed;
+            RippleDamage = rippleDamage;
         }
     }
 
@@ -138,7 +142,15 @@ namespace BalloonParty.Solver
                 levelParams.Current.AllowedColors,
                 GamePalette.RainbowColorId,
                 items,
+                RippleDamageOf(balloonsConfig),
                 SeedFor(loaded));
+        }
+
+        /// <summary>The hit a ripe cluster's ripple deals each neighbour, as the game's <c>RipeBubbleBurst</c> reads it.
+        /// No fallback: a configuration without the ripe bubble block is a broken one, not a ripple of 1.</summary>
+        internal static int RippleDamageOf(IBalloonsConfiguration balloonsConfig)
+        {
+            return balloonsConfig.RipeBubble.RippleDamage;
         }
 
         internal static ShotSimulationResult SimulateAt(
@@ -153,7 +165,7 @@ namespace BalloonParty.Solver
                 cruiseConfig: context.CruiseConfig, dynamics: context.Dynamics, timestampsOut: timesOut,
                 targetColorId: targetColorId, radiusBias: radiusBias, allowedColors: context.AllowedColors,
                 rainbowColorId: context.RainbowColorId, seed: context.LoadedSeed, items: context.Items,
-                streakGrantsShields: context.StreakGrantsShields);
+                streakGrantsShields: context.StreakGrantsShields, rippleDamage: context.RippleDamage);
         }
 
         /// <summary>
@@ -251,7 +263,7 @@ namespace BalloonParty.Solver
         // IHasDurability (EvaluateHit never mutates HitsRemaining) yet still DEFLECT the live shot,
         // so they enter as never-popping deflect geometry — int.MaxValue durability keeps the sim's
         // HitsRemaining > 1 branch permanently deflecting (deflects score nothing, matching the game).
-        private static bool TryBuildTargetSnapshot(
+        internal static bool TryBuildTargetSnapshot(
             SlotGrid grid, IBalloonsConfiguration balloonsConfig, IGamePalette palette, Vector2Int index,
             IWriteableSlotActor actor, out ShotBalloonSnapshot snapshot)
         {
@@ -289,7 +301,13 @@ namespace BalloonParty.Solver
             }
 
             var colorId = actor is IHasColor colorable ? colorable.Color.Value : null;
+
+            // The marker, not WashesProjectileColor(): a coat washes too, but it comes off with the first hit, so the
+            // simulation decides the wash at each contact from the marker and Coat: soap washes, and so does a coat
+            // under a hit that is not piercing. The marker alone also tells the effect board a cluster from a
+            // paint-resisting tough.
             var washesProjectileColor = actor is IWashesProjectileColor;
+            var coat = actor is ICoatable coatable ? coatable.Coat.Value : 0;
 
             // Unbreakable scatters its score across palette colors and breaks the streak (same as
             // ToughBalloonModel). The solver approximates this via ResolveToughPop (flat score, streak
@@ -299,6 +317,13 @@ namespace BalloonParty.Solver
             var balance = BuildTargetBalance(balloonsConfig, index, actor);
             var item = BuildItemProfile(actor, view);
 
+            if (actor is BubbleClusterModel cluster)
+            {
+                snapshot = ShotBalloonSnapshot.ForBubbleClusterTarget(
+                    position, radius, hitsRemaining, balance, cluster.Ripe.Value);
+                return true;
+            }
+
             // A rainbow balloon's colour IS a real (non-empty) IHasColor value — the reserved
             // GamePalette.RainbowColorId marker — so it must be classified BEFORE the colored/tough
             // branch below, or it silently mis-scores as an ordinary green target (the latent bug
@@ -306,18 +331,18 @@ namespace BalloonParty.Solver
             if (!string.IsNullOrEmpty(colorId) && palette.IsRainbow(colorId))
             {
                 snapshot = ShotBalloonSnapshot.ForRainbowTarget(
-                    position, radius, colorId, scored.ScoreValue, hitsRemaining, balance, item);
+                    position, radius, colorId, scored.ScoreValue, hitsRemaining, balance, item, coat);
             }
             else if (string.IsNullOrEmpty(colorId))
             {
                 snapshot = ShotBalloonSnapshot.ForToughTarget(
                     position, radius, scored.ScoreValue, hitsRemaining, balance, washesProjectileColor,
-                    paysSourceColor);
+                    paysSourceColor, coat);
             }
             else
             {
                 snapshot = ShotBalloonSnapshot.ForColorTarget(
-                    position, radius, colorId, scored.ScoreValue, hitsRemaining, balance, item);
+                    position, radius, colorId, scored.ScoreValue, hitsRemaining, balance, item, coat);
             }
 
             return true;

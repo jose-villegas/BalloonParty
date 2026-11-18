@@ -54,16 +54,19 @@ namespace BalloonParty.Item
             _cts.Dispose();
         }
 
-        private void OnActorHit(ActorHitMessage msg)
+        /// <summary>The handler for the item this hit releases, or null when it releases none. Only a pop releases
+        /// an item: a coated carrier survives an ordinary hit (it loses the coat), and the item must stay with it
+        /// until the hit that pops it.</summary>
+        internal IBalloonItem HandlerReleasedBy(ActorHitMessage msg)
         {
-            if (msg.Actor is not IBalloonModel balloon)
+            if ((msg.Outcome & HitOutcome.Pop) == 0 || msg.Actor is not IBalloonModel balloon)
             {
-                return;
+                return null;
             }
 
             if (balloon is not IHasItemSlot itemSlot || itemSlot.Item.Value == ItemType.None)
             {
-                return;
+                return null;
             }
 
             if (!_handlerMap.TryGetValue(itemSlot.Item.Value, out var handler))
@@ -71,11 +74,23 @@ namespace BalloonParty.Item
                 Log.Error("ItemActivator",
                     $"OnActorHit: no handler registered for item type " +
                     $"\"{itemSlot.Item.Value}\" — this is a configuration bug.");
+                return null;
+            }
+
+            return handler;
+        }
+
+        private void OnActorHit(ActorHitMessage msg)
+        {
+            var handler = HandlerReleasedBy(msg);
+            if (handler == null)
+            {
                 return;
             }
 
+            var balloon = (IBalloonModel)msg.Actor;
             var context = new ItemActivationContext(balloon, msg.WorldPosition, msg.ProjectileDirection, msg.Context);
-            Log.Info("Item", $"{itemSlot.Item.Value} activated at ({msg.WorldPosition.x:F1}, {msg.WorldPosition.y:F1})");
+            Log.Info("Item", $"{handler.Type} activated at ({msg.WorldPosition.x:F1}, {msg.WorldPosition.y:F1})");
             ActivateAsync(handler, context).Forget();
         }
 

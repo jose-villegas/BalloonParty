@@ -35,7 +35,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: workingSet);
+                workingSet: workingSet, rippleDamage: 1);
 
             Assert.IsTrue(result.Absorbed, "the absorber ends the flight");
             Assert.IsFalse(result.Died, "Absorbed is distinct from Died");
@@ -69,7 +69,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: workingSet);
+                workingSet: workingSet, rippleDamage: 1);
 
             Assert.IsTrue(result.Absorbed);
             Assert.AreEqual(1, result.Pops, "only the green before the absorber counts");
@@ -103,7 +103,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, new Vector2(1f, 0.1f), startingShields: 10, projectileContactRadius: 0f,
-                workingSet: workingSet, cruiseConfig: cruiseConfig, timestampsOut: timestampsWithCruise);
+                workingSet: workingSet, rippleDamage: 1, cruiseConfig: cruiseConfig, timestampsOut: timestampsWithCruise);
 
             Assert.IsTrue(result.Absorbed, "the absorber ends the flight even while cruising");
             Assert.AreEqual(0, result.RawScore);
@@ -117,7 +117,7 @@ namespace BalloonParty.Tests.ShotSolver
             var timestampsWithoutCruise = new List<float>();
             ShotSimulator.Simulate(
                 board, walls, Vector2.zero, new Vector2(1f, 0.1f), startingShields: 10, projectileContactRadius: 0f,
-                workingSet: baselineWorkingSet, timestampsOut: timestampsWithoutCruise);
+                workingSet: baselineWorkingSet, rippleDamage: 1, timestampsOut: timestampsWithoutCruise);
 
             Assert.Less(
                 timestampsWithCruise[^1], timestampsWithoutCruise[^1],
@@ -141,7 +141,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: workingSet);
+                workingSet: workingSet, rippleDamage: 1);
 
             Assert.IsTrue(result.Died, "the deflector never gives, so bounces eventually outrun the shield budget");
             Assert.AreEqual(0, result.Pops);
@@ -168,7 +168,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: workingSet);
+                workingSet: workingSet, rippleDamage: 1);
 
             Assert.AreEqual(1 + 2 + 3, result.RawScore, "the gatekeeper's pop doesn't reset or skip the running streak");
             Assert.AreEqual(4, result.Pops, "2 greens + the gatekeeper's final hit + the trailing green");
@@ -254,7 +254,7 @@ namespace BalloonParty.Tests.ShotSolver
             // without the ray ever doubling back over the filler column.
             var result = ShotSimulator.Simulate(
                 board, new Vector4(1000f, 4f, -1000f, -1000f), Vector2.zero, Vector2.right, startingShields: 0,
-                projectileContactRadius: 0f, workingSet: workingSet, dynamics: dynamics);
+                projectileContactRadius: 0f, workingSet: workingSet, rippleDamage: 1, dynamics: dynamics);
 
             Assert.AreEqual(1, result.Pops, "only the gatekeeper sits on the ray's line");
             Assert.AreEqual(
@@ -289,7 +289,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: workingSet, dynamics: dynamics);
+                workingSet: workingSet, rippleDamage: 1, dynamics: dynamics);
 
             Assert.AreEqual(
                 0, dynamics.TargetActors[1].NudgeImpulses.Count,
@@ -329,7 +329,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: workingSet, dynamics: dynamics);
+                workingSet: workingSet, rippleDamage: 1, dynamics: dynamics);
 
             Assert.Greater(
                 dynamics.TargetActors[1].NudgeImpulses.Count, 0,

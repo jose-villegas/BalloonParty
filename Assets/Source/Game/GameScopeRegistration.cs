@@ -145,6 +145,9 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<NukeBreatherMessage>(options);
             builder.RegisterMessageBroker<ClearShotsInFlightMessage>(options);
             builder.RegisterMessageBroker<BubbleMergedMessage>(options);
+            builder.RegisterMessageBroker<BubbleRipenedMessage>(options);
+            builder.RegisterMessageBroker<RipeBubbleBurstMessage>(options);
+            builder.RegisterMessageBroker<RipeFuseBeatMessage>(options);
             builder.RegisterMessageBroker<UpgradeCardHeldMessage>(options);
             builder.RegisterMessageBroker<GameOverDismissedMessage>(options);
             builder.RegisterMessageBroker<LevelTransitionCompletedMessage>(options);
@@ -261,9 +264,13 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<BalloonBalancer>().AsSelf().As<IRunResettable>();
             builder.RegisterEntryPoint<NudgeService>();
             builder.RegisterEntryPoint<BubbleMergeService>();
+            builder.Register<RipeBubbleBurst>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<RipeBubbleService>().As<IRunResettable>();
             builder.RegisterComponentOnNewGameObject<BubbleMergeView>(Lifetime.Singleton, "BubbleMerge");
-            // Nothing depends on the view: it only listens, so build it with the scope.
+            // Nothing depends on these views: they only listen, so build them with the scope.
             builder.RegisterBuildCallback(resolver => resolver.Resolve<BubbleMergeView>());
+            builder.RegisterComponentOnNewGameObject<RipeBubbleBurstView>(Lifetime.Singleton, "RipeBubbleBurst");
+            builder.RegisterBuildCallback(resolver => resolver.Resolve<RipeBubbleBurstView>());
             builder.RegisterEntryPoint<UnbreakableFormationService>().AsSelf().As<IRunResettable>()
                 .As<IFormationReinforcements>().As<IToughSnakeBody>();
             builder.RegisterEntryPoint<NukeOdds>().As<INukeOdds>().As<IRunResettable>();

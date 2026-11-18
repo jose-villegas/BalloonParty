@@ -492,6 +492,105 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
+        public void Resolve_CoatedBalloon_WashesTheShot_StealsNothing_AndTheBalloonSurvivesUncoated()
+        {
+            var balloon = CoatedBalloon("Red");
+            _projectile.ColorName.Value = "Blue";
+
+            var result = _resolver.Resolve(_projectile, balloon, Vector3.zero);
+
+            Assert.IsTrue(string.IsNullOrEmpty(_projectile.ColorName.Value), "the coat washes the shot");
+            Assert.AreEqual(ProjectileHitVisual.Recolored, result);
+            Assert.AreEqual(0, balloon.Coat.Value);
+            Assert.AreEqual(1, balloon.HitsRemaining.Value);
+            _hitDispatcher.Received(1).Dispatch(Arg.Is<ActorHitMessage>(m =>
+                m.Actor == balloon && m.Outcome == HitOutcome.PassThrough));
+            Assert.AreEqual(0, _projectile.Flight.SegmentPopCount);
+            Assert.IsFalse(_projectile.Flight.SegmentSweepValid, "a coated balloon takes two hits: no clean sweep");
+        }
+
+        [Test]
+        public void Resolve_CoatedBalloon_TheNextOrdinaryHitPopsIt_AndStealsItsColour()
+        {
+            var balloon = CoatedBalloon("Red");
+            _projectile.ColorName.Value = "Blue";
+            _resolver.Resolve(_projectile, balloon, Vector3.zero);
+            _projectile.LastHitBalloon = null;
+
+            _resolver.Resolve(_projectile, balloon, Vector3.zero);
+
+            Assert.AreEqual("Red", _projectile.ColorName.Value);
+            _hitDispatcher.Received(1).Dispatch(Arg.Is<ActorHitMessage>(m =>
+                m.Actor == balloon && m.Outcome == HitOutcome.Pop));
+        }
+
+        [Test]
+        public void Resolve_PiercingShot_PopsACoatedBalloonOnContact_AndStealsItsColour()
+        {
+            _projectile.IsPiercing.Value = true;
+            var balloon = CoatedBalloon("Red");
+            _projectile.ColorName.Value = "Blue";
+
+            _resolver.Resolve(_projectile, balloon, Vector3.zero);
+
+            Assert.AreEqual(0, _projectile.Flight.PendingPierceHits.Count, "popped on contact, not plowed");
+            _hitDispatcher.Received(1).Dispatch(Arg.Is<ActorHitMessage>(m =>
+                m.Actor == balloon && m.Outcome == HitOutcome.Pop));
+            Assert.AreEqual(0, balloon.Coat.Value);
+            Assert.AreEqual("Red", _projectile.ColorName.Value, "the coat went with the balloon and washed nothing");
+            Assert.IsTrue(_projectile.Flight.SegmentSweepValid, "a pierce pops it in one contact");
+        }
+
+        [Test]
+        public void Resolve_CoatedRainbow_TheCoatHitWashesTheShot_AndCarriesNoStreak()
+        {
+            var balloon = CoatedBalloon(GamePalette.RainbowColorId);
+            _projectile.ColorName.Value = "Blue";
+
+            _resolver.Resolve(_projectile, balloon, Vector3.zero);
+
+            Assert.IsTrue(string.IsNullOrEmpty(_projectile.ColorName.Value), "the coat washes even a rainbow's shot");
+            _hitDispatcher.Received(1).Dispatch(Arg.Is<ActorHitMessage>(m =>
+                m.Actor == balloon && m.Outcome == HitOutcome.PassThrough
+                && (m.Context.Flags & (DamageFlags.CarryStreak | DamageFlags.OwnPaint)) == 0));
+            Assert.AreEqual(GamePalette.RainbowColorId, balloon.Color.Value);
+            Assert.AreEqual(0, _projectile.ShieldsRemaining.Value, "no pop, no streak shield");
+        }
+
+        [Test]
+        public void Resolve_RipeCluster_BurstsOnContact_AndWashesTheShot()
+        {
+            var cluster = new BubbleClusterModel(new BalloonModelConfig(hitsToPop: 3), Substitute.For<IGamePalette>());
+            cluster.SetBubbles(5);
+            cluster.Ripen();
+            _projectile.ColorName.Value = "Red";
+
+            var result = _resolver.Resolve(_projectile, cluster, Vector3.zero);
+
+            Assert.IsTrue(string.IsNullOrEmpty(_projectile.ColorName.Value));
+            Assert.AreEqual(ProjectileHitVisual.Recolored, result);
+            _hitDispatcher.Received(1).Dispatch(Arg.Is<ActorHitMessage>(m =>
+                m.Actor == cluster && m.Outcome == HitOutcome.Pop));
+        }
+
+        [Test]
+        public void Resolve_PiercingShot_BurstsARipeClusterOnContact_NotPlowed_AndIsWashed()
+        {
+            _projectile.IsPiercing.Value = true;
+            var cluster = new BubbleClusterModel(new BalloonModelConfig(hitsToPop: 3), Substitute.For<IGamePalette>());
+            cluster.SetBubbles(5);
+            cluster.Ripen();
+            _projectile.ColorName.Value = "Red";
+
+            _resolver.Resolve(_projectile, cluster, Vector3.zero);
+
+            Assert.AreEqual(0, _projectile.Flight.PendingPierceHits.Count);
+            Assert.IsTrue(string.IsNullOrEmpty(_projectile.ColorName.Value));
+            _hitDispatcher.Received(1).Dispatch(Arg.Is<ActorHitMessage>(m =>
+                m.Actor == cluster && m.Outcome == HitOutcome.Pop));
+        }
+
+        [Test]
         public void Resolve_PopRainbowBalloon_DoesNotStealColour()
         {
             var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
@@ -650,6 +749,14 @@ namespace BalloonParty.Tests.Projectile
             _resolver.Resolve(_projectile, hit, Vector3.zero);
 
             Assert.AreEqual("Blue", neighbour.Color.Value);
+        }
+
+        private static BalloonModel CoatedBalloon(string color)
+        {
+            var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
+            balloon.Color.Value = color;
+            balloon.TryCoat(1);
+            return balloon;
         }
 
         private ProjectileBuff ApplyRainbowBuff()

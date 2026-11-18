@@ -77,7 +77,7 @@ namespace BalloonParty.Tests.ShotSolver
         {
             return ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: new ShotBalloonState[board.Length], seed: seed);
+                workingSet: new ShotBalloonState[board.Length], rippleDamage: 1, seed: seed);
         }
 
         // As SnipeItemHandler.ArmLance leaves it: piercing, with the speed (and a rainbow host's) buff riding it.

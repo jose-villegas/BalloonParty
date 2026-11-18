@@ -47,7 +47,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: new ShotBalloonState[board.Length]);
+                workingSet: new ShotBalloonState[board.Length], rippleDamage: 1);
 
             Assert.AreEqual(0, result.Pops);
             Assert.AreEqual(0, result.NukePops);
@@ -65,7 +65,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: new ShotBalloonState[board.Length]);
+                workingSet: new ShotBalloonState[board.Length], rippleDamage: 1);
 
             Assert.AreEqual(0, result.Pops, "arming is no pop");
             Assert.AreEqual(1, result.NukePops);
@@ -79,7 +79,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: new ShotBalloonState[board.Length]);
+                workingSet: new ShotBalloonState[board.Length], rippleDamage: 1);
 
             Assert.AreEqual(0, result.Pops);
             Assert.AreEqual(1, result.NukePops);
@@ -101,7 +101,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.up, startingShields: 2, projectileContactRadius: 0f,
-                workingSet: new ShotBalloonState[board.Length]);
+                workingSet: new ShotBalloonState[board.Length], rippleDamage: 1);
 
             Assert.AreEqual(0, result.Pops);
             Assert.AreEqual(1, result.NukePops);
@@ -121,7 +121,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: new ShotBalloonState[board.Length], items: CreateSnipeItemLayer());
+                workingSet: new ShotBalloonState[board.Length], rippleDamage: 1, items: CreateSnipeItemLayer());
 
             Assert.AreEqual(2, result.Pops, "the host and the Red behind the nuke");
             Assert.Greater(result.RawScore, 1, "the Red behind it scored");
@@ -144,7 +144,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: new ShotBalloonState[board.Length]);
+                workingSet: new ShotBalloonState[board.Length], rippleDamage: 1);
 
             Assert.AreEqual(0, result.RawScore);
             Assert.AreEqual(0, result.Pops);

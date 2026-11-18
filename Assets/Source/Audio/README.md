@@ -24,7 +24,7 @@ Unity audio only (`AudioSource` + `AudioMixer`), no middleware.
 | `AudioPoolKeys` | The `PoolManager` key string for the voice pool |
 | `SfxVoicePoolBootstrap` | `IStartable` — registers and pre-warms the `AudioSourceVoice` pool before any router can play a sound |
 | `View/AudioSourceVoice` | **View** — the only `MonoBehaviour` in this feature, and the only type that touches `AudioSource` directly. Wraps one `AudioSource`; pooled; schedules its own real-time return |
-| `Routing/CombatSoundRouter` | Hits (the nuke's deflect, `BalloonDeflectNuke`, steps a semitone lower for each dent through the durability branch; its pop is `BalloonPopNuke`), shots, reload (on `ThrowerReadyMessage`), cruise loop (one handle per ball, stopped when that ball's cruise ends or the registry retires it), doomed warning, pierce, shield gained/lost |
+| `Routing/CombatSoundRouter` | Hits (the nuke's deflect, `BalloonDeflectNuke`, steps a semitone lower for each dent through the durability branch; its pop is `BalloonPopNuke`), shots, reload (on `ThrowerReadyMessage`), cruise loop (one handle per ball, stopped when that ball's cruise ends or the registry retires it), doomed warning, pierce, shield gained/lost. The ripe bubble cluster's cues are all the plain `BalloonPop`, pitched and scaled, with a melodic streak of 0 so none moves the ambient key: ripening an octave up and quiet (`BubbleRipenedMessage`), the hit on a ripe cluster a fifth up at half volume in place of its usual pop, as its view starts folding into one bubble; the player's burst a fourth down and loud when that bubble pops and the ripple goes out, `BurstSeconds` later, and foam an octave down and soft as the fuse runs out (both `RipeBubbleBurstMessage`), and a coat taken off a light pop a fourth up. A coat hit (`ActorHitMessageExtensions.TookCoat`: a damaging hit that passed through a coatable balloon) plays that instead of the resist any other pass-through or absorb plays. Each fast throb at the end of a fuse plays `DiscoWaveTick` (`RipeFuseBeatMessage`) |
 | `Routing/ProgressionSoundRouter` | Streak, score chime (the level-complete pop is pitched by the latest ball's colour, via `IProjectileRegistry.ShotOrCurrent`), level-up (+ fill, dismiss), level transition, board clear, game-over (+ dismiss) |
 | `Routing/ItemSoundRouter` | Per-item activation, overflow heart, the Sharpshooter sky light's gust when a ball loads piercing |
 | `Routing/DangerSoundRouter` | Starts/stops the `DangerWarn` loop as `IDangerLevel` crosses `DangerLevelThreshold` |
@@ -257,6 +257,10 @@ anything else stays on the generic `BalloonPop`. Only a pop that stays on `Ballo
 has a colour reads and bumps the colour dictionary; every pop that resolved to a dedicated type
 id instead bumps its own type counter and never touches the colour dictionary at all. Colour and
 type aren't two axes tracked side by side, they're a fork, and only one branch fires per pop.
+
+A ripple's pops (`DamageFlags.Ripple`) sound at the colour counter as it stands but do not bump it: the
+cluster the shot burst set them off, and a ring of same-coloured neighbours would otherwise run the
+colour up the scale in one frame.
 
 For most special types the fork discards nothing: Tough, Tougher and Unbreakable are
 colourless — `BalloonModelFactory` builds them from `ToughBalloonModel` and
