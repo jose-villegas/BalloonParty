@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"SightReaction_8cs.html":[7,0,8,33],
 "SightScalePulseReaction_8cs.html":[7,0,8,34],
 "SightShakeReaction_8cs.html":[7,0,8,35],
 "SightSpinReaction_8cs.html":[7,0,8,36],
@@ -147,7 +148,6 @@ var NAVTREEINDEX4 =
 "UiSfxEmitter_8cs.html":[7,0,0,3,1],
 "UnbreakableBalloonModel_8cs.html":[7,0,1,2,19],
 "UnbreakableBalloonVariant_8cs.html":[7,0,1,5,11],
-"UnbreakableBalloonVariant_8cs.html#a90519392e763b626f8e41b3c580fa94d":[7,0,1,5,11,1],
 "UnbreakableFormationLook_8cs.html":[7,0,1,5,12],
 "UnbreakableFormationService_8cs.html":[7,0,1,1,9],
 "UnbreakableFormationService_8cs.html#a832e8f52fca5a678819ec96269dcb532":[7,0,1,1,9,1],

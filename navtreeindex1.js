@@ -56,6 +56,7 @@ var NAVTREEINDEX1 =
 "GatekeeperActorModel_8cs.html":[7,0,15,0,0,11],
 "GizmoDrawingHelper_8cs.html":[7,0,14,10,5],
 "GodRaysLook_8cs.html":[7,0,1,5,3],
+"GodRaysLook_8cs.html#a90519392e763b626f8e41b3c580fa94d":[7,0,1,5,3,1],
 "GoldenBalloonModel_8cs.html":[7,0,1,2,8],
 "GoldenSnipeGift_8cs.html":[7,0,8,7,0],
 "GradientTextureDrawer_8cs.html":[7,0,6,24],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "IProjectileVisualConfig_8cs.html":[7,0,3,5,11],
 "IPuffCloudSettings_8cs.html":[7,0,3,5,12],
 "IRainbowLines_8cs.html":[7,0,1,3,4],
-"IReactiveBindable_8cs.html":[7,0,18,0,1],
-"IReadOnlyMetricSet_8cs.html":[7,0,7,10,10]
+"IReactiveBindable_8cs.html":[7,0,18,0,1]
 };

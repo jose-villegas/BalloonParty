@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"IReadOnlyMetricSet_8cs.html":[7,0,7,10,10],
 "IReadyGate_8cs.html":[7,0,14,26],
 "IResistsPaint_8cs.html":[7,0,15,1,16],
 "IRetryStaging_8cs.html":[7,0,7,8,7],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "PaintTriangle_8cs.html":[7,0,8,4,6],
 "PaletteChannelEncoding_8cs.html":[7,0,3,10,4],
 "PaletteColorMaskAttribute_8cs.html":[7,0,3,10,5],
-"PaletteColorMaskDrawer_8cs.html":[7,0,3,4,6],
-"PaletteColorNameAttribute_8cs.html":[7,0,3,10,6]
+"PaletteColorMaskDrawer_8cs.html":[7,0,3,4,6]
 };

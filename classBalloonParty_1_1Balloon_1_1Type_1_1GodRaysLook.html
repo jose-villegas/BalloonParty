@@ -109,7 +109,10 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Type_1_1GodRaysLook.ht
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pac-methods">Package Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1Balloon_1_1Type_1_1GodRaysLook-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Balloon.Type.GodRaysLook Class Reference</div></div>
 </div><!--header-->
@@ -129,7 +132,7 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Type_1_1GodRaysLook.ht
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Balloon_1_1Type_1_1GodRaysLook__coll__graph.svg" width="504" height="176"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Balloon_1_1Type_1_1GodRaysLook__coll__graph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -137,18 +140,50 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6be8cdf5fc8161eccb2a207c2b794b55" id="r_a6be8cdf5fc8161eccb2a207c2b794b55"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6be8cdf5fc8161eccb2a207c2b794b55">Bind</a> (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html">IBalloonModel</a> model, CompositeDisposable disposables)</td></tr>
 <tr class="separator:a6be8cdf5fc8161eccb2a207c2b794b55"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
+Package Functions</h2></td></tr>
+<tr class="memitem:a60ef964d3bf5512a5cbb57cd52ad3f64" id="r_a60ef964d3bf5512a5cbb57cd52ad3f64"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a60ef964d3bf5512a5cbb57cd52ad3f64">SetColor</a> (string colorId)</td></tr>
+<tr class="memdesc:a60ef964d3bf5512a5cbb57cd52ad3f64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Turns the rays, and the light they cast, to another palette entry (the nuke's, once armed).  <br /></td></tr>
+<tr class="separator:a60ef964d3bf5512a5cbb57cd52ad3f64"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a8b07521a10750b3384a71c538515cdc6" id="r_a8b07521a10750b3384a71c538515cdc6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8b07521a10750b3384a71c538515cdc6">LateUpdate</a> ()</td></tr>
+<tr class="separator:a8b07521a10750b3384a71c538515cdc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:aa747707a6c21db04e639605673b2c57d" id="r_aa747707a6c21db04e639605673b2c57d"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa747707a6c21db04e639605673b2c57d">_colorId</a> = GamePalette.GoldenRaysColorId</td></tr>
 <tr class="separator:aa747707a6c21db04e639605673b2c57d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f570ce117d5264c0ddaa3d50ada82bb" id="r_a3f570ce117d5264c0ddaa3d50ada82bb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1Light.html">Light</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3f570ce117d5264c0ddaa3d50ada82bb">_light</a></td></tr>
+<tr class="separator:a3f570ce117d5264c0ddaa3d50ada82bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9ea7e4f4d4fbe5d8d4831e436080c87" id="r_ae9ea7e4f4d4fbe5d8d4831e436080c87"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae9ea7e4f4d4fbe5d8d4831e436080c87">_lightFalloffPower</a> = 1.5f</td></tr>
+<tr class="separator:ae9ea7e4f4d4fbe5d8d4831e436080c87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9205cfe9aeadaa716aac6a5412c69b6f" id="r_a9205cfe9aeadaa716aac6a5412c69b6f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html">SceneLightFieldService</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9205cfe9aeadaa716aac6a5412c69b6f">_lightField</a></td></tr>
+<tr class="separator:a9205cfe9aeadaa716aac6a5412c69b6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a58bf220843c91cec4646146d840e528d" id="r_a58bf220843c91cec4646146d840e528d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a58bf220843c91cec4646146d840e528d">_lightIntensity</a> = 1.5f</td></tr>
+<tr class="separator:a58bf220843c91cec4646146d840e528d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14ea321992d52f8fce833471992eda15" id="r_a14ea321992d52f8fce833471992eda15"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a14ea321992d52f8fce833471992eda15">_lightReachShare</a> = 0.9f</td></tr>
+<tr class="separator:a14ea321992d52f8fce833471992eda15"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f34082933a51de3cc896918a976aa78" id="r_a5f34082933a51de3cc896918a976aa78"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html">IGamePalette</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5f34082933a51de3cc896918a976aa78">_palette</a></td></tr>
 <tr class="separator:a5f34082933a51de3cc896918a976aa78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d38879f789fc60f8c0b428bd4ad0cd2" id="r_a7d38879f789fc60f8c0b428bd4ad0cd2"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7d38879f789fc60f8c0b428bd4ad0cd2">_rayReach</a></td></tr>
+<tr class="separator:a7d38879f789fc60f8c0b428bd4ad0cd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d32fc1586e42b020debc773a5c62f6a" id="r_a5d32fc1586e42b020debc773a5c62f6a"><td class="memItemLeft" align="right" valign="top">SpriteRenderer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5d32fc1586e42b020debc773a5c62f6a">_rays</a></td></tr>
 <tr class="separator:a5d32fc1586e42b020debc773a5c62f6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:a7ad050403f313575a7b49b84c29c0618" id="r_a7ad050403f313575a7b49b84c29c0618"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7ad050403f313575a7b49b84c29c0618">MinLightRadius</a> = 0.05f</td></tr>
+<tr class="separator:a7ad050403f313575a7b49b84c29c0618"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae647214ac29387b75db1b9c038637cf3" id="r_ae647214ac29387b75db1b9c038637cf3"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae647214ac29387b75db1b9c038637cf3">MoveStep</a> = 0.02f</td></tr>
+<tr class="separator:ae647214ac29387b75db1b9c038637cf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af55a9d61c90b025a9e1aca0d7846f5f7" id="r_af55a9d61c90b025a9e1aca0d7846f5f7"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af55a9d61c90b025a9e1aca0d7846f5f7">RayReachId</a> = Shader.PropertyToID(&quot;_RayReach&quot;)</td></tr>
+<tr class="separator:af55a9d61c90b025a9e1aca0d7846f5f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Tints a reward balloon's god rays from its palette entry (the golden balloon's <code>GoldenRays</code>, the heart's <code>HeartRays</code>). </p>
-<p>The rays turn and breathe in their shader (<code>BalloonParty/Sprite/GodRays</code>), whose material holds their shape, so nothing here runs per frame and no tween outlives the balloon: they hang off the balloon's root, so they scale in with its spawn and go with it when the pool takes it back. </p>
+<p>The rays turn and breathe in their shader (<code>BalloonParty/Sprite/GodRays</code>), whose material holds their shape, and no tween outlives the balloon: they hang off the balloon's root, so they scale in with its spawn and go with it when the pool takes it back. The rays also light the scene: a light in their palette colour, reaching nearly as far as they do, follows the balloon through the scene-light field while it is on the board. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a6be8cdf5fc8161eccb2a207c2b794b55" name="a6be8cdf5fc8161eccb2a207c2b794b55"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6be8cdf5fc8161eccb2a207c2b794b55">&#9670;&#160;</a></span>Bind()</h2>
@@ -173,6 +208,58 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a8b07521a10750b3384a71c538515cdc6" name="a8b07521a10750b3384a71c538515cdc6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b07521a10750b3384a71c538515cdc6">&#9670;&#160;</a></span>LateUpdate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Balloon.Type.GodRaysLook.LateUpdate </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a60ef964d3bf5512a5cbb57cd52ad3f64" name="a60ef964d3bf5512a5cbb57cd52ad3f64"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60ef964d3bf5512a5cbb57cd52ad3f64">&#9670;&#160;</a></span>SetColor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Balloon.Type.GodRaysLook.SetColor </td>
+          <td>(</td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>colorId</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Turns the rays, and the light they cast, to another palette entry (the nuke's, once armed). </p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="aa747707a6c21db04e639605673b2c57d" name="aa747707a6c21db04e639605673b2c57d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa747707a6c21db04e639605673b2c57d">&#9670;&#160;</a></span>_colorId</h2>
@@ -185,6 +272,116 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">string BalloonParty.Balloon.Type.GodRaysLook._colorId = GamePalette.GoldenRaysColorId</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3f570ce117d5264c0ddaa3d50ada82bb" name="a3f570ce117d5264c0ddaa3d50ada82bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f570ce117d5264c0ddaa3d50ada82bb">&#9670;&#160;</a></span>_light</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1Light.html">Light</a> BalloonParty.Balloon.Type.GodRaysLook._light</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae9ea7e4f4d4fbe5d8d4831e436080c87" name="ae9ea7e4f4d4fbe5d8d4831e436080c87"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9ea7e4f4d4fbe5d8d4831e436080c87">&#9670;&#160;</a></span>_lightFalloffPower</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Balloon.Type.GodRaysLook._lightFalloffPower = 1.5f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9205cfe9aeadaa716aac6a5412c69b6f" name="a9205cfe9aeadaa716aac6a5412c69b6f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9205cfe9aeadaa716aac6a5412c69b6f">&#9670;&#160;</a></span>_lightField</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html">SceneLightFieldService</a> BalloonParty.Balloon.Type.GodRaysLook._lightField</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a58bf220843c91cec4646146d840e528d" name="a58bf220843c91cec4646146d840e528d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a58bf220843c91cec4646146d840e528d">&#9670;&#160;</a></span>_lightIntensity</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Balloon.Type.GodRaysLook._lightIntensity = 1.5f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a14ea321992d52f8fce833471992eda15" name="a14ea321992d52f8fce833471992eda15"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14ea321992d52f8fce833471992eda15">&#9670;&#160;</a></span>_lightReachShare</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Balloon.Type.GodRaysLook._lightReachShare = 0.9f</td>
         </tr>
       </table>
   </td>
@@ -218,6 +415,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a7d38879f789fc60f8c0b428bd4ad0cd2" name="a7d38879f789fc60f8c0b428bd4ad0cd2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d38879f789fc60f8c0b428bd4ad0cd2">&#9670;&#160;</a></span>_rayReach</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Balloon.Type.GodRaysLook._rayReach</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a5d32fc1586e42b020debc773a5c62f6a" name="a5d32fc1586e42b020debc773a5c62f6a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5d32fc1586e42b020debc773a5c62f6a">&#9670;&#160;</a></span>_rays</h2>
 
@@ -234,6 +453,72 @@ Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7ad050403f313575a7b49b84c29c0618" name="a7ad050403f313575a7b49b84c29c0618"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ad050403f313575a7b49b84c29c0618">&#9670;&#160;</a></span>MinLightRadius</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float BalloonParty.Balloon.Type.GodRaysLook.MinLightRadius = 0.05f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae647214ac29387b75db1b9c038637cf3" name="ae647214ac29387b75db1b9c038637cf3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae647214ac29387b75db1b9c038637cf3">&#9670;&#160;</a></span>MoveStep</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float BalloonParty.Balloon.Type.GodRaysLook.MoveStep = 0.02f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af55a9d61c90b025a9e1aca0d7846f5f7" name="af55a9d61c90b025a9e1aca0d7846f5f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af55a9d61c90b025a9e1aca0d7846f5f7">&#9670;&#160;</a></span>RayReachId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Balloon.Type.GodRaysLook.RayReachId = Shader.PropertyToID(&quot;_RayReach&quot;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

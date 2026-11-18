@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"PaletteColorNameAttribute_8cs.html":[7,0,3,10,6],
 "PaletteColorNameDrawer_8cs.html":[7,0,3,4,7],
 "PaletteEntry_8cs.html":[7,0,3,10,7],
 "PaletteMaskDrawer_8cs.html":[7,0,3,4,8],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "ShowIfEnumDrawer_8cs.html":[7,0,6,49],
 "SightFadeReaction_8cs.html":[7,0,8,30],
 "SightGlitterDriftReaction_8cs.html":[7,0,8,31],
-"SightRampReaction_8cs.html":[7,0,8,32],
-"SightReaction_8cs.html":[7,0,8,33]
+"SightRampReaction_8cs.html":[7,0,8,32]
 };
