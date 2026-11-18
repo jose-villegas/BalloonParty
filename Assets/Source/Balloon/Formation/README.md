@@ -297,6 +297,19 @@ additive and HDR (`HdrBoost`, 2.5 over the palette blue), so it blooms. It sorts
 shadow. Rings of neighbouring formations join too, so a stack of formations reads as one wall. The
 settings are `IFormationGlowSettings`, `BalloonsConfiguration`'s "Formation Glow".
 
+The rings light what stands round them, in the formation blue. Being left out of the GI capture, the quad
+bounces no light of its own, so the view casts it through the scene-light field
+(`Shared/SceneLight/SceneLightFieldService`). A light per ring would use up the field's 32 lights on one
+long formation, so `FormationGlowBeams` puts the rings that join into one outline (centres closer than
+`FormationGlowField.JoinDistance`, about 1.1) in one group, chains included, so two formations whose
+rings stay apart light apart. Each group casts one capsule light between its two members furthest
+apart: exact for a line or a diagonal, close for a ring round an item or a bent snake. At most 8 groups
+cast one. The light's strength is `LightIntensity` (0.6) times the group's average of brightness times
+presence, so it rises as members draw close and falls away with a dissolving ring. It reaches
+`LightRadius` (1.3) from that line and falls off by `LightFalloffPower` (2). A light is registered only
+while its group glows, and a formation standing still changes none of its values, so the field does not
+re-render for it.
+
 ## Settings
 
 The settings are `IUnbreakableFormationSettings`, nested in `BalloonsConfiguration` under

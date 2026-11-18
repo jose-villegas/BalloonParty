@@ -30,6 +30,16 @@ namespace BalloonParty.Balloon.View
         }
 
         /// <summary>
+        ///     How far apart two whole members' rings stop joining into one outline: where their two fields, summed
+        ///     halfway between them, fall to the threshold.
+        /// </summary>
+        internal static float JoinDistance(float ringRadius, float reach)
+        {
+            var half = Mathf.Pow(Threshold(ringRadius, reach) * 0.5f, 1f / 3f);
+            return 2f * reach * Mathf.Sqrt(Mathf.Max(0f, 1f - half));
+        }
+
+        /// <summary>
         ///     How much of its field a ring adds at <paramref name="presence" />: all of it when whole, and at none
         ///     no more than the threshold, so a lone ring shrinks into its member as it dissolves.
         /// </summary>

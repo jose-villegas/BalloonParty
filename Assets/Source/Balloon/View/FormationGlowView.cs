@@ -1,9 +1,13 @@
+using System;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Shared.Diagnostics;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Rendering;
+using BalloonParty.Shared.SceneLight;
 using UnityEngine;
 using VContainer;
+using Light = BalloonParty.Shared.SceneLight.Light;
 
 namespace BalloonParty.Balloon.View
 {
@@ -11,7 +15,9 @@ namespace BalloonParty.Balloon.View
     ///     The blue light ring round unbreakables in formation, on the ground beneath them (<c>FormationGlow</c>
     ///     shader): rings that join like metaballs as members draw close, lit only as close as they are. One quad,
     ///     fitted each frame round the members that glow, so the shader only runs where the light can be; hidden,
-    ///     and costing nothing, while no member glows.
+    ///     and costing nothing, while no member glows. The rings also light what stands round them: the quad is
+    ///     only drawn, so each group of joined rings casts one capsule light through the scene-light field
+    ///     (<see cref="FormationGlowBeams" />).
     /// </summary>
     internal sealed class FormationGlowView : MonoBehaviour
     {
@@ -25,9 +31,16 @@ namespace BalloonParty.Balloon.View
 
         private readonly Vector4[] _points = new Vector4[FormationGlowField.MaxPoints];
         private readonly FormationGlowField _field = new();
+        private readonly int[] _groups = new int[FormationGlowField.MaxPoints];
+        private readonly FormationGlowBeam[] _beams = new FormationGlowBeam[FormationGlowBeams.MaxBeams];
+        private readonly Light[] _lights = new Light[FormationGlowBeams.MaxBeams];
+        private readonly IDisposable[] _lit = new IDisposable[FormationGlowBeams.MaxBeams];
 
         private IFormationGlowSettings _settings;
         private FormationGlowSources _sources;
+        private SceneLightFieldService _lightField;
+        private int _lightColorIndex;
+        private float _lightJoinDistance;
         private Material _material;
         private MeshRenderer _renderer;
         private Transform _quad;
@@ -42,6 +55,7 @@ namespace BalloonParty.Balloon.View
 
             var bounds = default(Rect);
             var count = _settings.Enabled ? _field.Step(_sources.All, _settings, Time.deltaTime, _points, out bounds) : 0;
+            CastLight(count);
             if (count == 0)
             {
                 _renderer.enabled = false;
@@ -57,6 +71,7 @@ namespace BalloonParty.Balloon.View
 
         private void OnDestroy()
         {
+            CastLight(0);
             if (_material != null)
             {
                 Destroy(_material);
@@ -64,10 +79,15 @@ namespace BalloonParty.Balloon.View
         }
 
         [Inject]
-        internal void Construct(IBalloonsConfiguration balloons, FormationGlowSources sources, IGamePalette palette)
+        internal void Construct(
+            IBalloonsConfiguration balloons, FormationGlowSources sources, IGamePalette palette,
+            SceneLightFieldService lightField)
         {
             _settings = balloons.FormationGlow;
             _sources = sources;
+            _lightField = lightField;
+            _lightColorIndex = palette.PaletteIndexOf(GamePalette.UnbreakableFormationColorId);
+            _lightJoinDistance = FormationGlowField.JoinDistance(_settings.RingRadius, _settings.Reach);
 
             var shader = _settings.Shader;
             if (shader == null)
@@ -93,6 +113,32 @@ namespace BalloonParty.Balloon.View
             _quad.SetParent(transform, false);
             _renderer = quad.GetComponent<MeshRenderer>();
             _renderer.enabled = false;
+        }
+
+        // A light is on only while its group glows: the field loops over every registered light, a dark one too.
+        // A still formation writes the same values each frame, which the field doesn't re-render for.
+        private void CastLight(int count)
+        {
+            var beams = _lightField != null && _settings.LightIntensity > 0f
+                ? FormationGlowBeams.Group(_points, count, _lightJoinDistance, _groups, _beams)
+                : 0;
+            for (var i = 0; i < _lights.Length; i++)
+            {
+                if (i >= beams)
+                {
+                    _lit[i]?.Dispose();
+                    _lit[i] = null;
+                    continue;
+                }
+
+                var beam = _beams[i];
+                var light = _lights[i] ??= new Light(
+                    beam.Start, _settings.LightRadius, 0f, _lightColorIndex, _settings.LightFalloffPower);
+                light.Position.Value = beam.Start;
+                light.EndPosition.Value = beam.End;
+                light.Intensity.Value = _settings.LightIntensity * beam.Level;
+                _lit[i] ??= _lightField.RegisterLight(light);
+            }
         }
     }
 }

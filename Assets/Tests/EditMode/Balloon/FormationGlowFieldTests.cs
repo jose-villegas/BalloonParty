@@ -56,6 +56,27 @@ namespace BalloonParty.Tests.Balloon
             Assert.AreEqual(_threshold, FormationGlowField.FieldAt(lone, 1, new Vector2(RingRadius, 0f), Reach, _threshold), 1e-5f);
         }
 
+        [TestCase(0.4f, 0.96f)]
+        [TestCase(0.3f, 1.2f)]
+        [TestCase(0.5f, 0.7f)]
+        public void JoinDistance_IsWhereTwoRingsFieldsMeetTheThresholdBetweenThem(float ringRadius, float reach)
+        {
+            var apart = FormationGlowField.JoinDistance(ringRadius, reach);
+
+            var falloff = 1f - (apart * 0.5f) * (apart * 0.5f) / (reach * reach);
+            Assert.AreEqual(FormationGlowField.Threshold(ringRadius, reach), 2f * falloff * falloff * falloff, 1e-4f);
+        }
+
+        // Members a slot apart (0.75) share one outline, and two formations with an empty slot between (1.5) don't.
+        [Test]
+        public void JoinDistance_AtTheAuthoredRing_LiesBetweenASlotAndTwo()
+        {
+            var apart = FormationGlowField.JoinDistance(0.4f, 0.96f);
+
+            Assert.Greater(apart, 0.75f);
+            Assert.Less(apart, 1.5f);
+        }
+
         [Test]
         public void Shape_AtNoPresence_DrawsALoneRingBackIntoItsMember()
         {

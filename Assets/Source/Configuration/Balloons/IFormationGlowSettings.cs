@@ -40,6 +40,18 @@ namespace BalloonParty.Configuration.Balloons
         /// <summary>Grains per world unit of the noise a dissolving ring erodes along.</summary>
         float DissolveNoiseScale { get; }
 
+        /// <summary>
+        ///     How strongly a fully lit group of rings lights the scene round it, through the scene-light field, in
+        ///     the formation blue. 0 casts none.
+        /// </summary>
+        float LightIntensity { get; }
+
+        /// <summary>World reach of that light, from the line between the group's two members furthest apart.</summary>
+        float LightRadius { get; }
+
+        /// <summary>How fast that light falls off toward its reach: 1 is a straight ramp, higher keeps it closer in.</summary>
+        float LightFalloffPower { get; }
+
         string SortingLayerName { get; }
 
         int SortingOrder { get; }

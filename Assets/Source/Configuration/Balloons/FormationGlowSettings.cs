@@ -52,6 +52,20 @@ namespace BalloonParty.Configuration.Balloons
         [Min(0.5f)]
         [SerializeField] private float _dissolveNoiseScale = 7f;
 
+        [Tooltip("How strongly a fully lit group of rings lights what stands round it, in the formation blue. The " +
+                 "rings themselves are only drawn; this is the light they cast, through the scene-light field. 0 " +
+                 "casts none.")]
+        [Min(0f)]
+        [SerializeField] private float _lightIntensity = 0.6f;
+
+        [Tooltip("World reach of that light, from the line between a group's two members furthest apart.")]
+        [Min(0.1f)]
+        [SerializeField] private float _lightRadius = 1.3f;
+
+        [Tooltip("How fast that light falls off toward its reach: 1 is a straight ramp, higher keeps it closer in.")]
+        [Min(0.1f)]
+        [SerializeField] private float _lightFalloffPower = 2f;
+
         [Tooltip("On the ground beneath the balloons, as the nuke's flood.")]
         [SortingLayerName]
         [SerializeField] private string _sortingLayerName = "Balloons";
@@ -71,6 +85,9 @@ namespace BalloonParty.Configuration.Balloons
         public float FadeDistance => Mathf.Max(_fadeDistance, _fullDistance + 0.01f);
         public float DissolveSeconds => _dissolveSeconds;
         public float DissolveNoiseScale => _dissolveNoiseScale;
+        public float LightIntensity => _lightIntensity;
+        public float LightRadius => _lightRadius;
+        public float LightFalloffPower => _lightFalloffPower;
         public string SortingLayerName => _sortingLayerName;
         public int SortingOrder => _sortingOrder;
         public Shader Shader => _shader;
