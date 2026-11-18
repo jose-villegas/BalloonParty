@@ -6,7 +6,7 @@
 > Popped before the fuse runs out, its burst is the player's: a ripple knocks a hit off every neighbour.
 > Left alone, its burst is the level's: it sprays foam, and each neighbouring balloon gets a one-bubble
 > coat that must be popped first and washes the shot's colour.
-> Planned 2026-11-18. **Status: proposed. The decisions below are open; nothing is built.**
+> Planned 2026-11-18; the owner settled the open decisions the same day. **Status: building.**
 
 ---
 
@@ -256,24 +256,25 @@ All of it needs a look in the Editor.
 
 No water-only switch is needed: clusters spawn only on water, and the board clears on every level change.
 
-## Open decisions for the owner
+## Owner decisions (2026-11-18)
 
-Each has a recommendation; the plan above is written as if all are taken.
+Eight decisions were put to the owner, each with a recommendation. The answer: "Go with your
+recommendations, build the ripe cluster".
 
-1. **A hit on a ripe cluster:** it bursts whole (recommended), or it un-ripens, or it stays ripe and
-   needs all 5 hits.
-2. **The fuse's clock:** seconds of level clock, 6 to start (recommended), or spawn lines.
-3. **A cluster whose fuse ran out:** spent to 1 bubble and stays (recommended), or leaves the board, or
-   re-arms at 5. Leaving trades five hits of cluster for at most six one-hit coats, which is close to
-   no danger at all. Re-arming makes a foam fountain.
-4. **Foam on a neighbouring cluster:** nothing (recommended), or one more bubble, which ripens clusters
-   with foam and can run away.
-5. **A ripple reaching a ripe neighbour:** it bursts too (recommended).
-6. **A hit on a coat:** washes the colour and nothing else (recommended): no points, no streak break.
-7. **Clusters arriving from the lines:** at most one below the cap (recommended), so a cluster always
-   ripens through a merge and none arrives ripe from level 61.
-8. **A ripe burst's score:** the 5 bubbles it held (recommended). Today a piercing pop of any cluster
-   scores 1, less than chipping it down, which is a quirk worth fixing with it.
+1. **A hit on a ripe cluster:** it bursts whole. (The other ways: it un-ripens, or it stays ripe and
+   needs all 5 hits.)
+2. **The fuse's clock:** seconds of level clock, 6 to start, not spawn lines.
+3. **A cluster whose fuse ran out:** spent to 1 bubble and stays. Leaving the board would trade five hits
+   of cluster for at most six one-hit coats, which is close to no danger at all; re-arming at 5 would
+   make a foam fountain.
+4. **Foam on a neighbouring cluster:** nothing. One more bubble would ripen clusters with foam and could
+   run away.
+5. **A ripple reaching a ripe neighbour:** it bursts too.
+6. **A hit on a coat:** washes the colour and nothing else: no points, no streak break.
+7. **Clusters arriving from the lines:** at most one below the cap, so a cluster always ripens through a
+   merge and none arrives ripe from level 61.
+8. **A ripe burst's score:** the 5 bubbles it held. Before this a piercing pop of any cluster scored 1,
+   less than chipping it down.
 
 ## Phases
 
