@@ -25,9 +25,21 @@ namespace BalloonParty.Cheats.Autoplay
         /// </summary>
         internal static bool ButtonThatCalls<T>(string method) where T : Object
         {
+            return FindButton<T>(method, press: true);
+        }
+
+        /// <summary>Whether a finger could tap the button now, without tapping it.</summary>
+        internal static bool CanTapButtonThatCalls<T>(string method) where T : Object
+        {
+            return FindButton<T>(method, press: false);
+        }
+
+        private static bool FindButton<T>(string method, bool press) where T : Object
+        {
             foreach (var button in Object.FindObjectsByType<ScaleDownButton>())
             {
-                if (button.isActiveAndEnabled && Calls<T>(button.OnScaleComplete, method) && Tap(button.gameObject))
+                if (button.isActiveAndEnabled && Calls<T>(button.OnScaleComplete, method)
+                    && Tap(button.gameObject, press))
                 {
                     return true;
                 }
@@ -36,7 +48,7 @@ namespace BalloonParty.Cheats.Autoplay
             foreach (var button in Object.FindObjectsByType<Button>())
             {
                 if (button.isActiveAndEnabled && button.IsInteractable() && Calls<T>(button.onClick, method)
-                    && Tap(button.gameObject))
+                    && Tap(button.gameObject, press))
                 {
                     return true;
                 }
@@ -58,7 +70,7 @@ namespace BalloonParty.Cheats.Autoplay
             return false;
         }
 
-        private static bool Tap(GameObject button)
+        private static bool Tap(GameObject button, bool press)
         {
             var events = EventSystem.current;
             if (events == null || button.transform is not RectTransform rect)
@@ -79,6 +91,11 @@ namespace BalloonParty.Cheats.Autoplay
             if (Hits.Count == 0 || ExecuteEvents.GetEventHandler<IPointerClickHandler>(Hits[0].gameObject) != button)
             {
                 return false;
+            }
+
+            if (!press)
+            {
+                return true;
             }
 
             var hit = Hits[0].gameObject;

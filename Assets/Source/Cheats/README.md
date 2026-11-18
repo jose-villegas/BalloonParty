@@ -33,7 +33,9 @@ ships.
 - `AutoplayLaunchArgument` reads the spec the app was launched with: the intent's `autoplay` extra on
   Android (`adb shell am start -n <package>/<activity> -e autoplay 'player=human seconds=420'`), the argument
   after `-autoplay` elsewhere. With none, nothing is registered and the build plays as usual.
-- `AutoplaySettings.TryParse` reads it: `player=human|best`, `seconds`, `restart=0|1`, and the human's knobs
+- `AutoplaySettings.TryParse` reads it: `player=human|best`, `seconds`, `loss=stop|restart|retry|bonus|free`
+  (what to press on a game over, the playtest bot's `--on-loss`; `restart=1` is the older way to write
+  `loss=restart`), and the human's knobs
   `floor`, `mean`, `aim`, `wild` (the playtest bot's, see `Tools/playtest/README.md`), plus an optional
   `seed` and an optional `fps`, which holds the frame rate for the session (`ThermalFrameRateGovernor.Pin`)
   so a performance run isn't stepped down as the phone warms, and an optional `off`, which switches parts
@@ -41,10 +43,13 @@ ships.
   `hud`, joined by `+`) so a run can measure what each costs. The game looks wrong with any of them off. A malformed spec is refused with a warning rather than played wrong.
 - `AutoplayController` (Game scope) presses Play on the launch screen, fires as the chosen player once the
   cannon is ready (the best angle from `FireBestShotCheat.TryFindBestAngle`, plus `AutoplayDice`'s reaction
-  time and aim error for a human), presses Restart on game over or ends there, and quits the app when the
-  time is up.
-- `AutoplayTap` presses those two buttons as a finger does. It finds the button that calls
-  `LaunchPlayTrigger.Play` (or `GameOverScreen.OnRestartPressed`), from a Button's On Click or a
+  time and aim error for a human), answers a game over as `loss` says, and quits the app when the time is
+  up. On a game over it reads what the run offers (`IFailureOffers.Current`) and presses the bonus retry, the
+  retry or Restart; a retry press that leaves the screen up (an ad that staged nothing) is followed 6 s later
+  by the next answer down. `free` takes only the retries that cost no ad and ends the session at the first
+  loss that would need one. Each answer is a marker line in the ticks, which the report counts.
+- `AutoplayTap` presses those buttons as a finger does. It finds the button that calls
+  `LaunchPlayTrigger.Play` (or `GameOverScreen.OnRestartPressed`, `OnRetryPressed`, `OnBonusRetryPressed`), from a Button's On Click or a
   `ScaleDownButton`'s On Scale Complete, raycasts the event system at its centre, and sends pointer down, up
   and click to what that hits. So every listener runs (the press animation, the scene load, the title
   animation), a covered button isn't tapped through, and the bot goes through the same screens a player does

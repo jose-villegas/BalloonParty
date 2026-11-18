@@ -28,7 +28,7 @@ import sys
 import threading
 import time
 
-from playtest_bot import REPO_ROOT, SKILLS, build_report, read_tuning
+from playtest_bot import ON_LOSS, REPO_ROOT, SKILLS, build_report, read_tuning, settle_retries
 
 SDK = os.path.join(os.path.expanduser("~"), "AppData", "Local", "Android", "Sdk")
 ADB = os.path.join(SDK, "platform-tools", "adb.exe")
@@ -122,7 +122,7 @@ def spec_for(player, args):
         skill = SKILLS[player]
         knobs = (f"player=human floor={skill['react_floor']:g} mean={skill['react_mean']:g} "
                  f"aim={skill['aim_sd']:g} wild={skill['wild']:g}")
-    return f"{knobs} seconds={args.seconds} restart={1 if args.restart else 0}"
+    return f"{knobs} seconds={args.seconds} loss={args.on_loss}"
 
 
 def describe(player):
@@ -179,8 +179,8 @@ def play_session(serial, player, args, stamp):
     samples = load_jsonl([ticks_path]) if os.path.exists(ticks_path) else []
     records = load_jsonl(glob.glob(os.path.join(out_dir, "telemetry", "telemetry_*.jsonl")))
     header = f"{name} on {serial}" + ("" if finished else " (ended early: the app stopped or never finished)")
-    report = build_report(header, played, describe(player), read_tuning(REPO_ROOT), samples, records,
-                          on_loss="restart" if args.restart else "stop")
+    report = build_report(header, played, describe(player), read_tuning(REPO_ROOT), settle_retries(samples), records,
+                          on_loss=args.on_loss)
     with open(os.path.join(out_dir, "report.md"), "w", encoding="utf-8") as out:
         out.write(report + "\n")
     return name, finished, out_dir
@@ -208,8 +208,12 @@ def main():
                         help="one session per entry: best, or a human skill (low, average, high)")
     parser.add_argument("--seconds", type=int, default=240, help="seconds each session plays (default 240)")
     parser.add_argument("--label", default="", help="a name for this batch, used in the folders and reports")
-    parser.add_argument("--restart", action="store_true",
-                        help="start a new run on game over instead of ending the session there")
+    parser.add_argument("--on-loss", choices=tuple(ON_LOSS), default="stop",
+                        help="what to press on game over, as playtest_bot.py: stop ends the session there "
+                             "(default); restart starts a new run; retry takes the run's retries (free, then "
+                             "behind an ad); bonus takes the rewarded-ad bonus retry while it is offered; free "
+                             "takes only the free retries and ends at the first loss that would need an ad")
+    parser.add_argument("--restart", action="store_true", help="the same as --on-loss restart")
     parser.add_argument("--apk", help="install this APK on each device first (a checked build)")
     parser.add_argument("--boot", type=int, default=0, help="start emulators until this many are running")
     parser.add_argument("--avd", default="bp-autoplay",
@@ -218,6 +222,8 @@ def main():
     parser.add_argument("--serial", action="append",
                         help="play on this device (repeatable); default: every running emulator, never a phone")
     args = parser.parse_args()
+    if args.restart and args.on_loss == "stop":
+        args.on_loss = "restart"
     sys.stdout.reconfigure(encoding="utf-8")
 
     if args.boot:

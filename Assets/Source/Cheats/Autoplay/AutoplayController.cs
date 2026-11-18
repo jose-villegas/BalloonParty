@@ -23,7 +23,7 @@ namespace BalloonParty.Cheats.Autoplay
     ///     Plays the game by itself when it was launched with an autoplay spec (<see cref="AutoplaySettings" />):
     ///     the Editor playtest bot's player, inside the game, so a phone or an emulator can play while the Editor
     ///     does something else. It presses Play on the launch screen, fires as the chosen player once the cannon
-    ///     is ready, presses Restart on the game-over screen (or ends there), samples the game twice a second
+    ///     is ready, answers a game over as the spec says (<see cref="AutoplayOnLoss" />), samples the game twice a second
     ///     (<see cref="AutoplayTickWriter" />) and quits the app when the time is up.
     /// </summary>
     internal sealed class AutoplayController : IStartable, ITickable, IDisposable
@@ -34,6 +34,10 @@ namespace BalloonParty.Cheats.Autoplay
         private const float LaunchPressDelay = 1f;
         private const float PlayRetapDelay = 10f;
 
+        // How long a retry press gets to leave the game-over screen before the next answer down is pressed.
+        // No ad SDK is plugged in, so an ad is watched at once; a real one would need longer than this.
+        private const float LossRetapDelay = 6f;
+
         private readonly AutoplaySettings _settings;
         private readonly ILevelProgress _progress;
         private readonly IPlayerHealth _health;
@@ -43,6 +47,7 @@ namespace BalloonParty.Cheats.Autoplay
         private readonly IProjectileFlightConfig _flight;
         private readonly FireBestShotCheat _solver;
         private readonly ThermalFrameRateGovernor _governor;
+        private readonly IFailureOffers _offers;
         private readonly System.Random _random;
 
         private AutoplayTickWriter _writer;
@@ -52,6 +57,8 @@ namespace BalloonParty.Cheats.Autoplay
         private float _nextSample;
         private float _fireAt = -1f;
         private float _nextPlayTap;
+        private float _nextLossPress;
+        private int _lossPresses;
         private int _shots;
         private bool _restartPressed;
         private bool _warnedNoPlay;
@@ -67,7 +74,8 @@ namespace BalloonParty.Cheats.Autoplay
             IProjectileRegistry projectiles,
             IProjectileFlightConfig flight,
             FireBestShotCheat solver,
-            ThermalFrameRateGovernor governor)
+            ThermalFrameRateGovernor governor,
+            IFailureOffers offers)
         {
             _settings = settings;
             _progress = progress;
@@ -78,6 +86,7 @@ namespace BalloonParty.Cheats.Autoplay
             _flight = flight;
             _solver = solver;
             _governor = governor;
+            _offers = offers;
             _random = settings.Seed.HasValue ? new System.Random(settings.Seed.Value) : new System.Random();
         }
 
@@ -89,7 +98,8 @@ namespace BalloonParty.Cheats.Autoplay
                 _governor.Pin(_settings.Fps);
             }
 
-            Log.Info("Autoplay", $"playing as {(_settings.Best ? "best" : "human")} for {_settings.Seconds:F0} s.");
+            Log.Info("Autoplay", $"playing as {(_settings.Best ? "best" : "human")} for {_settings.Seconds:F0} s, "
+                                 + $"on a game over: {_settings.OnLoss}.");
         }
 
         // The switches a view can't read for itself, applied once the game scene is up. The HUD's canvases stop
@@ -136,7 +146,7 @@ namespace BalloonParty.Cheats.Autoplay
                     PressPlay(clock);
                     break;
                 case NavigationState.GameOver:
-                    if (!OnGameOver())
+                    if (!OnGameOver(clock))
                     {
                         return;
                     }
@@ -144,6 +154,8 @@ namespace BalloonParty.Cheats.Autoplay
                     break;
                 default:
                     _restartPressed = false;
+                    _lossPresses = 0;
+                    _nextLossPress = 0f;
                     SwitchOffOnce();
                     Shoot(clock, navigation);
                     break;
@@ -191,19 +203,40 @@ namespace BalloonParty.Cheats.Autoplay
             }
         }
 
-        // False once the session has ended here (no restart asked for).
-        private bool OnGameOver()
+        // False once the session has ended here: no answer was asked for, or a player who never watches an ad
+        // has run out of free retries.
+        private bool OnGameOver(float clock)
         {
             _fireAt = -1f;
-            if (!_settings.Restart)
+            if (_settings.OnLoss == AutoplayOnLoss.Stop)
             {
-                _writer.WriteMarker("game_over");
-                Finish();
-                return false;
+                return EndAtGameOver();
             }
 
-            if (_restartPressed)
+            if (_restartPressed || clock < _nextLossPress)
             {
+                return true;
+            }
+
+            // The screen is still up after a retry press when that press staged nothing (an ad skipped or not
+            // shown), so each press for this loss steps down: the bonus retry, then a plain retry, then Restart.
+            var offer = _offers.Current;
+            var onLoss = _settings.OnLoss;
+            if (onLoss == AutoplayOnLoss.Free)
+            {
+                return OnGameOverWithoutAds(clock, in offer);
+            }
+
+            if (onLoss == AutoplayOnLoss.Bonus && _lossPresses == 0 && offer.CanBonusRetry)
+            {
+                PressRetry(clock, bonus: true, ad: true);
+                return true;
+            }
+
+            var retryPresses = onLoss == AutoplayOnLoss.Bonus ? 1 : 0;
+            if (onLoss != AutoplayOnLoss.Restart && _lossPresses <= retryPresses && offer.CanRetry)
+            {
+                PressRetry(clock, bonus: false, ad: offer.RetryNeedsAd);
                 return true;
             }
 
@@ -215,6 +248,40 @@ namespace BalloonParty.Cheats.Autoplay
             }
 
             return true;
+        }
+
+        // A player who never watches an ad: the free retries, then the run is over and so is the session.
+        private bool OnGameOverWithoutAds(float clock, in FailureOffer offer)
+        {
+            if (_lossPresses == 0 && offer.CanRetry && !offer.RetryNeedsAd)
+            {
+                PressRetry(clock, bonus: false, ad: false);
+                return true;
+            }
+
+            // Only once the screen has brought its buttons in, as a player would see there is no free retry.
+            return !AutoplayTap.CanTapButtonThatCalls<GameOverScreen>(nameof(GameOverScreen.OnRestartPressed))
+                   || EndAtGameOver();
+        }
+
+        private bool EndAtGameOver()
+        {
+            _writer.WriteMarker("game_over");
+            Finish();
+            return false;
+        }
+
+        private void PressRetry(float clock, bool bonus, bool ad)
+        {
+            var method = bonus ? nameof(GameOverScreen.OnBonusRetryPressed) : nameof(GameOverScreen.OnRetryPressed);
+            if (!AutoplayTap.ButtonThatCalls<GameOverScreen>(method))
+            {
+                return;
+            }
+
+            _lossPresses++;
+            _nextLossPress = clock + LossRetapDelay;
+            _writer.WriteRetry(bonus, ad);
         }
 
         private void Shoot(float clock, NavigationState navigation)

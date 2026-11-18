@@ -25,7 +25,7 @@ namespace BalloonParty.Tests.Cheats
             Assert.That(parsed, Is.True);
             Assert.That(settings.Best, Is.False);
             Assert.That(settings.Seconds, Is.EqualTo(420f));
-            Assert.That(settings.Restart, Is.True);
+            Assert.That(settings.OnLoss, Is.EqualTo(AutoplayOnLoss.Restart));
             Assert.That(settings.ReactFloor, Is.EqualTo(0.15f));
             Assert.That(settings.ReactMean, Is.EqualTo(0.25f));
             Assert.That(settings.AimSd, Is.EqualTo(1.5f));
@@ -40,11 +40,29 @@ namespace BalloonParty.Tests.Cheats
 
             Assert.That(settings.Best, Is.True);
             Assert.That(settings.Seconds, Is.EqualTo(240f));
-            Assert.That(settings.Restart, Is.False);
+            Assert.That(settings.OnLoss, Is.EqualTo(AutoplayOnLoss.Stop));
             Assert.That(settings.Seed, Is.Null);
         }
 
+        [TestCase("loss=stop", "Stop")]
+        [TestCase("loss=restart", "Restart")]
+        [TestCase("loss=retry", "Retry")]
+        [TestCase("loss=bonus", "Bonus")]
+        [TestCase("loss=free", "Free")]
+        [TestCase("restart=0", "Stop")]
+        [TestCase("loss=free restart=1", "Free")]
+        [TestCase("restart=1 loss=retry", "Retry")]
+        public void TryParse_TheAnswerToAGameOver_IsReadAndWinsOverTheOlderRestartFlag(
+            string spec, string expected)
+        {
+            Assert.That(AutoplaySettings.TryParse(spec, out var settings), Is.True);
+
+            Assert.That(settings.OnLoss.ToString(), Is.EqualTo(expected));
+        }
+
         [TestCase("player=robot")]
+        [TestCase("loss=always")]
+        [TestCase("loss=")]
         [TestCase("seconds=0")]
         [TestCase("seconds=-5")]
         [TestCase("restart=yes")]

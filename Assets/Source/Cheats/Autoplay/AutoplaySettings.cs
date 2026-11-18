@@ -6,18 +6,23 @@ namespace BalloonParty.Cheats.Autoplay
     /// <summary>
     ///     How the in-game autoplay plays: the playtest bot's two players (<c>Tools/playtest/README.md</c>), read
     ///     from a launch argument so a phone or an emulator can play itself. The spec is space-separated
-    ///     <c>key=value</c> pairs: <c>player=human|best seconds=420 restart=0|1 floor=0.25 mean=0.6 aim=4
-    ///     wild=0.05 seed=7</c>. Any pair left out keeps its default (the average human).
+    ///     <c>key=value</c> pairs: <c>player=human|best seconds=420 loss=stop|restart|retry|bonus|free
+    ///     floor=0.25 mean=0.6 aim=4 wild=0.05 seed=7</c>. Any pair left out keeps its default (the average
+    ///     human, ending at the first game over). <c>restart=1</c> is the older way to write
+    ///     <c>loss=restart</c>; a <c>loss</c> pair wins over it.
     /// </summary>
     internal sealed class AutoplaySettings
     {
+        // A loss pair was read: restart=1, the older spelling, then no longer changes the answer.
+        private bool _lossGiven;
+
         public bool Best { get; private set; }
         public float ReactFloor { get; private set; } = 0.25f;
         public float ReactMean { get; private set; } = 0.6f;
         public float AimSd { get; private set; } = 4f;
         public float WildChance { get; private set; } = 0.05f;
         public float Seconds { get; private set; } = 240f;
-        public bool Restart { get; private set; }
+        public AutoplayOnLoss OnLoss { get; private set; }
         public int? Seed { get; private set; }
 
         /// <summary>The frame rate to hold for the whole session, or 0 to leave it to the thermal governor.</summary>
@@ -63,6 +68,31 @@ namespace BalloonParty.Cheats.Autoplay
             return text == "0" || text == "1";
         }
 
+        private static bool TryLoss(string text, out AutoplayOnLoss value)
+        {
+            switch (text)
+            {
+                case "stop":
+                    value = AutoplayOnLoss.Stop;
+                    return true;
+                case "restart":
+                    value = AutoplayOnLoss.Restart;
+                    return true;
+                case "retry":
+                    value = AutoplayOnLoss.Retry;
+                    return true;
+                case "bonus":
+                    value = AutoplayOnLoss.Bonus;
+                    return true;
+                case "free":
+                    value = AutoplayOnLoss.Free;
+                    return true;
+                default:
+                    value = AutoplayOnLoss.Stop;
+                    return false;
+            }
+        }
+
         private bool TrySet(string key, string text)
         {
             float number;
@@ -77,8 +107,16 @@ namespace BalloonParty.Cheats.Autoplay
                     return Seconds > 0f;
                 case "restart":
                     var ok = TryFlag(text, out flag);
-                    Restart = flag;
+                    if (flag && !_lossGiven)
+                    {
+                        OnLoss = AutoplayOnLoss.Restart;
+                    }
+
                     return ok;
+                case "loss":
+                    _lossGiven = TryLoss(text, out var onLoss);
+                    OnLoss = onLoss;
+                    return _lossGiven;
                 case "floor":
                     ReactFloor = TryFloat(text, out number) ? number : -1f;
                     return ReactFloor >= 0f;

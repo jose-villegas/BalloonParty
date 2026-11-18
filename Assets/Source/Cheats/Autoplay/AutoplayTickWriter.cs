@@ -63,6 +63,14 @@ namespace BalloonParty.Cheats.Autoplay
             WriteLine("{\"wall\": " + Wall() + ", \"" + key + "\": true}");
         }
 
+        /// <summary>A game over answered with a retry, which keeps the run going: the bonus retry or the plain
+        /// one, and whether it cost an ad.</summary>
+        internal void WriteRetry(bool bonus, bool ad)
+        {
+            WriteLine("{\"wall\": " + Wall() + ", \"retry\": true, \"bonus\": " + (bonus ? "true" : "false")
+                      + ", \"ad\": " + (ad ? "true" : "false") + "}");
+        }
+
         internal void Finish()
         {
             Dispose();

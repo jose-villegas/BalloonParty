@@ -72,7 +72,9 @@ every loss with its answer.
 python3 Tools/playtest/playtest_bot.py --on-loss bonus --seconds 600 --label ads
 ```
 
-`device_bot.py` only knows `--restart`: the device autoplay never retries.
+`device_bot.py` takes the same `--on-loss`: the game's own autoplay presses the same buttons (its spec's
+`loss=` pair). A build has no ad SDK either, so there too every ad counts as watched at once. After a retry
+press the autoplay gives the screen 6 s to leave before it presses the next answer down.
 
 ## What it does
 
