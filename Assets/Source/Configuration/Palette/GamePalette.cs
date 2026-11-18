@@ -78,14 +78,17 @@ namespace BalloonParty.Configuration.Palette
         public const string NukeRaysColorId = "NukeRays";
 
         /// <summary>
-        ///     The red flare behind the nuke once it is armed and its fuse runs; its alpha is its strength. It sits past
-        ///     the scene-light field's slots (<c>PaletteChannelEncoding.Slots</c>), which only lights need.
+        ///     The red flare behind the nuke once it is armed and its fuse runs; its alpha is its strength. The rays
+        ///     cast a light in it (<c>GodRaysLook</c>), so in the palette asset it must sit inside the scene-light
+        ///     field's slots (<c>PaletteChannelEncoding.Slots</c>).
         /// </summary>
         public const string NukeArmedRaysColorId = "NukeArmedRays";
 
         /// <summary>
         ///     Presentation-only palette entry for the whirlwind around the thrower when a ball loads Snipe-armed (the
-        ///     Sharpshooter card) — authored in the palette asset but never a spawnable balloon color.
+        ///     Sharpshooter card) — authored in the palette asset but never a spawnable balloon color. No light or
+        ///     field is tagged with it, so it is the entry that sits past the scene-light field's slots
+        ///     (<c>PaletteChannelEncoding.Slots</c>).
         /// </summary>
         public const string SnipeWhirlwindColorId = "SnipeWhirlwind";
 

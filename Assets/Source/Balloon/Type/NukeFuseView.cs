@@ -56,7 +56,17 @@ namespace BalloonParty.Balloon.Type
         private void OnArmed()
         {
             _body.SetFloatAndApply(_block, FuseArmedId, 1f);
-            if (_rays != null && _palette != null)
+            if (_rays == null || _palette == null)
+            {
+                return;
+            }
+
+            // Through the rays' look where there is one, so the light they cast turns with them.
+            if (_rays.TryGetComponent<GodRaysLook>(out var look))
+            {
+                look.SetColor(_armedColorId);
+            }
+            else
             {
                 _rays.color = _palette.GetColor(_armedColorId);
             }

@@ -28,6 +28,12 @@ namespace BalloonParty.Tests.Configuration
 
         [TestCase(GamePalette.PredictionColorId)]
         [TestCase(GamePalette.SnipeSkyLightColorId)]
+        [TestCase(GamePalette.UnbreakableFormationColorId)]
+        [TestCase(GamePalette.GoldenRaysColorId)]
+        [TestCase(GamePalette.HeartRaysColorId)]
+        [TestCase(GamePalette.DiscoRaysColorId)]
+        [TestCase(GamePalette.NukeRaysColorId)]
+        [TestCase(GamePalette.NukeArmedRaysColorId)]
         public void SceneLightSlot_IsInTheFieldsPalette(string colorId)
         {
             var index = _palette.PaletteIndexOf(colorId);
