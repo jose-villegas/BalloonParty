@@ -28,6 +28,39 @@ namespace BalloonParty.Balloon.Controller
             return max > 0 && bubbles >= max;
         }
 
+        /// <summary>
+        ///     How many more clusters may be filled to the merge cap right now, which is what keeps ripe clusters few
+        ///     and apart: none until <paramref name="cooldownBeats" /> of the bubbles' off-beats have passed since a
+        ///     ripe cluster last ended (<paramref name="offBeatsSinceEnded" />, <see cref="int.MaxValue" /> when
+        ///     none has), then what is left of <paramref name="maxRipe" /> (at least 1) after the
+        ///     <paramref name="fullClusters" /> already at the cap.
+        /// </summary>
+        internal static int FillsLeft(int fullClusters, int maxRipe, int offBeatsSinceEnded, int cooldownBeats)
+        {
+            if (offBeatsSinceEnded < cooldownBeats)
+            {
+                return 0;
+            }
+
+            return Mathf.Max(0, Mathf.Max(1, maxRipe) - fullClusters);
+        }
+
+        /// <summary>
+        ///     What a merge or a foam's hand-out may fill a cluster to right now: <paramref name="max" />, the merge
+        ///     cap, while another cluster may still be filled (<see cref="FillsLeft" />), otherwise one bubble short of
+        ///     it, where the cluster waits without ripening. It is a limit on what a cluster is given, never on what
+        ///     it holds: one already at the cap keeps its bubbles. A cap of 1 or less has no bubble to hold back.
+        /// </summary>
+        internal static int FillLimit(int max, int fullClusters, int maxRipe, int offBeatsSinceEnded, int cooldownBeats)
+        {
+            if (max <= 1)
+            {
+                return max;
+            }
+
+            return FillsLeft(fullClusters, maxRipe, offBeatsSinceEnded, cooldownBeats) > 0 ? max : max - 1;
+        }
+
         /// <summary>Seconds of level clock left before <paramref name="deadline" />, never below 0.</summary>
         internal static float FuseLeft(float deadline, float now)
         {
@@ -140,17 +173,22 @@ namespace BalloonParty.Balloon.Controller
         ///     One bubble per taker a round, in direction order, coats (<paramref name="coatRoom" />, layers each plain
         ///     neighbour can still take) before clusters (<paramref name="clusterRoom" />, bubbles each neighbouring
         ///     cluster can still take); rounds run until the bubbles or the room run out, and any bubbles left over pop
-        ///     as leftovers. Both arrays are indexed by direction and used up as the plan takes from them.
+        ///     as leftovers. Only <paramref name="clusterFills" /> clusters (<see cref="FillsLeft" />) take the last
+        ///     bubble of their room, the one that fills them to the cap: counted as the plan fills them, so one
+        ///     hand-out never fills more than that, and every other cluster stops a bubble short. Both arrays are
+        ///     indexed by direction and used up as the plan takes from them.
         /// </summary>
-        internal static int PlanHandout(int bubbles, int[] coatRoom, int[] clusterRoom)
+        internal static int PlanHandout(int bubbles, int[] coatRoom, int[] clusterRoom, int clusterFills)
         {
             var handout = 0;
             var left = Mathf.Clamp(bubbles, 0, RipeBubbleBurstMessage.MaxHandout);
+            // Nothing limits how many balloons are coated up to their last layer.
+            var coatFills = int.MaxValue;
             var gave = true;
             while (left > 0 && gave)
             {
-                gave = GiveRound(ref handout, ref left, coatRoom, FoamGift.Coat);
-                gave |= GiveRound(ref handout, ref left, clusterRoom, FoamGift.Cluster);
+                gave = GiveRound(ref handout, ref left, coatRoom, FoamGift.Coat, ref coatFills);
+                gave |= GiveRound(ref handout, ref left, clusterRoom, FoamGift.Cluster, ref clusterFills);
             }
 
             for (; left > 0; left--)
@@ -281,8 +319,9 @@ namespace BalloonParty.Balloon.Controller
             return Mathf.Clamp(Mathf.FloorToInt((elapsed / step) + 1e-4f), 0, from - 1);
         }
 
-        // One bubble to each taker with room, in direction order. True if any was given.
-        private static bool GiveRound(ref int handout, ref int left, int[] room, FoamGift gift)
+        // One bubble to each taker with room, in direction order. True if any was given. A taker's last bubble of
+        // room uses up one of fills; with none left, the taker stays a bubble short.
+        private static bool GiveRound(ref int handout, ref int left, int[] room, FoamGift gift, ref int fills)
         {
             var gave = false;
             for (var direction = 0; direction < room.Length && left > 0; direction++)
@@ -290,6 +329,16 @@ namespace BalloonParty.Balloon.Controller
                 if (room[direction] <= 0)
                 {
                     continue;
+                }
+
+                if (room[direction] == 1)
+                {
+                    if (fills <= 0)
+                    {
+                        continue;
+                    }
+
+                    fills--;
                 }
 
                 room[direction]--;

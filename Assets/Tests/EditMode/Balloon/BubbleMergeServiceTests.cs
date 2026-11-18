@@ -4,6 +4,7 @@ using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Palette;
+using BalloonParty.Game.Level;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
@@ -19,6 +20,8 @@ namespace BalloonParty.Tests.Balloon
     ///     The service over a real grid: merges where the giver keeps bubbles, which need no controller (only an
     ///     absorb slides one away), and when the service looks again. Clusters spawn with the shipped HitsToPop, below
     ///     the merge cap, as they do in play. Each merge's <see cref="BubbleMergedMessage" /> is what the view plays.
+    ///     The board's beat is a count the tests step: a pass runs only on a tick that finds it risen
+    ///     (<c>OffBeat</c>), and a tick between two off-beats (<c>_service.Tick()</c>) does nothing.
     /// </summary>
     [TestFixture]
     public class BubbleMergeServiceTests
@@ -39,6 +42,7 @@ namespace BalloonParty.Tests.Balloon
         private BubbleClusterModel _left;
         private BubbleClusterModel _right;
         private BubbleMergeService _service;
+        private int _offBeats;
 
         [SetUp]
         public void SetUp()
@@ -52,13 +56,20 @@ namespace BalloonParty.Tests.Balloon
 
             var balloonsConfig = Substitute.For<IBalloonsConfiguration>();
             balloonsConfig.BubbleMergeMax.Returns(MergeMax);
+            balloonsConfig.RipeBubble.Returns(Substitute.For<IRipeBubbleSettings>());
             var registry = new BalloonControllerRegistry(null, Substitute.For<IPublisher<BoardDepletedMessage>>());
             _merged.Clear();
             _countsAtPublish.Clear();
             _left = null;
             _right = null;
+            // Ripeness is off here (no fuse on the substituted settings), so the room for full clusters limits
+            // nothing: what it does to a merge is covered in RipeRoomTests.
+            _offBeats = 0;
+            var beat = Substitute.For<IBoardBeat>();
+            beat.OffBeats(Arg.Any<float>()).Returns(_ => _offBeats);
+            var room = new RipeRoom(_grid, beat, Substitute.For<ILevelProgress>(), balloonsConfig);
             _service = new BubbleMergeService(
-                _grid, registry, balloonsConfig, CaptureHits(), CaptureMerges());
+                _grid, registry, balloonsConfig, room, beat, CaptureHits(), CaptureMerges());
             _service.Start();
         }
 
@@ -76,7 +87,7 @@ namespace BalloonParty.Tests.Balloon
             var left = Place(Left, SpawnHits);
             var right = Place(Right, SpawnHits);
 
-            _service.Tick();
+            OffBeat();
 
             // Between equals the higher column gives.
             Assert.AreEqual(MergeMax, left.HitsRemaining.Value);
@@ -90,40 +101,40 @@ namespace BalloonParty.Tests.Balloon
             var full = Place(Left, 5);
             var giver = Place(Right, 3);
 
-            _service.Tick();
+            OffBeat();
 
             Assert.AreEqual(5, full.HitsRemaining.Value);
             Assert.AreEqual(3, giver.HitsRemaining.Value);
         }
 
         [Test]
-        public void AHitThatMakesRoom_MergesOnTheNextFrame()
+        public void AHitThatMakesRoom_MergesOnTheNextOffBeat()
         {
             var full = Place(Left, 5);
             var giver = Place(Right, 3);
-            _service.Tick();
+            OffBeat();
 
             full.SetBubbles(4);
             _hitHandler.Handle(new ActorHitMessage(full, Vector3.zero, Vector3.up, HitOutcome.PassThrough));
-            _service.Tick();
+            OffBeat();
 
             Assert.AreEqual(5, full.HitsRemaining.Value);
             Assert.AreEqual(2, giver.HitsRemaining.Value);
         }
 
         [Test]
-        public void AClusterLeavingTheBoard_LooksAgainOnTheNextFrame()
+        public void AClusterLeavingTheBoard_LooksAgainOnTheNextOffBeat()
         {
             var full = Place(Left, 5);
             var giver = Place(Right, 3);
             var leaving = Place(new Vector2Int(3, 3), 1);
-            _service.Tick();
+            OffBeat();
 
             // A count changed with no hit, then a ripe cluster that handed its bubbles out leaves the board: the
             // grid change alone says to look again.
             full.SetBubbles(4);
             _grid.Remove(leaving.SlotIndex.Value);
-            _service.Tick();
+            OffBeat();
 
             Assert.AreEqual(5, full.HitsRemaining.Value);
             Assert.AreEqual(2, giver.HitsRemaining.Value);
@@ -134,11 +145,11 @@ namespace BalloonParty.Tests.Balloon
         {
             var full = Place(Left, 5);
             var giver = Place(Right, 3);
-            _service.Tick();
+            OffBeat();
 
             // A count changed by something the service doesn't hear about waits for the next change it does.
             full.SetBubbles(4);
-            _service.Tick();
+            OffBeat();
 
             Assert.AreEqual(4, full.HitsRemaining.Value);
             Assert.AreEqual(3, giver.HitsRemaining.Value);
@@ -150,7 +161,7 @@ namespace BalloonParty.Tests.Balloon
             _left = Place(Left, SpawnHits);
             _right = Place(Right, SpawnHits);
 
-            _service.Tick();
+            OffBeat();
 
             Assert.AreEqual(1, _merged.Count);
             var merge = _merged[0];
@@ -169,7 +180,7 @@ namespace BalloonParty.Tests.Balloon
             _left = Place(Left, SpawnHits);
             _right = Place(Right, SpawnHits);
 
-            _service.Tick();
+            OffBeat();
 
             Assert.AreEqual((SpawnHits, SpawnHits), _countsAtPublish[0]);
             Assert.AreEqual(MergeMax, _left.HitsRemaining.Value);
@@ -181,7 +192,7 @@ namespace BalloonParty.Tests.Balloon
             Place(Left, 5);
             Place(Right, 3);
 
-            _service.Tick();
+            OffBeat();
 
             Assert.IsEmpty(_merged);
         }
@@ -193,7 +204,7 @@ namespace BalloonParty.Tests.Balloon
             var receiver = Place(Left, SpawnHits);
             Place(Right, 1);
 
-            _service.Tick();
+            OffBeat();
 
             Assert.IsEmpty(_merged);
             Assert.AreEqual(SpawnHits, receiver.HitsRemaining.Value);
@@ -208,10 +219,124 @@ namespace BalloonParty.Tests.Balloon
             Place(new Vector2Int(1, 3), SpawnHits);
             Place(new Vector2Int(2, 3), SpawnHits);
 
-            _service.Tick();
+            OffBeat();
 
             Assert.AreEqual(2, _merged.Count);
             Assert.AreNotEqual(_merged[0].ReceiverSlot, _merged[1].ReceiverSlot);
+        }
+
+        [Test]
+        public void BetweenOffBeats_NothingMerges_AndTheOffBeatMergesOnce()
+        {
+            var left = Place(Left, SpawnHits);
+            var right = Place(Right, SpawnHits);
+
+            _service.Tick();
+            _service.Tick();
+            _service.Tick();
+
+            Assert.AreEqual(SpawnHits, left.HitsRemaining.Value, "a pair ready to merge waits for the off-beat");
+            Assert.AreEqual(SpawnHits, right.HitsRemaining.Value);
+            Assert.IsEmpty(_merged);
+
+            OffBeat();
+
+            Assert.AreEqual(MergeMax, left.HitsRemaining.Value);
+            Assert.AreEqual(1, _merged.Count);
+        }
+
+        // The board changes after an off-beat has passed: nothing is looked at until the next one.
+        [Test]
+        public void ABoardChangeBetweenOffBeats_WaitsForTheNextOne()
+        {
+            OffBeat();
+            var left = Place(Left, SpawnHits);
+            Place(Right, SpawnHits);
+
+            _service.Tick();
+            _service.Tick();
+
+            Assert.AreEqual(SpawnHits, left.HitsRemaining.Value);
+
+            OffBeat();
+
+            Assert.AreEqual(MergeMax, left.HitsRemaining.Value);
+        }
+
+        // The middle cluster could give to either neighbour. A pass takes each cluster in one merge, and the
+        // follow-up no longer runs the frame after: it waits for the next off-beat, however many ticks pass.
+        [Test]
+        public void TwoMergesForOneCluster_TakeTwoOffBeats()
+        {
+            var left = Place(new Vector2Int(0, 1), 4);
+            var middle = Place(new Vector2Int(1, 1), 3);
+            var right = Place(new Vector2Int(2, 1), 4);
+
+            OffBeat();
+
+            // Between merges that make clusters the same size, the receiver in the lower column goes first.
+            Assert.AreEqual(MergeMax, left.HitsRemaining.Value);
+            Assert.AreEqual(2, middle.HitsRemaining.Value);
+            Assert.AreEqual(4, right.HitsRemaining.Value);
+
+            _service.Tick();
+            _service.Tick();
+
+            Assert.AreEqual(4, right.HitsRemaining.Value, "one pass an off-beat, however many frames it lasts");
+            Assert.AreEqual(1, _merged.Count);
+
+            OffBeat();
+
+            Assert.AreEqual(MergeMax, right.HitsRemaining.Value);
+            Assert.AreEqual(1, middle.HitsRemaining.Value);
+            Assert.AreEqual(2, _merged.Count);
+        }
+
+        // A hit only marks that there is something to look at: the merge it makes room for comes on the off-beat.
+        [Test]
+        public void AHitBetweenOffBeats_WaitsForTheNextOne()
+        {
+            var full = Place(Left, 5);
+            var giver = Place(Right, 3);
+            OffBeat();
+
+            full.SetBubbles(4);
+            _hitHandler.Handle(new ActorHitMessage(full, Vector3.zero, Vector3.up, HitOutcome.PassThrough));
+            _service.Tick();
+
+            Assert.AreEqual(4, full.HitsRemaining.Value);
+            Assert.AreEqual(3, giver.HitsRemaining.Value);
+
+            OffBeat();
+
+            Assert.AreEqual(5, full.HitsRemaining.Value);
+            Assert.AreEqual(2, giver.HitsRemaining.Value);
+        }
+
+        // A run that starts over takes the beat's count back to 0. That drop is not an off-beat; the next rise is.
+        [Test]
+        public void TheCountStartingOver_IsNoOffBeat()
+        {
+            _offBeats = 5;
+            _service.Tick();
+            var left = Place(Left, SpawnHits);
+            Place(Right, SpawnHits);
+
+            _offBeats = 0;
+            _service.Tick();
+
+            Assert.AreEqual(SpawnHits, left.HitsRemaining.Value);
+
+            OffBeat();
+
+            Assert.AreEqual(MergeMax, left.HitsRemaining.Value);
+        }
+
+        // The bubbles' next off-beat falls, and the service ticks on it.
+        private void OffBeat()
+        {
+            _offBeats++;
+            _service.Tick();
         }
 
         private BubbleClusterModel Place(Vector2Int slot, int bubbles)

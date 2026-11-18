@@ -13,6 +13,19 @@ namespace BalloonParty.Configuration.Balloons
         /// <summary>Seconds of level clock from ripening to the fuse running out. 0 or less: clusters never ripen.</summary>
         float FuseSeconds { get; }
 
+        /// <summary>The most clusters that are full (ripe, or about to ripen) at once, at least 1: while that many
+        /// are, a merge or a foam's hand-out fills a cluster to one bubble short of the cap, where it waits.</summary>
+        int MaxRipeClusters { get; }
+
+        /// <summary>How many of the bubbles' off-beats (<see cref="MergeOffBeat" />) pass after a ripe cluster ends
+        /// (burst by a hit, or its fuse run out) before another cluster is filled to the cap. 0: none.</summary>
+        int RipenCooldownBeats { get; }
+
+        /// <summary>When in each beat of the board (<see cref="IUnbreakableFormationSettings.BeatSeconds" />) bubble
+        /// clusters merge, as a share of the beat after it falls (0 to 1): the bubbles' off-beat. Clusters merge
+        /// only then, one pass an off-beat.</summary>
+        float MergeOffBeat { get; }
+
         /// <summary>The hit each balloon the ripple reaches takes.</summary>
         int RippleDamage { get; }
 

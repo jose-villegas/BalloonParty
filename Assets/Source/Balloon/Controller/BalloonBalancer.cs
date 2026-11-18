@@ -25,7 +25,7 @@ using BalloonParty.Configuration.Effects;
 
 namespace BalloonParty.Balloon.Controller
 {
-    internal class BalloonBalancer : IStartable, ITickable, IRunResettable, IDisposable
+    internal class BalloonBalancer : IStartable, ITickable, IRunResettable, IDisposable, IBoardBeat
     {
         // Sub-millimeter total travel (squared world units): below this a move is degenerate — a
         // (near-)zero-length path makes DOTween's ConvertToConstantPathPerc divide 0/0 into NaN positions.
@@ -151,6 +151,23 @@ namespace BalloonParty.Balloon.Controller
             _turnSteps.Clear();
             _motionTicker.CancelAllBalanceMoves();
             ReleasePaths();
+        }
+
+        // The beat is read where it is kept (IBoardBeat): the bubbles merge on its off-beat, and counting it here
+        // keeps them on the snakes' rhythm with no clock of their own. With no formation service there is no beat.
+        public int OffBeats(float share)
+        {
+            return _formations == null ? 0 : OffBeatsAt(_beats, BeatPhase(), share);
+        }
+
+        /// <summary>
+        ///     The off-beats passed once <paramref name="beats" /> beats have fallen and the clock stands
+        ///     <paramref name="phase" /> (0 to 1) of the way to the next: one <paramref name="share" /> of a beat
+        ///     after the run's start and after each beat. A share of 0 puts the off-beat on the beat itself.
+        /// </summary>
+        internal static int OffBeatsAt(int beats, float phase, float share)
+        {
+            return beats + (phase >= Mathf.Clamp01(share) ? 1 : 0);
         }
 
         private void AnimatePaths(Dictionary<IWriteableDynamicSlotActor, List<Vector3>> paths)
@@ -592,6 +609,13 @@ namespace BalloonParty.Balloon.Controller
                 {
                     KeepTheBeatThroughADoomedGlide(deltaTime);
                 }
+                else if (!paused && _formations != null)
+                {
+                    // The pulse is switched off (an interval of 0), which stops everything the balancer moves,
+                    // the snakes too. The beat is still counted, with nothing marked due, for what reads it
+                    // (IBoardBeat): bubble merging must not stop with the pulse.
+                    AdvanceBeat(deltaTime);
+                }
 
                 return false;
             }
@@ -685,22 +709,20 @@ namespace BalloonParty.Balloon.Controller
         // The unbreakables' clock, marking what falls due. True when anything did. An unbreakable snake steps
         // SnakeStepsPerBeat times a beat, on the beat and evenly between; on a beat the free unbreakables form up;
         // every BeatsPerCycle beats is a cycle, when formations also change shape and a lone unbreakable may move. The
-        // clock runs with no snake too, so the snakes' steps and the cycles keep one rhythm.
+        // clock runs with no snake and with no unbreakable on the board too, so the snakes' steps, the cycles and
+        // whatever else reads the beat (IBoardBeat) keep one rhythm.
         private bool TickBeat(float deltaTime)
         {
-            var stepsPerBeat = _formations.SnakeStepsPerBeat;
-            if (!TickStepClock(ref _beatElapsed, _formations.BeatSeconds / stepsPerBeat, true, true, deltaTime))
+            if (!AdvanceBeat(deltaTime))
             {
                 return false;
             }
 
-            _snakeSteps++;
             var snakeStep = _formations.HasUnbreakableSnake;
             var cycle = false;
             var form = false;
-            if (_snakeSteps % stepsPerBeat == 0)
+            if (_snakeSteps % _formations.SnakeStepsPerBeat == 0)
             {
-                _beats++;
                 cycle = _beats % _formations.BeatsPerCycle == 0 && _formations.HasUnbreakables;
                 form = !cycle && _formations.UnbreakablesDueToForm();
             }
@@ -709,6 +731,41 @@ namespace BalloonParty.Balloon.Controller
             _cycleDue |= cycle;
             _formDue |= form;
             return snakeStep || cycle || form;
+        }
+
+        // The clock alone, asking nothing of the board: counts a snake step each time one falls, and a beat every
+        // SnakeStepsPerBeat of them. True when a step fell.
+        private bool AdvanceBeat(float deltaTime)
+        {
+            var stepsPerBeat = _formations.SnakeStepsPerBeat;
+            if (!TickStepClock(ref _beatElapsed, _formations.BeatSeconds / stepsPerBeat, true, true, deltaTime))
+            {
+                return false;
+            }
+
+            _snakeSteps++;
+            if (_snakeSteps % stepsPerBeat == 0)
+            {
+                _beats++;
+            }
+
+            return true;
+        }
+
+        // How far the clock stands from the last beat to the next, 0 to 1: the snake steps already taken in this
+        // beat and the time run toward the next one.
+        private float BeatPhase()
+        {
+            var beatSeconds = _formations.BeatSeconds;
+            if (beatSeconds <= 0f)
+            {
+                return 0f;
+            }
+
+            var stepsPerBeat = _formations.SnakeStepsPerBeat;
+            var stepSeconds = beatSeconds / stepsPerBeat;
+            var sinceBeat = ((_snakeSteps % stepsPerBeat) * stepSeconds) + Mathf.Min(_beatElapsed, stepSeconds);
+            return Mathf.Clamp01(sinceBeat / beatSeconds);
         }
 
         // A snake's step clock: true every interval of play while one walks. A pause or a doomed glide holds it

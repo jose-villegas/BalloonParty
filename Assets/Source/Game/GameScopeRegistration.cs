@@ -261,8 +261,9 @@ namespace BalloonParty.Game
         // Do not reorder or split — entry points start in registration order and the game depends on it.
         internal static void RegisterGameplaySystems(this IContainerBuilder builder)
         {
-            builder.RegisterEntryPoint<BalloonBalancer>().AsSelf().As<IRunResettable>();
+            builder.RegisterEntryPoint<BalloonBalancer>().AsSelf().As<IRunResettable>().As<IBoardBeat>();
             builder.RegisterEntryPoint<NudgeService>();
+            builder.Register<RipeRoom>(Lifetime.Singleton).AsSelf().As<IRunResettable>();
             builder.RegisterEntryPoint<BubbleMergeService>();
             builder.Register<RipeBubbleBurst>(Lifetime.Singleton);
             builder.RegisterEntryPoint<RipeBubbleService>().As<IRunResettable>();

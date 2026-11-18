@@ -151,14 +151,16 @@ namespace BalloonParty.Tests.ShotSolver
                 new ImpactEventBus());
             var clock = Substitute.For<ISpawnClock>();
             clock.SecondsOnLevel.Returns(0f);
+            var room = new RipeRoom(_grid, Substitute.For<IBoardBeat>(), levelProgress, _balloons);
             _ripe = new RipeBubbleService(
                 _grid, clock, _balloons, levelProgress, new RipeBubbleBurst(
-                    _grid, _dispatcher, Substitute.For<IBalloonPopper>(), _balloons, disturbanceField,
+                    _grid, _dispatcher, Substitute.For<IBalloonPopper>(), _balloons, room, disturbanceField,
                     new SceneLightFieldService(
                         Substitute.For<IGameDisplayConfiguration>(), _palette,
                         Substitute.For<ISceneLightFieldSettings>()),
                     Substitute.For<IPublisher<NudgeMessage>>()),
-                Capture<ActorHitMessage>(h => _rippleHears = h), Quiet<BubbleMergedMessage>(), Quiet<GameOverMessage>(),
+                room, Capture<ActorHitMessage>(h => _rippleHears = h), Quiet<BubbleMergedMessage>(),
+                Quiet<GameOverMessage>(),
                 Substitute.For<IPublisher<BubbleRipenedMessage>>(), Substitute.For<IPublisher<RipeBubbleBurstMessage>>(),
                 Substitute.For<IPublisher<RipeFuseBeatMessage>>());
             _ripe.Start();

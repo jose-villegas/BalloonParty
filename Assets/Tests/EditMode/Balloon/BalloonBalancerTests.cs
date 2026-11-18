@@ -446,6 +446,159 @@ namespace BalloonParty.Tests.Balloon
             balancer.ResetRun(balancer.Generation + 1);
         }
 
+        [TestCase(0, 0f, 0.25f, 0)]
+        [TestCase(0, 0.24f, 0.25f, 0)]
+        [TestCase(0, 0.25f, 0.25f, 1)]
+        [TestCase(0, 0.9f, 0.25f, 1)]
+        [TestCase(1, 0f, 0.25f, 1)]
+        [TestCase(1, 0.3f, 0.25f, 2)]
+        [TestCase(4, 0.1f, 0.25f, 4)]
+        [TestCase(4, 0.5f, 0.25f, 5)]
+        [TestCase(3, 0f, 0f, 4)]
+        public void OffBeatsAt_CountsOneAShareOfABeatAfterTheStartAndAfterEachBeat(
+            int beats, float phase, float share, int offBeats)
+        {
+            Assert.AreEqual(offBeats, BalloonBalancer.OffBeatsAt(beats, phase, share));
+        }
+
+        // A beat of 1 s with two snake steps in it, stepped an eighth of a second at a time, on a board with no
+        // unbreakable, no tough and no snake: the off-beat falls a quarter beat into the run and a quarter beat after
+        // each beat, and the count never falls or jumps.
+        [Test]
+        public void TheOffBeat_IsCountedOnAnEmptyBoard_AQuarterBeatAfterEachBeat()
+        {
+            var balancer = BalancerWithABeat(out var formations);
+            IBoardBeat beat = balancer;
+            var counts = new List<int>();
+
+            for (var step = 1; step <= 18; step++)
+            {
+                Assert.IsFalse(balancer.TickFlightRebalance(0.125f), "nothing on the board is due");
+                counts.Add(beat.OffBeats(0.25f));
+            }
+
+            // Seconds of play:      .125 .25 .375 .5 .625 .75 .875 1  1.125 1.25 ... 2  2.125 2.25
+            CollectionAssert.AreEqual(
+                new[] { 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 3 }, counts);
+            formations.Dispose();
+        }
+
+        [Test]
+        public void TheOffBeat_ReadAtAnotherShare_FallsThere()
+        {
+            var balancer = BalancerWithABeat(out var formations);
+            IBoardBeat beat = balancer;
+
+            balancer.TickFlightRebalance(0.5f);
+            Assert.AreEqual(0, beat.OffBeats(0.75f), "half a beat in");
+            Assert.AreEqual(1, beat.OffBeats(0.5f));
+            balancer.TickFlightRebalance(0.25f);
+
+            Assert.AreEqual(1, beat.OffBeats(0.75f));
+            formations.Dispose();
+        }
+
+        [Test]
+        public void APause_HoldsTheOffBeat_AndItGoesOnFromWhereItStood()
+        {
+            var balancer = BalancerWithABeat(out var formations);
+            IBoardBeat beat = balancer;
+            balancer.TickFlightRebalance(0.125f);
+
+            _pauseService.Pause(PauseSource.Cheat);
+            for (var step = 0; step < 20; step++)
+            {
+                balancer.TickFlightRebalance(0.125f);
+            }
+
+            Assert.AreEqual(0, beat.OffBeats(0.25f), "no beat passes in a pause");
+
+            _pauseService.Resume(PauseSource.Cheat);
+            balancer.TickFlightRebalance(0.125f);
+
+            Assert.AreEqual(1, beat.OffBeats(0.25f), "a quarter beat of play in all");
+            formations.Dispose();
+        }
+
+        // The rhythm comes first: a doomed shot's last glide holds the board, not the beat.
+        [Test]
+        public void ADoomedGlide_DoesNotHoldTheOffBeat()
+        {
+            var balancer = BalancerWithABeat(out var formations);
+            IBoardBeat beat = balancer;
+            LoadFreeProjectile().IsLastShieldApproach.Value = true;
+
+            balancer.TickFlightRebalance(0.25f);
+
+            Assert.AreEqual(1, beat.OffBeats(0.25f));
+            formations.Dispose();
+        }
+
+        // With the pulse switched off the balancer moves nothing, but what reads the beat still gets it.
+        [Test]
+        public void WithTheFlightPulseOff_TheOffBeatIsStillCounted()
+        {
+            var balancer = BalancerWithABeat(out var formations);
+            _balloonsConfig.FlightRebalanceInterval.Returns(0f);
+            IBoardBeat beat = balancer;
+
+            for (var step = 0; step < 10; step++)
+            {
+                Assert.IsFalse(balancer.TickFlightRebalance(0.125f));
+            }
+
+            Assert.AreEqual(2, beat.OffBeats(0.25f), "1.25 s of play: a quarter beat past the first beat");
+            formations.Dispose();
+        }
+
+        [Test]
+        public void ARunReset_StartsTheOffBeatCountOver()
+        {
+            var balancer = BalancerWithABeat(out var formations);
+            IBoardBeat beat = balancer;
+            for (var step = 0; step < 10; step++)
+            {
+                balancer.TickFlightRebalance(0.125f);
+            }
+
+            Assert.AreEqual(2, beat.OffBeats(0.25f));
+
+            balancer.ResetRun(balancer.Generation + 1);
+
+            Assert.AreEqual(0, beat.OffBeats(0.25f));
+            formations.Dispose();
+        }
+
+        [Test]
+        public void WithNoFormationService_ThereIsNoBeat()
+        {
+            IBoardBeat beat = _balancer;
+
+            _balancer.TickFlightRebalance(0.5f);
+
+            Assert.AreEqual(0, beat.OffBeats(0.25f));
+        }
+
+        // An empty board and a formation service with the unbreakables' clock set: a beat of 1 s, two snake steps a
+        // beat, two beats a cycle. The flight pulse is 100 s away, so only the beat can make anything due.
+        private BalloonBalancer BalancerWithABeat(out UnbreakableFormationService formations)
+        {
+            var settings = Substitute.For<IUnbreakableFormationSettings>();
+            settings.Enabled.Returns(true);
+            settings.MinMembers.Returns(2);
+            settings.BeatSeconds.Returns(1f);
+            settings.BeatsPerCycle.Returns(2);
+            settings.SnakeStepsPerBeat.Returns(2);
+            _balloonsConfig.UnbreakableFormation.Returns(settings);
+            _balloonsConfig.FlightRebalanceInterval.Returns(100f);
+            formations = new UnbreakableFormationService(_grid, _balloonsConfig,
+                new ThreatEase(Substitute.For<IPlayerNeed>(), Substitute.For<IAssistSettings>()));
+            formations.Start();
+            return new BalloonBalancer(
+                _grid, new GridBalanceQuery(_grid), _balloonsConfig, new BalancePathHolder(), CaptureBalanceRequests(),
+                _registry, _pauseService, null, new BalloonMotionTicker(), formations: formations);
+        }
+
         // Three toughs on row 0 of the 3 by 3 board: the wave start makes a snake of them, unless formAtOnce is
         // off, when it waits for the test to arrange.
         private BalloonBalancer BalancerWithAToughSnake(

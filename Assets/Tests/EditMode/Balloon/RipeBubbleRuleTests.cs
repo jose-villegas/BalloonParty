@@ -20,6 +20,9 @@ namespace BalloonParty.Tests.Balloon
         // The shipped BurstSeconds: the whole fold, hit to pop.
         private const float FoldBurst = 0.22f;
 
+        // A hand-out that may fill every cluster it reaches: the room for full clusters is not what is tested.
+        private const int NoFillLimit = int.MaxValue;
+
         [TestCase(5, 5, true)]
         [TestCase(6, 5, true)]
         [TestCase(4, 5, false)]
@@ -237,7 +240,7 @@ namespace BalloonParty.Tests.Balloon
             var coats = new[] { 0, 1, 0, 1, 0, 0 };
             var clusters = new[] { 2, 0, 0, 0, 0, 0 };
 
-            var handout = RipeBubbleRule.PlanHandout(6, coats, clusters);
+            var handout = RipeBubbleRule.PlanHandout(6, coats, clusters, NoFillLimit);
 
             AssertGifts(handout,
                 (FoamGift.Coat, 1), (FoamGift.Coat, 3), (FoamGift.Cluster, 0),
@@ -248,7 +251,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void PlanHandout_ACoatOfTwoLayers_TakesASecondBubbleInTheNextRound()
         {
-            var handout = RipeBubbleRule.PlanHandout(3, new[] { 2, 0, 0, 0, 0, 1 }, new int[6]);
+            var handout = RipeBubbleRule.PlanHandout(3, new[] { 2, 0, 0, 0, 0, 1 }, new int[6], NoFillLimit);
 
             AssertGifts(handout, (FoamGift.Coat, 0), (FoamGift.Coat, 5), (FoamGift.Coat, 0));
         }
@@ -256,7 +259,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void PlanHandout_NoTakers_AllLeftovers_AndNoMoreThanSix()
         {
-            var handout = RipeBubbleRule.PlanHandout(9, new int[6], new int[6]);
+            var handout = RipeBubbleRule.PlanHandout(9, new int[6], new int[6], NoFillLimit);
 
             Assert.AreEqual(6, RipeBubbleBurstMessage.HandoutCount(handout));
             for (var bubble = 0; bubble < 6; bubble++)
@@ -270,7 +273,77 @@ namespace BalloonParty.Tests.Balloon
         public void PlanHandout_NoBubbles_NoHandout()
         {
             Assert.AreEqual(0, RipeBubbleBurstMessage.HandoutCount(
-                RipeBubbleRule.PlanHandout(0, new[] { 1, 1, 1, 1, 1, 1 }, new int[6])));
+                RipeBubbleRule.PlanHandout(0, new[] { 1, 1, 1, 1, 1, 1 }, new int[6], NoFillLimit)));
+        }
+
+        // Two clusters each a bubble from the cap and one with room for three: only one may be filled, so the first
+        // by direction takes its last bubble, the second is passed over, and the third stops a bubble short.
+        [Test]
+        public void PlanHandout_FillsOnlyAsManyClustersAsItMay_AndStopsTheRestABubbleShort()
+        {
+            var clusters = new[] { 1, 0, 1, 0, 3, 0 };
+
+            var handout = RipeBubbleRule.PlanHandout(6, new int[6], clusters, 1);
+
+            AssertGifts(handout,
+                (FoamGift.Cluster, 0), (FoamGift.Cluster, 4), (FoamGift.Cluster, 4),
+                (FoamGift.Leftover, -1), (FoamGift.Leftover, -1), (FoamGift.Leftover, -1));
+        }
+
+        [Test]
+        public void PlanHandout_WithNoFillsLeft_EveryClusterStopsABubbleShort()
+        {
+            var clusters = new[] { 1, 2, 0, 0, 0, 0 };
+
+            var handout = RipeBubbleRule.PlanHandout(6, new int[6], clusters, 0);
+
+            Assert.AreEqual(1, CountOf(handout, FoamGift.Cluster));
+            Assert.AreEqual(FoamGift.Cluster, RipeBubbleBurstMessage.HandoutGift(handout, 0, out var direction));
+            Assert.AreEqual(1, direction);
+            Assert.AreEqual(5, CountOf(handout, FoamGift.Leftover));
+        }
+
+        // The limit is on clusters only: a coat's last layer is never held back.
+        [Test]
+        public void PlanHandout_WithNoFillsLeft_StillCoatsToTheLastLayer()
+        {
+            var handout = RipeBubbleRule.PlanHandout(2, new[] { 1, 0, 0, 1, 0, 0 }, new int[6], 0);
+
+            AssertGifts(handout, (FoamGift.Coat, 0), (FoamGift.Coat, 3));
+        }
+
+        // since: the bubbles' off-beats passed since a ripe cluster last ended, int.MaxValue when none has.
+        [TestCase(0, 2, int.MaxValue, 2, 2)]
+        [TestCase(1, 2, int.MaxValue, 2, 1)]
+        [TestCase(2, 2, int.MaxValue, 2, 0)]
+        [TestCase(5, 2, int.MaxValue, 2, 0)]
+        [TestCase(0, 2, 0, 2, 0)]
+        [TestCase(0, 2, 1, 2, 0)]
+        [TestCase(0, 2, 2, 2, 2)]
+        [TestCase(1, 2, 7, 2, 1)]
+        [TestCase(0, 2, 0, 0, 2)]
+        [TestCase(0, 0, 7, 2, 1)]
+        public void FillsLeft_IsTheRoomUnderTheMostFullClusters_AndNoneWhileTheCooldownRuns(
+            int full, int maxRipe, int since, int cooldownBeats, int fills)
+        {
+            Assert.AreEqual(fills, RipeBubbleRule.FillsLeft(full, maxRipe, since, cooldownBeats));
+        }
+
+        [TestCase(6, 0, 2, int.MaxValue, 2, 6)]
+        [TestCase(6, 1, 2, int.MaxValue, 2, 6)]
+        [TestCase(6, 2, 2, int.MaxValue, 2, 5)]
+        [TestCase(6, 3, 2, int.MaxValue, 2, 5)]
+        [TestCase(6, 0, 2, 0, 2, 5)]
+        [TestCase(6, 0, 2, 1, 2, 5)]
+        [TestCase(6, 0, 2, 2, 2, 6)]
+        [TestCase(6, 2, 2, 2, 2, 5)]
+        [TestCase(6, 0, 2, 0, 0, 6)]
+        [TestCase(1, 5, 2, 0, 2, 1)]
+        [TestCase(0, 5, 2, 0, 2, 0)]
+        public void FillLimit_IsTheCapWhileThereIsRoom_AndOneBubbleShortOtherwise(
+            int max, int full, int maxRipe, int since, int cooldownBeats, int limit)
+        {
+            Assert.AreEqual(limit, RipeBubbleRule.FillLimit(max, full, maxRipe, since, cooldownBeats));
         }
 
         [TestCase(0f, 6)]
@@ -536,6 +609,20 @@ namespace BalloonParty.Tests.Balloon
                 Assert.AreEqual(expected[bubble].Gift, gift, $"bubble {bubble}");
                 Assert.AreEqual(expected[bubble].Direction, direction, $"bubble {bubble}");
             }
+        }
+
+        private static int CountOf(int handout, FoamGift gift)
+        {
+            var count = 0;
+            for (var bubble = 0; bubble < RipeBubbleBurstMessage.HandoutCount(handout); bubble++)
+            {
+                if (RipeBubbleBurstMessage.HandoutGift(handout, bubble, out _) == gift)
+                {
+                    count++;
+                }
+            }
+
+            return count;
         }
     }
 }

@@ -43,9 +43,20 @@ most, not a cycle. On every cycle the balancer asks the service to `ArrangeOnCyc
 lone unbreakable (`RelocateOneRoamer`): the one that has rested longest of those that have stood
 `LoneHoldCycles`, and none while the last one to move is still on its way (`RoamRests` keeps the count).
 Formations go first, so the lone one sees their slots as taken. A cycle with no unbreakable on the board
-does nothing, and no balance runs for it. The beat runs with no snake too, so the snakes' steps and the
-cycles keep one rhythm. The tough snake keeps its own clock (`ToughSnakeStepSeconds`, 1.5 s): it has no
-shape to change and nothing to hold, so it steps on its own.
+does nothing, and no balance runs for it. The beat runs with no snake too, and with no unbreakable on the
+board at all, so the snakes' steps and the cycles keep one rhythm. The tough snake keeps its own clock
+(`ToughSnakeStepSeconds`, 1.5 s): it has no shape to change and nothing to hold, so it steps on its own.
+
+Other things on the board keep the same rhythm through `IBoardBeat` (`Balloon/Controller/`), which the
+balancer implements: `OffBeats(share)` is how many off-beats have passed in the run, an off-beat falling
+that share of a beat after each beat (`BalloonBalancer.OffBeatsAt` is the pure count, from the beats passed
+and how far the clock stands toward the next). A reader keeps no timer, only the count it last saw. Bubble
+clusters merge on theirs, a quarter beat in (`IRipeBubbleSettings.MergeOffBeat`), which falls between a
+snake's step on the beat and its step half a beat in (`Plans/PLAN-RipeBubbleCluster.md`, decision 19). The
+count follows the beat exactly: a pause holds it, a doomed glide does not, and a run reset starts it over.
+With the flight pulse switched off (`FlightRebalanceInterval` 0) the balancer moves nothing, snakes
+included, but still counts the beat for its readers. So `BeatSeconds` and `SnakeStepsPerBeat` now pace the
+bubbles' merging as well as the unbreakables.
 
 ## How a formation runs
 

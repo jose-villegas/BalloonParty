@@ -28,7 +28,8 @@ namespace BalloonParty.Configuration.Balloons
         ///     Seconds of play between the unbreakables' beats. An unbreakable snake steps
         ///     <see cref="SnakeStepsPerBeat" /> times a beat; every
         ///     <see cref="BeatsPerCycle" /> beats make a cycle, the clock formations form, hold and change shape on and
-        ///     a lone unbreakable moves on.
+        ///     a lone unbreakable moves on. It is the board's beat: bubble clusters merge on it too, a share of a beat
+        ///     after each one (<see cref="IRipeBubbleSettings.MergeOffBeat" />).
         /// </summary>
         float BeatSeconds { get; }
 

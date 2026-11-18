@@ -25,7 +25,10 @@ namespace BalloonParty.Balloon.Controller
     ///     ripe cluster the ripple pops does the same in turn. One whose fuse runs out hands its bubbles to its
     ///     neighbours and leaves the board, the level's foam (<see cref="RipeBubbleBurst.PlanFoam" />,
     ///     <see cref="RipeBubbleBurst.HandOut" />). Either way a <see cref="RipeBubbleBurstMessage" /> goes out, and
-    ///     each throb of a fuse sends a <see cref="RipeFuseBeatMessage" />. Looks for new ripe clusters when anything
+    ///     each throb of a fuse sends a <see cref="RipeFuseBeatMessage" />, and either ending is told to
+    ///     <see cref="RipeRoom" />, which holds other clusters a bubble short of the cap for a while after it. Every
+    ///     cluster already at the cap ripens, whatever that room: it limits what a cluster is filled to, not what
+    ///     ripens. Looks for new ripe clusters when anything
     ///     could have filled one: the grid changing, a cluster being hit, a merge, or a hand-out. A level change, game
     ///     over or run reset forgets every fuse and every burst still waiting.
     /// </summary>
@@ -41,6 +44,7 @@ namespace BalloonParty.Balloon.Controller
         private readonly IRipeBubbleSettings _settings;
         private readonly ILevelProgress _levelProgress;
         private readonly RipeBubbleBurst _burst;
+        private readonly RipeRoom _room;
         private readonly ISubscriber<ActorHitMessage> _hitSubscriber;
         private readonly ISubscriber<BubbleMergedMessage> _mergedSubscriber;
         private readonly ISubscriber<GameOverMessage> _gameOverSubscriber;
@@ -67,7 +71,8 @@ namespace BalloonParty.Balloon.Controller
 
         [Inject]
         internal RipeBubbleService(SlotGrid grid, ISpawnClock clock, IBalloonsConfiguration balloonsConfig,
-            ILevelProgress levelProgress, RipeBubbleBurst burst, ISubscriber<ActorHitMessage> hitSubscriber,
+            ILevelProgress levelProgress, RipeBubbleBurst burst, RipeRoom room,
+            ISubscriber<ActorHitMessage> hitSubscriber,
             ISubscriber<BubbleMergedMessage> mergedSubscriber, ISubscriber<GameOverMessage> gameOverSubscriber,
             IPublisher<BubbleRipenedMessage> ripenedPublisher, IPublisher<RipeBubbleBurstMessage> burstPublisher,
             IPublisher<RipeFuseBeatMessage> beatPublisher)
@@ -78,6 +83,7 @@ namespace BalloonParty.Balloon.Controller
             _settings = balloonsConfig.RipeBubble;
             _levelProgress = levelProgress;
             _burst = burst;
+            _room = room;
             _hitSubscriber = hitSubscriber;
             _mergedSubscriber = mergedSubscriber;
             _gameOverSubscriber = gameOverSubscriber;
@@ -155,6 +161,7 @@ namespace BalloonParty.Balloon.Controller
             }
 
             _fuses.RemoveAt(index);
+            _room.RipeEnded();
             var due = _clock.SecondsOnLevel + _settings.BurstSeconds;
             _pendingBursts.Add(new PendingBurst(cluster.SlotIndex.Value, message.Context, due));
         }
@@ -280,6 +287,9 @@ namespace BalloonParty.Balloon.Controller
                     continue;
                 }
 
+                // Told before the plan is made: the hand-out is this cluster's ending, so the cooldown it starts
+                // already holds the neighbours it feeds below the cap.
+                _room.RipeEnded();
                 var handout = _burst.PlanFoam(slot, cluster.HitsRemaining.Value);
                 _burstPublisher.Publish(RipeBubbleBurstMessage.Foam(
                     slot, _grid.IndexToWorldPosition(slot), RipeBubbleRule.CoatedNeighbours(handout), handout));

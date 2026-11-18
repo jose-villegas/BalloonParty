@@ -72,10 +72,20 @@ namespace BalloonParty.Tests.Balloon
         private GridDispatcher _dispatcher;
         private IProjectileModel _shot;
         private RipeBubbleService _service;
+        private RipeRoom _room;
         private float _now;
         private float _fuseSeconds;
         private float _burstSeconds;
         private float _rippleRadius;
+
+        // The room for full clusters is wide open unless a test narrows it: more than a board holds, and no cooldown.
+        // The cooldown is counted in the bubbles' off-beats, a count the tests step.
+        private int _maxRipe;
+        private int _cooldownBeats;
+        private int _offBeats;
+
+        // No cluster may be filled to the cap although none is full: the gap after a ripe cluster's end still runs.
+        private bool CoolingDown => _room.FillsLeft(0) == 0;
 
         // Runs as each burst message goes out, for a test that acts in the middle of a spray.
         private Action<RipeBubbleBurstMessage> _onBurst;
@@ -96,11 +106,16 @@ namespace BalloonParty.Tests.Balloon
             _fuseSeconds = Fuse;
             _burstSeconds = Burst;
             _rippleRadius = Radius;
+            _maxRipe = 60;
+            _cooldownBeats = 0;
+            _offBeats = 0;
             var clock = Substitute.For<ISpawnClock>();
             clock.SecondsOnLevel.Returns(_ => _now);
 
             var settings = Substitute.For<IRipeBubbleSettings>();
             settings.FuseSeconds.Returns(_ => _fuseSeconds);
+            settings.MaxRipeClusters.Returns(_ => _maxRipe);
+            settings.RipenCooldownBeats.Returns(_ => _cooldownBeats);
             settings.RippleDamage.Returns(1);
             settings.RippleRadius.Returns(_ => _rippleRadius);
             settings.BlastNudgeOverrides.Returns(_blastNudge);
@@ -165,11 +180,14 @@ namespace BalloonParty.Tests.Balloon
             var nudgePublisher = Substitute.For<IPublisher<NudgeMessage>>();
             nudgePublisher.When(p => p.Publish(Arg.Any<NudgeMessage>()))
                 .Do(call => _nudges.Add((call.Arg<NudgeMessage>(), _dispatcher.Dispatched.Count)));
+            var beat = Substitute.For<IBoardBeat>();
+            beat.OffBeats(Arg.Any<float>()).Returns(_ => _offBeats);
+            _room = new RipeRoom(_grid, beat, levelProgress, balloons);
             var burst = new RipeBubbleBurst(
-                _grid, _dispatcher, popper, balloons, disturbanceField, lightField, nudgePublisher);
+                _grid, _dispatcher, popper, balloons, _room, disturbanceField, lightField, nudgePublisher);
 
             _service = new RipeBubbleService(
-                _grid, clock, balloons, levelProgress, burst, Capture<ActorHitMessage>(h => _hitHandler = h),
+                _grid, clock, balloons, levelProgress, burst, _room, Capture<ActorHitMessage>(h => _hitHandler = h),
                 Capture<BubbleMergedMessage>(h => _mergedHandler = h),
                 Capture<GameOverMessage>(h => _gameOverHandler = h), ripenedPublisher, burstPublisher,
                 beatPublisher);
@@ -1176,6 +1194,128 @@ namespace BalloonParty.Tests.Balloon
             Assert.IsNull(_grid.At(Centre));
             Assert.IsNull(_grid.At(full.SlotIndex.Value));
             Assert.AreEqual(2, _left.Count, "bubbles are never made: neither grew on the other's");
+        }
+
+        [Test]
+        public void ARipeClusterBurstByAHit_StartsTheRipeningCooldown()
+        {
+            _cooldownBeats = 2;
+            var cluster = PlaceRipe();
+            Assert.IsFalse(CoolingDown, "ripening starts none");
+            _offBeats = 7;
+
+            HitDirect(cluster);
+
+            Assert.IsTrue(CoolingDown);
+            Assert.AreEqual(MergeMax - 1, _room.FillLimit(0), "nothing is filled to the cap meanwhile");
+            _offBeats = 8;
+            _now = 100f;
+            Assert.IsTrue(CoolingDown, "one off-beat on, however long it took on the level clock");
+            _offBeats = 9;
+            Assert.IsFalse(CoolingDown, "two off-beats after the hit");
+            Assert.AreEqual(MergeMax, _room.FillLimit(0));
+        }
+
+        [Test]
+        public void AClusterThatIsNotRipePopping_StartsNoCooldown()
+        {
+            _cooldownBeats = 2;
+            var cluster = Place(Slot, 1);
+            _service.Tick();
+
+            HitDirect(cluster);
+
+            Assert.AreEqual(1, PopsOf(cluster));
+            Assert.IsFalse(CoolingDown);
+        }
+
+        // The hand-out is the cluster's ending, so the cooldown it starts already holds: a neighbouring cluster is
+        // topped up to a bubble short of the cap and does not ripen on the foam.
+        [Test]
+        public void TheFuseRunningOut_StartsTheCooldown_AndItsFoamStopsAClusterABubbleShort()
+        {
+            _cooldownBeats = 2;
+            var neighbors = NeighborSlots(Centre);
+            Place(Centre, MergeMax);
+            var small = Place(neighbors[2], MergeMax - 3);
+            _service.Tick();
+
+            _now = Fuse;
+            _service.Tick();
+
+            Assert.IsTrue(CoolingDown);
+            Assert.AreEqual(MergeMax - 1, small.HitsRemaining.Value, "topped up, but not to the cap");
+            Assert.AreEqual(2, CountGifts(_bursts[0], FoamGift.Cluster));
+            Assert.AreEqual(MergeMax - 2, CountGifts(_bursts[0], FoamGift.Leftover), "the bubble held back pops");
+
+            _service.Tick();
+
+            Assert.IsFalse(small.Ripe.Value);
+            Assert.AreEqual(1, _ripened.Count);
+            _offBeats = 2;
+            Assert.IsFalse(CoolingDown);
+        }
+
+        // Two neighbouring clusters a bubble from the cap, and room on the board for one more full cluster beside the
+        // ripe one elsewhere: the hand-out counts as it fills, so only the first by direction is filled.
+        [Test]
+        public void TheFoam_FillsNoMoreClustersThanTheBoardHasRoomFor()
+        {
+            _maxRipe = 2;
+            var neighbors = NeighborSlots(Centre);
+            Place(Centre, MergeMax);
+            var first = Place(neighbors[0], MergeMax - 1);
+            var second = Place(neighbors[1], MergeMax - 1);
+            _service.Tick();
+            _now = 3f;
+            var elsewhere = Place(OtherSlot, MergeMax);
+            _service.Tick();
+            Assert.IsTrue(elsewhere.Ripe.Value, "ripe, with fuse left when the first one's runs out");
+
+            _now = Fuse;
+            _service.Tick();
+
+            Assert.AreEqual(1, CountBursts(RipeBurstKind.Foam, Centre));
+            Assert.AreEqual(MergeMax, first.HitsRemaining.Value);
+            Assert.AreEqual(MergeMax - 1, second.HitsRemaining.Value, "the board has room for one, not two");
+            Assert.AreEqual(1, CountGifts(_bursts[0], FoamGift.Cluster));
+            Assert.AreEqual(MergeMax - 1, CountGifts(_bursts[0], FoamGift.Leftover));
+        }
+
+        // The room limits what a cluster is filled to, not what ripens or what it holds.
+        [Test]
+        public void ClustersAlreadyAtTheCap_AllRipenAndKeepTheirBubbles_WhateverTheRoom()
+        {
+            _maxRipe = 1;
+            _cooldownBeats = 2;
+            var first = Place(Slot, MergeMax);
+            var second = Place(OtherSlot, MergeMax);
+            var third = Place(Centre, MergeMax);
+            _room.RipeEnded();
+
+            _service.Tick();
+
+            Assert.AreEqual(3, _service.Tracked);
+            foreach (var cluster in new[] { first, second, third })
+            {
+                Assert.IsTrue(cluster.Ripe.Value);
+                Assert.AreEqual(MergeMax, cluster.HitsRemaining.Value);
+            }
+        }
+
+        [Test]
+        public void ANewLevel_DoesNotInheritTheCooldown()
+        {
+            _cooldownBeats = 2;
+            var cluster = PlaceRipe();
+            HitDirect(cluster);
+            Assert.IsTrue(CoolingDown);
+
+            // The beat runs on from one level into the next, but a level starts with no gap to wait out.
+            _level.Value = 2;
+
+            Assert.IsFalse(CoolingDown);
+            Assert.AreEqual(MergeMax, _room.FillLimit(0));
         }
 
         [Test]

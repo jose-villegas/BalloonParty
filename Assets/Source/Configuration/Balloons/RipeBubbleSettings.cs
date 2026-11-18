@@ -12,6 +12,21 @@ namespace BalloonParty.Configuration.Balloons
                  "to its fuse running out. 0 turns ripeness off.")]
         [SerializeField] [Min(0f)] private float _fuseSeconds = 6f;
 
+        [Tooltip("The most clusters that are full (ripe, or about to ripen) at once. While that many are, a merge " +
+                 "or a foam's hand-out fills a cluster to one bubble short of the cap, where it waits. A cluster " +
+                 "already full is never reduced.")]
+        [SerializeField] [Min(1)] private int _maxRipeClusters = 2;
+
+        [Tooltip("How many of the bubbles' off-beats pass after a ripe cluster ends (burst by a hit, or its fuse " +
+                 "run out) before another cluster is filled to the cap, so ripe clusters come one after another " +
+                 "with a gap. 2 is one cycle of the unbreakables' clock. 0 for none.")]
+        [SerializeField] [Min(0)] private int _ripenCooldownBeats = 2;
+
+        [Tooltip("When in each beat of the board (the unbreakables' BeatSeconds) bubble clusters merge, as a share " +
+                 "of the beat after it falls. Clusters merge only then, one pass an off-beat. 0.25 is a quarter " +
+                 "beat: between an unbreakable snake's step on the beat and its step half a beat in.")]
+        [SerializeField] [Range(0f, 0.95f)] private float _mergeOffBeat = 0.25f;
+
         [Tooltip("The hit each balloon in the blast takes when a ripe cluster is popped: one bubble off a cluster, " +
                  "a plain balloon popped.")]
         [SerializeField] [Min(1)] private int _rippleDamage = 1;
@@ -157,6 +172,9 @@ namespace BalloonParty.Configuration.Balloons
         [SerializeField] [Range(0.02f, 0.5f)] private float _blastBubbleRadius = 0.2f;
 
         public float FuseSeconds => _fuseSeconds;
+        public int MaxRipeClusters => _maxRipeClusters;
+        public int RipenCooldownBeats => _ripenCooldownBeats;
+        public float MergeOffBeat => _mergeOffBeat;
         public int RippleDamage => _rippleDamage;
         public float RippleRadius => _rippleRadius;
         public float BurstSeconds => _burstSeconds;

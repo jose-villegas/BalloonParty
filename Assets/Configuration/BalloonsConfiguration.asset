@@ -294,6 +294,9 @@ MonoBehaviour:
   _bubbleMergeMax: 6
   _ripeBubble:
     _fuseSeconds: 6
+    _maxRipeClusters: 2
+    _ripenCooldownBeats: 2
+    _mergeOffBeat: 0.25
     _rippleDamage: 1
     _rippleRadius: 1.35
     _burstSeconds: 0.22

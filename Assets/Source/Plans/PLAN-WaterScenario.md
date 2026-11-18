@@ -156,9 +156,11 @@ generator's entry is `Withheld`: the water rise is its own path.
 ### 4. The merge
 
 Two bubble clusters in neighbouring slots merge, whatever brought them there: a spawn, the board
-settling, a pop opening the way. `BubbleMergeService` (`Balloon/Controller/`, a tick) looks again
-whenever the grid has changed (`SlotGrid.MutationVersion`), a cluster was hit, or its own last pass
-merged something, and merges every neighbouring pair where the larger still has room.
+settling, a pop opening the way. `BubbleMergeService` (`Balloon/Controller/`, a tick) merges on the
+board's beat, one pass on each of the bubbles' off-beats (`PLAN-RipeBubbleCluster.md`, decision 19; it ran
+the frame after any change when this was built). It looks when the grid has changed
+(`SlotGrid.MutationVersion`), a cluster was hit, or its own last pass merged something or held a merge
+back, and merges every neighbouring pair where the larger still has room.
 `BubbleMergeRule` is the pure rule, tested on its own.
 
 - The smaller cluster gives its bubbles to the larger (between equals, the slot order decides),

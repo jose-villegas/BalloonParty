@@ -39,6 +39,7 @@ namespace BalloonParty.Balloon.Controller
         private readonly IBalloonPopper _popper;
         private readonly IBalloonsConfiguration _balloonsConfig;
         private readonly IRipeBubbleSettings _settings;
+        private readonly RipeRoom _room;
         private readonly DisturbanceFieldService _disturbanceField;
         private readonly SceneLightFieldService _lightField;
         private readonly IPublisher<NudgeMessage> _nudgePublisher;
@@ -51,7 +52,7 @@ namespace BalloonParty.Balloon.Controller
 
         [Inject]
         internal RipeBubbleBurst(SlotGrid grid, IHitDispatcher hitDispatcher, IBalloonPopper popper,
-            IBalloonsConfiguration balloonsConfig, DisturbanceFieldService disturbanceField,
+            IBalloonsConfiguration balloonsConfig, RipeRoom room, DisturbanceFieldService disturbanceField,
             SceneLightFieldService lightField, IPublisher<NudgeMessage> nudgePublisher)
         {
             _grid = grid;
@@ -59,6 +60,7 @@ namespace BalloonParty.Balloon.Controller
             _popper = popper;
             _balloonsConfig = balloonsConfig;
             _settings = balloonsConfig.RipeBubble;
+            _room = room;
             _disturbanceField = disturbanceField;
             _lightField = lightField;
             _nudgePublisher = nudgePublisher;
@@ -116,12 +118,15 @@ namespace BalloonParty.Balloon.Controller
         ///     as <see cref="RipeBubbleBurstMessage.Handout" /> carries it: a coat for each neighbour that takes foam
         ///     (<see cref="RipeBubbleRule.FoamTakes" />), up to <see cref="IRipeBubbleSettings.CoatLayers" />, a bubble
         ///     for each neighbouring cluster with room below <see cref="IBalloonsConfiguration.BubbleMergeMax" />, and
-        ///     leftovers for the rest. Changes nothing.
+        ///     leftovers for the rest. It fills no more clusters to the cap than the board has room for
+        ///     (<see cref="RipeRoom" />): the others stop a bubble short. Called after the room has heard that this
+        ///     cluster ended, so with a ripening cooldown above 0 a hand-out fills none. Changes nothing.
         /// </summary>
         internal int PlanFoam(Vector2Int slot, int bubbles)
         {
             var maxLayers = _settings.CoatLayers;
             var max = _balloonsConfig.BubbleMergeMax;
+            var fills = _room.FillsLeft(_room.CountFull(_grid.At(slot)));
             CollectNeighbors(slot);
             for (var i = 0; i < _neighbors.Length; i++)
             {
@@ -133,7 +138,7 @@ namespace BalloonParty.Balloon.Controller
             }
 
             System.Array.Clear(_neighbors, 0, _neighbors.Length);
-            return RipeBubbleRule.PlanHandout(bubbles, _coatRoom, _clusterRoom);
+            return RipeBubbleRule.PlanHandout(bubbles, _coatRoom, _clusterRoom, fills);
         }
 
         /// <summary>
@@ -148,6 +153,9 @@ namespace BalloonParty.Balloon.Controller
             var slot = cluster.SlotIndex.Value;
             var maxLayers = _settings.CoatLayers;
             var max = _balloonsConfig.BubbleMergeMax;
+            // Counted again as the board is read again, and raised by each cluster filled here, so the hand-out
+            // keeps to the room for full clusters whatever the plan's message set off.
+            var full = _room.CountFull(cluster);
             CollectNeighbors(slot);
             var bubbles = RipeBubbleBurstMessage.HandoutCount(handout);
             for (var bubble = 0; bubble < bubbles; bubble++)
@@ -169,9 +177,9 @@ namespace BalloonParty.Balloon.Controller
                     balloon.TryCoat(maxLayers);
                 }
                 else if (gift == FoamGift.Cluster && actor is BubbleClusterModel neighbour
-                         && neighbour.HitsRemaining.Value < max)
+                         && GiveBubble(neighbour, full) && RipeBubbleRule.IsRipe(neighbour.HitsRemaining.Value, max))
                 {
-                    neighbour.SetBubbles(neighbour.HitsRemaining.Value + 1);
+                    full++;
                 }
             }
 
@@ -184,6 +192,20 @@ namespace BalloonParty.Balloon.Controller
             }
 
             _disturbanceField.Stamp(StampSource.BubbleFoam, _grid.IndexToWorldPosition(slot), Vector2.zero);
+        }
+
+        // One more bubble for a neighbouring cluster, unless that would take it past what the room for full clusters
+        // allows with fullClusters full already. False when it took none.
+        private bool GiveBubble(BubbleClusterModel neighbour, int fullClusters)
+        {
+            var bubbles = neighbour.HitsRemaining.Value + 1;
+            if (bubbles > _room.FillLimit(fullClusters))
+            {
+                return false;
+            }
+
+            neighbour.SetBubbles(bubbles);
+            return true;
         }
 
         // Every occupied slot the blast reaches and who is in it, column by column. Taken before any hit lands, so

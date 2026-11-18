@@ -52,7 +52,8 @@ namespace BalloonParty.Configuration.Balloons
 
         [Header("Clock")]
         [Tooltip("Seconds of play between the unbreakables' beats. An unbreakable snake steps Snake Steps Per " +
-                 "Beat times a beat. A pause or a doomed shot holds the clock.")]
+                 "Beat times a beat, and bubble clusters merge on its off-beat. A pause holds the clock; a doomed shot " +
+                 "does not.")]
         [FormerlySerializedAs("_snakeStepSeconds")]
         [SerializeField] [Min(0.1f)] private float _beatSeconds = 1.7f;
 
