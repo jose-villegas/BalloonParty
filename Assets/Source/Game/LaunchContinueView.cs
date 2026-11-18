@@ -45,6 +45,11 @@ namespace BalloonParty.Game
         [Tooltip("Room kept between this balloon and Play's, its tail included, in canvas units.")]
         [SerializeField] [Min(0f)] private float _playGap = 16f;
 
+        [Tooltip("Where the balloon starts, as shares of the room it drifts in: x from the left edge, y from the " +
+                 "lowest it can hang. Off the bottom right corner, so the ribbon has room to fall and swing from " +
+                 "the first frame.")]
+        [SerializeField] private Vector2 _start = new(0.62f, 0.16f);
+
         [SerializeField] private BalloonWanderSettings _wander = new();
         [SerializeField] private RibbonClothSettings _cloth = new();
 
@@ -121,7 +126,8 @@ namespace BalloonParty.Game
             var tail = Mathf.Max(0f, (_bodyCentre.y - _knot.y) * playScale - playRadius);
             var keepOut = new KeepOut(
                 playCentre + Vector2.down * tail, playCentre + Vector2.up * hang, playRadius + radius + _playGap);
-            var start = new Vector2(Mathf.Lerp(bounds.xMin, bounds.xMax, 0.8f), bounds.yMin);
+            var start = new Vector2(
+                Mathf.Lerp(bounds.xMin, bounds.xMax, _start.x), Mathf.Lerp(bounds.yMin, bounds.yMax, _start.y));
             _wanderer = new BalloonWander(_wander, bounds, keepOut, start, Random.Range(int.MinValue, int.MaxValue));
             _obstacles[0] = new KeepOut(playCentre, playCentre, playRadius);
             _ribbonCloth.SetRoom(area.xMin + _clearance, area.xMax - _clearance);
