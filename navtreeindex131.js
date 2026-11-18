@@ -1,5 +1,6 @@
 var NAVTREEINDEX131 =
 {
+"structBalloonParty_1_1Configuration_1_1Level_1_1TailGrowthConfig.html#ac7583803a71933e6492519769ca5e863":[6,0,0,3,9,34,4],
 "structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedFloat.html":[5,0,0,3,11,1],
 "structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedFloat.html":[6,0,0,3,11,1],
 "structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedFloat.html#a2eb869e7edaaa575dfc1678f13e01e60":[5,0,0,3,11,1,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX131 =
 "structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1PinImages.html#aeba6b6fa4ae884cc7e47f2201d850a23":[6,0,0,5,13,2,2],
 "structBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerEventRow.html":[5,0,0,5,2,2],
 "structBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerEventRow.html":[6,0,0,5,2,2],
-"structBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerEventRow.html#a10a1c7a68d429bcfb0f05b3ad8005046":[5,0,0,5,2,2,2],
-"structBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerEventRow.html#a10a1c7a68d429bcfb0f05b3ad8005046":[6,0,0,5,2,2,2]
+"structBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerEventRow.html#a10a1c7a68d429bcfb0f05b3ad8005046":[5,0,0,5,2,2,2]
 };

@@ -1,5 +1,6 @@
 var NAVTREEINDEX103 =
 {
+"classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonStrike.html#affaf6b5ebc614f8f1afb8381eaff354c":[6,0,0,16,1,4,6],
 "classBalloonParty_1_1UI_1_1ClothRibbon_1_1ClothRibbonGraphic.html":[5,0,0,16,2,0],
 "classBalloonParty_1_1UI_1_1ClothRibbon_1_1ClothRibbonGraphic.html":[6,0,0,16,2,0],
 "classBalloonParty_1_1UI_1_1ClothRibbon_1_1ClothRibbonGraphic.html#a0a6b008612d7c0be27a83c35f3ce3d90":[5,0,0,16,2,0,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX103 =
 "classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonClothSettings.html#ae1c5c90b41bb6ae9284c12e9d4ac1172":[6,0,0,16,2,4,12],
 "classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonClothSettings.html#ae3b27577f799f31eb09dfb9ab9f57cc9":[5,0,0,16,2,4,6],
 "classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonClothSettings.html#ae3b27577f799f31eb09dfb9ab9f57cc9":[6,0,0,16,2,4,6],
-"classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonClothSettings.html#ae7ed2e8f5c3496acf3927011cc7541e3":[5,0,0,16,2,4,25],
-"classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonClothSettings.html#ae7ed2e8f5c3496acf3927011cc7541e3":[6,0,0,16,2,4,25]
+"classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonClothSettings.html#ae7ed2e8f5c3496acf3927011cc7541e3":[5,0,0,16,2,4,25]
 };

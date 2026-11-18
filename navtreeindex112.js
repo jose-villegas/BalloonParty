@@ -1,5 +1,6 @@
 var NAVTREEINDEX112 =
 {
+"interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember.html#a843a3af2b56fadf7fdcd7d43859ab9d9":[6,0,0,1,2,12,2],
 "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember.html#ae295e13669f2335dde5195f851710138":[5,0,0,1,2,12,1],
 "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember.html#ae295e13669f2335dde5195f851710138":[6,0,0,1,2,12,1],
 "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IHasWriteableItemSlot.html":[5,0,0,1,2,13],
@@ -248,6 +249,5 @@ var NAVTREEINDEX112 =
 "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBubbleMergeCueSettings.html#a6d5c88c601af43e2018c852057aa79bd":[6,0,0,3,0,13,4],
 "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBubbleMergeCueSettings.html#a7a5b53b8c6631fe6648ff4cee85ec5d5":[5,0,0,3,0,13,6],
 "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBubbleMergeCueSettings.html#a7a5b53b8c6631fe6648ff4cee85ec5d5":[6,0,0,3,0,13,6],
-"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBubbleMergeCueSettings.html#a99446a7f017be219f0b2bad6baeea901":[5,0,0,3,0,13,1],
-"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBubbleMergeCueSettings.html#a99446a7f017be219f0b2bad6baeea901":[6,0,0,3,0,13,1]
+"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBubbleMergeCueSettings.html#a99446a7f017be219f0b2bad6baeea901":[5,0,0,3,0,13,1]
 };

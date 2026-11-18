@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"IRunConfig_8cs.html":[7,0,14,27],
 "IRunMeta_8cs.html":[7,0,7,8,9],
 "IRunResettable_8cs.html":[7,0,7,8,10],
 "IRunResumeRequest_8cs.html":[7,0,7,8,11],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "ParticleColorableRenderer_8cs.html":[7,0,1,6,19],
 "ParticleEffectView_8cs.html":[7,0,14,9,6],
 "ParticlePoolChannel_8cs.html":[7,0,14,9,7],
-"PathHelper_8cs.html":[7,0,14,0,0],
-"PathTrace_8cs.html":[7,0,14,33]
+"PathHelper_8cs.html":[7,0,14,0,0]
 };

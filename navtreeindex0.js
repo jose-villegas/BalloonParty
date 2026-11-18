@@ -28,9 +28,10 @@ var NAVTREEINDEX0 =
 "AutoplayController_8cs.html":[7,0,2,0,0],
 "AutoplayDice_8cs.html":[7,0,2,0,1],
 "AutoplayLaunchArgument_8cs.html":[7,0,2,0,2],
-"AutoplaySettings_8cs.html":[7,0,2,0,3],
-"AutoplayTap_8cs.html":[7,0,2,0,4],
-"AutoplayTickWriter_8cs.html":[7,0,2,0,5],
+"AutoplayOnLoss_8cs.html":[7,0,2,0,3],
+"AutoplaySettings_8cs.html":[7,0,2,0,4],
+"AutoplayTap_8cs.html":[7,0,2,0,5],
+"AutoplayTickWriter_8cs.html":[7,0,2,0,6],
 "AwardScorePopCheat_8cs.html":[7,0,2,2],
 "AxisBucketNaming_8cs.html":[7,0,7,10,0],
 "AxisSlotInfo_8cs.html":[7,0,7,10,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "EndRunRequestedMessage_8cs.html":[7,0,14,7,11],
 "EnumIndexedAttribute_8cs.html":[7,0,14,17],
 "EnumIndexedDrawer_8cs.html":[7,0,6,21],
-"ExtraColorLevelSettings_8cs.html":[7,0,3,9,6],
-"FPSCounter_8cs.html":[7,0,14,2,1]
+"ExtraColorLevelSettings_8cs.html":[7,0,3,9,6]
 };

@@ -1,5 +1,6 @@
 var NAVTREEINDEX26 =
 {
+"classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeFuseSettings.html":[6,0,0,3,0,23],
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeFuseSettings.html#a16065c479af72ceea7521ff115b36a61":[5,0,0,3,0,23,8],
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeFuseSettings.html#a16065c479af72ceea7521ff115b36a61":[6,0,0,3,0,23,8],
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeFuseSettings.html#a183c0d01395b8d9a2a98d1f43bdc72a7":[5,0,0,3,0,23,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX26 =
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1ToughSnakeSpringSettings.html#a8792bef91e547045e5fcac32bdd5e324":[6,0,0,3,0,27,9],
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1ToughSnakeSpringSettings.html#a91acba5efd4df094f4ed3216cf07a069":[5,0,0,3,0,27,5],
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1ToughSnakeSpringSettings.html#a91acba5efd4df094f4ed3216cf07a069":[6,0,0,3,0,27,5],
-"classBalloonParty_1_1Configuration_1_1Balloons_1_1ToughSnakeSpringSettings.html#aa27019046d156d47abe723b7d88963da":[5,0,0,3,0,27,24],
-"classBalloonParty_1_1Configuration_1_1Balloons_1_1ToughSnakeSpringSettings.html#aa27019046d156d47abe723b7d88963da":[6,0,0,3,0,27,24]
+"classBalloonParty_1_1Configuration_1_1Balloons_1_1ToughSnakeSpringSettings.html#aa27019046d156d47abe723b7d88963da":[5,0,0,3,0,27,24]
 };

@@ -1,5 +1,6 @@
 var NAVTREEINDEX133 =
 {
+"structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreFormationRequest.html#a5dfa3a709ceef7221f90fb74734fb858":[6,0,0,6,9,0,1,9],
 "structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreFormationRequest.html#a83ae2ebb576d77cc0de7c8b40e891a72":[5,0,0,6,9,0,1,4],
 "structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreFormationRequest.html#a83ae2ebb576d77cc0de7c8b40e891a72":[6,0,0,6,9,0,1,4],
 "structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreFormationRequest.html#a979854fa84773f8dc32e1c334a5f6208":[5,0,0,6,9,0,1,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX133 =
 "structBalloonParty_1_1Item_1_1Effects_1_1BombEffectParams.html":[6,0,0,7,1,0],
 "structBalloonParty_1_1Item_1_1Effects_1_1BombEffectParams.html#a0b302e9ef96558b0590d9ad3fc317e3c":[5,0,0,7,1,0,2],
 "structBalloonParty_1_1Item_1_1Effects_1_1BombEffectParams.html#a0b302e9ef96558b0590d9ad3fc317e3c":[6,0,0,7,1,0,2],
-"structBalloonParty_1_1Item_1_1Effects_1_1BombEffectParams.html#a2e5ef72e111e07e6470f898472df2805":[5,0,0,7,1,0,0],
-"structBalloonParty_1_1Item_1_1Effects_1_1BombEffectParams.html#a2e5ef72e111e07e6470f898472df2805":[6,0,0,7,1,0,0]
+"structBalloonParty_1_1Item_1_1Effects_1_1BombEffectParams.html#a2e5ef72e111e07e6470f898472df2805":[5,0,0,7,1,0,0]
 };

@@ -1,5 +1,6 @@
 var NAVTREEINDEX86 =
 {
+"classBalloonParty_1_1Shared_1_1Diagnostics_1_1Log_1_1TagPalette.html":[6,0,0,12,2,3,0],
 "classBalloonParty_1_1Shared_1_1Diagnostics_1_1Log_1_1TagPalette.html#ae7d47a224f57e397b20b2ddb09c2ab7e":[5,0,0,12,2,3,0,0],
 "classBalloonParty_1_1Shared_1_1Diagnostics_1_1Log_1_1TagPalette.html#ae7d47a224f57e397b20b2ddb09c2ab7e":[6,0,0,12,2,3,0,0],
 "classBalloonParty_1_1Shared_1_1Diagnostics_1_1Log_1_1TagPalette.html#af2548449a1e1c9aef7f4f9c2699fd89b":[5,0,0,12,2,3,0,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX86 =
 "classBalloonParty_1_1Shared_1_1Extensions_1_1BalanceBiasExtensions.html#ada364afc5af95aa20ca800415cd1953d":[6,0,0,12,4,1,6],
 "classBalloonParty_1_1Shared_1_1Extensions_1_1BalanceBiasExtensions.html#ae45a8a9f3a9361a4956eb7422199a259":[5,0,0,12,4,1,7],
 "classBalloonParty_1_1Shared_1_1Extensions_1_1BalanceBiasExtensions.html#ae45a8a9f3a9361a4956eb7422199a259":[6,0,0,12,4,1,7],
-"classBalloonParty_1_1Shared_1_1Extensions_1_1BalanceBiasExtensions.html#af5e3fdbc8318abe0a19e039c8894459b":[5,0,0,12,4,1,10],
-"classBalloonParty_1_1Shared_1_1Extensions_1_1BalanceBiasExtensions.html#af5e3fdbc8318abe0a19e039c8894459b":[6,0,0,12,4,1,10]
+"classBalloonParty_1_1Shared_1_1Extensions_1_1BalanceBiasExtensions.html#af5e3fdbc8318abe0a19e039c8894459b":[5,0,0,12,4,1,10]
 };

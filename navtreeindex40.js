@@ -1,5 +1,6 @@
 var NAVTREEINDEX40 =
 {
+"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#ae50419a0d7a8da0c50bbbd7f1f3d164d":[6,0,0,3,29,8],
 "classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html":[5,0,0,3,32],
 "classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html":[6,0,0,3,32],
 "classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html#a1027e4f1728e3470c4aa58b5d25da68a":[5,0,0,3,32,16],
@@ -248,6 +249,5 @@ var NAVTREEINDEX40 =
 "classBalloonParty_1_1Display_1_1EffectsClearingController.html":[6,0,0,4,5],
 "classBalloonParty_1_1Display_1_1EffectsClearingController.html#a0259cb2c607fff42d30be1c58286f561":[5,0,0,4,5,6],
 "classBalloonParty_1_1Display_1_1EffectsClearingController.html#a0259cb2c607fff42d30be1c58286f561":[6,0,0,4,5,6],
-"classBalloonParty_1_1Display_1_1EffectsClearingController.html#a0e4bf7771deb593bcc03126e7643f23e":[5,0,0,4,5,5],
-"classBalloonParty_1_1Display_1_1EffectsClearingController.html#a0e4bf7771deb593bcc03126e7643f23e":[6,0,0,4,5,5]
+"classBalloonParty_1_1Display_1_1EffectsClearingController.html#a0e4bf7771deb593bcc03126e7643f23e":[5,0,0,4,5,5]
 };

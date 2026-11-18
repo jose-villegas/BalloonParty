@@ -1,5 +1,6 @@
 var NAVTREEINDEX39 =
 {
+"classBalloonParty_1_1Configuration_1_1PitySettings.html":[6,0,0,3,25],
 "classBalloonParty_1_1Configuration_1_1PitySettings.html#a01fd57282d6565ec245b950318629389":[5,0,0,3,25,0],
 "classBalloonParty_1_1Configuration_1_1PitySettings.html#a01fd57282d6565ec245b950318629389":[6,0,0,3,25,0],
 "classBalloonParty_1_1Configuration_1_1PitySettings.html#a2568d0a156d5ce47b931b15d4fa15870":[5,0,0,3,25,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX39 =
 "classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#abaeb09222d0547a6b4fe71a9bcc37f17":[6,0,0,3,29,1],
 "classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#ad0a64e70d7d8d41c3fa63ba33bdbc11d":[5,0,0,3,29,5],
 "classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#ad0a64e70d7d8d41c3fa63ba33bdbc11d":[6,0,0,3,29,5],
-"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#ae50419a0d7a8da0c50bbbd7f1f3d164d":[5,0,0,3,29,8],
-"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#ae50419a0d7a8da0c50bbbd7f1f3d164d":[6,0,0,3,29,8]
+"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#ae50419a0d7a8da0c50bbbd7f1f3d164d":[5,0,0,3,29,8]
 };

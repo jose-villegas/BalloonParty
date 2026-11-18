@@ -1,5 +1,6 @@
 var NAVTREEINDEX88 =
 {
+"classBalloonParty_1_1Shared_1_1GameState_1_1EditorNavigationBootstrap.html":[6,0,0,12,5,3],
 "classBalloonParty_1_1Shared_1_1GameState_1_1LaunchAscend.html":[5,0,0,12,5,6],
 "classBalloonParty_1_1Shared_1_1GameState_1_1LaunchAscend.html":[6,0,0,12,5,6],
 "classBalloonParty_1_1Shared_1_1GameState_1_1LaunchAscend.html#a0073751ee6bd1b1c34e129e9a4d06516":[5,0,0,12,5,6,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX88 =
 "classBalloonParty_1_1Shared_1_1Pool_1_1EffectView.html#afdf333754150b4aa44307842499db588":[6,0,0,12,9,1,6],
 "classBalloonParty_1_1Shared_1_1Pool_1_1InjectingPoolChannel-1-g.html":[5,0,0,12,9,2],
 "classBalloonParty_1_1Shared_1_1Pool_1_1InjectingPoolChannel-1-g.html":[6,0,0,12,9,2],
-"classBalloonParty_1_1Shared_1_1Pool_1_1InjectingPoolChannel-1-g.html#a1cd92be952ef964093f0413d5693ea2c":[5,0,0,12,9,2,1],
-"classBalloonParty_1_1Shared_1_1Pool_1_1InjectingPoolChannel-1-g.html#a1cd92be952ef964093f0413d5693ea2c":[6,0,0,12,9,2,1]
+"classBalloonParty_1_1Shared_1_1Pool_1_1InjectingPoolChannel-1-g.html#a1cd92be952ef964093f0413d5693ea2c":[5,0,0,12,9,2,1]
 };

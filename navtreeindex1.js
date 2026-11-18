@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"FPSCounter_8cs.html":[7,0,14,2,1],
 "FadeImage_8cs.html":[7,0,18,15],
 "FailureOffers_8cs.html":[7,0,7,8,1],
 "FireBestShotCheat_8cs.html":[7,0,2,11],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "IRetryStaging_8cs.html":[7,0,7,8,7],
 "IRetryState_8cs.html":[7,0,7,8,8],
 "IRewardBalloonRequests_8cs.html":[7,0,1,3,5],
-"IRewardBalloonSettings_8cs.html":[7,0,3,0,19],
-"IRunConfig_8cs.html":[7,0,14,27]
+"IRewardBalloonSettings_8cs.html":[7,0,3,0,19]
 };

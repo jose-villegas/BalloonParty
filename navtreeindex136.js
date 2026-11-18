@@ -1,5 +1,6 @@
 var NAVTREEINDEX136 =
 {
+"structBalloonParty_1_1Scenario_1_1ScenarioShift.html#a410be1ddd5ad75aba90a32bd89ed6fa1":[6,0,0,11,11,1],
 "structBalloonParty_1_1Scenario_1_1ScenarioShift.html#a7966e01f6c25d5d5580e5902dd043280":[5,0,0,11,11,6],
 "structBalloonParty_1_1Scenario_1_1ScenarioShift.html#a7966e01f6c25d5d5580e5902dd043280":[6,0,0,11,11,6],
 "structBalloonParty_1_1Scenario_1_1ScenarioShift.html#a8c5b11b86ec35c000703b0db3546152d":[5,0,0,11,11,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX136 =
 "structBalloonParty_1_1Shared_1_1Messages_1_1DeflectChainMessage.html#aa4a81b6d7ed72a526ccba9439ace396d":[6,0,0,12,7,8,0],
 "structBalloonParty_1_1Shared_1_1Messages_1_1DeflectChainMessage.html#ac4e6877bb26501acd9b58bfc158402af":[5,0,0,12,7,8,3],
 "structBalloonParty_1_1Shared_1_1Messages_1_1DeflectChainMessage.html#ac4e6877bb26501acd9b58bfc158402af":[6,0,0,12,7,8,3],
-"structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveAdvancedMessage.html":[5,0,0,12,7,9],
-"structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveAdvancedMessage.html":[6,0,0,12,7,9]
+"structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveAdvancedMessage.html":[5,0,0,12,7,9]
 };

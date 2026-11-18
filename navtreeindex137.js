@@ -1,5 +1,6 @@
 var NAVTREEINDEX137 =
 {
+"structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveAdvancedMessage.html":[6,0,0,12,7,9],
 "structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveAdvancedMessage.html#a8ff662b7183aa5c4a286d903628a7231":[5,0,0,12,7,9,1],
 "structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveAdvancedMessage.html#a8ff662b7183aa5c4a286d903628a7231":[6,0,0,12,7,9,1],
 "structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveAdvancedMessage.html#ae6deca5c9a25227564e8530f9441d985":[5,0,0,12,7,9,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX137 =
 "structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html#a2174c6689b3070ae5c9011584f814e4e":[6,0,0,12,7,46,3],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html#a894270f5641777f1977e0807c61320b8":[5,0,0,12,7,46,2],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html#a894270f5641777f1977e0807c61320b8":[6,0,0,12,7,46,2],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html#ab7b68b61d100e5f0fa6987f39d47a806":[5,0,0,12,7,46,0],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html#ab7b68b61d100e5f0fa6987f39d47a806":[6,0,0,12,7,46,0]
+"structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html#ab7b68b61d100e5f0fa6987f39d47a806":[5,0,0,12,7,46,0]
 };

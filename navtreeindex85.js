@@ -1,5 +1,6 @@
 var NAVTREEINDEX85 =
 {
+"classBalloonParty_1_1Shared_1_1AimAngleGrid.html#ad98578e20c2c8af16c7d66e9361a728e":[6,0,0,12,13,2],
 "classBalloonParty_1_1Shared_1_1AimAngleGrid.html#af3297b86afed0520c0578799d8f29d79":[5,0,0,12,13,4],
 "classBalloonParty_1_1Shared_1_1AimAngleGrid.html#af3297b86afed0520c0578799d8f29d79":[6,0,0,12,13,4],
 "classBalloonParty_1_1Shared_1_1AimAngleGrid.html#afc043fe5fa2ea340bac7ff55aa8c9009":[5,0,0,12,13,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX85 =
 "classBalloonParty_1_1Shared_1_1Diagnostics_1_1Log.html#abce2131a0828ab88e3e1040fa7978c02":[6,0,0,12,2,3,1],
 "classBalloonParty_1_1Shared_1_1Diagnostics_1_1Log.html#ac873f5851ea92ba72f0c88fc764a2dfe":[5,0,0,12,2,3,7],
 "classBalloonParty_1_1Shared_1_1Diagnostics_1_1Log.html#ac873f5851ea92ba72f0c88fc764a2dfe":[6,0,0,12,2,3,7],
-"classBalloonParty_1_1Shared_1_1Diagnostics_1_1Log_1_1TagPalette.html":[5,0,0,12,2,3,0],
-"classBalloonParty_1_1Shared_1_1Diagnostics_1_1Log_1_1TagPalette.html":[6,0,0,12,2,3,0]
+"classBalloonParty_1_1Shared_1_1Diagnostics_1_1Log_1_1TagPalette.html":[5,0,0,12,2,3,0]
 };

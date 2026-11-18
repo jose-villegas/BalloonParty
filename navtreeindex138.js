@@ -1,5 +1,6 @@
 var NAVTREEINDEX138 =
 {
+"structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html#ab7b68b61d100e5f0fa6987f39d47a806":[6,0,0,12,7,46,0],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html#ac592a7d4ab3893c052d7054d75957c67":[5,0,0,12,7,46,4],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html#ac592a7d4ab3893c052d7054d75957c67":[6,0,0,12,7,46,4],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html":[5,0,0,12,7,47],
@@ -248,6 +249,5 @@ var NAVTREEINDEX138 =
 "structBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterChangedEvent.html#afe0e950ab29cc7debd0b304031c1622b":[6,0,0,13,0,1,6,3],
 "structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1PendingSpeck.html":[5,0,0,13,0,18,0],
 "structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1PendingSpeck.html":[6,0,0,13,0,18,0],
-"structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1PendingSpeck.html#a58a54b1e48576a0dd054b726b32a2eef":[5,0,0,13,0,18,0,1],
-"structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1PendingSpeck.html#a58a54b1e48576a0dd054b726b32a2eef":[6,0,0,13,0,18,0,1]
+"structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1PendingSpeck.html#a58a54b1e48576a0dd054b726b32a2eef":[5,0,0,13,0,18,0,1]
 };

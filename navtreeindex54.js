@@ -1,5 +1,6 @@
 var NAVTREEINDEX54 =
 {
+"classBalloonParty_1_1Editor_1_1UnusedAssetsWindow.html#ae2fc22f068077126b1c4e74306e13a15":[6,0,0,5,52,11],
 "classBalloonParty_1_1Editor_1_1UnusedAssetsWindow.html#af97edcbafbce1fd4f63bdb300d20aa00":[5,0,0,5,52,12],
 "classBalloonParty_1_1Editor_1_1UnusedAssetsWindow.html#af97edcbafbce1fd4f63bdb300d20aa00":[6,0,0,5,52,12],
 "classBalloonParty_1_1Editor_1_1UpgradeCardSlotBuilder.html":[5,0,0,5,53],
@@ -248,6 +249,5 @@ var NAVTREEINDEX54 =
 "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html":[6,0,0,6,1,1],
 "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a08a1559761431abfa339b9f95822900d":[5,0,0,6,1,1,17],
 "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a08a1559761431abfa339b9f95822900d":[6,0,0,6,1,1,17],
-"classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a0d9618716a7e97f3d5abf050dd68b520":[5,0,0,6,1,1,4],
-"classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a0d9618716a7e97f3d5abf050dd68b520":[6,0,0,6,1,1,4]
+"classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a0d9618716a7e97f3d5abf050dd68b520":[5,0,0,6,1,1,4]
 };

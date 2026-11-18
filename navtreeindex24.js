@@ -1,5 +1,6 @@
 var NAVTREEINDEX24 =
 {
+"classBalloonParty_1_1Cheats_1_1DevLogConsole.html":[6,0,0,2,0],
 "classBalloonParty_1_1Cheats_1_1DevLogConsole.html#ac208ffe803544ccaf27d528454c7d4d8":[5,0,0,2,0,0],
 "classBalloonParty_1_1Cheats_1_1DevLogConsole.html#ac208ffe803544ccaf27d528454c7d4d8":[6,0,0,2,0,0],
 "classBalloonParty_1_1Configuration_1_1AssistSettings.html":[5,0,0,3,12],
@@ -248,6 +249,5 @@ var NAVTREEINDEX24 =
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html#ab8dcaaf2f5ee41cd45b385dcc17c3837":[6,0,0,3,0,3,9],
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html#abe539cd5453ec954a63367d813c42db3":[5,0,0,3,0,3,22],
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html#abe539cd5453ec954a63367d813c42db3":[6,0,0,3,0,3,22],
-"classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html#abf591ffbb653df29db9db051201d16a8":[5,0,0,3,0,3,49],
-"classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html#abf591ffbb653df29db9db051201d16a8":[6,0,0,3,0,3,49]
+"classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html#abf591ffbb653df29db9db051201d16a8":[5,0,0,3,0,3,49]
 };

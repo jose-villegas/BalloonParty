@@ -1,5 +1,6 @@
 var NAVTREEINDEX125 =
 {
+"plan_color_balance.html#autotoc_md414":[3,7,0,2],
 "plan_color_balance.html#autotoc_md416":[3,7,0,3],
 "plan_color_balance.html#autotoc_md417":[3,7,0,3,0],
 "plan_color_balance.html#autotoc_md418":[3,7,0,3,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX125 =
 "plan_hdr_color_pipeline.html#autotoc_md730":[3,8,0,0],
 "plan_hdr_color_pipeline.html#autotoc_md731":[3,8,0,1],
 "plan_hdr_color_pipeline.html#autotoc_md732":[3,8,0,2],
-"plan_hdr_color_pipeline.html#autotoc_md733":[3,8,0,2,0],
-"plan_hdr_color_pipeline.html#autotoc_md734":[3,8,0,2,1]
+"plan_hdr_color_pipeline.html#autotoc_md733":[3,8,0,2,0]
 };

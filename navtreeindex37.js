@@ -1,5 +1,6 @@
 var NAVTREEINDEX37 =
 {
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#af55728b16b09c77ef692b1b90b1f00b1":[6,0,0,3,9,19,18],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingValidator.html":[5,0,0,3,9,20],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingValidator.html":[6,0,0,3,9,20],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingValidator.html#a24a3e658a2d6f9bd6ef9ec96393d9ff6":[5,0,0,3,9,20,5],
@@ -248,6 +249,5 @@ var NAVTREEINDEX37 =
 "classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#aba7a91ac8d695f343912a5b83027e10c":[6,0,0,3,9,30,4],
 "classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#abbd9b543237b766bd4d277d54ad31e5d":[5,0,0,3,9,30,6],
 "classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#abbd9b543237b766bd4d277d54ad31e5d":[6,0,0,3,9,30,6],
-"classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#abd0d28088f40f2b45a8fba123661031f":[5,0,0,3,9,30,1],
-"classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#abd0d28088f40f2b45a8fba123661031f":[6,0,0,3,9,30,1]
+"classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#abd0d28088f40f2b45a8fba123661031f":[5,0,0,3,9,30,1]
 };

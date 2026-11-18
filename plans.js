@@ -348,7 +348,7 @@ var plans =
         ] ],
         [ "Presentation", "plan_ripe_bubble_cluster.html#autotoc_md884", null ],
         [ "Settings", "plan_ripe_bubble_cluster.html#autotoc_md885", null ],
-        [ "Open decisions for the owner", "plan_ripe_bubble_cluster.html#autotoc_md886", null ],
+        [ "Owner decisions (2026-11-18)", "plan_ripe_bubble_cluster.html#autotoc_md886", null ],
         [ "Phases", "plan_ripe_bubble_cluster.html#autotoc_md887", null ],
         [ "Tests", "plan_ripe_bubble_cluster.html#autotoc_md888", null ],
         [ "What to watch", "plan_ripe_bubble_cluster.html#autotoc_md889", null ]

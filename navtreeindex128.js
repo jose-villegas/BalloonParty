@@ -1,5 +1,6 @@
 var NAVTREEINDEX128 =
 {
+"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Pair.html#a7ec376ac3ce7eb694ea788e77f0dd3b8":[6,0,0,1,1,1,0,1],
 "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Pair.html#ab0f245ab270f99f70aad8c76729abe0d":[5,0,0,1,1,1,0,0],
 "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Pair.html#ab0f245ab270f99f70aad8c76729abe0d":[6,0,0,1,1,1,0,0],
 "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Spot.html":[5,0,0,1,1,1,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX128 =
 "structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html":[6,0,0,3,5,29],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a09eba7c6bc214def9e3537adcac60c17":[5,0,0,3,5,29,4],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a09eba7c6bc214def9e3537adcac60c17":[6,0,0,3,5,29,4],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a0ee36ff4cc5a3278c1482efd0b7b6793":[5,0,0,3,5,29,8],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a0ee36ff4cc5a3278c1482efd0b7b6793":[6,0,0,3,5,29,8]
+"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a0ee36ff4cc5a3278c1482efd0b7b6793":[5,0,0,3,5,29,8]
 };

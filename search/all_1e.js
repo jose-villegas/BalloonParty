@@ -186,7 +186,7 @@ var searchData=
   ['the_20open_20visual_20question_183',['13.7 Card presentation (the open visual question)',['../plan_future_ideas.html#autotoc_md598',1,'']]],
   ['the_20orchestrator_20is_20the_20existing_20phase_20machine_184',['5. The orchestrator IS the existing phase machine',['../plan_level_up_timing.html#autotoc_md783',1,'']]],
   ['the_20other_20side_3a_20pressure_185',['The other side: pressure',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/Game/Assist/README.md#autotoc_md193',1,'']]],
-  ['the_20owner_186',['the owner',['../plan_ripe_bubble_cluster.html#autotoc_md886',1,'Open decisions for the owner'],['../plan_effects_layer_clearing.html#autotoc_md492',1,'Open questions for the owner']]],
+  ['the_20owner_186',['Open questions for the owner',['../plan_effects_layer_clearing.html#autotoc_md492',1,'']]],
   ['the_20pan_20in_20stops_20pausing_20the_20camera_20follows_20the_20shot_187',['6.7 The pan-in stops pausing; the camera follows the shot',['../plan_level_up_timing.html#autotoc_md791',1,'']]],
   ['the_20pause_20context_20answer_188',['Channels (the pause / context answer)',['../plan_audio.html#autotoc_md332',1,'']]],
   ['the_20pens_189',['Driving the pens',['../plan_item_range_preview.html#autotoc_md769',1,'']]],

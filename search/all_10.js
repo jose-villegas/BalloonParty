@@ -291,7 +291,7 @@ var searchData=
   ['for_20phase_202_288',['In-editor checks for phase 2',['../plan_terrain_biomes.html#autotoc_md928',1,'']]],
   ['for_20puff_20clouds_289',['10 — Baked Noise Texture for Puff Clouds',['../plan_future_ideas.html#autotoc_md580',1,'']]],
   ['for_20ship_20promoted_20earlier_290',['A4 — Quality tiers + ADPF · &lt;strong&gt;opus&lt;/strong&gt; — required for ship, promoted earlier',['../plan_performance_recovery.html#autotoc_md854',1,'']]],
-  ['for_20the_20owner_291',['for the owner',['../plan_ripe_bubble_cluster.html#autotoc_md886',1,'Open decisions for the owner'],['../plan_effects_layer_clearing.html#autotoc_md492',1,'Open questions for the owner']]],
+  ['for_20the_20owner_291',['Open questions for the owner',['../plan_effects_layer_clearing.html#autotoc_md492',1,'']]],
   ['for_20this_20plan_20superseded_20by_20neutral_292',['What ACES meant for this plan (superseded by Neutral)',['../plan_hdr.html#autotoc_md727',1,'']]],
   ['for_20tt_20registercomponentonnewgameobject_20tt_293',['Eager creation for &lt;tt&gt;RegisterComponentOnNewGameObject&lt;/tt&gt;',['../style_guide.html#autotoc_md1014',1,'']]],
   ['for_20weight_20randoms_294',['2.2 Pity System for Weight Randoms',['../plan_future_ideas.html#autotoc_md522',1,'']]],

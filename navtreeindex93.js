@@ -1,5 +1,6 @@
 var NAVTREEINDEX93 =
 {
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushMaterialSet.html#adc37c010a68345c6cc974aaf725f7b25":[6,0,0,13,0,0,2,13],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushObstacleModel.html":[5,0,0,13,0,0,3],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushObstacleModel.html":[6,0,0,13,0,0,3],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushObstacleModel.html#a14677a6144c285b56e5e140e167d8ad7":[5,0,0,13,0,0,3,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX93 =
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushViewController.html#a1c659f6b0f40907e6bbc932ee203b53d":[6,0,0,13,0,0,9,15],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushViewController.html#a2216318775920dc40ff4467a3ba6fbb8":[5,0,0,13,0,0,9,9],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushViewController.html#a2216318775920dc40ff4467a3ba6fbb8":[6,0,0,13,0,0,9,9],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushViewController.html#a2b48250c97317989fefb3a3350dcb061":[5,0,0,13,0,0,9,3],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushViewController.html#a2b48250c97317989fefb3a3350dcb061":[6,0,0,13,0,0,9,3]
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushViewController.html#a2b48250c97317989fefb3a3350dcb061":[5,0,0,13,0,0,9,3]
 };

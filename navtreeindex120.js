@@ -1,5 +1,6 @@
 var NAVTREEINDEX120 =
 {
+"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#a954254eb84eb90eca81a94485ecb4b5f":[6,0,0,10,2,1,11],
 "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#a965f538ffa7a6bb2ad295e8b32c9edd6":[5,0,0,10,2,1,4],
 "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#a965f538ffa7a6bb2ad295e8b32c9edd6":[6,0,0,10,2,1,4],
 "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#a99fdbf24546a90d6a123f81a40fd222d":[5,0,0,10,2,1,8],
@@ -248,6 +249,5 @@ var NAVTREEINDEX120 =
 "interfaceBalloonParty_1_1Shared_1_1IScoreTrailConfig.html":[6,0,0,12,29],
 "interfaceBalloonParty_1_1Shared_1_1IScoreTrailConfig.html#a213f9d1928f614eccb7c2878de9cf128":[5,0,0,12,29,1],
 "interfaceBalloonParty_1_1Shared_1_1IScoreTrailConfig.html#a213f9d1928f614eccb7c2878de9cf128":[6,0,0,12,29,1],
-"interfaceBalloonParty_1_1Shared_1_1IScoreTrailConfig.html#a24aed4aea9a5f0946a84b7755600176c":[5,0,0,12,29,3],
-"interfaceBalloonParty_1_1Shared_1_1IScoreTrailConfig.html#a24aed4aea9a5f0946a84b7755600176c":[6,0,0,12,29,3]
+"interfaceBalloonParty_1_1Shared_1_1IScoreTrailConfig.html#a24aed4aea9a5f0946a84b7755600176c":[5,0,0,12,29,3]
 };

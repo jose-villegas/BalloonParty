@@ -45,11 +45,12 @@ var searchData=
   ['autoplaycontroller_2ecs_42',['AutoplayController.cs',['../AutoplayController_8cs.html',1,'']]],
   ['autoplaydice_2ecs_43',['AutoplayDice.cs',['../AutoplayDice_8cs.html',1,'']]],
   ['autoplaylaunchargument_2ecs_44',['AutoplayLaunchArgument.cs',['../AutoplayLaunchArgument_8cs.html',1,'']]],
-  ['autoplaysettings_2ecs_45',['AutoplaySettings.cs',['../AutoplaySettings_8cs.html',1,'']]],
-  ['autoplaytap_2ecs_46',['AutoplayTap.cs',['../AutoplayTap_8cs.html',1,'']]],
-  ['autoplaytickwriter_2ecs_47',['AutoplayTickWriter.cs',['../AutoplayTickWriter_8cs.html',1,'']]],
-  ['awardscorepopcheat_2ecs_48',['AwardScorePopCheat.cs',['../AwardScorePopCheat_8cs.html',1,'']]],
-  ['axisbucketnaming_2ecs_49',['AxisBucketNaming.cs',['../AxisBucketNaming_8cs.html',1,'']]],
-  ['axisslot_2ecs_50',['AxisSlot.cs',['../AxisSlot_8cs.html',1,'']]],
-  ['axisslotinfo_2ecs_51',['AxisSlotInfo.cs',['../AxisSlotInfo_8cs.html',1,'']]]
+  ['autoplayonloss_2ecs_45',['AutoplayOnLoss.cs',['../AutoplayOnLoss_8cs.html',1,'']]],
+  ['autoplaysettings_2ecs_46',['AutoplaySettings.cs',['../AutoplaySettings_8cs.html',1,'']]],
+  ['autoplaytap_2ecs_47',['AutoplayTap.cs',['../AutoplayTap_8cs.html',1,'']]],
+  ['autoplaytickwriter_2ecs_48',['AutoplayTickWriter.cs',['../AutoplayTickWriter_8cs.html',1,'']]],
+  ['awardscorepopcheat_2ecs_49',['AwardScorePopCheat.cs',['../AwardScorePopCheat_8cs.html',1,'']]],
+  ['axisbucketnaming_2ecs_50',['AxisBucketNaming.cs',['../AxisBucketNaming_8cs.html',1,'']]],
+  ['axisslot_2ecs_51',['AxisSlot.cs',['../AxisSlot_8cs.html',1,'']]],
+  ['axisslotinfo_2ecs_52',['AxisSlotInfo.cs',['../AxisSlotInfo_8cs.html',1,'']]]
 ];
