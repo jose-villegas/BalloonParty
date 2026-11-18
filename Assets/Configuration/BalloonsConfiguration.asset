@@ -435,6 +435,7 @@ MonoBehaviour:
     _cloudSortingOrder: 40
     _cloudLayerName: Effects
   _nukeFuse:
+    _heartSeconds: 1
     _seconds: 3
     _pullInterval: 0.5
     _pullRadius: 4

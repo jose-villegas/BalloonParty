@@ -19,9 +19,10 @@ namespace BalloonParty.Balloon.Reward
 {
     /// <summary>
     ///     The armed nuke's fuse (PLAN-NukeBalloon). The hit that arms a nuke (any <see cref="ActorHitMessage" /> on a
-    ///     <see cref="NukeBalloonModel" /> that is now <see cref="NukeBalloonModel.Armed" />) starts it. It counts
-    ///     <see cref="INukeFuseSettings.Seconds" /> down on scaled time, so a pause holds it, and shows the whole seconds
-    ///     left on the nuke's counter, with a <see cref="NukeCountdownMessage" /> for each. Meanwhile it pulls the
+    ///     <see cref="NukeBalloonModel" /> that is now <see cref="NukeBalloonModel.Armed" />) starts it. It first
+    ///     waits <see cref="INukeFuseSettings.HeartSeconds" />, while the counter's heart flashes, then counts
+    ///     <see cref="INukeFuseSettings.Seconds" /> down, all on scaled time, so a pause holds it, and shows the whole
+    ///     seconds left on the nuke's counter, with a <see cref="NukeCountdownMessage" /> for each. Meanwhile it pulls the
     ///     balloons around the nuke in towards it, harder as the count runs down, and the view implodes the
     ///     disturbance field at it. At zero <see cref="INukeDetonator" /> sets it off. A level change, a game over, a
     ///     run reset or the nuke leaving the board stops the fuse with no blast.
@@ -52,6 +53,9 @@ namespace BalloonParty.Balloon.Reward
         public int ResetOrder => RunResetOrder.Quiesce;
 
         internal bool IsRunning => _nuke != null;
+
+        // From the arming hit to the blast: the heart's flashing, then the count.
+        private float TotalSeconds => _settings.HeartSeconds + _settings.Seconds;
 
         public NukeFuse(
             ISubscriber<ActorHitMessage> hitSubscriber,
@@ -119,7 +123,7 @@ namespace BalloonParty.Balloon.Reward
             _elapsed = 0f;
             _sincePull = 0f;
             _armedPublisher.Publish(new NukeArmedMessage(_center));
-            _view.Implode(_center, _settings.Seconds);
+            _view.Implode(_center, TotalSeconds);
             ShowSecondsLeft();
             Pull();
         }
@@ -148,7 +152,7 @@ namespace BalloonParty.Balloon.Reward
             }
 
             _elapsed += deltaTime;
-            if (_elapsed >= _settings.Seconds)
+            if (_elapsed >= TotalSeconds)
             {
                 GoOff();
                 return;
@@ -165,7 +169,13 @@ namespace BalloonParty.Balloon.Reward
 
         private void ShowSecondsLeft()
         {
-            var secondsLeft = Mathf.CeilToInt(_settings.Seconds - _elapsed - 1e-4f);
+            // The counter stays on its flashing heart until the count starts.
+            if (_elapsed < _settings.HeartSeconds)
+            {
+                return;
+            }
+
+            var secondsLeft = Mathf.CeilToInt(TotalSeconds - _elapsed - 1e-4f);
             if (secondsLeft == _nuke.FuseSecondsLeft.Value)
             {
                 return;
@@ -178,7 +188,7 @@ namespace BalloonParty.Balloon.Reward
         // Every balloon near the nuke is drawn towards it: a nudge with a negative distance pulls instead of pushing.
         private void Pull()
         {
-            var t = Mathf.Clamp01(_elapsed / _settings.Seconds);
+            var t = Mathf.Clamp01(_elapsed / TotalSeconds);
             var distance = Mathf.Lerp(_settings.PullDistanceStart, _settings.PullDistanceEnd, t);
             _pull[0] = new NudgeOverride(NudgeType.Wave, -distance, _settings.PullSeconds);
             BoardDisc.SlotsWithin(_grid, _center, _settings.PullRadius * _settings.PullRadius, _none, _slots);

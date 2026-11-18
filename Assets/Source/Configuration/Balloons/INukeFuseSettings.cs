@@ -6,7 +6,13 @@ namespace BalloonParty.Configuration.Balloons
     /// </summary>
     public interface INukeFuseSettings
     {
-        /// <summary>Seconds from arming to the blast. The counter on its body shows the whole seconds left.</summary>
+        /// <summary>
+        ///     Seconds the counter's heart flashes after the hit that arms it, before the count starts. The blast
+        ///     comes this long plus <see cref="Seconds" /> after that hit.
+        /// </summary>
+        float HeartSeconds { get; }
+
+        /// <summary>Seconds the count runs, to the blast. The counter on its body shows the whole seconds left.</summary>
         float Seconds { get; }
 
         /// <summary>Seconds between two pulls on the balloons around it.</summary>

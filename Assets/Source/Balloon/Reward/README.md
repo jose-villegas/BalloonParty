@@ -21,7 +21,7 @@ ball's pop paints the board rainbow (see The disco ball's wave).
 | `RewardBalloonService` | The rules behind the answer. Registered as `IRewardBalloonRequests` and `IRunResettable` |
 | `NukeSchedule` | When the nuke is due, and whether one is on the board: its gates (`FromLevel`, `PerLevel`, `CooldownLines`), the sure level (`SureLevel`) and the roll against `INukeOdds.Chance`. The service asks it first on a line |
 | `INukeOdds`, `NukeOdds` | The nuke's chance on a line: a tiny base raised by the trouble the player is in (board fill, spawn-clock pressure, low hearts, hearts lost in succession, read from `WaveDamageMessage` and fading each line). Registered as an entry point and `IRunResettable` |
-| `NukeFuse` | The armed nuke's three-second countdown: publishes `NukeArmedMessage` and a `NukeCountdownMessage` each second, pulls the nearby balloons in, then calls `INukeDetonator.Detonate`. Stops with no blast on a level change, game over or run reset. Registered as an entry point and `IRunResettable` |
+| `NukeFuse` | The armed nuke's fuse: a second while the counter's heart flashes (`HeartSeconds`), then the three-second countdown. Publishes `NukeArmedMessage` at the arming hit and a `NukeCountdownMessage` each second of the count, pulls the nearby balloons in, then calls `INukeDetonator.Detonate`. Stops with no blast on a level change, game over or run reset. Registered as an entry point and `IRunResettable` |
 | `INukeDetonator`, `NukeBlast` | `Detonate` is the blast itself: pops the nuke, kills the shots in flight, then grows a disc from it that pops every balloon it reaches but the other rewards, scoring nothing, and finally asks the spawn clock for a breather. `NukeBlast` implements it, as an entry point and `IRunResettable`; drawn by `Balloon/View/NukeBlastView` and `NukeCloudView` |
 | `BoardDisc` | The disc's shape and the last sweep, shared by `DiscoWave` and `NukeBlast`: the radius at a share of the time, which slots the edge has reached |
 | `PlatedRewardSchedule` | When one plated balloon (the golden one, the disco ball) is due, and whether one is on the board: the purple rolls, the ordinary level's single roll, the sure level. The service runs one for each; `RollPurple` is shared with the heart |
@@ -174,8 +174,10 @@ the golden balloon. Once armed it deflects every ball and takes no more damage, 
 (`IBalanceAnchor`), so the balancing of the board leaves it where it is. Its prefab (`Prefabs/Balloon/Nuke`) is
 the golden one's, with a lead-plated body (`Balloon/NukeBalloon.shader`: bolted plates, a radiation mark on a yellow
 placard) whose plates tip and darken as it is dented, and red rays behind it (`NukeRays` palette entry and
-material). `Balloon/Type/NukeFuseView` drives the shader's LED counter and status lamp from the fuse's messages: the
-lamp is green until the nuke is armed and then red, blinking with each beep, and the rays turn red too. It shatters
+material). `Balloon/Type/NukeFuseView` drives the shader's LED counter and status lamp from the model: the LED shows
+the hits the nuke still takes in green, a flashing red heart for the second after the arming hit, then the
+seconds left in red; the lamp is green until the arming hit, flashes red with the heart, then blinks red with
+each beep, and the rays turn red as the count starts. It shatters
 into lead plates (`PSVFX_NukePop`, the golden balloon's shatter on the `Sprites/Balloons/Nuke/nuke_parts` sheet, cut
 by `Tools/art/shatter` from a capture of the nuke armed). Cues: `BalloonDeflectNuke`, a lead clank a
 semitone lower on each dent, and `BalloonPopNuke`, a deep boom.

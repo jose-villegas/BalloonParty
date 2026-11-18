@@ -6,9 +6,11 @@ Shader "BalloonParty/Balloon/NukeBalloon"
     // ones do, but rough: a broad weak sheen, no glitter. Each ordinary hit the nuke takes dents more of its plates
     // (_DamageProgress, pushed by the prefab's ToughBalloonVariant as on the tough balloon): a dented plate sinks
     // darker and tips the other way. Below the placard sits an LED counter, one seven-segment digit behind dark
-    // glass, and above it a domed lamp; NukeFuseView pushes the fuse they show (_FuseArmed, _FuseDigit, _FuseBeat).
-    // Unarmed, the LED shows a green heart and the lamp pulses green; armed, the LED counts the fuse down in bright
-    // red digits and the lamp turns red, flashing with each count. Both shine by themselves, so the night doesn't dim
+    // glass, and above it a domed lamp; NukeFuseView pushes the fuse they show (_FuseArmed, _FuseHeart, _FuseDigit,
+    // _FuseBeat). Unarmed, the LED shows the hits the nuke still takes as a green digit, flashing on each dent, and
+    // the lamp pulses green. The hit that arms it turns the digit to a red heart that flashes, the lamp flashing
+    // red with it (_FuseHeart), until the count starts; then the LED counts the fuse down in bright red digits and
+    // the lamp stays red, flashing with each count. Both shine by themselves, so the night doesn't dim
     // them. A thin line of light runs along the seams between the plates: HDR green while it waits, dim red once
     // armed, flaring bright red on each count. The seam light, the LED's heart and digits and the lamp are the parts
     // of a balloon that bloom (Plans/PLAN-HDR caps the rest at white), so they are added after the cap. The shadow
@@ -96,8 +98,10 @@ Shader "BalloonParty/Balloon/NukeBalloon"
         _LedGap     ("LED Gap", Range(0, 0.2)) = 0.05
         _LedColor   ("LED", Color) = (1.00, 0.12, 0.06, 1)
         _LedGlass   ("LED Glass", Color) = (0.05, 0.04, 0.04, 1)
-        // How bright the unarmed heart shows, as a share of the armed digits.
+        // How bright the unarmed digit (the hits left) shows between dents, as a share of the armed digits.
         _LedIdle    ("LED Idle", Range(0, 1)) = 0.6
+        // How many times a second the heart flashes between the arming hit and the count.
+        _HeartFlashRate ("Heart Flashes Per Second", Range(1, 12)) = 5
         _LampRadius ("Lamp Radius", Range(0.02, 0.2)) = 0.075
         _LampGap    ("Lamp Gap", Range(0, 0.2)) = 0.04
         _LampGreen  ("Lamp Waiting", Color) = (0.25, 1.00, 0.35, 1)
@@ -116,6 +120,7 @@ Shader "BalloonParty/Balloon/NukeBalloon"
         // How bright the red line stays between counts, as a share of its flare on a count.
         _SeamArmedIdle ("Armed Between Counts", Range(0, 1)) = 0.025
         [HideInInspector] _FuseArmed ("Armed", Float) = 0
+        [HideInInspector] _FuseHeart ("Heart", Float) = 0
         [HideInInspector] _FuseDigit ("Digit", Float) = 3
         [HideInInspector] _FuseBeat  ("Last Count", Float) = -100
 
@@ -272,6 +277,8 @@ Shader "BalloonParty/Balloon/NukeBalloon"
             half4  _SeamRed;
             float  _SeamArmedIdle;
             float  _FuseArmed;
+            float  _FuseHeart;
+            float  _HeartFlashRate;
             float  _FuseDigit;
             float  _FuseBeat;
 
@@ -424,6 +431,11 @@ Shader "BalloonParty/Balloon/NukeBalloon"
             half3 FuseParts(half3 col, float2 p, half3 tint, out half3 glowOut)
             {
                 glowOut = 0.0;
+                // Since the last beat NukeFuseView pushed: a dent, the arming hit or a count.
+                float  sinceBeat = max(_Time.y - _FuseBeat, 0.0);
+                float  flash = exp(-sinceBeat * 5.0);
+                // The heart's flashing, on from the arming hit.
+                float  blink = step(0.0, sin(sinceBeat * 6.2831853 * _HeartFlashRate));
                 // The LED: a rounded box of dark glass in a steel bezel, one digit behind it.
                 float2 ledCenter = float2(0.0, _MarkLift - _MarkRadius - _LedGap - _LedSize.y);
                 float2 d = p - ledCenter;
@@ -450,29 +462,33 @@ Shader "BalloonParty/Balloon/NukeBalloon"
                     Segment(q, float2(-0.5, 0.0), float2(-0.5, 1.0), 5.0, qa, lit, ghost);
                     Segment(q, float2(-0.5, 0.0), float2(0.5, 0.0), 6.0, qa, lit, ghost);
 
-                    // Unarmed, a heart in place of the digit, and no unlit segments behind it.
+                    // Between the arming hit and the count, a heart in place of the digit, and no unlit segments
+                    // behind it.
                     float2 hp = d / (_LedSize.y * 1.25) + float2(0.0, 0.5);
                     float  ha = max(fwidth(hp.y), 0.01);
                     float  heart = 1.0 - smoothstep(-ha, ha, HeartDistance(hp));
-                    lit = lerp(heart, lit, _FuseArmed);
-                    ghost *= _FuseArmed;
+                    lit = lerp(lit, heart, _FuseHeart);
+                    ghost *= 1.0 - _FuseHeart;
 
-                    float  bright = lerp(_LedIdle, 1.0, _FuseArmed);
-                    // The heart glows the lamp's green; the count, the LED's red.
-                    half3  glow = lerp(_LampGreen.rgb, _LedColor.rgb, _FuseArmed);
-                    half3  led = glass + _LedColor.rgb * ghost * 0.06;
+                    // The hits left sit dimmer and flare on a dent; the heart flashes; the count is full.
+                    float  bright = lerp(lerp(_LedIdle, 1.0, flash), 1.0, _FuseArmed);
+                    bright = lerp(bright, lerp(0.1, 1.0, blink), _FuseHeart);
+                    // The hits left glow the lamp's green; the heart and the count, the LED's red.
+                    half3  glow = lerp(_LampGreen.rgb, _LedColor.rgb, max(_FuseArmed, _FuseHeart));
+                    half3  led = glass + glow * ghost * 0.06;
                     col = lerp(col, led, housing);
                     glowOut += glow * lit * bright * 1.4 * _FuseGlow * housing;
                 }
 
-                // The lamp: a small dome, pulsing green while it waits, red and flashing on each count once armed.
+                // The lamp: a small dome, pulsing green while it waits and flaring on a dent, flashing red with the
+                // heart, then red and flashing on each count.
                 float2 lampCenter = float2(0.0, _MarkLift + _MarkRadius + _LampGap + _LampRadius);
                 float2 l = (p - lampCenter) / _LampRadius;
                 float  r = length(l);
                 float  la = max(fwidth(r), 0.02);
-                float  waiting = 0.55 + 0.45 * sin(_Time.y * 3.0);
-                float  flash = exp(-max(_Time.y - _FuseBeat, 0.0) * 5.0);
+                float  waiting = max(0.55 + 0.45 * sin(_Time.y * 3.0), 1.4 * flash);
                 half3  light = lerp(_LampGreen.rgb * waiting, _LampRed.rgb * (0.2 + 1.6 * flash), _FuseArmed);
+                light = lerp(light, _LampRed.rgb * (0.15 + 1.45 * blink), _FuseHeart);
                 float  lamp = 1.0 - smoothstep(1.0 - la, 1.0 + la, r);
                 float  spot = pow(saturate(1.0 - length(l - float2(-0.35, 0.4)) * 1.8), 3.0);
                 float  inner = smoothstep(1.0, 0.75, r);

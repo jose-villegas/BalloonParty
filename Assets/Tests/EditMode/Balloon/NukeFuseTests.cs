@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Reward;
 using BalloonParty.Balloon.Spawner;
@@ -62,7 +63,9 @@ namespace BalloonParty.Tests.Balloon
             gridConfig.SlotsOffset.Returns(new Vector2(2.5f, 4f));
             _grid = new SlotGrid(gridConfig, new BalancePathHolder());
 
+            // The count's own tests run it from the arming hit; the heart's lead-in has its tests below.
             _settings = new NukeFuseSettings();
+            SetHeartSeconds(0f);
             var balloons = Substitute.For<IBalloonsConfiguration>();
             balloons.NukeFuse.Returns(_settings);
 
@@ -131,6 +134,54 @@ namespace BalloonParty.Tests.Balloon
             _view.Received(1).Implode(center, _settings.Seconds);
             CollectionAssert.AreEqual(new[] { 3 }, _counts);
             Assert.AreEqual(3, nuke.FuseSecondsLeft.Value);
+        }
+
+        [Test]
+        public void WhileTheHeartFlashes_TheCounterShowsNoSeconds_AndNothingBeeps()
+        {
+            SetHeartSeconds(1f);
+            var nuke = PlaceNuke(NukeSlot);
+
+            Hit(nuke);
+            Advance(3);
+
+            Assert.IsTrue(_fuse.IsRunning);
+            Assert.AreEqual(0, nuke.FuseSecondsLeft.Value);
+            CollectionAssert.IsEmpty(_counts);
+        }
+
+        [Test]
+        public void AfterTheHeart_TheCountRunsItsWholeLength_ThenTheNukeDetonates()
+        {
+            SetHeartSeconds(1f);
+            var nuke = PlaceNuke(NukeSlot);
+            Hit(nuke);
+
+            Advance(4);
+            Assert.AreEqual(3, nuke.FuseSecondsLeft.Value);
+            Advance(11);
+            CollectionAssert.AreEqual(new[] { 3, 2, 1 }, _counts);
+            _detonator.DidNotReceiveWithAnyArgs().Detonate(default, default);
+            Advance(1);
+
+            _detonator.Received(1).Detonate(nuke, Arg.Any<Vector3>());
+        }
+
+        [Test]
+        public void TheFieldImplodes_ForTheHeartAndTheCountTogether()
+        {
+            SetHeartSeconds(1f);
+            var nuke = PlaceNuke(NukeSlot);
+
+            Hit(nuke);
+
+            _view.Received(1).Implode(Arg.Any<Vector3>(), 1f + _settings.Seconds);
+        }
+
+        [Test]
+        public void TheShippedHeart_FlashesForASecond()
+        {
+            Assert.AreEqual(1f, new NukeFuseSettings().HeartSeconds);
         }
 
         [Test]
@@ -342,6 +393,13 @@ namespace BalloonParty.Tests.Balloon
             Advance(12);
 
             _detonator.Received(1).Detonate(second, _grid.IndexToWorldPosition(OtherSlot));
+        }
+
+        private void SetHeartSeconds(float seconds)
+        {
+            typeof(NukeFuseSettings)
+                .GetField("_heartSeconds", BindingFlags.Instance | BindingFlags.NonPublic)
+                .SetValue(_settings, seconds);
         }
 
         private void Advance(int steps)

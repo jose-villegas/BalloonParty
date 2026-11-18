@@ -6,7 +6,12 @@ namespace BalloonParty.Configuration.Balloons
     [Serializable]
     public class NukeFuseSettings : INukeFuseSettings
     {
-        [Tooltip("Seconds from arming to the blast, on scaled time. The counter shows the whole seconds left, " +
+        [Tooltip("Seconds the counter's heart flashes after the hit that arms the nuke, before the count starts: " +
+                 "the player's notice that it is about to count. The blast comes this long plus Seconds after " +
+                 "that hit.")]
+        [SerializeField] [Min(0f)] private float _heartSeconds = 1f;
+
+        [Tooltip("Seconds the count runs, to the blast, on scaled time. The counter shows the whole seconds left, " +
                  "with a beep on each.")]
         [SerializeField] [Min(0.5f)] private float _seconds = 3f;
 
@@ -32,6 +37,7 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("The implosion's strength, pulling the clouds, grass and specks in (the bomb's profile is 5).")]
         [SerializeField] [Min(0f)] private float _implodeStrength = 3f;
 
+        public float HeartSeconds => _heartSeconds;
         public float Seconds => _seconds;
         public float PullInterval => _pullInterval;
         public float PullRadius => _pullRadius;

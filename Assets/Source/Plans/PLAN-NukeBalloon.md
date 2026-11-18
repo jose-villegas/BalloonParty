@@ -4,7 +4,8 @@
 
 > A fourth reward balloon: a **nuke**. It is plated in dull lead and bolted together, with a riveted danger
 > placard on its face, a small LED counter and a status lamp that flares green. Shots bounce off it and dent
-> it. The third dent, or any piercing damage, **arms** it. The lamp turns red, the counter runs down from 3
+> it, and the counter shows in green how many dents it still takes. The third dent, or any piercing damage,
+> **arms** it. The counter flashes a red heart for a second, then the lamp turns red, the counter runs down from 3
 > with a beep each second, and the board leans in towards it. At zero it goes off. A blinding light floods the
 > board behind a growing shock disc that pops every balloon and every shot in flight. A mushroom cloud rises
 > where it stood. Then the spawn clock gives the breather a big clear earns, on a gust of wind. It is rare,
@@ -22,8 +23,11 @@
    spawn clock's pressure, low hearts, and hearts lost in quick succession.
 3. **It is heavy.** The shot's ordinary hit bounces off and dents it. The third dent arms it, and so does any
    `Piercing` damage at once (a pierce, a bomb's blast beside it, a laser beam).
-4. **Armed, it counts down.** It stays where it is for a 3 s fuse. Its lamp turns red and its LED counts
-   3, 2, 1 with a beep on each, while the balloons around it lean slowly in.
+4. **Armed, it counts down.** It stays where it is. Its LED flashes a red heart for 1 s (`HeartSeconds`), the lamp flashing red with it,
+   the player's notice that the count is coming. Then its lamp turns red and its LED counts 3, 2, 1 over a
+   3 s fuse with a beep on each, while the balloons around it lean slowly in. The blast comes 4 s after the
+   arming hit. The owner asked for both: nothing told the player that a third hit sets it off, so the LED
+   counts the dents left (3, 2, 1, green) before it, and the heart marks the moment it is armed.
 5. **At zero it clears the board.** Every balloon but the other rewards pops, scoring nothing, and every
    shot in flight dies. Then the spawn clock starts the breather a big clear earns.
 6. **The spectacle.** The disco wave's growing disc, with light that blinds the board as it spreads. The
@@ -63,13 +67,13 @@ blast, the breather grant, the cloud and the nuke's sound router.
 | `NukeOdds` | `Balloon/Reward/` | The nuke's chance on a line, from the four signals (*When it comes*). Plain C#, `IStartable` and `IRunResettable`. It hears `WaveDamageMessage` for the hearts lost |
 | `NukeSchedule` in `RewardBalloonService` | `Balloon/Reward/` | Rolls the nuke first on each line, through `NukeOdds`. Tracks the one on the board through the leave callback, as for the others |
 | `INukeOddsSettings`, `INukeBlastSettings` | `Configuration/Balloons/`, on `IBalloonsConfiguration` (`NukeOdds`, `NukeBlast`) | The nuke's numbers |
-| `NukeFuse` (new) | `Balloon/Reward/` | Plain C#, `ITickable`, `IRunResettable`. Hears the hit that arms a nuke (any `ActorHitMessage` on a `NukeBalloonModel` that is now `Armed`). Counts its fuse down on scaled time, sets `FuseSecondsLeft`, publishes `NukeCountdownMessage` each second, and pulls the board in (*The fuse*). At zero it hands the nuke to `NukeBlast.Detonate` |
+| `NukeFuse` (new) | `Balloon/Reward/` | Plain C#, `ITickable`, `IRunResettable`. Hears the hit that arms a nuke (any `ActorHitMessage` on a `NukeBalloonModel` that is now `Armed`). Waits `HeartSeconds`, then counts its fuse down, all on scaled time, sets `FuseSecondsLeft`, publishes `NukeCountdownMessage` each second, and pulls the board in (*The fuse*). At zero it hands the nuke to `NukeBlast.Detonate` |
 | `NukeBlast` | `Balloon/Reward/` | The detonation: pops the nuke, kills the shots in flight, then grows the disc that pops each balloon its edge reaches. A nudge runs ahead of the edge. Then a last sweep, then the breather. Plain C#, `ITickable`, `IRunResettable` |
 | `IBalloonPopper` | `Balloon/Controller/` | `BalloonControllerRegistry.TryPopSingle`: a scoreless pop with its VFX, the path the game-over pop wave uses |
 | `IBreatherGrant`, on `SpawnClock` | `Balloon/Spawner/` | `Grant()`: starts the breather now, whatever the cooldown |
 | `BoardDisc` | `Balloon/Reward/` | The disc's shape and sweep, shared with `DiscoWave` |
 | Messages (new) | `Shared/Messages/` | `NukeArmedMessage`, `NukeCountdownMessage` (seconds left), `NukeDetonatedMessage`, `NukeBreatherMessage`, all with the nuke's position. `ClearShotsInFlightMessage`, which `ThrowerController` answers by killing every shot in flight and sparing the loaded one |
-| `NukeFuseView` (new) | `Balloon/Type/`, on the Nuke prefab | An `IBalloonViewBinding`. It pushes `Armed` and `FuseSecondsLeft` to the body's material (the LED digit and the lamp) and switches the rays behind it from green to red |
+| `NukeFuseView` (new) | `Balloon/Type/`, on the Nuke prefab | An `IBalloonViewBinding`. It pushes the hits left, `Armed` and `FuseSecondsLeft` to the body's material: the LED shows the hits left in green, the heart from the arming hit until the count starts, then the seconds in red with the lamp, and it switches the rays behind it from green to red as the count starts |
 | `NukeBlastView`, `NukeCloudView` (new), `GrowingDiscView` | `Balloon/View/` | The disc (as `DiscoWaveView` draws the disco wave), the blinding light that follows it, and the mushroom cloud |
 | `NukeSoundRouter` (new) | `Audio/Routing/` | Plays the armed alarm, the countdown beeps, the boom and the breather's wind from the messages above, as `DiscoSoundRouter` plays the disco wave |
 | Solver | `Solver/` | `ShotBalloonSnapshot.ForNukeTarget` carries the hits left. The hit that arms a nuke deflects the shot and counts as `NukePops`, which is ranked. The clear comes 3 s later, after the simulated flight, so the solver does not clear the board |
@@ -87,6 +91,7 @@ sequenceDiagram
     Hit->>Model: the third dent, or piercing damage
     Model-->>Model: Armed, anchored, hits 0
     Hit->>Fuse: ActorHitMessage on an armed nuke
+    Fuse-->>Fuse: wait HeartSeconds, the LED's heart flashing
     loop each second of the 3 s fuse
         Fuse->>Model: FuseSecondsLeft 3, 2, 1
         Fuse-->>Fuse: beep, pull the board in
@@ -161,7 +166,7 @@ on, owed, to the next line with room.
 - **A board clear or a level change** takes it away unarmed. Only arming starts the fuse.
 
 Armed, it deflects every ball for the rest of the fuse. A ball can ricochet off it, so the deflect chain
-counts those bounces (`DeflectChainController`). That is three seconds at most, and the shot dies at zero,
+counts those bounces (`DeflectChainController`). That is four seconds at most, and the shot dies at zero,
 so it stays as it is.
 
 ## The fuse
@@ -231,9 +236,12 @@ prefab's baked shadow child, as the golden balloon's is.
   inside a black ring, held by three rivets between the blades. It takes the sphere's light, a soft sheen
   and some wear.
 - **The LED counter.** A small dark display below the placard with one red seven-segment digit, glowing
-  past white so it blooms. Unarmed it shows a green heart. Armed it shows the seconds left, bright red.
+  past white so it blooms. Unarmed it shows the hits the nuke still takes as a green digit, dimmer, flaring
+  on each dent. From the arming hit to the count it shows a red heart flashing 5 times a second
+  (`_FuseHeart`, `_HeartFlashRate`). Then it shows the seconds left, bright red.
 - **The lamp.** A small domed lamp above the placard. Unarmed it pulses green. Armed it is red and blinks
-  with each beep. Both are drawn by the body shader from `_FuseArmed` and `_FuseDigit`, which
+  with each beep; it flares on a dent and flashes red with the heart. Both are drawn by the body shader from
+  `_FuseArmed`, `_FuseHeart`, `_FuseDigit` and `_FuseBeat`, which
   `NukeFuseView` pushes, and both shine `_FuseGlow` (3) times past white.
 - **The seam light.** A thin line of light down the gaps between the plates, with a soft glow either side:
   HDR green while it waits, dim red once armed, flaring bright red on each count (`_FuseBeat`).
