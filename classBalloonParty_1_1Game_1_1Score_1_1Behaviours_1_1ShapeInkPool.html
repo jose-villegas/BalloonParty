@@ -181,13 +181,13 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a87f27c082a9fd0894f6acef7984e6e97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b8b4fe551d077d5f05db196c62e1bea" id="r_a0b8b4fe551d077d5f05db196c62e1bea"><td class="memItemLeft" align="right" valign="top">readonly List&lt; <a class="el" href="classBalloonParty_1_1UI_1_1Score_1_1ShapeInkView.html">ShapeInkView</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0b8b4fe551d077d5f05db196c62e1bea">_views</a> = new()</td></tr>
 <tr class="separator:a0b8b4fe551d077d5f05db196c62e1bea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab88ee9ad613bfcfddcff3a48de368fdb" id="r_ab88ee9ad613bfcfddcff3a48de368fdb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab88ee9ad613bfcfddcff3a48de368fdb">_warned</a></td></tr>
+<tr class="separator:ab88ee9ad613bfcfddcff3a48de368fdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
 <tr class="memitem:a8a7dfd87a3f11c0f346486e78f4b5652" id="r_a8a7dfd87a3f11c0f346486e78f4b5652"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8a7dfd87a3f11c0f346486e78f4b5652">InkHalfId</a> = Shader.PropertyToID(&quot;_InkHalf&quot;)</td></tr>
 <tr class="separator:a8a7dfd87a3f11c0f346486e78f4b5652"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab8f05b26a97dbef08ae72e7c5f2ba546" id="r_ab8f05b26a97dbef08ae72e7c5f2ba546"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab8f05b26a97dbef08ae72e7c5f2ba546">InkLookId</a> = Shader.PropertyToID(&quot;_InkLook&quot;)</td></tr>
-<tr class="separator:ab8f05b26a97dbef08ae72e7c5f2ba546"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8760d663e48fa218c6e3c1e3bbcd5103" id="r_a8760d663e48fa218c6e3c1e3bbcd5103"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8760d663e48fa218c6e3c1e3bbcd5103">InkRampId</a> = Shader.PropertyToID(&quot;_InkRamp&quot;)</td></tr>
 <tr class="separator:a8760d663e48fa218c6e3c1e3bbcd5103"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac57282010c31508e792918e9d702cb22" id="r_ac57282010c31508e792918e9d702cb22"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac57282010c31508e792918e9d702cb22">InkShadowId</a> = Shader.PropertyToID(&quot;_InkShadow&quot;)</td></tr>
@@ -245,6 +245,7 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>A view showing <em>shape</em>  in <em>color</em> , sorted and layered as <em>guide</em> . </p>
+<p>Null when the settings have no ink to draw with (<a class="el" href="structBalloonParty_1_1Configuration_1_1ShapeInkSettings.html#a51646dad000f1f3ffa278b4904b14705" title="False while the material or a curve is missing: there is then nothing to draw a shape with.">ShapeInkSettings.Drawable</a>): the shape then flies undrawn, its points still counted. </p>
 
 </div>
 </div>
@@ -567,6 +568,28 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ab88ee9ad613bfcfddcff3a48de368fdb" name="ab88ee9ad613bfcfddcff3a48de368fdb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab88ee9ad613bfcfddcff3a48de368fdb">&#9670;&#160;</a></span>_warned</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Game.Score.Behaviours.ShapeInkPool._warned</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a8a7dfd87a3f11c0f346486e78f4b5652" name="a8a7dfd87a3f11c0f346486e78f4b5652"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8a7dfd87a3f11c0f346486e78f4b5652">&#9670;&#160;</a></span>InkHalfId</h2>
 
@@ -578,28 +601,6 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly int BalloonParty.Game.Score.Behaviours.ShapeInkPool.InkHalfId = Shader.PropertyToID(&quot;_InkHalf&quot;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ab8f05b26a97dbef08ae72e7c5f2ba546" name="ab8f05b26a97dbef08ae72e7c5f2ba546"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab8f05b26a97dbef08ae72e7c5f2ba546">&#9670;&#160;</a></span>InkLookId</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">readonly int BalloonParty.Game.Score.Behaviours.ShapeInkPool.InkLookId = Shader.PropertyToID(&quot;_InkLook&quot;)</td>
         </tr>
       </table>
   </td>

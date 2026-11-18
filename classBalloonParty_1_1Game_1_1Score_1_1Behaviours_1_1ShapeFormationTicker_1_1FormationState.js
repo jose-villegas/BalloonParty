@@ -8,7 +8,6 @@ var classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1
     [ "Elapsed", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a7a5a357ddd75b6a54bcb15288d74a15a", null ],
     [ "FadeElapsed", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#abeaf9b5bf53539526a3e2d445ad9c3ff", null ],
     [ "FormationRadius", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a114339d10a9181a1c6698dec5f6cba1c", null ],
-    [ "Frozen", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a2ce88226fa4fe7c07892dfe820bea040", null ],
     [ "Group", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#ac7e66b5ffc3ce5d38f15eee6aecabecb", null ],
     [ "Guide", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a1976318db9f85a34b9cc161834d2d6d0", null ],
     [ "InitialRotation", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a4f6b2b5d70ca65ce67afb974b077448d", null ],
@@ -19,10 +18,6 @@ var classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1
     [ "LocalPenSpeed", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a4b96381e40d6030a2e20133285af1e0c", null ],
     [ "Origin", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a7df9cc0e3fca64da14470c48409bacf6", null ],
     [ "PendingRelease", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a99378bc13fb892002b15bf901c145675", null ],
-    [ "PenRibbonTime", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a4daaa22f0b6c031a699edc4d5a0939d0", null ],
-    [ "PenSegment", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#ac6ce76de8e94d87e8095bea36c03d7bd", null ],
-    [ "PenStartDist", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a3597cdcacb635a92f31ed3e94a68eefd", null ],
-    [ "PenWalk", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a7ae66e12495a918b4ba615f3af2675b3", null ],
     [ "Phase", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a56c8abf87d8c58da02f5086ebf5ce157", null ],
     [ "RangeLast", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a8b733390fc0d0e82963e9c1825a83667", null ],
     [ "Reported", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#ab55e5004121433776f7b792db298d992", null ],
@@ -33,8 +28,5 @@ var classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1
     [ "SpinAxis", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#afb8e1af9e19a0b488d4f5372fef258be", null ],
     [ "SpinSpeed", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#ad303f560128a2242cec43f5e036ccacd", null ],
     [ "TargetOffset", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a873847023610bcb6cacc42944f337637", null ],
-    [ "Value", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a452e5819a44ced4300afd778a233a162", null ],
-    [ "VertexCount", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#aff80b5c3f7db6c7285534633567539e9", null ],
-    [ "Vertices", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a24b1a6635cc1bbd4113869d7c0f7b9da", null ],
-    [ "VerticesLive", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a00e0abd9b9d5b5fcd5263a34475feccf", null ]
+    [ "Value", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a452e5819a44ced4300afd778a233a162", null ]
 ];

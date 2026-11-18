@@ -293,9 +293,9 @@
 <g id="node11" class="node">
 <title>Pens</title>
 <polygon fill="white" stroke="black" points="887,-241.25 727,-241.25 727,-169.5 887,-169.5 887,-241.25"/>
-<text xml:space="preserve" text-anchor="middle" x="807" y="-227.75" font-family="Helvetica,sans-Serif" font-size="10.00">Pens + anchor + guide</text>
-<text xml:space="preserve" text-anchor="middle" x="807" y="-215" font-family="Helvetica,sans-Serif" font-size="10.00">pooled FlyingTrail pens</text>
-<text xml:space="preserve" text-anchor="middle" x="807" y="-202.25" font-family="Helvetica,sans-Serif" font-size="10.00">(TrailRenderer ink),</text>
+<text xml:space="preserve" text-anchor="middle" x="807" y="-227.75" font-family="Helvetica,sans-Serif" font-size="10.00">Ink + anchor + guide</text>
+<text xml:space="preserve" text-anchor="middle" x="807" y="-215" font-family="Helvetica,sans-Serif" font-size="10.00">one baked ShapeInkView</text>
+<text xml:space="preserve" text-anchor="middle" x="807" y="-202.25" font-family="Helvetica,sans-Serif" font-size="10.00">per shape (ShapeInk shader),</text>
 <text xml:space="preserve" text-anchor="middle" x="807" y="-189.5" font-family="Helvetica,sans-Serif" font-size="10.00">anchor Transform = principal,</text>
 <text xml:space="preserve" text-anchor="middle" x="807" y="-176.75" font-family="Helvetica,sans-Serif" font-size="10.00">guide traces the travel path</text>
 </g>

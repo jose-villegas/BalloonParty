@@ -14,7 +14,7 @@
 <area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="564,281,677,260,672,261,565,286"/>
 <area shape="rect" id="Node000008" href="$structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html" title="Global knobs shared by every BigScore formation: radius, pen speed, coverage, spin and the scale&#45;over..." alt="" coords="358,352,555,397"/>
 <area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="547,344,566,337,653,301,730,268,735,266,655,306,568,342,549,349"/>
-<area shape="rect" id="Node000009" href="$structBalloonParty_1_1Configuration_1_1ShapeInkSettings.html" title="How a score shape&#39;s ink is drawn when the shape is one baked mesh (ShapeInkView) instead of a trail p..." alt="" coords="5,352,202,397"/>
+<area shape="rect" id="Node000009" href="$structBalloonParty_1_1Configuration_1_1ShapeInkSettings.html" title="How a score shape&#39;s ink is drawn (ShapeInkView, on the shape&#39;s baked mesh): the material that gives t..." alt="" coords="5,352,202,397"/>
 <area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="217,372,360,373,355,376,217,377"/>
 <area shape="rect" id="Node000010" href="$structBalloonParty_1_1Game_1_1Score_1_1TrailId.html" title="Uniquely identifies a score trail by color and score value; no level component since a trail is only ..." alt="" coords="362,421,550,466"/>
 <area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="553,413,566,407,623,374,677,336,762,268,767,266,680,340,626,379,568,411,554,418"/>

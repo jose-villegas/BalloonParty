@@ -162,7 +162,7 @@
 <!-- Node9 -->
 <g id="Node000009" class="node">
 <title>Node9</title>
-<g id="a_Node000009"><a xlink:href="structBalloonParty_1_1Configuration_1_1ShapeInkSettings.html" target="_top" xlink:title="How a score shape&#39;s ink is drawn when the shape is one baked mesh (ShapeInkView) instead of a trail p...">
+<g id="a_Node000009"><a xlink:href="structBalloonParty_1_1Configuration_1_1ShapeInkSettings.html" target="_top" xlink:title="How a score shape&#39;s ink is drawn (ShapeInkView, on the shape&#39;s baked mesh): the material that gives t...">
 <polygon fill="white" stroke="#666666" points="147.25,-85.5 0,-85.5 0,-52 147.25,-52 147.25,-85.5"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-72" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
 <text xml:space="preserve" text-anchor="middle" x="73.62" y="-59.25" font-family="Helvetica,sans-Serif" font-size="10.00">ShapeInkSettings</text>

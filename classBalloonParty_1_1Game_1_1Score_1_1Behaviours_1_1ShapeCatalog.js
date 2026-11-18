@@ -2,7 +2,7 @@ var classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog =
 [
     [ "AddAxisAlignedVertices", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog.html#a901af5e0a16e8ef1360861469ed54079", null ],
     [ "AddEvenPermutationVertices", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog.html#a5e89f8a87c74bd46507d26030fc148e1", null ],
-    [ "Build", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog.html#ae2e239b2a4f18295a1971e63916806ab", null ],
+    [ "Build", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog.html#a874442a7368d094171c48dd95b11ab20", null ],
     [ "BuildCube", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog.html#afa821344ceceb447c83ac911523d4564", null ],
     [ "BuildDodecahedron", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog.html#a133b69d8b019c66817fdf9d6bea1b9f3", null ],
     [ "BuildElongatedSquareDipyramid", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog.html#a1d1bbb9ac41d00de0994538afaf65a77", null ],
@@ -41,7 +41,6 @@ var classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog =
     [ "SortNeighborsByAngle", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog.html#acf6195d61e1a7813f302ab3cf2a41ef0", null ],
     [ "TryGet", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog.html#a6a7af776d50e2e61a2861f64437e03cd", null ],
     [ "Warm", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog.html#a93d567f8047538d4d8456d5b9b506157", null ],
-    [ "WavingSphereDisplacer", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog.html#aee73aa76381e94210509050b1b85705d", null ],
     [ "LadderDenominations", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog.html#a9a0a7367cd9449ed628d1868d7a1fbbd", null ],
     [ "MaxRadiusScale", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog.html#a3993db042bffb8c887e660ca7307f9e1", null ],
     [ "Phi", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog.html#ab4f6485edfd94485f5a6eacd94acf602", null ],

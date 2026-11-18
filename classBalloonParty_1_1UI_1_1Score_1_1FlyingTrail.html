@@ -177,8 +177,6 @@ Package Functions</h2></td></tr>
 <tr class="separator:a8574fcd1421286eccfcbd92cc9ecae45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb066320c00d457cd431cb29aadf2343" id="r_afb066320c00d457cd431cb29aadf2343"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afb066320c00d457cd431cb29aadf2343">ThawRibbon</a> ()</td></tr>
 <tr class="separator:afb066320c00d457cd431cb29aadf2343"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a31ba7311df1b2a4637cd9a2f0a53cefe" id="r_a31ba7311df1b2a4637cd9a2f0a53cefe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31ba7311df1b2a4637cd9a2f0a53cefe">TransformRibbon</a> (Vector3 oldCenter, Vector3 newCenter, Quaternion delta, float scaleRatio)</td></tr>
-<tr class="separator:a31ba7311df1b2a4637cd9a2f0a53cefe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -246,8 +244,6 @@ Private Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
-<tr class="memitem:a6453a55734fec3ff1ebc2642b90f23db" id="r_a6453a55734fec3ff1ebc2642b90f23db"><td class="memItemLeft" align="right" valign="top">static Vector3[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6453a55734fec3ff1ebc2642b90f23db">_ribbonScratch</a> = new Vector3[256]</td></tr>
-<tr class="separator:a6453a55734fec3ff1ebc2642b90f23db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aff0799102deca42e5bcb26fdba057f73" id="r_aff0799102deca42e5bcb26fdba057f73"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aff0799102deca42e5bcb26fdba057f73">FrozenRibbonTime</a> = 600f</td></tr>
 <tr class="separator:aff0799102deca42e5bcb26fdba057f73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9aad64162d87acf8e6ee791538f70e49" id="r_a9aad64162d87acf8e6ee791538f70e49"><td class="memItemLeft" align="right" valign="top">static readonly AnimationCurve&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9aad64162d87acf8e6ee791538f70e49">LinearFallback</a> = AnimationCurve.Linear(0f, 0f, 1f, 1f)</td></tr>
@@ -995,45 +991,6 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a31ba7311df1b2a4637cd9a2f0a53cefe" name="a31ba7311df1b2a4637cd9a2f0a53cefe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a31ba7311df1b2a4637cd9a2f0a53cefe">&#9670;&#160;</a></span>TransformRibbon()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void BalloonParty.UI.Score.FlyingTrail.TransformRibbon </td>
-          <td>(</td>
-          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>oldCenter</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>newCenter</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Quaternion</td>          <td class="paramname"><span class="paramname"><em>delta</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>scaleRatio</em></span>&#160;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a1d90c93542cbe0929065377f45f308ad" name="a1d90c93542cbe0929065377f45f308ad"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1d90c93542cbe0929065377f45f308ad">&#9670;&#160;</a></span>Update()</h2>
 
@@ -1428,28 +1385,6 @@ Static Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a6453a55734fec3ff1ebc2642b90f23db" name="a6453a55734fec3ff1ebc2642b90f23db"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6453a55734fec3ff1ebc2642b90f23db">&#9670;&#160;</a></span>_ribbonScratch</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Vector3 [] BalloonParty.UI.Score.FlyingTrail._ribbonScratch = new Vector3[256]</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

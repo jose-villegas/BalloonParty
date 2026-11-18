@@ -129,8 +129,8 @@ $(function(){initNavTree('classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1Fo
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:a213b2728cb32aae173e0fe921ed4f914" id="r_a213b2728cb32aae173e0fe921ed4f914"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a213b2728cb32aae173e0fe921ed4f914">FormationShape</a> (int denomination, float radiusScale, Vector3[] vertices, <a class="el" href="structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationWalk.html">FormationWalk</a>[] walks, bool alignToHit=false, float spinScale=1f, float penSpeedScale=1f, <a class="el" href="namespaceBalloonParty_1_1Game_1_1Score_1_1Behaviours.html#a33bff20e5951e5e2eee9701fe3db921a">VertexDisplacer</a> displacer=null, float displacementScale=1f, float displacementSpeed=1f)</td></tr>
-<tr class="separator:a213b2728cb32aae173e0fe921ed4f914"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9db27ee133a0f01578d3a93288d0ac80" id="r_a9db27ee133a0f01578d3a93288d0ac80"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9db27ee133a0f01578d3a93288d0ac80">FormationShape</a> (int denomination, float radiusScale, Vector3[] vertices, <a class="el" href="structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationWalk.html">FormationWalk</a>[] walks, bool alignToHit=false, float spinScale=1f, float penSpeedScale=1f, bool waves=false, float displacementScale=1f, float displacementSpeed=1f)</td></tr>
+<tr class="separator:a9db27ee133a0f01578d3a93288d0ac80"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ddb1cfbae05674c5eaaf467907ce194" id="r_a8ddb1cfbae05674c5eaaf467907ce194"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8ddb1cfbae05674c5eaaf467907ce194">PointOnWalk</a> (int w, float distance, ref int segment)</td></tr>
 <tr class="memdesc:a8ddb1cfbae05674c5eaaf467907ce194"><td class="mdescLeft">&#160;</td><td class="mdescRight">The point <em>distance</em>  along a closed walk, by LOCAL arc length (so a pen moving at a steady distance per second travels at a steady speed between vertices).  <br /></td></tr>
 <tr class="separator:a8ddb1cfbae05674c5eaaf467907ce194"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -152,8 +152,6 @@ Package Attributes</h2></td></tr>
 <tr class="separator:ad8209166a931a4a1d50d2fe1921d5ac9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a30f76f5736490494bf1cca4d33b6a4fc" id="r_a30f76f5736490494bf1cca4d33b6a4fc"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a30f76f5736490494bf1cca4d33b6a4fc">DisplacementSpeed</a></td></tr>
 <tr class="separator:a30f76f5736490494bf1cca4d33b6a4fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab57bf21a12084e633613759ae84b77ab" id="r_ab57bf21a12084e633613759ae84b77ab"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="namespaceBalloonParty_1_1Game_1_1Score_1_1Behaviours.html#a33bff20e5951e5e2eee9701fe3db921a">VertexDisplacer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab57bf21a12084e633613759ae84b77ab">Displacer</a></td></tr>
-<tr class="separator:ab57bf21a12084e633613759ae84b77ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaddef51b518cb5a95a131f37e8cc89a1" id="r_aaddef51b518cb5a95a131f37e8cc89a1"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaddef51b518cb5a95a131f37e8cc89a1">PenSpeedScale</a></td></tr>
 <tr class="separator:aaddef51b518cb5a95a131f37e8cc89a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a310bf044231bf31bf3fbc39f27e6b812" id="r_a310bf044231bf31bf3fbc39f27e6b812"><td class="memItemLeft" align="right" valign="top">readonly int[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a310bf044231bf31bf3fbc39f27e6b812">PensPerWalk</a></td></tr>
@@ -168,6 +166,8 @@ Package Attributes</h2></td></tr>
 <tr class="separator:a4f9c0db7a967c73498a274766cb2c541"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ed95a5344aa856b2210be41d5859fa4" id="r_a1ed95a5344aa856b2210be41d5859fa4"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationWalk.html">FormationWalk</a>[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ed95a5344aa856b2210be41d5859fa4">Walks</a></td></tr>
 <tr class="separator:a1ed95a5344aa856b2210be41d5859fa4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4fb79a7005a6bd074c2e4f29bb3d3eb2" id="r_a4fb79a7005a6bd074c2e4f29bb3d3eb2"><td class="memItemLeft" align="right" valign="top">readonly bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4fb79a7005a6bd074c2e4f29bb3d3eb2">Waves</a></td></tr>
+<tr class="separator:a4fb79a7005a6bd074c2e4f29bb3d3eb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
@@ -178,8 +178,8 @@ Static Private Member Functions</h2></td></tr>
 <div class="textblock"><p>A drawable formation: its vertex count (== its score denomination == its trail count), the local 3D vertex positions (normalized to a unit bounding radius), and the closed walks its pens orbit. </p>
 <p>Pens are distributed across walks proportionally to walk length (<a class="el" href="#a310bf044231bf31bf3fbc39f27e6b812">PensPerWalk</a>, summing to the denomination), spaced evenly along each walk, and orbit continuously during Draw + Collapse: the first lap draws the shape, later laps re-ink it, and k pens sharing a period-P walk cover it in P/k. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a213b2728cb32aae173e0fe921ed4f914" name="a213b2728cb32aae173e0fe921ed4f914"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a213b2728cb32aae173e0fe921ed4f914">&#9670;&#160;</a></span>FormationShape()</h2>
+<a id="a9db27ee133a0f01578d3a93288d0ac80" name="a9db27ee133a0f01578d3a93288d0ac80"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9db27ee133a0f01578d3a93288d0ac80">&#9670;&#160;</a></span>FormationShape()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -225,7 +225,7 @@ Static Private Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceBalloonParty_1_1Game_1_1Score_1_1Behaviours.html#a33bff20e5951e5e2eee9701fe3db921a">VertexDisplacer</a></td>          <td class="paramname"><span class="paramname"><em>displacer</em></span><span class="paramdefsep"> = </span><span class="paramdefval">null</span>, </td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>waves</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -464,28 +464,6 @@ Static Private Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ab57bf21a12084e633613759ae84b77ab" name="ab57bf21a12084e633613759ae84b77ab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab57bf21a12084e633613759ae84b77ab">&#9670;&#160;</a></span>Displacer</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">readonly <a class="el" href="namespaceBalloonParty_1_1Game_1_1Score_1_1Behaviours.html#a33bff20e5951e5e2eee9701fe3db921a">VertexDisplacer</a> BalloonParty.Game.Score.Behaviours.FormationShape.Displacer</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="aaddef51b518cb5a95a131f37e8cc89a1" name="aaddef51b518cb5a95a131f37e8cc89a1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aaddef51b518cb5a95a131f37e8cc89a1">&#9670;&#160;</a></span>PenSpeedScale</h2>
 
@@ -629,6 +607,28 @@ Static Private Member Functions</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly <a class="el" href="structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationWalk.html">FormationWalk</a> [] BalloonParty.Game.Score.Behaviours.FormationShape.Walks</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4fb79a7005a6bd074c2e4f29bb3d3eb2" name="a4fb79a7005a6bd074c2e4f29bb3d3eb2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4fb79a7005a6bd074c2e4f29bb3d3eb2">&#9670;&#160;</a></span>Waves</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly bool BalloonParty.Game.Score.Behaviours.FormationShape.Waves</td>
         </tr>
       </table>
   </td>

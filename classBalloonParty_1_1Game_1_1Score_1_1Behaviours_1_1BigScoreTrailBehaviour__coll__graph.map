@@ -4,7 +4,7 @@
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="746,51,882,84,949,103,944,103,881,89,746,57"/>
 <area shape="rect" id="Node000003" href="$structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html" title="Global knobs shared by every BigScore formation: radius, pen speed, coverage, spin and the scale&#45;over..." alt="" coords="527,75,725,119"/>
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="740,103,908,117,903,118,740,108"/>
-<area shape="rect" id="Node000004" href="$structBalloonParty_1_1Configuration_1_1ShapeInkSettings.html" title="How a score shape&#39;s ink is drawn when the shape is one baked mesh (ShapeInkView) instead of a trail p..." alt="" coords="219,24,415,69"/>
+<area shape="rect" id="Node000004" href="$structBalloonParty_1_1Configuration_1_1ShapeInkSettings.html" title="How a score shape&#39;s ink is drawn (ShapeInkView, on the shape&#39;s baked mesh): the material that gives t..." alt="" coords="219,24,415,69"/>
 <area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="430,62,530,80,525,82,431,68"/>
 <area shape="rect" id="Node000005" href="$classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html" title="Pooled, zero&#45;allocation per&#45;frame driver for every in&#45;flight shape formation." alt="" coords="504,144,748,189"/>
 <area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="763,150,908,138,902,139,763,155"/>

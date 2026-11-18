@@ -1,5 +1,5 @@
 <map id="BalloonParty.Configuration.BigScoreFormationSettings" name="BalloonParty.Configuration.BigScoreFormationSettings">
 <area shape="rect" id="Node000001" title="Global knobs shared by every BigScore formation: radius, pen speed, coverage, spin and the scale&#45;over..." alt="" coords="5,115,203,160"/>
-<area shape="rect" id="Node000002" href="$structBalloonParty_1_1Configuration_1_1ShapeInkSettings.html" title="How a score shape&#39;s ink is drawn when the shape is one baked mesh (ShapeInkView) instead of a trail p..." alt="" coords="6,5,202,50"/>
+<area shape="rect" id="Node000002" href="$structBalloonParty_1_1Configuration_1_1ShapeInkSettings.html" title="How a score shape&#39;s ink is drawn (ShapeInkView, on the shape&#39;s baked mesh): the material that gives t..." alt="" coords="6,5,202,50"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="106,64,107,115,101,114,102,68"/>
 </map>

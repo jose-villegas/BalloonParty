@@ -21,6 +21,5 @@ var namespaceBalloonParty_1_1Game_1_1Score_1_1Behaviours =
     [ "ScoreTrailBehaviourId", "namespaceBalloonParty_1_1Game_1_1Score_1_1Behaviours.html#aff94943b476f68c5fc1ec89ef01ac5a7", [
       [ "DefaultScore", "namespaceBalloonParty_1_1Game_1_1Score_1_1Behaviours.html#aff94943b476f68c5fc1ec89ef01ac5a7a6b039d2779c73d18220ab9fae062bbd9", null ],
       [ "BigScore", "namespaceBalloonParty_1_1Game_1_1Score_1_1Behaviours.html#aff94943b476f68c5fc1ec89ef01ac5a7ad23a683cb2b4f90161d8a87c591d80da", null ]
-    ] ],
-    [ "VertexDisplacer", "namespaceBalloonParty_1_1Game_1_1Score_1_1Behaviours.html#a33bff20e5951e5e2eee9701fe3db921a", null ]
+    ] ]
 ];

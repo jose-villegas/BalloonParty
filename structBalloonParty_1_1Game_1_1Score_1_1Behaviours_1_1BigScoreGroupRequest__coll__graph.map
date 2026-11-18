@@ -16,6 +16,6 @@
 <area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="547,275,720,225,725,223,548,280"/>
 <area shape="rect" id="Node000009" href="$structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html" title="Global knobs shared by every BigScore formation: radius, pen speed, coverage, spin and the scale&#45;over..." alt="" coords="358,352,555,397"/>
 <area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="551,344,566,337,622,309,676,278,763,225,768,223,679,283,625,314,568,342,552,349"/>
-<area shape="rect" id="Node000010" href="$structBalloonParty_1_1Configuration_1_1ShapeInkSettings.html" title="How a score shape&#39;s ink is drawn when the shape is one baked mesh (ShapeInkView) instead of a trail p..." alt="" coords="5,352,202,397"/>
+<area shape="rect" id="Node000010" href="$structBalloonParty_1_1Configuration_1_1ShapeInkSettings.html" title="How a score shape&#39;s ink is drawn (ShapeInkView, on the shape&#39;s baked mesh): the material that gives t..." alt="" coords="5,352,202,397"/>
 <area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="217,372,360,374,354,375,217,377"/>
 </map>

@@ -116,20 +116,21 @@ $(function(){initNavTree('structBalloonParty_1_1Configuration_1_1ShapeInkSetting
 </div><!--header-->
 <div class="contents">
 
-<p>How a score shape's ink is drawn when the shape is one baked mesh (<code>ShapeInkView</code>) instead of a trail per pen: the ink's width, fade and colour along its length.  
+<p>How a score shape's ink is drawn (<code>ShapeInkView</code>, on the shape's baked mesh): the material that gives the pen stroke its look, and the ink's width, fade and colour along its length.  
  <a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:afd38dcc33731a1c6b25d833b45d211c1" id="r_afd38dcc33731a1c6b25d833b45d211c1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afd38dcc33731a1c6b25d833b45d211c1">ShapeInkSettings</a> (bool baked, <a class="el" href="#ab631c334895b310c4da312074a7b066a">Material</a> material, AnimationCurve width, AnimationCurve alpha, AnimationCurve tailMix)</td></tr>
-<tr class="separator:afd38dcc33731a1c6b25d833b45d211c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a422f2cd7366448b964eeacdd623fed4b" id="r_a422f2cd7366448b964eeacdd623fed4b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a422f2cd7366448b964eeacdd623fed4b">ShapeInkSettings</a> (<a class="el" href="#ab631c334895b310c4da312074a7b066a">Material</a> material, AnimationCurve width, AnimationCurve alpha, AnimationCurve tailMix)</td></tr>
+<tr class="separator:a422f2cd7366448b964eeacdd623fed4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
 <tr class="memitem:a11bffebc1f368e490cf81641910962c5" id="r_a11bffebc1f368e490cf81641910962c5"><td class="memItemLeft" align="right" valign="top">AnimationCurve&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a11bffebc1f368e490cf81641910962c5">Alpha</a><code> [get]</code></td></tr>
 <tr class="separator:a11bffebc1f368e490cf81641910962c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaee176505341347bd8a556a0a2ad1ac5" id="r_aaee176505341347bd8a556a0a2ad1ac5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaee176505341347bd8a556a0a2ad1ac5">Baked</a><code> [get]</code></td></tr>
-<tr class="separator:aaee176505341347bd8a556a0a2ad1ac5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51646dad000f1f3ffa278b4904b14705" id="r_a51646dad000f1f3ffa278b4904b14705"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a51646dad000f1f3ffa278b4904b14705">Drawable</a><code> [get]</code></td></tr>
+<tr class="memdesc:a51646dad000f1f3ffa278b4904b14705"><td class="mdescLeft">&#160;</td><td class="mdescRight">False while the material or a curve is missing: there is then nothing to draw a shape with.  <br /></td></tr>
+<tr class="separator:a51646dad000f1f3ffa278b4904b14705"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab631c334895b310c4da312074a7b066a" id="r_ab631c334895b310c4da312074a7b066a"><td class="memItemLeft" align="right" valign="top">Material&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab631c334895b310c4da312074a7b066a">Material</a><code> [get]</code></td></tr>
 <tr class="separator:ab631c334895b310c4da312074a7b066a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2286c5ec6a347fa3d7631b7300c1b432" id="r_a2286c5ec6a347fa3d7631b7300c1b432"><td class="memItemLeft" align="right" valign="top">AnimationCurve&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2286c5ec6a347fa3d7631b7300c1b432">TailMix</a><code> [get]</code></td></tr>
@@ -141,8 +142,6 @@ Properties</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a6ed00e0ed47547611af701f6841f0278" id="r_a6ed00e0ed47547611af701f6841f0278"><td class="memItemLeft" align="right" valign="top">AnimationCurve&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6ed00e0ed47547611af701f6841f0278">_alpha</a></td></tr>
 <tr class="separator:a6ed00e0ed47547611af701f6841f0278"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae217dbc4d8799b9d63fc0d388e836d16" id="r_ae217dbc4d8799b9d63fc0d388e836d16"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae217dbc4d8799b9d63fc0d388e836d16">_baked</a></td></tr>
-<tr class="separator:ae217dbc4d8799b9d63fc0d388e836d16"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8fe669211946fb1e514aede42fe5fab5" id="r_a8fe669211946fb1e514aede42fe5fab5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#ab631c334895b310c4da312074a7b066a">Material</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8fe669211946fb1e514aede42fe5fab5">_material</a></td></tr>
 <tr class="separator:a8fe669211946fb1e514aede42fe5fab5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a264faacc4aa585769e5978a428397789" id="r_a264faacc4aa585769e5978a428397789"><td class="memItemLeft" align="right" valign="top">AnimationCurve&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a264faacc4aa585769e5978a428397789">_tailMix</a></td></tr>
@@ -151,11 +150,11 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a1b1ff444806e739b8a3471f1bf94f4c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>How a score shape's ink is drawn when the shape is one baked mesh (<code>ShapeInkView</code>) instead of a trail per pen: the ink's width, fade and colour along its length. </p>
-<p>The pen is the ink's head: the shader closes it with a round nose as wide as the ink is there. </p>
+<div class="textblock"><p>How a score shape's ink is drawn (<code>ShapeInkView</code>, on the shape's baked mesh): the material that gives the pen stroke its look, and the ink's width, fade and colour along its length. </p>
+<p>The pen is the ink's head: the shader closes it with a round end as wide as the ink is there. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="afd38dcc33731a1c6b25d833b45d211c1" name="afd38dcc33731a1c6b25d833b45d211c1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afd38dcc33731a1c6b25d833b45d211c1">&#9670;&#160;</a></span>ShapeInkSettings()</h2>
+<a id="a422f2cd7366448b964eeacdd623fed4b" name="a422f2cd7366448b964eeacdd623fed4b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a422f2cd7366448b964eeacdd623fed4b">&#9670;&#160;</a></span>ShapeInkSettings()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -166,11 +165,6 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">BalloonParty.Configuration.ShapeInkSettings.ShapeInkSettings </td>
           <td>(</td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>baked</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype"><a class="el" href="#ab631c334895b310c4da312074a7b066a">Material</a></td>          <td class="paramname"><span class="paramname"><em>material</em></span>, </td>
         </tr>
         <tr>
@@ -210,28 +204,6 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">AnimationCurve BalloonParty.Configuration.ShapeInkSettings._alpha</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae217dbc4d8799b9d63fc0d388e836d16" name="ae217dbc4d8799b9d63fc0d388e836d16"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae217dbc4d8799b9d63fc0d388e836d16">&#9670;&#160;</a></span>_baked</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool BalloonParty.Configuration.ShapeInkSettings._baked</td>
         </tr>
       </table>
   </td>
@@ -332,8 +304,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aaee176505341347bd8a556a0a2ad1ac5" name="aaee176505341347bd8a556a0a2ad1ac5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaee176505341347bd8a556a0a2ad1ac5">&#9670;&#160;</a></span>Baked</h2>
+<a id="a51646dad000f1f3ffa278b4904b14705" name="a51646dad000f1f3ffa278b4904b14705"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51646dad000f1f3ffa278b4904b14705">&#9670;&#160;</a></span>Drawable</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -342,7 +314,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool BalloonParty.Configuration.ShapeInkSettings.Baked</td>
+          <td class="memname">bool BalloonParty.Configuration.ShapeInkSettings.Drawable</td>
         </tr>
       </table>
   </td>
@@ -351,6 +323,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>False while the material or a curve is missing: there is then nothing to draw a shape with. </p>
 
 </div>
 </div>
