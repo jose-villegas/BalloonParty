@@ -29,6 +29,8 @@ namespace BalloonParty.Balloon.View
 
         private static readonly int DissolveId = Shader.PropertyToID("_GlowDissolve");
 
+        private static int BalloonsLayer = -1;
+
         private readonly Vector4[] _points = new Vector4[FormationGlowField.MaxPoints];
         private readonly FormationGlowField _field = new();
         private readonly int[] _groups = new int[FormationGlowField.MaxPoints];
@@ -105,10 +107,16 @@ namespace BalloonParty.Balloon.View
                 _settings.Fill));
             _material.SetVector(DissolveId, new Vector4(_settings.DissolveNoiseScale, 0f, 0f, 0f));
 
-            // Default layer: the main camera draws it in play, but neither the launch screen nor the GI capture
-            // (as an occluder, a ring would cast a shadow on the ground).
+            if (BalloonsLayer == -1)
+            {
+                BalloonsLayer = LayerMask.NameToLayer("Balloons");
+            }
+
+            // The balloons' layer: the main camera draws it in play, the launch screen doesn't, and the GI capture
+            // does, so the rings' light is in the colour the GI smear bounces. The shader writes colour only, so
+            // a ring adds no coverage there and casts no shadow.
             var quad = QuadRendererBuilder.Build(
-                "FormationGlowQuad", _material, 0, _settings.SortingLayerName, _settings.SortingOrder);
+                "FormationGlowQuad", _material, BalloonsLayer, _settings.SortingLayerName, _settings.SortingOrder);
             _quad = quad.transform;
             _quad.SetParent(transform, false);
             _renderer = quad.GetComponent<MeshRenderer>();

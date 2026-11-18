@@ -293,13 +293,16 @@ level a lone member's would at `RingRadius`, at a constant width, with a faint f
 ring adds less to that sum as it goes, down to only the threshold, which is what draws it back into its
 member, and the noise eats its light as far as the dissolving rings' share of the sum. The light is
 additive and HDR (`HdrBoost`, 2.5 over the palette blue), so it blooms. It sorts under the balloons
-(`Balloons` -2), on the Default layer: the main camera draws it, the GI capture doesn't, so it casts no
-shadow. Rings of neighbouring formations join too, so a stack of formations reads as one wall. The
+(`Balloons` -2), on the `Balloons` layer: the main camera draws it in play and the launch screen doesn't.
+The GI capture (`Display/SceneCaptureService`) draws it too, so the rings are in the colour the GI smear
+bounces and their light spreads over the ground beside them. The shader writes colour only, so a ring
+adds no coverage to the capture and casts no shadow. The capture is 8 bits, so the ring's HDR blue clamps
+there toward cyan. Rings of neighbouring formations join too, so a stack of formations reads as one wall. The
 settings are `IFormationGlowSettings`, `BalloonsConfiguration`'s "Formation Glow".
 
-The rings light what stands round them, in the formation blue. Being left out of the GI capture, the quad
-bounces no light of its own, so the view casts it through the scene-light field
-(`Shared/SceneLight/SceneLightFieldService`). A light per ring would use up the field's 32 lights on one
+The rings also cast a local light on what stands round them, in the formation blue, through the
+scene-light field (`Shared/SceneLight/SceneLightFieldService`): the bounce above only reaches the ground,
+and this one lights the balloons' sides. A light per ring would use up the field's 32 lights on one
 long formation, so `FormationGlowBeams` puts the rings that join into one outline (centres closer than
 `FormationGlowField.JoinDistance`, about 1.1) in one group, chains included, so two formations whose
 rings stay apart light apart. Each group casts one capsule light between its two members furthest
