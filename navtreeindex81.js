@@ -1,5 +1,17 @@
 var NAVTREEINDEX81 =
 {
+"classBalloonParty_1_1Prediction_1_1PredictionTraceLights.html#ae30116ee518a64e1fbe7b2360bc84419":[5,0,0,9,3,7],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceLights.html#ae30116ee518a64e1fbe7b2360bc84419":[6,0,0,9,3,7],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceLights.html#aeb71cb74b60ace9303584a3652efb58e":[5,0,0,9,3,1],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceLights.html#aeb71cb74b60ace9303584a3652efb58e":[6,0,0,9,3,1],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceLights.html#af1234c7a439e910cf23391aab90df4c6":[5,0,0,9,3,10],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceLights.html#af1234c7a439e910cf23391aab90df4c6":[6,0,0,9,3,10],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceLights.html#af6e0f7370394c0d927d68e578c909693":[5,0,0,9,3,4],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceLights.html#af6e0f7370394c0d927d68e578c909693":[6,0,0,9,3,4],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html":[5,0,0,9,4],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html":[6,0,0,9,4],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html#a0ed9d57275a5a104c0550a2ced31f99b":[5,0,0,9,4,6],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html#a0ed9d57275a5a104c0550a2ced31f99b":[6,0,0,9,4,6],
 "classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html#a30672c970f6f425e1d29c92118de98c4":[5,0,0,9,4,8],
 "classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html#a30672c970f6f425e1d29c92118de98c4":[6,0,0,9,4,8],
 "classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html#a325bad2a871d69e43fd49617cfde231d":[5,0,0,9,4,1],
@@ -237,17 +249,5 @@ var NAVTREEINDEX81 =
 "classBalloonParty_1_1Projectile_1_1Controller_1_1DeflectChainController.html#ac8fe12ee2a30f6682b99f269adfd78a0":[5,0,0,10,1,1,5],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1DeflectChainController.html#ac8fe12ee2a30f6682b99f269adfd78a0":[6,0,0,10,1,1,5],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1DeflectChainController.html#ae79fabbd7996da4fcf71c433d4ffee09":[5,0,0,10,1,1,8],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1DeflectChainController.html#ae79fabbd7996da4fcf71c433d4ffee09":[6,0,0,10,1,1,8],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html":[5,0,0,10,1,4],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html":[6,0,0,10,1,4],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html#a2a48e9e02976398bf7325cefe6660de9":[5,0,0,10,1,4,4],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html#a2a48e9e02976398bf7325cefe6660de9":[6,0,0,10,1,4,4],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html#a333b8a8524d9ac39c9f08806fc45b5ae":[5,0,0,10,1,4,6],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html#a333b8a8524d9ac39c9f08806fc45b5ae":[6,0,0,10,1,4,6],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html#a56d7d47266e89249ca3257bf705d4fd9":[5,0,0,10,1,4,1],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html#a56d7d47266e89249ca3257bf705d4fd9":[6,0,0,10,1,4,1],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html#a597de4bac009ca6bcf2c62832c401cb8":[5,0,0,10,1,4,9],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html#a597de4bac009ca6bcf2c62832c401cb8":[6,0,0,10,1,4,9],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html#a64b0758e9d0f36344c2fdd567c788264":[5,0,0,10,1,4,2],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html#a64b0758e9d0f36344c2fdd567c788264":[6,0,0,10,1,4,2]
+"classBalloonParty_1_1Projectile_1_1Controller_1_1DeflectChainController.html#ae79fabbd7996da4fcf71c433d4ffee09":[6,0,0,10,1,1,8]
 };

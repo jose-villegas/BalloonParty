@@ -87,5 +87,6 @@ var searchData=
   ['fullyshowndelay_84',['FullyShownDelay',['../classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice.html#afb11b54dcc89b7cdfac42dde23904dc5',1,'BalloonParty::UI::Score::ProgressNotice']]],
   ['fusearmedid_85',['FuseArmedId',['../classBalloonParty_1_1Balloon_1_1Type_1_1NukeFuseView.html#a8eb69d692731c1a8d8d6055a8b4ab22b',1,'BalloonParty::Balloon::Type::NukeFuseView']]],
   ['fusebeatid_86',['FuseBeatId',['../classBalloonParty_1_1Balloon_1_1Type_1_1NukeFuseView.html#a84b6df6c5c73d648068b21cb312274e8',1,'BalloonParty::Balloon::Type::NukeFuseView']]],
-  ['fusedigitid_87',['FuseDigitId',['../classBalloonParty_1_1Balloon_1_1Type_1_1NukeFuseView.html#a9812a7324d32ea9efa30430329206c1d',1,'BalloonParty::Balloon::Type::NukeFuseView']]]
+  ['fusedigitid_87',['FuseDigitId',['../classBalloonParty_1_1Balloon_1_1Type_1_1NukeFuseView.html#a9812a7324d32ea9efa30430329206c1d',1,'BalloonParty::Balloon::Type::NukeFuseView']]],
+  ['fuseheartid_88',['FuseHeartId',['../classBalloonParty_1_1Balloon_1_1Type_1_1NukeFuseView.html#a775b11a0ed2381913607417380427130',1,'BalloonParty::Balloon::Type::NukeFuseView']]]
 ];

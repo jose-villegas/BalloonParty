@@ -1,5 +1,17 @@
 var NAVTREEINDEX42 =
 {
+"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#ae107af9a44f594acec3593aff7b19a1b":[5,0,0,3,10,0,28],
+"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#ae107af9a44f594acec3593aff7b19a1b":[6,0,0,3,10,0,28],
+"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#ae39b60a027595d542c58860144bdb217":[5,0,0,3,10,0,1],
+"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#ae39b60a027595d542c58860144bdb217":[6,0,0,3,10,0,1],
+"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#aef3dc229dd3ded67f2e414e9c4d28470":[5,0,0,3,10,0,3],
+"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#aef3dc229dd3ded67f2e414e9c4d28470":[6,0,0,3,10,0,3],
+"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#afe98ac3340ddeb1bd314559924b96984":[5,0,0,3,10,0,0],
+"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#afe98ac3340ddeb1bd314559924b96984":[6,0,0,3,10,0,0],
+"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePaletteExtensions.html":[5,0,0,3,10,1],
+"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePaletteExtensions.html":[6,0,0,3,10,1],
+"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePaletteExtensions.html#a6260b0875f9692883e96516722d118bf":[5,0,0,3,10,1,0],
+"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePaletteExtensions.html#a6260b0875f9692883e96516722d118bf":[6,0,0,3,10,1,0],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteChannelEncoding.html":[5,0,0,3,10,4],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteChannelEncoding.html":[6,0,0,3,10,4],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteChannelEncoding.html#a11a88d675b45dda25f39f93600bfada0":[5,0,0,3,10,4,0],
@@ -237,17 +249,5 @@ var NAVTREEINDEX42 =
 "classBalloonParty_1_1Configuration_1_1RunConfig.html#ac4df57b1ea374fd488694d091c521576":[5,0,0,3,28,15],
 "classBalloonParty_1_1Configuration_1_1RunConfig.html#ac4df57b1ea374fd488694d091c521576":[6,0,0,3,28,15],
 "classBalloonParty_1_1Configuration_1_1RunConfig.html#addac5244db6c7a4bf4b1db1a0f74b9d3":[5,0,0,3,28,23],
-"classBalloonParty_1_1Configuration_1_1RunConfig.html#addac5244db6c7a4bf4b1db1a0f74b9d3":[6,0,0,3,28,23],
-"classBalloonParty_1_1Configuration_1_1RunConfig.html#ade885c1cf15ff4287166f1daedc2bc75":[5,0,0,3,28,1],
-"classBalloonParty_1_1Configuration_1_1RunConfig.html#ade885c1cf15ff4287166f1daedc2bc75":[6,0,0,3,28,1],
-"classBalloonParty_1_1Configuration_1_1RunConfig.html#ae4393bf941524d9903dfb7f689c9e94e":[5,0,0,3,28,4],
-"classBalloonParty_1_1Configuration_1_1RunConfig.html#ae4393bf941524d9903dfb7f689c9e94e":[6,0,0,3,28,4],
-"classBalloonParty_1_1Configuration_1_1RunConfig.html#af08f6b81da67e57dc0492f77ae4e7f07":[5,0,0,3,28,9],
-"classBalloonParty_1_1Configuration_1_1RunConfig.html#af08f6b81da67e57dc0492f77ae4e7f07":[6,0,0,3,28,9],
-"classBalloonParty_1_1Configuration_1_1RunConfig.html#af7543729b240eb6945c720ed60d3c7f9":[5,0,0,3,28,10],
-"classBalloonParty_1_1Configuration_1_1RunConfig.html#af7543729b240eb6945c720ed60d3c7f9":[6,0,0,3,28,10],
-"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html":[5,0,0,3,29],
-"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html":[6,0,0,3,29],
-"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#a0185db328b5fe9b83f055f3a878cee3b":[5,0,0,3,29,15],
-"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#a0185db328b5fe9b83f055f3a878cee3b":[6,0,0,3,29,15]
+"classBalloonParty_1_1Configuration_1_1RunConfig.html#addac5244db6c7a4bf4b1db1a0f74b9d3":[6,0,0,3,28,23]
 };

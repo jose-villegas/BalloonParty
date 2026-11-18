@@ -1,5 +1,6 @@
 var classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeFuseSettings =
 [
+    [ "_heartSeconds", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeFuseSettings.html#a5a91ce5a0dcf291a0577608fd4e5b5e1", null ],
     [ "_implodeRadius", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeFuseSettings.html#a37c09125ba84a057a02295cdd8c9f364", null ],
     [ "_implodeStrength", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeFuseSettings.html#ad076be4e616ced7cae96e24832e79296", null ],
     [ "_pullDistanceEnd", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeFuseSettings.html#aa70ced2a87a5c538d5a86376bbb8524d", null ],
@@ -8,6 +9,7 @@ var classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeFuseSettings =
     [ "_pullRadius", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeFuseSettings.html#abb046670ae6463c12857b661d8a92aac", null ],
     [ "_pullSeconds", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeFuseSettings.html#a8b28134debe4de9a2a86717a8cb28bf2", null ],
     [ "_seconds", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeFuseSettings.html#a3acf14c8e3a228c15dbbcc49f8766e9c", null ],
+    [ "HeartSeconds", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeFuseSettings.html#a5ec72850c024dd603b317605a3d27d84", null ],
     [ "ImplodeRadius", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeFuseSettings.html#a16065c479af72ceea7521ff115b36a61", null ],
     [ "ImplodeStrength", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeFuseSettings.html#a86f7b0ebd9c8551396521966fba3f649", null ],
     [ "PullDistanceEnd", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeFuseSettings.html#a9544d507158ff0ff01942d238a5b1558", null ],

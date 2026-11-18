@@ -1,5 +1,6 @@
 var interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeFuseSettings =
 [
+    [ "HeartSeconds", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeFuseSettings.html#ab5fee10ee56c25d003aeb161e4bb58ff", null ],
     [ "ImplodeRadius", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeFuseSettings.html#a2471fa7a431be9967f5fd4821f20a52d", null ],
     [ "ImplodeStrength", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeFuseSettings.html#a2ac9fd9a0e7a017d6a9ffdd025a4d350", null ],
     [ "PullDistanceEnd", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeFuseSettings.html#ae166825f197b670c8ae2e858082ada88", null ],

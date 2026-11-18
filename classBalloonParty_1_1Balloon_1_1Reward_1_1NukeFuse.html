@@ -168,6 +168,8 @@ Properties</h2></td></tr>
 <tr class="separator:a813bbdba15dc97b5ac2e96b9a8d6663f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa9f9bc49131fb27abda0c709c8c9fdf9" id="r_aa9f9bc49131fb27abda0c709c8c9fdf9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa9f9bc49131fb27abda0c709c8c9fdf9">ResetOrder</a><code> [get]</code></td></tr>
 <tr class="separator:aa9f9bc49131fb27abda0c709c8c9fdf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02c8bdbcda86478b4ccfbe425dcdb341" id="r_a02c8bdbcda86478b4ccfbe425dcdb341"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a02c8bdbcda86478b4ccfbe425dcdb341">TotalSeconds</a><code> [get]</code></td></tr>
+<tr class="separator:a02c8bdbcda86478b4ccfbe425dcdb341"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -223,7 +225,7 @@ Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The armed nuke's fuse (PLAN-NukeBalloon). </p>
-<p>The hit that arms a nuke (any <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html">ActorHitMessage</a> on a <a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1NukeBalloonModel.html" title="The nuke reward balloon (PLAN-NukeBalloon): a PlatedBalloonModel that is never popped by a hit.">NukeBalloonModel</a> that is now <a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1NukeBalloonModel.html#aea5d74d8914f658a9ef767104de9f35c">NukeBalloonModel.Armed</a>) starts it. It counts <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeFuseSettings.html#a80c340fec5d2ade7f7a699d84d639d9a" title="Seconds from arming to the blast. The counter on its body shows the whole seconds left.">INukeFuseSettings.Seconds</a> down on scaled time, so a pause holds it, and shows the whole seconds left on the nuke's counter, with a <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1NukeCountdownMessage.html" title="Published by NukeFuse each time an armed nuke&#39;s counter changes (PLAN-NukeBalloon): at arming with th...">NukeCountdownMessage</a> for each. Meanwhile it pulls the balloons around the nuke in towards it, harder as the count runs down, and the view implodes the disturbance field at it. At zero <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Reward_1_1INukeDetonator.html" title="Sets an armed nuke off: NukeBlast, called by NukeFuse when the fuse runs out.">INukeDetonator</a> sets it off. A level change, a game over, a run reset or the nuke leaving the board stops the fuse with no blast. </p>
+<p>The hit that arms a nuke (any <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html">ActorHitMessage</a> on a <a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1NukeBalloonModel.html" title="The nuke reward balloon (PLAN-NukeBalloon): a PlatedBalloonModel that is never popped by a hit.">NukeBalloonModel</a> that is now <a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1NukeBalloonModel.html#aea5d74d8914f658a9ef767104de9f35c">NukeBalloonModel.Armed</a>) starts it. It first waits <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeFuseSettings.html#ab5fee10ee56c25d003aeb161e4bb58ff" title="Seconds the counter&#39;s heart flashes after the hit that arms it, before the count starts.">INukeFuseSettings.HeartSeconds</a>, while the counter's heart flashes, then counts <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeFuseSettings.html#a80c340fec5d2ade7f7a699d84d639d9a" title="Seconds the count runs, to the blast. The counter on its body shows the whole seconds left.">INukeFuseSettings.Seconds</a> down, all on scaled time, so a pause holds it, and shows the whole seconds left on the nuke's counter, with a <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1NukeCountdownMessage.html" title="Published by NukeFuse each time an armed nuke&#39;s counter changes (PLAN-NukeBalloon): at arming with th...">NukeCountdownMessage</a> for each. Meanwhile it pulls the balloons around the nuke in towards it, harder as the count runs down, and the view implodes the disturbance field at it. At zero <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Reward_1_1INukeDetonator.html" title="Sets an armed nuke off: NukeBlast, called by NukeFuse when the fuse runs out.">INukeDetonator</a> sets it off. A level change, a game over, a run reset or the nuke leaving the board stops the fuse with no blast. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a87c68c9a570a80953f49296773ac65f9" name="a87c68c9a570a80953f49296773ac65f9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a87c68c9a570a80953f49296773ac65f9">&#9670;&#160;</a></span>NukeFuse()</h2>
@@ -978,6 +980,28 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html#a347699f041bd2f73a8326aa24a351d81">BalloonParty.Game.Run.IRunResettable</a>.</p>
+
+</div>
+</div>
+<a id="a02c8bdbcda86478b4ccfbe425dcdb341" name="a02c8bdbcda86478b4ccfbe425dcdb341"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02c8bdbcda86478b4ccfbe425dcdb341">&#9670;&#160;</a></span>TotalSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Balloon.Reward.NukeFuse.TotalSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

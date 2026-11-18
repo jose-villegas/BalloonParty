@@ -1,5 +1,17 @@
 var NAVTREEINDEX68 =
 {
+"classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html#af55b8cd8fb16ec87250087838547e230":[5,0,0,6,9,2,0],
+"classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html#af55b8cd8fb16ec87250087838547e230":[6,0,0,6,9,2,0],
+"classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html":[5,0,0,6,9,4],
+"classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html":[6,0,0,6,9,4],
+"classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a013ee02bf8feb164c1d6d0c1d90976a0":[5,0,0,6,9,4,30],
+"classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a013ee02bf8feb164c1d6d0c1d90976a0":[6,0,0,6,9,4,30],
+"classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a04b52b5b05951eeb757b9fcac1c379a4":[5,0,0,6,9,4,20],
+"classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a04b52b5b05951eeb757b9fcac1c379a4":[6,0,0,6,9,4,20],
+"classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a0664edb053efd934394fad1f9cf78bd1":[5,0,0,6,9,4,28],
+"classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a0664edb053efd934394fad1f9cf78bd1":[6,0,0,6,9,4,28],
+"classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a0bd168269c2be12416273571bc95ed70":[5,0,0,6,9,4,15],
+"classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a0bd168269c2be12416273571bc95ed70":[6,0,0,6,9,4,15],
 "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a0d377c0af8fb7219b5c140a3a44446bc":[5,0,0,6,9,4,16],
 "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a0d377c0af8fb7219b5c140a3a44446bc":[6,0,0,6,9,4,16],
 "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a15b48a850de1c26a498b783d71ab4b2d":[5,0,0,6,9,4,19],
@@ -237,17 +249,5 @@ var NAVTREEINDEX68 =
 "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a3125a53a4c668b85047550dfb50ed58e":[5,0,0,6,10,7,77],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a3125a53a4c668b85047550dfb50ed58e":[6,0,0,6,10,7,77],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a337992aeaebd64a68f30c137c142bbf0":[5,0,0,6,10,7,78],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a337992aeaebd64a68f30c137c142bbf0":[6,0,0,6,10,7,78],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a3397640c67ae2d1c757b34ed7ca25701":[5,0,0,6,10,7,80],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a3397640c67ae2d1c757b34ed7ca25701":[6,0,0,6,10,7,80],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a39736b7769350649c8e8bdf01e47d950":[5,0,0,6,10,7,53],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a39736b7769350649c8e8bdf01e47d950":[6,0,0,6,10,7,53],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a3a31fa4efd036944c76b99d18cb56bf0":[5,0,0,6,10,7,113],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a3a31fa4efd036944c76b99d18cb56bf0":[6,0,0,6,10,7,113],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a3ae3ebe9517c356f2803cfc856284067":[5,0,0,6,10,7,49],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a3ae3ebe9517c356f2803cfc856284067":[6,0,0,6,10,7,49],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a3baaf17d62c4f343a6b61483c2753598":[5,0,0,6,10,7,42],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a3baaf17d62c4f343a6b61483c2753598":[6,0,0,6,10,7,42],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a3f178aafede1ff6649dbd16944ea29a4":[5,0,0,6,10,7,87],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a3f178aafede1ff6649dbd16944ea29a4":[6,0,0,6,10,7,87]
+"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a337992aeaebd64a68f30c137c142bbf0":[6,0,0,6,10,7,78]
 };

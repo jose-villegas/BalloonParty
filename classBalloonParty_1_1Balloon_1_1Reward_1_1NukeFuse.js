@@ -31,5 +31,6 @@ var classBalloonParty_1_1Balloon_1_1Reward_1_1NukeFuse =
     [ "_subscriptions", "classBalloonParty_1_1Balloon_1_1Reward_1_1NukeFuse.html#a9028ec0d7b2395835aa3d09e404cb3a9", null ],
     [ "_view", "classBalloonParty_1_1Balloon_1_1Reward_1_1NukeFuse.html#a6e464e0857d85e5e674e4738b087b8ba", null ],
     [ "IsRunning", "classBalloonParty_1_1Balloon_1_1Reward_1_1NukeFuse.html#a813bbdba15dc97b5ac2e96b9a8d6663f", null ],
-    [ "ResetOrder", "classBalloonParty_1_1Balloon_1_1Reward_1_1NukeFuse.html#aa9f9bc49131fb27abda0c709c8c9fdf9", null ]
+    [ "ResetOrder", "classBalloonParty_1_1Balloon_1_1Reward_1_1NukeFuse.html#aa9f9bc49131fb27abda0c709c8c9fdf9", null ],
+    [ "TotalSeconds", "classBalloonParty_1_1Balloon_1_1Reward_1_1NukeFuse.html#a02c8bdbcda86478b4ccfbe425dcdb341", null ]
 ];

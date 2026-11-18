@@ -113,7 +113,7 @@ $(function(){initNavTree('plan_nuke_balloon.html',''); initResizable(true); });
 <div class="textblock"><h1><a class="anchor" id="autotoc_md798"></a>
 Nuke Balloon</h1>
 <blockquote class="doxtable">
-<p>A fourth reward balloon: a <b>nuke</b>. It is plated in dull lead and bolted together, with a riveted danger placard on its face, a small LED counter and a status lamp that flares green. Shots bounce off it and dent it. The third dent, or any piercing damage, <b>arms</b> it. The lamp turns red, the counter runs down from 3 with a beep each second, and the board leans in towards it. At zero it goes off. A blinding light floods the board behind a growing shock disc that pops every balloon and every shot in flight. A mushroom cloud rises where it stood. Then the spawn clock gives the breather a big clear earns, on a gust of wind. It is rare, and it comes when the player is in trouble: a full board, a fast clock, few hearts, or hearts lost one after another. </p>
+<p>A fourth reward balloon: a <b>nuke</b>. It is plated in dull lead and bolted together, with a riveted danger placard on its face, a small LED counter and a status lamp that flares green. Shots bounce off it and dent it, and the counter shows in green how many dents it still takes. The third dent, or any piercing damage, <b>arms</b> it. The counter flashes a red heart for a second, then the lamp turns red, the counter runs down from 3 with a beep each second, and the board leans in towards it. At zero it goes off. A blinding light floods the board behind a growing shock disc that pops every balloon and every shot in flight. A mushroom cloud rises where it stood. Then the spawn clock gives the breather a big clear earns, on a gust of wind. It is rare, and it comes when the player is in trouble: a full board, a fast clock, few hearts, or hearts lost one after another. </p>
 </blockquote>
 <hr  />
 <h2><a class="anchor" id="autotoc_md800"></a>
@@ -122,7 +122,7 @@ Goals</h2>
 <li><b>A rescue, placed by <code>RewardBalloonService</code></b> and never by a level's mix, like the golden balloon, the heart balloon and the disco ball (<code><a class="el" href="PLAN-RewardBalloons_8md.html">Plans/PLAN-RewardBalloons.md</a></code>, <code><a class="el" href="PLAN-DiscoBalloon_8md.html">Plans/PLAN-DiscoBalloon.md</a></code>). At most one on the board.</li>
 <li><b>Its odds follow trouble.</b> A tiny chance on any line, raised by four signals: the board's fill, the spawn clock's pressure, low hearts, and hearts lost in quick succession.</li>
 <li><b>It is heavy.</b> The shot's ordinary hit bounces off and dents it. The third dent arms it, and so does any <code>Piercing</code> damage at once (a pierce, a bomb's blast beside it, a laser beam).</li>
-<li><b>Armed, it counts down.</b> It stays where it is for a 3 s fuse. Its lamp turns red and its LED counts 3, 2, 1 with a beep on each, while the balloons around it lean slowly in.</li>
+<li><b>Armed, it counts down.</b> It stays where it is. Its LED flashes a red heart for 1 s (<code>HeartSeconds</code>), the lamp flashing red with it, the player's notice that the count is coming. Then its lamp turns red and its LED counts 3, 2, 1 over a 3 s fuse with a beep on each, while the balloons around it lean slowly in. The blast comes 4 s after the arming hit. The owner asked for both: nothing told the player that a third hit sets it off, so the LED counts the dents left (3, 2, 1, green) before it, and the heart marks the moment it is armed.</li>
 <li><b>At zero it clears the board.</b> Every balloon but the other rewards pops, scoring nothing, and every shot in flight dies. Then the spawn clock starts the breather a big clear earns.</li>
 <li><b>The spectacle.</b> The disco wave's growing disc, with light that blinds the board as it spreads. The disturbance field's strongest push. A nudge outward running just ahead of the disc. A mushroom cloud rising where the nuke stood. The owner flagged the cloud as the hard part.</li>
 <li><b>The bar the other rewards set.</b> Depth (the plated sphere's relief, a baked ground shadow), the scene light (lit by the time of day, like the golden balloon), and its own sounds.</li>
@@ -175,7 +175,7 @@ How it fits</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>INukeOddsSettings</code>, <code>INukeBlastSettings</code>   </td><td class="markdownTableBodyNone"><code>Configuration/Balloons/</code>, on <code>IBalloonsConfiguration</code> (<code>NukeOdds</code>, <code>NukeBlast</code>)   </td><td class="markdownTableBodyNone">The nuke's numbers    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>NukeFuse</code> (new)   </td><td class="markdownTableBodyNone"><code>Balloon/Reward/</code>   </td><td class="markdownTableBodyNone">Plain C#, <code>ITickable</code>, <code>IRunResettable</code>. Hears the hit that arms a nuke (any <code>ActorHitMessage</code> on a <code>NukeBalloonModel</code> that is now <code>Armed</code>). Counts its fuse down on scaled time, sets <code>FuseSecondsLeft</code>, publishes <code>NukeCountdownMessage</code> each second, and pulls the board in (<em>The fuse</em>). At zero it hands the nuke to <code>NukeBlast.Detonate</code>    </td></tr>
+<td class="markdownTableBodyNone"><code>NukeFuse</code> (new)   </td><td class="markdownTableBodyNone"><code>Balloon/Reward/</code>   </td><td class="markdownTableBodyNone">Plain C#, <code>ITickable</code>, <code>IRunResettable</code>. Hears the hit that arms a nuke (any <code>ActorHitMessage</code> on a <code>NukeBalloonModel</code> that is now <code>Armed</code>). Waits <code>HeartSeconds</code>, then counts its fuse down, all on scaled time, sets <code>FuseSecondsLeft</code>, publishes <code>NukeCountdownMessage</code> each second, and pulls the board in (<em>The fuse</em>). At zero it hands the nuke to <code>NukeBlast.Detonate</code>    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>NukeBlast</code>   </td><td class="markdownTableBodyNone"><code>Balloon/Reward/</code>   </td><td class="markdownTableBodyNone">The detonation: pops the nuke, kills the shots in flight, then grows the disc that pops each balloon its edge reaches. A nudge runs ahead of the edge. Then a last sweep, then the breather. Plain C#, <code>ITickable</code>, <code>IRunResettable</code>    </td></tr>
 <tr class="markdownTableRowOdd">
@@ -187,7 +187,7 @@ How it fits</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Messages (new)   </td><td class="markdownTableBodyNone"><code>Shared/Messages/</code>   </td><td class="markdownTableBodyNone"><code>NukeArmedMessage</code>, <code>NukeCountdownMessage</code> (seconds left), <code>NukeDetonatedMessage</code>, <code>NukeBreatherMessage</code>, all with the nuke's position. <code>ClearShotsInFlightMessage</code>, which <code>ThrowerController</code> answers by killing every shot in flight and sparing the loaded one    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>NukeFuseView</code> (new)   </td><td class="markdownTableBodyNone"><code>Balloon/Type/</code>, on the Nuke prefab   </td><td class="markdownTableBodyNone">An <code>IBalloonViewBinding</code>. It pushes <code>Armed</code> and <code>FuseSecondsLeft</code> to the body's material (the LED digit and the lamp) and switches the rays behind it from green to red    </td></tr>
+<td class="markdownTableBodyNone"><code>NukeFuseView</code> (new)   </td><td class="markdownTableBodyNone"><code>Balloon/Type/</code>, on the Nuke prefab   </td><td class="markdownTableBodyNone">An <code>IBalloonViewBinding</code>. It pushes the hits left, <code>Armed</code> and <code>FuseSecondsLeft</code> to the body's material: the LED shows the hits left in green, the heart from the arming hit until the count starts, then the seconds in red with the lamp, and it switches the rays behind it from green to red as the count starts    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>NukeBlastView</code>, <code>NukeCloudView</code> (new), <code>GrowingDiscView</code>   </td><td class="markdownTableBodyNone"><code>Balloon/View/</code>   </td><td class="markdownTableBodyNone">The disc (as <code>DiscoWaveView</code> draws the disco wave), the blinding light that follows it, and the mushroom cloud    </td></tr>
 <tr class="markdownTableRowOdd">
@@ -208,6 +208,7 @@ How it fits</h2>
 <div class="line">    Hit-&gt;&gt;Model: the third dent, or piercing damage</div>
 <div class="line">    Model--&gt;&gt;Model: Armed, anchored, hits 0</div>
 <div class="line">    Hit-&gt;&gt;Fuse: ActorHitMessage on an armed nuke</div>
+<div class="line">    Fuse--&gt;&gt;Fuse: wait HeartSeconds, the LED&#39;s heart flashing</div>
 <div class="line">    loop each second of the 3 s fuse</div>
 <div class="line">        Fuse-&gt;&gt;Model: FuseSecondsLeft 3, 2, 1</div>
 <div class="line">        Fuse--&gt;&gt;Fuse: beep, pull the board in</div>
@@ -263,7 +264,7 @@ Arming it</h2>
 <li><b>Lightning and paint</b> do nothing (<code>HitOutcome.None</code>), as on the golden balloon.</li>
 <li><b>A board clear or a level change</b> takes it away unarmed. Only arming starts the fuse.</li>
 </ul>
-<p>Armed, it deflects every ball for the rest of the fuse. A ball can ricochet off it, so the deflect chain counts those bounces (<code>DeflectChainController</code>). That is three seconds at most, and the shot dies at zero, so it stays as it is.</p>
+<p>Armed, it deflects every ball for the rest of the fuse. A ball can ricochet off it, so the deflect chain counts those bounces (<code>DeflectChainController</code>). That is four seconds at most, and the shot dies at zero, so it stays as it is.</p>
 <h2><a class="anchor" id="autotoc_md805"></a>
 The fuse</h2>
 <p><code>NukeFuseSettings.Seconds</code> (3). It starts on the hit that arms the nuke and runs on scaled time.</p>
@@ -298,8 +299,8 @@ The look</h2>
 <li><b>Lead plating.</b> The golden balloon's hexagonal plates, bolted at the corners over a dark rubber skin, in dull lead: a broad, weak sheen and no glitter.</li>
 <li><b>Dents.</b> Each dent sinks a growing share of the plates (<code>_DamageProgress</code>, which the prefab's <code>ToughBalloonVariant</code> pushes): a dented plate tips the other way and darkens.</li>
 <li><b>The danger placard.</b> A round steel plate riveted to the face: a black radiation trefoil on yellow, inside a black ring, held by three rivets between the blades. It takes the sphere's light, a soft sheen and some wear.</li>
-<li><b>The LED counter.</b> A small dark display below the placard with one red seven-segment digit, glowing past white so it blooms. Unarmed it shows a green heart. Armed it shows the seconds left, bright red.</li>
-<li><b>The lamp.</b> A small domed lamp above the placard. Unarmed it pulses green. Armed it is red and blinks with each beep. Both are drawn by the body shader from <code>_FuseArmed</code> and <code>_FuseDigit</code>, which <code>NukeFuseView</code> pushes, and both shine <code>_FuseGlow</code> (3) times past white.</li>
+<li><b>The LED counter.</b> A small dark display below the placard with one red seven-segment digit, glowing past white so it blooms. Unarmed it shows the hits the nuke still takes as a green digit, dimmer, flaring on each dent. From the arming hit to the count it shows a red heart flashing 5 times a second (<code>_FuseHeart</code>, <code>_HeartFlashRate</code>). Then it shows the seconds left, bright red.</li>
+<li><b>The lamp.</b> A small domed lamp above the placard. Unarmed it pulses green. Armed it is red and blinks with each beep; it flares on a dent and flashes red with the heart. Both are drawn by the body shader from <code>_FuseArmed</code>, <code>_FuseHeart</code>, <code>_FuseDigit</code> and <code>_FuseBeat</code>, which <code>NukeFuseView</code> pushes, and both shine <code>_FuseGlow</code> (3) times past white.</li>
 <li><b>The seam light.</b> A thin line of light down the gaps between the plates, with a soft glow either side: HDR green while it waits, dim red once armed, flaring bright red on each count (<code>_FuseBeat</code>).</li>
 <li>The LED, the lamp and the seam light are the only parts of a balloon that bloom: every other balloon colour is capped at white (Plans/PLAN-HDR), so the shader adds them after the cap.</li>
 <li><b>The flare.</b> God rays behind it (<code>GodRaysLook</code>, <code>NukeRays</code>), spinning like the other reward balloons'. One fan is green (palette <code>NukeRays</code>) and the other yellow (the material's second fan colour) while it waits; once armed the green fan turns red (palette <code>NukeArmedRays</code>).</li>

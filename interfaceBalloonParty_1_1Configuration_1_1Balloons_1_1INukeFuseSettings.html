@@ -126,6 +126,9 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:ab5fee10ee56c25d003aeb161e4bb58ff" id="r_ab5fee10ee56c25d003aeb161e4bb58ff"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab5fee10ee56c25d003aeb161e4bb58ff">HeartSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:ab5fee10ee56c25d003aeb161e4bb58ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds the counter's heart flashes after the hit that arms it, before the count starts.  <br /></td></tr>
+<tr class="separator:ab5fee10ee56c25d003aeb161e4bb58ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2471fa7a431be9967f5fd4821f20a52d" id="r_a2471fa7a431be9967f5fd4821f20a52d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2471fa7a431be9967f5fd4821f20a52d">ImplodeRadius</a><code> [get]</code></td></tr>
 <tr class="memdesc:a2471fa7a431be9967f5fd4821f20a52d"><td class="mdescLeft">&#160;</td><td class="mdescRight">World radius of the disturbance field's implosion at the nuke while the fuse runs.  <br /></td></tr>
 <tr class="separator:a2471fa7a431be9967f5fd4821f20a52d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -148,12 +151,39 @@ Properties</h2></td></tr>
 <tr class="memdesc:a178d7f11f6d517e23f26fb2ec0316e15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds one pull takes, out and back.  <br /></td></tr>
 <tr class="separator:a178d7f11f6d517e23f26fb2ec0316e15"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80c340fec5d2ade7f7a699d84d639d9a" id="r_a80c340fec5d2ade7f7a699d84d639d9a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a80c340fec5d2ade7f7a699d84d639d9a">Seconds</a><code> [get]</code></td></tr>
-<tr class="memdesc:a80c340fec5d2ade7f7a699d84d639d9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds from arming to the blast. The counter on its body shows the whole seconds left.  <br /></td></tr>
+<tr class="memdesc:a80c340fec5d2ade7f7a699d84d639d9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds the count runs, to the blast. The counter on its body shows the whole seconds left.  <br /></td></tr>
 <tr class="separator:a80c340fec5d2ade7f7a699d84d639d9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The armed nuke's fuse (PLAN-NukeBalloon): how long it counts down before it goes off, and how it pulls the board in towards it while it does. </p>
 </div><h2 class="groupheader">Property Documentation</h2>
+<a id="ab5fee10ee56c25d003aeb161e4bb58ff" name="ab5fee10ee56c25d003aeb161e4bb58ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5fee10ee56c25d003aeb161e4bb58ff">&#9670;&#160;</a></span>HeartSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.INukeFuseSettings.HeartSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds the counter's heart flashes after the hit that arms it, before the count starts. </p>
+<p>The blast comes this long plus <a class="el" href="#a80c340fec5d2ade7f7a699d84d639d9a" title="Seconds the count runs, to the blast. The counter on its body shows the whole seconds left.">Seconds</a> after that hit. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeFuseSettings.html#a5ec72850c024dd603b317605a3d27d84">BalloonParty.Configuration.Balloons.NukeFuseSettings</a>.</p>
+
+</div>
+</div>
 <a id="a2471fa7a431be9967f5fd4821f20a52d" name="a2471fa7a431be9967f5fd4821f20a52d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2471fa7a431be9967f5fd4821f20a52d">&#9670;&#160;</a></span>ImplodeRadius</h2>
 
@@ -356,7 +386,7 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Seconds from arming to the blast. The counter on its body shows the whole seconds left. </p>
+<p>Seconds the count runs, to the blast. The counter on its body shows the whole seconds left. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeFuseSettings.html#a954c485379c223cb782a5d84edea5eaa">BalloonParty.Configuration.Balloons.NukeFuseSettings</a>.</p>
 

@@ -1,5 +1,17 @@
 var NAVTREEINDEX35 =
 {
+"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a45f19c6cc6e53859f1c88327f1a7afc0":[5,0,0,3,5,27,4],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a45f19c6cc6e53859f1c88327f1a7afc0":[6,0,0,3,5,27,4],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a48be1086ce9b25aefa8b07ed7de58119":[5,0,0,3,5,27,22],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a48be1086ce9b25aefa8b07ed7de58119":[6,0,0,3,5,27,22],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a5313ab744951be6c7c68f7ee1fcf4fdd":[5,0,0,3,5,27,5],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a5313ab744951be6c7c68f7ee1fcf4fdd":[6,0,0,3,5,27,5],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a573d49cfa5a6848dc7eccb3d06e5f000":[5,0,0,3,5,27,11],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a573d49cfa5a6848dc7eccb3d06e5f000":[6,0,0,3,5,27,11],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a5786402b3125eec65b05d6ac4bd64c62":[5,0,0,3,5,27,19],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a5786402b3125eec65b05d6ac4bd64c62":[6,0,0,3,5,27,19],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a58a3307474da181c18c9605b08be4baf":[5,0,0,3,5,27,9],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a58a3307474da181c18c9605b08be4baf":[6,0,0,3,5,27,9],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a5eb84a3dfef3336f49540e96a2fffd33":[5,0,0,3,5,27,3],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a5eb84a3dfef3336f49540e96a2fffd33":[6,0,0,3,5,27,3],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a6398e8dca20adcb7ee5648617e22017b":[5,0,0,3,5,27,32],
@@ -237,17 +249,5 @@ var NAVTREEINDEX35 =
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#aecae6ea0aa15dd5a0fe78eafde169ccf":[5,0,0,3,5,31,57],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#aecae6ea0aa15dd5a0fe78eafde169ccf":[6,0,0,3,5,31,57],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#aef0ef6ef4fd9d7e0bf75cbb73fbe12da":[5,0,0,3,5,31,38],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#aef0ef6ef4fd9d7e0bf75cbb73fbe12da":[6,0,0,3,5,31,38],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#af117c01cf7c54af52546d333297bdb89":[5,0,0,3,5,31,67],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#af117c01cf7c54af52546d333297bdb89":[6,0,0,3,5,31,67],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#af2606a212b309260daf37da2d550b45c":[5,0,0,3,5,31,52],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#af2606a212b309260daf37da2d550b45c":[6,0,0,3,5,31,52],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#af357afe9d825bb780e4ca57b4b4793be":[5,0,0,3,5,31,30],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#af357afe9d825bb780e4ca57b4b4793be":[6,0,0,3,5,31,30],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#af7972965ec7ac4e9f22b72cd2e30e40d":[5,0,0,3,5,31,40],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#af7972965ec7ac4e9f22b72cd2e30e40d":[6,0,0,3,5,31,40],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#af79840a89b0d5c81110f86d5e75ceddf":[5,0,0,3,5,31,8],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#af79840a89b0d5c81110f86d5e75ceddf":[6,0,0,3,5,31,8],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#afae6f1e77c558cef1cfedda0e56929b7":[5,0,0,3,5,31,70],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#afae6f1e77c558cef1cfedda0e56929b7":[6,0,0,3,5,31,70]
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#aef0ef6ef4fd9d7e0bf75cbb73fbe12da":[6,0,0,3,5,31,38]
 };
