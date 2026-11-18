@@ -6,7 +6,7 @@
 > A ball that hits three of them in one flight, without touching a wall in between, becomes the Snipe lance.
 > To make room, the meadow loses its Tough and Tougher balloons, and its unbreakables form only the snake.
 > Talked through with the owner on 2026-11-18 and banked; started on 2026-11-19, when he settled the open
-> points below. **Status: planned. Nothing is built. Decisions A to G wait on the owner.**
+> points below and decisions A to F. **Status: building, phase 1. Nothing has been played yet.**
 
 ## The owner's direction (verbatim)
 
@@ -49,17 +49,17 @@
 | Art | Made by us, no painted sprite | Owner, 2026-11-19 |
 | Hit reaction | The cap leans away along the ball's direction and springs back, elastic | Owner, 2026-11-19 |
 
-## Open decisions for the owner
+## Decisions A to G
 
-Each has a recommendation; nothing below is built until he answers.
+The owner chose each on 2026-11-19 from the options put to him; G is how the work is done, not a choice of his.
 
-| | Question | Recommendation and why |
+| | Question | Decided, and why |
 |---|---|---|
 | A | Does a lance bounce off mushrooms too? | **Yes.** Today a piercing shot flies on unbent everywhere (the game, the solver and the aim line). A lance that passed through mushrooms would make them vanish from play the moment the reward lands |
-| B | Does a 4th hit bank an extra lance charge? | **Yes, one extra a flight at most.** It needs A. It rewards the full 4-mushroom chain late in a stretch |
+| B | Does a 4th hit bank an extra lance charge? | **Yes, one extra a flight at most.** It rewards the full 4-mushroom chain late in a stretch |
 | C | Does the aim line show the kick's bend? | **Yes.** The chain has to be readable on a phone, and the line already bends off deflecting things |
-| D | Unbreakables past the snake cap on the meadow | **Leave them loose.** With only the snake allowed and every snake full, extra unbreakables have no shape to join. Lifting the cap on the meadow is the alternative |
-| E | The meadow loses two routes to a lance | **Accept it.** With no toughs the armour need falls, and with no item-cover formation the covered-bomb pity never builds. The mushrooms are the meadow's own route to the lance |
+| D | Unbreakables past the snake cap on the meadow | **They stay loose.** With only the snake allowed and every snake full, extra unbreakables have no shape to join |
+| E | The meadow loses two routes to a lance | **Accepted.** With no toughs the armour need falls, and with no item-cover formation the covered-bomb pity never builds. The mushrooms are the meadow's own route to the lance. Balance is checked with the bot against the level-10 target |
 | F | Does a mushroom bounce spend a shield? | **No.** Walls end flights, mushrooms don't. The loop guards under *The forgiving kick* are what stop a flight running forever |
 | G | The prefab and settings asset | **An editor menu builds them**, run once by the owner, who also assigns the settings asset on the game scope. Hand-written prefab YAML is too fragile |
 
@@ -240,7 +240,7 @@ sequenceDiagram
 ## Risks
 
 - **Piercing means "unbent" in three places** (the game, the solver, the aim line). Bending a lance off
-  mushrooms (decision A) is the largest change to the mirror.
+  mushrooms (decision A, taken) is the largest change to the mirror.
 - **Every cast that assumes only balloons block** needs the bumpers added: the cruise lookahead, the doomed
   last-shield glide (or it passes through a mushroom), the tunnelling sweep and the aim fan. Each gets a test.
 - **A mushroom bounce spends no shield** (decision F), so the loop guards carry the weight.
