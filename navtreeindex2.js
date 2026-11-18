@@ -1,5 +1,7 @@
 var NAVTREEINDEX2 =
 {
+"IRainbowLines_8cs.html":[7,0,1,3,4],
+"IReactiveBindable_8cs.html":[7,0,18,0,1],
 "IReadOnlyMetricSet_8cs.html":[7,0,7,10,10],
 "IReadyGate_8cs.html":[7,0,14,26],
 "IResistsPaint_8cs.html":[7,0,15,1,16],
@@ -247,7 +249,5 @@ var NAVTREEINDEX2 =
 "PaintSpread_8cs.html":[7,0,8,4,4],
 "PaintTargets_8cs.html":[7,0,8,4,5],
 "PaintTriangle_8cs.html":[7,0,8,4,6],
-"PaletteChannelEncoding_8cs.html":[7,0,3,10,4],
-"PaletteColorMaskAttribute_8cs.html":[7,0,3,10,5],
-"PaletteColorMaskDrawer_8cs.html":[7,0,3,4,6]
+"PaletteChannelEncoding_8cs.html":[7,0,3,10,4]
 };

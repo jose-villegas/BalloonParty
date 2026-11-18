@@ -1,0 +1,11 @@
+<map id="BalloonParty.Game.Assist.CoveredBombNeed" name="BalloonParty.Game.Assist.CoveredBombNeed">
+<area shape="rect" id="Node000001" title="Need from a bomb the player can&#39;t get at: a balloon carrying a bomb counts as covered while at least ..." alt="" coords="260,96,451,141"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Game_1_1Assist_1_1ICoveredBombNeed.html" title="How long a bomb has sat on the board under a formation&#39;s cover, 0 (none, or just covered) to Shared...." alt="" coords="13,5,204,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="192,53,213,60,300,95,295,96,211,65,193,58"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="66,74,151,102"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="166,92,261,105,257,108,166,97"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,125,212,170"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="227,131,262,129,257,130,228,136"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="60,194,157,222"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="171,191,211,180,306,142,311,141,213,185,173,197"/>
+</map>

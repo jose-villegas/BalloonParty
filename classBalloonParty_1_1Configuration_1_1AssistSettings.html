@@ -143,6 +143,15 @@ Properties</h2></td></tr>
 <tr class="memitem:a4fc213a00b9b0868dbc0840f2d3145f0" id="r_a4fc213a00b9b0868dbc0840f2d3145f0"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4fc213a00b9b0868dbc0840f2d3145f0">ArmourSecondsForFull</a><code> [get]</code></td></tr>
 <tr class="memdesc:a4fc213a00b9b0868dbc0840f2d3145f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds of game time an armoured balloon stands before it counts in full; it counts from 0 as it lands.  <br /></td></tr>
 <tr class="separator:a4fc213a00b9b0868dbc0840f2d3145f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac83e57a33e50f32e676b6056ac4ed483" id="r_ac83e57a33e50f32e676b6056ac4ed483"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac83e57a33e50f32e676b6056ac4ed483">CoveredBombMinCover</a><code> [get]</code></td></tr>
+<tr class="memdesc:ac83e57a33e50f32e676b6056ac4ed483"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many of the six slots round a bomb must hold unbreakables in formation for it to be covered.  <br /></td></tr>
+<tr class="separator:ac83e57a33e50f32e676b6056ac4ed483"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7badd6a074269ecc547db70f62c396c5" id="r_a7badd6a074269ecc547db70f62c396c5"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7badd6a074269ecc547db70f62c396c5">CoveredBombNeedWeight</a><code> [get]</code></td></tr>
+<tr class="memdesc:a7badd6a074269ecc547db70f62c396c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">How much a bomb left under a formation's cover counts toward the Snipe roll's need, 0 to 1: once a bomb has stayed covered <a class="el" href="#a145b3c71e4a401fa7065e88632d6aed4" title="Seconds of game time a bomb stays covered before it counts in full; it counts from 0 as the cover clo...">CoveredBombSecondsForFull</a> the roll reads this much need.  <br /></td></tr>
+<tr class="separator:a7badd6a074269ecc547db70f62c396c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a145b3c71e4a401fa7065e88632d6aed4" id="r_a145b3c71e4a401fa7065e88632d6aed4"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a145b3c71e4a401fa7065e88632d6aed4">CoveredBombSecondsForFull</a><code> [get]</code></td></tr>
+<tr class="memdesc:a145b3c71e4a401fa7065e88632d6aed4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds of game time a bomb stays covered before it counts in full; it counts from 0 as the cover closes.  <br /></td></tr>
+<tr class="separator:a145b3c71e4a401fa7065e88632d6aed4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46d35c410009d8b5cc6528432f33fecf" id="r_a46d35c410009d8b5cc6528432f33fecf"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a46d35c410009d8b5cc6528432f33fecf">DangerNeedWeight</a><code> [get]</code></td></tr>
 <tr class="memdesc:a46d35c410009d8b5cc6528432f33fecf"><td class="mdescLeft">&#160;</td><td class="mdescRight">How much the danger signal counts toward need, 0 to 1: at 1, a board one line from a lost heart is as much need as the last heart.  <br /></td></tr>
 <tr class="separator:a46d35c410009d8b5cc6528432f33fecf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -170,6 +179,12 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ae99dabe273c87caa029bcf75c2bfda60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abafa375e0d33588dc6f0d752ccd43edc" id="r_abafa375e0d33588dc6f0d752ccd43edc"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abafa375e0d33588dc6f0d752ccd43edc">_armourSecondsForFull</a> = 30f</td></tr>
 <tr class="separator:abafa375e0d33588dc6f0d752ccd43edc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7f153dc94deda0650052004b58538ab" id="r_aa7f153dc94deda0650052004b58538ab"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa7f153dc94deda0650052004b58538ab">_coveredBombMinCover</a> = 3</td></tr>
+<tr class="separator:aa7f153dc94deda0650052004b58538ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88382848665a4b8dcc1e6914cbcd2d14" id="r_a88382848665a4b8dcc1e6914cbcd2d14"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a88382848665a4b8dcc1e6914cbcd2d14">_coveredBombNeedWeight</a> = 0.6f</td></tr>
+<tr class="separator:a88382848665a4b8dcc1e6914cbcd2d14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad01be09d67592d54f072d0483d59c513" id="r_ad01be09d67592d54f072d0483d59c513"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad01be09d67592d54f072d0483d59c513">_coveredBombSecondsForFull</a> = 20f</td></tr>
+<tr class="separator:ad01be09d67592d54f072d0483d59c513"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a90e740951207c951998c6b983f2664aa" id="r_a90e740951207c951998c6b983f2664aa"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a90e740951207c951998c6b983f2664aa">_dangerNeedWeight</a> = 1f</td></tr>
 <tr class="separator:a90e740951207c951998c6b983f2664aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7e8817a52cf91dcc53c790d5e462b87" id="r_ac7e8817a52cf91dcc53c790d5e462b87"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac7e8817a52cf91dcc53c790d5e462b87">_firstGoldenSnipeAfterDeflects</a> = 3</td></tr>
@@ -241,6 +256,72 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">float BalloonParty.Configuration.AssistSettings._armourSecondsForFull = 30f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa7f153dc94deda0650052004b58538ab" name="aa7f153dc94deda0650052004b58538ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7f153dc94deda0650052004b58538ab">&#9670;&#160;</a></span>_coveredBombMinCover</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.AssistSettings._coveredBombMinCover = 3</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a88382848665a4b8dcc1e6914cbcd2d14" name="a88382848665a4b8dcc1e6914cbcd2d14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a88382848665a4b8dcc1e6914cbcd2d14">&#9670;&#160;</a></span>_coveredBombNeedWeight</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.AssistSettings._coveredBombNeedWeight = 0.6f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad01be09d67592d54f072d0483d59c513" name="ad01be09d67592d54f072d0483d59c513"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad01be09d67592d54f072d0483d59c513">&#9670;&#160;</a></span>_coveredBombSecondsForFull</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.AssistSettings._coveredBombSecondsForFull = 20f</td>
         </tr>
       </table>
   </td>
@@ -461,6 +542,85 @@ Private Attributes</h2></td></tr>
 <p>Seconds of game time an armoured balloon stands before it counts in full; it counts from 0 as it lands. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IAssistSettings.html#a9dc97b66a9aa67de2ee1eafaa37a22c7">BalloonParty.Shared.IAssistSettings</a>.</p>
+
+</div>
+</div>
+<a id="ac83e57a33e50f32e676b6056ac4ed483" name="ac83e57a33e50f32e676b6056ac4ed483"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac83e57a33e50f32e676b6056ac4ed483">&#9670;&#160;</a></span>CoveredBombMinCover</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.AssistSettings.CoveredBombMinCover</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How many of the six slots round a bomb must hold unbreakables in formation for it to be covered. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IAssistSettings.html#afbbd74e797f1a5fd08a960c76cdcf09c">BalloonParty.Shared.IAssistSettings</a>.</p>
+
+</div>
+</div>
+<a id="a7badd6a074269ecc547db70f62c396c5" name="a7badd6a074269ecc547db70f62c396c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7badd6a074269ecc547db70f62c396c5">&#9670;&#160;</a></span>CoveredBombNeedWeight</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.AssistSettings.CoveredBombNeedWeight</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How much a bomb left under a formation's cover counts toward the Snipe roll's need, 0 to 1: once a bomb has stayed covered <a class="el" href="#a145b3c71e4a401fa7065e88632d6aed4" title="Seconds of game time a bomb stays covered before it counts in full; it counts from 0 as the cover clo...">CoveredBombSecondsForFull</a> the roll reads this much need. </p>
+<p>The roll takes the largest of this, the armour's and the player's need. 0 = a covered bomb never counts. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IAssistSettings.html#ac6601f202a8765f69a8985c48b3c8b43">BalloonParty.Shared.IAssistSettings</a>.</p>
+
+</div>
+</div>
+<a id="a145b3c71e4a401fa7065e88632d6aed4" name="a145b3c71e4a401fa7065e88632d6aed4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a145b3c71e4a401fa7065e88632d6aed4">&#9670;&#160;</a></span>CoveredBombSecondsForFull</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.AssistSettings.CoveredBombSecondsForFull</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds of game time a bomb stays covered before it counts in full; it counts from 0 as the cover closes. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IAssistSettings.html#a28f299d6532cab8617c3029f8a281fe3">BalloonParty.Shared.IAssistSettings</a>.</p>
 
 </div>
 </div>

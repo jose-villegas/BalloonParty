@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"EnumIndexedAttribute_8cs.html":[7,0,14,17],
 "EnumIndexedDrawer_8cs.html":[7,0,6,21],
 "ExtraColorLevelSettings_8cs.html":[7,0,3,9,6],
 "FPSCounter_8cs.html":[7,0,14,2,1],
@@ -112,7 +113,7 @@ var NAVTREEINDEX1 =
 "IActiveLevelParameters_8cs.html":[7,0,7,7,1],
 "IActiveScenario_8cs.html":[7,0,13,6],
 "IAdService_8cs.html":[7,0,7,8,3],
-"IArmourNeed_8cs.html":[7,0,7,0,1],
+"IArmourNeed_8cs.html":[7,0,7,0,2],
 "IArmouredFormationMember_8cs.html":[7,0,1,2,10],
 "IAssistSettings_8cs.html":[7,0,14,18],
 "IAudioMixerRouter_8cs.html":[7,0,0,8],
@@ -158,6 +159,7 @@ var NAVTREEINDEX1 =
 "IColorStreak_8cs.html":[7,0,7,9,3],
 "IContentPiece_8cs.html":[7,0,3,9,9],
 "ICounterDisplay_8cs.html":[7,0,18,0,0],
+"ICoveredBombNeed_8cs.html":[7,0,7,0,3],
 "IDangerLevel_8cs.html":[7,0,7,3,0],
 "IDeflectorField_8cs.html":[7,0,14,19],
 "IDeflectsShots_8cs.html":[7,0,15,1,4],
@@ -232,7 +234,7 @@ var NAVTREEINDEX1 =
 "IPitySettings_8cs.html":[7,0,14,23],
 "IPlayerHealing_8cs.html":[7,0,7,6,2],
 "IPlayerHealth_8cs.html":[7,0,7,6,3],
-"IPlayerNeed_8cs.html":[7,0,7,0,2],
+"IPlayerNeed_8cs.html":[7,0,7,0,4],
 "IPoolable_8cs.html":[7,0,14,9,4],
 "IPreBalanceRelocatable_8cs.html":[7,0,15,0,10],
 "IPredictionTraceConfig_8cs.html":[7,0,14,24],
@@ -247,7 +249,5 @@ var NAVTREEINDEX1 =
 "IProjectileRegistryWriter_8cs.html":[7,0,12,6],
 "IProjectileRegistry_8cs.html":[7,0,12,5],
 "IProjectileVisualConfig_8cs.html":[7,0,3,5,11],
-"IPuffCloudSettings_8cs.html":[7,0,3,5,12],
-"IRainbowLines_8cs.html":[7,0,1,3,4],
-"IReactiveBindable_8cs.html":[7,0,18,0,1]
+"IPuffCloudSettings_8cs.html":[7,0,3,5,12]
 };

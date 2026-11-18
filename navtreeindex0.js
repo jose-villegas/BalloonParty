@@ -205,6 +205,7 @@ var NAVTREEINDEX0 =
 "ContactRadius_8cs.html":[7,0,14,15],
 "ContentRole_8cs.html":[7,0,3,9,4],
 "ContentWeightRamp_8cs.html":[7,0,3,9,5],
+"CoveredBombNeed_8cs.html":[7,0,7,0,1],
 "DamageContext_8cs.html":[7,0,15,1,0],
 "DamageFlags_8cs.html":[7,0,15,1,1],
 "DampedSpring1D_8cs.html":[7,0,14,6,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "EffectsClearingStamper_8cs.html":[7,0,5,7],
 "EffectsClearingStamps_8cs.html":[7,0,5,8],
 "EffectsMapCompositor_8cs.html":[7,0,5,9],
-"EndRunRequestedMessage_8cs.html":[7,0,14,7,12],
-"EnumIndexedAttribute_8cs.html":[7,0,14,17]
+"EndRunRequestedMessage_8cs.html":[7,0,14,7,12]
 };

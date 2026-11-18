@@ -68,5 +68,6 @@ var searchData=
   ['compositetelemetrysink_2ecs_65',['CompositeTelemetrySink.cs',['../CompositeTelemetrySink_8cs.html',1,'']]],
   ['contactradius_2ecs_66',['ContactRadius.cs',['../ContactRadius_8cs.html',1,'']]],
   ['contentrole_2ecs_67',['ContentRole.cs',['../ContentRole_8cs.html',1,'']]],
-  ['contentweightramp_2ecs_68',['ContentWeightRamp.cs',['../ContentWeightRamp_8cs.html',1,'']]]
+  ['contentweightramp_2ecs_68',['ContentWeightRamp.cs',['../ContentWeightRamp_8cs.html',1,'']]],
+  ['coveredbombneed_2ecs_69',['CoveredBombNeed.cs',['../CoveredBombNeed_8cs.html',1,'']]]
 ];

@@ -1,5 +1,7 @@
 var NAVTREEINDEX4 =
 {
+"SightGlitterDriftReaction_8cs.html":[7,0,8,31],
+"SightRampReaction_8cs.html":[7,0,8,32],
 "SightReaction_8cs.html":[7,0,8,33],
 "SightScalePulseReaction_8cs.html":[7,0,8,34],
 "SightShakeReaction_8cs.html":[7,0,8,35],
@@ -97,7 +99,7 @@ var NAVTREEINDEX4 =
 "TexturePreviewBox_8cs.html":[7,0,6,53],
 "ThermalFrameRateGovernor_8cs.html":[7,0,14,12,3],
 "ThermalGovernorSettings_8cs.html":[7,0,3,29],
-"ThreatEase_8cs.html":[7,0,7,0,5],
+"ThreatEase_8cs.html":[7,0,7,0,7],
 "ThrowerController_8cs.html":[7,0,17,2],
 "ThrowerLifetimeScope_8cs.html":[7,0,17,3],
 "ThrowerOriginProvider_8cs.html":[7,0,17,4],
@@ -247,7 +249,5 @@ var NAVTREEINDEX4 =
 "arch_trail_composition.html":[2,9],
 "arch_trail_composition.html#autotoc_md126":[2,9,0],
 "arch_trail_composition.html#autotoc_md127":[2,9,0,0],
-"arch_trail_composition.html#autotoc_md128":[2,9,0,1],
-"arch_turn_pipeline.html":[2,3],
-"arch_turn_pipeline.html#autotoc_md129":[2,3,0]
+"arch_trail_composition.html#autotoc_md128":[2,9,0,1]
 };

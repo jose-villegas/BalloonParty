@@ -66,5 +66,6 @@ var searchData=
   ['compositecolorablerenderer_63',['CompositeColorableRenderer',['../classBalloonParty_1_1Shared_1_1Rendering_1_1CompositeColorableRenderer.html',1,'BalloonParty::Shared::Rendering']]],
   ['compositetelemetrysink_64',['CompositeTelemetrySink',['../classBalloonParty_1_1Game_1_1Telemetry_1_1CompositeTelemetrySink.html',1,'BalloonParty::Game::Telemetry']]],
   ['contactradius_65',['ContactRadius',['../classBalloonParty_1_1Shared_1_1ContactRadius.html',1,'BalloonParty::Shared']]],
-  ['contentweightramp_66',['ContentWeightRamp',['../structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html',1,'BalloonParty::Configuration::Level']]]
+  ['contentweightramp_66',['ContentWeightRamp',['../structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html',1,'BalloonParty::Configuration::Level']]],
+  ['coveredbombneed_67',['CoveredBombNeed',['../classBalloonParty_1_1Game_1_1Assist_1_1CoveredBombNeed.html',1,'BalloonParty::Game::Assist']]]
 ];

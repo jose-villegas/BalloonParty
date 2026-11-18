@@ -1,0 +1,5 @@
+<map id="BalloonParty.Game.Assist.ICoveredBombNeed" name="BalloonParty.Game.Assist.ICoveredBombNeed">
+<area shape="rect" id="Node000001" title="How long a bomb has sat on the board under a formation&#39;s cover, 0 (none, or just covered) to Shared...." alt="" coords="5,5,197,50"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Assist_1_1CoveredBombNeed.html" title="Need from a bomb the player can&#39;t get at: a balloon carrying a bomb counts as covered while at least ..." alt="" coords="5,98,197,143"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,64,103,99,99,97,99,68"/>
+</map>

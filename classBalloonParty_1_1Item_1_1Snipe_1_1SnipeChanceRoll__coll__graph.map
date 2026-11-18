@@ -1,25 +1,27 @@
 <map id="BalloonParty.Item.Snipe.SnipeChanceRoll" name="BalloonParty.Item.Snipe.SnipeChanceRoll">
-<area shape="rect" id="Node000001" title="The Sharpshooter card&#39;s roll, once per ball the thrower loads." alt="" coords="625,317,804,362"/>
+<area shape="rect" id="Node000001" title="The Sharpshooter card&#39;s roll, once per ball the thrower loads." alt="" coords="663,352,842,397"/>
 <area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeChanceRoll.html" title="What the thrower asks of each ball it loads: roll the Sharpshooter card&#39;s chance at a Snipe lance." alt="" coords="317,5,496,50"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="505,55,515,60,552,88,585,120,641,192,681,262,707,318,702,316,677,265,636,195,581,124,549,92,513,65,506,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="501,54,515,60,584,99,611,121,641,154,678,205,708,260,746,352,741,351,703,262,673,208,637,157,607,125,581,103,513,65,503,59"/>
 <area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeGuarantee.html" title="Makes the next ball the thrower loads a Snipe lance, whatever the Sharpshooter roll would say." alt="" coords="317,75,496,119"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="504,124,515,129,575,174,628,225,670,275,701,318,695,317,666,279,624,229,572,178,513,134,505,129"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="500,122,573,156,609,178,641,204,674,241,703,281,743,352,738,351,698,284,670,244,637,208,606,183,571,161,500,128"/>
 <area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="304,144,510,189"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="500,192,515,199,565,226,613,257,689,317,684,317,610,262,563,231,513,203,501,198"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="520,191,582,215,640,247,671,271,698,299,739,352,733,351,694,302,667,275,638,251,580,219,521,196"/>
 <area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html" title="The run&#39;s weapon after its upgrade cards: the configured base plus every card held." alt="" coords="300,213,514,258"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="495,260,602,296,655,316,650,317,600,301,495,266"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="510,260,576,281,640,307,719,351,714,352,638,311,574,286,511,266"/>
 <area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeArmer.html" title="Arms a shot as a Snipe lance without a pickup: what SnipeItemHandler does for one." alt="" coords="317,283,496,327"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="511,314,627,329,622,330,512,319"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="511,323,665,356,660,357,512,329"/>
 <area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Shared_1_1IUpgradeSettings.html" title="When the level&#45;up deals cards, how many, and from which deck." alt="" coords="300,352,514,397"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="528,358,627,349,622,351,530,363"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="529,372,665,373,660,375,530,377"/>
 <area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Game_1_1Assist_1_1IPlayerNeed.html" title="How much trouble the player is in right now, 0 (none) to 1 (one mistake from losing the run)." alt="" coords="311,421,502,466"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="496,414,600,379,657,362,652,364,602,385,498,419"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="517,419,665,391,660,393,519,424"/>
 <area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Game_1_1Assist_1_1IArmourNeed.html" title="How much armour has stood on the board too long, 0 (none) to Shared.IAssistSettings...." alt="" coords="311,491,502,535"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="498,482,513,476,563,449,610,418,684,364,689,361,613,422,566,453,515,481,500,487"/>
-<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html" title="Single read surface for the live per&#45;level difficulty mix; never read ILevelPacingConfiguration direc..." alt="" coords="313,560,500,605"/>
-<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="500,551,513,545,559,519,599,484,656,419,697,364,701,361,660,422,603,488,562,523,515,550,502,556"/>
-<area shape="rect" id="Node000011" href="$classBalloonParty_1_1Game_1_1Assist_1_1PityRoll.html" title="A chance roll that forgives a player in trouble." alt="" coords="311,629,502,674"/>
-<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="500,621,553,593,577,576,599,555,636,505,666,451,704,364,708,361,670,454,640,508,603,558,581,580,556,598,502,626"/>
-<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Shared_1_1IPitySettings.html" title="How a chance roll forgives a player in trouble (Game/Assist/PityRoll): each roll it misses while the ..." alt="" coords="5,629,189,674"/>
-<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="204,649,313,651,308,652,204,654"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="509,483,573,462,638,437,714,398,719,396,640,442,575,467,510,488"/>
+<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Game_1_1Assist_1_1ICoveredBombNeed.html" title="How long a bomb has sat on the board under a formation&#39;s cover, 0 (none, or just covered) to Shared...." alt="" coords="311,560,502,605"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="516,553,578,530,638,497,667,473,694,446,734,399,738,396,698,450,671,477,640,502,581,535,518,558"/>
+<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html" title="Single read surface for the live per&#45;level difficulty mix; never read ILevelPacingConfiguration direc..." alt="" coords="313,629,500,674"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="515,628,579,604,609,587,637,567,675,526,705,478,727,433,742,399,746,395,732,435,710,481,679,529,641,571,612,591,581,608,516,633"/>
+<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Game_1_1Assist_1_1PityRoll.html" title="A chance roll that forgives a player in trouble." alt="" coords="311,699,502,743"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="517,702,581,680,611,663,637,643,663,615,684,583,716,513,736,447,747,399,750,395,741,448,721,515,689,585,667,618,641,647,613,668,583,685,518,707"/>
+<area shape="rect" id="Node000013" href="$interfaceBalloonParty_1_1Shared_1_1IPitySettings.html" title="How a chance roll forgives a player in trouble (Game/Assist/PityRoll): each roll it misses while the ..." alt="" coords="5,699,189,743"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="204,718,313,721,308,721,204,724"/>
 </map>

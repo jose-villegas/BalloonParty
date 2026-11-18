@@ -1,5 +1,7 @@
 var NAVTREEINDEX3 =
 {
+"PaletteColorMaskAttribute_8cs.html":[7,0,3,10,5],
+"PaletteColorMaskDrawer_8cs.html":[7,0,3,4,6],
 "PaletteColorNameAttribute_8cs.html":[7,0,3,10,6],
 "PaletteColorNameDrawer_8cs.html":[7,0,3,4,7],
 "PaletteEntry_8cs.html":[7,0,3,10,7],
@@ -20,14 +22,14 @@ var NAVTREEINDEX3 =
 "PierceEndedEndCondition_8cs.html":[7,0,12,0,1],
 "PierceTelegraphScan_8cs.html":[7,0,12,1,3],
 "PierceWallReachedMessage_8cs.html":[7,0,14,7,32],
-"PityRoll_8cs.html":[7,0,7,0,3],
+"PityRoll_8cs.html":[7,0,7,0,5],
 "PitySettings_8cs.html":[7,0,3,21],
 "PlainCounterDisplay_8cs.html":[7,0,18,17],
 "PlatedBalloonModel_8cs.html":[7,0,1,2,17],
 "PlatedRewardSchedule_8cs.html":[7,0,1,3,10],
 "PlatedRewardTuning_8cs.html":[7,0,1,3,11],
 "PlayerHealthController_8cs.html":[7,0,7,6,5],
-"PlayerNeed_8cs.html":[7,0,7,0,4],
+"PlayerNeed_8cs.html":[7,0,7,0,6],
 "PlayerPrefsRunSave_8cs.html":[7,0,7,8,17],
 "PointFocus_8cs.html":[7,0,7,2,16],
 "PoolChannel_8cs.html":[7,0,14,9,9],
@@ -247,7 +249,5 @@ var NAVTREEINDEX3 =
 "ShoveVector_8cs.html":[7,0,15,2,6],
 "ShowIfEnumAttribute_8cs.html":[7,0,14,34],
 "ShowIfEnumDrawer_8cs.html":[7,0,6,49],
-"SightFadeReaction_8cs.html":[7,0,8,30],
-"SightGlitterDriftReaction_8cs.html":[7,0,8,31],
-"SightRampReaction_8cs.html":[7,0,8,32]
+"SightFadeReaction_8cs.html":[7,0,8,30]
 };

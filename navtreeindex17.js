@@ -1,5 +1,7 @@
 var NAVTREEINDEX17 =
 {
+"classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#a9f65d27752d4de9688f4ebd8fe2fa9ee":[5,0,0,1,3,1,20],
+"classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#a9f65d27752d4de9688f4ebd8fe2fa9ee":[6,0,0,1,3,1,20],
 "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#aa599cd9a220de2d2ae5440e05d3c5448":[5,0,0,1,3,1,25],
 "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#aa599cd9a220de2d2ae5440e05d3c5448":[6,0,0,1,3,1,25],
 "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#ab8eb4341807fffc25a1891e99fea7e45":[5,0,0,1,3,1,21],
@@ -247,7 +249,5 @@ var NAVTREEINDEX17 =
 "classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#a876d8f4d17060d4d07ddc7aa7591fc2e":[5,0,0,1,3,10,0],
 "classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#a876d8f4d17060d4d07ddc7aa7591fc2e":[6,0,0,1,3,10,0],
 "classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#a8ea10dbd02d8b3df8104d649102f3239":[5,0,0,1,3,10,5],
-"classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#a8ea10dbd02d8b3df8104d649102f3239":[6,0,0,1,3,10,5],
-"classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#a9b378d21b02e7a869190225ba253d063":[5,0,0,1,3,10,8],
-"classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#a9b378d21b02e7a869190225ba253d063":[6,0,0,1,3,10,8]
+"classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#a8ea10dbd02d8b3df8104d649102f3239":[6,0,0,1,3,10,5]
 };
