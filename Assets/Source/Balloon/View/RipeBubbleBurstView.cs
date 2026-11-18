@@ -16,10 +16,13 @@ using VContainer;
 namespace BalloonParty.Balloon.View
 {
     /// <summary>
-    ///     Plays a ripe cluster's spiral and <see cref="RipeBubbleBurstMessage" />. A ripple sends a ring over the
-    ///     water: one soap bubble drawn with the coat's material, under the balloons, spreading from the big bubble the
-    ///     popped cluster folded into to <see cref="IRipeBubbleSettings.RingReach" /> slot spacings as it fades. Foam
-    ///     plays the hand-out: the cluster, off the board but still on screen in its warning colour, lets one bubble go
+    ///     Plays a ripe cluster's spiral and <see cref="RipeBubbleBurstMessage" />. The spiral's source turns with the
+    ///     cluster it follows (<see cref="IRipeSpin" />, <see cref="RipeBubbleRule.SpiralTurnRate" />). A ripple is a
+    ///     small explosion out to the edge of its blast (<see cref="RipeBubbleBurstMessage.Radius" />): a ring over the
+    ///     water, one soap bubble drawn with the coat's material, under the balloons, spreading from the big bubble
+    ///     the popped cluster folded into as it fades, and <see cref="IRipeBubbleSettings.BlastBubbles" /> bubbles in
+    ///     the warning colour thrown out over the balloons, fast at first and fading at the end. Foam plays the
+    ///     hand-out: the cluster, off the board but still on screen in its warning colour, lets one bubble go
     ///     every <see cref="IRipeBubbleSettings.FoamStepSeconds" /> (<see cref="RipeBubbleRule.FoamDepartSeconds" />),
     ///     its shown count stepping down with them until it is gone. Each bubble hops to its taker on the merge's arc
     ///     (<see cref="SoapBubbleHop" />): a coat stays hidden (<see cref="BalloonView.HoldCoat" />) until its bubble
@@ -48,18 +51,32 @@ namespace BalloonParty.Balloon.View
         private const float SlowSourceSeconds = 1.15f;
         private const float FastSourceSeconds = 0.65f;
 
-        // The arm turns only a little faster in the fuse's last seconds: it is the thicker shedding that
-        // shows the hurry, and an arm wound much tighter stops reading as a spiral.
-        private const float FastTurnSpeedup = 1.25f;
-
-        // Over the balloons round the cluster, which the spray flies across.
+        // Over the balloons round the cluster, which the spiral and a burst's bubbles fly across.
         private const int SpiralSortingOrder = 5000;
 
         // A leftover bubble drifts this far out (slot spacings) in this share of a hop's time, then puffs away.
         private const float LeftoverReach = 0.35f;
         private const float LeftoverDriftShare = 0.5f;
 
+        // Where a burst's thrown bubble sets off, in slot spacings from the centre: inside the big bubble as it pops.
+        private const float BlastStartReach = 0.2f;
+
+        // A thrown bubble leaves at this share of its full size, and fades over this last share of its life.
+        private const float BlastStartScale = 0.35f;
+        private const float BlastFadeShare = 0.4f;
+
+        // How ragged the throw is: the least of the blast's radius a bubble gets to, of the full size it grows to
+        // and of the full time it lives. Even ones would draw a second ring, not an explosion.
+        private const float BlastReachMin = 0.7f;
+        private const float BlastSizeMin = 0.55f;
+        private const float BlastLifeMin = 0.75f;
+
+        // How far a thrown bubble is filled with the warning colour: they are the cluster's own, and the fill
+        // tells them from the spiral's clear ones.
+        private const float BlastFlush = 0.7f;
+
         private readonly List<Ring> _rings = new();
+        private readonly List<BlastBubble> _blasts = new(64);
         private readonly List<FoamHop> _hops = new();
         private readonly List<Handout> _handouts = new();
         private readonly Stack<Handout> _freeHandouts = new();
@@ -79,19 +96,9 @@ namespace BalloonParty.Balloon.View
 
         private void Update()
         {
-            // Scaled time: a pause holds the rings, the hand-outs and the hops where they are.
+            // Scaled time: a pause holds the bursts, the hand-outs and the hops where they are.
             var deltaTime = Time.deltaTime;
-            for (var i = _rings.Count - 1; i >= 0; i--)
-            {
-                var ring = _rings[i];
-                if (AdvanceRing(ref ring, deltaTime))
-                {
-                    _rings[i] = ring;
-                    continue;
-                }
-
-                _rings.RemoveAt(i);
-            }
+            AdvanceBursts(deltaTime);
 
             // Hand-outs before hops: a bubble that leaves this frame is placed this frame.
             AdvanceHandouts(deltaTime);
@@ -175,7 +182,8 @@ namespace BalloonParty.Balloon.View
         // A ripe cluster sheds soap from a point that turns round it, so the bubbles draw a spiral arm winding
         // out of it. Each beat of its fuse feeds the source a little longer than the wait for the next, so the
         // arm is unbroken for the whole fuse and ends when the beats do. The source follows the cluster's view,
-        // not its slot: a cluster the board is moving is drawn on its way there, and the arm goes with it.
+        // not its slot: a cluster the board is moving is drawn on its way there, and the arm goes with it. It
+        // turns the way the cluster spins, at the cluster's own rate, so the two go round as one.
         private void FeedSource(Vector2Int slot, bool fast)
         {
             if (_settings.SpiralInterval <= 0f || _settings.SpiralSeconds <= 0f
@@ -203,7 +211,8 @@ namespace BalloonParty.Balloon.View
             }
 
             var source = _freeSources.Count > 0 ? _freeSources.Pop() : new SpiralSource();
-            source.Start(view, Random.value * Mathf.PI * 2f, Random.value < 0.5f ? 1f : -1f, seconds, fast);
+            var turn = view.Variant is IRipeSpin spin ? spin.TurnDirection : 1f;
+            source.Start(view, Random.value * Mathf.PI * 2f, turn, seconds, fast);
             _sources.Add(source);
         }
 
@@ -226,8 +235,8 @@ namespace BalloonParty.Balloon.View
 
             source.Centre = source.View.transform.position;
             var rate = source.Fast ? _settings.SpiralFastSpeedup : 1f;
-            source.Angle += source.Turn * _settings.SpiralTurnsPerSecond * Mathf.PI * 2f * deltaTime
-                            * (source.Fast ? FastTurnSpeedup : 1f);
+            source.Angle += source.Turn * deltaTime
+                            * RipeBubbleRule.SpiralTurnRate(_settings.SpiralTurnsPerSecond, source.Fast);
             source.SinceBubble += deltaTime;
             var interval = _settings.SpiralInterval / rate;
             var material = _settings.CoatMaterial;
@@ -292,7 +301,8 @@ namespace BalloonParty.Balloon.View
         {
             if (message.Kind == RipeBurstKind.Ripple)
             {
-                StartRing(message.Position);
+                StartRing(message.Position, message.Radius);
+                StartBlast(message.Position, message.Radius);
             }
             else
             {
@@ -300,7 +310,36 @@ namespace BalloonParty.Balloon.View
             }
         }
 
-        private void StartRing(Vector3 position)
+        // A ripple's two parts: its ring over the water and the bubbles it threw.
+        private void AdvanceBursts(float deltaTime)
+        {
+            for (var i = _rings.Count - 1; i >= 0; i--)
+            {
+                var ring = _rings[i];
+                if (AdvanceRing(ref ring, deltaTime))
+                {
+                    _rings[i] = ring;
+                    continue;
+                }
+
+                _rings.RemoveAt(i);
+            }
+
+            for (var i = _blasts.Count - 1; i >= 0; i--)
+            {
+                var blast = _blasts[i];
+                if (AdvanceBlast(ref blast, deltaTime))
+                {
+                    _blasts[i] = blast;
+                    continue;
+                }
+
+                _blasts.RemoveAt(i);
+            }
+        }
+
+        // From the big bubble the cluster folded into, out to the edge of the blast.
+        private void StartRing(Vector3 position, float blastRadius)
         {
             var material = _settings.CoatMaterial;
             var sprite = _settings.CoatSprite;
@@ -311,12 +350,76 @@ namespace BalloonParty.Balloon.View
 
             var bubble = _bubbles.Rent(material, sprite, _ringLayerId, _settings.RingSortingOrder);
             bubble.transform.position = position;
-            var startReach = RingStartReach * _settings.SwellScale * RipeBubbleRule.FoldedSize;
-            var from = SoapBubbleShader.ScaleForRadius(material, sprite, startReach * _slotSpacing);
-            var to = SoapBubbleShader.ScaleForRadius(material, sprite, _settings.RingReach * _slotSpacing);
+            var startRadius = RingStartReach * _settings.SwellScale
+                              * RipeBubbleRule.FoldedSize(_settings.FoldGrowth) * _slotSpacing;
+            var from = SoapBubbleShader.ScaleForRadius(material, sprite, startRadius);
+            var to = SoapBubbleShader.ScaleForRadius(material, sprite, Mathf.Max(startRadius, blastRadius));
             var ring = new Ring(bubble, from, to);
             Place(in ring, 0f);
             _rings.Add(ring);
+        }
+
+        // The burst throws soap outward as a bomb throws sparks: one bubble along each of as many spokes as there
+        // are bubbles, each spoke turned by up to half a gap either way so no two bursts look alike and none
+        // clump, each bubble with its own reach, size and life.
+        private void StartBlast(Vector3 position, float blastRadius)
+        {
+            var count = _settings.BlastBubbles;
+            var material = _settings.CoatMaterial;
+            var sprite = _settings.CoatSprite;
+            if (count <= 0 || blastRadius <= 0f || _settings.BlastBubbleSeconds <= 0f
+                || material == null || sprite == null)
+            {
+                return;
+            }
+
+            var flush = _settings.WarnTint;
+            flush.a = BlastFlush;
+            var fullScale = SoapBubbleShader.ScaleForRadius(
+                material, sprite, _settings.BlastBubbleRadius * _slotSpacing);
+            var startDistance = Mathf.Min(BlastStartReach * _slotSpacing, blastRadius);
+            var turn = Random.value;
+            for (var i = 0; i < count; i++)
+            {
+                var angle = (turn + ((i + Random.value - 0.5f) / count)) * Mathf.PI * 2f;
+                var bubble = _bubbles.Rent(material, sprite, _ringLayerId, SpiralSortingOrder, flush);
+                var blast = new BlastBubble(
+                    bubble, position, new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f), startDistance,
+                    Mathf.Max(startDistance, blastRadius * Random.Range(BlastReachMin, 1f)),
+                    fullScale * Random.Range(BlastSizeMin, 1f),
+                    _settings.BlastBubbleSeconds * Random.Range(BlastLifeMin, 1f));
+                PlaceBlast(in blast, 0f);
+                _blasts.Add(blast);
+            }
+        }
+
+        // False once the bubble has faded.
+        private bool AdvanceBlast(ref BlastBubble blast, float deltaTime)
+        {
+            blast.Elapsed += deltaTime;
+            var t = blast.Elapsed / blast.Seconds;
+            if (t >= 1f)
+            {
+                _bubbles.Return(blast.Bubble);
+                return false;
+            }
+
+            PlaceBlast(in blast, t);
+            return true;
+        }
+
+        // Thrown hard and slowing to a stop at its reach, growing as it goes, fading at the end.
+        private static void PlaceBlast(in BlastBubble blast, float t)
+        {
+            var left = 1f - t;
+            var thrown = 1f - (left * left * left);
+            var body = blast.Bubble.transform;
+            body.position = blast.Centre + (blast.Direction * Mathf.Lerp(blast.StartDistance, blast.Reach, thrown));
+            var scale = blast.Scale * Mathf.Lerp(BlastStartScale, 1f, thrown);
+            body.localScale = new Vector3(scale, scale, 1f);
+            var color = blast.Bubble.color;
+            color.a = 1f - Mathf.Clamp01((t - (1f - BlastFadeShare)) / BlastFadeShare);
+            blast.Bubble.color = color;
         }
 
         // False once the ring has faded.
@@ -682,6 +785,32 @@ namespace BalloonParty.Balloon.View
                 Source = source;
                 Angle = angle;
                 Scale = scale;
+                Elapsed = 0f;
+            }
+        }
+
+        // One bubble a burst threw, flying straight out along its spoke.
+        private struct BlastBubble
+        {
+            public readonly SpriteRenderer Bubble;
+            public readonly Vector3 Centre;
+            public readonly Vector3 Direction;
+            public readonly float StartDistance;
+            public readonly float Reach;
+            public readonly float Scale;
+            public readonly float Seconds;
+            public float Elapsed;
+
+            public BlastBubble(SpriteRenderer bubble, Vector3 centre, Vector3 direction, float startDistance,
+                float reach, float scale, float seconds)
+            {
+                Bubble = bubble;
+                Centre = centre;
+                Direction = direction;
+                StartDistance = startDistance;
+                Reach = reach;
+                Scale = scale;
+                Seconds = seconds;
                 Elapsed = 0f;
             }
         }

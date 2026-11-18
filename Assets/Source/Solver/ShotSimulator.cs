@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BalloonParty.Balloon.Controller;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Item.Effects;
 using BalloonParty.Projectile.Controller;
@@ -100,18 +101,23 @@ namespace BalloonParty.Solver
         /// </summary>
         public readonly bool StreakGrantsShields;
 
-        /// <summary>The hit a ripe cluster's ripple deals each neighbour (<c>IRipeBubbleSettings.RippleDamage</c>).</summary>
+        /// <summary>The hit a ripe cluster's ripple deals each balloon it reaches (<c>IRipeBubbleSettings.RippleDamage</c>).</summary>
         public readonly int RippleDamage;
+
+        /// <summary>How far that ripple reaches between slot centres, in world units
+        /// (<c>IRipeBubbleSettings.RippleRadius</c>).</summary>
+        public readonly float RippleRadius;
 
         public ShotScoreRules(
             string targetColorId, IReadOnlyList<string> allowedColors, string rainbowColorId,
-            bool streakGrantsShields, int rippleDamage)
+            bool streakGrantsShields, int rippleDamage, float rippleRadius)
         {
             TargetColorId = targetColorId;
             AllowedColors = allowedColors;
             RainbowColorId = rainbowColorId;
             StreakGrantsShields = streakGrantsShields;
             RippleDamage = rippleDamage;
+            RippleRadius = rippleRadius;
         }
     }
 
@@ -209,11 +215,11 @@ namespace BalloonParty.Solver
         // Phase C2) — same single-threaded scratch-buffer convention as NeighborBuffer/ItemHitsScratch.
         private static readonly List<Vector2Int> EffectHitSlotsScratch = new();
 
-        // The ripe clusters a shot has burst whose ripple has not run yet, by slot, and the neighbours of the one
-        // running. Same single-threaded scratch convention as NeighborBuffer: a ripple's own pops only add to the
-        // queue, never re-enter it, so a chain runs in one index loop.
-        private static readonly List<Vector2Int> RippleQueueScratch = new();
-        private static readonly Vector2Int[] RippleNeighborBuffer = new Vector2Int[6];
+        // The ripe clusters a shot has burst whose ripple has not run yet, by the centre of the slot each burst in,
+        // and the slots the one running reaches. Same single-threaded scratch convention as NeighborBuffer: a
+        // ripple's own pops only add to the queue, never re-enter it, so a chain runs in one index loop.
+        private static readonly List<Vector2> RippleQueueScratch = new();
+        private static readonly List<Vector2Int> RippleSlotsScratch = new();
 
         /// <summary>Simulates one aim direction to completion. <paramref name="workingSet" /> is a
         /// caller-owned scratch buffer (sized to at least <paramref name="board" />.Count) reused
@@ -226,8 +232,12 @@ namespace BalloonParty.Solver
         /// <paramref name="cruiseConfig" /> drive the timeline even without a dynamic board;
         /// <paramref name="dynamics" />, when supplied, additionally runs flight-rebalance pulses and
         /// nudge impulses against a real <c>SlotGrid</c> (see <see cref="ShotBoardDynamics" />).
-        /// <paramref name="rippleDamage" /> is the hit a ripe cluster's ripple deals each neighbour
-        /// (<c>IRipeBubbleSettings.RippleDamage</c>); it has no default, so a caller cannot forget it.</summary>
+        /// <paramref name="rippleDamage" /> is the hit a ripe cluster's ripple deals each balloon it reaches
+        /// (<c>IRipeBubbleSettings.RippleDamage</c>); it has no default, so a caller cannot forget it.
+        /// <paramref name="rippleRadius" /> is how far that ripple reaches between slot centres
+        /// (<c>IRipeBubbleSettings.RippleRadius</c>, each target's <see cref="ShotBalloonSnapshot.SlotCenter" />);
+        /// left at 0, a ripe cluster's burst reaches nothing, so every flight over a board with one must pass it
+        /// (<see cref="ShotBoardGather.SimulateAt" /> does, from its context).</summary>
         internal static ShotSimulationResult Simulate(
             IReadOnlyList<ShotBalloonSnapshot> board,
             Vector4 wallLimitsClockwise,
@@ -249,7 +259,8 @@ namespace BalloonParty.Solver
             string rainbowColorId = null,
             in ShotFlightSeed seed = default,
             ShotItemLayer items = null,
-            bool streakGrantsShields = true)
+            bool streakGrantsShields = true,
+            float rippleRadius = 0f)
         {
             var walls = new WallLimits(wallLimitsClockwise);
             dynamics?.ResetForNewFlight();
@@ -263,7 +274,7 @@ namespace BalloonParty.Solver
             // already-established streak once a buff takes over) without a full item layer in place.
             var state = new ShotFlightState(origin, direction, startingShields, in seed);
             var scoreRules = new ShotScoreRules(
-                targetColorId, allowedColors, rainbowColorId, streakGrantsShields, rippleDamage);
+                targetColorId, allowedColors, rainbowColorId, streakGrantsShields, rippleDamage, rippleRadius);
             RippleQueueScratch.Clear();
 
             if (pathOut != null)
@@ -943,12 +954,12 @@ namespace BalloonParty.Solver
                     in scoreRules, ref state);
             }
 
-            // A ripe cluster's burst ripples into its neighbours. The game runs it BurstSeconds after the contact (and
-            // each chained burst as long after its own); the simulation resolves the whole chain here. Items its
-            // pops release join the item queue, drained after it as any chained item is.
+            // A ripe cluster's burst ripples into the balloons round it. The game runs it BurstSeconds after the
+            // contact (and each chained burst as long after its own); the simulation resolves the whole chain here.
+            // Items its pops release join the item queue, drained after it as any chained item is.
             if (host.Ripe)
             {
-                RippleQueueScratch.Add(host.SlotIndex);
+                RippleQueueScratch.Add(host.SlotCenter);
                 RunRipples(workingSet, ref activeCount, dynamics, tHit, in scoreRules, items, ref state);
                 DrainItemQueue(items, tHit, workingSet, ref activeCount, dynamics, in scoreRules, ref state);
             }
@@ -1192,7 +1203,7 @@ namespace BalloonParty.Solver
             // Its ripple runs once the hits in hand have landed (RunRipples): a ripple's own pops only queue more.
             if (popped.Ripe)
             {
-                RippleQueueScratch.Add(popped.SlotIndex);
+                RippleQueueScratch.Add(popped.SlotCenter);
             }
 
             if (items != null && popped.Item != ItemType.None)
@@ -1434,21 +1445,26 @@ namespace BalloonParty.Solver
         }
 
         // The ripple of every ripe cluster queued in RippleQueueScratch (RipeBubbleBurst.Ripple): one hit of
-        // RippleDamage, flagged Ripple, to each neighbour RippleTakes. A ripe neighbour it bursts joins the queue, so a
-        // chain runs to its end in this one index loop; each cluster leaves the board as it bursts, so the chain is
-        // bounded. Neighbours are the six hex slots round the burst's slot, found in the working set by slot as the
-        // rainbow side-conversion and the item effect board find theirs (the slots are the ones gathered).
+        // RippleDamage, flagged Ripple, to each target RippleTakes whose slot the burst reaches. A ripe cluster it
+        // bursts joins the queue, so a chain runs to its end in this one index loop; each cluster leaves the board
+        // as it bursts, so the chain is bounded. The reach is the game's own rule (RipeBubbleRule.RippleReaches)
+        // over the slot centres gathered with the board; the targets are then found in the working set by slot, as
+        // the rainbow side-conversion and the item effect board find theirs.
         private static void RunRipples(
             ShotBalloonState[] workingSet, ref int activeCount, ShotBoardDynamics dynamics, float tHit,
             in ShotScoreRules scoreRules, ShotItemLayer items, ref ShotFlightState state)
         {
+            // Simulate's rippleRadius is optional (0), so a caller that sets a ripe cluster up and forgets it would
+            // simulate a burst that reaches nothing, in silence.
+            Log.Assert(
+                RippleQueueScratch.Count == 0 || scoreRules.RippleRadius > 0f, "ShotSimulator",
+                "A ripe cluster bursts with no ripple radius: pass rippleRadius to Simulate.");
             for (var q = 0; q < RippleQueueScratch.Count; q++)
             {
-                var origin = RippleQueueScratch[q];
-                HexCoordinates.HexNeighborIndices(origin.x, origin.y, RippleNeighborBuffer);
-                for (var n = 0; n < RippleNeighborBuffer.Length; n++)
+                CollectRippleSlots(workingSet, activeCount, RippleQueueScratch[q], scoreRules.RippleRadius);
+                for (var n = 0; n < RippleSlotsScratch.Count; n++)
                 {
-                    var index = FindActiveIndex(workingSet, activeCount, RippleNeighborBuffer[n]);
+                    var index = FindActiveIndex(workingSet, activeCount, RippleSlotsScratch[n]);
                     if (index >= 0 && RippleTakes(in workingSet[index]))
                     {
                         ApplyRippleHit(workingSet, ref activeCount, index, dynamics, tHit, in scoreRules, items, ref state);
@@ -1457,6 +1473,36 @@ namespace BalloonParty.Solver
             }
 
             RippleQueueScratch.Clear();
+        }
+
+        // Every slot still on the board that a burst at origin reaches, in the order the game hits them (column,
+        // then row: RipeBubbleBurst.CollectBlast). Taken before any hit lands, as the game takes them: a hit's
+        // swap-remove reorders the working set under the loop.
+        private static void CollectRippleSlots(
+            ShotBalloonState[] workingSet, int activeCount, Vector2 origin, float radius)
+        {
+            RippleSlotsScratch.Clear();
+            for (var i = 0; i < activeCount; i++)
+            {
+                if (!RipeBubbleRule.RippleReaches(origin, workingSet[i].SlotCenter, radius))
+                {
+                    continue;
+                }
+
+                var slot = workingSet[i].SlotIndex;
+                var at = RippleSlotsScratch.Count;
+                while (at > 0 && ComesBefore(slot, RippleSlotsScratch[at - 1]))
+                {
+                    at--;
+                }
+
+                RippleSlotsScratch.Insert(at, slot);
+            }
+        }
+
+        private static bool ComesBefore(Vector2Int slot, Vector2Int other)
+        {
+            return slot.x < other.x || (slot.x == other.x && slot.y < other.y);
         }
 
         // Mirrors BalloonModel.EvaluateHit on a coated balloon: a piercing or beam hit takes the coat whole and goes on

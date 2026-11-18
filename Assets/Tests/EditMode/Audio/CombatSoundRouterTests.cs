@@ -408,8 +408,8 @@ namespace BalloonParty.Tests.Audio
 
             _ripenedHandler.Handle(new BubbleRipenedMessage(slot, at));
             _fuseBeatHandler.Handle(new RipeFuseBeatMessage(slot, at, fast: true));
-            _ripeBurstHandler.Handle(new RipeBubbleBurstMessage(RipeBurstKind.Ripple, slot, at, 0b101));
-            _ripeBurstHandler.Handle(new RipeBubbleBurstMessage(RipeBurstKind.Foam, slot, at, 0));
+            _ripeBurstHandler.Handle(RipeBubbleBurstMessage.Ripple(slot, at, 1.35f, 2));
+            _ripeBurstHandler.Handle(RipeBubbleBurstMessage.Foam(slot, at, 0));
 
             _player.Received(1).Play(GameSoundId.BalloonPop, at, 0, 12, 0.6f);
             _player.Received(1).Play(GameSoundId.DiscoWaveTick, at);

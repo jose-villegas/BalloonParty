@@ -35,14 +35,21 @@ namespace BalloonParty.Balloon.View
             return bubble;
         }
 
-        /// <summary>A single untinted bubble of <paramref name="material" />, floating and spinning on its own clock
-        /// (<see cref="SoapBubbleShader.SetLoneBubble" />).</summary>
-        internal SpriteRenderer Rent(Material material, Sprite sprite, int sortingLayerId, int sortingOrder)
+        /// <summary>A single bubble of <paramref name="material" />, floating and spinning on its own clock
+        /// (<see cref="SoapBubbleShader.SetLoneBubble" />). It is clear unless <paramref name="flush" /> has an alpha:
+        /// then it is filled with that colour, by that much, as a ripe cluster is with its warning.</summary>
+        internal SpriteRenderer Rent(
+            Material material, Sprite sprite, int sortingLayerId, int sortingOrder, Color flush = default)
         {
             var bubble = Take(material, sprite, sortingLayerId, sortingOrder);
             bubble.color = Color.white;
             _block.Clear();
             SoapBubbleShader.SetLoneBubble(_block);
+            if (flush.a > 0f)
+            {
+                _block.SetColor(SoapBubbleShader.FlushId, flush);
+            }
+
             bubble.SetPropertyBlock(_block);
             return bubble;
         }

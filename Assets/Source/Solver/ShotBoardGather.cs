@@ -57,8 +57,11 @@ namespace BalloonParty.Solver
         /// a ball armed in the thrower plans as the lance it is. <c>default</c> for a plain ball.</summary>
         public readonly ShotFlightSeed LoadedSeed;
 
-        /// <summary>The hit a ripe cluster's ripple deals each neighbour (<c>IRipeBubbleSettings.RippleDamage</c>).</summary>
+        /// <summary>The hit a ripe cluster's ripple deals each balloon it reaches (<c>IRipeBubbleSettings.RippleDamage</c>).</summary>
         public readonly int RippleDamage;
+
+        /// <summary>How far that ripple reaches between slot centres, in world units (<c>IRipeBubbleSettings.RippleRadius</c>).</summary>
+        public readonly float RippleRadius;
 
         public ShotSolveContext(
             IReadOnlyList<ShotBalloonSnapshot> board, Vector4 wallLimitsClockwise, Vector2 throwerPivot,
@@ -66,7 +69,7 @@ namespace BalloonParty.Solver
             float projectileContactRadius,
             float projectileSpeed, ShotCruiseConfig cruiseConfig, ShotBoardDynamics dynamics,
             float nudgeAmplitude, IReadOnlyList<string> allowedColors, string rainbowColorId, ShotItemLayer items,
-            int rippleDamage, in ShotFlightSeed loadedSeed = default)
+            int rippleDamage, float rippleRadius, in ShotFlightSeed loadedSeed = default)
         {
             Board = board;
             WallLimitsClockwise = wallLimitsClockwise;
@@ -84,6 +87,7 @@ namespace BalloonParty.Solver
             Items = items;
             LoadedSeed = loadedSeed;
             RippleDamage = rippleDamage;
+            RippleRadius = rippleRadius;
         }
     }
 
@@ -143,14 +147,22 @@ namespace BalloonParty.Solver
                 GamePalette.RainbowColorId,
                 items,
                 RippleDamageOf(balloonsConfig),
+                RippleRadiusOf(balloonsConfig),
                 SeedFor(loaded));
         }
 
-        /// <summary>The hit a ripe cluster's ripple deals each neighbour, as the game's <c>RipeBubbleBurst</c> reads it.
-        /// No fallback: a configuration without the ripe bubble block is a broken one, not a ripple of 1.</summary>
+        /// <summary>The hit a ripe cluster's ripple deals each balloon it reaches, as the game's <c>RipeBubbleBurst</c>
+        /// reads it. No fallback: a configuration without the ripe bubble block is a broken one, not a ripple of 1.</summary>
         internal static int RippleDamageOf(IBalloonsConfiguration balloonsConfig)
         {
             return balloonsConfig.RipeBubble.RippleDamage;
+        }
+
+        /// <summary>How far a ripe cluster's ripple reaches, as the game's <c>RipeBubbleBurst</c> reads it, with no
+        /// fallback either.</summary>
+        internal static float RippleRadiusOf(IBalloonsConfiguration balloonsConfig)
+        {
+            return balloonsConfig.RipeBubble.RippleRadius;
         }
 
         internal static ShotSimulationResult SimulateAt(
@@ -165,7 +177,8 @@ namespace BalloonParty.Solver
                 cruiseConfig: context.CruiseConfig, dynamics: context.Dynamics, timestampsOut: timesOut,
                 targetColorId: targetColorId, radiusBias: radiusBias, allowedColors: context.AllowedColors,
                 rainbowColorId: context.RainbowColorId, seed: context.LoadedSeed, items: context.Items,
-                streakGrantsShields: context.StreakGrantsShields, rippleDamage: context.RippleDamage);
+                streakGrantsShields: context.StreakGrantsShields, rippleDamage: context.RippleDamage,
+                rippleRadius: context.RippleRadius);
         }
 
         /// <summary>
@@ -259,11 +272,27 @@ namespace BalloonParty.Solver
             }
         }
 
+        /// <summary>The shot target the actor in <paramref name="index" /> is, if it is one: where its view is, and
+        /// the centre of its slot beside it, which a ripe cluster's ripple is measured between as the game measures
+        /// it.</summary>
+        internal static bool TryBuildTargetSnapshot(
+            SlotGrid grid, IBalloonsConfiguration balloonsConfig, IGamePalette palette, Vector2Int index,
+            IWriteableSlotActor actor, out ShotBalloonSnapshot snapshot)
+        {
+            if (!TryBuildTargetAtView(grid, balloonsConfig, palette, index, actor, out snapshot))
+            {
+                return false;
+            }
+
+            snapshot = snapshot.AtSlotCenter(grid.IndexToWorldPosition(index));
+            return true;
+        }
+
         // Durable + scorable actors are poppable/deflectable targets. Unbreakables have no
         // IHasDurability (EvaluateHit never mutates HitsRemaining) yet still DEFLECT the live shot,
         // so they enter as never-popping deflect geometry — int.MaxValue durability keeps the sim's
         // HitsRemaining > 1 branch permanently deflecting (deflects score nothing, matching the game).
-        internal static bool TryBuildTargetSnapshot(
+        private static bool TryBuildTargetAtView(
             SlotGrid grid, IBalloonsConfiguration balloonsConfig, IGamePalette palette, Vector2Int index,
             IWriteableSlotActor actor, out ShotBalloonSnapshot snapshot)
         {

@@ -19,9 +19,10 @@ namespace BalloonParty.Balloon.Controller
     /// <summary>
     ///     Ripens bubble clusters that reach the merge cap (<see cref="RipeBubbleRule" />) and runs each one's fuse on
     ///     the level clock (<see cref="ISpawnClock.SecondsOnLevel" />), which holds through pause, the level-up and
-    ///     game over. A ripe cluster popped by a hit bursts as the player's ripple (<see cref="RipeBubbleBurst.Ripple" />)
+    ///     game over. A ripe cluster popped by a hit bursts as the player's ripple (<see cref="RipeBubbleBurst.Ripple" />),
+    ///     a blast over <see cref="IRipeBubbleSettings.RippleRadius" />,
     ///     <see cref="IRipeBubbleSettings.BurstSeconds" /> after the hit, as the big bubble its view folds into pops; a
-    ///     ripe neighbour the ripple pops does the same in turn. One whose fuse runs out hands its bubbles to its
+    ///     ripe cluster the ripple pops does the same in turn. One whose fuse runs out hands its bubbles to its
     ///     neighbours and leaves the board, the level's foam (<see cref="RipeBubbleBurst.PlanFoam" />,
     ///     <see cref="RipeBubbleBurst.HandOut" />). Either way a <see cref="RipeBubbleBurstMessage" /> goes out, and
     ///     each throb of a fuse sends a <see cref="RipeFuseBeatMessage" />. Looks for new ripe clusters when anything
@@ -158,7 +159,7 @@ namespace BalloonParty.Balloon.Controller
             _pendingBursts.Add(new PendingBurst(cluster.SlotIndex.Value, message.Context, due));
         }
 
-        // Index loop, re-reading Count: a ripple's hits can pop a ripe neighbour, whose burst is appended to this
+        // Index loop, re-reading Count: a ripple's hits can pop a ripe cluster in its blast, whose burst is appended to this
         // list while it is drained. The ripple is only ever called from here, so a chain is a loop, never a
         // recursion. A due burst leaves the list before its ripple runs, so one whose hits throw cannot run again
         // on the next tick; bursts not yet due stay where they are. False when a ripple's hits stopped the service.
@@ -184,8 +185,8 @@ namespace BalloonParty.Balloon.Controller
                     return false;
                 }
 
-                _burstPublisher.Publish(new RipeBubbleBurstMessage(
-                    RipeBurstKind.Ripple, burst.Slot, _grid.IndexToWorldPosition(burst.Slot), reached));
+                _burstPublisher.Publish(RipeBubbleBurstMessage.Ripple(
+                    burst.Slot, _grid.IndexToWorldPosition(burst.Slot), _settings.RippleRadius, reached));
             }
 
             return true;
@@ -280,9 +281,8 @@ namespace BalloonParty.Balloon.Controller
                 }
 
                 var handout = _burst.PlanFoam(slot, cluster.HitsRemaining.Value);
-                _burstPublisher.Publish(new RipeBubbleBurstMessage(
-                    RipeBurstKind.Foam, slot, _grid.IndexToWorldPosition(slot),
-                    RipeBubbleRule.CoatedNeighbours(handout), handout));
+                _burstPublisher.Publish(RipeBubbleBurstMessage.Foam(
+                    slot, _grid.IndexToWorldPosition(slot), RipeBubbleRule.CoatedNeighbours(handout), handout));
                 _burst.HandOut(cluster, handout);
                 // A neighbouring cluster the hand-out filled ripens on a later tick.
                 _woken = true;

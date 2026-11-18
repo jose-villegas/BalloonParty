@@ -23,13 +23,17 @@ namespace BalloonParty.Shared.Messages
     }
 
     /// <summary>
-    ///     Published by <c>RipeBubbleService</c> when a ripe cluster bursts. <see cref="Neighbours" /> says which
-    ///     neighbouring balloons the burst touched (a ripple's hits that landed, the foam's new coats), one bit per
-    ///     direction in the order <c>HexCoordinates.HexNeighborIndices</c> lists the six neighbours of
-    ///     <see cref="Slot" />, so a burst carries them without allocating. <see cref="Reached" /> is how many.
-    ///     A foam also carries its hand-out (<see cref="Handout" />): where each of its bubbles went, in the order they
-    ///     leave, one 4-bit entry per bubble (a direction, plus 8 for a cluster, or 15 for a leftover) and the count in
-    ///     the seventh. Published before the hand-out changes the board, so the views still see it as it was.
+    ///     Published by <c>RipeBubbleService</c> when a ripe cluster bursts, built by <see cref="Ripple" /> or
+    ///     <see cref="Foam" />. Either way <see cref="Reached" /> is how many balloons the burst touched, and the
+    ///     message carries plain numbers only, so it allocates nothing.
+    ///     A ripple is a blast: it hit every balloon it could within <see cref="Radius" /> world units of
+    ///     <see cref="Position" />, and <see cref="Reached" /> counts the hits that landed.
+    ///     A foam touches only the six neighbours of <see cref="Slot" />: <see cref="Neighbours" /> has one bit per
+    ///     direction, in the order <c>HexCoordinates.HexNeighborIndices</c> lists them, for each neighbour it coated,
+    ///     and <see cref="Reached" /> counts them. It also carries its hand-out (<see cref="Handout" />): where each
+    ///     of its bubbles went, in the order they leave, one 4-bit entry per bubble (a direction, plus 8 for a
+    ///     cluster, or 15 for a leftover) and the count in the seventh. It is published before the hand-out changes
+    ///     the board, so the views still see it as it was.
     /// </summary>
     public readonly struct RipeBubbleBurstMessage
     {
@@ -45,24 +49,49 @@ namespace BalloonParty.Shared.Messages
         public RipeBurstKind Kind { get; }
         public Vector2Int Slot { get; }
         public Vector3 Position { get; }
+
+        /// <summary>How far a ripple's blast reached from <see cref="Position" />, in world units; 0 for a foam.</summary>
+        public float Radius { get; }
+
+        /// <summary>The balloons the burst touched: a ripple's hits that landed, a foam's new coats.</summary>
+        public int Reached { get; }
+
+        /// <summary>The neighbours a foam coated, a bit per direction; 0 for a ripple, which is not bound to them.</summary>
         public int Neighbours { get; }
+
         public int Handout { get; }
-        public int Reached => CountBits(Neighbours);
 
         /// <summary>How many bubbles the foam handed out, leftovers included; 0 for a ripple.</summary>
         public int Bubbles => HandoutCount(Handout);
 
-        public RipeBubbleBurstMessage(RipeBurstKind kind, Vector2Int slot, Vector3 position, int neighbours,
-            int handout = 0)
+        private RipeBubbleBurstMessage(RipeBurstKind kind, Vector2Int slot, Vector3 position, float radius,
+            int reached, int neighbours, int handout)
         {
             Kind = kind;
             Slot = slot;
             Position = position;
+            Radius = radius;
+            Reached = reached;
             Neighbours = neighbours;
             Handout = handout;
         }
 
-        /// <summary>Whether the burst touched the neighbour in <paramref name="direction" /> (0 to 5).</summary>
+        /// <summary>The player's burst: a blast of <paramref name="radius" /> world units round
+        /// <paramref name="position" /> whose hits landed on <paramref name="reached" /> balloons.</summary>
+        public static RipeBubbleBurstMessage Ripple(Vector2Int slot, Vector3 position, float radius, int reached)
+        {
+            return new RipeBubbleBurstMessage(RipeBurstKind.Ripple, slot, position, radius, reached, 0, 0);
+        }
+
+        /// <summary>The level's burst: the neighbours it coated (<paramref name="coated" />, a bit per direction)
+        /// and its <paramref name="handout" />.</summary>
+        public static RipeBubbleBurstMessage Foam(Vector2Int slot, Vector3 position, int coated, int handout = 0)
+        {
+            return new RipeBubbleBurstMessage(
+                RipeBurstKind.Foam, slot, position, 0f, CountBits(coated), coated, handout);
+        }
+
+        /// <summary>Whether a foam coated the neighbour in <paramref name="direction" /> (0 to 5).</summary>
         public bool Touched(int direction)
         {
             return (Neighbours & (1 << direction)) != 0;

@@ -17,6 +17,7 @@ using BalloonParty.Game.Score;
 using BalloonParty.Item;
 using BalloonParty.Item.Bomb;
 using BalloonParty.Item.Effects;
+using BalloonParty.Nudge;
 using BalloonParty.Projectile;
 using BalloonParty.Projectile.Buffs;
 using BalloonParty.Projectile.Controller;
@@ -46,7 +47,9 @@ namespace BalloonParty.Tests.ShotSolver
     ///     for score and streak, <see cref="RipeBubbleService" /> for the ripple (chains with no delay, so one tick runs
     ///     them all). Score, the shot's colour and streak, and what is left on the board must agree.
     ///     The grid is (1, 1) apart with no offset: same-row neighbours sit 2 apart, the rest at (±1, ±1), and a slot two
-    ///     rows away in the same column 2 straight above or below. Shots fly along (1, 2), which passes every
+    ///     rows away in the same column 2 straight above or below; nothing else is nearer than 2.8. The ripple's
+    ///     radius is 2.05 unless a test sets another, so a blast takes the six neighbours and those two slots, on
+    ///     both sides by the same rule (<see cref="RipeBubbleRule.RippleReaches" />). Shots fly along (1, 2), which passes every
     ///     neighbour of a slot on its line at least 0.44 off, so only the slots placed on the line are struck. Along
     ///     that line from (2, 8) the slots are (3, 4) and (4, 0). An item goes off the way <c>ItemActivator</c> decides
     ///     (only a pop releases one), and a bomb's blast takes its damage and flags from the same item settings the
@@ -61,6 +64,7 @@ namespace BalloonParty.Tests.ShotSolver
         private const int MergeMax = 5;
         private const float ContactRadius = 0.1f;
         private const float BlastRadius = 2.05f;
+        private const float RippleRadius = 2.05f;
 
         private static readonly Vector2 Separation = new(1f, 1f);
         private static readonly Vector2 Diagonal = new Vector2(1f, 2f).normalized;
@@ -100,6 +104,7 @@ namespace BalloonParty.Tests.ShotSolver
             var settings = Substitute.For<IRipeBubbleSettings>();
             settings.FuseSeconds.Returns(6f);
             settings.RippleDamage.Returns(1);
+            settings.RippleRadius.Returns(RippleRadius);
             settings.BurstSeconds.Returns(0f);
             settings.CoatLayers.Returns(1);
             _balloons = Substitute.For<IBalloonsConfiguration>();
@@ -148,7 +153,11 @@ namespace BalloonParty.Tests.ShotSolver
             clock.SecondsOnLevel.Returns(0f);
             _ripe = new RipeBubbleService(
                 _grid, clock, _balloons, levelProgress, new RipeBubbleBurst(
-                    _grid, _dispatcher, Substitute.For<IBalloonPopper>(), _balloons, disturbanceField),
+                    _grid, _dispatcher, Substitute.For<IBalloonPopper>(), _balloons, disturbanceField,
+                    new SceneLightFieldService(
+                        Substitute.For<IGameDisplayConfiguration>(), _palette,
+                        Substitute.For<ISceneLightFieldSettings>()),
+                    Substitute.For<IPublisher<NudgeMessage>>()),
                 Capture<ActorHitMessage>(h => _rippleHears = h), Quiet<BubbleMergedMessage>(), Quiet<GameOverMessage>(),
                 Substitute.For<IPublisher<BubbleRipenedMessage>>(), Substitute.For<IPublisher<RipeBubbleBurstMessage>>(),
                 Substitute.For<IPublisher<RipeFuseBeatMessage>>());
@@ -205,7 +214,8 @@ namespace BalloonParty.Tests.ShotSolver
             Assert.IsTrue(string.IsNullOrEmpty(_ball.ColorName.Value), "the burst washed the shot");
         }
 
-        // Three ripe clusters in a line and a plain balloon past the last: one burst sets off the next.
+        // Three ripe clusters up a column and a plain balloon past the last. The first blast bursts both clusters above
+        // it (the far one is 2 away, inside the radius), and their own blasts reach the plain balloon.
         [Test]
         public void AChainOfRipeClusters_GameAndSolverAgree()
         {
@@ -449,6 +459,119 @@ namespace BalloonParty.Tests.ShotSolver
             Assert.AreEqual(Blue, _ball.ColorName.Value);
         }
 
+        // A blast, not a ring of neighbours: the plain balloons two rows straight up and down are 2 away and pop, the
+        // coated neighbour loses its coat, and the balloons 4 along the row and 2.8 up the diagonal are out of it.
+        [Test]
+        public void ABlastPastTheNeighbours_GameAndSolverAgree()
+        {
+            var red = Plain(new Vector2Int(2, 8), Red);
+            var ripe = Cluster(new Vector2Int(3, 4), MergeMax);
+            var above = Plain(new Vector2Int(3, 2), Blue);
+            var below = Plain(new Vector2Int(3, 6), Green);
+            var coated = Plain(new Vector2Int(4, 4), Blue);
+            coated.TryCoat(1);
+            var alongTheRow = Plain(new Vector2Int(1, 4), Red);
+            var upTheDiagonal = Plain(new Vector2Int(4, 2), Red);
+            RipenAtTheCap();
+
+            var sim = Simulate(OriginBefore(red.SlotIndex.Value, Diagonal), Diagonal, shields: 0, out var survivors);
+            Shoot(red, ripe);
+            _ripe.Tick();
+
+            AssertAgree(sim, survivors);
+            Assert.IsNull(_grid.At(above.SlotIndex.Value), "2 away, not a neighbour: in the blast");
+            Assert.IsNull(_grid.At(below.SlotIndex.Value));
+            Assert.AreEqual(0, coated.Coat.Value);
+            Assert.AreSame(alongTheRow, _grid.At(new Vector2Int(1, 4)));
+            Assert.AreSame(upTheDiagonal, _grid.At(new Vector2Int(4, 2)));
+            Assert.AreEqual(1 + 5 + 1 + 1, _gameScore);
+            Assert.AreEqual(3, survivors.Count);
+        }
+
+        // A ripe cluster two rows up is inside the blast without being a neighbour. It bursts, and its own blast, from
+        // its own slot, pops two balloons the first was too far from.
+        [Test]
+        public void AChainThroughARipeClusterInsideTheRadius_GameAndSolverAgree()
+        {
+            var red = Plain(new Vector2Int(2, 8), Red);
+            var first = Cluster(new Vector2Int(3, 4), MergeMax);
+            var second = Cluster(new Vector2Int(3, 2), MergeMax);
+            var beyond = Plain(new Vector2Int(3, 0), Blue);
+            var beside = Plain(new Vector2Int(2, 1), Green);
+            RipenAtTheCap();
+            Assert.IsTrue(second.Ripe.Value);
+
+            var sim = Simulate(OriginBefore(red.SlotIndex.Value, Diagonal), Diagonal, shields: 0, out var survivors);
+            Shoot(red, first);
+            _ripe.Tick();
+
+            AssertAgree(sim, survivors);
+            Assert.IsNull(_grid.At(second.SlotIndex.Value), "the first blast burst it");
+            Assert.IsNull(_grid.At(beyond.SlotIndex.Value), "4 from the first, 2 from the second");
+            Assert.IsNull(_grid.At(beside.SlotIndex.Value), "3.2 from the first, 1.4 from the second");
+            Assert.AreEqual(1 + 5 + 5 + 1 + 1, _gameScore);
+            Assert.IsTrue(sim.BoardCleared);
+        }
+
+        // The radius decides on both sides, not adjacency: at 1.5 the neighbour on the row above (1.4 away) pops and
+        // the neighbour on the cluster's own row (2 away) is left alone.
+        [Test]
+        public void ARadiusShortOfSomeNeighbours_GameAndSolverAgree()
+        {
+            _balloons.RipeBubble.RippleRadius.Returns(1.5f);
+            var red = Plain(new Vector2Int(2, 8), Red);
+            var ripe = Cluster(new Vector2Int(3, 4), MergeMax);
+            var onTheRow = Plain(new Vector2Int(2, 4), Blue);
+            var onTheRowAbove = Plain(new Vector2Int(3, 3), Green);
+            RipenAtTheCap();
+
+            var sim = Simulate(OriginBefore(red.SlotIndex.Value, Diagonal), Diagonal, shields: 0, out var survivors);
+            Shoot(red, ripe);
+            _ripe.Tick();
+
+            AssertAgree(sim, survivors);
+            Assert.AreSame(onTheRow, _grid.At(new Vector2Int(2, 4)));
+            Assert.IsNull(_grid.At(onTheRowAbove.SlotIndex.Value));
+            Assert.AreEqual(1 + 5 + 1, _gameScore);
+        }
+
+        // The ripple is measured between slot centres, as the game measures it, not between the balloons as drawn: a
+        // balloon on its way to a slot inside the blast is hit though it is still drawn far off, and one drawn close by
+        // whose slot is out of reach is not.
+        [Test]
+        public void TheSolversRipple_MeasuresBetweenSlotCentres_NotWhereTheBalloonsAreDrawn()
+        {
+            var board = new List<ShotBalloonSnapshot>
+            {
+                ShotBalloonSnapshot.ForBubbleClusterTarget(
+                    Vector2.zero, 0.3f, MergeMax, SlotOnly(new Vector2Int(0, 0)), ripe: true),
+                ShotBalloonSnapshot.ForColorTarget(new Vector2(10f, 0f), 0.3f, Red, 1, 1, SlotOnly(new Vector2Int(1, 0)))
+                    .AtSlotCenter(new Vector2(1f, 0f)),
+                ShotBalloonSnapshot.ForColorTarget(new Vector2(1f, 0.2f), 0.3f, Blue, 1, 1, SlotOnly(new Vector2Int(2, 0)))
+                    .AtSlotCenter(new Vector2(5f, 5f))
+            };
+            var workingSet = new ShotBalloonState[board.Count];
+
+            var result = ShotSimulator.Simulate(
+                board, new Vector4(1000f, 1000f, -1000f, -1000f), new Vector2(0f, -2f), Vector2.up, 0, ContactRadius,
+                workingSet, rippleDamage: 1, allowedColors: Colors, rippleRadius: 1.5f);
+
+            Assert.AreEqual(2, result.Pops, "the cluster, and the balloon whose slot is 1 from it");
+            Assert.AreEqual(new Vector2Int(2, 0), workingSet[0].SlotIndex, "the one whose slot is out of reach stays");
+        }
+
+        // A snapshot built without a slot centre sits on its slot: the ripple measures from where it is.
+        [Test]
+        public void ASnapshotWithNoSlotCentreOfItsOwn_IsMeasuredWhereItIs()
+        {
+            var drawn = new Vector2(3f, -2f);
+            var snapshot = ShotBalloonSnapshot.ForColorTarget(drawn, 0.3f, Red, 1, 1);
+
+            Assert.AreEqual(drawn, snapshot.SlotCenter);
+            Assert.AreEqual(new Vector2(4f, 4f), snapshot.AtSlotCenter(new Vector2(4f, 4f)).SlotCenter);
+            Assert.AreEqual(drawn, snapshot.AtSlotCenter(new Vector2(4f, 4f)).Position, "where it is drawn is kept");
+        }
+
         // The gather reads the ripple's damage from the settings, with no fallback of its own.
         [Test]
         public void TheGather_ReadsTheConfiguredRippleDamage()
@@ -456,6 +579,38 @@ namespace BalloonParty.Tests.ShotSolver
             _balloons.RipeBubble.RippleDamage.Returns(2);
 
             Assert.AreEqual(2, ShotBoardGather.RippleDamageOf(_balloons));
+        }
+
+        // And its radius, the same way.
+        [Test]
+        public void TheGather_ReadsTheConfiguredRippleRadius()
+        {
+            _balloons.RipeBubble.RippleRadius.Returns(1.35f);
+
+            Assert.AreEqual(1.35f, ShotBoardGather.RippleRadiusOf(_balloons));
+        }
+
+        // The context's ripple radius reaches the simulation: with it the burst pops the balloon beside it, and a
+        // radius short of the next slot reaches nothing.
+        [Test]
+        public void SimulateAt_ForwardsTheContextsRippleRadius()
+        {
+            var red = Plain(new Vector2Int(2, 8), Red);
+            Cluster(new Vector2Int(3, 4), MergeMax);
+            Plain(new Vector2Int(2, 4), Blue);
+            RipenAtTheCap();
+            var board = BoardSnapshot();
+            var angle = Mathf.Atan2(Diagonal.y, Diagonal.x) * Mathf.Rad2Deg;
+            var origin = OriginBefore(red.SlotIndex.Value, Diagonal);
+
+            var reaching = ShotBoardGather.SimulateAt(
+                angle, ContextOver(board, origin, rippleDamage: 1), new ShotBalloonState[board.Count]);
+            var reachingNothing = ShotBoardGather.SimulateAt(
+                angle, ContextOver(board, origin, rippleDamage: 1, rippleRadius: 0.1f),
+                new ShotBalloonState[board.Count]);
+
+            Assert.AreEqual(3, reaching.Pops, "the red, the ripe cluster and the balloon beside it");
+            Assert.AreEqual(2, reachingNothing.Pops);
         }
 
         // The context's ripple damage reaches the simulation: a ripple of 2 pops the two-bubble cluster next to the
@@ -490,7 +645,7 @@ namespace BalloonParty.Tests.ShotSolver
             var result = ShotSimulator.Simulate(
                 board, walls ?? new Vector4(1000f, 1000f, -1000f, -1000f), origin, direction, shields, ContactRadius,
                 workingSet, allowedColors: Colors, rainbowColorId: GamePalette.RainbowColorId, seed: seed, items: items,
-                rippleDamage: _balloons.RipeBubble.RippleDamage);
+                rippleDamage: _balloons.RipeBubble.RippleDamage, rippleRadius: _balloons.RipeBubble.RippleRadius);
 
             survivors = new List<ShotBalloonState>();
             var remaining = board.Count - result.Pops;
@@ -630,11 +785,18 @@ namespace BalloonParty.Tests.ShotSolver
                 new WallBounceEndCondition(Quiet<ShieldLostMessage>(), _ball)));
         }
 
-        private static ShotSolveContext ContextOver(List<ShotBalloonSnapshot> board, Vector2 origin, int rippleDamage)
+        private static ShotSolveContext ContextOver(
+            List<ShotBalloonSnapshot> board, Vector2 origin, int rippleDamage, float rippleRadius = RippleRadius)
         {
             return new ShotSolveContext(
                 board, new Vector4(1000f, 1000f, -1000f, -1000f), origin, Vector3.zero, 0, true, ContactRadius, 1f,
-                default, null, 0f, Colors, GamePalette.RainbowColorId, null, rippleDamage);
+                default, null, 0f, Colors, GamePalette.RainbowColorId, null, rippleDamage, rippleRadius);
+        }
+
+        // A target's slot and nothing else of its balance: the simulator finds a ripple's targets by slot.
+        private static BalanceProfile SlotOnly(Vector2Int slot)
+        {
+            return new BalanceProfile(slot, 0, 0, 0f, false, null);
         }
 
         // Walls across the column between two rows: the top one bounces the shot back down.

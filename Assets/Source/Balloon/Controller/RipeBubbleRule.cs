@@ -8,19 +8,19 @@ using UnityEngine;
 
 namespace BalloonParty.Balloon.Controller
 {
-    /// <summary>When a bubble cluster is ripe, how long its fuse has left, which neighbours its ripple hits, where its
-    /// bubbles go when the fuse runs out, and the timing of both endings' looks.</summary>
+    /// <summary>When a bubble cluster is ripe, how long its fuse has left, how fast it turns, which balloons its
+    /// ripple reaches and hits, where its bubbles go when the fuse runs out, and the timing of both endings'
+    /// looks.</summary>
     internal static class RipeBubbleRule
     {
         /// <summary>The share of the burst delay over which a popped ripe cluster steps down to one bubble; the big
         /// bubble holds for the rest, then pops.</summary>
         internal const float FoldShare = 0.75f;
 
-        /// <summary>How much a folding cluster grows past its own size by the time it is one bubble.</summary>
-        internal const float FoldGrowth = 0.1f;
-
-        /// <summary>The one bubble a fold ends on, over the size of the whole cluster it started as.</summary>
-        internal const float FoldedSize = 1f + FoldGrowth;
+        /// <summary>How much faster the spiral arm, and the cluster with it, turns in the fuse's last seconds. Only a
+        /// little: the thicker shedding shows the hurry, and an arm wound much tighter stops reading as a
+        /// spiral.</summary>
+        internal const float FastTurnSpeedup = 1.25f;
 
         /// <summary>A cluster is ripe at the merge cap; a cap of 0 or less ripens nothing.</summary>
         internal static bool IsRipe(int bubbles, int max)
@@ -68,9 +68,43 @@ namespace BalloonParty.Balloon.Controller
         }
 
         /// <summary>
-        ///     Whether a ripple hits this neighbour: a balloon, as an item's hit would, other than a reward balloon or
-        ///     one that bounces an ordinary hit (the unbreakable, a tough with more than one hit left), whose
-        ///     <c>Deflect</c> would act on the shot that set the ripple off. Other clusters are hit, ripe ones too.
+        ///     How fast a ripe cluster's spiral arm turns round it, in radians a second, never negative:
+        ///     <paramref name="turnsPerSecond" /> while the fuse runs, <see cref="FastTurnSpeedup" /> times that once
+        ///     its throbs are the <paramref name="fast" /> ones. The cluster's own spin is the same number
+        ///     (<see cref="ClusterSpin" />), so the two turn as one.
+        /// </summary>
+        internal static float SpiralTurnRate(float turnsPerSecond, bool fast)
+        {
+            return Mathf.Max(0f, turnsPerSecond) * Mathf.PI * 2f * (fast ? FastTurnSpeedup : 1f);
+        }
+
+        /// <summary>
+        ///     The soap shader's <c>_RotationSpeed</c> that turns a ripe cluster with its spiral arm, whose source
+        ///     turns <paramref name="turnDirection" /> (+1 counter-clockwise on screen, -1 clockwise) at
+        ///     <see cref="SpiralTurnRate" />. The sign flips because the shader turns the point it samples, not the
+        ///     picture: the drawn bubbles go round the other way from the angle it is given.
+        /// </summary>
+        internal static float ClusterSpin(float turnDirection, float turnsPerSecond, bool fast)
+        {
+            return -Mathf.Sign(turnDirection) * SpiralTurnRate(turnsPerSecond, fast);
+        }
+
+        /// <summary>
+        ///     Whether a ripe cluster's burst at <paramref name="burstCentre" /> reaches the slot whose centre is
+        ///     <paramref name="slotCentre" />: within <paramref name="radius" /> world units, the edge included. It is
+        ///     measured between slot centres, never where a balloon is drawn on its way to one, so the game and the
+        ///     shot solver agree on a board in motion. A radius of 0 or less reaches nothing.
+        /// </summary>
+        internal static bool RippleReaches(Vector2 burstCentre, Vector2 slotCentre, float radius)
+        {
+            return radius > 0f && (slotCentre - burstCentre).sqrMagnitude <= radius * radius;
+        }
+
+        /// <summary>
+        ///     Whether a ripple hits this actor once it reaches it (<see cref="RippleReaches" />): a balloon, as an
+        ///     item's hit would, other than a reward balloon or one that bounces an ordinary hit (the unbreakable, a
+        ///     tough with more than one hit left), whose <c>Deflect</c> would act on the shot that set the ripple off.
+        ///     Other clusters are hit, ripe ones too.
         /// </summary>
         internal static bool RippleTakes(ISlotActor actor)
         {
@@ -144,31 +178,39 @@ namespace BalloonParty.Balloon.Controller
             return coated;
         }
 
+        /// <summary>Seconds between the steps of a fold from <paramref name="from" /> bubbles: they share
+        /// <see cref="FoldShare" /> of <paramref name="burstSeconds" /> evenly. 0 when there is nothing to step
+        /// through.</summary>
+        internal static float FoldStepSeconds(float burstSeconds, int from)
+        {
+            return from > 1 && burstSeconds > 0f ? FoldShare * burstSeconds / (from - 1) : 0f;
+        }
+
         /// <summary>
         ///     The bubbles a popped ripe cluster shows <paramref name="elapsed" /> seconds into its fold: from
-        ///     <paramref name="from" /> down one at a time at even steps over <see cref="FoldShare" /> of
-        ///     <paramref name="burstSeconds" />, then 1 until it pops.
+        ///     <paramref name="from" /> down one at a time at even steps (<see cref="FoldStepSeconds" />), then 1
+        ///     until it pops.
         /// </summary>
         internal static int FoldCount(float elapsed, float burstSeconds, int from)
         {
-            if (from <= 1 || burstSeconds <= 0f)
+            var step = FoldStepSeconds(burstSeconds, from);
+            if (step <= 0f)
             {
                 return 1;
             }
 
-            var step = FoldShare * burstSeconds / (from - 1);
-            var stepsTaken = Mathf.FloorToInt((elapsed / step) + 1e-4f);
-            return Mathf.Clamp(from - stepsTaken, 1, from);
+            return Mathf.Clamp(from - FoldStepsTaken(elapsed, step, from), 1, from);
         }
 
         /// <summary>
-        ///     The folding cluster's scale over its own while it shows <paramref name="shown" /> of the
+        ///     The folding cluster's settled scale over its own while it shows <paramref name="shown" /> of the
         ///     <paramref name="from" /> bubbles it started with. The shader packs fewer bubbles closer in, so the scale
-        ///     makes up for it and the cluster keeps its outline, growing a little more each step: at one bubble it
-        ///     is a single bubble <see cref="FoldedSize" /> times the size of the whole cluster it was.
-        ///     <paramref name="bubbleRadius" /> is the material's (<see cref="SoapBubbleShader.BubbleRadiusOf" />).
+        ///     makes up for it and the cluster keeps its outline, and each step adds an even share of
+        ///     <paramref name="growth" /> on top: at one bubble it is a single bubble <see cref="FoldedSize" /> times
+        ///     the size of the whole cluster it was. <paramref name="bubbleRadius" /> is the material's
+        ///     (<see cref="SoapBubbleShader.BubbleRadiusOf" />).
         /// </summary>
-        internal static float FoldScale(int shown, int from, float bubbleRadius)
+        internal static float FoldScale(int shown, int from, float bubbleRadius, float growth)
         {
             if (from <= 1)
             {
@@ -178,7 +220,32 @@ namespace BalloonParty.Balloon.Controller
             var share = Mathf.Clamp01((float)(from - shown) / (from - 1));
             var outline = SoapBubbleShader.LayoutReach(from, bubbleRadius)
                           / SoapBubbleShader.LayoutReach(shown, bubbleRadius);
-            return outline * (1f + (FoldGrowth * share));
+            return outline * (1f + (Mathf.Max(0f, growth) * share));
+        }
+
+        /// <summary>The one bubble a fold ends on, over the size of the whole cluster it started as.</summary>
+        internal static float FoldedSize(float growth)
+        {
+            return 1f + Mathf.Max(0f, growth);
+        }
+
+        /// <summary>
+        ///     The pump on top of <see cref="FoldScale" /> <paramref name="elapsed" /> seconds into a fold: each count
+        ///     shown, the full cluster at the hit included, kicks the scale out by <paramref name="strength" /> the
+        ///     moment it shows and eases back to 1 by the next step, so a fold from six reads as six pumps. The last
+        ///     one settles on the one big bubble, which holds at 1 until the pop.
+        /// </summary>
+        internal static float FoldPulse(float elapsed, float burstSeconds, int from, float strength)
+        {
+            var step = FoldStepSeconds(burstSeconds, from);
+            if (step <= 0f || strength <= 0f)
+            {
+                return 1f;
+            }
+
+            var sinceStep = Mathf.Max(0f, elapsed) - (FoldStepsTaken(elapsed, step, from) * step);
+            var left = 1f - Mathf.Clamp01(sinceStep / step);
+            return 1f + (strength * left * left);
         }
 
         /// <summary>Seconds from the fuse running out to the hand-out's bubble <paramref name="bubble" /> (0 first)
@@ -206,6 +273,12 @@ namespace BalloonParty.Balloon.Controller
         internal static float FoamLeaveSeconds(int bubbles, float step)
         {
             return bubbles > 0 ? FoamDepartSeconds(bubbles - 1, step) : 0f;
+        }
+
+        // The steps of a fold behind it at elapsed, never more than the fold has.
+        private static int FoldStepsTaken(float elapsed, float step, int from)
+        {
+            return Mathf.Clamp(Mathf.FloorToInt((elapsed / step) + 1e-4f), 0, from - 1);
         }
 
         // One bubble to each taker with room, in direction order. True if any was given.

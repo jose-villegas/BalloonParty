@@ -8,8 +8,8 @@ namespace BalloonParty.Tests.Balloon
 {
     /// <summary>
     ///     The arithmetic behind how a ripe cluster looks and what its burst tells the views: the float rebase that
-    ///     keeps bubbles where they are when they speed up, the hop path the foam shares with a merge, and the
-    ///     burst message's neighbour bits.
+    ///     keeps bubbles where they are when they speed up, the hop path the foam shares with a merge, and what the
+    ///     burst message carries for each ending: a ripple's blast, a foam's coats and hand-out.
     /// </summary>
     [TestFixture]
     public class RipeBubblePresentationTests
@@ -63,10 +63,12 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void TheBurstMessage_CountsAndNamesTheNeighboursItTouched()
+        public void AFoamMessage_CountsAndNamesTheNeighboursItCoated()
         {
-            var message = new RipeBubbleBurstMessage(RipeBurstKind.Foam, Vector2Int.one, Vector3.zero, 0b100101);
+            var message = RipeBubbleBurstMessage.Foam(Vector2Int.one, Vector3.zero, 0b100101);
 
+            Assert.AreEqual(RipeBurstKind.Foam, message.Kind);
+            Assert.AreEqual(0f, message.Radius, "a foam is no blast");
             Assert.AreEqual(3, message.Reached);
             Assert.IsTrue(message.Touched(0));
             Assert.IsFalse(message.Touched(1));
@@ -76,16 +78,29 @@ namespace BalloonParty.Tests.Balloon
             Assert.IsTrue(message.Touched(5));
         }
 
+        // A blast is not bound to the six neighbours: it carries where, how far and how many, and no direction bits.
         [Test]
-        public void ABurstThatTouchedNobody_ReachedNone()
+        public void ARippleMessage_CarriesItsBlast_TheCentreTheRadiusAndTheHitsThatLanded()
         {
-            var message = new RipeBubbleBurstMessage(RipeBurstKind.Ripple, Vector2Int.zero, Vector3.zero, 0);
+            var at = new Vector3(2f, -3f, 0f);
+            var message = RipeBubbleBurstMessage.Ripple(new Vector2Int(4, 5), at, 1.35f, 9);
 
-            Assert.AreEqual(0, message.Reached);
+            Assert.AreEqual(RipeBurstKind.Ripple, message.Kind);
+            Assert.AreEqual(new Vector2Int(4, 5), message.Slot);
+            Assert.AreEqual(at, message.Position);
+            Assert.AreEqual(1.35f, message.Radius);
+            Assert.AreEqual(9, message.Reached, "more than six: the count is not a mask of neighbours");
+            Assert.AreEqual(0, message.Neighbours);
             for (var direction = 0; direction < 6; direction++)
             {
                 Assert.IsFalse(message.Touched(direction));
             }
+        }
+
+        [Test]
+        public void ARippleThatHitNobody_ReachedNone()
+        {
+            Assert.AreEqual(0, RipeBubbleBurstMessage.Ripple(Vector2Int.zero, Vector3.zero, 1.35f, 0).Reached);
         }
 
         [Test]
@@ -96,7 +111,7 @@ namespace BalloonParty.Tests.Balloon
             handout = RipeBubbleBurstMessage.AddGift(handout, FoamGift.Cluster, 0);
             handout = RipeBubbleBurstMessage.AddGift(handout, FoamGift.Coat, 0);
             handout = RipeBubbleBurstMessage.AddGift(handout, FoamGift.Leftover, -1);
-            var message = new RipeBubbleBurstMessage(RipeBurstKind.Foam, Vector2Int.one, Vector3.zero, 0b100001, handout);
+            var message = RipeBubbleBurstMessage.Foam(Vector2Int.one, Vector3.zero, 0b100001, handout);
 
             Assert.AreEqual(4, message.Bubbles);
             Assert.AreEqual(2, message.Reached, "the coats");
@@ -130,7 +145,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void ARipple_HandsNothingOut()
         {
-            Assert.AreEqual(0, new RipeBubbleBurstMessage(RipeBurstKind.Ripple, Vector2Int.zero, Vector3.zero, 0b11).Bubbles);
+            Assert.AreEqual(0, RipeBubbleBurstMessage.Ripple(Vector2Int.zero, Vector3.zero, 1.35f, 3).Bubbles);
         }
 
         private static void AssertNear(Vector3 expected, Vector3 actual)

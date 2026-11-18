@@ -168,10 +168,16 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
   flag at gather. A ripe cluster bursts whole on any damaging hit (the shot's contact, an item's hit, a
   ripple), mirroring `BubbleClusterModel.EvaluateHit`: it scores the bubbles it held through the
   flat/streak-breaking tough rule, washes the shot as any cluster does, and is never ploughed through
-  (`HitsUnderCoat` is 1, so a pierce bursts it too). Its burst ripples into its six hex neighbours
-  (`RunRipples`): one hit of `ShotSolveContext.RippleDamage` each (read from
-  `IBalloonsConfiguration.RipeBubble` at gather, and passed explicitly to `Simulate`, which has no
-  default for it; a damage of 0 or less is no hit), flagged `DamageFlags.Ripple`, to every neighbour
+  (`HitsUnderCoat` is 1, so a pierce bursts it too). Its burst is a blast over a radius
+  (`RunRipples`): it reaches every target whose slot centre is within `ShotSolveContext.RippleRadius` of the
+  burst's slot centre, by the game's own rule (`RipeBubbleRule.RippleReaches`, which `RipeBubbleBurst` calls
+  too), in the game's order (column, then row). The centres are the slots' own, not the views': each snapshot
+  carries `SlotCenter` beside the `Position` its view is drawn at (`ShotBoardGather.TryBuildTargetSnapshot`
+  sets it from `SlotGrid.IndexToWorldPosition`; a snapshot built without one sits on its slot). Each target
+  reached takes one hit of `ShotSolveContext.RippleDamage` (both read from
+  `IBalloonsConfiguration.RipeBubble` at gather; `Simulate` has no default for the damage, and a damage of 0
+  or less is no hit; its `rippleRadius` defaults to 0, which reaches nothing, and `SimulateAt` passes the
+  context's), flagged `DamageFlags.Ripple`, if it is one
   `RipeBubbleRule.RippleTakes` would take — not a reward balloon, not a static, not a target that
   deflects an ordinary hit. A ripple hit strips a coat layer and stops, pops a one-hit balloon, takes a
   bubble off an unripe cluster, or bursts a ripe one, which queues its own ripple, so a chain runs to its
@@ -179,8 +185,8 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
   `Ripple` branch); a rainbow it pops pays as any item-popped rainbow does, the ripple carrying no
   source colour (`RipeBubbleBurst` sends `string.Empty`). A carrier it pops chains its item through the item queue, as an item's pop
   does. The simulation resolves a ripple and its whole chain at the contact; the game lands each one
-  `BurstSeconds` (0.35) later, after the cluster's fold, while the shot flies on. So where the shot reaches
-  a rippled neighbour inside that window, or its streak changes in it, the two can differ by that neighbour's
+  `BurstSeconds` (0.22) later, after the cluster's fold, while the shot flies on. So where the shot reaches
+  a rippled balloon inside that window, or its streak changes in it, the two can differ by that balloon's
   score. `RipeClusterMirrorTests` runs the game with `BurstSeconds` at 0 for that reason. The fuse's foam
   needs no mirror: it runs on the level's clock and gives no hit or score.
 - **Foam coats** — `ShotBalloonSnapshot.Coat` carries a coloured or rainbow balloon's coat layers
@@ -257,16 +263,17 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
   popping, scores the bubbles it held through the flat/streak-breaking tough rule, mirroring
   `BubbleClusterModel.ResolveScoreAttribution`; only the pop counts as a tough cleared. An item's (or a
   ripple's) surviving hit on a cluster scores the same way.
-- **The ripple's timing.** Live, a ripe burst's ripple lands `IRipeBubbleSettings.BurstSeconds` (0.35 s of
+- **The ripple's timing.** Live, a ripe burst's ripple lands `IRipeBubbleSettings.BurstSeconds` (0.22 s of
   level clock) after the hit that popped the cluster, as the big bubble it folds into pops, and each chained
   burst as long after its own hit; the sim resolves the whole chain at the contact that set it off (or,
   for an item's blast, once every hit of that activation has landed). It scores at the streak as it stands
-  at that moment. A shot that reaches a ripple's neighbour before the ripple would, or changes its streak
-  in the meantime, is mispredicted: the sim gives the neighbour to the ripple and the game to the shot.
-- **Ripple adjacency** is the six hex slots round the burst's *gathered* slot, looked up in the working
-  set by slot (as the rainbow side-conversion and the item effect board do). A balance pulse mid-flight
-  moves balloons but not their slots, so after one the ripple reaches the gathered neighbours, not the
-  current ones.
+  at that moment. A shot that reaches a balloon in the blast before the ripple would, or changes its streak
+  in the meantime, is mispredicted: the sim gives the balloon to the ripple and the game to the shot.
+- **The ripple's reach** is measured between the *gathered* slot centres, and its targets are looked up in
+  the working set by their gathered slot (as the rainbow side-conversion and the item effect board do). A
+  balance pulse mid-flight moves balloons but not their slots, so after one the ripple reaches what stood
+  within its radius at gather, not what stands there now; for the same reason a balloon the board moves
+  into the burst's own slot before the ripple lands is in the game's blast and not in the sim's.
 - **No ripening, no fuse, no foam inside a shot.** Ripeness and coats are read once at gather; a cluster
   that ripens mid-flight, a fuse that runs out, or foam that coats a balloon during the flight is not
   simulated. The board the shot is ranked against is the board at fire time.

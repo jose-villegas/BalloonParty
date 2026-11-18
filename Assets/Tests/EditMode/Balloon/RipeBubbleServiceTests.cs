@@ -10,10 +10,12 @@ using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Level;
+using BalloonParty.Nudge;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Shared.SceneLight;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
@@ -31,6 +33,9 @@ namespace BalloonParty.Tests.Balloon
     ///     bubbles handed to its neighbours, then it leaves), or ends in a ripple the burst delay after a hit pops it. The ripple's hits go through a dispatcher that does what the game's does for
     ///     these tests: a popped balloon leaves its slot, then the hit is heard. A level change, game over or run
     ///     reset forgets every fuse and every burst still waiting.
+    ///     The grid is (1, 0.85) apart: from a slot, its two neighbours on the row sit 2 away, the four on the rows
+    ///     above and below 1.31, the slot two rows straight up or down 1.7, and nothing else nearer than 2.6. The
+    ///     ripple's radius is 2.05 unless a test sets another, so a blast takes the six neighbours and those two.
     /// </summary>
     [TestFixture]
     public class RipeBubbleServiceTests
@@ -39,6 +44,7 @@ namespace BalloonParty.Tests.Balloon
         private const float Fuse = 6f;
         private const float Burst = 0.35f;
         private const float FoamStep = 0.12f;
+        private const float Radius = 2.05f;
 
         private static readonly Vector2Int Slot = new(1, 1);
         private static readonly Vector2Int OtherSlot = new(4, 6);
@@ -51,6 +57,10 @@ namespace BalloonParty.Tests.Balloon
 
         // The clusters that left the board quietly, and how long each one's view was to linger.
         private readonly List<(IBalloonModel Model, float Linger)> _left = new();
+
+        // Each nudge the burst published, and how many hits had been dispatched by then.
+        private readonly List<(NudgeMessage Message, int HitsBefore)> _nudges = new();
+        private readonly NudgeOverride[] _blastNudge = { new(NudgeType.Shockwave, 1.2f, 0.35f, 1.2f) };
         private int _allBeats;
 
         private SlotGrid _grid;
@@ -65,6 +75,7 @@ namespace BalloonParty.Tests.Balloon
         private float _now;
         private float _fuseSeconds;
         private float _burstSeconds;
+        private float _rippleRadius;
 
         // Runs as each burst message goes out, for a test that acts in the middle of a spray.
         private Action<RipeBubbleBurstMessage> _onBurst;
@@ -84,12 +95,15 @@ namespace BalloonParty.Tests.Balloon
             _now = 0f;
             _fuseSeconds = Fuse;
             _burstSeconds = Burst;
+            _rippleRadius = Radius;
             var clock = Substitute.For<ISpawnClock>();
             clock.SecondsOnLevel.Returns(_ => _now);
 
             var settings = Substitute.For<IRipeBubbleSettings>();
             settings.FuseSeconds.Returns(_ => _fuseSeconds);
             settings.RippleDamage.Returns(1);
+            settings.RippleRadius.Returns(_ => _rippleRadius);
+            settings.BlastNudgeOverrides.Returns(_blastNudge);
             settings.BurstSeconds.Returns(_ => _burstSeconds);
             settings.FoamStepSeconds.Returns(FoamStep);
             settings.CoatLayers.Returns(1);
@@ -144,7 +158,15 @@ namespace BalloonParty.Tests.Balloon
                 _left.Add((model, call.Arg<float>()));
                 return true;
             });
-            var burst = new RipeBubbleBurst(_grid, _dispatcher, popper, balloons, disturbanceField);
+            // The flash is held for no time (the settings' 0), so the light service is never started.
+            var lightField = new SceneLightFieldService(
+                Substitute.For<IGameDisplayConfiguration>(), _palette, Substitute.For<ISceneLightFieldSettings>());
+            _nudges.Clear();
+            var nudgePublisher = Substitute.For<IPublisher<NudgeMessage>>();
+            nudgePublisher.When(p => p.Publish(Arg.Any<NudgeMessage>()))
+                .Do(call => _nudges.Add((call.Arg<NudgeMessage>(), _dispatcher.Dispatched.Count)));
+            var burst = new RipeBubbleBurst(
+                _grid, _dispatcher, popper, balloons, disturbanceField, lightField, nudgePublisher);
 
             _service = new RipeBubbleService(
                 _grid, clock, balloons, levelProgress, burst, Capture<ActorHitMessage>(h => _hitHandler = h),
@@ -522,6 +544,149 @@ namespace BalloonParty.Tests.Balloon
             Assert.AreEqual(Centre, _bursts[0].Slot);
             Assert.AreEqual(_grid.IndexToWorldPosition(Centre), _bursts[0].Position);
             Assert.AreEqual(3, _bursts[0].Reached);
+            Assert.AreEqual(Radius, _bursts[0].Radius);
+        }
+
+        // A blast, not a ring of neighbours: the slots two rows straight up and down are 1.7 away, inside the radius,
+        // and are hit; the next slot along the row and the one up the diagonal past it are 4 and 2.6 away, and are not.
+        [Test]
+        public void TheRipple_ReachesPastTheNeighbours_ToEverySlotWithinItsRadius()
+        {
+            var cluster = Place(Centre, MergeMax);
+            var above = PlacePlain(new Vector2Int(2, 2));
+            var below = PlacePlain(new Vector2Int(2, 6));
+            var alongTheRow = PlacePlain(new Vector2Int(0, 4));
+            var upTheDiagonal = PlacePlain(new Vector2Int(3, 2));
+            _service.Tick();
+
+            HitDirect(cluster);
+            AfterBurst();
+
+            Assert.AreEqual(1, HitsOn(above), "1.7 away");
+            Assert.AreEqual(1, HitsOn(below), "1.7 away");
+            Assert.AreEqual(0, HitsOn(alongTheRow), "4 away");
+            Assert.AreEqual(0, HitsOn(upTheDiagonal), "2.6 away");
+            Assert.AreEqual(2, _bursts[0].Reached);
+            Assert.AreEqual(Radius, _bursts[0].Radius);
+        }
+
+        // The radius decides, not adjacency: at 1.5 the neighbours on the rows above and below (1.31 away) are in,
+        // and the two neighbours on the cluster's own row (2 away) are out.
+        [Test]
+        public void ASmallerRadius_LeavesOutTheNeighboursItDoesNotReach()
+        {
+            _rippleRadius = 1.5f;
+            var neighbors = NeighborSlots(Centre);
+            var cluster = Place(Centre, MergeMax);
+            var onTheRow = PlacePlain(neighbors[0]);
+            var onTheRowAbove = PlacePlain(neighbors[2]);
+            _service.Tick();
+
+            HitDirect(cluster);
+            AfterBurst();
+
+            Assert.AreEqual(0, HitsOn(onTheRow));
+            Assert.AreEqual(1, HitsOn(onTheRowAbove));
+            Assert.AreEqual(1.5f, _bursts[0].Radius);
+        }
+
+        // The shot solver repeats the blast in this order (ShotSimulator.CollectRippleSlots): by column, then by row.
+        [Test]
+        public void TheRipple_HitsColumnByColumn_ThenRowByRow()
+        {
+            var cluster = Place(Centre, MergeMax);
+            PlacePlain(new Vector2Int(3, 4));
+            PlacePlain(new Vector2Int(2, 5));
+            PlacePlain(new Vector2Int(2, 2));
+            PlacePlain(new Vector2Int(2, 3));
+            PlacePlain(new Vector2Int(1, 4));
+            _service.Tick();
+
+            HitDirect(cluster);
+            AfterBurst();
+
+            var hit = new List<Vector2Int>();
+            foreach (var ripple in Ripples())
+            {
+                hit.Add(((ISlotActor)ripple.Actor).SlotIndex);
+            }
+
+            CollectionAssert.AreEqual(
+                new[]
+                {
+                    new Vector2Int(1, 4), new Vector2Int(2, 2), new Vector2Int(2, 3), new Vector2Int(2, 5),
+                    new Vector2Int(3, 4)
+                },
+                hit);
+        }
+
+        // The cluster left its slot when it popped. A balloon the board moves there before the ripple lands stands
+        // in the middle of the blast.
+        [Test]
+        public void ABalloonMovedIntoTheBurstsOwnSlot_IsInTheBlast()
+        {
+            var cluster = Place(Centre, MergeMax);
+            _service.Tick();
+
+            HitDirect(cluster);
+            var movedIn = PlacePlain(Centre);
+            AfterBurst();
+
+            Assert.AreEqual(1, HitsOn(movedIn));
+            Assert.AreEqual(1, PopsOf(cluster), "the cluster itself is hit once, by the shot");
+        }
+
+        // As a bomb's blast does: one shockwave from the burst's centre with the burst's own overrides, sent before
+        // the ripple's hits.
+        [Test]
+        public void TheBurst_ShovesTheBoardOutward_BeforeItsHits()
+        {
+            var neighbors = NeighborSlots(Centre);
+            var cluster = Place(Centre, MergeMax);
+            PlacePlain(neighbors[0]);
+            _service.Tick();
+
+            HitDirect(cluster);
+            Assert.IsEmpty(_nudges, "nothing is shoved while the cluster folds");
+            AfterBurst();
+
+            Assert.AreEqual(1, _nudges.Count);
+            var (message, hitsBefore) = _nudges[0];
+            Assert.AreEqual(NudgeType.Shockwave, message.Source);
+            Assert.IsNull(message.Actor, "the whole board, as a bomb's shockwave");
+            Assert.AreEqual(_grid.IndexToWorldPosition(Centre), message.Origin);
+            Assert.AreSame(_blastNudge, message.Overrides);
+            Assert.AreEqual(1, hitsBefore, "only the shot's own hit had landed");
+            Assert.AreEqual(1, Ripples().Count);
+        }
+
+        // A ripe cluster two rows up is inside the blast without being a neighbour: it bursts, and its own ripple
+        // goes out from its own slot, reaching a balloon the first blast was too far from.
+        [Test]
+        public void ARipeClusterInsideTheRadiusButNotNextDoor_BurstsInTurn_FromItsOwnCentre()
+        {
+            var secondSlot = new Vector2Int(2, 2);
+            Assert.IsTrue(Array.IndexOf(NeighborSlots(Centre), secondSlot) < 0, "not a neighbour");
+            var first = Place(Centre, MergeMax);
+            var second = Place(secondSlot, MergeMax);
+            var beyond = PlacePlain(new Vector2Int(2, 0));
+            _service.Tick();
+
+            HitDirect(first);
+            AfterBurst();
+
+            Assert.AreEqual(1, PopsOf(second), "the first blast bursts it");
+            Assert.AreEqual(0, HitsOn(beyond), "3.4 from the first: out of its blast");
+            Assert.AreEqual(1, _bursts.Count, "the second is still folding");
+
+            AfterBurst();
+
+            Assert.AreEqual(2, _bursts.Count);
+            Assert.AreEqual(secondSlot, _bursts[1].Slot);
+            Assert.AreEqual(_grid.IndexToWorldPosition(secondSlot), _bursts[1].Position);
+            Assert.AreEqual(1, HitsOn(beyond), "1.7 from the second: in its blast");
+            Assert.AreEqual(1, _bursts[1].Reached);
+            Assert.AreEqual(1, _dispatcher.MaxDepth, "no ripple is dispatched inside another hit");
         }
 
         [Test]
@@ -907,6 +1072,8 @@ namespace BalloonParty.Tests.Balloon
             }
 
             Assert.IsEmpty(_dispatcher.Dispatched, "no hit, so nothing scores and the streak is untouched");
+            Assert.IsEmpty(_nudges, "the foam shoves nothing: only the player's burst is a blast");
+            Assert.AreEqual(0f, _bursts[0].Radius);
         }
 
         [Test]
@@ -1029,7 +1196,6 @@ namespace BalloonParty.Tests.Balloon
             Assert.AreEqual(0, PopsOf(coated));
             Assert.AreEqual(1, _bursts.Count);
             Assert.AreEqual(1, _bursts[0].Reached);
-            Assert.IsTrue(_bursts[0].Touched(0));
         }
 
         // A balloon still flying in from its spawn is already in its slot, so foam reaches it.

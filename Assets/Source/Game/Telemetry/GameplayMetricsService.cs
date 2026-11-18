@@ -686,7 +686,7 @@ namespace BalloonParty.Game.Telemetry
             _levelMetrics.Increment(MetricId.ClustersRipened);
         }
 
-        // A ripple's neighbours are the hits that landed; the foam's are the coats it put on.
+        // A ripple's count is the hits its blast landed; the foam's is the coats it put on.
         private void OnRipeBurst(RipeBubbleBurstMessage message)
         {
             if (_state == LevelState.Ended)

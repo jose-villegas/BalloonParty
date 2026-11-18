@@ -259,7 +259,9 @@ too.
 Six level counters follow the ripe bubble cluster (`Balloon/Controller/RipeBubbleService`).
 `clusters_ripened` counts `BubbleRipenedMessage`. Each `RipeBubbleBurstMessage` is either a
 ripple, the player popping a ripe cluster in time, or foam, its fuse running out. A ripple adds
-one to `ripple_bursts` and the neighbours its hits reached to `ripple_neighbours_hit`. A ripple
+one to `ripple_bursts` and the hits its blast landed to `ripple_neighbours_hit` (every balloon
+within the ripple's radius whose hit had an outcome: the six neighbours and the slots behind
+them, so more than six in one burst; the counter keeps the name it was shipped with). A ripple
 goes out `BurstSeconds` after the pop, so one still waiting when the level ends is dropped and
 counts nothing. Foam adds one to `fuses_run_out` and the balloons it coated to `coats_applied`;
 the bubbles it hands to neighbouring clusters, and those left over, are not counted. `coats_removed` counts the

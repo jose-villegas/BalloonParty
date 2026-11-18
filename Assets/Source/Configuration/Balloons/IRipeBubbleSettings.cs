@@ -1,23 +1,69 @@
+using BalloonParty.Nudge;
 using UnityEngine;
 
 namespace BalloonParty.Configuration.Balloons
 {
     /// <summary>
     ///     A bubble cluster that reaches <see cref="IBalloonsConfiguration.BubbleMergeMax" /> is ripe: any hit bursts it
-    ///     whole, and a fuse on the level clock runs until it hands its bubbles out and leaves.
+    ///     whole, a small bomb whose blast (the ripple) hits every balloon within <see cref="RippleRadius" />, and a
+    ///     fuse on the level clock runs until it hands its bubbles out and leaves.
     /// </summary>
     public interface IRipeBubbleSettings
     {
         /// <summary>Seconds of level clock from ripening to the fuse running out. 0 or less: clusters never ripen.</summary>
         float FuseSeconds { get; }
 
-        /// <summary>The hit each neighbour takes from a ripe cluster's ripple.</summary>
+        /// <summary>The hit each balloon the ripple reaches takes.</summary>
         int RippleDamage { get; }
 
+        /// <summary>How far a ripe cluster's ripple reaches, in world units between slot centres, the edge
+        /// included: every balloon whose slot centre is that close to the burst's is hit.</summary>
+        float RippleRadius { get; }
+
         /// <summary>Seconds of level clock from the hit that pops a ripe cluster to its ripple: the cluster folds into
-        /// one big bubble meanwhile, and the ripple lands as that bubble pops. A ripe neighbour the ripple pops waits
+        /// one big bubble meanwhile, and the ripple lands as that bubble pops. A ripe cluster the ripple pops waits
         /// as long again.</summary>
         float BurstSeconds { get; }
+
+        /// <summary>How much bigger than the whole cluster the one bubble a fold ends on is: each step of the fold
+        /// adds an even share of it.</summary>
+        float FoldGrowth { get; }
+
+        /// <summary>How far each step of the fold kicks the cluster's scale out, as a share of its size, before it
+        /// settles on the step's own size.</summary>
+        float FoldPulse { get; }
+
+        /// <summary>The outward shove the board takes as a ripe cluster bursts: a shockwave nudge, as a bomb's is,
+        /// with its own distance, duration and falloff. Empty: the configuration's default nudge.</summary>
+        NudgeOverride[] BlastNudgeOverrides { get; }
+
+        /// <summary>The inward pull stamped on the disturbance field just before the burst's outward shock, as a
+        /// multiple of the <c>BubbleRipple</c> stamp profile's radius.</summary>
+        float BlastImplosionRadiusScale { get; }
+
+        /// <summary>The inward pull's strength, as a multiple of the <c>BubbleRipple</c> profile's. 0: no pull.</summary>
+        float BlastImplosionStrengthScale { get; }
+
+        /// <summary>Seconds the inward pull takes: short, the outward shock follows it.</summary>
+        float BlastImplosionSeconds { get; }
+
+        /// <summary>The radius of the light a burst flashes, in world units.</summary>
+        float BlastLightRadius { get; }
+
+        /// <summary>The flash's peak intensity.</summary>
+        float BlastLightIntensity { get; }
+
+        /// <summary>Seconds the flash is held. 0 or less: no flash.</summary>
+        float BlastLightSeconds { get; }
+
+        /// <summary>How many soap bubbles a burst throws outward. 0: none.</summary>
+        int BlastBubbles { get; }
+
+        /// <summary>Seconds a thrown bubble takes to reach the edge of the blast and fade.</summary>
+        float BlastBubbleSeconds { get; }
+
+        /// <summary>A thrown bubble's radius at the edge of the blast, in slot spacings; it leaves smaller.</summary>
+        float BlastBubbleRadius { get; }
 
         /// <summary>Seconds between the bubbles a cluster whose fuse ran out hands to its neighbours.</summary>
         float FoamStepSeconds { get; }
@@ -43,9 +89,6 @@ namespace BalloonParty.Configuration.Balloons
         /// <summary>A ripe cluster's float speed over its rest speed.</summary>
         float FloatSpeedup { get; }
 
-        /// <summary>A ripe cluster's spin over its rest spin as its fuse runs out: 1 at ripening, this at the end.</summary>
-        float SpinSpeedup { get; }
-
         /// <summary>How far toward its warning tint a cluster is the moment it ripens (0..1).</summary>
         float WarnStart { get; }
 
@@ -59,7 +102,8 @@ namespace BalloonParty.Configuration.Balloons
         /// <summary>How far a spiral's bubble gets from the cluster, in slot spacings.</summary>
         float SpiralReach { get; }
 
-        /// <summary>Turns a second of the point the bubbles leave from.</summary>
+        /// <summary>Turns a second of the point the bubbles leave from, and of the ripe cluster itself: the two turn
+        /// together, a little faster in the fuse's last seconds.</summary>
         float SpiralTurnsPerSecond { get; }
 
         /// <summary>How much faster the spiral sheds bubbles in the fuse's last seconds.</summary>
@@ -86,11 +130,9 @@ namespace BalloonParty.Configuration.Balloons
         /// <summary>The coat's size at the end of its puff, over its fitted size.</summary>
         float CoatPuffScale { get; }
 
-        /// <summary>Seconds the ring a player's burst sends over the water takes to spread and fade.</summary>
+        /// <summary>Seconds the ring a player's burst sends over the water takes to spread to the edge of the blast
+        /// (<see cref="RippleRadius" />) and fade.</summary>
         float RingSeconds { get; }
-
-        /// <summary>How far the ring spreads, in slot spacings from the burst.</summary>
-        float RingReach { get; }
 
         /// <summary>The sorting layer the ring draws on.</summary>
         string RingSortingLayerName { get; }

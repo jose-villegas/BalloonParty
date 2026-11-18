@@ -21,15 +21,18 @@ namespace BalloonParty.Balloon.Type
     /// During a merge it shows the count a bubble at a time and wobbles (<see cref="IBubbleMergeReactive" />). A ripe
     /// cluster (<see cref="BubbleClusterModel.Ripe" />) swells its renderer to <see cref="IRipeBubbleSettings.SwellScale" />,
     /// floats <see cref="IRipeBubbleSettings.FloatSpeedup" /> times faster, throbs as its fuse
-    /// (<see cref="BubbleClusterModel.FuseLeft" />) crosses each second (<see cref="RipeBubbleRule.Throbs" />), and is
-    /// tinted toward <see cref="IRipeBubbleSettings.WarnTint" /> as the fuse runs out. The fuse only moves while the
+    /// (<see cref="BubbleClusterModel.FuseLeft" />) crosses each second (<see cref="RipeBubbleRule.Throbs" />), is
+    /// tinted toward <see cref="IRipeBubbleSettings.WarnTint" /> as the fuse runs out, and spins with the spiral arm it
+    /// sheds: at the arm's own turn rate and the same way round (<see cref="RipeBubbleRule.ClusterSpin" />,
+    /// <see cref="IRipeSpin" />), stepping up with the arm at the first fast throb. The fuse only moves while the
     /// level clock runs, so a pause or the level-up holds the throb and the tint with it. A cluster popped while ripe
     /// folds before its pop shows (<see cref="IBalloonPopPrelude" />): over <see cref="IRipeBubbleSettings.BurstSeconds" />
     /// it steps down to one big bubble (<see cref="RipeBubbleRule.FoldCount" />, <see cref="RipeBubbleRule.FoldScale" />),
-    /// keeping the flush it had at the hit. All of it is undone on every bind and when the binding is dropped.</summary>
+    /// each step pumping its scale out (<see cref="RipeBubbleRule.FoldPulse" />), keeping the flush it had at the hit.
+    /// All of it is undone on every bind and when the binding is dropped.</summary>
     [ExecuteAlways]
     public class SoapBubbleClusterVariant : MonoBehaviour, IBalloonVariant, IBalloonViewBinding, IBubbleMergeReactive,
-        IBalloonPopPrelude
+        IBalloonPopPrelude, IRipeSpin
     {
         [SerializeField] private SpriteRenderer _renderer;
 
@@ -65,8 +68,11 @@ namespace BalloonParty.Balloon.Type
         private float _foldElapsed;
         private float _foldSeconds;
         private float _foldRadius;
+        private float _foldGrowth;
+        private float _foldPulse;
         private int _foldFrom;
         private bool _folding;
+        private bool _spinFast;
         private float _lastFuseLeft;
         private float _timeOffset;
         private float _currentFloatSpeed;
@@ -91,6 +97,11 @@ namespace BalloonParty.Balloon.Type
                 return parent != null ? Vector3.Scale(parent.lossyScale, _rendererRestScale) : _rendererRestScale;
             }
         }
+
+        float IRipeSpin.TurnDirection => TurnDirection;
+
+        // The way round it drifts at rest, kept when it ripens: the shader's angle runs against what is drawn.
+        private float TurnDirection => _rotationSpeedRad > 0f ? -1f : 1f;
 
         // The renderer's scale before any punch: its rest scale, swollen while ripe, grown while folding.
         private Vector3 BaseScale => _rendererRestScale * (_swell * _fold);
@@ -194,7 +205,8 @@ namespace BalloonParty.Balloon.Type
                 return false;
             }
 
-            var seconds = _balloons.RipeBubble.BurstSeconds;
+            var settings = _balloons.RipeBubble;
+            var seconds = settings.BurstSeconds;
             if (seconds <= 0f)
             {
                 return false;
@@ -204,13 +216,16 @@ namespace BalloonParty.Balloon.Type
             _foldSeconds = seconds;
             _foldElapsed = 0f;
             _foldRadius = SoapBubbleShader.BubbleRadiusOf(_renderer.sharedMaterial);
+            _foldGrowth = settings.FoldGrowth;
+            _foldPulse = settings.FoldPulse;
             _foldDone = onDone;
             _folding = true;
             _punchTween?.Kill();
             _punchTween = null;
             _foldTween?.Kill();
-            // The hit already took the model's count to nothing; the fold starts from the full cluster it was.
-            ShowFold(_foldFrom);
+            // The hit already took the model's count to nothing; the fold starts from the full cluster it was, with
+            // the first pump.
+            StepFold();
             _foldTween = DOTween.To(_foldGetter, _foldSetter, seconds, seconds)
                 .SetEase(Ease.Linear)
                 .SetTarget(this)
@@ -290,19 +305,24 @@ namespace BalloonParty.Balloon.Type
             }
         }
 
+        // The arm starts slow as the cluster ripens, and so does the spin.
         private void OnRipeChanged(bool ripe)
         {
             var settings = _balloons.RipeBubble;
+            _spinFast = false;
             SwellTo(ripe ? settings.SwellScale : 1f, settings.SwellSeconds);
             PushFloatSpeed(ripe ? _floatSpeed * settings.FloatSpeedup : _floatSpeed);
             ApplyTint(_cluster.FuseLeft.Value);
         }
 
+        // The spin changes pace on the throb, as the arm does on the beat the service sends for the same throb
+        // (RipeFuseBeatMessage.Fast), so the two step up in the same frame.
         private void OnFuseLeftChanged(float left)
         {
             var settings = _balloons.RipeBubble;
             if (_cluster.Ripe.Value && RipeBubbleRule.Throbs(_lastFuseLeft, left, settings.ThrobFastSeconds))
             {
+                _spinFast = RipeBubbleRule.IsFastThrob(left, settings.ThrobFastSeconds);
                 Punch(settings.ThrobStrength, settings.ThrobSeconds);
             }
 
@@ -313,13 +333,17 @@ namespace BalloonParty.Balloon.Type
         private void ApplyTint(float fuseLeft)
         {
             var settings = _balloons.RipeBubble;
-            var amount = _cluster.Ripe.Value ? RipeBubbleRule.WarnAmount(fuseLeft, settings.FuseSeconds, settings.WarnStart) : 0f;
-            PushWarning(settings.WarnTint, amount, _rotationSpeedRad * Mathf.Lerp(1f, settings.SpinSpeedup, amount));
+            var ripe = _cluster.Ripe.Value;
+            var amount = ripe ? RipeBubbleRule.WarnAmount(fuseLeft, settings.FuseSeconds, settings.WarnStart) : 0f;
+            var spin = ripe
+                ? RipeBubbleRule.ClusterSpin(TurnDirection, settings.SpiralTurnsPerSecond, _spinFast)
+                : _rotationSpeedRad;
+            PushWarning(settings.WarnTint, amount, spin);
         }
 
-        // The warning as the fuse runs out: the cluster fills with the tint and spins up. The fill is the shader's
-        // flush, not the renderer's colour (the film is nearly clear, so tinting it shows nothing). The angle is
-        // rebased as the float's offset is, so a new spin carries on from where the cluster has turned to.
+        // The warning as the fuse runs out: the cluster fills with the tint, and turns with its spiral arm. The fill
+        // is the shader's flush, not the renderer's colour (the film is nearly clear, so tinting it shows nothing).
+        // The angle is rebased as the float's offset is, so a new spin carries on from where the cluster has turned to.
         private void PushWarning(Color tint, float amount, float spin)
         {
             if (_renderer == null || _block == null)
@@ -382,20 +406,18 @@ namespace BalloonParty.Balloon.Type
             }
         }
 
+        // The layout and the scale change together, so the outline holds while the bubbles grow into one; the pump
+        // on top moves every frame, so the scale is set every frame.
         private void StepFold()
         {
             var shown = RipeBubbleRule.FoldCount(_foldElapsed, _foldSeconds, _foldFrom);
             if (shown != _shownCount)
             {
-                ShowFold(shown);
+                PushBubbleCount(shown);
             }
-        }
 
-        // The layout and the scale change together, so the outline holds while the bubbles grow into one.
-        private void ShowFold(int shown)
-        {
-            PushBubbleCount(shown);
-            _fold = RipeBubbleRule.FoldScale(shown, _foldFrom, _foldRadius);
+            _fold = RipeBubbleRule.FoldScale(shown, _foldFrom, _foldRadius, _foldGrowth)
+                    * RipeBubbleRule.FoldPulse(_foldElapsed, _foldSeconds, _foldFrom, _foldPulse);
             SettleScale();
         }
 
@@ -428,6 +450,7 @@ namespace BalloonParty.Balloon.Type
             _foldTween = null;
             _foldDone = null;
             _folding = false;
+            _spinFast = false;
             _swell = 1f;
             _fold = 1f;
             _cluster = null;

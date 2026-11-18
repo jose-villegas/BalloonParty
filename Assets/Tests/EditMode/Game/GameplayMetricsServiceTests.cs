@@ -840,22 +840,22 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void RipeClusters_CountRipenings_Bursts_TheirNeighbours_AndFuses()
+        public void RipeClusters_CountRipenings_Bursts_TheirHits_AndFuses()
         {
             _harness.EnterGame();
             Play();
             var slot = new Vector2Int(2, 3);
             _harness.ClusterRipened.Handle(new BubbleRipenedMessage(slot, Vector3.zero));
             _harness.ClusterRipened.Handle(new BubbleRipenedMessage(slot, Vector3.zero));
-            _harness.RipeBurst.Handle(new RipeBubbleBurstMessage(RipeBurstKind.Ripple, slot, Vector3.zero, 0b111));
-            _harness.RipeBurst.Handle(new RipeBubbleBurstMessage(RipeBurstKind.Ripple, slot, Vector3.zero, 0));
-            _harness.RipeBurst.Handle(new RipeBubbleBurstMessage(RipeBurstKind.Foam, slot, Vector3.zero, 0b100001));
+            _harness.RipeBurst.Handle(RipeBubbleBurstMessage.Ripple(slot, Vector3.zero, 1.35f, 9));
+            _harness.RipeBurst.Handle(RipeBubbleBurstMessage.Ripple(slot, Vector3.zero, 1.35f, 0));
+            _harness.RipeBurst.Handle(RipeBubbleBurstMessage.Foam(slot, Vector3.zero, 0b100001));
             _harness.CompleteLevel(2);
 
             var level = _harness.LastOf(RecordKind.Level);
             Assert.AreEqual(2, level.Metrics[MetricId.ClustersRipened]);
             Assert.AreEqual(2, level.Metrics[MetricId.RippleBursts], "a ripple that reached nobody still burst");
-            Assert.AreEqual(3, level.Metrics[MetricId.RippleNeighboursHit]);
+            Assert.AreEqual(9, level.Metrics[MetricId.RippleNeighboursHit], "every hit a blast landed, past six too");
             Assert.AreEqual(1, level.Metrics[MetricId.FusesRunOut]);
             Assert.AreEqual(2, level.Metrics[MetricId.CoatsApplied]);
         }
@@ -893,7 +893,7 @@ namespace BalloonParty.Tests.Game
             var slot = new Vector2Int(2, 3);
 
             _harness.ClusterRipened.Handle(new BubbleRipenedMessage(slot, Vector3.zero));
-            _harness.RipeBurst.Handle(new RipeBubbleBurstMessage(RipeBurstKind.Foam, slot, Vector3.zero, 1));
+            _harness.RipeBurst.Handle(RipeBubbleBurstMessage.Foam(slot, Vector3.zero, 1));
 
             Assert.AreEqual(written, _harness.Sink.Written.Count);
             var level = _harness.LastOf(RecordKind.Level);

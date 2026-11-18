@@ -142,8 +142,14 @@ namespace BalloonParty.Solver
         public readonly int Coat;
 
         /// <summary>A bubble cluster at the merge cap (<c>BubbleClusterModel.Ripe</c>): any damaging hit bursts it
-        /// whole and ripples into its neighbours.</summary>
+        /// whole and ripples into every balloon within the ripple's radius.</summary>
         public readonly bool Ripe;
+
+        /// <summary>The centre of the slot the target belongs to (<c>SlotGrid.IndexToWorldPosition</c>), which a
+        /// ripe cluster's ripple is measured between: <see cref="Position" /> is where the balloon is drawn, which
+        /// a balance tween or a nudge moves off it. A snapshot built without one (<see cref="AtSlotCenter" />)
+        /// sits on its slot: this is its <see cref="Position" />.</summary>
+        public readonly Vector2 SlotCenter;
 
         /// <summary>Passthrough so downstream reads stay tidy — null/empty means colourless, exactly as
         /// <see cref="ColorProfile.ColorId" /> does.</summary>
@@ -152,7 +158,7 @@ namespace BalloonParty.Solver
         private ShotBalloonSnapshot(
             Vector2 position, float radius, int scoreValue, int hitsRemaining, ColorProfile color,
             BalanceProfile? balance, ShotContactKind contactKind, ItemProfile? item, Vector2Int? staticSlotIndex,
-            ShotRewardKind reward = ShotRewardKind.None, int coat = 0, bool ripe = false)
+            ShotRewardKind reward = ShotRewardKind.None, int coat = 0, bool ripe = false, Vector2? slotCenter = null)
         {
             Position = position;
             Radius = radius;
@@ -166,6 +172,16 @@ namespace BalloonParty.Solver
             Reward = reward;
             Coat = coat;
             Ripe = ripe;
+            SlotCenter = slotCenter ?? position;
+        }
+
+        /// <summary>This target with its slot's own centre, for a gather that reads the target's position off its
+        /// view: the live board's balloons are rarely drawn exactly on their slots.</summary>
+        public ShotBalloonSnapshot AtSlotCenter(Vector2 slotCenter)
+        {
+            return new ShotBalloonSnapshot(
+                Position, Radius, ScoreValue, HitsRemaining, Color, Balance, ContactKind, Item, StaticSlotIndex,
+                Reward, Coat, Ripe, slotCenter);
         }
 
         /// <summary>A poppable/deflectable colour-scoring target — mirrors a live balloon with
@@ -196,7 +212,7 @@ namespace BalloonParty.Solver
 
         /// <summary>A bubble cluster: colourless, washes the shot's colour on any contact, loses a bubble to each ordinary
         /// hit while the shot flies on, and scores the bubbles it held on every hit, breaking the streak. A
-        /// <paramref name="ripe" /> one bursts whole on any damaging hit and ripples into its neighbours. Mirrors
+        /// <paramref name="ripe" /> one bursts whole on any damaging hit and ripples into the balloons round it. Mirrors
         /// <c>BubbleClusterModel</c>.</summary>
         public static ShotBalloonSnapshot ForBubbleClusterTarget(
             Vector2 position, float radius, int bubbles, BalanceProfile? balance = null, bool ripe = false)
@@ -308,6 +324,7 @@ namespace BalloonParty.Solver
         public bool OwnPaint;
         public int Coat;
         public bool Ripe;
+        public Vector2 SlotCenter;
         public ShotSimDynamicActor Actor;
 
         public bool Scoreless => Reward != ShotRewardKind.None;
@@ -335,6 +352,7 @@ namespace BalloonParty.Solver
             OwnPaint = false;
             Coat = snapshot.Coat;
             Ripe = snapshot.Ripe;
+            SlotCenter = snapshot.SlotCenter;
             Actor = null;
         }
     }

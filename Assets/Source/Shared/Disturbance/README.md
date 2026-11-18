@@ -234,7 +234,8 @@ On frames where stamps arrive but diffusion is not due, all instant stamps are f
 | `BombItemHandler` | On detonation | `Bomb` | Large-radius burst; `Duration > 0` for smooth shockwave spread |
 | `LaserItemHandler` | Along each beam segment | `Laser` | Linear disturbance along beams |
 | `PaintItemHandler` | On neighbor hit and splash landing | `Paint` | Splash disturbances |
-| `RipeBubbleBurst` (`Balloon/Controller/`) | Once per burst: when a ripe bubble cluster popped by a hit ripples, `BurstSeconds` after the hit, and when one whose fuse ran out hands its bubbles out | `BubbleRipple` | A strong round press at the cluster's slot, wide enough to reach its six neighbours; `Duration > 0` so it spreads |
+| `RipeBubbleBurst` (`Balloon/Controller/`) | When a ripe bubble cluster popped by a hit ripples, `BurstSeconds` after the hit | `BubbleRipple` | A small bomb's pair. First a brief inward pull, an explicit stamp of the profile's radius times `IRipeBubbleSettings.BlastImplosionRadiusScale` and minus its strength times `BlastImplosionStrengthScale` over `BlastImplosionSeconds` (none at a strength scale of 0), then the profile's own outward shock, wider than the ripple's reach and ramped (`Duration > 0`) so it spreads |
+| `RipeBubbleBurst` (`Balloon/Controller/`) | When a ripe cluster whose fuse ran out hands its bubbles out | `BubbleFoam` | A strong round press at the cluster's slot, wide enough to reach its six neighbours; `Duration > 0` so it spreads |
 | `SnipeWhirlwindView` (`Thrower/`) | Distance-gated down the Sharpshooter sky light's fall (`StampAlong`), then once where it lands | `SnipeSkyLight` | A downward wake, then a wider burst (radius scaled on the prefab) around the cannon |
 | `DisturbanceStampCheat` | Mouse drag (debug only) | — | Direct explicit-parameter `Stamp()` call for testing |
 

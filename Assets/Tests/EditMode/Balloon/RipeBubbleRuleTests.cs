@@ -7,14 +7,19 @@ using BalloonParty.Configuration.Palette;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Actor.Archetype;
+using BalloonParty.Slots.Grid;
 using NSubstitute;
 using NUnit.Framework;
+using UnityEngine;
 
 namespace BalloonParty.Tests.Balloon
 {
     [TestFixture]
     public class RipeBubbleRuleTests
     {
+        // The shipped BurstSeconds: the whole fold, hit to pop.
+        private const float FoldBurst = 0.22f;
+
         [TestCase(5, 5, true)]
         [TestCase(6, 5, true)]
         [TestCase(4, 5, false)]
@@ -269,16 +274,16 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [TestCase(0f, 6)]
-        [TestCase(0.05f, 6)]
-        [TestCase(0.0525f, 5)]
-        [TestCase(0.105f, 4)]
-        [TestCase(0.2625f, 1)]
-        [TestCase(0.34f, 1)]
+        [TestCase(0.03f, 6)]
+        [TestCase(0.033f, 5)]
+        [TestCase(0.066f, 4)]
+        [TestCase(0.165f, 1)]
+        [TestCase(0.21f, 1)]
         [TestCase(1f, 1)]
         public void FoldCount_StepsDownEvenly_OverMostOfTheBurst(float elapsed, int shown)
         {
-            // 0.35 s, folding over 0.75 of it: a step every 0.0525 s, at one by 0.2625 s.
-            Assert.AreEqual(shown, RipeBubbleRule.FoldCount(elapsed, 0.35f, 6));
+            // 0.22 s, folding over 0.75 of it: a step every 0.033 s, at one by 0.165 s.
+            Assert.AreEqual(shown, RipeBubbleRule.FoldCount(elapsed, FoldBurst, 6));
         }
 
         [Test]
@@ -288,19 +293,205 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void FoldStepSeconds_SharesTheFoldEvenly_AndIsNothingWithNothingToStep()
+        {
+            Assert.AreEqual(0.033f, RipeBubbleRule.FoldStepSeconds(FoldBurst, 6), 1e-5f);
+            Assert.AreEqual(0f, RipeBubbleRule.FoldStepSeconds(FoldBurst, 1));
+            Assert.AreEqual(0f, RipeBubbleRule.FoldStepSeconds(0f, 6));
+        }
+
+        [Test]
         public void FoldScale_StartsAtRest_GrowsEachStep_AndEndsAsOneBubbleTheClustersSize()
         {
+            const float growth = 0.4f;
             var radius = SoapBubbleShader.DefaultBubbleRadius;
-            Assert.AreEqual(1f, RipeBubbleRule.FoldScale(6, 6, radius), 1e-5f);
+            Assert.AreEqual(1f, RipeBubbleRule.FoldScale(6, 6, radius, growth), 1e-5f);
             for (var shown = 5; shown >= 1; shown--)
             {
-                Assert.Greater(RipeBubbleRule.FoldScale(shown, 6, radius), RipeBubbleRule.FoldScale(shown + 1, 6, radius));
+                Assert.Greater(
+                    RipeBubbleRule.FoldScale(shown, 6, radius, growth),
+                    RipeBubbleRule.FoldScale(shown + 1, 6, radius, growth));
             }
 
-            // One bubble of the folded scale reaches as far as the ring of six did, grown by FoldGrowth.
+            // One bubble of the folded scale reaches as far as the ring of six did, grown by the fold's growth.
             var reachOfSix = SoapBubbleShader.LayoutReach(6, radius);
-            Assert.AreEqual(reachOfSix * RipeBubbleRule.FoldedSize, RipeBubbleRule.FoldScale(1, 6, radius), 1e-4f);
+            Assert.AreEqual(
+                reachOfSix * RipeBubbleRule.FoldedSize(growth), RipeBubbleRule.FoldScale(1, 6, radius, growth), 1e-4f);
+            Assert.AreEqual(1.4f, RipeBubbleRule.FoldedSize(growth), 1e-5f);
             Assert.AreEqual(2.1f, reachOfSix, 0.05f);
+        }
+
+        // What the cluster's outline has grown by, the layout's own packing taken out: a fifth of the growth a step.
+        [TestCase(6, 1f)]
+        [TestCase(5, 1.08f)]
+        [TestCase(3, 1.24f)]
+        [TestCase(1, 1.4f)]
+        public void FoldScale_EachStepAddsAnEvenShareOfTheGrowth(int shown, float grown)
+        {
+            var radius = SoapBubbleShader.DefaultBubbleRadius;
+
+            var outlineOnly = RipeBubbleRule.FoldScale(shown, 6, radius, 0f);
+            Assert.AreEqual(grown, RipeBubbleRule.FoldScale(shown, 6, radius, 0.4f) / outlineOnly, 1e-4f);
+        }
+
+        // 0.22 s from six: a step every 0.033 s. The kick is whole the moment a count shows, a quarter of it half
+        // a step later, and gone by the next step.
+        [TestCase(0f, 1.1f)]
+        [TestCase(0.0165f, 1.025f)]
+        [TestCase(0.0329f, 1f)]
+        [TestCase(0.033f, 1.1f)]
+        [TestCase(0.0495f, 1.025f)]
+        [TestCase(0.132f, 1.1f)]
+        [TestCase(0.165f, 1.1f)]
+        [TestCase(0.1815f, 1.025f)]
+        public void FoldPulse_KicksOutAsEachCountShows_AndSettlesByTheNext(float elapsed, float pulse)
+        {
+            Assert.AreEqual(pulse, RipeBubbleRule.FoldPulse(elapsed, FoldBurst, 6, 0.1f), 2e-3f);
+        }
+
+        [TestCase(0.198f)]
+        [TestCase(0.22f)]
+        [TestCase(2f)]
+        public void FoldPulse_HoldsSettledOnTheOneBigBubble_UntilThePop(float elapsed)
+        {
+            Assert.AreEqual(1f, RipeBubbleRule.FoldPulse(elapsed, FoldBurst, 6, 0.1f), 1e-4f);
+        }
+
+        // Sampled every millisecond: the hit's own pump, then one for each of the five steps down to one bubble.
+        [Test]
+        public void AFoldFromSix_PumpsSixTimes()
+        {
+            const float strength = 0.1f;
+            var pumps = 0;
+            var before = 1f;
+            for (var ms = 0; ms <= 220; ms++)
+            {
+                var pulse = RipeBubbleRule.FoldPulse(ms / 1000f, FoldBurst, 6, strength);
+                if (pulse - before > strength * 0.5f)
+                {
+                    pumps++;
+                }
+
+                before = pulse;
+            }
+
+            Assert.AreEqual(6, pumps);
+        }
+
+        // Each pump peaks above the one before, and the fold ends on the biggest size it settles at.
+        [Test]
+        public void AFoldsPumps_EachPeakHigherThanTheLast()
+        {
+            var radius = SoapBubbleShader.DefaultBubbleRadius;
+            var step = RipeBubbleRule.FoldStepSeconds(FoldBurst, 6);
+            var lastPeak = 0f;
+            for (var taken = 0; taken <= 5; taken++)
+            {
+                var at = taken * step;
+                var shown = RipeBubbleRule.FoldCount(at, FoldBurst, 6);
+                // The size of the outline, not of the quad: the scale times how far that count's layout reaches.
+                var peak = RipeBubbleRule.FoldScale(shown, 6, radius, 0.4f)
+                           * RipeBubbleRule.FoldPulse(at, FoldBurst, 6, 0.08f)
+                           * SoapBubbleShader.LayoutReach(shown, radius);
+                Assert.Greater(peak, lastPeak, $"pump {taken}");
+                lastPeak = peak;
+            }
+        }
+
+        [Test]
+        public void FoldPulse_WithNoStrength_NoBurstTime_OrOneBubble_IsStill()
+        {
+            Assert.AreEqual(1f, RipeBubbleRule.FoldPulse(0f, FoldBurst, 6, 0f));
+            Assert.AreEqual(1f, RipeBubbleRule.FoldPulse(0f, 0f, 6, 0.1f));
+            Assert.AreEqual(1f, RipeBubbleRule.FoldPulse(0f, FoldBurst, 1, 0.1f));
+        }
+
+        // Slots 0.75 apart, as the game's are: the first ring at 0.75, the second at 1.30 and 1.50.
+        [TestCase(0.75f, 0f, 1.35f, true)]
+        [TestCase(0.375f, 1.25f, 1.35f, true)]
+        [TestCase(1.5f, 0f, 1.35f, false)]
+        [TestCase(1.125f, 0.65f, 1.35f, true)]
+        [TestCase(0f, 1.3f, 1.35f, true)]
+        [TestCase(0f, -1.3f, 1.35f, true)]
+        [TestCase(0f, 1.4f, 1.35f, false)]
+        [TestCase(0f, 0f, 1.35f, true)]
+        public void RippleReaches_ASlotCentreWithinTheRadius(
+            float dx, float dy, float radius, bool reaches)
+        {
+            var burst = new Vector2(2f, -3f);
+
+            Assert.AreEqual(reaches, RipeBubbleRule.RippleReaches(burst, burst + new Vector2(dx, dy), radius));
+        }
+
+        [Test]
+        public void RippleReaches_UpToTheRadius_AndNoFurther()
+        {
+            Assert.IsTrue(RipeBubbleRule.RippleReaches(Vector2.zero, new Vector2(1.349f, 0f), 1.35f));
+            Assert.IsFalse(RipeBubbleRule.RippleReaches(Vector2.zero, new Vector2(0f, -1.351f), 1.35f));
+        }
+
+        [TestCase(0f)]
+        [TestCase(-1f)]
+        public void RippleReaches_NothingWithNoRadius_NotEvenItsOwnSlot(float radius)
+        {
+            Assert.IsFalse(RipeBubbleRule.RippleReaches(Vector2.one, Vector2.one, radius));
+        }
+
+        // The game's own lattice (SlotGridConfig: 0.375 x 0.65 apart, so neighbours sit 0.75 from each other): the
+        // shipped radius takes the six neighbours and the six slots behind them, and nothing a third ring out.
+        [Test]
+        public void TheShippedRadius_TakesTwelveSlotsOnAnOpenBoard()
+        {
+            var separation = new Vector2(0.375f, 0.65f);
+            var centre = new Vector2Int(10, 10);
+            var burst = (Vector2)HexCoordinates.IndexToWorldPosition(centre, separation, Vector2.zero);
+            var reached = 0;
+            for (var col = 0; col < 20; col++)
+            {
+                for (var row = 0; row < 20; row++)
+                {
+                    var slot = new Vector2Int(col, row);
+                    var at = (Vector2)HexCoordinates.IndexToWorldPosition(slot, separation, Vector2.zero);
+                    if (slot != centre && RipeBubbleRule.RippleReaches(burst, at, 1.35f))
+                    {
+                        reached++;
+                        Assert.LessOrEqual(HexCoordinates.Distance(centre, slot), 2, $"{slot} is a third ring out");
+                    }
+                }
+            }
+
+            Assert.AreEqual(12, reached);
+        }
+
+        [TestCase(1f, false, 2f * Mathf.PI)]
+        [TestCase(1f, true, 2f * Mathf.PI * RipeBubbleRule.FastTurnSpeedup)]
+        [TestCase(0.5f, false, Mathf.PI)]
+        [TestCase(0f, true, 0f)]
+        [TestCase(-2f, false, 0f)]
+        public void SpiralTurnRate_IsTheArmsTurnsInRadians_ALittleFasterWhenFast(
+            float turnsPerSecond, bool fast, float radiansPerSecond)
+        {
+            Assert.AreEqual(radiansPerSecond, RipeBubbleRule.SpiralTurnRate(turnsPerSecond, fast), 1e-4f);
+        }
+
+        // The arm's source turns direction x SpiralTurnRate a second (RipeBubbleBurstView.AdvanceSource). The
+        // cluster, drawn by the shader at the spin ClusterSpin gives it, must have turned as far, the same way.
+        [TestCase(1f, false)]
+        [TestCase(-1f, false)]
+        [TestCase(1f, true)]
+        [TestCase(-1f, true)]
+        public void ClusterSpin_TurnsTheDrawnClusterWithItsSpiralArm_SlowAndFast(float direction, bool fast)
+        {
+            const float turnsPerSecond = 1f;
+            const float seconds = 0.2f;
+            const float startAngle = 0.7f;
+            var spin = RipeBubbleRule.ClusterSpin(direction, turnsPerSecond, fast);
+
+            var armTurned = direction * RipeBubbleRule.SpiralTurnRate(turnsPerSecond, fast) * seconds;
+            var clusterTurned = Vector2.SignedAngle(
+                DrawnAt(startAngle), DrawnAt(startAngle + (spin * seconds))) * Mathf.Deg2Rad;
+
+            Assert.AreEqual(armTurned, clusterTurned, 1e-3f);
         }
 
         [TestCase(0, 0.12f)]
@@ -326,6 +517,14 @@ namespace BalloonParty.Tests.Balloon
         {
             Assert.AreEqual(RipeBubbleRule.FoamDepartSeconds(5, 0.12f), RipeBubbleRule.FoamLeaveSeconds(6, 0.12f), 1e-5f);
             Assert.AreEqual(0f, RipeBubbleRule.FoamLeaveSeconds(0, 0.12f));
+        }
+
+        // Where the soap shader draws a bubble that sits at (1, 0) in the cluster's own frame, at a rotation angle.
+        // It samples the cluster at uv turned by the angle (SoapBubbleCluster.shader: uv = (x cos - y sin,
+        // x sin + y cos)), so the bubble shows where that turn lands on it: turned back by the angle.
+        private static Vector2 DrawnAt(float shaderAngle)
+        {
+            return new Vector2(Mathf.Cos(shaderAngle), -Mathf.Sin(shaderAngle));
         }
 
         private static void AssertGifts(int handout, params (FoamGift Gift, int Direction)[] expected)
