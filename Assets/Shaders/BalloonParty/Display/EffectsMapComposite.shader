@@ -8,7 +8,9 @@ Shader "BalloonParty/Display/EffectsMapComposite"
     // A stamp's profile, 1 - (d/r)^2, is a dome's height, so the mask's slope is the glass's surface: the effects
     // refract toward the dome's middle (magnified, so they spread away from the ball and pile up under the rim),
     // split a little by colour at the steep rim, and fade under the glass by the clearing strength. A glint on
-    // the dome is added light, so it shows over the board too.
+    // the dome is added light, so it shows over the board too. It is the scene's light on the glass
+    // (SceneLight.cginc): it sits on the side of the dome the light comes from, and takes the light's colour
+    // and strength, so it dims and tints with the time of day.
     Properties
     {
         [NoScaleOffset] _EffectsMapTex ("Effects Map", 2D) = "black" {}
@@ -35,6 +37,11 @@ Shader "BalloonParty/Display/EffectsMapComposite"
             #pragma vertex vert
             #pragma fragment frag
             #include "UnityCG.cginc"
+            #include "../Include/SceneLight.cginc"
+
+            // How far the glint's light leans along the screen (toward the scene's light) and toward the viewer.
+            #define GLINT_LIGHT_PLANAR 0.75
+            #define GLINT_LIGHT_TOWARD_VIEWER 0.66
 
             sampler2D _EffectsMapTex;
 
@@ -44,9 +51,6 @@ Shader "BalloonParty/Display/EffectsMapComposite"
             sampler2D_half _EffectsClearMask;
             float4 _EffectsClearParams;
             float4 _EffectsClearLens;
-
-            // The glint's light: up and to the left of the screen, leaning toward the viewer.
-            static const float3 GlintLight = float3(-0.45, 0.6, 0.66);
 
             struct appdata_t
             {
@@ -121,15 +125,18 @@ Shader "BalloonParty/Display/EffectsMapComposite"
                     * smoothstep(_EffectsClearParams.x, _EffectsClearParams.y, mask);
 
                 // The dome's normal leans out from the ball where it slopes; the glint is its mirror highlight
-                // plus a thin bright rim where the glass is steepest.
+                // plus a thin bright rim where the glass is steepest. The highlight's light is the scene's: from
+                // its direction on the screen, leaning toward the viewer.
                 float glass = smoothstep(0.0, 0.04, mask);
                 float3 normal = normalize(float3(-slope, 0.7));
-                float mirror = pow(saturate(dot(reflect(float3(0, 0, -1), normal), GlintLight)), 24.0);
+                float3 light = float3(SceneLightDirection() * GLINT_LIGHT_PLANAR, GLINT_LIGHT_TOWARD_VIEWER);
+                float mirror = pow(saturate(dot(reflect(float3(0, 0, -1), normal), light)), 24.0);
                 float rim = pow(saturate(length(slope)), 4.0) * 0.35;
                 half glint = (mirror + rim) * _EffectsClearLens.w * glass;
 
+                // Reflected light has the light's colour and no more than its strength.
                 half4 result = effects * fade;
-                result.rgb += glint;
+                result.rgb += glint * SceneLightTint();
                 return result;
             }
             ENDCG
