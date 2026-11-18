@@ -15,6 +15,7 @@ Working design plans and roadmaps for upcoming features.
 - @subpage plan_terrain_biomes
 - @subpage plan_water_scenario
 - @subpage plan_ripe_bubble_cluster
+- @subpage plan_meadow_mushrooms
 - @subpage plan_gameplay_telemetry
 - @subpage plan_sweep
 - @subpage plan_em_shield_field
