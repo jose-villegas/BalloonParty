@@ -151,6 +151,15 @@ Properties</h2></td></tr>
 <tr class="memitem:abb98d8dfc31c815680fabab1e1450a31" id="r_abb98d8dfc31c815680fabab1e1450a31"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abb98d8dfc31c815680fabab1e1450a31">HdrBoost</a><code> [get]</code></td></tr>
 <tr class="memdesc:abb98d8dfc31c815680fabab1e1450a31"><td class="mdescLeft">&#160;</td><td class="mdescRight">Brightness over the palette blue; above 1 the ring blooms.  <br /></td></tr>
 <tr class="separator:abb98d8dfc31c815680fabab1e1450a31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a867486faabc3271497602a17e7dee13a" id="r_a867486faabc3271497602a17e7dee13a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a867486faabc3271497602a17e7dee13a">LightFalloffPower</a><code> [get]</code></td></tr>
+<tr class="memdesc:a867486faabc3271497602a17e7dee13a"><td class="mdescLeft">&#160;</td><td class="mdescRight">How fast that light falls off toward its reach: 1 is a straight ramp, higher keeps it closer in.  <br /></td></tr>
+<tr class="separator:a867486faabc3271497602a17e7dee13a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a2daebf02177c69774ec4e67f7a2ebd" id="r_a5a2daebf02177c69774ec4e67f7a2ebd"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5a2daebf02177c69774ec4e67f7a2ebd">LightIntensity</a><code> [get]</code></td></tr>
+<tr class="memdesc:a5a2daebf02177c69774ec4e67f7a2ebd"><td class="mdescLeft">&#160;</td><td class="mdescRight">How strongly a fully lit group of rings lights the scene round it, through the scene-light field, in the formation blue.  <br /></td></tr>
+<tr class="separator:a5a2daebf02177c69774ec4e67f7a2ebd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b16512cde10f761a659bafc561d6d6e" id="r_a5b16512cde10f761a659bafc561d6d6e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5b16512cde10f761a659bafc561d6d6e">LightRadius</a><code> [get]</code></td></tr>
+<tr class="memdesc:a5b16512cde10f761a659bafc561d6d6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">World reach of that light, from the line between the group's two members furthest apart.  <br /></td></tr>
+<tr class="separator:a5b16512cde10f761a659bafc561d6d6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a948890c33afb9bcc46f747a91e505b48" id="r_a948890c33afb9bcc46f747a91e505b48"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a948890c33afb9bcc46f747a91e505b48">Reach</a><code> [get]</code></td></tr>
 <tr class="memdesc:a948890c33afb9bcc46f747a91e505b48"><td class="mdescLeft">&#160;</td><td class="mdescRight">World reach of a member's field: past it, it adds nothing. Two rings join closer than about 2.5 ring radii apart at a reach of 2.  <br /></td></tr>
 <tr class="separator:a948890c33afb9bcc46f747a91e505b48"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -184,6 +193,12 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a8307b4fa416a197b241d2ebf1842b73c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba1be41d164d927e01b11684cfab2437" id="r_aba1be41d164d927e01b11684cfab2437"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aba1be41d164d927e01b11684cfab2437">_hdrBoost</a> = 2.5f</td></tr>
 <tr class="separator:aba1be41d164d927e01b11684cfab2437"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69557af7ce3079de255307e6a2db11a6" id="r_a69557af7ce3079de255307e6a2db11a6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a69557af7ce3079de255307e6a2db11a6">_lightFalloffPower</a> = 2f</td></tr>
+<tr class="separator:a69557af7ce3079de255307e6a2db11a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee4c65a6508b946b7ed68997b899bb6f" id="r_aee4c65a6508b946b7ed68997b899bb6f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aee4c65a6508b946b7ed68997b899bb6f">_lightIntensity</a> = 0.6f</td></tr>
+<tr class="separator:aee4c65a6508b946b7ed68997b899bb6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f3c38e51a8b824b8c04ef07f0dd24b7" id="r_a9f3c38e51a8b824b8c04ef07f0dd24b7"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9f3c38e51a8b824b8c04ef07f0dd24b7">_lightRadius</a> = 1.3f</td></tr>
+<tr class="separator:a9f3c38e51a8b824b8c04ef07f0dd24b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c4a62819b2f3c3896d439bd144fa2d2" id="r_a3c4a62819b2f3c3896d439bd144fa2d2"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3c4a62819b2f3c3896d439bd144fa2d2">_reach</a> = 0.96f</td></tr>
 <tr class="separator:a3c4a62819b2f3c3896d439bd144fa2d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aae1c1902a0556074abad7fd7b11f2585" id="r_aae1c1902a0556074abad7fd7b11f2585"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aae1c1902a0556074abad7fd7b11f2585">_ringRadius</a> = 0.4f</td></tr>
@@ -341,6 +356,72 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">float BalloonParty.Configuration.Balloons.FormationGlowSettings._hdrBoost = 2.5f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a69557af7ce3079de255307e6a2db11a6" name="a69557af7ce3079de255307e6a2db11a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a69557af7ce3079de255307e6a2db11a6">&#9670;&#160;</a></span>_lightFalloffPower</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.FormationGlowSettings._lightFalloffPower = 2f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aee4c65a6508b946b7ed68997b899bb6f" name="aee4c65a6508b946b7ed68997b899bb6f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee4c65a6508b946b7ed68997b899bb6f">&#9670;&#160;</a></span>_lightIntensity</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.FormationGlowSettings._lightIntensity = 0.6f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9f3c38e51a8b824b8c04ef07f0dd24b7" name="a9f3c38e51a8b824b8c04ef07f0dd24b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f3c38e51a8b824b8c04ef07f0dd24b7">&#9670;&#160;</a></span>_lightRadius</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.FormationGlowSettings._lightRadius = 1.3f</td>
         </tr>
       </table>
   </td>
@@ -662,6 +743,85 @@ Private Attributes</h2></td></tr>
 <p>Brightness over the palette blue; above 1 the ring blooms. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html#a3364ca62ead9f426a0e779b02ecf584e">BalloonParty.Configuration.Balloons.IFormationGlowSettings</a>.</p>
+
+</div>
+</div>
+<a id="a867486faabc3271497602a17e7dee13a" name="a867486faabc3271497602a17e7dee13a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a867486faabc3271497602a17e7dee13a">&#9670;&#160;</a></span>LightFalloffPower</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.FormationGlowSettings.LightFalloffPower</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How fast that light falls off toward its reach: 1 is a straight ramp, higher keeps it closer in. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html#a84d0774ffb79009603ce2a01158443ec">BalloonParty.Configuration.Balloons.IFormationGlowSettings</a>.</p>
+
+</div>
+</div>
+<a id="a5a2daebf02177c69774ec4e67f7a2ebd" name="a5a2daebf02177c69774ec4e67f7a2ebd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a2daebf02177c69774ec4e67f7a2ebd">&#9670;&#160;</a></span>LightIntensity</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.FormationGlowSettings.LightIntensity</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How strongly a fully lit group of rings lights the scene round it, through the scene-light field, in the formation blue. </p>
+<p>0 casts none. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html#ad96953701259a232655d52e1b5d65599">BalloonParty.Configuration.Balloons.IFormationGlowSettings</a>.</p>
+
+</div>
+</div>
+<a id="a5b16512cde10f761a659bafc561d6d6e" name="a5b16512cde10f761a659bafc561d6d6e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b16512cde10f761a659bafc561d6d6e">&#9670;&#160;</a></span>LightRadius</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.FormationGlowSettings.LightRadius</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>World reach of that light, from the line between the group's two members furthest apart. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html#ae538507a611950baa5c69f5d3c172bed">BalloonParty.Configuration.Balloons.IFormationGlowSettings</a>.</p>
 
 </div>
 </div>

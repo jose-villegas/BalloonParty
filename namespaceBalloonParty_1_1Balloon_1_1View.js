@@ -4,6 +4,8 @@ var namespaceBalloonParty_1_1Balloon_1_1View =
     [ "BalloonView", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView" ],
     [ "BubbleMergeView", "classBalloonParty_1_1Balloon_1_1View_1_1BubbleMergeView.html", "classBalloonParty_1_1Balloon_1_1View_1_1BubbleMergeView" ],
     [ "DiscoWaveView", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView" ],
+    [ "FormationGlowBeam", "structBalloonParty_1_1Balloon_1_1View_1_1FormationGlowBeam.html", "structBalloonParty_1_1Balloon_1_1View_1_1FormationGlowBeam" ],
+    [ "FormationGlowBeams", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowBeams.html", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowBeams" ],
     [ "FormationGlowField", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField.html", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField" ],
     [ "FormationGlowSources", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowSources.html", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowSources" ],
     [ "FormationGlowView", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView" ],

@@ -171,6 +171,8 @@ var hierarchy =
     [ "BalloonParty.Editor.EffectPreview.PaintSplashPreviewModule.FlightState", "classBalloonParty_1_1Editor_1_1EffectPreview_1_1PaintSplashPreviewModule_1_1FlightState.html", null ],
     [ "BalloonParty.Shared.Messages.ForceDestroyProjectileMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ForceDestroyProjectileMessage.html", null ],
     [ "BalloonParty.Balloon.Formation.FormationAssignment", "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html", null ],
+    [ "BalloonParty.Balloon.View.FormationGlowBeam", "structBalloonParty_1_1Balloon_1_1View_1_1FormationGlowBeam.html", null ],
+    [ "BalloonParty.Balloon.View.FormationGlowBeams", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowBeams.html", null ],
     [ "BalloonParty.Balloon.View.FormationGlowField", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField.html", null ],
     [ "BalloonParty.Balloon.View.FormationGlowSources", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowSources.html", null ],
     [ "BalloonParty.Game.Score.Behaviours.ShapeFormationTicker.FormationGroup", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationGroup.html", null ],

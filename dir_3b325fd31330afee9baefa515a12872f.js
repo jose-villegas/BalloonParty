@@ -4,6 +4,7 @@ var dir_3b325fd31330afee9baefa515a12872f =
     [ "BalloonView.cs", "BalloonView_8cs.html", "BalloonView_8cs" ],
     [ "BubbleMergeView.cs", "BubbleMergeView_8cs.html", "BubbleMergeView_8cs" ],
     [ "DiscoWaveView.cs", "DiscoWaveView_8cs.html", "DiscoWaveView_8cs" ],
+    [ "FormationGlowBeams.cs", "FormationGlowBeams_8cs.html", "FormationGlowBeams_8cs" ],
     [ "FormationGlowField.cs", "FormationGlowField_8cs.html", "FormationGlowField_8cs" ],
     [ "FormationGlowSources.cs", "FormationGlowSources_8cs.html", "FormationGlowSources_8cs" ],
     [ "FormationGlowView.cs", "FormationGlowView_8cs.html", "FormationGlowView_8cs" ],

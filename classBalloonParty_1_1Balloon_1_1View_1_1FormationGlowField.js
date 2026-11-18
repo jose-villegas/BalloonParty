@@ -5,6 +5,7 @@ var classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField =
     [ "Closeness", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField.html#a4e6d85c9768dc66cb16eaa799cc09d35", null ],
     [ "FieldAt", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField.html#a64f86adfa34e275077f9840f35b8acb5", null ],
     [ "Find", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField.html#aeb5fe0f7e594d4b1d464927b7fe4f2a1", null ],
+    [ "JoinDistance", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField.html#aa583ff51768db75355e5beb7ee3d7a86", null ],
     [ "Match", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField.html#a0d33fb8ec78fa2fabd8c9df48db70169", null ],
     [ "Rent", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField.html#ac0be3676983b07adff2dc3cf5f6bd5d0", null ],
     [ "Shape", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField.html#a8b50a08b16eed36e9ea06466b9b575fa", null ],

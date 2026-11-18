@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"PathHelper_8cs.html":[7,0,14,0,0],
 "PathTrace_8cs.html":[7,0,14,33],
 "PauseService_8cs.html":[7,0,14,8,2],
 "PauseSource_8cs.html":[7,0,14,8,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "SlotClusterChangedEvent_8cs.html":[7,0,15,0,1,6],
 "SlotClusterRegistry_8cs.html":[7,0,15,0,1,7],
 "SlotCluster_8cs.html":[7,0,15,0,1,5],
-"SlotGridChangedEvent_8cs.html":[7,0,15,2,8],
-"SlotGridConfig_8cs.html":[7,0,3,28]
+"SlotGridChangedEvent_8cs.html":[7,0,15,2,8]
 };

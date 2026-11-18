@@ -1,11 +1,35 @@
 <map id="BalloonParty.Balloon.View.FormationGlowView" name="BalloonParty.Balloon.View.FormationGlowView">
-<area shape="rect" id="Node000001" title="The blue light ring round unbreakables in formation, on the ground beneath them (FormationGlow shader..." alt="" coords="354,92,547,136"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="62,5,186,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="200,32,243,42,390,90,385,92,242,47,201,37"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField.html" title="Which rings the formation glow draws (FormationGlow shader), how brightly, and how far each has disso..." alt="" coords="27,57,221,102"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="236,88,356,102,351,105,236,94"/>
-<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html" title="The blue light ring around unbreakables in formation (Balloon/View/FormationGlowView): a ring round e..." alt="" coords="5,126,243,171"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="258,132,356,123,351,125,259,137"/>
-<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowSources.html" title="The balloons that can light the formation glow, each in from its bind until its despawn." alt="" coords="27,196,221,240"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="217,188,242,181,329,154,383,137,389,136,330,159,243,186,218,193"/>
+<area shape="rect" id="Node000001" title="The blue light ring round unbreakables in formation, on the ground beneath them (FormationGlow shader..." alt="" coords="745,196,938,240"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="446,5,569,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="583,29,627,42,689,74,744,116,790,158,824,195,819,195,786,162,741,120,686,79,625,47,585,34"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField.html" title="Which rings the formation glow draws (FormationGlow shader), how brightly, and how far each has disso..." alt="" coords="411,57,604,102"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="605,104,627,111,721,152,802,194,796,195,719,157,625,116,606,109"/>
+<area shape="rect" id="Node000004" href="$structBalloonParty_1_1Balloon_1_1View_1_1FormationGlowBeam.html" title="The light one group of joined formation rings casts: a beam from one end of the group to the other." alt="" coords="411,126,604,171"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="619,169,747,197,742,199,620,174"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Shared_1_1SceneLight_1_1Light.html" title="One light a caller owns and toggles on/off in SceneLightFieldService (see Milestone 3)." alt="" coords="411,196,604,240"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="619,215,747,217,742,219,621,220"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html" title="The blue light ring around unbreakables in formation (Balloon/View/FormationGlowView): a ring round e..." alt="" coords="389,265,626,310"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="633,259,747,237,742,239,635,264"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowSources.html" title="The balloons that can light the formation glow, each in from its bind until its despawn." alt="" coords="411,334,604,379"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="604,327,625,319,719,279,801,239,797,242,721,284,627,324,607,331"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html" title="Owns the scene&#45;light FIELD — a small screen/world&#45;space RT (the disturbance&#45;field architecture applie..." alt="" coords="404,404,611,448"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="608,395,625,389,674,365,719,333,774,284,818,242,822,239,778,288,723,337,677,369,627,394,611,400"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="81,179,166,206"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="180,199,242,217,312,240,339,257,367,286,375,300,379,314,378,340,378,365,382,377,391,389,406,403,401,403,387,393,377,380,373,366,373,340,373,315,370,302,363,289,336,261,310,245,241,222,182,204"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="84,231,163,258"/>
+<area shape="poly" id="edge9_Node000008_Node000010" title=" " alt="" coords="177,251,242,269,310,290,338,305,367,331,376,347,379,362,381,376,391,389,408,403,403,403,387,393,376,378,373,363,371,349,363,334,334,309,308,295,241,274,179,256"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="48,283,199,310"/>
+<area shape="poly" id="edge10_Node000008_Node000011" title=" " alt="" coords="213,312,242,319,306,340,366,370,390,389,418,402,413,403,387,393,363,375,304,345,241,324,215,317"/>
+<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Shared_1_1Cadence_1_1ICadencedEffect.html" title="Implemented by field services that perform periodic RT blits on a cadence timer." alt="" coords="16,334,231,379"/>
+<area shape="poly" id="edge11_Node000008_Node000012" title=" " alt="" coords="245,376,405,406,401,409,246,381"/>
+<area shape="rect" id="Node000013" href="$interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html" title=" " alt="" coords="23,404,224,448"/>
+<area shape="poly" id="edge12_Node000008_Node000013" title=" " alt="" coords="238,423,405,424,401,427,240,428"/>
+<area shape="rect" id="Node000014" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html" title=" " alt="" coords="25,473,222,518"/>
+<area shape="poly" id="edge13_Node000008_Node000014" title=" " alt="" coords="236,472,405,443,401,446,238,477"/>
+<area shape="rect" id="Node000015" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightFieldSettings.html" title="Read&#45;only tuning for the scene&#45;light field (see Milestone 3)." alt="" coords="9,542,238,587"/>
+<area shape="poly" id="edge14_Node000008_Node000015" title=" " alt="" coords="216,535,241,527,303,509,364,488,462,447,458,450,366,493,304,514,242,532,219,540"/>
+<area shape="rect" id="Node000016" href="$classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldResources.html" title="Holds the scene&#45;light field&#39;s GPU resources (two ping&#45;pong RTs, the smaller colour map,..." alt="" coords="10,612,237,656"/>
+<area shape="poly" id="edge15_Node000008_Node000016" title=" " alt="" coords="220,604,241,597,304,573,363,542,429,493,481,450,485,447,433,497,366,546,306,578,243,602,222,609"/>
+<area shape="rect" id="Node000017" href="$classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldCoordinates.html" title="Converts world positions/radii to the normalised UV space the stamp shaders expect." alt="" coords="5,681,242,726"/>
+<area shape="poly" id="edge16_Node000008_Node000017" title=" " alt="" coords="239,673,303,647,334,630,363,610,405,570,441,525,492,450,496,447,445,529,409,574,366,614,337,635,306,652,240,678"/>
 </map>

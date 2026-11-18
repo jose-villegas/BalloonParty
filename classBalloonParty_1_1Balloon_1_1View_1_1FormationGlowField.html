@@ -138,6 +138,9 @@ Static Package Functions</h2></td></tr>
 <tr class="memitem:a64f86adfa34e275077f9840f35b8acb5" id="r_a64f86adfa34e275077f9840f35b8acb5"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a64f86adfa34e275077f9840f35b8acb5">FieldAt</a> (IReadOnlyList&lt; Vector4 &gt; points, int count, Vector2 point, float reach, float threshold)</td></tr>
 <tr class="memdesc:a64f86adfa34e275077f9840f35b8acb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The field the shader sums at <em>point</em> .  <br /></td></tr>
 <tr class="separator:a64f86adfa34e275077f9840f35b8acb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa583ff51768db75355e5beb7ee3d7a86" id="r_aa583ff51768db75355e5beb7ee3d7a86"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa583ff51768db75355e5beb7ee3d7a86">JoinDistance</a> (float ringRadius, float reach)</td></tr>
+<tr class="memdesc:aa583ff51768db75355e5beb7ee3d7a86"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far apart two whole members' rings stop joining into one outline: where their two fields, summed halfway between them, fall to the threshold.  <br /></td></tr>
+<tr class="separator:aa583ff51768db75355e5beb7ee3d7a86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b50a08b16eed36e9ea06466b9b575fa" id="r_a8b50a08b16eed36e9ea06466b9b575fa"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8b50a08b16eed36e9ea06466b9b575fa">Shape</a> (float presence, float threshold)</td></tr>
 <tr class="memdesc:a8b50a08b16eed36e9ea06466b9b575fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">How much of its field a ring adds at <em>presence</em> : all of it when whole, and at none no more than the threshold, so a lone ring shrinks into its member as it dissolves.  <br /></td></tr>
 <tr class="separator:a8b50a08b16eed36e9ea06466b9b575fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -302,6 +305,37 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa583ff51768db75355e5beb7ee3d7a86" name="aa583ff51768db75355e5beb7ee3d7a86"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa583ff51768db75355e5beb7ee3d7a86">&#9670;&#160;</a></span>JoinDistance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static float BalloonParty.Balloon.View.FormationGlowField.JoinDistance </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>ringRadius</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>reach</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How far apart two whole members' rings stop joining into one outline: where their two fields, summed halfway between them, fall to the threshold. </p>
 
 </div>
 </div>

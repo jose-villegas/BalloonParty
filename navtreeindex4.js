@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"SlotGridConfig_8cs.html":[7,0,3,28],
 "SlotGridDeflectorField_8cs.html":[7,0,15,2,9],
 "SlotGridPierceItemField_8cs.html":[7,0,15,2,10],
 "SlotGridView_8cs.html":[7,0,15,2,11],
@@ -51,7 +52,7 @@ var NAVTREEINDEX4 =
 "SpinSpace_8cs.html":[7,0,8,37],
 "SpringChain_8cs.html":[7,0,14,6,2],
 "SpringLineGraphic_8cs.html":[7,0,18,2,5],
-"SpriteColorableRenderer_8cs.html":[7,0,1,6,20],
+"SpriteColorableRenderer_8cs.html":[7,0,1,6,21],
 "SpriteLayerCombinerEditor_8cs.html":[7,0,6,8,0],
 "SpriteLayerCombiner_8cs.html":[7,0,14,10,15],
 "SpriteRendererExtensions_8cs.html":[7,0,14,4,17],
@@ -109,7 +110,7 @@ var NAVTREEINDEX4 =
 "ToughLanding_8cs.html":[7,0,1,4,12],
 "ToughRunPlan_8cs.html":[7,0,1,4,13],
 "ToughSnakeSpringSettings_8cs.html":[7,0,3,0,27],
-"ToughSnakeSpringView_8cs.html":[7,0,1,6,21],
+"ToughSnakeSpringView_8cs.html":[7,0,1,6,22],
 "ToughSnakeSpringsCheat_8cs.html":[7,0,2,26],
 "TraceHitGeometry_8cs.html":[7,0,11,6],
 "TraceHitMarker_8cs.html":[7,0,11,7],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "classBalloonParty_1_1Audio_1_1AudioChannelController.html#a4f0d4cbf068526c3b3256ce1207f3ff9":[5,0,0,0,4,7],
 "classBalloonParty_1_1Audio_1_1AudioChannelController.html#a4f0d4cbf068526c3b3256ce1207f3ff9":[6,0,0,0,4,7],
 "classBalloonParty_1_1Audio_1_1AudioChannelController.html#a538305d426ebea0d9e3968b407746fcd":[5,0,0,0,4,4],
-"classBalloonParty_1_1Audio_1_1AudioChannelController.html#a538305d426ebea0d9e3968b407746fcd":[6,0,0,0,4,4],
-"classBalloonParty_1_1Audio_1_1AudioChannelController.html#a6f9c80b901ee39a477b48c012aa09348":[5,0,0,0,4,5]
+"classBalloonParty_1_1Audio_1_1AudioChannelController.html#a538305d426ebea0d9e3968b407746fcd":[6,0,0,0,4,4]
 };
