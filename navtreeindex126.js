@@ -1,5 +1,7 @@
 var NAVTREEINDEX126 =
 {
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IPassThrough.html":[5,0,0,13,1,12],
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IPassThrough.html":[6,0,0,13,1,12],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IPressureMovable.html":[5,0,0,13,1,13],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IPressureMovable.html":[6,0,0,13,1,13],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IPressureMovable.html#ae1e4dedeee5e4047d6b7e4637b343a0c":[5,0,0,13,1,13,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX126 =
 "namespaceBalloonParty_1_1Display.html":[5,0,0,4],
 "namespaceBalloonParty_1_1Editor.html":[5,0,0,5],
 "namespaceBalloonParty_1_1Editor_1_1Bush.html":[5,0,0,5,0],
-"namespaceBalloonParty_1_1Editor_1_1EffectPreview.html":[5,0,0,5,1],
-"namespaceBalloonParty_1_1Editor_1_1FrameDump.html":[5,0,0,5,2],
-"namespaceBalloonParty_1_1Editor_1_1Maps.html":[5,0,0,5,3]
+"namespaceBalloonParty_1_1Editor_1_1EffectPreview.html":[5,0,0,5,1]
 };

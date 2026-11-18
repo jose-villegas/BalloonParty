@@ -1,5 +1,7 @@
 var NAVTREEINDEX142 =
 {
+"structBalloonParty_1_1Shared_1_1Messages_1_1RestartRiseStartedMessage.html":[5,0,0,12,7,42],
+"structBalloonParty_1_1Shared_1_1Messages_1_1RestartRiseStartedMessage.html":[6,0,0,12,7,42],
 "structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html":[5,0,0,12,7,43],
 "structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html":[6,0,0,12,7,43],
 "structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#a07d13fb2a55b8b099425e07626b6f3cf":[5,0,0,12,7,43,2],
@@ -247,7 +249,5 @@ var NAVTREEINDEX142 =
 "structBalloonParty_1_1Shared_1_1Rendering_1_1ColorCycleState.html#a74715eb30411bce6da7e7b05978a721f":[5,0,0,12,10,4,1],
 "structBalloonParty_1_1Shared_1_1Rendering_1_1ColorCycleState.html#a74715eb30411bce6da7e7b05978a721f":[6,0,0,12,10,4,1],
 "structBalloonParty_1_1Shared_1_1Rendering_1_1ColorCycleState.html#a7771f1b7fe7109bf9601f0a9353e0f99":[5,0,0,12,10,4,5],
-"structBalloonParty_1_1Shared_1_1Rendering_1_1ColorCycleState.html#a7771f1b7fe7109bf9601f0a9353e0f99":[6,0,0,12,10,4,5],
-"structBalloonParty_1_1Shared_1_1Rendering_1_1ColorCycleState.html#a7d9dfd40d6a64c52718daf14c438ab08":[5,0,0,12,10,4,3],
-"structBalloonParty_1_1Shared_1_1Rendering_1_1ColorCycleState.html#a7d9dfd40d6a64c52718daf14c438ab08":[6,0,0,12,10,4,3]
+"structBalloonParty_1_1Shared_1_1Rendering_1_1ColorCycleState.html#a7771f1b7fe7109bf9601f0a9353e0f99":[6,0,0,12,10,4,5]
 };

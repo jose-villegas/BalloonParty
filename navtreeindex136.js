@@ -1,5 +1,7 @@
 var NAVTREEINDEX136 =
 {
+"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html#a83ba4125aa491f4b7c3a87226fdbd5e9":[5,0,0,5,13,0,6],
+"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html#a83ba4125aa491f4b7c3a87226fdbd5e9":[6,0,0,5,13,0,6],
 "structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html#a976aa24c9ed82cc7aec123c26bfdf19d":[5,0,0,5,13,0,4],
 "structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html#a976aa24c9ed82cc7aec123c26bfdf19d":[6,0,0,5,13,0,4],
 "structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html#aa3e8ca64a0db06d08d23e7660e14fe76":[5,0,0,5,13,0,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX136 =
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html#afd177696079acd0ce177c29a0b15bfa0":[5,0,0,6,5,6,1],
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html#afd177696079acd0ce177c29a0b15bfa0":[6,0,0,6,5,6,1],
 "structBalloonParty_1_1Game_1_1Health_1_1WaveDeficit.html":[5,0,0,6,6,6],
-"structBalloonParty_1_1Game_1_1Health_1_1WaveDeficit.html":[6,0,0,6,6,6],
-"structBalloonParty_1_1Game_1_1Health_1_1WaveDeficit.html#acfda2b9494f9acc414975075cad3c6a3":[5,0,0,6,6,6,2],
-"structBalloonParty_1_1Game_1_1Health_1_1WaveDeficit.html#acfda2b9494f9acc414975075cad3c6a3":[6,0,0,6,6,6,2]
+"structBalloonParty_1_1Game_1_1Health_1_1WaveDeficit.html":[6,0,0,6,6,6]
 };

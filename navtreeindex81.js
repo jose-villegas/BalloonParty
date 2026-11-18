@@ -1,5 +1,7 @@
 var NAVTREEINDEX81 =
 {
+"classBalloonParty_1_1Prediction_1_1PredictionTraceLights.html#acf5cb7c25f0480dd490c76ab7e27e5d5":[5,0,0,9,3,9],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceLights.html#acf5cb7c25f0480dd490c76ab7e27e5d5":[6,0,0,9,3,9],
 "classBalloonParty_1_1Prediction_1_1PredictionTraceLights.html#ae30116ee518a64e1fbe7b2360bc84419":[5,0,0,9,3,7],
 "classBalloonParty_1_1Prediction_1_1PredictionTraceLights.html#ae30116ee518a64e1fbe7b2360bc84419":[6,0,0,9,3,7],
 "classBalloonParty_1_1Prediction_1_1PredictionTraceLights.html#aeb71cb74b60ace9303584a3652efb58e":[5,0,0,9,3,1],
@@ -247,7 +249,5 @@ var NAVTREEINDEX81 =
 "classBalloonParty_1_1Projectile_1_1Controller_1_1DeflectChainController.html#ac6b4203e6bc35749935b6cb7de346690":[5,0,0,10,1,1,4],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1DeflectChainController.html#ac6b4203e6bc35749935b6cb7de346690":[6,0,0,10,1,1,4],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1DeflectChainController.html#ac8fe12ee2a30f6682b99f269adfd78a0":[5,0,0,10,1,1,5],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1DeflectChainController.html#ac8fe12ee2a30f6682b99f269adfd78a0":[6,0,0,10,1,1,5],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1DeflectChainController.html#ae79fabbd7996da4fcf71c433d4ffee09":[5,0,0,10,1,1,8],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1DeflectChainController.html#ae79fabbd7996da4fcf71c433d4ffee09":[6,0,0,10,1,1,8]
+"classBalloonParty_1_1Projectile_1_1Controller_1_1DeflectChainController.html#ac8fe12ee2a30f6682b99f269adfd78a0":[6,0,0,10,1,1,5]
 };

@@ -1,5 +1,7 @@
 var NAVTREEINDEX63 =
 {
+"classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html#ae22fc0a50825c9c6585312caa3d9a409":[5,0,0,6,7,0,1],
+"classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html#ae22fc0a50825c9c6585312caa3d9a409":[6,0,0,6,7,0,1],
 "classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html#ae5f3bc5e238af45ca86b5051ae50adc5":[5,0,0,6,7,0,8],
 "classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html#ae5f3bc5e238af45ca86b5051ae50adc5":[6,0,0,6,7,0,8],
 "classBalloonParty_1_1Game_1_1Level_1_1LevelCompletion.html":[5,0,0,6,7,5],
@@ -247,7 +249,5 @@ var NAVTREEINDEX63 =
 "classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController.html#a8188bd55a843f320fd6d839b6bcb1225":[5,0,0,6,7,8,4],
 "classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController.html#a8188bd55a843f320fd6d839b6bcb1225":[6,0,0,6,7,8,4],
 "classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController.html#ab2e71faee49be90087db34e5e9f48ac4":[5,0,0,6,7,8,20],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController.html#ab2e71faee49be90087db34e5e9f48ac4":[6,0,0,6,7,8,20],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController.html#abbf177e36feca4525d4eba31c11c53df":[5,0,0,6,7,8,17],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController.html#abbf177e36feca4525d4eba31c11c53df":[6,0,0,6,7,8,17]
+"classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController.html#ab2e71faee49be90087db34e5e9f48ac4":[6,0,0,6,7,8,20]
 };

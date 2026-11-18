@@ -1,5 +1,7 @@
 var NAVTREEINDEX130 =
 {
+"plan_level_up_timing.html#autotoc_md789":[3,17,0,6,3],
+"plan_level_up_timing.html#autotoc_md790":[3,17,0,6,4],
 "plan_level_up_timing.html#autotoc_md791":[3,17,0,6,5],
 "plan_level_up_timing.html#autotoc_md792":[3,17,0,6,6],
 "plan_level_up_timing.html#autotoc_md793":[3,17,0,7],
@@ -247,7 +249,5 @@ var NAVTREEINDEX130 =
 "structBalloonParty_1_1Audio_1_1SoundHandle.html#aa7ec94b7090556d8ec57a8df08f0ce9e":[5,0,0,0,15,0],
 "structBalloonParty_1_1Audio_1_1SoundHandle.html#aa7ec94b7090556d8ec57a8df08f0ce9e":[6,0,0,0,15,0],
 "structBalloonParty_1_1Audio_1_1SoundHandle.html#ab51a1285cbab844be86b179f277215dc":[5,0,0,0,15,3],
-"structBalloonParty_1_1Audio_1_1SoundHandle.html#ab51a1285cbab844be86b179f277215dc":[6,0,0,0,15,3],
-"structBalloonParty_1_1Audio_1_1SoundHandle.html#ad405112e6e8331344cf6ee098af15623":[5,0,0,0,15,2],
-"structBalloonParty_1_1Audio_1_1SoundHandle.html#ad405112e6e8331344cf6ee098af15623":[6,0,0,0,15,2]
+"structBalloonParty_1_1Audio_1_1SoundHandle.html#ab51a1285cbab844be86b179f277215dc":[6,0,0,0,15,3]
 };

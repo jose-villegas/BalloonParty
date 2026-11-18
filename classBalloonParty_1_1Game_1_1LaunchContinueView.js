@@ -29,6 +29,7 @@ var classBalloonParty_1_1Game_1_1LaunchContinueView =
     [ "_pressed", "classBalloonParty_1_1Game_1_1LaunchContinueView.html#a288373ef21ce540cf8f4b6b229ad48b7", null ],
     [ "_ribbon", "classBalloonParty_1_1Game_1_1LaunchContinueView.html#a3b86164a4ccf0f8f461645bf8c1fe3f2", null ],
     [ "_ribbonCloth", "classBalloonParty_1_1Game_1_1LaunchContinueView.html#a77c8f0c9984be01a42b2b2df33442e69", null ],
+    [ "_start", "classBalloonParty_1_1Game_1_1LaunchContinueView.html#a8b6b5bbe8db3bc02b33875cf5eed5b15", null ],
     [ "_wander", "classBalloonParty_1_1Game_1_1LaunchContinueView.html#abde432e5e1846526a3b8fe7160bc1268", null ],
     [ "_wanderer", "classBalloonParty_1_1Game_1_1LaunchContinueView.html#a4cd5fb18df741c837dbafd7f6200e1e8", null ],
     [ "_writing", "classBalloonParty_1_1Game_1_1LaunchContinueView.html#ab265127976d31418b68c091176f33933", null ],

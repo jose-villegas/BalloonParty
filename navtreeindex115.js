@@ -1,5 +1,7 @@
 var NAVTREEINDEX115 =
 {
+"index.html#autotoc_md307":[0,1],
+"index.html#autotoc_md309":[0,2],
 "interfaceBalloonParty_1_1Audio_1_1Configuration_1_1IAudioMixerSettings.html":[5,0,0,0,0,1],
 "interfaceBalloonParty_1_1Audio_1_1Configuration_1_1IAudioMixerSettings.html":[6,0,0,0,0,1],
 "interfaceBalloonParty_1_1Audio_1_1Configuration_1_1IAudioMixerSettings.html#a844e11ae1f433ccdb9809a8fe0c83559":[5,0,0,0,0,1,1],
@@ -247,7 +249,5 @@ var NAVTREEINDEX115 =
 "interfaceBalloonParty_1_1Balloon_1_1View_1_1IGrowingDiscView.html#a5bc2be587153e790f06d12852e805580":[5,0,0,1,6,18,0],
 "interfaceBalloonParty_1_1Balloon_1_1View_1_1IGrowingDiscView.html#a5bc2be587153e790f06d12852e805580":[6,0,0,1,6,18,0],
 "interfaceBalloonParty_1_1Balloon_1_1View_1_1IGrowingDiscView.html#aaf54b8b6db0aec88fdd7d2ad767d5f52":[5,0,0,1,6,18,2],
-"interfaceBalloonParty_1_1Balloon_1_1View_1_1IGrowingDiscView.html#aaf54b8b6db0aec88fdd7d2ad767d5f52":[6,0,0,1,6,18,2],
-"interfaceBalloonParty_1_1Balloon_1_1View_1_1INukeBlastView.html":[5,0,0,1,6,19],
-"interfaceBalloonParty_1_1Balloon_1_1View_1_1INukeBlastView.html":[6,0,0,1,6,19]
+"interfaceBalloonParty_1_1Balloon_1_1View_1_1IGrowingDiscView.html#aaf54b8b6db0aec88fdd7d2ad767d5f52":[6,0,0,1,6,18,2]
 };

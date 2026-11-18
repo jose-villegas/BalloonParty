@@ -1,5 +1,7 @@
 var NAVTREEINDEX129 =
 {
+"plan_effects_layer_clearing.html#autotoc_md485":[3,26,0,5],
+"plan_effects_layer_clearing.html#autotoc_md486":[3,26,0,5,0],
 "plan_effects_layer_clearing.html#autotoc_md487":[3,26,0,5,1],
 "plan_effects_layer_clearing.html#autotoc_md488":[3,26,0,5,2],
 "plan_effects_layer_clearing.html#autotoc_md489":[3,26,0,5,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX129 =
 "plan_level_up_timing.html#autotoc_md785":[3,17,0,6],
 "plan_level_up_timing.html#autotoc_md786":[3,17,0,6,0],
 "plan_level_up_timing.html#autotoc_md787":[3,17,0,6,1],
-"plan_level_up_timing.html#autotoc_md788":[3,17,0,6,2],
-"plan_level_up_timing.html#autotoc_md789":[3,17,0,6,3],
-"plan_level_up_timing.html#autotoc_md790":[3,17,0,6,4]
+"plan_level_up_timing.html#autotoc_md788":[3,17,0,6,2]
 };

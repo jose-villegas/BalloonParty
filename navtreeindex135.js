@@ -1,5 +1,7 @@
 var NAVTREEINDEX135 =
 {
+"structBalloonParty_1_1Configuration_1_1Level_1_1ScenarioStretch.html#a64afabfb566128e42f3071a038c66bde":[5,0,0,3,9,31,4],
+"structBalloonParty_1_1Configuration_1_1Level_1_1ScenarioStretch.html#a64afabfb566128e42f3071a038c66bde":[6,0,0,3,9,31,4],
 "structBalloonParty_1_1Configuration_1_1Level_1_1ScenarioStretch.html#a70225a37ec1c547bcca599e3eed6bdb9":[5,0,0,3,9,31,3],
 "structBalloonParty_1_1Configuration_1_1Level_1_1ScenarioStretch.html#a70225a37ec1c547bcca599e3eed6bdb9":[6,0,0,3,9,31,3],
 "structBalloonParty_1_1Configuration_1_1Level_1_1ScenarioStretch.html#a7e68fde4b35ee9f89c0a87f4703f9142":[5,0,0,3,9,31,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX135 =
 "structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html#a4372dc8727c3e8a7a4be42d31055bf12":[5,0,0,5,13,0,1],
 "structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html#a4372dc8727c3e8a7a4be42d31055bf12":[6,0,0,5,13,0,1],
 "structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html#a57097ac173dc1e778a4520acacc16b08":[5,0,0,5,13,0,0],
-"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html#a57097ac173dc1e778a4520acacc16b08":[6,0,0,5,13,0,0],
-"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html#a83ba4125aa491f4b7c3a87226fdbd5e9":[5,0,0,5,13,0,6],
-"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html#a83ba4125aa491f4b7c3a87226fdbd5e9":[6,0,0,5,13,0,6]
+"structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html#a57097ac173dc1e778a4520acacc16b08":[6,0,0,5,13,0,0]
 };

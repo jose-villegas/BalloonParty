@@ -1,5 +1,7 @@
 var NAVTREEINDEX141 =
 {
+"structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html#ae91a9b00a1446efecdf08078f5e60c8c":[5,0,0,12,7,5,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html#ae91a9b00a1446efecdf08078f5e60c8c":[6,0,0,12,7,5,0],
 "structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html#af667ba77744a0b7ad053ce9c9f5757ce":[5,0,0,12,7,5,3],
 "structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html#af667ba77744a0b7ad053ce9c9f5757ce":[6,0,0,12,7,5,3],
 "structBalloonParty_1_1Shared_1_1Messages_1_1BubbleMergedMessage.html":[5,0,0,12,7,6],
@@ -247,7 +249,5 @@ var NAVTREEINDEX141 =
 "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html#af305a03533683b446b16637a0a847df7":[5,0,0,12,7,41,2],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html#af305a03533683b446b16637a0a847df7":[6,0,0,12,7,41,2],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html#afb1a58fd748077609747736dffa36b04":[5,0,0,12,7,41,0],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html#afb1a58fd748077609747736dffa36b04":[6,0,0,12,7,41,0],
-"structBalloonParty_1_1Shared_1_1Messages_1_1RestartRiseStartedMessage.html":[5,0,0,12,7,42],
-"structBalloonParty_1_1Shared_1_1Messages_1_1RestartRiseStartedMessage.html":[6,0,0,12,7,42]
+"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html#afb1a58fd748077609747736dffa36b04":[6,0,0,12,7,41,0]
 };

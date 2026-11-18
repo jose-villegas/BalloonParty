@@ -1,5 +1,7 @@
 var NAVTREEINDEX145 =
 {
+"structBalloonParty_1_1Solver_1_1ShotItemOutcome.html#a695fbb7e5bcc57d1bb60a425f9401daa":[5,0,0,14,13,7],
+"structBalloonParty_1_1Solver_1_1ShotItemOutcome.html#a695fbb7e5bcc57d1bb60a425f9401daa":[6,0,0,14,13,7],
 "structBalloonParty_1_1Solver_1_1ShotItemOutcome.html#a6c0ff45aed7b39fa18d71bb8b656ecda":[5,0,0,14,13,2],
 "structBalloonParty_1_1Solver_1_1ShotItemOutcome.html#a6c0ff45aed7b39fa18d71bb8b656ecda":[6,0,0,14,13,2],
 "structBalloonParty_1_1Solver_1_1ShotItemOutcome.html#a8ee08ed7e6bac2ef15f63d1cce592038":[5,0,0,14,13,5],
@@ -247,7 +249,5 @@ var NAVTREEINDEX145 =
 "structBalloonParty_1_1UI_1_1Telemetry_1_1MetricBinding.html#a9b1823de61567564fa8115b8016f7fdb":[5,0,0,16,10,0,11],
 "structBalloonParty_1_1UI_1_1Telemetry_1_1MetricBinding.html#a9b1823de61567564fa8115b8016f7fdb":[6,0,0,16,10,0,11],
 "structBalloonParty_1_1UI_1_1Telemetry_1_1MetricBinding.html#a9b609cb886572ccdc52f5b43b12534f0":[5,0,0,16,10,0,17],
-"structBalloonParty_1_1UI_1_1Telemetry_1_1MetricBinding.html#a9b609cb886572ccdc52f5b43b12534f0":[6,0,0,16,10,0,17],
-"structBalloonParty_1_1UI_1_1Telemetry_1_1MetricBinding.html#aaba51d16e736eb5003db42cf0a5492dd":[5,0,0,16,10,0,12],
-"structBalloonParty_1_1UI_1_1Telemetry_1_1MetricBinding.html#aaba51d16e736eb5003db42cf0a5492dd":[6,0,0,16,10,0,12]
+"structBalloonParty_1_1UI_1_1Telemetry_1_1MetricBinding.html#a9b609cb886572ccdc52f5b43b12534f0":[6,0,0,16,10,0,17]
 };

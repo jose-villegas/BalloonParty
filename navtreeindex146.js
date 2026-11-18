@@ -1,5 +1,7 @@
 var NAVTREEINDEX146 =
 {
+"structBalloonParty_1_1UI_1_1Telemetry_1_1MetricBinding.html#aaba51d16e736eb5003db42cf0a5492dd":[5,0,0,16,10,0,12],
+"structBalloonParty_1_1UI_1_1Telemetry_1_1MetricBinding.html#aaba51d16e736eb5003db42cf0a5492dd":[6,0,0,16,10,0,12],
 "structBalloonParty_1_1UI_1_1Telemetry_1_1MetricBinding.html#aac382cd45d5c9ae12f7dbc1fc7e8c13e":[5,0,0,16,10,0,1],
 "structBalloonParty_1_1UI_1_1Telemetry_1_1MetricBinding.html#aac382cd45d5c9ae12f7dbc1fc7e8c13e":[6,0,0,16,10,0,1],
 "structBalloonParty_1_1UI_1_1Telemetry_1_1MetricBinding.html#ab39b50ec87bf51684fa89a994f81dd7e":[5,0,0,16,10,0,6],
