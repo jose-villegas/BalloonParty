@@ -31,57 +31,57 @@ var NAVTREE =
       [ "Quick Links", "index.html#autotoc_md308", null ]
     ] ],
     [ "Code Style Guide", "style_guide.html", [
-      [ "Code Style Guide", "style_guide.html#autotoc_md989", [
-        [ "Architecture — MVC", "style_guide.html#autotoc_md991", null ],
-        [ "Stack", "style_guide.html#autotoc_md993", null ],
-        [ "Dependency Injection — VContainer", "style_guide.html#autotoc_md995", [
-          [ "Scopes", "style_guide.html#autotoc_md996", null ],
-          [ "Instantiating prefabs with child scopes", "style_guide.html#autotoc_md997", null ],
-          [ "Eager creation for RegisterComponentOnNewGameObject", "style_guide.html#autotoc_md998", null ],
-          [ "Injection timing", "style_guide.html#autotoc_md999", null ]
+      [ "Code Style Guide", "style_guide.html#autotoc_md1005", [
+        [ "Architecture — MVC", "style_guide.html#autotoc_md1007", null ],
+        [ "Stack", "style_guide.html#autotoc_md1009", null ],
+        [ "Dependency Injection — VContainer", "style_guide.html#autotoc_md1011", [
+          [ "Scopes", "style_guide.html#autotoc_md1012", null ],
+          [ "Instantiating prefabs with child scopes", "style_guide.html#autotoc_md1013", null ],
+          [ "Eager creation for RegisterComponentOnNewGameObject", "style_guide.html#autotoc_md1014", null ],
+          [ "Injection timing", "style_guide.html#autotoc_md1015", null ]
         ] ],
-        [ "Reactive Programming — UniRx", "style_guide.html#autotoc_md1001", null ],
-        [ "Messaging — MessagePipe", "style_guide.html#autotoc_md1003", [
-          [ "Message design rules", "style_guide.html#autotoc_md1004", null ]
+        [ "Reactive Programming — UniRx", "style_guide.html#autotoc_md1017", null ],
+        [ "Messaging — MessagePipe", "style_guide.html#autotoc_md1019", [
+          [ "Message design rules", "style_guide.html#autotoc_md1020", null ]
         ] ],
-        [ "Async — UniTask", "style_guide.html#autotoc_md1006", null ],
-        [ "Navigation State", "style_guide.html#autotoc_md1008", [
-          [ "States", "style_guide.html#autotoc_md1009", null ],
-          [ "Scene preloading flow", "style_guide.html#autotoc_md1010", null ],
-          [ "Editor standalone play", "style_guide.html#autotoc_md1011", null ]
+        [ "Async — UniTask", "style_guide.html#autotoc_md1022", null ],
+        [ "Navigation State", "style_guide.html#autotoc_md1024", [
+          [ "States", "style_guide.html#autotoc_md1025", null ],
+          [ "Scene preloading flow", "style_guide.html#autotoc_md1026", null ],
+          [ "Editor standalone play", "style_guide.html#autotoc_md1027", null ]
         ] ],
-        [ "Cinematic State", "style_guide.html#autotoc_md1012", [
-          [ "States", "style_guide.html#autotoc_md1013", null ],
-          [ "Pause Integration", "style_guide.html#autotoc_md1014", null ]
+        [ "Cinematic State", "style_guide.html#autotoc_md1028", [
+          [ "States", "style_guide.html#autotoc_md1029", null ],
+          [ "Pause Integration", "style_guide.html#autotoc_md1030", null ]
         ] ],
-        [ "Object Pooling", "style_guide.html#autotoc_md1016", null ],
-        [ "Configuration — Single Source of Truth", "style_guide.html#autotoc_md1018", null ],
-        [ "Animation", "style_guide.html#autotoc_md1020", null ],
-        [ "Unity Project Settings", "style_guide.html#autotoc_md1022", null ],
-        [ "Code Quality Constraints", "style_guide.html#autotoc_md1024", [
-          [ "Comments", "style_guide.html#autotoc_md1025", null ],
-          [ "Naming & Readability", "style_guide.html#autotoc_md1026", null ],
-          [ "Visibility", "style_guide.html#autotoc_md1027", null ],
-          [ "Architecture & Reuse", "style_guide.html#autotoc_md1028", null ],
-          [ "Formatting", "style_guide.html#autotoc_md1029", null ]
+        [ "Object Pooling", "style_guide.html#autotoc_md1032", null ],
+        [ "Configuration — Single Source of Truth", "style_guide.html#autotoc_md1034", null ],
+        [ "Animation", "style_guide.html#autotoc_md1036", null ],
+        [ "Unity Project Settings", "style_guide.html#autotoc_md1038", null ],
+        [ "Code Quality Constraints", "style_guide.html#autotoc_md1040", [
+          [ "Comments", "style_guide.html#autotoc_md1041", null ],
+          [ "Naming & Readability", "style_guide.html#autotoc_md1042", null ],
+          [ "Visibility", "style_guide.html#autotoc_md1043", null ],
+          [ "Architecture & Reuse", "style_guide.html#autotoc_md1044", null ],
+          [ "Formatting", "style_guide.html#autotoc_md1045", null ]
         ] ],
-        [ "Member Ordering", "style_guide.html#autotoc_md1031", [
-          [ "Fields & Properties", "style_guide.html#autotoc_md1032", null ],
-          [ "Methods", "style_guide.html#autotoc_md1033", null ],
-          [ "Canonical Example", "style_guide.html#autotoc_md1034", null ]
+        [ "Member Ordering", "style_guide.html#autotoc_md1047", [
+          [ "Fields & Properties", "style_guide.html#autotoc_md1048", null ],
+          [ "Methods", "style_guide.html#autotoc_md1049", null ],
+          [ "Canonical Example", "style_guide.html#autotoc_md1050", null ]
         ] ],
-        [ "Model Interface Pattern — Read/Write Separation", "style_guide.html#autotoc_md1036", null ],
-        [ "UI Scope Architecture", "style_guide.html#autotoc_md1038", [
-          [ "Dynamically instantiated prefab scopes", "style_guide.html#autotoc_md1039", null ]
+        [ "Model Interface Pattern — Read/Write Separation", "style_guide.html#autotoc_md1052", null ],
+        [ "UI Scope Architecture", "style_guide.html#autotoc_md1054", [
+          [ "Dynamically instantiated prefab scopes", "style_guide.html#autotoc_md1055", null ]
         ] ],
-        [ "Cheat Console", "style_guide.html#autotoc_md1041", null ],
-        [ "Logging", "style_guide.html#autotoc_md1043", null ],
-        [ "Gizmos & Editor Drawing", "style_guide.html#autotoc_md1045", [
-          [ "Build-stripping rules", "style_guide.html#autotoc_md1046", null ]
+        [ "Cheat Console", "style_guide.html#autotoc_md1057", null ],
+        [ "Logging", "style_guide.html#autotoc_md1059", null ],
+        [ "Gizmos & Editor Drawing", "style_guide.html#autotoc_md1061", [
+          [ "Build-stripping rules", "style_guide.html#autotoc_md1062", null ]
         ] ],
-        [ "Living Documentation", "style_guide.html#autotoc_md1048", null ],
-        [ "Enforcement Tooling", "style_guide.html#autotoc_md1050", [
-          [ "Quick reference", "style_guide.html#autotoc_md1051", null ]
+        [ "Living Documentation", "style_guide.html#autotoc_md1064", null ],
+        [ "Enforcement Tooling", "style_guide.html#autotoc_md1066", [
+          [ "Quick reference", "style_guide.html#autotoc_md1067", null ]
         ] ]
       ] ]
     ] ],
@@ -256,21 +256,21 @@ var NAVTREEINDEX =
 "namespaceBalloonParty_1_1Shared_1_1Animation.html",
 "plan_color_balance.html#autotoc_md416",
 "plan_hdr_color_pipeline.html#autotoc_md735",
-"structBalloonParty_1_1Audio_1_1PickContext.html#a9ccd2724479761ff2f999733696f759c",
-"structBalloonParty_1_1Balloon_1_1Formation_1_1SlotMove.html#ac27a7264ae3971df3fc9db055602d271",
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a6f0945abb75fe111cb30bbd1d2cd7429",
-"structBalloonParty_1_1Configuration_1_1Level_1_1BudgetFormula.html#afad78d59eae3809961a48e32902b5986",
-"structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedFloat.html#adfbd0e1a1a2dca0bf4c704a3cba8199f",
-"structBalloonParty_1_1Editor_1_1MetricBindingDrawer_1_1Entry.html",
-"structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreGroupRequest.html#a3fe07c3648ea2897ebb2e94b9ddfa2c0",
-"structBalloonParty_1_1Item_1_1Effects_1_1EffectHit.html#ac8a88a40a134d2356dcaadc7d9eff70e",
-"structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewStroke.html#aa7006f5e1d1893fb4869a284f8677d2b",
-"structBalloonParty_1_1Scenario_1_1SmokeFieldService_1_1PendingStamp.html#aa6d837feeccdbe2edc9de0d095e6184e",
-"structBalloonParty_1_1Shared_1_1Messages_1_1GameOverDismissedMessage.html",
-"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage.html#aaf6c4dae95498d1ab6d33531183844bb",
-"structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1Speck.html#aaa4ddfc7c253e8fd6f13a475dd2e0e8c",
-"structBalloonParty_1_1Solver_1_1ShotFlightSeed.html#a01c4282bfdee99d09b03abfd8cde7f91",
-"structBalloonParty_1_1Solver_1_1ShotStaticActorSnapshot.html"
+"structBalloonParty_1_1Audio_1_1Editor_1_1SfxFetchRequest.html#a2eaea45d3773083394e6d93e3f8c18b3",
+"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Pair.html#ab0f245ab270f99f70aad8c76729abe0d",
+"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a19439140857df82be48affc228fc7b7e",
+"structBalloonParty_1_1Configuration_1_1Level_1_1BalloonContentEntry.html#ac87be6307f14f4fd736131821fc3e1cd",
+"structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedFloat.html",
+"structBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerEventRow.html#a12af803516d350f0f71004e5c944cc8d",
+"structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreFormationRequest.html#a83ae2ebb576d77cc0de7c8b40e891a72",
+"structBalloonParty_1_1Item_1_1Effects_1_1BombEffectParams.html#a46305a595dd37023bf6ad784b61ea977",
+"structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightedHost.html#a4ffc71488974a675074a37b7325931dd",
+"structBalloonParty_1_1Scenario_1_1ScenarioShift.html#a7966e01f6c25d5d5580e5902dd043280",
+"structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveAdvancedMessage.html#a8ff662b7183aa5c4a286d903628a7231",
+"structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html#ac592a7d4ab3893c052d7054d75957c67",
+"structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1PendingSpeck.html#a98cc30ad4a746d0a5b04c90c35f660b3",
+"structBalloonParty_1_1Solver_1_1ShotDynamicActorSnapshot.html#a7f24e51a07f8218ae938e65016899ed0",
+"structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a565e2ba7709d72a2b52268776853cca7"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

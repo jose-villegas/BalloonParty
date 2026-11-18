@@ -8,8 +8,9 @@ var searchData=
   ['balloonparty_5',['BalloonParty',['../index.html',1,'']]],
   ['balloons_6',['Reward Balloons',['../plan_reward_balloons.html',1,'plans']]],
   ['biomes_7',['Terrain &amp; Biomes',['../plan_terrain_biomes.html',1,'plans']]],
-  ['bubble_20cluster_20hit_20feedback_8',['Bubble Cluster Hit Feedback',['../plan_bubble_cluster_hit_feedback.html',1,'plans']]],
-  ['bubble_20merge_9',['Water Scenario &amp; Bubble Merge',['../plan_water_scenario.html',1,'plans']]],
-  ['bush_20baking_20tools_10',['Bush Baking Tools',['../editor_bush.html',1,'']]],
-  ['bush_20system_11',['Bush System',['../arch_bush_system.html',1,'architecture']]]
+  ['bubble_20cluster_8',['Ripe Bubble Cluster',['../plan_ripe_bubble_cluster.html',1,'plans']]],
+  ['bubble_20cluster_20hit_20feedback_9',['Bubble Cluster Hit Feedback',['../plan_bubble_cluster_hit_feedback.html',1,'plans']]],
+  ['bubble_20merge_10',['Water Scenario &amp; Bubble Merge',['../plan_water_scenario.html',1,'plans']]],
+  ['bush_20baking_20tools_11',['Bush Baking Tools',['../editor_bush.html',1,'']]],
+  ['bush_20system_12',['Bush System',['../arch_bush_system.html',1,'architecture']]]
 ];
