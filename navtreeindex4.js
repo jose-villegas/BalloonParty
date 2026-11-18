@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"SightFadeReaction_8cs.html":[7,0,8,30],
 "SightGlitterDriftReaction_8cs.html":[7,0,8,31],
 "SightRampReaction_8cs.html":[7,0,8,32],
 "SightReaction_8cs.html":[7,0,8,33],
@@ -40,9 +41,9 @@ var NAVTREEINDEX4 =
 "SnipeRangePreview_8cs.html":[7,0,8,5,15],
 "SnipeWhirlwindView_8cs.html":[7,0,17,1],
 "SoapBubbleClusterVariant_8cs.html":[7,0,1,5,8],
-"SoapBubbleHop_8cs.html":[7,0,1,6,24],
+"SoapBubbleHop_8cs.html":[7,0,1,6,25],
 "SoapBubbleShader_8cs.html":[7,0,1,5,9],
-"SoapBubbleSprites_8cs.html":[7,0,1,6,25],
+"SoapBubbleSprites_8cs.html":[7,0,1,6,26],
 "SortingHelper_8cs.html":[7,0,14,10,14],
 "SortingLayerNameAttribute_8cs.html":[7,0,14,35],
 "SortingLayerNameDrawer_8cs.html":[7,0,6,50],
@@ -71,7 +72,7 @@ var NAVTREEINDEX4 =
 "SpinSpace_8cs.html":[7,0,8,37],
 "SpringChain_8cs.html":[7,0,14,6,2],
 "SpringLineGraphic_8cs.html":[7,0,18,2,5],
-"SpriteColorableRenderer_8cs.html":[7,0,1,6,26],
+"SpriteColorableRenderer_8cs.html":[7,0,1,6,27],
 "SpriteLayerCombinerEditor_8cs.html":[7,0,6,8,0],
 "SpriteLayerCombiner_8cs.html":[7,0,14,10,15],
 "SpriteRendererExtensions_8cs.html":[7,0,14,4,18],
@@ -129,7 +130,7 @@ var NAVTREEINDEX4 =
 "ToughLanding_8cs.html":[7,0,1,4,12],
 "ToughRunPlan_8cs.html":[7,0,1,4,13],
 "ToughSnakeSpringSettings_8cs.html":[7,0,3,0,29],
-"ToughSnakeSpringView_8cs.html":[7,0,1,6,27],
+"ToughSnakeSpringView_8cs.html":[7,0,1,6,28],
 "ToughSnakeSpringsCheat_8cs.html":[7,0,2,26],
 "TraceHitGeometry_8cs.html":[7,0,11,6],
 "TraceHitMarker_8cs.html":[7,0,11,7],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "arch_static_state.html#autotoc_md125":[2,12,0,1],
 "arch_trail_composition.html":[2,9],
 "arch_trail_composition.html#autotoc_md126":[2,9,0],
-"arch_trail_composition.html#autotoc_md127":[2,9,0,0],
-"arch_trail_composition.html#autotoc_md128":[2,9,0,1]
+"arch_trail_composition.html#autotoc_md127":[2,9,0,0]
 };

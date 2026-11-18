@@ -123,9 +123,9 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1View_1_1SoapBubbleSpri
 Package Functions</h2></td></tr>
 <tr class="memitem:a3bdffc99cd791b36b46fa91c616b67a5" id="r_a3bdffc99cd791b36b46fa91c616b67a5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3bdffc99cd791b36b46fa91c616b67a5">SoapBubbleSprites</a> (Transform parent, string name)</td></tr>
 <tr class="separator:a3bdffc99cd791b36b46fa91c616b67a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac588ad9d90c2c0e245d572c2ea85de44" id="r_ac588ad9d90c2c0e245d572c2ea85de44"><td class="memItemLeft" align="right" valign="top">SpriteRenderer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac588ad9d90c2c0e245d572c2ea85de44">Rent</a> (Material material, Sprite sprite, int sortingLayerId, int sortingOrder)</td></tr>
-<tr class="memdesc:ac588ad9d90c2c0e245d572c2ea85de44"><td class="mdescLeft">&#160;</td><td class="mdescRight">A single untinted bubble of <em>material</em> , floating and spinning on its own clock (<a class="el" href="classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleShader.html#a2b016277028e18eb6149e1d747f12b4c" title="Writes a lone bubble&#39;s look into block : one bubble at the quad&#39;s centre, at the default float speed,...">SoapBubbleShader.SetLoneBubble</a>).  <br /></td></tr>
-<tr class="separator:ac588ad9d90c2c0e245d572c2ea85de44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73aaff66ca7fbf554c8af5a0f1e88869" id="r_a73aaff66ca7fbf554c8af5a0f1e88869"><td class="memItemLeft" align="right" valign="top">SpriteRenderer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a73aaff66ca7fbf554c8af5a0f1e88869">Rent</a> (Material material, Sprite sprite, int sortingLayerId, int sortingOrder, Color flush=default)</td></tr>
+<tr class="memdesc:a73aaff66ca7fbf554c8af5a0f1e88869"><td class="mdescLeft">&#160;</td><td class="mdescRight">A single bubble of <em>material</em> , floating and spinning on its own clock (<a class="el" href="classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleShader.html#a2b016277028e18eb6149e1d747f12b4c" title="Writes a lone bubble&#39;s look into block : one bubble at the quad&#39;s centre, at the default float speed,...">SoapBubbleShader.SetLoneBubble</a>).  <br /></td></tr>
+<tr class="separator:a73aaff66ca7fbf554c8af5a0f1e88869"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5407ed64ffee6e230a7d5312f92a2c0" id="r_ab5407ed64ffee6e230a7d5312f92a2c0"><td class="memItemLeft" align="right" valign="top">SpriteRenderer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab5407ed64ffee6e230a7d5312f92a2c0">RentLike</a> (SpriteRenderer source, int sortingOrder)</td></tr>
 <tr class="memdesc:ab5407ed64ffee6e230a7d5312f92a2c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">A single bubble in <em>source</em> 's look: its material, sprite, tint, sorting layer and the float and spin its property block carries, drawn as one bubble.  <br /></td></tr>
 <tr class="separator:ab5407ed64ffee6e230a7d5312f92a2c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -182,8 +182,8 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ac588ad9d90c2c0e245d572c2ea85de44" name="ac588ad9d90c2c0e245d572c2ea85de44"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac588ad9d90c2c0e245d572c2ea85de44">&#9670;&#160;</a></span>Rent()</h2>
+<a id="a73aaff66ca7fbf554c8af5a0f1e88869" name="a73aaff66ca7fbf554c8af5a0f1e88869"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73aaff66ca7fbf554c8af5a0f1e88869">&#9670;&#160;</a></span>Rent()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -209,7 +209,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>sortingOrder</em></span>&#160;)</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>sortingOrder</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Color</td>          <td class="paramname"><span class="paramname"><em>flush</em></span><span class="paramdefsep"> = </span><span class="paramdefval">default</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -219,7 +224,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>A single untinted bubble of <em>material</em> , floating and spinning on its own clock (<a class="el" href="classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleShader.html#a2b016277028e18eb6149e1d747f12b4c" title="Writes a lone bubble&#39;s look into block : one bubble at the quad&#39;s centre, at the default float speed,...">SoapBubbleShader.SetLoneBubble</a>). </p>
+<p>A single bubble of <em>material</em> , floating and spinning on its own clock (<a class="el" href="classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleShader.html#a2b016277028e18eb6149e1d747f12b4c" title="Writes a lone bubble&#39;s look into block : one bubble at the quad&#39;s centre, at the default float speed,...">SoapBubbleShader.SetLoneBubble</a>). </p>
+<p>It is clear unless <em>flush</em>  has an alpha: then it is filled with that colour, by that much, as a ripe cluster is with its warning. </p>
 
 </div>
 </div>

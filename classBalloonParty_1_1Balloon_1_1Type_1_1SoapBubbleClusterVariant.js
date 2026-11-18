@@ -19,7 +19,6 @@ var classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant =
     [ "ReleaseCount", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#ac731d1d785edd73df7b2ab526373dfc2", null ],
     [ "ResetCues", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#a9f79ebb52699e2fd488a4da53f926e75", null ],
     [ "SettleScale", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#a811c62d7d77da36defc75db5bb0094eb", null ],
-    [ "ShowFold", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#a522d32bfe8e76a2166fc30a464402918", null ],
     [ "StepCount", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#abc6c4cd902bcd9ad83ed1309b6d41b40", null ],
     [ "StepFold", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#a4070cf14096c0ee7e1e58fe886e95678", null ],
     [ "SwellTo", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#a28ae2e436d3a715576cacf9875ceb52f", null ],
@@ -43,7 +42,9 @@ var classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant =
     [ "_foldElapsed", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#a30b579f897fb03897c4d39ae9b662ae9", null ],
     [ "_foldFrom", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#ae45124242dfa2c8c831267f3b8134ec3", null ],
     [ "_foldGetter", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#a5307e9325d715709aeac2c6f932a6d50", null ],
+    [ "_foldGrowth", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#aff8920707e19cc334322f54493b48b0e", null ],
     [ "_folding", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#adb2d2609f82e6209c54ddac0defd6513", null ],
+    [ "_foldPulse", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#adbe15ceb99ec8233f1a1a6a621f87528", null ],
     [ "_foldRadius", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#a15fd953aab7d2b42f06a9fc0e3fa1950", null ],
     [ "_foldSeconds", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#a79eaa3f637142e459a1be2446b598403", null ],
     [ "_foldSetter", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#a4d1b9b8933a22447a0f41244cbc7b89b", null ],
@@ -60,6 +61,7 @@ var classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant =
     [ "_rotationSpeedRad", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#a85f3460412cb502358037bef10e455fd", null ],
     [ "_settleScale", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#a053d7dc5cfb3f69e7310ca3a7ad0db17", null ],
     [ "_shownCount", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#a9072c56fa7d5774d1addcc84af086644", null ],
+    [ "_spinFast", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#ad6b4b94511c23814fe4651debe1a1d11", null ],
     [ "_stepFold", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#abc174df9ec15df36445ac9dbaa4e195e", null ],
     [ "_swell", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#a23baedafc4af6ca81b0b289a6a3bbee6", null ],
     [ "_swellTween", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#a9b687b086b04e47ea847efaadbcb10c0", null ],
@@ -67,5 +69,7 @@ var classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant =
     [ "BaseScale", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#ad0ae1f112a6ba2d920a6c6f39e450e55", null ],
     [ "Binding", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#ac2c4b70e49fe2800d4f1206eb552fc6e", null ],
     [ "BubbleRenderer", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#accc4335c98427e8a34a4c8a47d0353fa", null ],
-    [ "BubbleWorldScale", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#a5111cdce8338e6c65518a79dd8b0baaf", null ]
+    [ "BubbleWorldScale", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#a5111cdce8338e6c65518a79dd8b0baaf", null ],
+    [ "TurnDirection", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#ae79c9b3fd6508fc05007d5a4ce12f151", null ],
+    [ "TurnDirection", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#a0828c574ee384ca7935b77cff41b9f52", null ]
 ];

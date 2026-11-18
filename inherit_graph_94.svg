@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Balloon_1_1View_1_1SoapBubbleSprites.html" target="_top" xlink:title="Loose soap bubbles, one per sprite, for the views that send bubbles off on their own (BubbleMergeView...">
+<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Balloon_1_1View_1_1SoapBubbleHop.html" target="_top" xlink:title="The path of a lone soap bubble hopping from one balloon to another (BubbleMergeView,...">
 <polygon fill="white" stroke="#666666" points="145,-33.5 0,-33.5 0,0 145,0 145,-33.5"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.View.</text>
-<text xml:space="preserve" text-anchor="middle" x="72.5" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">SoapBubbleSprites</text>
+<text xml:space="preserve" text-anchor="middle" x="72.5" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">SoapBubbleHop</text>
 </a>
 </g>
 </g>

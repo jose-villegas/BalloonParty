@@ -11,9 +11,11 @@ var classBalloonParty_1_1Solver_1_1ShotBoardGather =
     [ "ResolveProjectileColliderOffset", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#a5cae8f3bb69413e02681dfe4ce3bb53b", null ],
     [ "ResolveProjectileContactRadius", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#aa5c44a749d9d3b44d39fdda24a3a654f", null ],
     [ "RippleDamageOf", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#aad330ee2b804dbade9abdbb73bf8c301", null ],
+    [ "RippleRadiusOf", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#a7d6075b3104bccd6ae433049c198b3af", null ],
     [ "SeedFor", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#a5bb04b6ea6ee0575934b52f762abf92a", null ],
     [ "SimulateAt", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#a47c824d114545792f8154fcb4a8b2443", null ],
     [ "TryBuildRewardSnapshot", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#af54f5445c548833dd410a05a3d386847", null ],
     [ "TryBuildStaticContactSnapshot", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#a6ea5fe4c35c8f5d99a13393d7b551b56", null ],
+    [ "TryBuildTargetAtView", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#a5f9b3be65a1d515deda66d37839c875d", null ],
     [ "TryBuildTargetSnapshot", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#a41fa381f338d8cea0c2046b5878371a8", null ]
 ];

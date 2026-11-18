@@ -183,6 +183,7 @@ var annotated_dup =
           [ "IGrowingDiscView", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IGrowingDiscView.html", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IGrowingDiscView" ],
           [ "INukeBlastView", "interfaceBalloonParty_1_1Balloon_1_1View_1_1INukeBlastView.html", "interfaceBalloonParty_1_1Balloon_1_1View_1_1INukeBlastView" ],
           [ "INukeCloudView", "interfaceBalloonParty_1_1Balloon_1_1View_1_1INukeCloudView.html", "interfaceBalloonParty_1_1Balloon_1_1View_1_1INukeCloudView" ],
+          [ "IRipeSpin", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IRipeSpin.html", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IRipeSpin" ],
           [ "NukeBlastView", "classBalloonParty_1_1Balloon_1_1View_1_1NukeBlastView.html", "classBalloonParty_1_1Balloon_1_1View_1_1NukeBlastView" ],
           [ "NukeCloudView", "classBalloonParty_1_1Balloon_1_1View_1_1NukeCloudView.html", "classBalloonParty_1_1Balloon_1_1View_1_1NukeCloudView" ],
           [ "PaintDripOverlay", "classBalloonParty_1_1Balloon_1_1View_1_1PaintDripOverlay.html", "classBalloonParty_1_1Balloon_1_1View_1_1PaintDripOverlay" ],

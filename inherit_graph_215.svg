@@ -11,11 +11,11 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Editor_1_1EffectPreview_1_1PaintSplashPreviewModule_1_1SplashInstance.html" target="_top" xlink:title=" ">
+<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Editor_1_1EffectPreview_1_1PaintSplashPreviewModule_1_1FlightState.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="191.5,-46.25 0,-46.25 0,0 191.5,0 191.5,-46.25"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-32.75" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Editor.Effect</text>
 <text xml:space="preserve" text-anchor="start" x="8" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">Preview.PaintSplashPreviewModule.</text>
-<text xml:space="preserve" text-anchor="middle" x="95.75" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">SplashInstance</text>
+<text xml:space="preserve" text-anchor="middle" x="95.75" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">FlightState</text>
 </a>
 </g>
 </g>

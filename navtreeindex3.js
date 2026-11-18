@@ -1,12 +1,13 @@
 var NAVTREEINDEX3 =
 {
+"PaletteChannelEncoding_8cs.html":[7,0,3,10,4],
 "PaletteColorMaskAttribute_8cs.html":[7,0,3,10,5],
 "PaletteColorMaskDrawer_8cs.html":[7,0,3,4,6],
 "PaletteColorNameAttribute_8cs.html":[7,0,3,10,6],
 "PaletteColorNameDrawer_8cs.html":[7,0,3,4,7],
 "PaletteEntry_8cs.html":[7,0,3,10,7],
 "PaletteMaskDrawer_8cs.html":[7,0,3,4,8],
-"ParticleColorableRenderer_8cs.html":[7,0,1,6,22],
+"ParticleColorableRenderer_8cs.html":[7,0,1,6,23],
 "ParticleEffectView_8cs.html":[7,0,14,9,6],
 "ParticlePoolChannel_8cs.html":[7,0,14,9,7],
 "PathHelper_8cs.html":[7,0,14,0,0],
@@ -129,7 +130,7 @@ var NAVTREEINDEX3 =
 "RibbonPiece_8cs.html":[7,0,18,1,3],
 "RibbonStrike_8cs.html":[7,0,18,1,4],
 "RipeBubbleBurstMessage_8cs.html":[7,0,14,7,43],
-"RipeBubbleBurstView_8cs.html":[7,0,1,6,23],
+"RipeBubbleBurstView_8cs.html":[7,0,1,6,24],
 "RipeBubbleBurst_8cs.html":[7,0,1,0,14],
 "RipeBubbleRule_8cs.html":[7,0,1,0,15],
 "RipeBubbleService_8cs.html":[7,0,1,0,16],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "ShotWall_8cs.html":[7,0,15,2,5],
 "ShoveVector_8cs.html":[7,0,15,2,6],
 "ShowIfEnumAttribute_8cs.html":[7,0,14,34],
-"ShowIfEnumDrawer_8cs.html":[7,0,6,49],
-"SightFadeReaction_8cs.html":[7,0,8,30]
+"ShowIfEnumDrawer_8cs.html":[7,0,6,49]
 };

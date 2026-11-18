@@ -6,6 +6,8 @@ var classBalloonParty_1_1Solver_1_1ShotSimulator =
     [ "ApplyRippleHit", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a83fc9981d3e533c75b94bfc2c557c5da", null ],
     [ "ArmNuke", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#ac86ceba2aa07577be0604efcecf20c3b", null ],
     [ "CoatStops", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a4410a96673056758b46dd0a2811b2cad", null ],
+    [ "CollectRippleSlots", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a0129f8b8bf715af04092120345fafa95", null ],
+    [ "ComesBefore", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#af820b2a4f9181cb6c83505a729861238", null ],
     [ "ContainsColor", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#ac3f9c8484153e97ecddd8834144d8df8", null ],
     [ "ConvertSideNeighboursToRainbow", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#ad0fcb585d4da51a43e3f0fb55d479b78", null ],
     [ "CopyIntoWorkingSet", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#aeff3f330e00afeaadf9f8f652798ad77", null ],
@@ -35,7 +37,7 @@ var classBalloonParty_1_1Solver_1_1ShotSimulator =
     [ "RunRipples", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#aed2871b116cede6f4ae6a610f5bed907", null ],
     [ "ScoreSurvivingClusterHit", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a4881f0851385a3ef0cdc4da6d3082ce0", null ],
     [ "SegmentHitsAnyBalloon", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#ae6987db6d4e244403d0f2566737d396c", null ],
-    [ "Simulate", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a63721fa68cced1c8c2316b30193d0376", null ],
+    [ "Simulate", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a910fc601a3511d2ce831baf73cef09c0", null ],
     [ "SpendPierceAtDischarge", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a2c79236612561ac1f5a9de8513510af1", null ],
     [ "TryAxisCandidate", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#ae1e82c4a16fe4bee38f436b63b4eb45a", null ],
     [ "TryFindMovingBalloonEntry", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a31253b26ca1bdf695164085953d43fdc", null ],
@@ -53,8 +55,8 @@ var classBalloonParty_1_1Solver_1_1ShotSimulator =
     [ "ItemHitsScratch", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a06bcf8dab927941f9397ef54942e987e", null ],
     [ "MinSpeed", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#aad797543d79449b745d506edf8115ce3", null ],
     [ "NeighborBuffer", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a540742f10227afd890e3cbcbcd844ab6", null ],
-    [ "RippleNeighborBuffer", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a15cced90239e9ac65769ee30d745f3e8", null ],
-    [ "RippleQueueScratch", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a1da9fe66854f06a67f5c9f9647555136", null ],
+    [ "RippleQueueScratch", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a04a459efc0dd878bee2d32bc8e426678", null ],
+    [ "RippleSlotsScratch", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a5263a578b3187d4fb36b0ea3fb35c715", null ],
     [ "SideNeighborOffsetsScratch", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a4a2bd05a68ea2f1f9d0fe39e663f764e", null ],
     [ "SideNeighborWorkingSetIndicesScratch", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a0057c7b9d24a82caf0b6b44f0b94ae04", null ]
 ];

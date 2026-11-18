@@ -112,6 +112,7 @@ $(function(){initNavTree('structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubble
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="#properties">Properties</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage-members.html">List of all members</a>  </div>
@@ -119,18 +120,16 @@ $(function(){initNavTree('structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubble
 </div><!--header-->
 <div class="contents">
 
-<p>Published by <code>RipeBubbleService</code> when a ripe cluster bursts.  
+<p>Published by <code>RipeBubbleService</code> when a ripe cluster bursts, built by <a class="el" href="#a6db2f6b53ab00b5774a6765e7032bc8f" title="The player&#39;s burst: a blast of radius  world units round position  whose hits landed on reached  ball...">Ripple</a> or <a class="el" href="#afafa183e6148eddba6a95d7924340443" title="The level&#39;s burst: the neighbours it coated (coated , a bit per direction) and its handout .">Foam</a>.  
  <a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a1681ca0855e9768cc85cda97977e4418" id="r_a1681ca0855e9768cc85cda97977e4418"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1681ca0855e9768cc85cda97977e4418">RipeBubbleBurstMessage</a> (<a class="el" href="namespaceBalloonParty_1_1Shared_1_1Messages.html#ac45f89e1e12dc060a80c4997f10bb76a">RipeBurstKind</a> kind, Vector2Int slot, Vector3 position, int neighbours, int handout=0)</td></tr>
-<tr class="separator:a1681ca0855e9768cc85cda97977e4418"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3926b598ebd50b5fbc50511a26db14e4" id="r_a3926b598ebd50b5fbc50511a26db14e4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceBalloonParty_1_1Shared_1_1Messages.html#a59eaf814cb0fd69d1473c2377bee7918">FoamGift</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3926b598ebd50b5fbc50511a26db14e4">GiftOf</a> (int bubble, out int direction)</td></tr>
 <tr class="memdesc:a3926b598ebd50b5fbc50511a26db14e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where the foam's bubble <em>bubble</em>  (0 first) went, and in which direction; a leftover's direction is -1.  <br /></td></tr>
 <tr class="separator:a3926b598ebd50b5fbc50511a26db14e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8aaa0675a5bec20bb173c2eb99451fcc" id="r_a8aaa0675a5bec20bb173c2eb99451fcc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8aaa0675a5bec20bb173c2eb99451fcc">Touched</a> (int direction)</td></tr>
-<tr class="memdesc:a8aaa0675a5bec20bb173c2eb99451fcc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the burst touched the neighbour in <em>direction</em>  (0 to 5).  <br /></td></tr>
+<tr class="memdesc:a8aaa0675a5bec20bb173c2eb99451fcc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether a foam coated the neighbour in <em>direction</em>  (0 to 5).  <br /></td></tr>
 <tr class="separator:a8aaa0675a5bec20bb173c2eb99451fcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
@@ -138,10 +137,16 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a3035cdbeb9ba5af1f5d898c132a72675" id="r_a3035cdbeb9ba5af1f5d898c132a72675"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3035cdbeb9ba5af1f5d898c132a72675">AddGift</a> (int handout, <a class="el" href="namespaceBalloonParty_1_1Shared_1_1Messages.html#a59eaf814cb0fd69d1473c2377bee7918">FoamGift</a> gift, int direction)</td></tr>
 <tr class="memdesc:a3035cdbeb9ba5af1f5d898c132a72675"><td class="mdescLeft">&#160;</td><td class="mdescRight"><em>handout</em>  with one more bubble, the next to leave, going to <em>gift</em>  in <em>direction</em>  (ignored for a leftover).  <br /></td></tr>
 <tr class="separator:a3035cdbeb9ba5af1f5d898c132a72675"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afafa183e6148eddba6a95d7924340443" id="r_afafa183e6148eddba6a95d7924340443"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html">RipeBubbleBurstMessage</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afafa183e6148eddba6a95d7924340443">Foam</a> (Vector2Int slot, Vector3 position, int coated, int handout=0)</td></tr>
+<tr class="memdesc:afafa183e6148eddba6a95d7924340443"><td class="mdescLeft">&#160;</td><td class="mdescRight">The level's burst: the neighbours it coated (<em>coated</em> , a bit per direction) and its <em>handout</em> .  <br /></td></tr>
+<tr class="separator:afafa183e6148eddba6a95d7924340443"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9d9fe4f4ab964a5e2f3e04d5b438eaf" id="r_af9d9fe4f4ab964a5e2f3e04d5b438eaf"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af9d9fe4f4ab964a5e2f3e04d5b438eaf">HandoutCount</a> (int handout)</td></tr>
 <tr class="separator:af9d9fe4f4ab964a5e2f3e04d5b438eaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeaa6dafcb57f12c4c218babd98b9ad8d" id="r_aeaa6dafcb57f12c4c218babd98b9ad8d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespaceBalloonParty_1_1Shared_1_1Messages.html#a59eaf814cb0fd69d1473c2377bee7918">FoamGift</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeaa6dafcb57f12c4c218babd98b9ad8d">HandoutGift</a> (int handout, int bubble, out int direction)</td></tr>
 <tr class="separator:aeaa6dafcb57f12c4c218babd98b9ad8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6db2f6b53ab00b5774a6765e7032bc8f" id="r_a6db2f6b53ab00b5774a6765e7032bc8f"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html">RipeBubbleBurstMessage</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6db2f6b53ab00b5774a6765e7032bc8f">Ripple</a> (Vector2Int slot, Vector3 position, float radius, int reached)</td></tr>
+<tr class="memdesc:a6db2f6b53ab00b5774a6765e7032bc8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The player's burst: a blast of <em>radius</em>  world units round <em>position</em>  whose hits landed on <em>reached</em>  balloons.  <br /></td></tr>
+<tr class="separator:a6db2f6b53ab00b5774a6765e7032bc8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -159,13 +164,23 @@ Properties</h2></td></tr>
 <tr class="memitem:a5370a72091adfe2a8e5e0ec8842fa9cf" id="r_a5370a72091adfe2a8e5e0ec8842fa9cf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceBalloonParty_1_1Shared_1_1Messages.html#ac45f89e1e12dc060a80c4997f10bb76a">RipeBurstKind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5370a72091adfe2a8e5e0ec8842fa9cf">Kind</a><code> [get]</code></td></tr>
 <tr class="separator:a5370a72091adfe2a8e5e0ec8842fa9cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3cb08338a787276b0cbb8e1b33c3d57" id="r_ad3cb08338a787276b0cbb8e1b33c3d57"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3cb08338a787276b0cbb8e1b33c3d57">Neighbours</a><code> [get]</code></td></tr>
+<tr class="memdesc:ad3cb08338a787276b0cbb8e1b33c3d57"><td class="mdescLeft">&#160;</td><td class="mdescRight">The neighbours a foam coated, a bit per direction; 0 for a ripple, which is not bound to them.  <br /></td></tr>
 <tr class="separator:ad3cb08338a787276b0cbb8e1b33c3d57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a230aa16bb7ebcc21d4bcc268a498db72" id="r_a230aa16bb7ebcc21d4bcc268a498db72"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a230aa16bb7ebcc21d4bcc268a498db72">Position</a><code> [get]</code></td></tr>
 <tr class="separator:a230aa16bb7ebcc21d4bcc268a498db72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acdfbe7588842c9c65ed083a8f2fe35d9" id="r_acdfbe7588842c9c65ed083a8f2fe35d9"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acdfbe7588842c9c65ed083a8f2fe35d9">Radius</a><code> [get]</code></td></tr>
+<tr class="memdesc:acdfbe7588842c9c65ed083a8f2fe35d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far a ripple's blast reached from <a class="el" href="#a230aa16bb7ebcc21d4bcc268a498db72">Position</a>, in world units; 0 for a foam.  <br /></td></tr>
+<tr class="separator:acdfbe7588842c9c65ed083a8f2fe35d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a45d95a67b04e4ba9a9caad99f692b097" id="r_a45d95a67b04e4ba9a9caad99f692b097"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a45d95a67b04e4ba9a9caad99f692b097">Reached</a><code> [get]</code></td></tr>
+<tr class="memdesc:a45d95a67b04e4ba9a9caad99f692b097"><td class="mdescLeft">&#160;</td><td class="mdescRight">The balloons the burst touched: a ripple's hits that landed, a foam's new coats.  <br /></td></tr>
 <tr class="separator:a45d95a67b04e4ba9a9caad99f692b097"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a77796ae9d25b335d2bcc475e920845e7" id="r_a77796ae9d25b335d2bcc475e920845e7"><td class="memItemLeft" align="right" valign="top">Vector2Int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a77796ae9d25b335d2bcc475e920845e7">Slot</a><code> [get]</code></td></tr>
 <tr class="separator:a77796ae9d25b335d2bcc475e920845e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:ac2e52e63457bb992c2f6d8ad78c6a97e" id="r_ac2e52e63457bb992c2f6d8ad78c6a97e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac2e52e63457bb992c2f6d8ad78c6a97e">RipeBubbleBurstMessage</a> (<a class="el" href="namespaceBalloonParty_1_1Shared_1_1Messages.html#ac45f89e1e12dc060a80c4997f10bb76a">RipeBurstKind</a> kind, Vector2Int slot, Vector3 position, float radius, int reached, int neighbours, int handout)</td></tr>
+<tr class="separator:ac2e52e63457bb992c2f6d8ad78c6a97e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
@@ -186,14 +201,17 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:aa05b3ed469ddde637517bc54589c23da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Published by <code>RipeBubbleService</code> when a ripe cluster bursts. </p>
-<p><a class="el" href="#ad3cb08338a787276b0cbb8e1b33c3d57">Neighbours</a> says which neighbouring balloons the burst touched (a ripple's hits that landed, the foam's new coats), one bit per direction in the order <code>HexCoordinates.HexNeighborIndices</code> lists the six neighbours of <a class="el" href="#a77796ae9d25b335d2bcc475e920845e7">Slot</a>, so a burst carries them without allocating. <a class="el" href="#a45d95a67b04e4ba9a9caad99f692b097">Reached</a> is how many. A foam also carries its hand-out (<a class="el" href="#a3b8c7f5020a4bdaf0b2cf3919354196a">Handout</a>): where each of its bubbles went, in the order they leave, one 4-bit entry per bubble (a direction, plus 8 for a cluster, or 15 for a leftover) and the count in the seventh. Published before the hand-out changes the board, so the views still see it as it was. </p>
+<div class="textblock"><p>Published by <code>RipeBubbleService</code> when a ripe cluster bursts, built by <a class="el" href="#a6db2f6b53ab00b5774a6765e7032bc8f" title="The player&#39;s burst: a blast of radius  world units round position  whose hits landed on reached  ball...">Ripple</a> or <a class="el" href="#afafa183e6148eddba6a95d7924340443" title="The level&#39;s burst: the neighbours it coated (coated , a bit per direction) and its handout .">Foam</a>. </p>
+<p>Either way <a class="el" href="#a45d95a67b04e4ba9a9caad99f692b097" title="The balloons the burst touched: a ripple&#39;s hits that landed, a foam&#39;s new coats.">Reached</a> is how many balloons the burst touched, and the message carries plain numbers only, so it allocates nothing. A ripple is a blast: it hit every balloon it could within <a class="el" href="#acdfbe7588842c9c65ed083a8f2fe35d9" title="How far a ripple&#39;s blast reached from Position, in world units; 0 for a foam.">Radius</a> world units of <a class="el" href="#a230aa16bb7ebcc21d4bcc268a498db72">Position</a>, and <a class="el" href="#a45d95a67b04e4ba9a9caad99f692b097" title="The balloons the burst touched: a ripple&#39;s hits that landed, a foam&#39;s new coats.">Reached</a> counts the hits that landed. A foam touches only the six neighbours of <a class="el" href="#a77796ae9d25b335d2bcc475e920845e7">Slot</a>: <a class="el" href="#ad3cb08338a787276b0cbb8e1b33c3d57" title="The neighbours a foam coated, a bit per direction; 0 for a ripple, which is not bound to them.">Neighbours</a> has one bit per direction, in the order <code>HexCoordinates.HexNeighborIndices</code> lists them, for each neighbour it coated, and <a class="el" href="#a45d95a67b04e4ba9a9caad99f692b097" title="The balloons the burst touched: a ripple&#39;s hits that landed, a foam&#39;s new coats.">Reached</a> counts them. It also carries its hand-out (<a class="el" href="#a3b8c7f5020a4bdaf0b2cf3919354196a">Handout</a>): where each of its bubbles went, in the order they leave, one 4-bit entry per bubble (a direction, plus 8 for a cluster, or 15 for a leftover) and the count in the seventh. It is published before the hand-out changes the board, so the views still see it as it was. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a1681ca0855e9768cc85cda97977e4418" name="a1681ca0855e9768cc85cda97977e4418"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1681ca0855e9768cc85cda97977e4418">&#9670;&#160;</a></span>RipeBubbleBurstMessage()</h2>
+<a id="ac2e52e63457bb992c2f6d8ad78c6a97e" name="ac2e52e63457bb992c2f6d8ad78c6a97e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac2e52e63457bb992c2f6d8ad78c6a97e">&#9670;&#160;</a></span>RipeBubbleBurstMessage()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">BalloonParty.Shared.Messages.RipeBubbleBurstMessage.RipeBubbleBurstMessage </td>
@@ -213,14 +231,29 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>radius</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>reached</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>neighbours</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>handout</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;)</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>handout</em></span>&#160;)</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -285,6 +318,47 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="afafa183e6148eddba6a95d7924340443" name="afafa183e6148eddba6a95d7924340443"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afafa183e6148eddba6a95d7924340443">&#9670;&#160;</a></span>Foam()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html">RipeBubbleBurstMessage</a> BalloonParty.Shared.Messages.RipeBubbleBurstMessage.Foam </td>
+          <td>(</td>
+          <td class="paramtype">Vector2Int</td>          <td class="paramname"><span class="paramname"><em>slot</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>position</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>coated</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>handout</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The level's burst: the neighbours it coated (<em>coated</em> , a bit per direction) and its <em>handout</em> . </p>
 
 </div>
 </div>
@@ -370,6 +444,47 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a6db2f6b53ab00b5774a6765e7032bc8f" name="a6db2f6b53ab00b5774a6765e7032bc8f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6db2f6b53ab00b5774a6765e7032bc8f">&#9670;&#160;</a></span>Ripple()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html">RipeBubbleBurstMessage</a> BalloonParty.Shared.Messages.RipeBubbleBurstMessage.Ripple </td>
+          <td>(</td>
+          <td class="paramtype">Vector2Int</td>          <td class="paramname"><span class="paramname"><em>slot</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>position</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>radius</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>reached</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The player's burst: a blast of <em>radius</em>  world units round <em>position</em>  whose hits landed on <em>reached</em>  balloons. </p>
+
+</div>
+</div>
 <a id="a8aaa0675a5bec20bb173c2eb99451fcc" name="a8aaa0675a5bec20bb173c2eb99451fcc"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8aaa0675a5bec20bb173c2eb99451fcc">&#9670;&#160;</a></span>Touched()</h2>
 
@@ -385,7 +500,7 @@ Static Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Whether the burst touched the neighbour in <em>direction</em>  (0 to 5). </p>
+<p>Whether a foam coated the neighbour in <em>direction</em>  (0 to 5). </p>
 
 </div>
 </div>
@@ -613,6 +728,8 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>The neighbours a foam coated, a bit per direction; 0 for a ripple, which is not bound to them. </p>
+
 </div>
 </div>
 <a id="a230aa16bb7ebcc21d4bcc268a498db72" name="a230aa16bb7ebcc21d4bcc268a498db72"></a>
@@ -637,6 +754,30 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="acdfbe7588842c9c65ed083a8f2fe35d9" name="acdfbe7588842c9c65ed083a8f2fe35d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acdfbe7588842c9c65ed083a8f2fe35d9">&#9670;&#160;</a></span>Radius</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Shared.Messages.RipeBubbleBurstMessage.Radius</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How far a ripple's blast reached from <a class="el" href="#a230aa16bb7ebcc21d4bcc268a498db72">Position</a>, in world units; 0 for a foam. </p>
+
+</div>
+</div>
 <a id="a45d95a67b04e4ba9a9caad99f692b097" name="a45d95a67b04e4ba9a9caad99f692b097"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a45d95a67b04e4ba9a9caad99f692b097">&#9670;&#160;</a></span>Reached</h2>
 
@@ -656,6 +797,8 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>The balloons the burst touched: a ripple's hits that landed, a foam's new coats. </p>
 
 </div>
 </div>

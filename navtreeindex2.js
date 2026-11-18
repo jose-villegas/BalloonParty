@@ -10,6 +10,7 @@ var NAVTREEINDEX2 =
 "IRewardBalloonRequests_8cs.html":[7,0,1,3,5],
 "IRewardBalloonSettings_8cs.html":[7,0,3,0,19],
 "IRipeBubbleSettings_8cs.html":[7,0,3,0,20],
+"IRipeSpin_8cs.html":[7,0,1,6,19],
 "IRunConfig_8cs.html":[7,0,14,27],
 "IRunMeta_8cs.html":[7,0,7,8,9],
 "IRunResettable_8cs.html":[7,0,7,8,10],
@@ -220,10 +221,10 @@ var NAVTREEINDEX2 =
 "NukeArmedMessage_8cs.html":[7,0,14,7,26],
 "NukeBalloonModel_8cs.html":[7,0,1,2,16],
 "NukeBlastSettings_8cs.html":[7,0,3,0,23],
-"NukeBlastView_8cs.html":[7,0,1,6,19],
+"NukeBlastView_8cs.html":[7,0,1,6,20],
 "NukeBlast_8cs.html":[7,0,1,3,6],
 "NukeBreatherMessage_8cs.html":[7,0,14,7,27],
-"NukeCloudView_8cs.html":[7,0,1,6,20],
+"NukeCloudView_8cs.html":[7,0,1,6,21],
 "NukeCountdownMessage_8cs.html":[7,0,14,7,28],
 "NukeDetonatedMessage_8cs.html":[7,0,14,7,29],
 "NukeFuseSettings_8cs.html":[7,0,3,0,24],
@@ -239,7 +240,7 @@ var NAVTREEINDEX2 =
 "OverflowSettings_8cs.html":[7,0,3,20],
 "PaintBlobRenderer_8cs.html":[7,0,8,4,1],
 "PaintDripOverlayEditor_8cs.html":[7,0,6,35],
-"PaintDripOverlay_8cs.html":[7,0,1,6,21],
+"PaintDripOverlay_8cs.html":[7,0,1,6,22],
 "PaintItemHandler_8cs.html":[7,0,8,4,2],
 "PaintProfileDrawer_8cs.html":[7,0,3,4,5],
 "PaintRangePreview_8cs.html":[7,0,8,5,13],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "PaintSplashView_8cs.html":[7,0,8,4,3],
 "PaintSpread_8cs.html":[7,0,8,4,4],
 "PaintTargets_8cs.html":[7,0,8,4,5],
-"PaintTriangle_8cs.html":[7,0,8,4,6],
-"PaletteChannelEncoding_8cs.html":[7,0,3,10,4]
+"PaintTriangle_8cs.html":[7,0,8,4,6]
 };

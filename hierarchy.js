@@ -47,6 +47,7 @@ var hierarchy =
     [ "BalloonParty.Configuration.BigScoreFormationSettings", "structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html", null ],
     [ "BalloonParty.Game.Score.Behaviours.BigScoreGroupRequest", "structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreGroupRequest.html", null ],
     [ "BalloonParty.Scenario.View.GrassBladeMesh.BladeVertex", "structBalloonParty_1_1Scenario_1_1View_1_1GrassBladeMesh_1_1BladeVertex.html", null ],
+    [ "BalloonParty.Balloon.View.RipeBubbleBurstView.BlastBubble", "structBalloonParty_1_1Balloon_1_1View_1_1RipeBubbleBurstView_1_1BlastBubble.html", null ],
     [ "BalloonParty.Item.Paint.PaintSplashView.BlobFlight", "classBalloonParty_1_1Item_1_1Paint_1_1PaintSplashView_1_1BlobFlight.html", null ],
     [ "BalloonParty.Item.Paint.BlobFlightSnapshot", "structBalloonParty_1_1Item_1_1Paint_1_1BlobFlightSnapshot.html", null ],
     [ "BalloonParty.Shared.Messages.BoardClearMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1BoardClearMessage.html", null ],
@@ -961,6 +962,9 @@ var hierarchy =
     ] ],
     [ "BalloonParty.Configuration.Balloons.IRipeBubbleSettings", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRipeBubbleSettings.html", [
       [ "BalloonParty.Configuration.Balloons.RipeBubbleSettings", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RipeBubbleSettings.html", null ]
+    ] ],
+    [ "BalloonParty.Balloon.View.IRipeSpin", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IRipeSpin.html", [
+      [ "BalloonParty.Balloon.Type.SoapBubbleClusterVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html", null ]
     ] ],
     [ "BalloonParty.Shared.IRunConfig", "interfaceBalloonParty_1_1Shared_1_1IRunConfig.html", [
       [ "BalloonParty.Configuration.RunConfig", "classBalloonParty_1_1Configuration_1_1RunConfig.html", null ]

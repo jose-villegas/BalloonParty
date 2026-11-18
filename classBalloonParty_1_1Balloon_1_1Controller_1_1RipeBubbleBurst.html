@@ -111,6 +111,7 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubb
 <a href="#pac-methods">Package Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleBurst-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Balloon.Controller.RipeBubbleBurst Class Reference<span class="mlabels"><span class="mlabel sealed">sealed</span></span></div></div>
 </div><!--header-->
@@ -128,8 +129,8 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubb
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:a74085d27cd14b8202032e0d6aacd1ffb" id="r_a74085d27cd14b8202032e0d6aacd1ffb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a74085d27cd14b8202032e0d6aacd1ffb">RipeBubbleBurst</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1Messages_1_1IHitDispatcher.html">IHitDispatcher</a> hitDispatcher, <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Controller_1_1IBalloonPopper.html">IBalloonPopper</a> popper, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html">IBalloonsConfiguration</a> balloonsConfig, <a class="el" href="classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html">DisturbanceFieldService</a> disturbanceField)</td></tr>
-<tr class="separator:a74085d27cd14b8202032e0d6aacd1ffb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af003ab8e3c15acc042a2bcf2ce84c477" id="r_af003ab8e3c15acc042a2bcf2ce84c477"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af003ab8e3c15acc042a2bcf2ce84c477">RipeBubbleBurst</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1Messages_1_1IHitDispatcher.html">IHitDispatcher</a> hitDispatcher, <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Controller_1_1IBalloonPopper.html">IBalloonPopper</a> popper, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html">IBalloonsConfiguration</a> balloonsConfig, <a class="el" href="classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html">DisturbanceFieldService</a> disturbanceField, <a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html">SceneLightFieldService</a> lightField, IPublisher&lt; <a class="el" href="structBalloonParty_1_1Nudge_1_1NudgeMessage.html">NudgeMessage</a> &gt; nudgePublisher)</td></tr>
+<tr class="separator:af003ab8e3c15acc042a2bcf2ce84c477"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adcdc1bb2afcb17ac2cc4d47dffbf8282" id="r_adcdc1bb2afcb17ac2cc4d47dffbf8282"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adcdc1bb2afcb17ac2cc4d47dffbf8282">HandOut</a> (<a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html">BubbleClusterModel</a> cluster, int handout)</td></tr>
 <tr class="memdesc:adcdc1bb2afcb17ac2cc4d47dffbf8282"><td class="mdescLeft">&#160;</td><td class="mdescRight">Carries out a <em>handout</em>  from <a class="el" href="#a8ecb484d104aa68fdfd321fa269b773b" title="Where the bubbles  of the cluster at slot  go when its fuse runs out, as RipeBubbleBurstMessage....">PlanFoam</a>: each coat goes on, each neighbouring cluster's count goes up, leftovers pop with no effect on anything, and the cluster leaves the board as a merge's absorbed giver does, its view lingering while it plays the hand-out (<a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleRule.html#a35dc1fc8de3edce9f0d44fe8e33e7de3" title="Seconds a cluster handing out bubbles  stays on screen: until the last leaves.">RipeBubbleRule.FoamLeaveSeconds</a>).  <br /></td></tr>
 <tr class="separator:adcdc1bb2afcb17ac2cc4d47dffbf8282"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -137,18 +138,26 @@ Package Functions</h2></td></tr>
 <tr class="memdesc:a8ecb484d104aa68fdfd321fa269b773b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where the <em>bubbles</em>  of the cluster at <em>slot</em>  go when its fuse runs out, as <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#a3b8c7f5020a4bdaf0b2cf3919354196a">RipeBubbleBurstMessage.Handout</a> carries it: a coat for each neighbour that takes foam (<a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleRule.html#af1711d131f35e413f9504f021fe51f34" title="Whether a cluster whose fuse ran out can coat this neighbour: a plain balloon (ICoatable,...">RipeBubbleRule.FoamTakes</a>), up to <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRipeBubbleSettings.html#a93b07f84ab24c345934bbb1a6769d26f" title="The most layers of foam a balloon wears; each takes an ordinary hit of its own.">IRipeBubbleSettings.CoatLayers</a>, a bubble for each neighbouring cluster with room below <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#a95784529211c68181bb56a6161802d14" title="Most bubbles a merge fills a cluster to; above the HitsToPop clusters spawn with.">IBalloonsConfiguration.BubbleMergeMax</a>, and leftovers for the rest.  <br /></td></tr>
 <tr class="separator:a8ecb484d104aa68fdfd321fa269b773b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac1a31bc51ef5b0a098fe165a7d430350" id="r_ac1a31bc51ef5b0a098fe165a7d430350"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac1a31bc51ef5b0a098fe165a7d430350">Ripple</a> (Vector2Int slot, in <a class="el" href="structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html">DamageContext</a> burstContext)</td></tr>
-<tr class="memdesc:ac1a31bc51ef5b0a098fe165a7d430350"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hits the neighbours of <em>slot</em>  and returns the ones the hits reached (an outcome other than HitOutcome.None), a bit per direction as <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html" title="Published by RipeBubbleService when a ripe cluster bursts.">RipeBubbleBurstMessage</a> carries them.  <br /></td></tr>
+<tr class="memdesc:ac1a31bc51ef5b0a098fe165a7d430350"><td class="mdescLeft">&#160;</td><td class="mdescRight">Blasts round <em>slot</em> : hits every balloon within the ripple's radius that takes it, in column then row order, and returns how many hits landed (an outcome other than HitOutcome.None), as <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#a45d95a67b04e4ba9a9caad99f692b097" title="The balloons the burst touched: a ripple&#39;s hits that landed, a foam&#39;s new coats.">RipeBubbleBurstMessage.Reached</a> carries it.  <br /></td></tr>
 <tr class="separator:ac1a31bc51ef5b0a098fe165a7d430350"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:aa14f1d3cf919fb2a89423470eba05fb3" id="r_aa14f1d3cf919fb2a89423470eba05fb3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa14f1d3cf919fb2a89423470eba05fb3">CollectBlast</a> (Vector3 origin, float radius)</td></tr>
+<tr class="separator:aa14f1d3cf919fb2a89423470eba05fb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9fc7f9c08638c9ae0b47460194cf930c" id="r_a9fc7f9c08638c9ae0b47460194cf930c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9fc7f9c08638c9ae0b47460194cf930c">CollectNeighbors</a> (Vector2Int slot)</td></tr>
 <tr class="separator:a9fc7f9c08638c9ae0b47460194cf930c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83f514546f366ccf37a5578f905fdd9d" id="r_a83f514546f366ccf37a5578f905fdd9d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a83f514546f366ccf37a5578f905fdd9d">ShockTheField</a> (Vector3 origin)</td></tr>
+<tr class="separator:a83f514546f366ccf37a5578f905fdd9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:af67abf8541c723957b4850fcc5b1d0af" id="r_af67abf8541c723957b4850fcc5b1d0af"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html">IBalloonsConfiguration</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af67abf8541c723957b4850fcc5b1d0af">_balloonsConfig</a></td></tr>
 <tr class="separator:af67abf8541c723957b4850fcc5b1d0af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75a61aaa7ee04e925f2c749216adbcd9" id="r_a75a61aaa7ee04e925f2c749216adbcd9"><td class="memItemLeft" align="right" valign="top">readonly List&lt; <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html">IWriteableSlotActor</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a75a61aaa7ee04e925f2c749216adbcd9">_blastActors</a> = new(<a class="el" href="#adc85e31c9a648f18d5f3052a57c73447">BlastCapacity</a>)</td></tr>
+<tr class="separator:a75a61aaa7ee04e925f2c749216adbcd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afabc379d4f2b0c188e86bd7a21579d89" id="r_afabc379d4f2b0c188e86bd7a21579d89"><td class="memItemLeft" align="right" valign="top">readonly List&lt; Vector2Int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afabc379d4f2b0c188e86bd7a21579d89">_blastSlots</a> = new(<a class="el" href="#adc85e31c9a648f18d5f3052a57c73447">BlastCapacity</a>)</td></tr>
+<tr class="separator:afabc379d4f2b0c188e86bd7a21579d89"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a546dd9c3aedbd37c5876b1a0436b264c" id="r_a546dd9c3aedbd37c5876b1a0436b264c"><td class="memItemLeft" align="right" valign="top">readonly int[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a546dd9c3aedbd37c5876b1a0436b264c">_clusterRoom</a> = new int[6]</td></tr>
 <tr class="separator:a546dd9c3aedbd37c5876b1a0436b264c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3d584cf4c132be366033971219b2509" id="r_ad3d584cf4c132be366033971219b2509"><td class="memItemLeft" align="right" valign="top">readonly int[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3d584cf4c132be366033971219b2509">_coatRoom</a> = new int[6]</td></tr>
@@ -159,21 +168,30 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a229abc5139c72f496c240315bd53c45e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4bf9d6d4711b1a8b9e6a467318c44fe1" id="r_a4bf9d6d4711b1a8b9e6a467318c44fe1"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Shared_1_1Messages_1_1IHitDispatcher.html">IHitDispatcher</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4bf9d6d4711b1a8b9e6a467318c44fe1">_hitDispatcher</a></td></tr>
 <tr class="separator:a4bf9d6d4711b1a8b9e6a467318c44fe1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf241870d65c4ee0ca7001ad95b8db05" id="r_adf241870d65c4ee0ca7001ad95b8db05"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html">SceneLightFieldService</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adf241870d65c4ee0ca7001ad95b8db05">_lightField</a></td></tr>
+<tr class="separator:adf241870d65c4ee0ca7001ad95b8db05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a86f7d4ffe35ac575987e2ac1aa1cd7c7" id="r_a86f7d4ffe35ac575987e2ac1aa1cd7c7"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html">IWriteableSlotActor</a>[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a86f7d4ffe35ac575987e2ac1aa1cd7c7">_neighbors</a> = new <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html">IWriteableSlotActor</a>[6]</td></tr>
 <tr class="separator:a86f7d4ffe35ac575987e2ac1aa1cd7c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f150661c0f3233a6eccd6d6bbd47913" id="r_a7f150661c0f3233a6eccd6d6bbd47913"><td class="memItemLeft" align="right" valign="top">readonly Vector2Int[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7f150661c0f3233a6eccd6d6bbd47913">_neighborSlots</a> = new Vector2Int[6]</td></tr>
 <tr class="separator:a7f150661c0f3233a6eccd6d6bbd47913"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c254dc5be354b23931fdf48976e8d07" id="r_a0c254dc5be354b23931fdf48976e8d07"><td class="memItemLeft" align="right" valign="top">readonly IPublisher&lt; <a class="el" href="structBalloonParty_1_1Nudge_1_1NudgeMessage.html">NudgeMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0c254dc5be354b23931fdf48976e8d07">_nudgePublisher</a></td></tr>
+<tr class="separator:a0c254dc5be354b23931fdf48976e8d07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e9d5c3a807ef1243cccb55d10e8ba14" id="r_a4e9d5c3a807ef1243cccb55d10e8ba14"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Controller_1_1IBalloonPopper.html">IBalloonPopper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4e9d5c3a807ef1243cccb55d10e8ba14">_popper</a></td></tr>
 <tr class="separator:a4e9d5c3a807ef1243cccb55d10e8ba14"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a950e3686b179eaf05e52e14a4035c928" id="r_a950e3686b179eaf05e52e14a4035c928"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRipeBubbleSettings.html">IRipeBubbleSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a950e3686b179eaf05e52e14a4035c928">_settings</a></td></tr>
 <tr class="separator:a950e3686b179eaf05e52e14a4035c928"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:adc85e31c9a648f18d5f3052a57c73447" id="r_adc85e31c9a648f18d5f3052a57c73447"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adc85e31c9a648f18d5f3052a57c73447">BlastCapacity</a> = 32</td></tr>
+<tr class="separator:adc85e31c9a648f18d5f3052a57c73447"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A ripe cluster's two endings. </p>
-<p>The ripple (<a class="el" href="#ac1a31bc51ef5b0a098fe165a7d430350" title="Hits the neighbours of slot  and returns the ones the hits reached (an outcome other than HitOutcome....">Ripple</a>): one hit of <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRipeBubbleSettings.html#a325467b58e077d0cf10edceff1cc7d87" title="The hit each neighbour takes from a ripe cluster&#39;s ripple.">IRipeBubbleSettings.RippleDamage</a> to each neighbouring balloon that takes it (<a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleRule.html#a543b7d19bb6f978449bc0761b551298d" title="Whether a ripple hits this neighbour: a balloon, as an item&#39;s hit would, other than a reward balloon ...">RipeBubbleRule.RippleTakes</a>), through <a class="el" href="interfaceBalloonParty_1_1Shared_1_1Messages_1_1IHitDispatcher.html" title="Publish ActorHitMessage only through this — publishing to the broker directly skips scoring and the o...">IHitDispatcher</a> as an item's hit goes, so score, items and pops behave as for any other hit. The hits carry DamageFlags.Ripple and the shot that burst the cluster, never DamageFlags.DirectHit. The foam, when its fuse runs out (<a class="el" href="#a8ecb484d104aa68fdfd321fa269b773b" title="Where the bubbles  of the cluster at slot  go when its fuse runs out, as RipeBubbleBurstMessage....">PlanFoam</a>, then <a class="el" href="#adcdc1bb2afcb17ac2cc4d47dffbf8282" title="Carries out a handout  from PlanFoam: each coat goes on, each neighbouring cluster&#39;s count goes up,...">HandOut</a>): the cluster gives its bubbles to its neighbours (<a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleRule.html#a1a5eaf6ed0d530b894d24b99ab074f90" title="Where a cluster whose fuse ran out hands its bubbles  (at most RipeBubbleBurstMessage....">RipeBubbleRule.PlanHandout</a>), coats on plain balloons and bubbles to clusters with room, pops any left over and leaves the board, all without a hit. Either way a round press on the water. Only <a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleService.html" title="Ripens bubble clusters that reach the merge cap (RipeBubbleRule) and runs each one&#39;s fuse on the leve...">RipeBubbleService</a> calls it, from its own tick. </p>
+<p>The ripple (<a class="el" href="#ac1a31bc51ef5b0a098fe165a7d430350" title="Blasts round slot : hits every balloon within the ripple&#39;s radius that takes it, in column then row o...">Ripple</a>) is a small bomb: one hit of <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRipeBubbleSettings.html#a325467b58e077d0cf10edceff1cc7d87" title="The hit each balloon the ripple reaches takes.">IRipeBubbleSettings.RippleDamage</a> to each balloon that takes it (<a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleRule.html#a543b7d19bb6f978449bc0761b551298d" title="Whether a ripple hits this actor once it reaches it (RippleReaches): a balloon, as an item&#39;s hit woul...">RipeBubbleRule.RippleTakes</a>) on a slot within <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRipeBubbleSettings.html#a6c79c18bb9d2540a672dbd94cf7d6ff6" title="How far a ripe cluster&#39;s ripple reaches, in world units between slot centres, the edge included: ever...">IRipeBubbleSettings.RippleRadius</a> of the burst's (<a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleRule.html#a2c598e4498fdcc37b6ee3f867f26e50b" title="Whether a ripe cluster&#39;s burst at burstCentre  reaches the slot whose centre is slotCentre : within r...">RipeBubbleRule.RippleReaches</a>), through <a class="el" href="interfaceBalloonParty_1_1Shared_1_1Messages_1_1IHitDispatcher.html" title="Publish ActorHitMessage only through this — publishing to the broker directly skips scoring and the o...">IHitDispatcher</a> as an item's hit goes, so score, items and pops behave as for any other hit. The hits carry DamageFlags.Ripple and the shot that burst the cluster, never DamageFlags.DirectHit. With them go the pieces a bomb's blast has, each at its own smaller scale: a shockwave nudge of the board, an inward pull then an outward shock on the disturbance field, and a flash of light. The foam, when its fuse runs out (<a class="el" href="#a8ecb484d104aa68fdfd321fa269b773b" title="Where the bubbles  of the cluster at slot  go when its fuse runs out, as RipeBubbleBurstMessage....">PlanFoam</a>, then <a class="el" href="#adcdc1bb2afcb17ac2cc4d47dffbf8282" title="Carries out a handout  from PlanFoam: each coat goes on, each neighbouring cluster&#39;s count goes up,...">HandOut</a>): the cluster gives its bubbles to its six neighbours (<a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleRule.html#a1a5eaf6ed0d530b894d24b99ab074f90" title="Where a cluster whose fuse ran out hands its bubbles  (at most RipeBubbleBurstMessage....">RipeBubbleRule.PlanHandout</a>), coats on plain balloons and bubbles to clusters with room, pops any left over and leaves the board, all without a hit, with a round press on the water. Only <a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleService.html" title="Ripens bubble clusters that reach the merge cap (RipeBubbleRule) and runs each one&#39;s fuse on the leve...">RipeBubbleService</a> calls it, from its own tick. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a74085d27cd14b8202032e0d6aacd1ffb" name="a74085d27cd14b8202032e0d6aacd1ffb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a74085d27cd14b8202032e0d6aacd1ffb">&#9670;&#160;</a></span>RipeBubbleBurst()</h2>
+<a id="af003ab8e3c15acc042a2bcf2ce84c477" name="af003ab8e3c15acc042a2bcf2ce84c477"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af003ab8e3c15acc042a2bcf2ce84c477">&#9670;&#160;</a></span>RipeBubbleBurst()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -204,7 +222,17 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html">DisturbanceFieldService</a></td>          <td class="paramname"><span class="paramname"><em>disturbanceField</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html">DisturbanceFieldService</a></td>          <td class="paramname"><span class="paramname"><em>disturbanceField</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html">SceneLightFieldService</a></td>          <td class="paramname"><span class="paramname"><em>lightField</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">IPublisher&lt; <a class="el" href="structBalloonParty_1_1Nudge_1_1NudgeMessage.html">NudgeMessage</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>nudgePublisher</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -217,6 +245,35 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="aa14f1d3cf919fb2a89423470eba05fb3" name="aa14f1d3cf919fb2a89423470eba05fb3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa14f1d3cf919fb2a89423470eba05fb3">&#9670;&#160;</a></span>CollectBlast()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Balloon.Controller.RipeBubbleBurst.CollectBlast </td>
+          <td>(</td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>origin</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>radius</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a9fc7f9c08638c9ae0b47460194cf930c" name="a9fc7f9c08638c9ae0b47460194cf930c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9fc7f9c08638c9ae0b47460194cf930c">&#9670;&#160;</a></span>CollectNeighbors()</h2>
 
@@ -333,7 +390,33 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Hits the neighbours of <em>slot</em>  and returns the ones the hits reached (an outcome other than HitOutcome.None), a bit per direction as <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html" title="Published by RipeBubbleService when a ripe cluster bursts.">RipeBubbleBurstMessage</a> carries them. </p>
+<p>Blasts round <em>slot</em> : hits every balloon within the ripple's radius that takes it, in column then row order, and returns how many hits landed (an outcome other than HitOutcome.None), as <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#a45d95a67b04e4ba9a9caad99f692b097" title="The balloons the burst touched: a ripple&#39;s hits that landed, a foam&#39;s new coats.">RipeBubbleBurstMessage.Reached</a> carries it. </p>
+<p>The bursting cluster has left its slot by now; a balloon the board has since moved there is in the blast like any other. </p>
+
+</div>
+</div>
+<a id="a83f514546f366ccf37a5578f905fdd9d" name="a83f514546f366ccf37a5578f905fdd9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a83f514546f366ccf37a5578f905fdd9d">&#9670;&#160;</a></span>ShockTheField()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Balloon.Controller.RipeBubbleBurst.ShockTheField </td>
+          <td>(</td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>origin</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -349,6 +432,50 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html">IBalloonsConfiguration</a> BalloonParty.Balloon.Controller.RipeBubbleBurst._balloonsConfig</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a75a61aaa7ee04e925f2c749216adbcd9" name="a75a61aaa7ee04e925f2c749216adbcd9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75a61aaa7ee04e925f2c749216adbcd9">&#9670;&#160;</a></span>_blastActors</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly List&lt;<a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html">IWriteableSlotActor</a>&gt; BalloonParty.Balloon.Controller.RipeBubbleBurst._blastActors = new(<a class="el" href="#adc85e31c9a648f18d5f3052a57c73447">BlastCapacity</a>)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afabc379d4f2b0c188e86bd7a21579d89" name="afabc379d4f2b0c188e86bd7a21579d89"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afabc379d4f2b0c188e86bd7a21579d89">&#9670;&#160;</a></span>_blastSlots</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly List&lt;Vector2Int&gt; BalloonParty.Balloon.Controller.RipeBubbleBurst._blastSlots = new(<a class="el" href="#adc85e31c9a648f18d5f3052a57c73447">BlastCapacity</a>)</td>
         </tr>
       </table>
   </td>
@@ -470,6 +597,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="adf241870d65c4ee0ca7001ad95b8db05" name="adf241870d65c4ee0ca7001ad95b8db05"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf241870d65c4ee0ca7001ad95b8db05">&#9670;&#160;</a></span>_lightField</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly <a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html">SceneLightFieldService</a> BalloonParty.Balloon.Controller.RipeBubbleBurst._lightField</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a86f7d4ffe35ac575987e2ac1aa1cd7c7" name="a86f7d4ffe35ac575987e2ac1aa1cd7c7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a86f7d4ffe35ac575987e2ac1aa1cd7c7">&#9670;&#160;</a></span>_neighbors</h2>
 
@@ -503,6 +652,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly Vector2Int [] BalloonParty.Balloon.Controller.RipeBubbleBurst._neighborSlots = new Vector2Int[6]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0c254dc5be354b23931fdf48976e8d07" name="a0c254dc5be354b23931fdf48976e8d07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c254dc5be354b23931fdf48976e8d07">&#9670;&#160;</a></span>_nudgePublisher</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly IPublisher&lt;<a class="el" href="structBalloonParty_1_1Nudge_1_1NudgeMessage.html">NudgeMessage</a>&gt; BalloonParty.Balloon.Controller.RipeBubbleBurst._nudgePublisher</td>
         </tr>
       </table>
   </td>
@@ -552,6 +723,28 @@ Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adc85e31c9a648f18d5f3052a57c73447" name="adc85e31c9a648f18d5f3052a57c73447"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc85e31c9a648f18d5f3052a57c73447">&#9670;&#160;</a></span>BlastCapacity</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int BalloonParty.Balloon.Controller.RipeBubbleBurst.BlastCapacity = 32</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

@@ -41,6 +41,7 @@ var searchData=
   ['bouncewalllast_38',['BounceWallLast',['../namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56dad7ae23504c10caf6fdcacff88a864cfe',1,'BalloonParty::Configuration::HeadsUp']]],
   ['bracing_39',['Bracing',['../classBalloonParty_1_1Projectile_1_1View_1_1ProjectileShieldView.html#a8cbb3f09d52df56431e51199cad285caa8b4b0412c01a1855349602f9cbe33768',1,'BalloonParty::Projectile::View::ProjectileShieldView']]],
   ['bubblecluster_40',['BubbleCluster',['../namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60ea2d92127d6af9dd8fbbe7b1fa1a72dc5e',1,'BalloonParty::Balloon::Type']]],
-  ['bubbleripple_41',['BubbleRipple',['../namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0ea0e30236f031ba5b65ca19c59d8bd912c',1,'BalloonParty::Configuration::Effects']]],
-  ['bush_42',['Bush',['../namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473ac7174dc75237a0361780548a1af6872b',1,'BalloonParty::Slots::Actor::Archetype']]]
+  ['bubblefoam_41',['BubbleFoam',['../namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0ea88f4b61f49946e82cb3476bee6a9fd8c',1,'BalloonParty::Configuration::Effects']]],
+  ['bubbleripple_42',['BubbleRipple',['../namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0ea0e30236f031ba5b65ca19c59d8bd912c',1,'BalloonParty::Configuration::Effects']]],
+  ['bush_43',['Bush',['../namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473ac7174dc75237a0361780548a1af6872b',1,'BalloonParty::Slots::Actor::Archetype']]]
 ];

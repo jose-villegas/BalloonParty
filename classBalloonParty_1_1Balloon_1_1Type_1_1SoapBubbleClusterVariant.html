@@ -124,7 +124,7 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClus
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant__inherit__graph.svg" width="444" height="315"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant__inherit__graph.svg" width="444" height="384"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for BalloonParty.Balloon.Type.SoapBubbleClusterVariant:</div>
@@ -158,6 +158,12 @@ Properties</h2></td></tr>
 <tr class="memitem:a5111cdce8338e6c65518a79dd8b0baaf" id="r_a5111cdce8338e6c65518a79dd8b0baaf"><td class="memItemLeft" align="right" valign="top">Vector3 IBubbleMergeReactive.&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5111cdce8338e6c65518a79dd8b0baaf">BubbleWorldScale</a><code> [get]</code></td></tr>
 <tr class="memdesc:a5111cdce8338e6c65518a79dd8b0baaf"><td class="mdescLeft">&#160;</td><td class="mdescRight">A bubble's world size at rest, without a wobble in progress.  <br /></td></tr>
 <tr class="separator:a5111cdce8338e6c65518a79dd8b0baaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae79c9b3fd6508fc05007d5a4ce12f151" id="r_ae79c9b3fd6508fc05007d5a4ce12f151"><td class="memItemLeft" align="right" valign="top">float IRipeSpin.&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae79c9b3fd6508fc05007d5a4ce12f151">TurnDirection</a><code> [get]</code></td></tr>
+<tr class="memdesc:ae79c9b3fd6508fc05007d5a4ce12f151"><td class="mdescLeft">&#160;</td><td class="mdescRight">The way the cluster turns on screen while ripe: +1 counter-clockwise, -1 clockwise.  <br /></td></tr>
+<tr class="separator:ae79c9b3fd6508fc05007d5a4ce12f151"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0828c574ee384ca7935b77cff41b9f52" id="r_a0828c574ee384ca7935b77cff41b9f52"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0828c574ee384ca7935b77cff41b9f52">TurnDirection</a><code> [get]</code></td></tr>
+<tr class="memdesc:a0828c574ee384ca7935b77cff41b9f52"><td class="mdescLeft">&#160;</td><td class="mdescRight">The way the cluster turns on screen while ripe: +1 counter-clockwise, -1 clockwise.  <br /></td></tr>
+<tr class="separator:a0828c574ee384ca7935b77cff41b9f52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -197,8 +203,6 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a9f79ebb52699e2fd488a4da53f926e75"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a811c62d7d77da36defc75db5bb0094eb" id="r_a811c62d7d77da36defc75db5bb0094eb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a811c62d7d77da36defc75db5bb0094eb">SettleScale</a> ()</td></tr>
 <tr class="separator:a811c62d7d77da36defc75db5bb0094eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a522d32bfe8e76a2166fc30a464402918" id="r_a522d32bfe8e76a2166fc30a464402918"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a522d32bfe8e76a2166fc30a464402918">ShowFold</a> (int shown)</td></tr>
-<tr class="separator:a522d32bfe8e76a2166fc30a464402918"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc6c4cd902bcd9ad83ed1309b6d41b40" id="r_abc6c4cd902bcd9ad83ed1309b6d41b40"><td class="memItemLeft" align="right" valign="top">void IBubbleMergeReactive.&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abc6c4cd902bcd9ad83ed1309b6d41b40">StepCount</a> (int delta)</td></tr>
 <tr class="memdesc:abc6c4cd902bcd9ad83ed1309b6d41b40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves the shown count by <em>delta</em>  bubbles while held.  <br /></td></tr>
 <tr class="separator:abc6c4cd902bcd9ad83ed1309b6d41b40"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -248,8 +252,12 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ae45124242dfa2c8c831267f3b8134ec3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5307e9325d715709aeac2c6f932a6d50" id="r_a5307e9325d715709aeac2c6f932a6d50"><td class="memItemLeft" align="right" valign="top">DOGetter&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5307e9325d715709aeac2c6f932a6d50">_foldGetter</a></td></tr>
 <tr class="separator:a5307e9325d715709aeac2c6f932a6d50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff8920707e19cc334322f54493b48b0e" id="r_aff8920707e19cc334322f54493b48b0e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aff8920707e19cc334322f54493b48b0e">_foldGrowth</a></td></tr>
+<tr class="separator:aff8920707e19cc334322f54493b48b0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adb2d2609f82e6209c54ddac0defd6513" id="r_adb2d2609f82e6209c54ddac0defd6513"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adb2d2609f82e6209c54ddac0defd6513">_folding</a></td></tr>
 <tr class="separator:adb2d2609f82e6209c54ddac0defd6513"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adbe15ceb99ec8233f1a1a6a621f87528" id="r_adbe15ceb99ec8233f1a1a6a621f87528"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adbe15ceb99ec8233f1a1a6a621f87528">_foldPulse</a></td></tr>
+<tr class="separator:adbe15ceb99ec8233f1a1a6a621f87528"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a15fd953aab7d2b42f06a9fc0e3fa1950" id="r_a15fd953aab7d2b42f06a9fc0e3fa1950"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a15fd953aab7d2b42f06a9fc0e3fa1950">_foldRadius</a></td></tr>
 <tr class="separator:a15fd953aab7d2b42f06a9fc0e3fa1950"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79eaa3f637142e459a1be2446b598403" id="r_a79eaa3f637142e459a1be2446b598403"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a79eaa3f637142e459a1be2446b598403">_foldSeconds</a></td></tr>
@@ -282,6 +290,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a053d7dc5cfb3f69e7310ca3a7ad0db17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9072c56fa7d5774d1addcc84af086644" id="r_a9072c56fa7d5774d1addcc84af086644"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9072c56fa7d5774d1addcc84af086644">_shownCount</a></td></tr>
 <tr class="separator:a9072c56fa7d5774d1addcc84af086644"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6b4b94511c23814fe4651debe1a1d11" id="r_ad6b4b94511c23814fe4651debe1a1d11"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad6b4b94511c23814fe4651debe1a1d11">_spinFast</a></td></tr>
+<tr class="separator:ad6b4b94511c23814fe4651debe1a1d11"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc174df9ec15df36445ac9dbaa4e195e" id="r_abc174df9ec15df36445ac9dbaa4e195e"><td class="memItemLeft" align="right" valign="top">TweenCallback&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abc174df9ec15df36445ac9dbaa4e195e">_stepFold</a></td></tr>
 <tr class="separator:abc174df9ec15df36445ac9dbaa4e195e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23baedafc4af6ca81b0b289a6a3bbee6" id="r_a23baedafc4af6ca81b0b289a6a3bbee6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a23baedafc4af6ca81b0b289a6a3bbee6">_swell</a> = 1f</td></tr>
@@ -293,7 +303,7 @@ Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Drives the SoapBubbleCluster shader's bubble count and float/spin clock; the shader animates itself from <code>_Time.y</code> after Bind. </p>
-<p>During a merge it shows the count a bubble at a time and wobbles (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1View_1_1IBubbleMergeReactive.html" title="A bubble cluster&#39;s look as a merge plays out (BubbleMergeView).">IBubbleMergeReactive</a>). A ripe cluster (<a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html#a1bd118b40fc8b563c32536f622aedbfa" title="At the merge cap with its fuse running: any hit bursts it whole.">BubbleClusterModel.Ripe</a>) swells its renderer to <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRipeBubbleSettings.html#a4564706015700b231898d6785be32152" title="A ripe cluster&#39;s size over its rest size.">IRipeBubbleSettings.SwellScale</a>, floats <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRipeBubbleSettings.html#a2d39491103ed538c7dffa12a26e18b0d" title="A ripe cluster&#39;s float speed over its rest speed.">IRipeBubbleSettings.FloatSpeedup</a> times faster, throbs as its fuse (<a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html#ad24ef6b5391408ad977eb8ae7da26e8c" title="Seconds of level clock until the fuse runs out; 0 when not ripe.">BubbleClusterModel.FuseLeft</a>) crosses each second (<a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleRule.html#a10ac48daee6fcd2a2a80df15bb4c389a" title="Whether a ripe cluster&#39;s fuse throbs as it runs from before  seconds left to after : once as it cross...">RipeBubbleRule.Throbs</a>), and is tinted toward <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRipeBubbleSettings.html#a0495e1e62e49f6aa0232270bac21cf42" title="The colour a ripe cluster is tinted toward as its fuse runs out.">IRipeBubbleSettings.WarnTint</a> as the fuse runs out. The fuse only moves while the level clock runs, so a pause or the level-up holds the throb and the tint with it. A cluster popped while ripe folds before its pop shows (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonPopPrelude.html" title="A view binding with a look of its own to play between its balloon being popped and the pop being show...">IBalloonPopPrelude</a>): over <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRipeBubbleSettings.html#afa0db86d1c3f1507f577126d144d93ed" title="Seconds of level clock from the hit that pops a ripe cluster to its ripple: the cluster folds into on...">IRipeBubbleSettings.BurstSeconds</a> it steps down to one big bubble (<a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleRule.html#af697468eb5c5ed15d8b38a494acb2406" title="The bubbles a popped ripe cluster shows elapsed  seconds into its fold: from from  down one at a time...">RipeBubbleRule.FoldCount</a>, <a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleRule.html#a006b2547909486b3896715cd8ac1686b" title="The folding cluster&#39;s scale over its own while it shows shown  of the from  bubbles it started with.">RipeBubbleRule.FoldScale</a>), keeping the flush it had at the hit. All of it is undone on every bind and when the binding is dropped. </p>
+<p>During a merge it shows the count a bubble at a time and wobbles (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1View_1_1IBubbleMergeReactive.html" title="A bubble cluster&#39;s look as a merge plays out (BubbleMergeView).">IBubbleMergeReactive</a>). A ripe cluster (<a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html#a1bd118b40fc8b563c32536f622aedbfa" title="At the merge cap with its fuse running: any hit bursts it whole.">BubbleClusterModel.Ripe</a>) swells its renderer to <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRipeBubbleSettings.html#a4564706015700b231898d6785be32152" title="A ripe cluster&#39;s size over its rest size.">IRipeBubbleSettings.SwellScale</a>, floats <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRipeBubbleSettings.html#a2d39491103ed538c7dffa12a26e18b0d" title="A ripe cluster&#39;s float speed over its rest speed.">IRipeBubbleSettings.FloatSpeedup</a> times faster, throbs as its fuse (<a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html#ad24ef6b5391408ad977eb8ae7da26e8c" title="Seconds of level clock until the fuse runs out; 0 when not ripe.">BubbleClusterModel.FuseLeft</a>) crosses each second (<a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleRule.html#a10ac48daee6fcd2a2a80df15bb4c389a" title="Whether a ripe cluster&#39;s fuse throbs as it runs from before  seconds left to after : once as it cross...">RipeBubbleRule.Throbs</a>), is tinted toward <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRipeBubbleSettings.html#a0495e1e62e49f6aa0232270bac21cf42" title="The colour a ripe cluster is tinted toward as its fuse runs out.">IRipeBubbleSettings.WarnTint</a> as the fuse runs out, and spins with the spiral arm it sheds: at the arm's own turn rate and the same way round (<a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleRule.html#a93ad030775d6c064e905e07f8301fd7c" title="The soap shader&#39;s _RotationSpeed that turns a ripe cluster with its spiral arm, whose source turns tu...">RipeBubbleRule.ClusterSpin</a>, <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1View_1_1IRipeSpin.html" title="A view binding that spins while its balloon is ripe (the soap bubble cluster).">IRipeSpin</a>), stepping up with the arm at the first fast throb. The fuse only moves while the level clock runs, so a pause or the level-up holds the throb and the tint with it. A cluster popped while ripe folds before its pop shows (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonPopPrelude.html" title="A view binding with a look of its own to play between its balloon being popped and the pop being show...">IBalloonPopPrelude</a>): over <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRipeBubbleSettings.html#afa0db86d1c3f1507f577126d144d93ed" title="Seconds of level clock from the hit that pops a ripe cluster to its ripple: the cluster folds into on...">IRipeBubbleSettings.BurstSeconds</a> it steps down to one big bubble (<a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleRule.html#af697468eb5c5ed15d8b38a494acb2406" title="The bubbles a popped ripe cluster shows elapsed  seconds into its fold: from from  down one at a time...">RipeBubbleRule.FoldCount</a>, <a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleRule.html#aee0be7a3a8f3829cb9612f37de525b89" title="The folding cluster&#39;s settled scale over its own while it shows shown  of the from  bubbles it starte...">RipeBubbleRule.FoldScale</a>), each step pumping its scale out (<a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleRule.html#a87b224e272ef6265a265f578a0336e2e" title="The pump on top of FoldScale elapsed  seconds into a fold: each count shown, the full cluster at the ...">RipeBubbleRule.FoldPulse</a>), keeping the flush it had at the hit. All of it is undone on every bind and when the binding is dropped. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="aeb0ed646d987e1fda440a799f086b378" name="aeb0ed646d987e1fda440a799f086b378"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aeb0ed646d987e1fda440a799f086b378">&#9670;&#160;</a></span>ApplyTint()</h2>
@@ -784,31 +794,6 @@ Private Attributes</h2></td></tr>
           <td class="memname">void BalloonParty.Balloon.Type.SoapBubbleClusterVariant.SettleScale </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a522d32bfe8e76a2166fc30a464402918" name="a522d32bfe8e76a2166fc30a464402918"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a522d32bfe8e76a2166fc30a464402918">&#9670;&#160;</a></span>ShowFold()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void BalloonParty.Balloon.Type.SoapBubbleClusterVariant.ShowFold </td>
-          <td>(</td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>shown</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -1368,6 +1353,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="aff8920707e19cc334322f54493b48b0e" name="aff8920707e19cc334322f54493b48b0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff8920707e19cc334322f54493b48b0e">&#9670;&#160;</a></span>_foldGrowth</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Balloon.Type.SoapBubbleClusterVariant._foldGrowth</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="adb2d2609f82e6209c54ddac0defd6513" name="adb2d2609f82e6209c54ddac0defd6513"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adb2d2609f82e6209c54ddac0defd6513">&#9670;&#160;</a></span>_folding</h2>
 
@@ -1379,6 +1386,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">bool BalloonParty.Balloon.Type.SoapBubbleClusterVariant._folding</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adbe15ceb99ec8233f1a1a6a621f87528" name="adbe15ceb99ec8233f1a1a6a621f87528"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adbe15ceb99ec8233f1a1a6a621f87528">&#9670;&#160;</a></span>_foldPulse</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Balloon.Type.SoapBubbleClusterVariant._foldPulse</td>
         </tr>
       </table>
   </td>
@@ -1742,6 +1771,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ad6b4b94511c23814fe4651debe1a1d11" name="ad6b4b94511c23814fe4651debe1a1d11"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6b4b94511c23814fe4651debe1a1d11">&#9670;&#160;</a></span>_spinFast</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Balloon.Type.SoapBubbleClusterVariant._spinFast</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="abc174df9ec15df36445ac9dbaa4e195e" name="abc174df9ec15df36445ac9dbaa4e195e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abc174df9ec15df36445ac9dbaa4e195e">&#9670;&#160;</a></span>_stepFold</h2>
 
@@ -1928,6 +1979,58 @@ Private Attributes</h2></td></tr>
 <p>A bubble's world size at rest, without a wobble in progress. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1View_1_1IBubbleMergeReactive.html#a1014e51e6e592d3aa4fcca6228ab08fc">BalloonParty.Balloon.View.IBubbleMergeReactive</a>.</p>
+
+</div>
+</div>
+<a id="ae79c9b3fd6508fc05007d5a4ce12f151" name="ae79c9b3fd6508fc05007d5a4ce12f151"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae79c9b3fd6508fc05007d5a4ce12f151">&#9670;&#160;</a></span>TurnDirection <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float IRipeSpin. BalloonParty.Balloon.Type.SoapBubbleClusterVariant.TurnDirection</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The way the cluster turns on screen while ripe: +1 counter-clockwise, -1 clockwise. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1View_1_1IRipeSpin.html#a0bd56094d308d4720c90cdaef3e5bdb7">BalloonParty.Balloon.View.IRipeSpin</a>.</p>
+
+</div>
+</div>
+<a id="a0828c574ee384ca7935b77cff41b9f52" name="a0828c574ee384ca7935b77cff41b9f52"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0828c574ee384ca7935b77cff41b9f52">&#9670;&#160;</a></span>TurnDirection <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Balloon.Type.SoapBubbleClusterVariant.TurnDirection</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The way the cluster turns on screen while ripe: +1 counter-clockwise, -1 clockwise. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1View_1_1IRipeSpin.html#a0bd56094d308d4720c90cdaef3e5bdb7">BalloonParty.Balloon.View.IRipeSpin</a>.</p>
 
 </div>
 </div>

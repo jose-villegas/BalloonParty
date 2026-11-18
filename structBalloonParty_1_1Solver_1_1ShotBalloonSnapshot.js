@@ -1,6 +1,7 @@
 var structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot =
 [
-    [ "ShotBalloonSnapshot", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#a4f3b60b2b224777a727e774927d65e3e", null ],
+    [ "ShotBalloonSnapshot", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#a312342964a33d245b401dd396834f737", null ],
+    [ "AtSlotCenter", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#a55be4b08cfb992af76b760d6c90a7eca", null ],
     [ "ForBubbleClusterTarget", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#ab4c55d7b63da751ed72d55772f522bd4", null ],
     [ "ForColorTarget", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#aaf8e7a91592d4ca8dd8cd3f83c0d3a85", null ],
     [ "ForDiscoTarget", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#a26f8a7fb0a3cd9dae0934d4fae2c11a0", null ],
@@ -22,6 +23,7 @@ var structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot =
     [ "Reward", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#a92073e768704a4c8d4bbdf53a2010a8b", null ],
     [ "Ripe", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#aa863f690f3a8c63a997eff2bd229cfc2", null ],
     [ "ScoreValue", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#aab92f235305c7983ce35cb6db4d72574", null ],
+    [ "SlotCenter", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#a0e2fa36e70af815b6cdede07b1a26e83", null ],
     [ "StaticSlotIndex", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#ab7e0c199e855e1d5d1da073d4dbae491", null ],
     [ "ColorId", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#a8f673aa641b48e9c7641bbfc610841ba", null ]
 ];

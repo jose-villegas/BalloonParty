@@ -114,7 +114,7 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1
 </div><!--header-->
 <div class="contents">
 
-<p>A bubble cluster that reaches <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#a95784529211c68181bb56a6161802d14" title="Most bubbles a merge fills a cluster to; above the HitsToPop clusters spawn with.">IBalloonsConfiguration.BubbleMergeMax</a> is ripe: any hit bursts it whole, and a fuse on the level clock runs until it hands its bubbles out and leaves.  
+<p>A bubble cluster that reaches <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#a95784529211c68181bb56a6161802d14" title="Most bubbles a merge fills a cluster to; above the HitsToPop clusters spawn with.">IBalloonsConfiguration.BubbleMergeMax</a> is ripe: any hit bursts it whole, a small bomb whose blast (the ripple) hits every balloon within <a class="el" href="#a6c79c18bb9d2540a672dbd94cf7d6ff6" title="How far a ripe cluster&#39;s ripple reaches, in world units between slot centres, the edge included: ever...">RippleRadius</a>, and a fuse on the level clock runs until it hands its bubbles out and leaves.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Configuration.Balloons.IRipeBubbleSettings:</div>
@@ -126,6 +126,36 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:a1ed064e1ba763ffd0c3d00aaf6912e29" id="r_a1ed064e1ba763ffd0c3d00aaf6912e29"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ed064e1ba763ffd0c3d00aaf6912e29">BlastBubbleRadius</a><code> [get]</code></td></tr>
+<tr class="memdesc:a1ed064e1ba763ffd0c3d00aaf6912e29"><td class="mdescLeft">&#160;</td><td class="mdescRight">A thrown bubble's radius at the edge of the blast, in slot spacings; it leaves smaller.  <br /></td></tr>
+<tr class="separator:a1ed064e1ba763ffd0c3d00aaf6912e29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c537ce43370859fe072d46c49333744" id="r_a4c537ce43370859fe072d46c49333744"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4c537ce43370859fe072d46c49333744">BlastBubbles</a><code> [get]</code></td></tr>
+<tr class="memdesc:a4c537ce43370859fe072d46c49333744"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many soap bubbles a burst throws outward. 0: none.  <br /></td></tr>
+<tr class="separator:a4c537ce43370859fe072d46c49333744"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7eb34e8b400d92cecb430ac8c1b5b7e6" id="r_a7eb34e8b400d92cecb430ac8c1b5b7e6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7eb34e8b400d92cecb430ac8c1b5b7e6">BlastBubbleSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:a7eb34e8b400d92cecb430ac8c1b5b7e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds a thrown bubble takes to reach the edge of the blast and fade.  <br /></td></tr>
+<tr class="separator:a7eb34e8b400d92cecb430ac8c1b5b7e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f2e99fce7da870491561f15367c8de3" id="r_a3f2e99fce7da870491561f15367c8de3"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3f2e99fce7da870491561f15367c8de3">BlastImplosionRadiusScale</a><code> [get]</code></td></tr>
+<tr class="memdesc:a3f2e99fce7da870491561f15367c8de3"><td class="mdescLeft">&#160;</td><td class="mdescRight">The inward pull stamped on the disturbance field just before the burst's outward shock, as a multiple of the <code>BubbleRipple</code> stamp profile's radius.  <br /></td></tr>
+<tr class="separator:a3f2e99fce7da870491561f15367c8de3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a179b11ae839ab50bdbd7cbc387d2995d" id="r_a179b11ae839ab50bdbd7cbc387d2995d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a179b11ae839ab50bdbd7cbc387d2995d">BlastImplosionSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:a179b11ae839ab50bdbd7cbc387d2995d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds the inward pull takes: short, the outward shock follows it.  <br /></td></tr>
+<tr class="separator:a179b11ae839ab50bdbd7cbc387d2995d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accb95dff91f622d277f580891ad2aea2" id="r_accb95dff91f622d277f580891ad2aea2"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#accb95dff91f622d277f580891ad2aea2">BlastImplosionStrengthScale</a><code> [get]</code></td></tr>
+<tr class="memdesc:accb95dff91f622d277f580891ad2aea2"><td class="mdescLeft">&#160;</td><td class="mdescRight">The inward pull's strength, as a multiple of the <code>BubbleRipple</code> profile's. 0: no pull.  <br /></td></tr>
+<tr class="separator:accb95dff91f622d277f580891ad2aea2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa69adde348d68d7766fe6536f148e94b" id="r_aa69adde348d68d7766fe6536f148e94b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa69adde348d68d7766fe6536f148e94b">BlastLightIntensity</a><code> [get]</code></td></tr>
+<tr class="memdesc:aa69adde348d68d7766fe6536f148e94b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The flash's peak intensity.  <br /></td></tr>
+<tr class="separator:aa69adde348d68d7766fe6536f148e94b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65c1271367360387d1cbd49c4a54710b" id="r_a65c1271367360387d1cbd49c4a54710b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a65c1271367360387d1cbd49c4a54710b">BlastLightRadius</a><code> [get]</code></td></tr>
+<tr class="memdesc:a65c1271367360387d1cbd49c4a54710b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The radius of the light a burst flashes, in world units.  <br /></td></tr>
+<tr class="separator:a65c1271367360387d1cbd49c4a54710b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7075c5d1e491ed03c498aab59dd5374" id="r_ab7075c5d1e491ed03c498aab59dd5374"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab7075c5d1e491ed03c498aab59dd5374">BlastLightSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:ab7075c5d1e491ed03c498aab59dd5374"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds the flash is held. 0 or less: no flash.  <br /></td></tr>
+<tr class="separator:ab7075c5d1e491ed03c498aab59dd5374"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a666bc3f86da92f4d2129839148ab1409" id="r_a666bc3f86da92f4d2129839148ab1409"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Nudge_1_1NudgeOverride.html">NudgeOverride</a>[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a666bc3f86da92f4d2129839148ab1409">BlastNudgeOverrides</a><code> [get]</code></td></tr>
+<tr class="memdesc:a666bc3f86da92f4d2129839148ab1409"><td class="mdescLeft">&#160;</td><td class="mdescRight">The outward shove the board takes as a ripe cluster bursts: a shockwave nudge, as a bomb's is, with its own distance, duration and falloff.  <br /></td></tr>
+<tr class="separator:a666bc3f86da92f4d2129839148ab1409"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa0db86d1c3f1507f577126d144d93ed" id="r_afa0db86d1c3f1507f577126d144d93ed"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa0db86d1c3f1507f577126d144d93ed">BurstSeconds</a><code> [get]</code></td></tr>
 <tr class="memdesc:afa0db86d1c3f1507f577126d144d93ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds of level clock from the hit that pops a ripe cluster to its ripple: the cluster folds into one big bubble meanwhile, and the ripple lands as that bubble pops.  <br /></td></tr>
 <tr class="separator:afa0db86d1c3f1507f577126d144d93ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -153,14 +183,17 @@ Properties</h2></td></tr>
 <tr class="memitem:ae19cd3d472d8ab13b1977e4ebbb3f884" id="r_ae19cd3d472d8ab13b1977e4ebbb3f884"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae19cd3d472d8ab13b1977e4ebbb3f884">FoamStepSeconds</a><code> [get]</code></td></tr>
 <tr class="memdesc:ae19cd3d472d8ab13b1977e4ebbb3f884"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds between the bubbles a cluster whose fuse ran out hands to its neighbours.  <br /></td></tr>
 <tr class="separator:ae19cd3d472d8ab13b1977e4ebbb3f884"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3af23d37f4e54601aed96b3436c8a221" id="r_a3af23d37f4e54601aed96b3436c8a221"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3af23d37f4e54601aed96b3436c8a221">FoldGrowth</a><code> [get]</code></td></tr>
+<tr class="memdesc:a3af23d37f4e54601aed96b3436c8a221"><td class="mdescLeft">&#160;</td><td class="mdescRight">How much bigger than the whole cluster the one bubble a fold ends on is: each step of the fold adds an even share of it.  <br /></td></tr>
+<tr class="separator:a3af23d37f4e54601aed96b3436c8a221"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c5bbe8fc2b5f390df9c03297e60ed8f" id="r_a7c5bbe8fc2b5f390df9c03297e60ed8f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7c5bbe8fc2b5f390df9c03297e60ed8f">FoldPulse</a><code> [get]</code></td></tr>
+<tr class="memdesc:a7c5bbe8fc2b5f390df9c03297e60ed8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far each step of the fold kicks the cluster's scale out, as a share of its size, before it settles on the step's own size.  <br /></td></tr>
+<tr class="separator:a7c5bbe8fc2b5f390df9c03297e60ed8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab0c4f134f39db55b8e7873582279f5fe" id="r_ab0c4f134f39db55b8e7873582279f5fe"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab0c4f134f39db55b8e7873582279f5fe">FuseSeconds</a><code> [get]</code></td></tr>
 <tr class="memdesc:ab0c4f134f39db55b8e7873582279f5fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds of level clock from ripening to the fuse running out. 0 or less: clusters never ripen.  <br /></td></tr>
 <tr class="separator:ab0c4f134f39db55b8e7873582279f5fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a01ffc81faab2b0fc799ceca94a7bafc4" id="r_a01ffc81faab2b0fc799ceca94a7bafc4"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a01ffc81faab2b0fc799ceca94a7bafc4">RingReach</a><code> [get]</code></td></tr>
-<tr class="memdesc:a01ffc81faab2b0fc799ceca94a7bafc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far the ring spreads, in slot spacings from the burst.  <br /></td></tr>
-<tr class="separator:a01ffc81faab2b0fc799ceca94a7bafc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a543462610c0931c54142f086fc037d6e" id="r_a543462610c0931c54142f086fc037d6e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a543462610c0931c54142f086fc037d6e">RingSeconds</a><code> [get]</code></td></tr>
-<tr class="memdesc:a543462610c0931c54142f086fc037d6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds the ring a player's burst sends over the water takes to spread and fade.  <br /></td></tr>
+<tr class="memdesc:a543462610c0931c54142f086fc037d6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds the ring a player's burst sends over the water takes to spread to the edge of the blast (<a class="el" href="#a6c79c18bb9d2540a672dbd94cf7d6ff6" title="How far a ripe cluster&#39;s ripple reaches, in world units between slot centres, the edge included: ever...">RippleRadius</a>) and fade.  <br /></td></tr>
 <tr class="separator:a543462610c0931c54142f086fc037d6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a64ce45727ca4968e29c233cb5b4ae358" id="r_a64ce45727ca4968e29c233cb5b4ae358"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a64ce45727ca4968e29c233cb5b4ae358">RingSortingLayerName</a><code> [get]</code></td></tr>
 <tr class="memdesc:a64ce45727ca4968e29c233cb5b4ae358"><td class="mdescLeft">&#160;</td><td class="mdescRight">The sorting layer the ring draws on.  <br /></td></tr>
@@ -169,11 +202,11 @@ Properties</h2></td></tr>
 <tr class="memdesc:ac1c2e7384d85277befde8a0c9f444ec5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The ring's order on its layer: below the balloons, so it reads as on the water.  <br /></td></tr>
 <tr class="separator:ac1c2e7384d85277befde8a0c9f444ec5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a325467b58e077d0cf10edceff1cc7d87" id="r_a325467b58e077d0cf10edceff1cc7d87"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a325467b58e077d0cf10edceff1cc7d87">RippleDamage</a><code> [get]</code></td></tr>
-<tr class="memdesc:a325467b58e077d0cf10edceff1cc7d87"><td class="mdescLeft">&#160;</td><td class="mdescRight">The hit each neighbour takes from a ripe cluster's ripple.  <br /></td></tr>
+<tr class="memdesc:a325467b58e077d0cf10edceff1cc7d87"><td class="mdescLeft">&#160;</td><td class="mdescRight">The hit each balloon the ripple reaches takes.  <br /></td></tr>
 <tr class="separator:a325467b58e077d0cf10edceff1cc7d87"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a19bb90e5049c0ef34be288977be981f5" id="r_a19bb90e5049c0ef34be288977be981f5"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a19bb90e5049c0ef34be288977be981f5">SpinSpeedup</a><code> [get]</code></td></tr>
-<tr class="memdesc:a19bb90e5049c0ef34be288977be981f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">A ripe cluster's spin over its rest spin as its fuse runs out: 1 at ripening, this at the end.  <br /></td></tr>
-<tr class="separator:a19bb90e5049c0ef34be288977be981f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c79c18bb9d2540a672dbd94cf7d6ff6" id="r_a6c79c18bb9d2540a672dbd94cf7d6ff6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6c79c18bb9d2540a672dbd94cf7d6ff6">RippleRadius</a><code> [get]</code></td></tr>
+<tr class="memdesc:a6c79c18bb9d2540a672dbd94cf7d6ff6"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far a ripe cluster's ripple reaches, in world units between slot centres, the edge included: every balloon whose slot centre is that close to the burst's is hit.  <br /></td></tr>
+<tr class="separator:a6c79c18bb9d2540a672dbd94cf7d6ff6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afeda91d5db92b02a9a8a6fa48c3c581b" id="r_afeda91d5db92b02a9a8a6fa48c3c581b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afeda91d5db92b02a9a8a6fa48c3c581b">SpiralBubbleRadius</a><code> [get]</code></td></tr>
 <tr class="memdesc:afeda91d5db92b02a9a8a6fa48c3c581b"><td class="mdescLeft">&#160;</td><td class="mdescRight">A spiral bubble's radius at the arm's outer end, in slot spacings; it leaves smaller.  <br /></td></tr>
 <tr class="separator:afeda91d5db92b02a9a8a6fa48c3c581b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -190,7 +223,7 @@ Properties</h2></td></tr>
 <tr class="memdesc:a07d5d2466b27e8a7d1bedc59dbfcb84a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds a spiral's bubble lives: with the turning, how many turns of the arm show.  <br /></td></tr>
 <tr class="separator:a07d5d2466b27e8a7d1bedc59dbfcb84a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2638862aef12f9dcf3aeec83dee21c48" id="r_a2638862aef12f9dcf3aeec83dee21c48"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2638862aef12f9dcf3aeec83dee21c48">SpiralTurnsPerSecond</a><code> [get]</code></td></tr>
-<tr class="memdesc:a2638862aef12f9dcf3aeec83dee21c48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Turns a second of the point the bubbles leave from.  <br /></td></tr>
+<tr class="memdesc:a2638862aef12f9dcf3aeec83dee21c48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Turns a second of the point the bubbles leave from, and of the ripe cluster itself: the two turn together, a little faster in the fuse's last seconds.  <br /></td></tr>
 <tr class="separator:a2638862aef12f9dcf3aeec83dee21c48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4564706015700b231898d6785be32152" id="r_a4564706015700b231898d6785be32152"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4564706015700b231898d6785be32152">SwellScale</a><code> [get]</code></td></tr>
 <tr class="memdesc:a4564706015700b231898d6785be32152"><td class="mdescLeft">&#160;</td><td class="mdescRight">A ripe cluster's size over its rest size.  <br /></td></tr>
@@ -215,8 +248,269 @@ Properties</h2></td></tr>
 <tr class="separator:a0495e1e62e49f6aa0232270bac21cf42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>A bubble cluster that reaches <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#a95784529211c68181bb56a6161802d14" title="Most bubbles a merge fills a cluster to; above the HitsToPop clusters spawn with.">IBalloonsConfiguration.BubbleMergeMax</a> is ripe: any hit bursts it whole, and a fuse on the level clock runs until it hands its bubbles out and leaves. </p>
+<div class="textblock"><p>A bubble cluster that reaches <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#a95784529211c68181bb56a6161802d14" title="Most bubbles a merge fills a cluster to; above the HitsToPop clusters spawn with.">IBalloonsConfiguration.BubbleMergeMax</a> is ripe: any hit bursts it whole, a small bomb whose blast (the ripple) hits every balloon within <a class="el" href="#a6c79c18bb9d2540a672dbd94cf7d6ff6" title="How far a ripe cluster&#39;s ripple reaches, in world units between slot centres, the edge included: ever...">RippleRadius</a>, and a fuse on the level clock runs until it hands its bubbles out and leaves. </p>
 </div><h2 class="groupheader">Property Documentation</h2>
+<a id="a1ed064e1ba763ffd0c3d00aaf6912e29" name="a1ed064e1ba763ffd0c3d00aaf6912e29"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ed064e1ba763ffd0c3d00aaf6912e29">&#9670;&#160;</a></span>BlastBubbleRadius</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.IRipeBubbleSettings.BlastBubbleRadius</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A thrown bubble's radius at the edge of the blast, in slot spacings; it leaves smaller. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RipeBubbleSettings.html#ac63a54ab10122818bf9a76391a9ebd86">BalloonParty.Configuration.Balloons.RipeBubbleSettings</a>.</p>
+
+</div>
+</div>
+<a id="a4c537ce43370859fe072d46c49333744" name="a4c537ce43370859fe072d46c49333744"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c537ce43370859fe072d46c49333744">&#9670;&#160;</a></span>BlastBubbles</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.IRipeBubbleSettings.BlastBubbles</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How many soap bubbles a burst throws outward. 0: none. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RipeBubbleSettings.html#aefef31df615d11255dbec0cdc9d39266">BalloonParty.Configuration.Balloons.RipeBubbleSettings</a>.</p>
+
+</div>
+</div>
+<a id="a7eb34e8b400d92cecb430ac8c1b5b7e6" name="a7eb34e8b400d92cecb430ac8c1b5b7e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7eb34e8b400d92cecb430ac8c1b5b7e6">&#9670;&#160;</a></span>BlastBubbleSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.IRipeBubbleSettings.BlastBubbleSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds a thrown bubble takes to reach the edge of the blast and fade. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RipeBubbleSettings.html#a90f88b5607015db146d97b0df3d8617a">BalloonParty.Configuration.Balloons.RipeBubbleSettings</a>.</p>
+
+</div>
+</div>
+<a id="a3f2e99fce7da870491561f15367c8de3" name="a3f2e99fce7da870491561f15367c8de3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f2e99fce7da870491561f15367c8de3">&#9670;&#160;</a></span>BlastImplosionRadiusScale</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.IRipeBubbleSettings.BlastImplosionRadiusScale</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The inward pull stamped on the disturbance field just before the burst's outward shock, as a multiple of the <code>BubbleRipple</code> stamp profile's radius. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RipeBubbleSettings.html#a3fc94a345443f8a20616b08a477e2773">BalloonParty.Configuration.Balloons.RipeBubbleSettings</a>.</p>
+
+</div>
+</div>
+<a id="a179b11ae839ab50bdbd7cbc387d2995d" name="a179b11ae839ab50bdbd7cbc387d2995d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a179b11ae839ab50bdbd7cbc387d2995d">&#9670;&#160;</a></span>BlastImplosionSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.IRipeBubbleSettings.BlastImplosionSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds the inward pull takes: short, the outward shock follows it. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RipeBubbleSettings.html#ae8132b3a562e5635a7b9f1a218a2a809">BalloonParty.Configuration.Balloons.RipeBubbleSettings</a>.</p>
+
+</div>
+</div>
+<a id="accb95dff91f622d277f580891ad2aea2" name="accb95dff91f622d277f580891ad2aea2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#accb95dff91f622d277f580891ad2aea2">&#9670;&#160;</a></span>BlastImplosionStrengthScale</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.IRipeBubbleSettings.BlastImplosionStrengthScale</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The inward pull's strength, as a multiple of the <code>BubbleRipple</code> profile's. 0: no pull. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RipeBubbleSettings.html#a94d51889526fef405f4a836628f48c52">BalloonParty.Configuration.Balloons.RipeBubbleSettings</a>.</p>
+
+</div>
+</div>
+<a id="aa69adde348d68d7766fe6536f148e94b" name="aa69adde348d68d7766fe6536f148e94b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa69adde348d68d7766fe6536f148e94b">&#9670;&#160;</a></span>BlastLightIntensity</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.IRipeBubbleSettings.BlastLightIntensity</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The flash's peak intensity. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RipeBubbleSettings.html#ad8f2b6bcc140a8f82e7342575d1fd71d">BalloonParty.Configuration.Balloons.RipeBubbleSettings</a>.</p>
+
+</div>
+</div>
+<a id="a65c1271367360387d1cbd49c4a54710b" name="a65c1271367360387d1cbd49c4a54710b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65c1271367360387d1cbd49c4a54710b">&#9670;&#160;</a></span>BlastLightRadius</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.IRipeBubbleSettings.BlastLightRadius</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The radius of the light a burst flashes, in world units. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RipeBubbleSettings.html#afa3139c0f7baa2d9be35b05127d68ff8">BalloonParty.Configuration.Balloons.RipeBubbleSettings</a>.</p>
+
+</div>
+</div>
+<a id="ab7075c5d1e491ed03c498aab59dd5374" name="ab7075c5d1e491ed03c498aab59dd5374"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7075c5d1e491ed03c498aab59dd5374">&#9670;&#160;</a></span>BlastLightSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.IRipeBubbleSettings.BlastLightSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds the flash is held. 0 or less: no flash. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RipeBubbleSettings.html#a1698dffc7e0d27b6a028feb766b1a52e">BalloonParty.Configuration.Balloons.RipeBubbleSettings</a>.</p>
+
+</div>
+</div>
+<a id="a666bc3f86da92f4d2129839148ab1409" name="a666bc3f86da92f4d2129839148ab1409"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a666bc3f86da92f4d2129839148ab1409">&#9670;&#160;</a></span>BlastNudgeOverrides</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classBalloonParty_1_1Nudge_1_1NudgeOverride.html">NudgeOverride</a> [] BalloonParty.Configuration.Balloons.IRipeBubbleSettings.BlastNudgeOverrides</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The outward shove the board takes as a ripe cluster bursts: a shockwave nudge, as a bomb's is, with its own distance, duration and falloff. </p>
+<p>Empty: the configuration's default nudge. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RipeBubbleSettings.html#aefac0f19d84ec5b46e78a39294767311">BalloonParty.Configuration.Balloons.RipeBubbleSettings</a>.</p>
+
+</div>
+</div>
 <a id="afa0db86d1c3f1507f577126d144d93ed" name="afa0db86d1c3f1507f577126d144d93ed"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afa0db86d1c3f1507f577126d144d93ed">&#9670;&#160;</a></span>BurstSeconds</h2>
 
@@ -238,7 +532,7 @@ Properties</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Seconds of level clock from the hit that pops a ripe cluster to its ripple: the cluster folds into one big bubble meanwhile, and the ripple lands as that bubble pops. </p>
-<p>A ripe neighbour the ripple pops waits as long again. </p>
+<p>A ripe cluster the ripple pops waits as long again. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RipeBubbleSettings.html#ac14689cab3a62041f8a683df9434f41d">BalloonParty.Configuration.Balloons.RipeBubbleSettings</a>.</p>
 
@@ -452,6 +746,58 @@ Properties</h2></td></tr>
 
 </div>
 </div>
+<a id="a3af23d37f4e54601aed96b3436c8a221" name="a3af23d37f4e54601aed96b3436c8a221"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3af23d37f4e54601aed96b3436c8a221">&#9670;&#160;</a></span>FoldGrowth</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.IRipeBubbleSettings.FoldGrowth</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How much bigger than the whole cluster the one bubble a fold ends on is: each step of the fold adds an even share of it. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RipeBubbleSettings.html#a79c0544df7775a262bad29cbd6e18ed3">BalloonParty.Configuration.Balloons.RipeBubbleSettings</a>.</p>
+
+</div>
+</div>
+<a id="a7c5bbe8fc2b5f390df9c03297e60ed8f" name="a7c5bbe8fc2b5f390df9c03297e60ed8f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c5bbe8fc2b5f390df9c03297e60ed8f">&#9670;&#160;</a></span>FoldPulse</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.IRipeBubbleSettings.FoldPulse</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How far each step of the fold kicks the cluster's scale out, as a share of its size, before it settles on the step's own size. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RipeBubbleSettings.html#a310bd485ae632d9bb630344553c0bc53">BalloonParty.Configuration.Balloons.RipeBubbleSettings</a>.</p>
+
+</div>
+</div>
 <a id="ab0c4f134f39db55b8e7873582279f5fe" name="ab0c4f134f39db55b8e7873582279f5fe"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab0c4f134f39db55b8e7873582279f5fe">&#9670;&#160;</a></span>FuseSeconds</h2>
 
@@ -478,32 +824,6 @@ Properties</h2></td></tr>
 
 </div>
 </div>
-<a id="a01ffc81faab2b0fc799ceca94a7bafc4" name="a01ffc81faab2b0fc799ceca94a7bafc4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a01ffc81faab2b0fc799ceca94a7bafc4">&#9670;&#160;</a></span>RingReach</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float BalloonParty.Configuration.Balloons.IRipeBubbleSettings.RingReach</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>How far the ring spreads, in slot spacings from the burst. </p>
-
-<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RipeBubbleSettings.html#a64f97b384b666cf0b85cbf3484bc691a">BalloonParty.Configuration.Balloons.RipeBubbleSettings</a>.</p>
-
-</div>
-</div>
 <a id="a543462610c0931c54142f086fc037d6e" name="a543462610c0931c54142f086fc037d6e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a543462610c0931c54142f086fc037d6e">&#9670;&#160;</a></span>RingSeconds</h2>
 
@@ -524,7 +844,7 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Seconds the ring a player's burst sends over the water takes to spread and fade. </p>
+<p>Seconds the ring a player's burst sends over the water takes to spread to the edge of the blast (<a class="el" href="#a6c79c18bb9d2540a672dbd94cf7d6ff6" title="How far a ripe cluster&#39;s ripple reaches, in world units between slot centres, the edge included: ever...">RippleRadius</a>) and fade. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RipeBubbleSettings.html#ab356df674f63babbdc398f1a013859a6">BalloonParty.Configuration.Balloons.RipeBubbleSettings</a>.</p>
 
@@ -602,14 +922,14 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>The hit each neighbour takes from a ripe cluster's ripple. </p>
+<p>The hit each balloon the ripple reaches takes. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RipeBubbleSettings.html#a59dce4b671e499d28b92e18df8d08fe3">BalloonParty.Configuration.Balloons.RipeBubbleSettings</a>.</p>
 
 </div>
 </div>
-<a id="a19bb90e5049c0ef34be288977be981f5" name="a19bb90e5049c0ef34be288977be981f5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a19bb90e5049c0ef34be288977be981f5">&#9670;&#160;</a></span>SpinSpeedup</h2>
+<a id="a6c79c18bb9d2540a672dbd94cf7d6ff6" name="a6c79c18bb9d2540a672dbd94cf7d6ff6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c79c18bb9d2540a672dbd94cf7d6ff6">&#9670;&#160;</a></span>RippleRadius</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -618,7 +938,7 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float BalloonParty.Configuration.Balloons.IRipeBubbleSettings.SpinSpeedup</td>
+          <td class="memname">float BalloonParty.Configuration.Balloons.IRipeBubbleSettings.RippleRadius</td>
         </tr>
       </table>
   </td>
@@ -628,9 +948,9 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>A ripe cluster's spin over its rest spin as its fuse runs out: 1 at ripening, this at the end. </p>
+<p>How far a ripe cluster's ripple reaches, in world units between slot centres, the edge included: every balloon whose slot centre is that close to the burst's is hit. </p>
 
-<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RipeBubbleSettings.html#a009ac5301c1efeb2c33a8a1c286c8545">BalloonParty.Configuration.Balloons.RipeBubbleSettings</a>.</p>
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RipeBubbleSettings.html#a80a462d67e167a7a974ebaaa5b6f9852">BalloonParty.Configuration.Balloons.RipeBubbleSettings</a>.</p>
 
 </div>
 </div>
@@ -785,7 +1105,7 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Turns a second of the point the bubbles leave from. </p>
+<p>Turns a second of the point the bubbles leave from, and of the ripe cluster itself: the two turn together, a little faster in the fuse's last seconds. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RipeBubbleSettings.html#afdcad6bc5724ed85afdba3ba86fb972a">BalloonParty.Configuration.Balloons.RipeBubbleSettings</a>.</p>
 

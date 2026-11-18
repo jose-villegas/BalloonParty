@@ -17,6 +17,7 @@ var DisturbanceFieldSettings_8cs =
       [ "BalloonParty.Configuration.Effects.StampSource.UnbreakableBurst", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0ea52557e239f11db73b54f27817dac5aac", null ],
       [ "BalloonParty.Configuration.Effects.StampSource.PierceDischarge", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0eae1eb86b5a3508b638909eaf2544ca4ab", null ],
       [ "BalloonParty.Configuration.Effects.StampSource.SnipeSkyLight", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0ea5f9970ae34cc55664cd63fa680706728", null ],
-      [ "BalloonParty.Configuration.Effects.StampSource.BubbleRipple", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0ea0e30236f031ba5b65ca19c59d8bd912c", null ]
+      [ "BalloonParty.Configuration.Effects.StampSource.BubbleRipple", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0ea0e30236f031ba5b65ca19c59d8bd912c", null ],
+      [ "BalloonParty.Configuration.Effects.StampSource.BubbleFoam", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0ea88f4b61f49946e82cb3476bee6a9fd8c", null ]
     ] ]
 ];

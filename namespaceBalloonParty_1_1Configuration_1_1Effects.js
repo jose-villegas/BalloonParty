@@ -75,7 +75,8 @@ var namespaceBalloonParty_1_1Configuration_1_1Effects =
       [ "UnbreakableBurst", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0ea52557e239f11db73b54f27817dac5aac", null ],
       [ "PierceDischarge", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0eae1eb86b5a3508b638909eaf2544ca4ab", null ],
       [ "SnipeSkyLight", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0ea5f9970ae34cc55664cd63fa680706728", null ],
-      [ "BubbleRipple", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0ea0e30236f031ba5b65ca19c59d8bd912c", null ]
+      [ "BubbleRipple", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0ea0e30236f031ba5b65ca19c59d8bd912c", null ],
+      [ "BubbleFoam", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0ea88f4b61f49946e82cb3476bee6a9fd8c", null ]
     ] ],
     [ "TimeOfDaySource", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac49e29688fd680d7d4b970212051ce95", [
       [ "LevelSweep", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac49e29688fd680d7d4b970212051ce95af82b70e009a9e33bfaa99ab4ddb9a426", null ],

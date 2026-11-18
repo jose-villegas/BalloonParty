@@ -18,6 +18,7 @@ var structBalloonParty_1_1Solver_1_1ShotBalloonState =
     [ "Reward", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#abd99b12a968836af6ca5e822439098a6", null ],
     [ "Ripe", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#aab6e10986ec4511c9a1f6e9989d42d00", null ],
     [ "ScoreValue", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a8e7fa5d1d03d091001a9c5d31c872ad3", null ],
+    [ "SlotCenter", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a74ccc4050f5c5a4ebed734b7a9a4aa62", null ],
     [ "SlotIndex", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a637f15de3887be771d088f8743597c77", null ],
     [ "WashesProjectileColor", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a40d961a3aae7954995846f8c21dc5a3f", null ],
     [ "HitsUnderCoat", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#ae2fa6d2d20b2ff1b6479f3d4b36dff80", null ],

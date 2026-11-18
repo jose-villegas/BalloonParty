@@ -19,6 +19,7 @@ var dir_3b325fd31330afee9baefa515a12872f =
     [ "IGrowingDiscView.cs", "IGrowingDiscView_8cs.html", "IGrowingDiscView_8cs" ],
     [ "INukeBlastView.cs", "INukeBlastView_8cs.html", "INukeBlastView_8cs" ],
     [ "INukeCloudView.cs", "INukeCloudView_8cs.html", "INukeCloudView_8cs" ],
+    [ "IRipeSpin.cs", "IRipeSpin_8cs.html", "IRipeSpin_8cs" ],
     [ "NukeBlastView.cs", "NukeBlastView_8cs.html", "NukeBlastView_8cs" ],
     [ "NukeCloudView.cs", "NukeCloudView_8cs.html", "NukeCloudView_8cs" ],
     [ "PaintDripOverlay.cs", "PaintDripOverlay_8cs.html", "PaintDripOverlay_8cs" ],
