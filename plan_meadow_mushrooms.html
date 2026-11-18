@@ -113,7 +113,7 @@ $(function(){initNavTree('plan_meadow_mushrooms.html',''); initResizable(true); 
 <div class="textblock"><h1><a class="anchor" id="autotoc_md798"></a>
 Meadow mushrooms: bumpers that earn a lance</h1>
 <blockquote class="doxtable">
-<p>On meadow levels the board grows <b>mushrooms</b>: permanent bumpers the ball bounces off, pinball style. A ball that hits three of them in one flight, without touching a wall in between, becomes the Snipe lance. To make room, the meadow loses its Tough and Tougher balloons, and its unbreakables form only the snake. Talked through with the owner on 2026-11-18 and banked; started on 2026-11-19, when he settled the open points below. <b>Status: planned. Nothing is built. Decisions A to G wait on the owner.</b> </p>
+<p>On meadow levels the board grows <b>mushrooms</b>: permanent bumpers the ball bounces off, pinball style. A ball that hits three of them in one flight, without touching a wall in between, becomes the Snipe lance. To make room, the meadow loses its Tough and Tougher balloons, and its unbreakables form only the snake. Talked through with the owner on 2026-11-18 and banked; started on 2026-11-19, when he settled the open points below and decisions A to F. <b>Status: building, phase 1. Nothing has been played yet.</b> </p>
 </blockquote>
 <h2><a class="anchor" id="autotoc_md799"></a>
 The owner's direction (verbatim)</h2>
@@ -171,21 +171,21 @@ The rules</h2>
 <td class="markdownTableBodyNone">Hit reaction   </td><td class="markdownTableBodyNone">The cap leans away along the ball's direction and springs back, elastic   </td><td class="markdownTableBodyNone">Owner, 2026-11-19   </td></tr>
 </table>
 <h2><a class="anchor" id="autotoc_md801"></a>
-Open decisions for the owner</h2>
-<p>Each has a recommendation; nothing below is built until he answers.</p>
+Decisions A to G</h2>
+<p>The owner chose each on 2026-11-19 from the options put to him; G is how the work is done, not a choice of his.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
-<th class="markdownTableHeadNone"></th><th class="markdownTableHeadNone">Question   </th><th class="markdownTableHeadNone">Recommendation and why    </th></tr>
+<th class="markdownTableHeadNone"></th><th class="markdownTableHeadNone">Question   </th><th class="markdownTableHeadNone">Decided, and why    </th></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">A   </td><td class="markdownTableBodyNone">Does a lance bounce off mushrooms too?   </td><td class="markdownTableBodyNone"><b>Yes.</b> Today a piercing shot flies on unbent everywhere (the game, the solver and the aim line). A lance that passed through mushrooms would make them vanish from play the moment the reward lands    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">B   </td><td class="markdownTableBodyNone">Does a 4th hit bank an extra lance charge?   </td><td class="markdownTableBodyNone"><b>Yes, one extra a flight at most.</b> It needs A. It rewards the full 4-mushroom chain late in a stretch    </td></tr>
+<td class="markdownTableBodyNone">B   </td><td class="markdownTableBodyNone">Does a 4th hit bank an extra lance charge?   </td><td class="markdownTableBodyNone"><b>Yes, one extra a flight at most.</b> It rewards the full 4-mushroom chain late in a stretch    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">C   </td><td class="markdownTableBodyNone">Does the aim line show the kick's bend?   </td><td class="markdownTableBodyNone"><b>Yes.</b> The chain has to be readable on a phone, and the line already bends off deflecting things    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">D   </td><td class="markdownTableBodyNone">Unbreakables past the snake cap on the meadow   </td><td class="markdownTableBodyNone"><b>Leave them loose.</b> With only the snake allowed and every snake full, extra unbreakables have no shape to join. Lifting the cap on the meadow is the alternative    </td></tr>
+<td class="markdownTableBodyNone">D   </td><td class="markdownTableBodyNone">Unbreakables past the snake cap on the meadow   </td><td class="markdownTableBodyNone"><b>They stay loose.</b> With only the snake allowed and every snake full, extra unbreakables have no shape to join    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">E   </td><td class="markdownTableBodyNone">The meadow loses two routes to a lance   </td><td class="markdownTableBodyNone"><b>Accept it.</b> With no toughs the armour need falls, and with no item-cover formation the covered-bomb pity never builds. The mushrooms are the meadow's own route to the lance    </td></tr>
+<td class="markdownTableBodyNone">E   </td><td class="markdownTableBodyNone">The meadow loses two routes to a lance   </td><td class="markdownTableBodyNone"><b>Accepted.</b> With no toughs the armour need falls, and with no item-cover formation the covered-bomb pity never builds. The mushrooms are the meadow's own route to the lance. Balance is checked with the bot against the level-10 target    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">F   </td><td class="markdownTableBodyNone">Does a mushroom bounce spend a shield?   </td><td class="markdownTableBodyNone"><b>No.</b> Walls end flights, mushrooms don't. The loop guards under <em>The forgiving kick</em> are what stop a flight running forever    </td></tr>
 <tr class="markdownTableRowOdd">
@@ -354,7 +354,7 @@ Diagrams</h2>
 </div><!-- fragment --><h2><a class="anchor" id="autotoc_md810"></a>
 Risks</h2>
 <ul>
-<li><b>Piercing means "unbent" in three places</b> (the game, the solver, the aim line). Bending a lance off mushrooms (decision A) is the largest change to the mirror.</li>
+<li><b>Piercing means "unbent" in three places</b> (the game, the solver, the aim line). Bending a lance off mushrooms (decision A, taken) is the largest change to the mirror.</li>
 <li><b>Every cast that assumes only balloons block</b> needs the bumpers added: the cruise lookahead, the doomed last-shield glide (or it passes through a mushroom), the tunnelling sweep and the aim fan. Each gets a test.</li>
 <li><b>A mushroom bounce spends no shield</b> (decision F), so the loop guards carry the weight.</li>
 <li><b>Balance.</b> Toughs are dropped before the threat budget is spent, so the budget buys other threats; the curves are <code>LevelGenerationSettings.BudgetForLevel</code> and <code>ScenarioScheduleSettings</code>. The target stands: the game picks up after level 10. Compare tunings with the playtest bot before and after.</li>

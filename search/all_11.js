@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['g_0',['G — headless level diagnostics (follow-up tier; unchanged spec in §4 Phase G)',['../plan_shot_solver_accuracy.html#autotoc_md931',1,'']]],
+  ['g_0',['G',['../plan_meadow_mushrooms.html#autotoc_md801',1,'Decisions A to G'],['../plan_shot_solver_accuracy.html#autotoc_md931',1,'G — headless level diagnostics (follow-up tier; unchanged spec in §4 Phase G)']]],
   ['g_1',['g',['../classBalloonParty_1_1Editor_1_1GradientTextureDrawer_1_1GradientStorage_1_1ColorKeyEntry.html#a056643bf7861a747284853aa07786196',1,'BalloonParty::Editor::GradientTextureDrawer::GradientStorage::ColorKeyEntry']]],
   ['g_20—_20headless_20level_20diagnostics_20follow_20up_20tier_20scoped_202026_2007_2025_2',['Phase G — Headless level diagnostics (follow-up tier; scoped 2026-07-25)',['../plan_shot_solver_accuracy.html#autotoc_md921',1,'']]],
   ['g_20—_20headless_20level_20diagnostics_20follow_20up_20tier_20unchanged_20spec_20in_20§4_20phase_20g_3',['G — headless level diagnostics (follow-up tier; unchanged spec in §4 Phase G)',['../plan_shot_solver_accuracy.html#autotoc_md931',1,'']]],

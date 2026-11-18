@@ -362,7 +362,7 @@ var plans =
       [ "Meadow mushrooms: bumpers that earn a lance", "plan_meadow_mushrooms.html#autotoc_md798", [
         [ "The owner's direction (verbatim)", "plan_meadow_mushrooms.html#autotoc_md799", null ],
         [ "The rules", "plan_meadow_mushrooms.html#autotoc_md800", null ],
-        [ "Open decisions for the owner", "plan_meadow_mushrooms.html#autotoc_md801", null ],
+        [ "Decisions A to G", "plan_meadow_mushrooms.html#autotoc_md801", null ],
         [ "Design", "plan_meadow_mushrooms.html#autotoc_md802", [
           [ "Contact is worked out, not left to physics", "plan_meadow_mushrooms.html#autotoc_md803", null ],
           [ "Types", "plan_meadow_mushrooms.html#autotoc_md804", null ],
