@@ -66,7 +66,7 @@ the pipeline at all.
 | Water caustics | `Scenario/View/WaterCausticBuffer` | R8, mips | — | Unchanged (a light mask, 0–1). |
 | Water ripples | `Scenario/View/WaterRippleBuffer` | ARGBHalf | Simulation state | Unchanged (data, not colour). |
 | Grass wake | `Scenario/View/GrassWakeBuffer` | ARGBHalf | Simulation state | Unchanged. |
-| Scene-light field | `Shared/SceneLight/SceneLightFieldResources` | ARGBHalf (ARGB32 fallback) | Palette index of the local light | Unchanged. **This is already HDR data**: R holds the local boost, up to 3. |
+| Scene-light field | `Shared/SceneLight/SceneLightFieldResources` | ARGBHalf (ARGB32 fallback) | Palette index of the local light | Unchanged. **This is already HDR data**: R holds the local boost, up to 3. A second, smaller RT, the light-colour map (`ColorTexture`, ARGB32), holds palette colours and shares in 0..1: not HDR data, left as is. |
 | Disturbance field | `Shared/Disturbance/DisturbanceFieldResources` | ARGBHalf (ARGB32 fallback) | Data | Unchanged. |
 | Smoke field | `Scenario/SmokeFieldResources` | ARGBHalf (ARGB32 fallback) | Smoke opacity | Unchanged. |
 | Background (cloud) field | `Scenario/BackgroundFieldService` | RG16 (ARGB32 fallback) | — | Unchanged. |

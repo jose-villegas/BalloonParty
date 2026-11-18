@@ -101,6 +101,11 @@ namespace BalloonParty.Configuration.Effects
                  "finer than the disturbance field's 8.")]
         [SerializeField] [Range(8, 64)] private int _texelsPerUnit = 32;
 
+        [Tooltip("How many times coarser than the field the light-colour map is, per axis (2 = a quarter of " +
+                 "the texels). The map holds what colour the local light is, filtered, so coloured lights " +
+                 "blend into each other; 1 follows a small light's colour most closely, at the most cost.")]
+        [SerializeField] [Range(1, 4)] private int _colorDownscale = 2;
+
         [Header("Field — Cadence")]
         [Tooltip("Render the field every Nth frame at 60 fps (reinterpreted as seconds so cost doesn't " +
                  "scale with display refresh — a 120 Hz panel would otherwise double it). The dirty gate " +
@@ -191,6 +196,7 @@ namespace BalloonParty.Configuration.Effects
         public Shader AccumulateShader => _accumulateShader;
         public Shader GradientShader => _gradientShader;
         public int TexelsPerUnit => _texelsPerUnit;
+        public int ColorDownscale => _colorDownscale;
         public int FieldFrameInterval => _fieldFrameInterval;
         public int MaxLights => _maxLights;
         public float AccumulationCeiling => _accumulationCeiling;

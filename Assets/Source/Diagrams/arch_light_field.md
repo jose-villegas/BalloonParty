@@ -51,13 +51,14 @@ digraph SceneLightField {
         fillcolor="#e8f5dc";
 
         Fill       [label="Pass 1 — Fill\nR=0, GB=0.5, A=0\n(rest state)"];
-        Accumulate [label="Pass 2 — Accumulate\nbatched ≤32 lights/blit\ncapsule falloff\nsoft-clamp R\ndominant palette → A"];
+        Accumulate [label="Pass 2 — Accumulate\nbatched ≤32 lights/blit\ncapsule falloff\nsoft-clamp R\ndominant palette → A\n+ pass 1: colour map"];
         Gradient   [label="Pass 3 — Gradient\ngrad(R) central diff\nblend rest→localDir\nby saturate(R·response)"];
 
         Fill -> Accumulate -> Gradient;
     }
 
     FieldRT [label="_SceneLightTex (global RT)\nR = local boost\nGB = direction weight\nA = palette index", fillcolor="#cfe0f0"];
+    ColorRT [label="_SceneLightColorTex (global RT)\nsmaller, ARGB32\nRGB = tagged light colour\nA = tagged share", fillcolor="#cfe0f0"];
 
     subgraph cluster_globals {
         label="Published globals";
@@ -99,6 +100,7 @@ digraph SceneLightField {
 
     /* Pipeline → Output */
     Gradient -> FieldRT;
+    Accumulate -> ColorRT [label="pass 1"];
 
     /* Output → Globals */
     FieldRT -> Bounds [style=dashed];
@@ -107,6 +109,7 @@ digraph SceneLightField {
 
     /* Globals → Include */
     FieldRT -> Include [label="texture sample"];
+    ColorRT -> Include [label="palette colour\n(bilinear tap)"];
     Bounds  -> Include [style=dashed];
     OnFlag  -> Include [label="off-fallback\n(flat globals)", style=dashed];
 
@@ -155,7 +158,10 @@ its last, still-correct contents.
    light is a capsule: falloff uses aspect-corrected distance to the segment `[start, end]`.
    R is soft-clamped
    (\f$ \mathit{MaxBoost}\cdot\big(1-e^{-\mathit{sum}/\mathit{MaxBoost}}\big) \f$); A writes
-   the dominant light's palette index (\f$ (\mathit{index}+1)/16 \f$). GB passes through.
+   the dominant light's palette index (\f$ (\mathit{index}+1)/16 \f$). GB passes through. A second pass
+   of the same shader renders the **light-colour map** (`_SceneLightColorTex`, `ARGB32`, the field's size
+   divided by `ColorDownscale`): RGB = the tagged lights' palette colours blended by how much light each
+   adds, times A; A = the tagged share of the local light.
 3. **Gradient** — derives direction from `grad(R)` via central difference. Blends from rest GB
    toward the gradient direction by \f$ \mathrm{saturate}(\mathit{localR}\cdot \mathit{DirectionResponse}) \f$
    — presence-weighted, so flat regions keep the global direction and bright regions capture
@@ -180,11 +186,12 @@ makes the field a strictly additive seam.
    and direction come from the globals `TimeOfDayService` pushes, added by the include's helpers. This
    means ambient tweaks (day/night, fade-outs) never dirty the field and never re-render it.
 
-4. **Palette colour via intensity-driven soft edge.** The A channel carries a quantised palette
-   index, but `SceneLightTintAt` decodes it into a smooth colour glow by blending key→palette by
+4. **Palette colour from a filterable map, with an intensity-driven soft edge.** A palette index can't
+   be filtered, so colour lives in the separate light-colour map; `SceneLightTintAt` takes one bilinear
+   tap of it and blends key→palette by
    \f$ \mathrm{saturate}((R - \mathit{rest}) / \mathit{RAMP}) \f$ — the smooth bilinear R magnitude
-   drives the colour edge, not the hard index texels. Overlapping lights meet in the dark
-   (between them R is low → colour fades out).
+   drives the colour edge. Overlapping coloured lights blend through their mix. The A index stays only
+   for the palette-mask exclusion, which needs the dominant light's identity.
 
 5. **Device-build safety.** All three `Hidden/` shaders are serialized on the settings SO
    (`ISceneLightFieldSettings`). `Shader.Find` is an editor-only fallback — an unassigned slot
@@ -201,13 +208,17 @@ makes the field a strictly additive seam.
    capture cadence), decoupling render cost from display refresh. The very first render is exempt
    from the cap so consumers never sample an empty RT.
 
-## Channel encoding (single RT)
+## Channel encoding
 
 | Channel | Meaning | Rest value |
 |---|---|---|
 | **R** | Local light boost above ambient | `0` |
 | **G/B** | 0.5-biased \f$ \mathit{weight}\cdot \mathit{localDir} \f$ (direction toward nearest local light) | `0.5` (neutral) |
-| **A** | Palette colour index \f$ (\mathit{index}+1)/16 \f$; 0 = use `_SceneLightColor` | `0` exactly |
+| **A** | Dominant light's palette index \f$ (\mathit{index}+1)/16 \f$; 0 = untagged. Point-sampled, used only for the palette-mask exclusion | `0` exactly |
+
+The light-colour map `_SceneLightColorTex` is a separate, smaller `ARGB32` RT: RGB = tagged lights'
+blended palette colour times A, A = the tagged share of the local light. Consumers read the palette
+colour from it as `keyColor * (1 - a) + rgb`.
 
 ## Current game sources
 

@@ -38,6 +38,12 @@ float     _SceneLightFieldOn;
 // into A. A tagged light tints its region this colour instead of the global key light.
 float4 _SceneLightPalette[16];
 
+// The light-colour map, rendered with the field at a lower resolution: RGB = the tagged local lights'
+// palette colours, blended by how much light each adds here, times A; A = the share of the local light
+// that is tagged. Filtered, unlike the index in the field's A, so a light's colour has no texel edge and
+// two coloured lights blend where they meet.
+sampler2D _SceneLightColorTex;
+
 // Guarded read of the scene light (see SceneLightFieldService): normalized, toward
 // the light; falls back to the canonical direction if the global hasn't been
 // pushed yet (protects edit-time before its first OnEnable/LateUpdate/OnValidate).
@@ -262,49 +268,25 @@ float SceneLightPaletteIndex(float a)
     return a > 0.001 ? min(floor(a * 16.0 + 0.5) - 1.0, 15.0) : -1.0;
 }
 
-// One texel's A → its palette colour, or the key light where untagged. The colour reconstruction
-// blends these DECODED colours (never the raw indices — an interpolated (index+1)/16 would land in a
-// foreign palette slot).
-float3 SceneLightDecodeColor(float a, float3 keyColor)
-{
-    float index = SceneLightPaletteIndex(a);
-    return index >= 0.0 ? _SceneLightPalette[(int)index].rgb : keyColor;
-}
-
-// Palette-colour IDENTITY at a world position — a 2×2 decode-then-blend: decode each texel's index to
-// a colour first, then bilinear-blend by the sub-texel fraction. Blending decoded colours (never the
-// raw indices, which would band into a foreign slot) keeps the hue smooth. The soft light EDGE is not
-// done here — it comes from the magnitude-driven fade in SceneLightTintAt — so this stays a plain
-// smooth blend rather than an edge-preserving filter, which would harden the glow.
+// The colour of the local light at a field UV: the palette colours of the tagged lights there, blended by
+// how much light each adds, with the key light's colour for whatever share of the local light is
+// untagged. One filtered tap of the colour map. It says nothing of how much light there is: a light's
+// colour holds to its edge, and the caller scales it by the field's R.
 float3 SceneLightPaletteColorAt(float2 fieldUV, float3 keyColor)
 {
-    float2 texel = _SceneLightTexelSize.xy;
-    float2 p = fieldUV / texel - 0.5;
-    float2 f = frac(p);
-    float2 uv00 = (floor(p) + 0.5) * texel;
-    float3 c00 = SceneLightDecodeColor(tex2D(_SceneLightTex, uv00).a, keyColor);
-    float3 c10 = SceneLightDecodeColor(tex2D(_SceneLightTex, uv00 + float2(texel.x, 0.0)).a, keyColor);
-    float3 c01 = SceneLightDecodeColor(tex2D(_SceneLightTex, uv00 + float2(0.0, texel.y)).a, keyColor);
-    float3 c11 = SceneLightDecodeColor(tex2D(_SceneLightTex, uv00 + texel).a, keyColor);
-    return lerp(lerp(c00, c10, f.x), lerp(c01, c11, f.x), f.y);
+    float4 colour = tex2D(_SceneLightColorTex, fieldUV);
+    return keyColor * (1.0 - colour.a) + colour.rgb;
 }
 
 float3 SceneLightPaletteColorAtLOD(float2 fieldUV, float3 keyColor)
 {
-    float2 texel = _SceneLightTexelSize.xy;
-    float2 p = fieldUV / texel - 0.5;
-    float2 f = frac(p);
-    float2 uv00 = (floor(p) + 0.5) * texel;
-    float3 c00 = SceneLightDecodeColor(tex2Dlod(_SceneLightTex, float4(uv00, 0.0, 0.0)).a, keyColor);
-    float3 c10 = SceneLightDecodeColor(tex2Dlod(_SceneLightTex, float4(uv00 + float2(texel.x, 0.0), 0.0, 0.0)).a, keyColor);
-    float3 c01 = SceneLightDecodeColor(tex2Dlod(_SceneLightTex, float4(uv00 + float2(0.0, texel.y), 0.0, 0.0)).a, keyColor);
-    float3 c11 = SceneLightDecodeColor(tex2Dlod(_SceneLightTex, float4(uv00 + texel, 0.0, 0.0)).a, keyColor);
-    return lerp(lerp(c00, c10, f.x), lerp(c01, c11, f.x), f.y);
+    float4 colour = tex2Dlod(_SceneLightColorTex, float4(fieldUV, 0.0, 0.0));
+    return keyColor * (1.0 - colour.a) + colour.rgb;
 }
 
 // Boost above the ambient rest at which a stamp's palette colour reaches full strength. The colour
 // fades in with the SMOOTH local magnitude, so a light's colour edge is as soft as its brightness
-// falloff (R is bilinear) — no hard hue boundary at the quantised palette-index texels.
+// falloff (R and the colour map are both bilinear).
 #define SCENE_LIGHT_COLOR_RAMP 1.0
 
 // Light colour × magnitude at a world position. A field-tagged region blends from the global key light
@@ -399,8 +381,8 @@ bool SceneLightTagInMaskAtLOD(float2 worldPos, float excludeMask)
         return false;
     }
 
-    // Point-sample A at the nearest texel CENTRE — never a bilinear tap (see SceneLightDecodeColor's
-    // warning): an interpolated (index+1)/16 between two lights decodes to a third, unrelated slot.
+    // Point-sample A at the nearest texel CENTRE — never a bilinear tap: an interpolated (index+1)/16
+    // between two lights decodes to a third, unrelated slot.
     // _SceneLightTexelSize is published precisely so consumers can snap to a centre and read back the
     // exact argmax index the accumulate pass wrote, with no extra taps.
     float2 texel = _SceneLightTexelSize.xy;

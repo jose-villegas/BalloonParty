@@ -24,21 +24,31 @@ field is off — so the field is a strictly additive seam, never a replacement.
 | `ISceneLightRuntime` | Read-only interface for the LIVE ambient light (`CurrentDirection`/`CurrentColor`/`CurrentIntensity`, plus `ShadowStrengthScale` — the night-mode GI-shadow multiplier `ScreenSpaceLightService` applies over the day/night angle), implemented by `TimeOfDayService`. Inject this instead of `ISceneLightSettings` when a system needs the runtime value rather than the static rest config |
 | `ITimeOfDayNight` | Narrow read-only seam exposing just `IsNight` (false whenever night mode is off), implemented by `TimeOfDayService`. `IsNight` is true while the current direction's angle sits in the night arc (315° down to 270° — the small slice the sun sweeps as the day angle decreases). Lets gameplay/UI systems outside the lighting stack (e.g. `ScoreController`, `ColorProgressBar`) key rules off "is it night" without depending on the wider `ISceneLightRuntime`/settings surface |
 | `SceneLightFieldService` | Plain-C# DI service (`IStartable`/`ITickable`/`IDisposable`), registered in `GameScopeRegistration` next to `DisturbanceFieldService` (Singleton, `AsImplementedInterfaces().AsSelf()`). Owns only the local light field — builds it via `SceneLightFieldResources` **only on ticks where a registered light changed AND a frame-interval cadence cap has elapsed** (`FieldFrameInterval`, see Cadence below). Holds the registry of on lights, subscribing to each one's reactive properties to know when to re-render. Pushes the bounds/texel/palette globals + on-flag; releases the RTs in `Dispose`. API: `RegisterLight(Light) → IDisposable`, `ClearLights()` |
-| `SceneLightFieldResources` | The field's GPU resources — **two** ping-pong RTs (`ARGBHalf` where supported, else `ARGB32`) and the fill / accumulate / gradient materials — kept separate from the service's logic, mirroring `DisturbanceFieldResources`. Owns the `_SceneLightTex` global push, `BlitAndSwap`, the `Fill()` (clears to the rest state — takes no parameters) and `Gradient()` passes, and exposes `AccumulateMaterial` for the service to upload the light arrays onto |
-| `ISceneLightFieldSettings` / `SceneLightFieldSettings` | Read-only config interface + `ScriptableObject` (in `Configuration/Effects`, mirroring `IDisturbanceFieldSettings`) exposing the field's tuning knobs: `TexelsPerUnit` (RT density), `FieldFrameInterval` (re-render cadence cap, see Cadence below), `MaxLights` (per-batch cap, \f$\le\f$ the accumulate shader's 32), `AccumulationCeiling` (overlap soft-clamp), `DirectionResponse` (how strongly a light's local brightness bends the field direction toward it). Light *falloff shape* is per-light (`Light.FalloffPower`), not here. Injected into the service; registered directly in `GameLifetimeScope` like the other settings SOs — so **create the asset** via `Create ▸ Configuration ▸ Scene Light Settings` and assign it on the `GameLifetimeScope` (an unassigned slot NREs on start, same as its siblings). |
+| `SceneLightFieldResources` | The field's GPU resources — **two** ping-pong RTs (`ARGBHalf` where supported, else `ARGB32`), the smaller **light-colour map** RT (`ColorTexture`, `ARGB32`), and the fill / accumulate / gradient materials — kept separate from the service's logic, mirroring `DisturbanceFieldResources`. Owns the `_SceneLightTex` and `_SceneLightColorTex` global pushes, `BlitAndSwap` (field, pass 0 of the accumulate material), `BlitColor` (colour map, pass 1), the `Fill()` (clears to the rest state — takes no parameters) and `Gradient()` passes, and exposes `AccumulateMaterial` for the service to upload the light arrays onto |
+| `ISceneLightFieldSettings` / `SceneLightFieldSettings` | Read-only config interface + `ScriptableObject` (in `Configuration/Effects`, mirroring `IDisturbanceFieldSettings`) exposing the field's tuning knobs: `TexelsPerUnit` (RT density), `ColorDownscale` (how many times coarser than the field the colour map is, per axis; default 2), `FieldFrameInterval` (re-render cadence cap, see Cadence below), `MaxLights` (per-batch cap, \f$\le\f$ the accumulate shader's 32), `AccumulationCeiling` (overlap soft-clamp), `DirectionResponse` (how strongly a light's local brightness bends the field direction toward it). Light *falloff shape* is per-light (`Light.FalloffPower`), not here. Injected into the service; registered directly in `GameLifetimeScope` like the other settings SOs — so **create the asset** via `Create ▸ Configuration ▸ Scene Light Settings` and assign it on the `GameLifetimeScope` (an unassigned slot NREs on start, same as its siblings). |
 | `Light` | A small reactive model a caller owns: `Position` / `EndPosition` / `Radius` / `EndRadius` (perpendicular half-width at each end) / `Intensity` / `FalloffPower` / `PaletteIndex` as `ReactiveProperty`s, with `const` defaults. `EndPosition == Position` is a point/disc light; set them apart (or use `Light.Segment(start, end, …)`) for a **capsule/area** light — a beam decaying from its axis to the sides (the laser cross is two of these). Set `EndRadius` apart from `Radius` (or pass `endRadius`) to **taper** the beam — the half-width lerps along the axis, and since the gradient pass derives GB from R, the taper shapes the local direction field too. On/off is `RegisterLight`/dispose; brightness is `Intensity`; no built-in decay. **Not** a config ScriptableObject. (Name collides with `UnityEngine.Light` — alias when both are in scope.) |
 
-## Channel encoding (single RT)
+## Channel encoding
 
 | Channel | Meaning | Rest value |
 |---|---|---|
 | **R** | **local** light boost above the ambient — the accumulate pass adds each registered light's magnitude (soft-clamped) on top of the rest value the Fill pass writes. The ambient magnitude is NOT stored here — it's the global `_SceneLightIntensity`, added by the include's helpers (so the field is purely local, and ambient tweaks don't re-render it) | `0` at runtime, per the `SceneLightFieldFill` shader (see note below) |
 | **G/B** | 0.5-biased **local direction weight** (\f$gb = (\text{weight} \cdot \text{localDir}) \cdot 0.5 + 0.5\f$): the gradient pass writes `grad(R)`'s direction (toward the nearest local light) scaled by the direction weight. Length 0 = no local light. Consumers un-bias it and blend the global `_SceneLightDir` toward `localDir` by that length — so the field stores no ambient | `0.5` (neutral / no local direction) |
-| **A** | palette-colour **index**, \f$(\text{index}+1)/16\f$; **0 = "no colour, use `_SceneLightColor`"**. The accumulate pass writes the palette index of the light that contributes most at each texel | `0` exactly |
+| **A** | palette-colour **index**, \f$(\text{index}+1)/16\f$; **0 = "no colour, use `_SceneLightColor`"**. The accumulate pass writes the palette index of the light that contributes most at each texel, only where that light is above 20% of its own peak. It is point-sampled and used only to tell *which* light dominates (the palette-mask exclusion, `SceneLightTagInMaskAtLOD`); an index can't be filtered, so colour comes from the colour map below | `0` exactly |
 
+### Light-colour map (`_SceneLightColorTex`)
+
+A second, separate RT: `ARGB32`, the field's size divided by `ColorDownscale` per axis. All values are colours and shares in 0..1, not HDR data.
+
+| Channel | Meaning |
+|---|---|
+| **RGB** | the palette colours of the tagged lights, blended by how much light each adds at that texel, times A |
+| **A** | the share of the local light at that texel that is tagged (0 = all untagged / no light, 1 = all tagged) |
+
+It exists because a palette index can't be filtered: blending two indices lands on a foreign palette slot, and an index that only exists where a light passes the 20% gate gives a colour region ending on texel edges. Colours blend fine, so the map stores them directly and is read through a bilinear filter. A consumer takes `keyColor * (1 - a) + rgb`, so a light's colour holds to its edge and fades with its brightness, two coloured lights blend through their mix where they overlap, and an untagged (key-coloured) light mixed with a coloured one pulls the colour toward the key by its share. It changes more slowly across space than brightness does, hence the coarser resolution.
 > **Rest value, C# vs. shader.** The values above are what the render pipeline produces every time it runs — set by the `Fill` shader pass, whose internals this doc can't verify. Before the pipeline has ever run once, `SceneLightFieldResources.Initialize` clears both RTs directly from C# (`ClearToRest`) to `(1, 0.5, 0.5, 0)` — a different R than the Fill pass's `0`. In practice this only matters for the sliver of a frame before the first render (gated behind `_SceneLightFieldOn`, which consumers check anyway), but the discrepancy means the two "rest" values aren't the same number.
 
-## The render pipeline (three passes, ping-pong)
+## The render pipeline (three passes, ping-pong, plus the colour map)
 
 A render rebuilds the whole field from scratch (there's no in-texture persistence like the disturbance
 field's diffusion) via a three-pass ping-pong over the two RTs. It runs only when the field is dirty
@@ -50,12 +60,14 @@ elapsed — see the cadence note below:
 2. **Accumulate** (`Hidden/BalloonParty/SceneLightAccumulate`, batched — up to 32 lights/blit,
    `Vector4[]`/`float[]` uploads, \f$(\text{index}+1)/16\f$ palette encoding, mirroring `DisturbanceStampBatched`) —
    ADDS each registered light's magnitude into R and writes the dominant light's palette index into A.
+   The material has **two passes** over the same light list: pass 0 builds the field (this step), pass 1 builds the colour map (see below).
    Each light is a **capsule**: the falloff uses aspect-corrected distance to the segment `[start, end]`
    (`_StampCenters[s].xy`/`.zw`), so a point light (`start == end`) is a disc and a segment is a beam
    decaying from its axis — \f$\mathrm{pow}\big(\mathrm{saturate}(1 - \text{dist}/\text{radius}), \text{FalloffPower}\big)\f$. The summed boost is **soft-clamped**:
    `boost = _MaxBoost * (1 - exp(-sum / _MaxBoost))`, so overlapping flashes approach the ceiling
-   asymptotically instead of blowing out. GB is passed through untouched. **Skipped when no source
+   asymptotically instead of blowing out. The index in A is only written where the dominant light is above 20% of its own peak. GB is passed through untouched. **Skipped when no source
    contributes**, and an identity on R/GB/A when `_StampCount = 0`.
+   Right after the field blit, `RunAccumulate` renders **pass 1** into the colour map (`BlitColor`), under the same dirty gate and cadence: each texel gets the tagged lights' palette colours blended by how much light each adds there, and the tagged share in A.
 3. **Gradient** (`Hidden/BalloonParty/SceneLightGradient`) — recomputes GB from `grad(R)` via a central
    difference over `_FieldTexelSize`. The gradient points toward increasing brightness = toward the
    source = the toward-light convention. It blends from the rest GB toward the gradient direction by
@@ -94,13 +106,14 @@ wrong tool for an on/off light).
 ## Globals published
 
 - `_SceneLightTex` — the field RT.
+- `_SceneLightColorTex` — the light-colour map (bilinear); the source of every consumer's palette colour.
 - `_SceneLightFieldBoundsMin` / `_SceneLightFieldBoundsSize` (float4, xy) — world-space rectangle for
   the world→field-UV mapping. Distinct from the disturbance field's `_FieldBoundsMin/Size`.
 - `_SceneLightTexelSize` (float4, xy) — one texel in UV space, pushed once at startup so the include can
   point-sample the A channel at a texel centre (it's bilinear like R/GB, so an interpolated palette index
-  would decode to a foreign colour).
-- `_SceneLightPalette` (float4[16]) — the game palette's RGB entries, pushed once at startup; `SceneLightTintAt`
-  decodes a texel's A index against this array.
+  would decode to a foreign colour). Only the palette-mask test still reads A.
+- `_SceneLightPalette` (float4[16]) — the game palette's RGB entries, pushed once at startup; the accumulate shader's colour pass
+  looks light colours up in this array when it builds the colour map.
 - `_SceneLightFieldOn` (float) — the **fallback switch**: 1 while the service is alive and has filled
   at least once, 0 in `Dispose` and any time the service never ran (edit mode, or no owner in scene).
 
@@ -170,22 +183,23 @@ automatically at the default radius of 0; the disc integration is an opt-in per-
 on top.
 
 
-`SceneLightTintAt` also applies the A **palette colour**: it blends from the global key light toward the
-tagged light's palette RGB (from the global `_SceneLightPalette[16]` the service pushes) by how far the
+`SceneLightTintAt` also applies the **palette colour**: it blends from the global key light toward the
+tagged lights' colour (read from the colour map, `SceneLightPaletteColorAt`) by how far the
 local magnitude sits above the ambient rest (`colorAmount = saturate((R − rest) / SCENE_LIGHT_COLOR_RAMP)`),
 then × the magnitude. Because R is smooth (bilinear), the **colour edge is as soft as the brightness
-falloff** — the intensity channel drives a soft glow rather than a hard hue boundary at the quantised
-index texels. The colour *identity* is a plain 2×2 decode-then-blend (`SceneLightPaletteColorAt` — decode
-each texel's index to a colour first, then bilinear-blend; never the raw indices, which would band into a
-foreign slot). Untagged / field-off is the key light unchanged. Consumers get this through
+falloff** — the intensity channel drives a soft glow rather than a hard hue boundary. The colour *identity*
+is one bilinear tap of the light-colour map (`SceneLightPaletteColorAt` / `…LOD`: `keyColor * (1 - a) + rgb`),
+so it is filtered as a colour, never as a raw index, which would band into a foreign slot. Where two coloured
+lights overlap the map holds their mix; where a tagged light meets an untagged one the colour leans toward the
+key by the untagged share. Untagged / field-off is the key light unchanged. Consumers get this through
 `SceneLightTintAt` — no per-shader edits.
 
 > An earlier attempt used an edge-*preserving* joint-trilateral (guided by R + direction). It was the
 > wrong tool for a soft glow: edge preservation keeps the boundary hard, and the direction term distorts a
-> single disc (asymmetric weighting near the radial centre). Softness now comes from the intensity-driven
+> single disc (asymmetric weighting near the radial centre). Softness comes from the intensity-driven
 > fade above plus the field's resolution (`TexelsPerUnit = 32`, far finer than the disturbance field's 8 —
-> affordable because the light field only re-renders when dirty, not every frame). Direction is still
-> available if colour-vs-colour seams between overlapping lights ever need separating.
+> affordable because the light field only re-renders when dirty, not every frame). Colour-vs-colour seams
+> between overlapping lights are handled by the colour map's blend, not by direction.
 
 (The render-maps preview stays raw/point-sampled on purpose — a field-data inspector, not the consumer view.)
 
@@ -207,8 +221,8 @@ has zero visual effect**: the field OFF is bit-identical to today.
 - **D (shipped)** — every remaining consumer (world bodies + sprite
   family) migrated onto the include; the screen-space GI smear/overlay now sample the field per-fragment
   (direction + magnitude), so lights bend the bounce and shadows. Field-off stays bit-identical.
-- **Palette colour decode (shipped)** — `SceneLightTintAt` decodes the
-  A index to a palette colour via the global `_SceneLightPalette` (2×2 decode-blend + intensity-driven soft edge); all consumers inherit it.
+- **Palette colour (shipped)** — `SceneLightTintAt` reads the palette colour from the light-colour map
+  `_SceneLightColorTex` (one bilinear tap + intensity-driven soft edge); all consumers inherit it.
 - **Specks (shipped)** — `SpeckField.shader` samples the field per speck (at its world position, VTF) and
   tints it, tunable **per appearance look**: `LightInfluence` (0 = emissive, ignores light; blends
   base→colour by heat) and `LightMode` (`SceneLightMode` enum — Full / Ambient / Local, resolved per the

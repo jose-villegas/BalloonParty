@@ -23,6 +23,7 @@ namespace BalloonParty.Editor.Maps
         private static readonly int SceneCaptureTexId = Shader.PropertyToID("_SceneCaptureTex");
         private static readonly int DisturbanceTexId = Shader.PropertyToID("_DisturbanceTex");
         private static readonly int SceneLightTexId = Shader.PropertyToID("_SceneLightTex");
+        private static readonly int SceneLightColorTexId = Shader.PropertyToID("_SceneLightColorTex");
         private static readonly int BackgroundDensityTexId = Shader.PropertyToID("_BackgroundDensityTex");
         private static readonly int SmokeTexId = Shader.PropertyToID("_SmokeTex");
         private static readonly int ChannelMaskId = Shader.PropertyToID("_ChannelMask");
@@ -453,6 +454,16 @@ namespace BalloonParty.Editor.Maps
                     "Palette tag, (index + 1) / 16 — 16 slots; 0 = untagged (consumers use the global " +
                     "key-light colour). Written hard (dominant source wins), never blended.",
                     hasPaletteChannel: true),
+
+                new MapDescriptor(
+                    "Scene Light Colour",
+                    () => Application.isPlaying ? Shader.GetGlobalTexture(SceneLightColorTexId) : null,
+                    "No light colour map bound — SceneLightFieldService binds it once the game scope starts.",
+                    "The tagged local lights' blended palette colour, red, times the tagged share (A).",
+                    "The tagged local lights' blended palette colour, green, times the tagged share (A).",
+                    "The tagged local lights' blended palette colour, blue, times the tagged share (A).",
+                    "Tagged share — how much of the local light here comes from palette-tagged lights; " +
+                    "the rest takes the key light's colour. 0 where no local light reaches."),
 
                 new MapDescriptor(
                     "GI Light Buffer",

@@ -123,7 +123,7 @@ namespace BalloonParty.Shared.SceneLight
             // Radii are scalar UV (not per-axis), so use the conservative (finer) axis.
             _epsilonRadius = Mathf.Min(_epsilonX, _epsilonY);
             _resources.Initialize(
-                _coords.Width, _coords.Height,
+                _coords.Width, _coords.Height, _settings.ColorDownscale,
                 _settings.FillShader, _settings.AccumulateShader, _settings.GradientShader);
             PushGlobalBounds();
 
@@ -391,6 +391,7 @@ namespace BalloonParty.Shared.SceneLight
             }
 
             _resources.BlitAndSwap(material);
+            _resources.BlitColor();
         }
 
         // How strongly local brightness bends the direction toward a light (see the gradient shader);

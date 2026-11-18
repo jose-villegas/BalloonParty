@@ -15,6 +15,10 @@ namespace BalloonParty.Configuration.Effects
         /// dirty-gated) RT. Far finer than the disturbance field's, which ticks every frame.</summary>
         int TexelsPerUnit { get; }
 
+        /// <summary>How many times coarser than the field the light-colour map is, per axis. A light's colour
+        /// changes more slowly across it than its brightness, and the map is read through a bilinear filter.</summary>
+        int ColorDownscale { get; }
+
         /// <summary>The field's re-render cadence, authored as "every N frames at 60 fps" and reinterpreted
         /// in seconds (see <see cref="BalloonParty.Shared.SceneLight.SceneLightFieldService"/>) so cost
         /// doesn't scale with display refresh — a 120 Hz panel would otherwise double it.</summary>

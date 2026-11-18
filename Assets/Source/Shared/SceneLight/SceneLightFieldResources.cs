@@ -3,22 +3,31 @@ using UnityEngine;
 
 namespace BalloonParty.Shared.SceneLight
 {
-    /// <summary>Holds the scene-light field's GPU resources (two ping-pong RTs + the fill/accumulate/gradient
-    /// materials) and the blit-and-swap, separate from <see cref="SceneLightFieldService"/>'s per-tick
-    /// logic — mirrors DisturbanceFieldResources.</summary>
+    /// <summary>Holds the scene-light field's GPU resources (two ping-pong RTs, the smaller colour map, and the
+    /// fill/accumulate/gradient materials) and the blit-and-swap, separate from
+    /// <see cref="SceneLightFieldService"/>'s per-tick logic — mirrors DisturbanceFieldResources.</summary>
     internal class SceneLightFieldResources
     {
+        private const int FieldPass = 0;
+        private const int ColorPass = 1;
+
         private static readonly int GlobalSceneLightTexId = Shader.PropertyToID("_SceneLightTex");
+        private static readonly int GlobalSceneLightColorTexId = Shader.PropertyToID("_SceneLightColorTex");
         private static readonly int TexelSizeId = Shader.PropertyToID("_FieldTexelSize");
 
         private RenderTexture _fieldA;
         private RenderTexture _fieldB;
+        private RenderTexture _color;
         private bool _readFromA = true;
         private Material _fillMaterial;
         private Material _accumulateMaterial;
         private Material _gradientMaterial;
 
         public RenderTexture FieldTexture => _readFromA ? _fieldA : _fieldB;
+
+        /// <summary>What colour the local light is at each point: the tagged lights' blended palette colour times
+        /// alpha, alpha the share of the local light that is tagged. Bound globally as <c>_SceneLightColorTex</c>.</summary>
+        public RenderTexture ColorTexture => _color;
         public Material AccumulateMaterial => _accumulateMaterial;
         public Material GradientMaterial => _gradientMaterial;
         public bool IsReady =>
@@ -26,13 +35,21 @@ namespace BalloonParty.Shared.SceneLight
 
         private RenderTexture FieldWrite => _readFromA ? _fieldB : _fieldA;
 
-        public void Initialize(int width, int height, Shader fill, Shader accumulate, Shader gradient)
+        public void Initialize(
+            int width, int height, int colorDownscale, Shader fill, Shader accumulate, Shader gradient)
         {
             _fieldA = CreateRT(width, height, FieldFormat);
             _fieldB = CreateRT(width, height, FieldFormat);
             ClearToRest(_fieldA);
             ClearToRest(_fieldB);
             _readFromA = true;
+
+            // Colours and shares, all within 0..1, read through a bilinear filter: 8 bits are enough, and a
+            // colour changes slowly enough across a light that it needs fewer texels than its brightness.
+            var downscale = Mathf.Max(1, colorDownscale);
+            _color = CreateRT(
+                Mathf.Max(1, width / downscale), Mathf.Max(1, height / downscale), RenderTextureFormat.ARGB32);
+            Clear(_color, Color.clear);
 
             // Prefer the serialized references (from the settings SO) so a device build keeps these Hidden
             // shaders; fall back to Shader.Find in-editor if a slot's unassigned (Find-only would be
@@ -66,17 +83,28 @@ namespace BalloonParty.Shared.SceneLight
             BlitAndSwap(_gradientMaterial);
         }
 
+        // The pass is named: Blit with none draws every pass of the material into the target, and the
+        // accumulate material's second pass is the colour map's.
         public void BlitAndSwap(Material material)
         {
-            Graphics.Blit(FieldTexture, FieldWrite, material);
+            Graphics.Blit(FieldTexture, FieldWrite, material, FieldPass);
             _readFromA = !_readFromA;
             PushGlobalTexture();
         }
 
+        /// <summary>Renders the colour map from the lights the accumulate material was just given.</summary>
+        public void BlitColor()
+        {
+            Graphics.Blit(null, _color, _accumulateMaterial, ColorPass);
+        }
+
         public void Dispose()
         {
+            // A shader that still samples the map after this (the Editor's scene view) reads no colour.
+            Shader.SetGlobalTexture(GlobalSceneLightColorTexId, Texture2D.blackTexture);
             ReleaseRT(ref _fieldA);
             ReleaseRT(ref _fieldB);
+            ReleaseRT(ref _color);
             DestroyMaterial(ref _fillMaterial);
             DestroyMaterial(ref _accumulateMaterial);
             DestroyMaterial(ref _gradientMaterial);
@@ -88,6 +116,11 @@ namespace BalloonParty.Shared.SceneLight
             if (tex != null)
             {
                 Shader.SetGlobalTexture(GlobalSceneLightTexId, tex);
+            }
+
+            if (_color != null)
+            {
+                Shader.SetGlobalTexture(GlobalSceneLightColorTexId, _color);
             }
         }
 
@@ -122,13 +155,18 @@ namespace BalloonParty.Shared.SceneLight
             return rt;
         }
 
+        // R = 1: neutral magnitude. GB = 0.5: a zero (un-biased) direction until the first fill
+        // reads the owner. A = 0: no palette colour anywhere (consumers fall back to _SceneLightColor).
         private static void ClearToRest(RenderTexture rt)
+        {
+            Clear(rt, new Color(1f, 0.5f, 0.5f, 0f));
+        }
+
+        private static void Clear(RenderTexture rt, Color color)
         {
             var prev = RenderTexture.active;
             RenderTexture.active = rt;
-            // R = 1: neutral magnitude. GB = 0.5: a zero (un-biased) direction until the first fill
-            // reads the owner. A = 0: no palette colour anywhere (consumers fall back to _SceneLightColor).
-            GL.Clear(false, true, new Color(1f, 0.5f, 0.5f, 0f));
+            GL.Clear(false, true, color);
             RenderTexture.active = prev;
         }
 
