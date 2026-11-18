@@ -110,20 +110,24 @@ $(function(){initNavTree('plan_ripe_bubble_cluster.html',''); initResizable(true
   <div class="headertitle"><div class="title">Ripe Bubble Cluster</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md874"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md875"></a>
 The ripe bubble cluster: a full cluster is a bomb with a fuse</h1>
 <blockquote class="doxtable">
-<p>On water, a bubble cluster that reaches the cap of 5 becomes <b>ripe</b>. It swells, and a fuse starts. Popped before the fuse runs out, its burst is the player's: a ripple knocks a hit off every neighbour. Left alone, its burst is the level's: it sprays foam, and each neighbouring balloon gets a one-bubble coat that must be popped first and washes the shot's colour. Planned 2026-11-18; the owner settled the open decisions the same day. <b>Status: building.</b> </p>
+<p>On water, a bubble cluster that reaches the cap of 6 becomes <b>ripe</b>. It swells, and a fuse starts. Popped before the fuse runs out, its burst is the player's: a ripple knocks a hit off every neighbour. Left alone, its burst is the level's: it hands its bubbles out as foam and leaves. Each neighbouring balloon gets a one-bubble coat that must be popped first and washes the shot's colour; neighbouring clusters get the bubbles left after that. Planned 2026-11-18; the owner settled the open decisions the same day. <b>Status: building.</b> </p>
 </blockquote>
 <hr  />
-<h2><a class="anchor" id="autotoc_md876"></a>
+<h2><a class="anchor" id="autotoc_md877"></a>
 Owner direction (2026-11-18)</h2>
 <p>"I'm trying to come up with an idea for the bubbles in water levels to make a mechanic after they reach
 the cap of 5 but I cannot think of any, water levels are kinda boring now, as the only pressure is a more
 compacted board from the bubbles."</p>
 <p>Four ideas were put forward (a fused bomb, foam that spreads, a burst that shoves the board, a cluster that swallows the shot). The owner chose the first: "I like 1".</p>
 <p>Standing rule that shapes it: difficulty comes from danger to the player, never from a scoring penalty.</p>
-<h2><a class="anchor" id="autotoc_md877"></a>
+<p>On the two endings, once the first version was built: "Basically we could use the shader so when it
+ripples basically goes from 6 to 1 in sequence forming a big single bubble and then pops. But for the
+foam, it stays in warning color, and goes from 6 to zero, keeping the bubble division, giving its entries
+to anything closer, until it runs out." Its two questions were answered the same day (decisions 10 and 11).</p>
+<h2><a class="anchor" id="autotoc_md878"></a>
 What exists (verified 2026-11-18)</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -133,7 +137,7 @@ What exists (verified 2026-11-18)</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Merge   </td><td class="markdownTableBodyNone"><code>BubbleMergeService</code>, <code>BubbleMergeRule</code>   </td><td class="markdownTableBodyNone">wakes on <code>SlotGrid.MutationVersion</code>, a hit on a cluster, or its own last merge; a full cluster neither takes nor gives    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">The cap   </td><td class="markdownTableBodyNone"><code>IBalloonsConfiguration.BubbleMergeMax</code> (5)   </td><td class="markdownTableBodyNone">the only limit on a cluster's size    </td></tr>
+<td class="markdownTableBodyNone">The cap   </td><td class="markdownTableBodyNone"><code>IBalloonsConfiguration.BubbleMergeMax</code> (5 when this was planned, 6 since: see the decisions)   </td><td class="markdownTableBodyNone">the only limit on a cluster's size    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Spawn size   </td><td class="markdownTableBodyNone"><code>BalloonSpawner</code> (<code>StartBubblesForLevel</code>)   </td><td class="markdownTableBodyNone">1 bubble, plus one every 15 levels, capped at <code>BubbleMergeMax</code>: a cluster would arrive full from level 61    </td></tr>
 <tr class="markdownTableRowOdd">
@@ -158,44 +162,53 @@ What exists (verified 2026-11-18)</h2>
 <li><b>The solver does not see clusters as targets.</b> <code>ShotBoardGather.TryBuildTargetSnapshot</code> skips actors that are not <code>IHasScore</code>, and <code>BubbleClusterModel</code> is not one. The playtest bot aims through the solver, so no water comparison can be trusted until this is fixed (phase 0). Found by reading; not yet run.</li>
 <li><b>"How many hits until it pops" is read from <code>HitsRemaining</code> in four places</b> (<code>IsTough</code>, the resolver's one-hit check, <code>ShotBoardGather</code>, <code>ShotSimulator</code>). A ripe cluster and a coated balloon both break that reading, so it moves behind one extension.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md878"></a>
+<h2><a class="anchor" id="autotoc_md879"></a>
 The mechanic</h2>
 <div class="fragment"><div class="line">stateDiagram-v2</div>
 <div class="line">    [*] --&gt; Growing</div>
 <div class="line">    Growing --&gt; Growing: merge or hit, below cap</div>
 <div class="line">    Growing --&gt; Ripe: count reaches BubbleMergeMax</div>
-<div class="line">    Ripe --&gt; Burst: any hit, the player&#39;s ripple</div>
-<div class="line">    Ripe --&gt; Spent: fuse runs out, the level&#39;s foam</div>
-<div class="line">    Spent --&gt; Growing: left with SpentBubbles</div>
+<div class="line">    Ripe --&gt; Burst: any hit, folds to one bubble, the player&#39;s ripple</div>
+<div class="line">    Ripe --&gt; Foamed: fuse runs out, the level&#39;s foam</div>
+<div class="line">    Foamed --&gt; Left: bubbles handed out, leaves the board</div>
 <div class="line">    Ripe --&gt; Gone: level change, game over, run reset</div>
 <div class="line">    Burst --&gt; [*]</div>
+<div class="line">    Left --&gt; [*]</div>
 <div class="line">    Gone --&gt; [*]</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md879"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md880"></a>
 Ripening and the fuse</h3>
 <p>A cluster is ripe when its count reaches <code>BubbleMergeMax</code>: the existing cap is the threshold, with no second number. Ripening starts a fuse of <code>FuseSeconds</code> (6) on <code>ISpawnClock.SecondsOnLevel</code>, held as a deadline.</p>
 <p>The fuse is in seconds on the level clock, not in spawn lines. Lines arrive anywhere from 0.55 s to 1.7 s apart, and their rate is multiplied by things the player cannot see (up to 8 times faster on a sparse board, 3 times faster in flight, slower in a breather). The level clock holds through exactly the moments a timed threat would be unfair: pause, the level-up cinematic, game over.</p>
-<h3><a class="anchor" id="autotoc_md880"></a>
+<h3><a class="anchor" id="autotoc_md881"></a>
 Popped in time: the ripple</h3>
 <p><b>A ripe cluster is fragile: any hit bursts the whole cluster.</b> A cluster loses one bubble a hit, so without this the first hit on a ripe 5 would make it a 4 and the choice would be between two bad rules. If that hit defused it, the ripple could only come from a one-shot pop (a pierce, a bomb, a laser) and the reward would be out of reach. If it stayed ripe, the ripple would cost five hits and five streak breaks. Fragile makes the answer one accurate shot.</p>
 <p>The burst sends one hit to each of the six neighbours through <code>IHitDispatcher</code>, so scoring, items and chains behave as for any other hit:</p>
 <ul>
-<li>Damage 1, a new flag <code>DamageFlags.Ripple</code> for audio and telemetry (no rule reads it), no <code>DirectHit</code>: it scores at the live multiplier but cannot climb the streak or trigger pop-spawns, like an item's pop.</li>
+<li>The ripple lands <code>BurstSeconds</code> (0.35) of level clock after the hit that popped the cluster. The cluster pops and scores at the hit, and its view spends that time folding its six bubbles into one big bubble and popping it; the ripple goes out as that bubble pops.</li>
+<li>Damage 1, a new flag <code>DamageFlags.Ripple</code>, no <code>DirectHit</code>. The ripple lands after the shot has flown on, so a ripple hit scores at the shot's streak as it stands and never changes it: it cannot climb it, break it, or restart it on the neighbour's colour. Without <code>DirectHit</code> it triggers no pop-spawn either.</li>
 <li>Reward balloons and balloons that deflect an ordinary hit (the unbreakable) are skipped.</li>
-<li>A ripe neighbour bursts in turn, after <code>ChainDelaySeconds</code> (0.12) so a chain reads as one.</li>
+<li>A ripe neighbour bursts in turn, <code>BurstSeconds</code> after the ripple popped it, folding first as the first one did, so a chain reads as a run of pops.</li>
+<li>The wait is on the level clock, so a pause holds it. A burst still waiting when the level completes, the game ends or the run resets is dropped with the fuses: the cluster has already popped and scored, and only its ripple is lost. The pop that completes a level therefore ripples nothing.</li>
 <li>A ripple strips foam coats, so popping a ripe cluster cleans the foam round it.</li>
 <li>A burst scores the bubbles the cluster held.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md881"></a>
+<h3><a class="anchor" id="autotoc_md882"></a>
 Fuse runs out: the foam</h3>
-<p>The cluster sprays foam and is <b>spent</b>: it drops to <code>SpentBubbles</code> (1) and stays, so the clump is still there to merge and ripen again. Each neighbouring colourable balloon takes a <b>coat</b>:</p>
+<p>The cluster hands its bubbles out and leaves. <code>RipeBubbleBurst.PlanFoam</code> decides where each bubble goes (<code>RipeBubbleRule.PlanHandout</code>), in this order:</p>
+<ol type="1">
+<li>A <b>coat</b> to each neighbouring plain balloon (<code>ICoatable</code>: the plain balloon and its silver, gold and rainbow skins, item carriers included), up to <code>CoatLayers</code>.</li>
+<li>Then one bubble at a time to <b>neighbouring clusters</b> with room below <code>BubbleMergeMax</code>: one per cluster a round, in <code>HexCoordinates.HexNeighborIndices</code> order, until the bubbles or the room run out. A cluster this fills to the cap ripens on the next tick and starts its own fuse.</li>
+<li>Any bubbles still left pop harmlessly.</li>
+</ol>
+<p><code>RipeBubbleBurst.HandOut</code> applies the plan. It only sets state: it dispatches no hit. The cluster then leaves the board through <code>IBalloonPopper.TryLeave</code>: its slot is freed at once, with no pop, no hit and no score, while its view stays for <code>FoamLeaveSeconds</code> to hand the bubbles out. It stays ripe to the end, so it keeps its warning colour. Bubbles are only moved or lost, never made, so the board's bubbles only fall.</p>
 <ul>
-<li>The first hit on a coated balloon removes the coat and passes through. The balloon is untouched.</li>
+<li>The first hit on a coated balloon removes the coat and passes through. The balloon is untouched, and an item it carries stays with it: an item goes off only when its balloon pops.</li>
 <li>That contact washes the shot's stolen colour, as a cluster does.</li>
 <li>It scores nothing and does not touch the streak. The cost is the extra hit and the lost colour.</li>
-<li>A piercing or beam hit pops the balloon, coat and all.</li>
-<li>One coat at most. Unbreakables, reward balloons and other clusters take none: a coat that added a bubble to a cluster would ripen it and start the next fuse, foam breeding bombs.</li>
+<li>A piercing or beam hit pops the balloon, coat and all. That contact does not wash: the coat went with the balloon, so the shot steals the balloon's colour as from any pop.</li>
+<li>One coat at most (<code>CoatLayers</code>, 1). Toughs, unbreakables, reward balloons and grid actors take nothing. Clusters take bubbles, never a coat.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md882"></a>
+<h2><a class="anchor" id="autotoc_md883"></a>
 Architecture</h2>
 <p>State sits on the models. One small controller beside <code>BubbleMergeService</code> makes the decisions, woken the same way. The merge service itself stays as it is: it has no state and no teardown, and the fuse has both.</p>
 <div class="fragment"><div class="line">classDiagram</div>
@@ -209,18 +222,23 @@ Architecture</h2>
 <div class="line">        +EvaluateHit(DamageContext) HitOutcome</div>
 <div class="line">        ~Ripen()</div>
 <div class="line">        ~SetFuseLeft(float)</div>
-<div class="line">        ~Spend(int)</div>
+<div class="line">        ~SetBubbles(int)</div>
 <div class="line">    }</div>
 <div class="line">    class BalloonModel {</div>
 <div class="line">        +IReadOnlyReactiveProperty~int~ Coat</div>
 <div class="line">        +EvaluateHit(DamageContext) HitOutcome</div>
-<div class="line">        ~TryCoat() bool</div>
+<div class="line">        ~TryCoat(int maxLayers) bool</div>
 <div class="line">    }</div>
 <div class="line">    class RipeBubbleRule {</div>
 <div class="line">        &lt;&lt;static&gt;&gt;</div>
 <div class="line">        +IsRipe(int bubbles, int max) bool</div>
+<div class="line">        +Throbs(float before, float after, float fast) bool</div>
+<div class="line">        +WarnAmount(float left, float fuse) float</div>
 <div class="line">        +RippleTakes(ISlotActor) bool</div>
-<div class="line">        +FoamTakes(ISlotActor) bool</div>
+<div class="line">        +FoamTakes(ISlotActor, int maxLayers) bool</div>
+<div class="line">        +PlanHandout(int bubbles, coatRoom, clusterRoom) int</div>
+<div class="line">        +FoldCount(float elapsed, float burst, int from) int</div>
+<div class="line">        +FoamShownCount(int bubbles, float elapsed, float step) int</div>
 <div class="line">    }</div>
 <div class="line">    class RipeBubbleService {</div>
 <div class="line">        +Start()</div>
@@ -229,25 +247,52 @@ Architecture</h2>
 <div class="line">        -OnActorHit(ActorHitMessage)</div>
 <div class="line">    }</div>
 <div class="line">    class RipeBubbleBurst {</div>
-<div class="line">        +Ripple(BubbleClusterModel, Vector2Int, DamageContext)</div>
-<div class="line">        +Foam(BubbleClusterModel, Vector2Int)</div>
+<div class="line">        +Ripple(Vector2Int, DamageContext) int</div>
+<div class="line">        +PlanFoam(Vector2Int, int bubbles) int</div>
+<div class="line">        +HandOut(BubbleClusterModel, int handout)</div>
 <div class="line">    }</div>
-<div class="line">    class RipeBubbleLook {</div>
+<div class="line">    class IBalloonPopper {</div>
+<div class="line">        &lt;&lt;interface&gt;&gt;</div>
+<div class="line">        +TryLeave(IBalloonModel, float linger) bool</div>
+<div class="line">    }</div>
+<div class="line">    class IBalloonPopPrelude {</div>
+<div class="line">        &lt;&lt;interface&gt;&gt;</div>
+<div class="line">        +TryPlayPopPrelude(Action onDone) bool</div>
+<div class="line">    }</div>
+<div class="line">    class SoapBubbleClusterVariant {</div>
 <div class="line">        +Bind(IBalloonModel, CompositeDisposable)</div>
 <div class="line">    }</div>
 <div class="line">    class FoamCoatOverlay {</div>
-<div class="line">        +Bind(IBalloonModel, CompositeDisposable)</div>
+<div class="line">        +Create(Transform, SpriteRenderer, IRipeBubbleSettings)$</div>
+<div class="line">        +Show()</div>
+<div class="line">        +Hide()</div>
+<div class="line">        +PuffAndHide()</div>
+<div class="line">    }</div>
+<div class="line">    class BalloonView {</div>
+<div class="line">        +HoldCoat()</div>
+<div class="line">        +ReleaseCoat()</div>
 <div class="line">    }</div>
 <div class="line">    class RipeBubbleBurstView</div>
+<div class="line">    class SoapBubbleHop {</div>
+<div class="line">        &lt;&lt;static&gt;&gt;</div>
+<div class="line">        +Place(Transform, Vector3, Vector3, float, float, Vector3, float)$</div>
+<div class="line">    }</div>
 <div class="line">    BalloonModel ..|&gt; ICoatable</div>
 <div class="line">    RipeBubbleService --&gt; RipeBubbleRule</div>
 <div class="line">    RipeBubbleService --&gt; RipeBubbleBurst</div>
 <div class="line">    RipeBubbleService --&gt; BubbleClusterModel : ripens and runs fuse</div>
 <div class="line">    RipeBubbleBurst --&gt; IHitDispatcher : ripple hits</div>
 <div class="line">    RipeBubbleBurst --&gt; BalloonModel : TryCoat</div>
-<div class="line">    RipeBubbleLook --&gt; BubbleClusterModel : reads Ripe, FuseLeft</div>
-<div class="line">    FoamCoatOverlay --&gt; ICoatable : reads Coat</div>
-<div class="line">    RipeBubbleBurstView --&gt; RipeBubbleBurst : RipeBubbleBurstMessage</div>
+<div class="line">    RipeBubbleBurst --&gt; BubbleClusterModel : one more bubble</div>
+<div class="line">    RipeBubbleBurst --&gt; IBalloonPopper : the foamed cluster leaves</div>
+<div class="line">    SoapBubbleClusterVariant ..|&gt; IBalloonPopPrelude</div>
+<div class="line">    BalloonView --&gt; IBalloonPopPrelude : asks before the pop</div>
+<div class="line">    SoapBubbleClusterVariant --&gt; BubbleClusterModel : reads Ripe, FuseLeft</div>
+<div class="line">    BalloonView --&gt; ICoatable : reads Coat</div>
+<div class="line">    BalloonView --&gt; FoamCoatOverlay : creates on the first coat</div>
+<div class="line">    RipeBubbleService ..&gt; RipeBubbleBurstView : RipeBubbleBurstMessage</div>
+<div class="line">    RipeBubbleBurstView --&gt; BalloonView : holds and releases the coat</div>
+<div class="line">    RipeBubbleBurstView --&gt; SoapBubbleHop</div>
 </div><!-- fragment --><table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Layer   </th><th class="markdownTableHeadNone">What it does    </th></tr>
@@ -256,26 +301,38 @@ Architecture</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>BalloonModel</code> (new field), <code>ICoatable</code>   </td><td class="markdownTableBodyNone">Model   </td><td class="markdownTableBodyNone"><code>Coat</code>; a coated balloon's first ordinary hit removes the coat and passes through    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>RipeBubbleRule</code>   </td><td class="markdownTableBodyNone">pure static   </td><td class="markdownTableBodyNone">when a cluster is ripe, which neighbours a ripple hits, which take foam    </td></tr>
+<td class="markdownTableBodyNone"><code>RipeBubbleRule</code>   </td><td class="markdownTableBodyNone">pure static   </td><td class="markdownTableBodyNone">when a cluster is ripe, which neighbours a ripple hits, which take a coat, where a foam's bubbles go, and the fold's and the hand-out's schedules    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>RipeBubbleService</code>   </td><td class="markdownTableBodyNone">Controller (<code>IStartable</code>, <code>ITickable</code>, <code>IRunResettable</code>)   </td><td class="markdownTableBodyNone">ripens clusters at the cap, runs each fuse, queues bursts, stops on level change, game over and run reset    </td></tr>
+<td class="markdownTableBodyNone"><code>RipeBubbleService</code>   </td><td class="markdownTableBodyNone">Controller (<code>IStartable</code>, <code>ITickable</code>, <code>IRunResettable</code>)   </td><td class="markdownTableBodyNone">ripens clusters at the cap, runs each fuse, queues bursts <code>BurstSeconds</code> after their hit, hands a foamed cluster's bubbles out, stops on level change, game over and run reset    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>RipeBubbleBurst</code>   </td><td class="markdownTableBodyNone">Controller   </td><td class="markdownTableBodyNone">the ripple's hits and the foam's coats; stamps the water; publishes <code>RipeBubbleBurstMessage</code>    </td></tr>
+<td class="markdownTableBodyNone"><code>RipeBubbleBurst</code>   </td><td class="markdownTableBodyNone">Controller   </td><td class="markdownTableBodyNone">the ripple's hits; the foam's plan (<code>PlanFoam</code>) and hand-out (<code>HandOut</code>: coats, bubbles for clusters, then the cluster leaves); stamps the water. The ripple returns the neighbours it reached, a bit per direction; the plan is the foam's message    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>RipeBubbleLook</code>   </td><td class="markdownTableBodyNone">View, on the cluster prefab   </td><td class="markdownTableBodyNone">swell, faster float, throb and tint from <code>Ripe</code> and <code>FuseLeft</code>    </td></tr>
+<td class="markdownTableBodyNone"><code>IBalloonPopper.TryLeave</code>, <code>BalloonController.Leave</code>   </td><td class="markdownTableBodyNone">Controller   </td><td class="markdownTableBodyNone">takes a balloon out of play with no pop, hit or score, and returns its view to the pool after a linger    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>FoamCoatOverlay</code>   </td><td class="markdownTableBodyNone">View, on the colourable balloon prefabs   </td><td class="markdownTableBodyNone">shows and pops the coat    </td></tr>
+<td class="markdownTableBodyNone"><code>IBalloonPopPrelude</code>   </td><td class="markdownTableBodyNone">View seam   </td><td class="markdownTableBodyNone">a view binding that plays before its balloon's pop; <code>BalloonView.TryPlayPopPrelude</code> asks each binding, and the controller presents the pop when the prelude ends    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>RipeBubbleBurstView</code>   </td><td class="markdownTableBodyNone">View   </td><td class="markdownTableBodyNone">the ripple ring, and foam bubbles hopping to each coated neighbour   </td></tr>
+<td class="markdownTableBodyNone"><code>SoapBubbleClusterVariant</code>   </td><td class="markdownTableBodyNone">View, on the cluster prefab   </td><td class="markdownTableBodyNone">swell, faster float, throb and tint from <code>Ripe</code> and <code>FuseLeft</code>; the fold, as the cluster's <code>IBalloonPopPrelude</code>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>FoamCoatOverlay</code>   </td><td class="markdownTableBodyNone">View, made in code by <code>BalloonView</code> the first time its balloon is coated   </td><td class="markdownTableBodyNone">a child sprite with the soap material showing one bubble round the balloon, shown while <code>Coat</code> is above 0 and hidden as the pop starts. It fits itself on every show from the body's local transforms up to the balloon's root, so the balloon's own world scale (a spawn tween, a pool at zero scale) never enters the fit    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>SoapBubbleShader</code>   </td><td class="markdownTableBodyNone">shared static   </td><td class="markdownTableBodyNone">the soap bubble shader's property IDs and look defaults, the float rebase, a lone bubble's look and size, used by the cluster variant, the coat and the burst view    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>RipeBubbleBurstView</code>   </td><td class="markdownTableBodyNone">View   </td><td class="markdownTableBodyNone">the ripple ring, and the foam's hand-out: a bubble at a time hopping to each taker or drifting off    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>SoapBubbleHop</code>, <code>SoapBubbleSprites</code>   </td><td class="markdownTableBodyNone">View helpers   </td><td class="markdownTableBodyNone">the hop's arc and the pool of loose bubbles, shared by <code>BubbleMergeView</code> and <code>RipeBubbleBurstView</code>   </td></tr>
 </table>
-<p>New messages: <code>BubbleRipenedMessage</code> and <code>RipeBubbleBurstMessage</code> (ripple or foam, and how many neighbours it reached). A coat coming off needs none: it is already an <code>ActorHitMessage</code> with <code>PassThrough</code>.</p>
+<p>New messages: <code>BubbleRipenedMessage</code>, <code>RipeFuseBeatMessage</code> (each fast throb near the end of a fuse) and <code>RipeBubbleBurstMessage</code> (ripple or foam, and which neighbours it touched, one bit per direction in the order <code>HexCoordinates.HexNeighborIndices</code> lists them: the ripple's hits, or the foam's coats). A foam's message also carries its plan in one <code>int</code>, four bits a bubble in the order they leave (a coat or a cluster and its direction, or a leftover) and the count above them, so it allocates nothing. A coat coming off needs none: it is already an <code>ActorHitMessage</code> with <code>PassThrough</code>, which <code>ActorHitMessageExtensions.TookCoat</code> tells apart from a resist.</p>
 <p>Points that are easy to get wrong:</p>
 <ul>
 <li><b>The ripple is never dispatched from inside a hit handler.</b> <code>ProjectileHitResolver</code> reads the shot's streak straight after its own dispatch to grant shields; a ripple nested inside that dispatch would change it underneath. The service queues the burst when it hears the hit and drains the queue in its own <code>Tick</code>, with an index loop, so a chain is picked up without recursion. At most 12 clusters exist (<code>MaxBubbles</code>) and each pops once, so a chain is bounded.</li>
 <li><b>The service holds models, not slots,</b> and checks each tick that the model is still the one in its slot, as <code>NukeFuse</code> does, so a cluster the balancer moves keeps its fuse.</li>
 <li><b>A ripe cluster is not anchored.</b> An anchored actor can seal a pocket off from the spawn lines.</li>
-<li><b>The wash is read before the hit is evaluated.</b> After it, the coat is gone. One extension, <code>WashesProjectileColor</code>, answers for both a cluster and a coated balloon; the resolver and the solver's gather both use it. <code>BalloonModel</code> does not take the <code>IWashesProjectileColor</code> marker itself: the solver reads that marker as "resists paint".</li>
-<li><b>A ripe cluster is not tough.</b> <code>IsTough</code> treats more than one hit remaining as plough-through and discharge at the wall; a piercing shot must burst a ripe cluster on contact.</li>
+<li><b>The wash is read before the hit is evaluated.</b> After it, the coat is gone. One extension, <code>WashesProjectileColor</code>, answers for both a cluster and a coated balloon; the resolver uses it. The solver does not: a coat can come off mid-flight, so its gather keeps the coat count (<code>ICoatable</code>) and the marker apart, and decides the wash at each simulated contact. <code>BalloonModel</code> does not take the <code>IWashesProjectileColor</code> marker itself: the solver reads that marker as "resists paint".</li>
+<li><b>A ripe cluster is not tough, nor is a coated balloon.</b> <code>IsTough</code> treats more than one hit remaining as plough-through and discharge at the wall; a piercing shot must burst a ripe cluster, and pop a coated balloon, on contact. So <code>HitsToPop</code> counts the coat (a coated one-hit balloon takes two ordinary hits, and is no clean sweep) and <code>IsTough</code> does not.</li>
+<li><b>Only a pop releases an item.</b> <code>ItemActivator</code> used to fire on any hit on a carrier, which was the same thing while a plain balloon could not survive a hit. A coat makes it survive one.</li>
+<li><b>The fold is a prelude, not a cluster case in the controller.</b> <code>BalloonController</code> asks its view for a pop prelude; with none, the pop is presented at once as before. With one, the balloon leaves the grid and the registry at once, and the pop is presented when the prelude calls back. The model popped at the hit, so the rules and the score never wait on the view.</li>
+<li><b>The foam's message goes out before the models change,</b> so the burst view can hold what each taker shows (the coat, the cluster's count) until its bubble lands; the cluster's view is still at its slot.</li>
+<li><b>A foamed cluster leaves, it does not pop.</b> <code>TryLeave</code> frees the slot with no hit, so nothing scores, nothing fires, and the merge service sees only a grid change.</li>
 </ul>
 <div class="fragment"><div class="line">sequenceDiagram</div>
 <div class="line">    participant Res as ProjectileHitResolver</div>
@@ -286,22 +343,24 @@ Architecture</h2>
 <div class="line">    Res-&gt;&gt;Pipe: Dispatch hit on ripe cluster, outcome Pop</div>
 <div class="line">    Pipe-&gt;&gt;Ripe: ActorHitMessage</div>
 <div class="line">    Ripe-&gt;&gt;Ripe: enqueue burst at slot, no dispatch here</div>
-<div class="line">    Note over Ripe: next Tick, outside the resolver call stack</div>
+<div class="line">    Note over Ripe: a Tick BurstSeconds later, outside the resolver call stack</div>
 <div class="line">    Ripe-&gt;&gt;Burst: Ripple at slot with the shot as Projectile</div>
 <div class="line">    Burst-&gt;&gt;Grid: GetNeighbors of slot</div>
 <div class="line">    loop each neighbour that RippleTakes</div>
 <div class="line">        Burst-&gt;&gt;Pipe: Dispatch Damage 1, flags Ripple</div>
 <div class="line">        Pipe-&gt;&gt;Ripe: ActorHitMessage, a ripe neighbour popped</div>
-<div class="line">        Ripe-&gt;&gt;Ripe: enqueue chain burst after ChainDelay</div>
+<div class="line">        Ripe-&gt;&gt;Ripe: enqueue chain burst, due BurstSeconds later</div>
 <div class="line">    end</div>
-<div class="line">    Burst-&gt;&gt;Burst: stamp disturbance, publish RipeBubbleBurstMessage</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md883"></a>
+<div class="line">    Burst-&gt;&gt;Burst: stamp disturbance</div>
+<div class="line">    Burst--&gt;&gt;Ripe: which neighbours it hit</div>
+<div class="line">    Ripe-&gt;&gt;Ripe: publish RipeBubbleBurstMessage</div>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md884"></a>
 The coat: why it is state on the balloon</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Option   </th><th class="markdownTableHeadNone">Verdict    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">A <code>Coat</code> count on <code>BalloonModel</code>, checked in its <code>EvaluateHit</code>   </td><td class="markdownTableBodyNone"><b>Chosen.</b> The balloon keeps its identity: slot, registry handle, item, rainbow paint, type counts. One override, one overlay on the prefab    </td></tr>
+<td class="markdownTableBodyNone">A <code>Coat</code> count on <code>BalloonModel</code>, checked in its <code>EvaluateHit</code>   </td><td class="markdownTableBodyNone"><b>Chosen.</b> The balloon keeps its identity: slot, registry handle, item, rainbow paint, type counts. One override, one overlay the view makes in code    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">A coat on every balloon model, through the base class   </td><td class="markdownTableBodyNone">Touches four models to coat actors that should take none    </td></tr>
 <tr class="markdownTableRowOdd">
@@ -310,18 +369,23 @@ The coat: why it is state on the balloon</h3>
 <td class="markdownTableBodyNone">A service that intercepts hits outside the model   </td><td class="markdownTableBodyNone">Hits are evaluated inside the model by six or more callers; the check has to live there   </td></tr>
 </table>
 <p>Nothing is saved mid-level and models are built new for each spawn, so ripe state and coats need no reset or save work of their own.</p>
-<h2><a class="anchor" id="autotoc_md884"></a>
+<h2><a class="anchor" id="autotoc_md885"></a>
 Presentation</h2>
+<p>All of it is done from C# with the soap shader's existing properties; nothing here edits a shader.</p>
 <ul>
-<li><b>Ripe:</b> the cluster shader's <code>_SpriteScale</code> for the swell (not the transform, which the wobble resets), <code>_FloatSpeed</code> for the faster float (with <code>_TimeOffset</code> rebased so the phase does not jump), a wobble punch once a second of fuse, and a tint toward a warning colour. No shader edit.</li>
-<li><b>Ripple:</b> a new stamp profile in the disturbance settings; the water ripples through the path it already has. A growing ring over it (<code>GrowingDiscView</code> is a possible base).</li>
-<li><b>Foam:</b> the bubble merge's hop (<code>BubbleMergeView</code>): pooled bubbles arcing to each coated neighbour.</li>
-<li><b>Coat:</b> a child renderer on the colourable balloon prefabs using the soap bubble material with one bubble, scaled to enclose the balloon. No new shader; prefab edits.</li>
-<li><b>Audio:</b> cues for ripen, burst and a coat coming off, in <code>CombatSoundRouter</code>.</li>
+<li><b>Ripe</b> (<code>SoapBubbleClusterVariant</code>): the cluster swells to <code>SwellScale</code> over <code>SwellSeconds</code>. The swell is a factor the variant keeps, so a merge's wobble or a throb punches from the swollen size and settles back to it. The float runs <code>FloatSpeedup</code> times faster, with <code>_TimeOffset</code> rebased (<code>SoapBubbleShader.RebaseTimeOffset</code>) so the bubbles do not jump. The fuse throbs once a second, then twice a second in its last <code>ThrobFastSeconds</code> (<code>RipeBubbleRule.Throbs</code>), each a punch of <code>ThrobStrength</code>. The cluster fills with <code>WarnTint</code> (<code>RipeBubbleRule.WarnAmount</code>): <code>WarnStart</code> of the way the moment it ripens, so the player sees at once that it has turned, then evenly to full as the fuse runs out. It spins up with the same amount, to <code>SpinSpeedup</code> times its rest spin, its angle rebased as the float's offset is. The fill is the soap shader's flush (<code>_Flush</code>, set per renderer), the one shader addition of this plan besides the sixth layout: a clear film can't carry a tint, so the renderer's own colour showed nothing. Binding another model or despawning puts scale, flush, spin and float speed back.</li>
+<li><b>Spiral:</b> a ripe cluster sheds soap bubbles from a point that turns round it (<code>RipeBubbleBurstView</code>), one every <code>SpiralInterval</code>; each flies straight out, growing, and fades at <code>SpiralReach</code>, so together they draw a spiral arm winding out of the cluster. The ripening and each beat of the fuse (<code>RipeFuseBeatMessage</code>, now sent for every throb with a <code>Fast</code> flag) feed the source a little longer than the wait for the next beat, so the arm is unbroken while the fuse runs and stops when the cluster bursts or leaves the board. The source follows the cluster's view, and its bubbles are placed from where the cluster is now, so the arm travels with a cluster the board moves. In the fuse's last seconds it sheds <code>SpiralFastSpeedup</code> times faster. Owner, on the first version (a ring of five bubbles thrown on each throb): "the spiral doesn't read", with a picture of one arm of many bubbles growing outward; and "color shift early, so the user knows
+  it's going to happen, the pulse a bit larger, so it reads as danger".</li>
+<li><b>Fold</b> (<code>SoapBubbleClusterVariant</code>, the cluster's pop prelude): the hit on a ripe cluster steps its shown count down a bubble at a time, 6 to 1, over <code>FoldShare</code> (0.75) of <code>BurstSeconds</code>, keeping the flush. A scale makes up for each smaller layout (<code>RipeBubbleRule.FoldScale</code>), so the bubbles draw together into one big bubble about the cluster's outline, growing <code>FoldGrowth</code> (0.1) as it goes. It holds that size for the rest of <code>BurstSeconds</code>, then the pop plays as any balloon's does.</li>
+<li><b>Ripple:</b> the water takes the <code>BubbleRipple</code> stamp. <code>RipeBubbleBurstView</code> draws a ring over it: one soap bubble in the coat's material, under the balloons, that grows from about the folded bubble's size to <code>RingReach</code> slot spacings and fades out over <code>RingSeconds</code>.</li>
+<li><b>Foam:</b> the cluster keeps its warning colour and empties a bubble at a time, every <code>FoamStepSeconds</code> (0.12), keeping the bubble division. Each bubble that leaves goes where the plan says: a coat hops to its balloon on the bubble merge's arc (<code>SoapBubbleHop</code>, timed by <code>IBubbleMergeCueSettings</code>) and the coat shows as it lands (<code>BalloonView.HoldCoat</code> until then); a cluster's bubble hops in as a merge's does, and the cluster's count, held until then, rises by one; a leftover drifts a little way out and puffs as a coat does. The cluster's view is hidden as its last bubble leaves.</li>
+<li><b>Coat:</b> a child renderer <code>BalloonView</code> makes in code the first time its balloon is coated, using the soap bubble material with one bubble, centred on the body and scaled to <code>CoatScale</code> times its radius, sorted over the balloon and its item. A hit that takes it off puffs it away: it swells to <code>CoatPuffScale</code> and fades over <code>CoatPuffSeconds</code>. Binding, a pop and despawning hide it at once.</li>
+<li><b>Audio</b> (<code>CombatSoundRouter</code>): every cue is the plain balloon pop, pitched and scaled, so it sits in the colour pops' key without moving the ambient one. Ripening is an octave up and quiet. Each fast throb is the disco wave's tick. The hit on a ripe cluster plays a fifth up at half volume in place of its pop, as the fold starts. The player's burst, a fourth down and loud, plays when the folded bubble pops and the ripple goes out, and the ripple's own pops play at their colours where the shot's ramp stands, without climbing it. Foam is an octave down and soft, once as the fuse runs out. A coat taken off is a light pop a fourth up, where any other pass-through or absorb plays the resist.</li>
+<li><b>Telemetry</b> (per level, <code>GameplayMetricsService</code>): <code>clusters_ripened</code>, <code>ripple_bursts</code>, <code>ripple_neighbours_hit</code>, <code>fuses_run_out</code>, <code>coats_applied</code> and <code>coats_removed</code>. A coat hit counts as a coat removed, not as an absorb.</li>
 <li>A digit counting the fuse down, and foam drawn on the water's surface, are both shader edits. Neither is in the plan.</li>
 </ul>
-<p>All of it needs a look in the Editor.</p>
-<h2><a class="anchor" id="autotoc_md885"></a>
+<p>All of it needs a look and a listen in the Editor.</p>
+<h2><a class="anchor" id="autotoc_md886"></a>
 Settings</h2>
 <p><code>IRipeBubbleSettings</code>, a block on <code>IBalloonsConfiguration</code> beside <code>BubbleMergeMax</code>.</p>
 <table class="markdownTable">
@@ -330,32 +394,66 @@ Settings</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>FuseSeconds</code>   </td><td class="markdownTableBodyNone">6   </td><td class="markdownTableBodyNone">seconds of level clock from ripe to foam; 0 turns ripeness off    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>ChainDelaySeconds</code>   </td><td class="markdownTableBodyNone">0.12   </td><td class="markdownTableBodyNone">wait before a ripe neighbour hit by a ripple bursts    </td></tr>
+<td class="markdownTableBodyNone"><code>BurstSeconds</code>   </td><td class="markdownTableBodyNone">0.35   </td><td class="markdownTableBodyNone">level clock from a ripe cluster's pop to its ripple, the fold's time; a chain waits as long at each link    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>RippleDamage</code>   </td><td class="markdownTableBodyNone">1   </td><td class="markdownTableBodyNone">the hit each neighbour takes    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>SpentBubbles</code>   </td><td class="markdownTableBodyNone">1   </td><td class="markdownTableBodyNone">what a cluster keeps once its fuse has run out    </td></tr>
+<td class="markdownTableBodyNone"><code>FoamStepSeconds</code>   </td><td class="markdownTableBodyNone">0.12   </td><td class="markdownTableBodyNone">the gap between the bubbles a foaming cluster hands out    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>CoatLayers</code>   </td><td class="markdownTableBodyNone">1   </td><td class="markdownTableBodyNone">the most coats a balloon holds    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Look values   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone">swell scale, float speed-up, throb strength, warning tint   </td></tr>
+<td class="markdownTableBodyNone"><code>CoatMaterial</code>, <code>CoatSprite</code>   </td><td class="markdownTableBodyNone"><code>SoapClusterMaterial</code>, the cluster prefab's sprite   </td><td class="markdownTableBodyNone">what the coat is drawn with    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>CoatScale</code>   </td><td class="markdownTableBodyNone">1.15   </td><td class="markdownTableBodyNone">the coat bubble's radius over the balloon body's    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>SwellScale</code>, <code>SwellSeconds</code>   </td><td class="markdownTableBodyNone">1.12, 0.25   </td><td class="markdownTableBodyNone">a ripe cluster's size over its rest size, and how fast it gets there    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>ThrobStrength</code>, <code>ThrobSeconds</code>   </td><td class="markdownTableBodyNone">0.22, 0.3   </td><td class="markdownTableBodyNone">each throb's punch and how long it takes to settle    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>ThrobFastSeconds</code>   </td><td class="markdownTableBodyNone">2   </td><td class="markdownTableBodyNone">the end of the fuse that throbs twice a second, and is heard    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>WarnTint</code>, <code>WarnStart</code>   </td><td class="markdownTableBodyNone">(1, 0.55, 0.4), 0.35   </td><td class="markdownTableBodyNone">the colour a ripe cluster fills with, and how far it has filled the moment it ripens    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>SpinSpeedup</code>   </td><td class="markdownTableBodyNone">14   </td><td class="markdownTableBodyNone">a ripe cluster's spin over its rest spin at the end of its fuse    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>SpiralInterval</code>, <code>SpiralSeconds</code>, <code>SpiralReach</code>   </td><td class="markdownTableBodyNone">0.045, 1.4, 1.3   </td><td class="markdownTableBodyNone">seconds between the spiral's bubbles, how long each lives, how far it gets (slot spacings)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>SpiralTurnsPerSecond</code>, <code>SpiralFastSpeedup</code>, <code>SpiralBubbleRadius</code>   </td><td class="markdownTableBodyNone">1, 1.6, 0.14   </td><td class="markdownTableBodyNone">how fast the arm turns, how much faster it sheds in the last seconds, a bubble's size at the arm's end    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>FloatSpeedup</code>   </td><td class="markdownTableBodyNone">1.6   </td><td class="markdownTableBodyNone">a ripe cluster's float speed over its rest speed    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>CoatPuffSeconds</code>, <code>CoatPuffScale</code>   </td><td class="markdownTableBodyNone">0.12, 1.3   </td><td class="markdownTableBodyNone">how long a coat taken off takes to puff away, and how big it gets    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>RingSeconds</code>, <code>RingReach</code>   </td><td class="markdownTableBodyNone">0.35, 1   </td><td class="markdownTableBodyNone">how long the ripple's ring takes, and how far it spreads in slot spacings    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>RingSortingLayerName</code>, <code>RingSortingOrder</code>   </td><td class="markdownTableBodyNone"><code>Balloons</code>, -1   </td><td class="markdownTableBodyNone">where the ring draws: under the balloons   </td></tr>
 </table>
+<p>The foam's hops reuse <code>IBubbleMergeCueSettings</code> (<code>HopSeconds</code>, <code>ArcHeight</code>, <code>BubbleScale</code>, <code>SortingOrderOffset</code>), so the two kinds of hopping bubble stay alike; they leave one per <code>FoamStepSeconds</code> rather than the merge's <code>HopStagger</code>. The fold's share of <code>BurstSeconds</code> and its growth (<code>FoldShare</code>, <code>FoldGrowth</code>) are constants in <code>RipeBubbleRule</code>, a leftover's drift is a constant in <code>RipeBubbleBurstView</code>, and the sounds' pitches and volumes are constants in <code>CombatSoundRouter</code>.</p>
 <p>No water-only switch is needed: clusters spawn only on water, and the board clears on every level change.</p>
-<h2><a class="anchor" id="autotoc_md886"></a>
+<h2><a class="anchor" id="autotoc_md887"></a>
 Owner decisions (2026-11-18)</h2>
 <p>Eight decisions were put to the owner, each with a recommendation. The answer: "Go with your
 recommendations, build the ripe cluster".</p>
 <ol type="1">
 <li><b>A hit on a ripe cluster:</b> it bursts whole. (The other ways: it un-ripens, or it stays ripe and needs all 5 hits.)</li>
 <li><b>The fuse's clock:</b> seconds of level clock, 6 to start, not spawn lines.</li>
-<li><b>A cluster whose fuse ran out:</b> spent to 1 bubble and stays. Leaving the board would trade five hits of cluster for at most six one-hit coats, which is close to no danger at all; re-arming at 5 would make a foam fountain.</li>
-<li><b>Foam on a neighbouring cluster:</b> nothing. One more bubble would ripen clusters with foam and could run away.</li>
+<li><em>(Replaced by decision 10.)</em> <b>A cluster whose fuse ran out:</b> spent to 1 bubble and stays. Leaving the board would trade five hits of cluster for at most six one-hit coats, which is close to no danger at all; re-arming at the cap would make a foam fountain.</li>
+<li><em>(Replaced by decision 11.)</em> <b>Foam on a neighbouring cluster:</b> nothing. One more bubble would ripen clusters with foam and could run away.</li>
 <li><b>A ripple reaching a ripe neighbour:</b> it bursts too.</li>
 <li><b>A hit on a coat:</b> washes the colour and nothing else: no points, no streak break.</li>
 <li><b>Clusters arriving from the lines:</b> at most one below the cap, so a cluster always ripens through a merge and none arrives ripe from level 61.</li>
-<li><b>A ripe burst's score:</b> the 5 bubbles it held. Before this a piercing pop of any cluster scored 1, less than chipping it down.</li>
+<li><b>A ripe burst's score:</b> the bubbles it held (6, with the cap below). Before this a piercing pop of any cluster scored 1, less than chipping it down.</li>
+<li><b>The cap is 6, not 5</b> (the same day, after seeing it staged): "Cap the bubbles to 6, it makes more sense
+   as it basically covers all its neighbors". A full cluster is a ring of six, one bubble toward each neighbouring slot (the shader's sixth layout), so the ripple and the foam reach exactly what the cluster shows it touches. Clusters arrive from the lines with at most 5.</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md887"></a>
+<p>The endings were then reworked on the owner's direction (quoted at the top), with two questions put to the owner:</p>
+<ol type="1">
+<li><b>May the cluster disappear after foaming?</b> "Yes". It hands every bubble out and leaves the board with no hit and no score, in its warning colour to the end. This replaces decision 3.</li>
+<li><b>Where do its bubbles go?</b> A suggestion was put: coats to the plain neighbours first, then one bubble at a time to neighbouring clusters up to the cap, then any left over pop harmlessly. The answer: "Go
+    with your suggestion". This replaces decision 4. A cluster the foam fills ripens and starts its own fuse, but bubbles are only moved or lost, so the board's bubbles only fall.</li>
+<li><b>The ripple</b> follows the direction as it stands: the ripe cluster folds 6 to 1 into one big bubble and pops, and the ripple goes out then, <code>BurstSeconds</code> after the hit, for a chained burst too.</li>
+</ol>
+<h2><a class="anchor" id="autotoc_md888"></a>
 Phases</h2>
 <p>Each phase can be played and checked on its own.</p>
 <table class="markdownTable">
@@ -368,23 +466,29 @@ Phases</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">2   </td><td class="markdownTableBodyNone">The ripple: <code>DamageFlags.Ripple</code>, the queue, chains, the water stamp   </td><td class="markdownTableBodyNone">a crowd round a ripe cluster is thinned; two ripe neighbours chain   </td><td class="markdownTableBodyNone">score, streak and items firing through chained hits    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">3   </td><td class="markdownTableBodyNone">The coat: <code>ICoatable</code>, the balloon's <code>EvaluateHit</code>, the resolver's wash and one-hit checks, foam on expiry, the overlay   </td><td class="markdownTableBodyNone">an ignored ripe cluster leaves coated balloons that take two hits and wash the shot   </td><td class="markdownTableBodyNone">it touches the resolver, the core hit path; prefab edits    </td></tr>
+<td class="markdownTableBodyNone">3   </td><td class="markdownTableBodyNone">The coat: <code>ICoatable</code>, the balloon's <code>EvaluateHit</code>, the resolver's wash and one-hit checks, foam on expiry, the overlay   </td><td class="markdownTableBodyNone">an ignored ripe cluster leaves coated balloons that take two hits and wash the shot   </td><td class="markdownTableBodyNone">it touches the resolver, the core hit path    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">4   </td><td class="markdownTableBodyNone">The solver knows coats and ripe clusters; bot runs on water with and without ripeness   </td><td class="markdownTableBodyNone">bot reports   </td><td class="markdownTableBodyNone">the solver drifting from the game    </td></tr>
+<td class="markdownTableBodyNone">4   </td><td class="markdownTableBodyNone">The solver knows coats and ripe clusters; bot runs on water with and without ripeness   </td><td class="markdownTableBodyNone"><code>RipeClusterMirrorTests</code>; bot reports   </td><td class="markdownTableBodyNone">the solver drifting from the game. <b>Solver built</b>, its known gaps in the ShotSolver README; the bot runs are still to do    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">5   </td><td class="markdownTableBodyNone">Presentation: float, throb, tint, ring, foam hops, audio, telemetry counters   </td><td class="markdownTableBodyNone">a look in the Editor   </td><td class="markdownTableBodyNone">none beyond taste   </td></tr>
+<td class="markdownTableBodyNone">5   </td><td class="markdownTableBodyNone">Presentation: float, throb, tint, ring, foam hops, coat puff, audio, telemetry counters   </td><td class="markdownTableBodyNone">a look and a listen in the Editor. <b>Built</b>; not yet seen or heard   </td><td class="markdownTableBodyNone">none beyond taste    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">6   </td><td class="markdownTableBodyNone">The endings reworked (decisions 10 to 12): the fold and the delayed ripple, the foam's hand-out and the cluster leaving   </td><td class="markdownTableBodyNone">a ripe pop folds into one bubble before its ring; an ignored one empties a bubble at a time into its neighbours and is gone. <b>Built</b>; not yet seen or heard   </td><td class="markdownTableBodyNone">the pop prelude touches every pop's path; clusters fed by foam ripening in a run   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md888"></a>
+<h2><a class="anchor" id="autotoc_md889"></a>
 Tests</h2>
 <ul>
-<li><code>RipeBubbleRule</code>: the ripe threshold; which neighbours a ripple hits and which take foam (rewards, deflectors, clusters, already coated); fuse left from the deadline.</li>
+<li><code>RipeBubbleRule</code>: the ripe threshold; which neighbours a ripple hits and which take foam (rewards, deflectors, clusters, already coated); fuse left from the deadline; the hand-out plan (coats first, then clusters a round at a time up to the cap, then leftovers); the fold's and the hand-out's schedules.</li>
 <li><code>BubbleClusterModel</code> when ripe: ordinary, piercing and indirect damage all pop it; it scores what it held.</li>
 <li><code>BalloonModel</code> with a coat: an ordinary hit removes the coat and the balloon survives; piercing and beam pop it; indirect damage removes the coat.</li>
-<li><code>RipeBubbleService</code>: ripens at the cap; the fuse fires foam once; stops on level change, game over and reset; follows a moved cluster; a burst heard during a dispatch is not dispatched inside it; two ripe neighbours each burst once.</li>
-<li><code>ProjectileHitResolver</code>: a coated balloon washes the shot and does not count as a one-hit pop; a ripe cluster is not ploughed through.</li>
+<li><code>RipeBubbleService</code>: ripens at the cap; the fuse fires foam once; stops on level change, game over and reset; follows a moved cluster; a burst heard during a dispatch is not dispatched inside it; two ripe neighbours each burst once; the ripple waits <code>BurstSeconds</code>, a chain as long at each link, and game over during the wait drops it; the foam coats six, or coats three and leaves three over, fills a cluster to the cap (which ripens a tick later), coats before it gives to clusters, gives a full cluster nothing, and the cluster leaves.</li>
+<li><code>ProjectileHitResolver</code>: a coated balloon washes the shot and does not count as a one-hit pop; a ripe cluster is not ploughed through; a coated rainbow's coat hit carries no streak.</li>
+<li><code>ItemActivator</code>: a coat hit on a carrier releases nothing; the pop releases the item.</li>
+<li><code>FoamCoatOverlay</code>: the fit does not change with the balloon's world scale, survives a zero scale, and follows the body on every show.</li>
+<li>The solver: <code>RipeClusterMirrorTests</code> play the same shot through the game's score, streak, resolver and ripple and through <code>ShotSimulator</code>, and compare score, colour and streak.</li>
+<li>Presentation: the throb schedule and the warning curve (<code>RipeBubbleRuleTests</code>); the float rebase, the hop's path, the burst message's direction bits and its hand-out entries (<code>RipeBubblePresentationTests</code>); the fast beats the service announces; the router's cue for a coat hit, a resist, a ripple's pops and a ripe cluster's fold (<code>CombatSoundRouterTests</code>); a cluster leaving the board wakes the merge (<code>BubbleMergeServiceTests</code>); the six counters (<code>GameplayMetricsServiceTests</code>, <code>MetricCatalogFoldTests</code>).</li>
 <li>Existing: <code>BubbleClusterModelTests</code>, <code>ProjectileHitResolverTests</code>, the solver's <code>EffectBoardMirrorTests</code>.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md889"></a>
+<h2><a class="anchor" id="autotoc_md890"></a>
 What to watch</h2>
 <p>A ripe cluster in the middle of a crowd cannot merge or move out of the way, so the fuse partly rewards how the board happens to lie. One-hit bursts and a 6 s fuse should keep that fair; the bot runs in phase 4 are where to check it. </p>
 </div></div><!-- contents -->

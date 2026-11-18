@@ -118,14 +118,14 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Model_1_1BubbleCluster
 </div><!--header-->
 <div class="contents">
 
-<p>At destruction, distributes one <a class="el" href="structBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttribution.html" title="One entry per color bar that should receive points on actor destruction.">ScoreAttribution</a> per remaining bubble to a random palette colour. Washes a projectile's stolen colour on contact.  
+<p>Each hit scores the bubbles the cluster held, spread over random palette colours, and breaks the streak.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Balloon.Model.BubbleClusterModel:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel__inherit__graph.svg" width="100%" height="558"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel__inherit__graph.svg" width="100%" height="582"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for BalloonParty.Balloon.Model.BubbleClusterModel:</div>
@@ -137,8 +137,8 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Model_1_1BubbleCluster
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a6b2a2a013b955cd134440cbfcbd607b1" id="r_a6b2a2a013b955cd134440cbfcbd607b1"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675">HitOutcome</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a6b2a2a013b955cd134440cbfcbd607b1">EvaluateHit</a> (<a class="el" href="structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html">DamageContext</a> context)</td></tr>
-<tr class="separator:a6b2a2a013b955cd134440cbfcbd607b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40cc66a8a534f628a6e86fcba86d93df" id="r_a40cc66a8a534f628a6e86fcba86d93df"><td class="memItemLeft" align="right" valign="top">override <a class="el" href="namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675">HitOutcome</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a40cc66a8a534f628a6e86fcba86d93df">EvaluateHit</a> (<a class="el" href="structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html">DamageContext</a> context)</td></tr>
+<tr class="separator:a40cc66a8a534f628a6e86fcba86d93df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7663a699e08d3a2f842ea664f9b98408" id="r_a7663a699e08d3a2f842ea664f9b98408"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7663a699e08d3a2f842ea664f9b98408">ResolveScoreAttribution</a> (in <a class="el" href="structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html">DamageContext</a> context, IReadOnlyList&lt; string &gt; incompleteColors, IList&lt; <a class="el" href="structBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttribution.html">ScoreAttribution</a> &gt; results)</td></tr>
 <tr class="memdesc:a7663a699e08d3a2f842ea664f9b98408"><td class="mdescLeft">&#160;</td><td class="mdescRight"><em>incompleteColors</em>  lists the colours whose progress bar isn't full yet — scatter implementers (Tough/BubbleCluster/Unbreakable) confine their random split to these so completing a colour never wastes points on it.  <br /></td></tr>
 <tr class="separator:a7663a699e08d3a2f842ea664f9b98408"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -155,9 +155,15 @@ Protected Member Functions</h2></td></tr>
 Package Functions</h2></td></tr>
 <tr class="memitem:af2faff2dab0ef6b40cc4b818728d742c" id="r_af2faff2dab0ef6b40cc4b818728d742c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af2faff2dab0ef6b40cc4b818728d742c">BubbleClusterModel</a> (<a class="el" href="structBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelConfig.html">BalloonModelConfig</a> config, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html">IGamePalette</a> palette, IReadOnlyList&lt; string &gt; allowedColors=null)</td></tr>
 <tr class="separator:af2faff2dab0ef6b40cc4b818728d742c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60af6792b97b2c36d2ba5f2887d68060" id="r_a60af6792b97b2c36d2ba5f2887d68060"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a60af6792b97b2c36d2ba5f2887d68060">Ripen</a> ()</td></tr>
+<tr class="separator:a60af6792b97b2c36d2ba5f2887d68060"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a09ef1059496fe54745388e851f788915" id="r_a09ef1059496fe54745388e851f788915"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a09ef1059496fe54745388e851f788915">SetBubbles</a> (int count)</td></tr>
 <tr class="memdesc:a09ef1059496fe54745388e851f788915"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets how many bubbles the cluster holds, at least 1: a water line's small cluster, or its count after a merge gave or took bubbles.  <br /></td></tr>
 <tr class="separator:a09ef1059496fe54745388e851f788915"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46d54a01fc05e8a1b9bc1780fa0bc0aa" id="r_a46d54a01fc05e8a1b9bc1780fa0bc0aa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a46d54a01fc05e8a1b9bc1780fa0bc0aa">SetFuseLeft</a> (float seconds)</td></tr>
+<tr class="separator:a46d54a01fc05e8a1b9bc1780fa0bc0aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc30ca1466571035701ff0be8654944e" id="r_acc30ca1466571035701ff0be8654944e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acc30ca1466571035701ff0be8654944e">Unripen</a> ()</td></tr>
+<tr class="separator:acc30ca1466571035701ff0be8654944e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -179,6 +185,9 @@ Properties</h2></td></tr>
 <tr class="memitem:a23aad630e6dd316a26c31b21063ae9e0" id="r_a23aad630e6dd316a26c31b21063ae9e0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a23aad630e6dd316a26c31b21063ae9e0">DirectBalanceMotion</a><code> [get]</code></td></tr>
 <tr class="memdesc:a23aad630e6dd316a26c31b21063ae9e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Animate a resolve straight to the final slot instead of touring every waypoint.  <br /></td></tr>
 <tr class="separator:a23aad630e6dd316a26c31b21063ae9e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad24ef6b5391408ad977eb8ae7da26e8c" id="r_ad24ef6b5391408ad977eb8ae7da26e8c"><td class="memItemLeft" align="right" valign="top">IReadOnlyReactiveProperty&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad24ef6b5391408ad977eb8ae7da26e8c">FuseLeft</a><code> [get]</code></td></tr>
+<tr class="memdesc:ad24ef6b5391408ad977eb8ae7da26e8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds of level clock until the fuse runs out; 0 when not ripe.  <br /></td></tr>
+<tr class="separator:ad24ef6b5391408ad977eb8ae7da26e8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aff023b93aadd6742236df8699b21e27d" id="r_aff023b93aadd6742236df8699b21e27d"><td class="memItemLeft" align="right" valign="top">IReadOnlyReactiveProperty&lt; int &gt; IHasDurability.&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aff023b93aadd6742236df8699b21e27d">HitsRemaining</a><code> [get]</code></td></tr>
 <tr class="separator:aff023b93aadd6742236df8699b21e27d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a128f930790cc3c403f5a9e41dabb8e02" id="r_a128f930790cc3c403f5a9e41dabb8e02"><td class="memItemLeft" align="right" valign="top">ReactiveProperty&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a128f930790cc3c403f5a9e41dabb8e02">IsStable</a> = new(true)<code> [get]</code></td></tr>
@@ -206,6 +215,9 @@ Properties</h2></td></tr>
 <tr class="memitem:a41c756776fb1dbb3fc8a9f0b23072aba" id="r_a41c756776fb1dbb3fc8a9f0b23072aba"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a41c756776fb1dbb3fc8a9f0b23072aba">RegistryHandle</a> = -1<code> [get, set]</code></td></tr>
 <tr class="memdesc:a41c756776fb1dbb3fc8a9f0b23072aba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opaque slot index into <code>BalloonControllerRegistry</code>, -1 while unregistered; consumers must not interpret it.  <br /></td></tr>
 <tr class="separator:a41c756776fb1dbb3fc8a9f0b23072aba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bd118b40fc8b563c32536f622aedbfa" id="r_a1bd118b40fc8b563c32536f622aedbfa"><td class="memItemLeft" align="right" valign="top">IReadOnlyReactiveProperty&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1bd118b40fc8b563c32536f622aedbfa">Ripe</a><code> [get]</code></td></tr>
+<tr class="memdesc:a1bd118b40fc8b563c32536f622aedbfa"><td class="mdescLeft">&#160;</td><td class="mdescRight">At the merge cap with its fuse running: any hit bursts it whole.  <br /></td></tr>
+<tr class="separator:a1bd118b40fc8b563c32536f622aedbfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af30220bdbafcef8a82e777b21aa49e07" id="r_af30220bdbafcef8a82e777b21aa49e07"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af30220bdbafcef8a82e777b21aa49e07">ScoreValue</a><code> [get]</code></td></tr>
 <tr class="separator:af30220bdbafcef8a82e777b21aa49e07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a20428a0019057df304a05f4eaebb5a41" id="r_a20428a0019057df304a05f4eaebb5a41"><td class="memItemLeft" align="right" valign="top">ReactiveProperty&lt; Vector2Int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a20428a0019057df304a05f4eaebb5a41">SlotIndex</a> = new()<code> [get]</code></td></tr>
@@ -227,9 +239,16 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a068329feee77d5d5ba1bdfdabe249d6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aacb85e45a47b00469628d81743787dcb" id="r_aacb85e45a47b00469628d81743787dcb"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="structBalloonParty_1_1Balloon_1_1Model_1_1ColorSource.html">ColorSource</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aacb85e45a47b00469628d81743787dcb">_colorSource</a></td></tr>
 <tr class="separator:aacb85e45a47b00469628d81743787dcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9bcc949dc694c642c1a7a8cd7fec9a4" id="r_aa9bcc949dc694c642c1a7a8cd7fec9a4"><td class="memItemLeft" align="right" valign="top">readonly ReactiveProperty&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa9bcc949dc694c642c1a7a8cd7fec9a4">_fuseLeft</a> = new()</td></tr>
+<tr class="separator:aa9bcc949dc694c642c1a7a8cd7fec9a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35c29eb2abfa4c3a179e1f4de0f4d610" id="r_a35c29eb2abfa4c3a179e1f4de0f4d610"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a35c29eb2abfa4c3a179e1f4de0f4d610">_heldAtHit</a></td></tr>
+<tr class="separator:a35c29eb2abfa4c3a179e1f4de0f4d610"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b636a470f8d9934963dd16dc83d8048" id="r_a3b636a470f8d9934963dd16dc83d8048"><td class="memItemLeft" align="right" valign="top">readonly ReactiveProperty&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3b636a470f8d9934963dd16dc83d8048">_ripe</a> = new()</td></tr>
+<tr class="separator:a3b636a470f8d9934963dd16dc83d8048"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>At destruction, distributes one <a class="el" href="structBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttribution.html" title="One entry per color bar that should receive points on actor destruction.">ScoreAttribution</a> per remaining bubble to a random palette colour. Washes a projectile's stolen colour on contact. </p>
+<div class="textblock"><p>Each hit scores the bubbles the cluster held, spread over random palette colours, and breaks the streak. </p>
+<p>Washes a projectile's stolen colour on contact. At the merge cap <code>RipeBubbleService</code> ripens it: while <a class="el" href="#a1bd118b40fc8b563c32536f622aedbfa" title="At the merge cap with its fuse running: any hit bursts it whole.">Ripe</a>, any hit bursts it whole. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="af2faff2dab0ef6b40cc4b818728d742c" name="af2faff2dab0ef6b40cc4b818728d742c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af2faff2dab0ef6b40cc4b818728d742c">&#9670;&#160;</a></span>BubbleClusterModel()</h2>
@@ -266,8 +285,8 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a6b2a2a013b955cd134440cbfcbd607b1" name="a6b2a2a013b955cd134440cbfcbd607b1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6b2a2a013b955cd134440cbfcbd607b1">&#9670;&#160;</a></span>EvaluateHit()</h2>
+<a id="a40cc66a8a534f628a6e86fcba86d93df" name="a40cc66a8a534f628a6e86fcba86d93df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40cc66a8a534f628a6e86fcba86d93df">&#9670;&#160;</a></span>EvaluateHit()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -276,7 +295,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675">HitOutcome</a> BalloonParty.Balloon.Model.BalloonModelBase.EvaluateHit </td>
+          <td class="memname">override <a class="el" href="namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675">HitOutcome</a> BalloonParty.Balloon.Model.BubbleClusterModel.EvaluateHit </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html">DamageContext</a></td>          <td class="paramname"><span class="paramname"><em>context</em></span></td><td>)</td>
           <td></td>
@@ -284,14 +303,12 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel virtual">virtual</span><span class="mlabel inherited">inherited</span></span>  </td>
+<span class="mlabels"><span class="mlabel virtual">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implements <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHitable.html#a5419ca3dc69e35376638bf36524942f6">BalloonParty.Slots.Capabilities.IHitable</a>.</p>
-
-<p>Reimplemented in <a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1HeartBalloonModel.html#acdca182bb28ae5f06af073cf10a3c7c6">BalloonParty.Balloon.Model.HeartBalloonModel</a>, <a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1NukeBalloonModel.html#a90deda45579aa7065946fda7e8375bf8">BalloonParty.Balloon.Model.NukeBalloonModel</a>, <a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1PlatedBalloonModel.html#a944855d0e161e453c5eed26300685716">BalloonParty.Balloon.Model.PlatedBalloonModel</a>, and <a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html#a3f39a6b3193be793441ddd2cde5b034f">BalloonParty.Balloon.Model.UnbreakableBalloonModel</a>.</p>
+<p>Reimplemented from <a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a6b2a2a013b955cd134440cbfcbd607b1">BalloonParty.Balloon.Model.BalloonModelBase</a>.</p>
 
 </div>
 </div>
@@ -351,6 +368,31 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a60af6792b97b2c36d2ba5f2887d68060" name="a60af6792b97b2c36d2ba5f2887d68060"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60af6792b97b2c36d2ba5f2887d68060">&#9670;&#160;</a></span>Ripen()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Balloon.Model.BubbleClusterModel.Ripen </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a09ef1059496fe54745388e851f788915" name="a09ef1059496fe54745388e851f788915"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a09ef1059496fe54745388e851f788915">&#9670;&#160;</a></span>SetBubbles()</h2>
 
@@ -376,6 +418,56 @@ Private Attributes</h2></td></tr>
 
 <p>Sets how many bubbles the cluster holds, at least 1: a water line's small cluster, or its count after a merge gave or took bubbles. </p>
 <p>Not capped by <code>MaxHitPoints</code>, the count it spawns with: a merge fills a cluster past that, up to its own cap. </p>
+
+</div>
+</div>
+<a id="a46d54a01fc05e8a1b9bc1780fa0bc0aa" name="a46d54a01fc05e8a1b9bc1780fa0bc0aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46d54a01fc05e8a1b9bc1780fa0bc0aa">&#9670;&#160;</a></span>SetFuseLeft()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Balloon.Model.BubbleClusterModel.SetFuseLeft </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>seconds</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acc30ca1466571035701ff0be8654944e" name="acc30ca1466571035701ff0be8654944e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc30ca1466571035701ff0be8654944e">&#9670;&#160;</a></span>Unripen()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Balloon.Model.BubbleClusterModel.Unripen </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -446,6 +538,72 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly <a class="el" href="structBalloonParty_1_1Balloon_1_1Model_1_1ColorSource.html">ColorSource</a> BalloonParty.Balloon.Model.BubbleClusterModel._colorSource</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa9bcc949dc694c642c1a7a8cd7fec9a4" name="aa9bcc949dc694c642c1a7a8cd7fec9a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9bcc949dc694c642c1a7a8cd7fec9a4">&#9670;&#160;</a></span>_fuseLeft</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly ReactiveProperty&lt;float&gt; BalloonParty.Balloon.Model.BubbleClusterModel._fuseLeft = new()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a35c29eb2abfa4c3a179e1f4de0f4d610" name="a35c29eb2abfa4c3a179e1f4de0f4d610"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35c29eb2abfa4c3a179e1f4de0f4d610">&#9670;&#160;</a></span>_heldAtHit</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Balloon.Model.BubbleClusterModel._heldAtHit</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3b636a470f8d9934963dd16dc83d8048" name="a3b636a470f8d9934963dd16dc83d8048"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b636a470f8d9934963dd16dc83d8048">&#9670;&#160;</a></span>_ripe</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly ReactiveProperty&lt;bool&gt; BalloonParty.Balloon.Model.BubbleClusterModel._ripe = new()</td>
         </tr>
       </table>
   </td>
@@ -611,6 +769,30 @@ Private Attributes</h2></td></tr>
 <p>Animate a resolve straight to the final slot instead of touring every waypoint. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceInfluence.html#adc10d56a4764b5768d0917e1cd404993">BalloonParty.Slots.Actor.IBalanceInfluence</a>.</p>
+
+</div>
+</div>
+<a id="ad24ef6b5391408ad977eb8ae7da26e8c" name="ad24ef6b5391408ad977eb8ae7da26e8c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad24ef6b5391408ad977eb8ae7da26e8c">&#9670;&#160;</a></span>FuseLeft</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IReadOnlyReactiveProperty&lt;float&gt; BalloonParty.Balloon.Model.BubbleClusterModel.FuseLeft</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds of level clock until the fuse runs out; 0 when not ripe. </p>
 
 </div>
 </div>
@@ -889,6 +1071,30 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a1bd118b40fc8b563c32536f622aedbfa" name="a1bd118b40fc8b563c32536f622aedbfa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1bd118b40fc8b563c32536f622aedbfa">&#9670;&#160;</a></span>Ripe</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IReadOnlyReactiveProperty&lt;bool&gt; BalloonParty.Balloon.Model.BubbleClusterModel.Ripe</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>At the merge cap with its fuse running: any hit bursts it whole. </p>
+
+</div>
+</div>
 <a id="af30220bdbafcef8a82e777b21aa49e07" name="af30220bdbafcef8a82e777b21aa49e07"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af30220bdbafcef8a82e777b21aa49e07">&#9670;&#160;</a></span>ScoreValue</h2>
 
@@ -908,6 +1114,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScore.html#adaf9d7fc481f54c2fcee73214ac42857">BalloonParty.Slots.Capabilities.IHasScore</a>.</p>
 
 </div>
 </div>

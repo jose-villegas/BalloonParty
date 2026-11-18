@@ -66,7 +66,13 @@ var namespaceBalloonParty_1_1Game_1_1Telemetry =
       [ "BoardCleared", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebab65bda0bf7248cc77c87f2bb0119074e", null ],
       [ "LevelsCompleted", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebad0a549eeaa08ef5c939c6bbbd75ed111", null ],
       [ "RetriesUsed", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba9ef01b10a4b468f5aff8fceddf9a25dc", null ],
-      [ "TotalScore", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebaea2b3b1b3474d39e4dde52681d9ecaf8", null ]
+      [ "TotalScore", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebaea2b3b1b3474d39e4dde52681d9ecaf8", null ],
+      [ "ClustersRipened", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebab0f34dfe9a0cbed556ca464cd3b947b8", null ],
+      [ "RippleBursts", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba18d738fcf9115cf964d662124b70e55e", null ],
+      [ "RippleNeighboursHit", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebaf16f1e40f839a226cfbad7299ba17083", null ],
+      [ "FusesRunOut", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebaea45586b88a6597bf4d1563c9b9c9800", null ],
+      [ "CoatsApplied", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba5f4d398f48fb16bda12a8899f185cd87", null ],
+      [ "CoatsRemoved", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba96b46cfcb37ab029c8467a29d99c6926", null ]
     ] ],
     [ "MetricScopeKind", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a3d10738649138d0d994cf40a2bc2cbed", [
       [ "Flight", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a3d10738649138d0d994cf40a2bc2cbeda98415a6f570af1d10bebd54f054ce4b4", null ],

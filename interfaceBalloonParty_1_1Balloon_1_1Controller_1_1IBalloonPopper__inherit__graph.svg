@@ -22,7 +22,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="Pops one balloon outside the hit path: its pop VFX play (unless asked not to), its slot is freed and ...">
+<g id="a_Node000001"><a xlink:title="Takes one balloon off the board outside the hit path: popped (TryPopSingle: its pop VFX play unless a...">
 <polygon fill="#999999" stroke="#666666" points="169,-103 0,-103 0,-69.5 169,-69.5 169,-103"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-89.5" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Controller.</text>
 <text xml:space="preserve" text-anchor="middle" x="84.5" y="-76.75" font-family="Helvetica,sans-Serif" font-size="10.00">IBalloonPopper</text>

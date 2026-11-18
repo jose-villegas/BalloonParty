@@ -1,0 +1,23 @@
+var structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage =
+[
+    [ "RipeBubbleBurstMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#a1681ca0855e9768cc85cda97977e4418", null ],
+    [ "AddGift", "structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#a3035cdbeb9ba5af1f5d898c132a72675", null ],
+    [ "CountBits", "structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#a07d13fb2a55b8b099425e07626b6f3cf", null ],
+    [ "GiftOf", "structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#a3926b598ebd50b5fbc50511a26db14e4", null ],
+    [ "HandoutCount", "structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#af9d9fe4f4ab964a5e2f3e04d5b438eaf", null ],
+    [ "HandoutGift", "structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#aeaa6dafcb57f12c4c218babd98b9ad8d", null ],
+    [ "Touched", "structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#a8aaa0675a5bec20bb173c2eb99451fcc", null ],
+    [ "ClusterEntry", "structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#a1340ad6be3e9cd850cf580d93d905c76", null ],
+    [ "CountShift", "structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#ae0e6b0b663342fda34b4657a20bbf35c", null ],
+    [ "EntryBits", "structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#a09c8827bbfbd2288e0c7d41ffebf5e90", null ],
+    [ "EntryMask", "structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#add48e482dfcefb491e5bbe278515de37", null ],
+    [ "LeftoverEntry", "structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#aa05b3ed469ddde637517bc54589c23da", null ],
+    [ "MaxHandout", "structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#aa9e3d77de5442ba08bdc7f9e15507e8d", null ],
+    [ "Bubbles", "structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#a3feee0b8969a4932d4645f4a93854dac", null ],
+    [ "Handout", "structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#a3b8c7f5020a4bdaf0b2cf3919354196a", null ],
+    [ "Kind", "structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#a5370a72091adfe2a8e5e0ec8842fa9cf", null ],
+    [ "Neighbours", "structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#ad3cb08338a787276b0cbb8e1b33c3d57", null ],
+    [ "Position", "structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#a230aa16bb7ebcc21d4bcc268a498db72", null ],
+    [ "Reached", "structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#a45d95a67b04e4ba9a9caad99f692b097", null ],
+    [ "Slot", "structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#a77796ae9d25b335d2bcc475e920845e7", null ]
+];

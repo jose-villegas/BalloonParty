@@ -1,6 +1,6 @@
 var structBalloonParty_1_1Solver_1_1ShotSolveContext =
 [
-    [ "ShotSolveContext", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a04fa0d46081f4d3f8ec4b188f96e8b66", null ],
+    [ "ShotSolveContext", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#af23e557862232c45116b6c5632c91c30", null ],
     [ "AllowedColors", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a2b1eaaee78d366ddc37b0bcf63ac85bf", null ],
     [ "Board", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a6c2497ec7b3aa65f161da19e89aae850", null ],
     [ "CruiseConfig", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#acdb2a043e58dee4b3060d3bf532225a0", null ],
@@ -11,6 +11,7 @@ var structBalloonParty_1_1Solver_1_1ShotSolveContext =
     [ "ProjectileContactRadius", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#ab40600e44b593183a6c9b230af19ee1e", null ],
     [ "ProjectileSpeed", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a1bed91bd71c061c0660d79730272351b", null ],
     [ "RainbowColorId", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a185a932ade4e74322a3799d71b08247d", null ],
+    [ "RippleDamage", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a7d940301cd9a5902926b71c498936d21", null ],
     [ "SpawnLocalOffset", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a565e2ba7709d72a2b52268776853cca7", null ],
     [ "StartingShields", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a8ed51d952d7a30ab47a05ec5eb514394", null ],
     [ "StreakGrantsShields", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#ae36919be00223c5bf8072b1de121defa", null ],

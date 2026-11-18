@@ -16,5 +16,8 @@ var namespaceBalloonParty_1_1Balloon_1_1Controller =
     [ "BubbleMergeService", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeService.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeService" ],
     [ "IBalloonPopper", "interfaceBalloonParty_1_1Balloon_1_1Controller_1_1IBalloonPopper.html", "interfaceBalloonParty_1_1Balloon_1_1Controller_1_1IBalloonPopper" ],
     [ "PressurePropagation", "classBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation" ],
+    [ "RipeBubbleBurst", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleBurst.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleBurst" ],
+    [ "RipeBubbleRule", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleRule.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleRule" ],
+    [ "RipeBubbleService", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleService.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleService" ],
     [ "RoamRests", "classBalloonParty_1_1Balloon_1_1Controller_1_1RoamRests.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1RoamRests" ]
 ];

@@ -32,9 +32,9 @@
 <area shape="poly" id="edge27_Node000010_Node000024" title=" " alt="" coords="692,402,700,407,717,424,725,442,733,460,748,476,770,491,764,490,745,480,728,463,720,445,712,427,697,411,690,407"/>
 <area shape="rect" id="Node000012" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html" title=" " alt="" coords="1018,352,1220,397"/>
 <area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="973,372,1020,374,1015,375,974,377"/>
-<area shape="rect" id="Node000013" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html" title=" " alt="" coords="1272,144,1474,189"/>
+<area shape="rect" id="Node000013" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html" title="The plain balloon (and its silver, gold and rainbow skins): paintable, carries an item,..." alt="" coords="1272,144,1474,189"/>
 <area shape="poly" id="edge14_Node000012_Node000013" title=" " alt="" coords="1142,337,1195,268,1231,231,1271,199,1291,190,1296,188,1273,203,1234,235,1199,271,1145,341"/>
-<area shape="rect" id="Node000014" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html" title="At destruction, distributes one ScoreAttribution per remaining bubble to a random palette colour...." alt="" coords="1272,213,1474,258"/>
+<area shape="rect" id="Node000014" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html" title="Each hit scores the bubbles the cluster held, spread over random palette colours, and breaks the stre..." alt="" coords="1272,213,1474,258"/>
 <area shape="poly" id="edge15_Node000012_Node000014" title=" " alt="" coords="1160,340,1211,303,1271,268,1296,259,1301,258,1273,273,1214,308,1162,345"/>
 <area shape="rect" id="Node000015" href="$classBalloonParty_1_1Balloon_1_1Model_1_1HeartBalloonModel.html" title="The heart reward balloon (PLAN&#45;RewardBalloons): a heart wrapped in bandages that gives a heart back." alt="" coords="1272,283,1474,327"/>
 <area shape="poly" id="edge16_Node000012_Node000015" title=" " alt="" coords="1218,345,1286,328,1291,327,1219,350"/>

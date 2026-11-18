@@ -1,5 +1,6 @@
 var namespaceBalloonParty_1_1Shared_1_1Extensions =
 [
+    [ "ActorHitMessageExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1ActorHitMessageExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1ActorHitMessageExtensions" ],
     [ "AnimationCurveExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1AnimationCurveExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1AnimationCurveExtensions" ],
     [ "BalanceBiasExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1BalanceBiasExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1BalanceBiasExtensions" ],
     [ "BalloonModelExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1BalloonModelExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1BalloonModelExtensions" ],

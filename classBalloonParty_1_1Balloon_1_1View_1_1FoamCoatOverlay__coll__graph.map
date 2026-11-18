@@ -1,0 +1,7 @@
+<map id="BalloonParty.Balloon.View.FoamCoatOverlay" name="BalloonParty.Balloon.View.FoamCoatOverlay">
+<area shape="rect" id="Node000001" title="The soap bubble round a balloon wearing foam (BalloonParty.Slots.Capabilities.ICoatable): a child spr..." alt="" coords="66,115,260,160"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,14,129,42"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="90,51,146,114,141,115,87,56"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRipeBubbleSettings.html" title="A bubble cluster that reaches IBalloonsConfiguration.BubbleMergeMax is ripe: any hit bursts it whole,..." alt="" coords="153,5,365,50"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="232,61,184,116,181,112,227,63"/>
+</map>

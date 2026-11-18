@@ -7,6 +7,7 @@ var namespaceBalloonParty_1_1Shared_1_1Messages =
     [ "BoardDepletedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1BoardDepletedMessage.html", null ],
     [ "BonusCardDealtMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage" ],
     [ "BubbleMergedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1BubbleMergedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1BubbleMergedMessage" ],
+    [ "BubbleRipenedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1BubbleRipenedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1BubbleRipenedMessage" ],
     [ "ClearShotsInFlightMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ClearShotsInFlightMessage.html", null ],
     [ "DeflectChainMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1DeflectChainMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1DeflectChainMessage" ],
     [ "DiscoWaveAdvancedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveAdvancedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveAdvancedMessage" ],
@@ -42,6 +43,8 @@ var namespaceBalloonParty_1_1Shared_1_1Messages =
     [ "ProjectileFiredMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileFiredMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileFiredMessage" ],
     [ "ProjectileLoadedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage" ],
     [ "RestartRiseStartedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1RestartRiseStartedMessage.html", null ],
+    [ "RipeBubbleBurstMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage" ],
+    [ "RipeFuseBeatMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1RipeFuseBeatMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1RipeFuseBeatMessage" ],
     [ "RunResetMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1RunResetMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1RunResetMessage" ],
     [ "RunRestartCompletedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1RunRestartCompletedMessage.html", null ],
     [ "ScoreLevelUpMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ScoreLevelUpMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ScoreLevelUpMessage" ],
@@ -61,6 +64,15 @@ var namespaceBalloonParty_1_1Shared_1_1Messages =
     [ "UpgradeCardHeldMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1UpgradeCardHeldMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1UpgradeCardHeldMessage" ],
     [ "WallHitMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage" ],
     [ "WaveDamageMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage" ],
+    [ "FoamGift", "namespaceBalloonParty_1_1Shared_1_1Messages.html#a59eaf814cb0fd69d1473c2377bee7918", [
+      [ "Coat", "namespaceBalloonParty_1_1Shared_1_1Messages.html#a59eaf814cb0fd69d1473c2377bee7918a6e162ed9a2bc76307e0a249786f4951e", null ],
+      [ "Cluster", "namespaceBalloonParty_1_1Shared_1_1Messages.html#a59eaf814cb0fd69d1473c2377bee7918a249694a485fc5d3289c38986b4f8e887", null ],
+      [ "Leftover", "namespaceBalloonParty_1_1Shared_1_1Messages.html#a59eaf814cb0fd69d1473c2377bee7918a980c0f693600b09962d3318bf55aaf8c", null ]
+    ] ],
+    [ "RipeBurstKind", "namespaceBalloonParty_1_1Shared_1_1Messages.html#ac45f89e1e12dc060a80c4997f10bb76a", [
+      [ "Ripple", "namespaceBalloonParty_1_1Shared_1_1Messages.html#ac45f89e1e12dc060a80c4997f10bb76aac0062863e3e99f67607ad1ae9a4299a7", null ],
+      [ "Foam", "namespaceBalloonParty_1_1Shared_1_1Messages.html#ac45f89e1e12dc060a80c4997f10bb76aa69a87c4b379ae01b6eeacc5eb274609b", null ]
+    ] ],
     [ "ShieldGainSource", "namespaceBalloonParty_1_1Shared_1_1Messages.html#a1a885ac3fd6e8e290b39752bfe7e21c5", [
       [ "Item", "namespaceBalloonParty_1_1Shared_1_1Messages.html#a1a885ac3fd6e8e290b39752bfe7e21c5a7d74f3b92b19da5e606d737d339a9679", null ],
       [ "Streak", "namespaceBalloonParty_1_1Shared_1_1Messages.html#a1a885ac3fd6e8e290b39752bfe7e21c5af4bb7b4d64f470dc5e5aca7aa1cfe624", null ],

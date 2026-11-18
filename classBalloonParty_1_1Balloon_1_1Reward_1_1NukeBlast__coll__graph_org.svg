@@ -281,7 +281,7 @@
 <!-- Node15 -->
 <g id="Node000015" class="node">
 <title>Node15</title>
-<g id="a_Node000015"><a xlink:href="interfaceBalloonParty_1_1Balloon_1_1Controller_1_1IBalloonPopper.html" target="_top" xlink:title="Pops one balloon outside the hit path: its pop VFX play (unless asked not to), its slot is freed and ...">
+<g id="a_Node000015"><a xlink:href="interfaceBalloonParty_1_1Balloon_1_1Controller_1_1IBalloonPopper.html" target="_top" xlink:title="Takes one balloon off the board outside the hit path: popped (TryPopSingle: its pop VFX play unless a...">
 <polygon fill="white" stroke="#666666" points="641.5,-189.5 472.5,-189.5 472.5,-156 641.5,-156 641.5,-189.5"/>
 <text xml:space="preserve" text-anchor="start" x="480.5" y="-176" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Controller.</text>
 <text xml:space="preserve" text-anchor="middle" x="557" y="-163.25" font-family="Helvetica,sans-Serif" font-size="10.00">IBalloonPopper</text>

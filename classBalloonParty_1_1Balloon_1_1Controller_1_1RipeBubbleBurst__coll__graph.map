@@ -1,0 +1,51 @@
+<map id="BalloonParty.Balloon.Controller.RipeBubbleBurst" name="BalloonParty.Balloon.Controller.RipeBubbleBurst">
+<area shape="rect" id="Node000001" title="A ripe cluster&#39;s two endings." alt="" coords="1171,253,1397,298"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" title=" " alt="" coords="801,115,973,159"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="988,158,1068,181,1148,208,1243,253,1238,253,1146,213,1066,186,989,164"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html" title="Tracks slots in&#45;transit from balance animations so spawn paths avoid them." alt="" coords="384,144,556,189"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="571,164,656,162,745,157,803,151,798,154,745,162,656,168,573,169"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="20,144,226,189"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="240,164,385,165,381,168,243,169"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html" title="Slot grid layout: size, spacing, and origin offset." alt="" coords="378,213,562,258"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="576,226,660,212,703,201,744,186,756,178,768,169,803,157,798,160,770,174,759,183,746,191,705,206,661,217,578,231"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="381,5,559,50"/>
+<area shape="poly" id="edge25_Node000001_Node000006" title=" " alt="" coords="574,22,698,27,770,34,846,46,924,62,1002,84,1078,113,1149,149,1183,173,1215,201,1266,253,1261,253,1212,204,1180,178,1146,154,1076,118,1001,89,923,67,845,51,769,40,698,33,576,27"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="573,51,613,61,746,92,816,113,811,115,744,97,611,66,575,57"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="34,5,212,50"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="226,25,383,26,379,29,229,30"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="381,75,559,119"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="574,105,612,109,803,128,798,130,612,114,576,110"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Shared_1_1Messages_1_1IHitDispatcher.html" title="Publish ActorHitMessage only through this — publishing to the broker directly skips scoring and the o..." alt="" coords="776,184,999,229"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="1014,226,1174,255,1168,257,1014,231"/>
+<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Balloon_1_1Controller_1_1IBalloonPopper.html" title="Takes one balloon off the board outside the hit path: popped (TryPopSingle: its pop VFX play unless a..." alt="" coords="774,253,1000,298"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="1015,273,1173,275,1168,276,1016,278"/>
+<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html" title=" " alt="" coords="773,323,1001,367"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="1016,320,1173,294,1168,296,1017,325"/>
+<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRipeBubbleSettings.html" title="A bubble cluster that reaches IBalloonsConfiguration.BubbleMergeMax is ripe: any hit bursts it whole,..." alt="" coords="781,392,993,437"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="998,385,1072,364,1146,338,1243,297,1238,299,1148,343,1073,369,1000,390"/>
+<area shape="rect" id="Node000013" href="$classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html" title="Screen&#45;space disturbance field any system can stamp into; GPU resources live in DisturbanceFieldResou..." alt="" coords="769,556,1005,601"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="936,545,1035,479,1146,397,1207,344,1257,300,1262,297,1211,348,1149,401,1038,484,939,550"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="428,624,512,652"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="527,628,771,594,766,596,528,633"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="430,676,510,704"/>
+<area shape="poly" id="edge14_Node000013_Node000015" title=" " alt="" coords="524,676,587,661,744,620,817,600,812,602,746,625,589,666,525,681"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="395,728,545,756"/>
+<area shape="poly" id="edge15_Node000013_Node000016" title=" " alt="" coords="554,722,587,713,667,691,744,660,801,630,850,602,855,600,804,634,746,665,669,696,589,718,555,727"/>
+<area shape="rect" id="Node000017" href="$interfaceBalloonParty_1_1Shared_1_1Cadence_1_1ICadencedEffect.html" title="Implemented by field services that perform periodic RT blits on a cadence timer." alt="" coords="363,780,577,825"/>
+<area shape="poly" id="edge16_Node000013_Node000017" title=" " alt="" coords="591,773,669,747,744,711,780,685,814,655,865,602,870,600,818,658,784,689,746,715,671,752,593,779"/>
+<area shape="rect" id="Node000018" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IDisturbanceFieldSettings.html" title=" " alt="" coords="5,347,241,391"/>
+<area shape="poly" id="edge17_Node000013_Node000018" title=" " alt="" coords="199,339,319,307,390,295,466,289,542,291,616,304,652,316,686,332,717,351,747,375,759,393,762,410,764,428,771,448,792,478,816,507,862,556,857,555,812,511,788,482,767,450,759,429,757,411,754,395,743,379,714,355,683,336,650,321,615,310,542,296,466,294,391,300,320,312,202,344"/>
+<area shape="rect" id="Node000022" href="$classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldResources.html" title="Holds the disturbance field&#39;s GPU resources and blit&#45;and&#45;swap, separate from DisturbanceFieldService&#39;..." alt="" coords="352,417,588,462"/>
+<area shape="poly" id="edge22_Node000022_Node000018" title=" " alt="" coords="250,392,359,415,354,418,252,398"/>
+<area shape="rect" id="Node000019" href="$interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html" title=" " alt="" coords="370,348,570,393"/>
+<area shape="poly" id="edge18_Node000013_Node000019" title=" " alt="" coords="585,389,667,413,746,448,783,472,817,501,869,556,864,555,813,505,780,477,744,453,665,418,586,394"/>
+<area shape="rect" id="Node000020" href="$classBalloonParty_1_1Shared_1_1ImpactEventBus.html" title="Frame&#45;scoped impact events, written via Report and cleared each end&#45;of&#45;frame." alt="" coords="370,849,570,894"/>
+<area shape="poly" id="edge19_Node000013_Node000020" title=" " alt="" coords="584,854,666,830,706,812,743,789,768,768,790,745,828,692,856,641,875,603,879,599,861,643,832,695,794,748,772,772,747,793,709,817,668,835,585,859"/>
+<area shape="rect" id="Node000021" title=" " alt="" coords="69,858,177,886"/>
+<area shape="poly" id="edge20_Node000020_Node000021" title=" " alt="" coords="192,869,372,870,368,873,192,874"/>
+<area shape="poly" id="edge21_Node000013_Node000022" title=" " alt="" coords="591,464,669,484,746,509,846,555,840,556,744,514,667,489,592,469"/>
+<area shape="rect" id="Node000023" href="$classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldCoordinates.html" title="Converts world positions/radii to the normalised UV space the stamp shaders expect." alt="" coords="352,487,588,531"/>
+<area shape="poly" id="edge23_Node000013_Node000023" title=" " alt="" coords="603,528,771,558,766,559,604,534"/>
+<area shape="rect" id="Node000024" href="$classBalloonParty_1_1Shared_1_1Disturbance_1_1LerpStampScheduler.html" title="Spreads a stamp&#39;s strength over its duration as sub&#45;stamps; evicts the oldest ramp when maxStamps is ..." alt="" coords="352,556,588,601"/>
+<area shape="poly" id="edge24_Node000013_Node000024" title=" " alt="" coords="603,576,771,578,766,579,604,581"/>
+</map>

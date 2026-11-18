@@ -1,11 +1,13 @@
 <map id="BalloonParty.Balloon.Type.SoapBubbleClusterVariant" name="BalloonParty.Balloon.Type.SoapBubbleClusterVariant">
-<area shape="rect" id="Node000001" title="Drives the SoapBubbleCluster shader&#39;s bubble count and float/spin clock; the shader animates itself f..." alt="" coords="247,92,439,136"/>
+<area shape="rect" id="Node000001" title="Drives the SoapBubbleCluster shader&#39;s bubble count and float/spin clock; the shader animates itself f..." alt="" coords="247,126,439,171"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="40,5,164,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="178,35,200,42,253,65,303,91,297,91,251,70,198,47,179,40"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="178,34,200,42,266,82,319,125,314,126,263,87,197,47,179,39"/>
 <area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Balloon_1_1Type_1_1IBalloonVariant.html" title=" " alt="" coords="6,57,198,102"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="214,93,249,99,244,101,214,98"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="196,104,265,125,260,127,196,109"/>
 <area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonViewBinding.html" title="Implemented by prefab MonoBehaviours that react to model binding; BalloonView discovers and calls the..." alt="" coords="5,126,199,171"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="213,130,249,127,244,129,215,135"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="214,146,249,148,244,149,215,151"/>
 <area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Balloon_1_1View_1_1IBubbleMergeReactive.html" title="A bubble cluster&#39;s look as a merge plays out (BubbleMergeView)." alt="" coords="5,196,199,240"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="182,187,198,181,295,137,300,136,200,186,184,192"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="195,188,265,170,260,173,197,193"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonPopPrelude.html" title="A view binding with a look of its own to play between its balloon being popped and the pop being show..." alt="" coords="5,265,199,310"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="187,256,197,250,261,210,313,172,317,170,264,214,200,255,189,261"/>
 </map>

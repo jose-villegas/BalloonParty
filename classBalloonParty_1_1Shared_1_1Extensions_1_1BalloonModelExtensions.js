@@ -4,8 +4,11 @@ var classBalloonParty_1_1Shared_1_1Extensions_1_1BalloonModelExtensions =
     [ "GetColorId", "classBalloonParty_1_1Shared_1_1Extensions_1_1BalloonModelExtensions.html#a5de505c17f971a9edde5e04fb15d0c35", null ],
     [ "GetImpactColorId", "classBalloonParty_1_1Shared_1_1Extensions_1_1BalloonModelExtensions.html#a417cbe1750e42e99df251e20e2f8d564", null ],
     [ "GetPopColorId", "classBalloonParty_1_1Shared_1_1Extensions_1_1BalloonModelExtensions.html#a55dc9dff857adc298434b2efe558c885", null ],
+    [ "HitsToPop", "classBalloonParty_1_1Shared_1_1Extensions_1_1BalloonModelExtensions.html#a8fc97c000a1ba6c23f3c86dd5664a951", null ],
+    [ "HitsUnderCoat", "classBalloonParty_1_1Shared_1_1Extensions_1_1BalloonModelExtensions.html#abc44eae4a1ce7c56fae6cb6cd01891ed", null ],
     [ "IsTough", "classBalloonParty_1_1Shared_1_1Extensions_1_1BalloonModelExtensions.html#a67a60c0f6e4265c269176117df554046", null ],
     [ "readonly", "classBalloonParty_1_1Shared_1_1Extensions_1_1BalloonModelExtensions.html#a502618d789455df1ce15145b182405a1", null ],
     [ "SearchRing", "classBalloonParty_1_1Shared_1_1Extensions_1_1BalloonModelExtensions.html#ac31320f9e6bcd8e8f29c18a48492e318", null ],
-    [ "TryGetColorAt", "classBalloonParty_1_1Shared_1_1Extensions_1_1BalloonModelExtensions.html#afdcc2c6a0b0bebe52a35db7bfdbfe72f", null ]
+    [ "TryGetColorAt", "classBalloonParty_1_1Shared_1_1Extensions_1_1BalloonModelExtensions.html#afdcc2c6a0b0bebe52a35db7bfdbfe72f", null ],
+    [ "WashesProjectileColor", "classBalloonParty_1_1Shared_1_1Extensions_1_1BalloonModelExtensions.html#ad79887c93dc3f7747ee3626da2719867", null ]
 ];

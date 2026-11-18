@@ -1,9 +1,9 @@
 <map id="BalloonParty.Balloon.View.BubbleMergeView" name="BalloonParty.Balloon.View.BubbleMergeView">
-<area shape="rect" id="Node000001" title="Plays BubbleMergedMessage: the bubbles a giver passes on hop to the receiver one after another,..." alt="" coords="1019,179,1212,223"/>
+<area shape="rect" id="Node000001" title="Plays BubbleMergedMessage: the bubbles a giver passes on hop to the receiver one after another,..." alt="" coords="1019,213,1212,258"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="688,58,812,86"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="827,83,875,94,937,112,996,136,1077,179,1072,178,994,141,935,117,874,100,827,88"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="827,82,875,94,938,114,996,143,1047,177,1091,213,1086,212,1044,181,993,147,936,119,874,100,827,88"/>
 <area shape="rect" id="Node000003" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" title=" " alt="" coords="664,109,836,154"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="852,148,1021,182,1016,183,852,154"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="851,152,995,190,1056,213,1051,213,994,196,851,157"/>
 <area shape="rect" id="Node000004" href="$classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html" title="Tracks slots in&#45;transit from balance animations so spawn paths avoid them." alt="" coords="266,5,439,50"/>
 <area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="453,43,527,60,602,83,626,95,666,110,661,110,624,99,600,87,526,65,454,48"/>
 <area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,5,212,50"/>
@@ -13,13 +13,15 @@
 <area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="264,144,442,189"/>
 <area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="457,155,666,138,661,140,458,160"/>
 <area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="19,144,198,189"/>
-<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="212,164,265,165,261,167,214,169"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="212,164,265,165,261,168,214,169"/>
 <area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="264,213,442,258"/>
-<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="457,214,528,198,600,176,624,164,661,154,666,153,626,169,602,180,529,203,458,220"/>
+<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="456,214,528,198,600,176,624,164,666,152,661,154,626,169,602,180,529,203,458,220"/>
 <area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html" title=" " alt="" coords="636,179,864,223"/>
-<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="880,198,1021,201,1015,201,880,204"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="880,211,1021,226,1015,227,880,216"/>
 <area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBubbleMergeCueSettings.html" title="How a bubble merge looks: the bubbles a giver passes on while it stays hop one by one to the receiver..." alt="" coords="625,248,875,293"/>
-<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="886,242,1016,220,1021,219,887,247"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="890,254,1021,244,1016,245,890,260"/>
 <area shape="rect" id="Node000012" href="$classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html" title=" " alt="" coords="657,317,843,362"/>
-<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="849,310,874,302,935,284,994,262,1072,225,1078,223,996,267,936,289,875,308,850,315"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="858,312,994,275,1050,259,1056,258,995,281,859,317"/>
+<area shape="rect" id="Node000013" href="$classBalloonParty_1_1Balloon_1_1View_1_1SoapBubbleSprites.html" title="Loose soap bubbles, one per sprite, for the views that send bubbles off on their own (BubbleMergeView..." alt="" coords="653,387,847,431"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="851,379,874,372,935,351,993,324,1044,290,1085,260,1090,258,1047,295,996,328,937,356,875,377,852,384"/>
 </map>

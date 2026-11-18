@@ -4,9 +4,9 @@
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="198,218,233,215,229,217,200,223"/>
 <area shape="rect" id="Node000012" href="$classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html" title="Stub grid actor standing in for a live balloon in the dynamic&#45;board sim — enough of IWriteableDynamic..." alt="" coords="244,248,422,293"/>
 <area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="199,248,246,257,241,258,200,254"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html" title=" " alt="" coords="482,5,684,50"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html" title="The plain balloon (and its silver, gold and rainbow skins): paintable, carries an item,..." alt="" coords="482,5,684,50"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="361,165,413,112,446,84,481,60,507,49,503,52,483,65,449,88,417,116,364,169"/>
-<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html" title="At destruction, distributes one ScoreAttribution per remaining bubble to a random palette colour...." alt="" coords="482,75,684,119"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html" title="Each hit scores the bubbles the cluster held, spread over random palette colours, and breaks the stre..." alt="" coords="482,75,684,119"/>
 <area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="392,169,481,129,515,119,510,121,483,134,394,174"/>
 <area shape="rect" id="Node000005" href="$classBalloonParty_1_1Balloon_1_1Model_1_1HeartBalloonModel.html" title="The heart reward balloon (PLAN&#45;RewardBalloons): a heart wrapped in bandages that gives a heart back." alt="" coords="482,144,684,189"/>
 <area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="449,182,484,180,479,181,450,187"/>

@@ -20,6 +20,7 @@ var dir_b802e883bf617d79d7ac9e8dff132809 =
     [ "INukeFuseSettings.cs", "INukeFuseSettings_8cs.html", "INukeFuseSettings_8cs" ],
     [ "INukeOddsSettings.cs", "INukeOddsSettings_8cs.html", "INukeOddsSettings_8cs" ],
     [ "IRewardBalloonSettings.cs", "IRewardBalloonSettings_8cs.html", "IRewardBalloonSettings_8cs" ],
+    [ "IRipeBubbleSettings.cs", "IRipeBubbleSettings_8cs.html", "IRipeBubbleSettings_8cs" ],
     [ "IToughSnakeSpringSettings.cs", "IToughSnakeSpringSettings_8cs.html", "IToughSnakeSpringSettings_8cs" ],
     [ "IUnbreakableFormationSettings.cs", "IUnbreakableFormationSettings_8cs.html", "IUnbreakableFormationSettings_8cs" ],
     [ "NukeBlastSettings.cs", "NukeBlastSettings_8cs.html", "NukeBlastSettings_8cs" ],
@@ -27,6 +28,7 @@ var dir_b802e883bf617d79d7ac9e8dff132809 =
     [ "NukeOddsSettings.cs", "NukeOddsSettings_8cs.html", "NukeOddsSettings_8cs" ],
     [ "PopPulse.cs", "PopPulse_8cs.html", "PopPulse_8cs" ],
     [ "RewardBalloonSettings.cs", "RewardBalloonSettings_8cs.html", "RewardBalloonSettings_8cs" ],
+    [ "RipeBubbleSettings.cs", "RipeBubbleSettings_8cs.html", "RipeBubbleSettings_8cs" ],
     [ "ToughSnakeSpringSettings.cs", "ToughSnakeSpringSettings_8cs.html", "ToughSnakeSpringSettings_8cs" ],
     [ "UnbreakableFormationSettings.cs", "UnbreakableFormationSettings_8cs.html", "UnbreakableFormationSettings_8cs" ]
 ];

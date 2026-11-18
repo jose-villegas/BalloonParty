@@ -10,6 +10,7 @@ var classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry =
     [ "ReturnOutgoing", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#a126cc751b5194567ddb6c623b717b971", null ],
     [ "Route", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#a17ee1887b230c5595de5b879cf4b2d41", null ],
     [ "Start", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#a7aaecafb702ff19cdb4f948875259a67", null ],
+    [ "TryLeave", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#a301c4fe3e3e67e9516b62dc2f4902dda", null ],
     [ "TryPopSingle", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#ac2aed99c6840f0afc306b67cde9764fe", null ],
     [ "TryResolve", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#a45362ca4052b4dd84ef8309565afb5cb", null ],
     [ "Unregister", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#ab2e7c935adf9199d4b13c49ced49fcd1", null ],

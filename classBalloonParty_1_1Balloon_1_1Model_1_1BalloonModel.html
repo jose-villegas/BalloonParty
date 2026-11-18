@@ -118,6 +118,9 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.
   <div class="headertitle"><div class="title">BalloonParty.Balloon.Model.BalloonModel Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>The plain balloon (and its silver, gold and rainbow skins): paintable, carries an item, scores its own colour.  
+ <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Balloon.Model.BalloonModel:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -135,8 +138,8 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a6b2a2a013b955cd134440cbfcbd607b1" id="r_a6b2a2a013b955cd134440cbfcbd607b1"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675">HitOutcome</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a6b2a2a013b955cd134440cbfcbd607b1">EvaluateHit</a> (<a class="el" href="structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html">DamageContext</a> context)</td></tr>
-<tr class="separator:a6b2a2a013b955cd134440cbfcbd607b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3c996d0dc7f233d0ef0132312858eba" id="r_ad3c996d0dc7f233d0ef0132312858eba"><td class="memItemLeft" align="right" valign="top">override <a class="el" href="namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675">HitOutcome</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3c996d0dc7f233d0ef0132312858eba">EvaluateHit</a> (<a class="el" href="structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html">DamageContext</a> context)</td></tr>
+<tr class="separator:ad3c996d0dc7f233d0ef0132312858eba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a49ab9ff4fe09b7ffb2acd166e8d8d675" id="r_a49ab9ff4fe09b7ffb2acd166e8d8d675"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a49ab9ff4fe09b7ffb2acd166e8d8d675">ResolveScoreAttribution</a> (in <a class="el" href="structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html">DamageContext</a> context, IReadOnlyList&lt; string &gt; incompleteColors, IList&lt; <a class="el" href="structBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttribution.html">ScoreAttribution</a> &gt; results)</td></tr>
 <tr class="memdesc:a49ab9ff4fe09b7ffb2acd166e8d8d675"><td class="mdescLeft">&#160;</td><td class="mdescRight"><em>incompleteColors</em>  lists the colours whose progress bar isn't full yet — scatter implementers (Tough/BubbleCluster/Unbreakable) confine their random split to these so completing a colour never wastes points on it.  <br /></td></tr>
 <tr class="separator:a49ab9ff4fe09b7ffb2acd166e8d8d675"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -155,6 +158,9 @@ Package Functions</h2></td></tr>
 <tr class="separator:ab8ea6a736e20237536a976cb250dc434"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a5eef8964e191cd9b1847cb36bd4478" id="r_a9a5eef8964e191cd9b1847cb36bd4478"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9a5eef8964e191cd9b1847cb36bd4478">BalloonModel</a> (<a class="el" href="structBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelConfig.html">BalloonModelConfig</a> config, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html">IGamePalette</a> palette=null, IReadOnlyList&lt; string &gt; allowedColors=null)</td></tr>
 <tr class="separator:a9a5eef8964e191cd9b1847cb36bd4478"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab25096d8cf3eb5b671b0ca0ce1fde555" id="r_ab25096d8cf3eb5b671b0ca0ce1fde555"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab25096d8cf3eb5b671b0ca0ce1fde555">TryCoat</a> (int maxLayers)</td></tr>
+<tr class="memdesc:ab25096d8cf3eb5b671b0ca0ce1fde555"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a layer of foam unless the balloon already wears <em>maxLayers</em> ; returns whether it did.  <br /></td></tr>
+<tr class="separator:ab25096d8cf3eb5b671b0ca0ce1fde555"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -170,6 +176,9 @@ Properties</h2></td></tr>
 <tr class="memitem:a74ddc03a7a236458e66b95dca5ad28db" id="r_a74ddc03a7a236458e66b95dca5ad28db"><td class="memItemLeft" align="right" valign="top">override float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a74ddc03a7a236458e66b95dca5ad28db">BiasValue</a><code> [get]</code></td></tr>
 <tr class="memdesc:a74ddc03a7a236458e66b95dca5ad28db"><td class="mdescLeft">&#160;</td><td class="mdescRight">The bias magnitude the formula named by <a class="el" href="#ae8afb6a1b3384ced3ae23f1a1e33ab74" title="Which shared formula this occupant&#39;s WeightBias applies — BalanceBiasKind.None for an occupant with n...">BiasKind</a> scales by (a live model's config-authored balance bias).  <br /></td></tr>
 <tr class="separator:a74ddc03a7a236458e66b95dca5ad28db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad96273b176e7d1c34d771914439069ea" id="r_ad96273b176e7d1c34d771914439069ea"><td class="memItemLeft" align="right" valign="top">IReadOnlyReactiveProperty&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad96273b176e7d1c34d771914439069ea">Coat</a><code> [get]</code></td></tr>
+<tr class="memdesc:ad96273b176e7d1c34d771914439069ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Layers of foam: each takes an ordinary hit of its own before the balloon can be hurt.  <br /></td></tr>
+<tr class="separator:ad96273b176e7d1c34d771914439069ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b1ebc902b839522954c4d3221cdb6a6" id="r_a6b1ebc902b839522954c4d3221cdb6a6"><td class="memItemLeft" align="right" valign="top">ReactiveProperty&lt; string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6b1ebc902b839522954c4d3221cdb6a6">Color</a> = new()<code> [get]</code></td></tr>
 <tr class="separator:a6b1ebc902b839522954c4d3221cdb6a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9bf1d934a7e1bf7faedb346c1ac872fd" id="r_a9bf1d934a7e1bf7faedb346c1ac872fd"><td class="memItemLeft" align="right" valign="top">IReadOnlyReactiveProperty&lt; string &gt; IHasColor.&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9bf1d934a7e1bf7faedb346c1ac872fd">Color</a><code> [get]</code></td></tr>
@@ -238,10 +247,15 @@ Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a4125eac744da1e35356325f871dac6b5" id="r_a4125eac744da1e35356325f871dac6b5"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4125eac744da1e35356325f871dac6b5">_balanceBias</a></td></tr>
 <tr class="separator:a4125eac744da1e35356325f871dac6b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ed34ab91d12ceb9dfb8a6f8a0d2f358" id="r_a0ed34ab91d12ceb9dfb8a6f8a0d2f358"><td class="memItemLeft" align="right" valign="top">readonly ReactiveProperty&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0ed34ab91d12ceb9dfb8a6f8a0d2f358">_coat</a> = new()</td></tr>
+<tr class="separator:a0ed34ab91d12ceb9dfb8a6f8a0d2f358"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21fd8516017dfb25883569ff3e78ea7f" id="r_a21fd8516017dfb25883569ff3e78ea7f"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="structBalloonParty_1_1Balloon_1_1Model_1_1ColorSource.html">ColorSource</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a21fd8516017dfb25883569ff3e78ea7f">_colorSource</a></td></tr>
 <tr class="separator:a21fd8516017dfb25883569ff3e78ea7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>The plain balloon (and its silver, gold and rainbow skins): paintable, carries an item, scores its own colour. </p>
+<p>It can wear foam (<a class="el" href="interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1ICoatable.html" title="An actor that can wear foam: layers a ripe bubble cluster hands it when its fuse runs out.">ICoatable</a>): while coated, an ordinary hit takes a layer off and passes through, scoring nothing; a piercing or beam hit pops it, coat and all. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ab8ea6a736e20237536a976cb250dc434" name="ab8ea6a736e20237536a976cb250dc434"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab8ea6a736e20237536a976cb250dc434">&#9670;&#160;</a></span>BalloonModel() <span class="overload">[1/2]</span></h2>
 
@@ -302,8 +316,8 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a6b2a2a013b955cd134440cbfcbd607b1" name="a6b2a2a013b955cd134440cbfcbd607b1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6b2a2a013b955cd134440cbfcbd607b1">&#9670;&#160;</a></span>EvaluateHit()</h2>
+<a id="ad3c996d0dc7f233d0ef0132312858eba" name="ad3c996d0dc7f233d0ef0132312858eba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3c996d0dc7f233d0ef0132312858eba">&#9670;&#160;</a></span>EvaluateHit()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -312,7 +326,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675">HitOutcome</a> BalloonParty.Balloon.Model.BalloonModelBase.EvaluateHit </td>
+          <td class="memname">override <a class="el" href="namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675">HitOutcome</a> BalloonParty.Balloon.Model.BalloonModel.EvaluateHit </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html">DamageContext</a></td>          <td class="paramname"><span class="paramname"><em>context</em></span></td><td>)</td>
           <td></td>
@@ -320,14 +334,12 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel virtual">virtual</span><span class="mlabel inherited">inherited</span></span>  </td>
+<span class="mlabels"><span class="mlabel virtual">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implements <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHitable.html#a5419ca3dc69e35376638bf36524942f6">BalloonParty.Slots.Capabilities.IHitable</a>.</p>
-
-<p>Reimplemented in <a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1HeartBalloonModel.html#acdca182bb28ae5f06af073cf10a3c7c6">BalloonParty.Balloon.Model.HeartBalloonModel</a>, <a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1NukeBalloonModel.html#a90deda45579aa7065946fda7e8375bf8">BalloonParty.Balloon.Model.NukeBalloonModel</a>, <a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1PlatedBalloonModel.html#a944855d0e161e453c5eed26300685716">BalloonParty.Balloon.Model.PlatedBalloonModel</a>, and <a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html#a3f39a6b3193be793441ddd2cde5b034f">BalloonParty.Balloon.Model.UnbreakableBalloonModel</a>.</p>
+<p>Reimplemented from <a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a6b2a2a013b955cd134440cbfcbd607b1">BalloonParty.Balloon.Model.BalloonModelBase</a>.</p>
 
 </div>
 </div>
@@ -416,6 +428,33 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ab25096d8cf3eb5b671b0ca0ce1fde555" name="ab25096d8cf3eb5b671b0ca0ce1fde555"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab25096d8cf3eb5b671b0ca0ce1fde555">&#9670;&#160;</a></span>TryCoat()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Balloon.Model.BalloonModel.TryCoat </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>maxLayers</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds a layer of foam unless the balloon already wears <em>maxLayers</em> ; returns whether it did. </p>
+
+</div>
+</div>
 <a id="aea56ecf61f3446e632329fee67d94ed8" name="aea56ecf61f3446e632329fee67d94ed8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aea56ecf61f3446e632329fee67d94ed8">&#9670;&#160;</a></span>WeightBias()</h2>
 
@@ -461,6 +500,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly float BalloonParty.Balloon.Model.BalloonModel._balanceBias</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0ed34ab91d12ceb9dfb8a6f8a0d2f358" name="a0ed34ab91d12ceb9dfb8a6f8a0d2f358"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ed34ab91d12ceb9dfb8a6f8a0d2f358">&#9670;&#160;</a></span>_coat</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly ReactiveProperty&lt;int&gt; BalloonParty.Balloon.Model.BalloonModel._coat = new()</td>
         </tr>
       </table>
   </td>
@@ -596,6 +657,32 @@ Private Attributes</h2></td></tr>
 <p>The bias magnitude the formula named by <a class="el" href="#ae8afb6a1b3384ced3ae23f1a1e33ab74" title="Which shared formula this occupant&#39;s WeightBias applies — BalanceBiasKind.None for an occupant with n...">BiasKind</a> scales by (a live model's config-authored balance bias). </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceBiasSource.html#a1b42b899b7dd00aa77aa166e4da42834">BalloonParty.Slots.Actor.IBalanceBiasSource</a>.</p>
+
+</div>
+</div>
+<a id="ad96273b176e7d1c34d771914439069ea" name="ad96273b176e7d1c34d771914439069ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad96273b176e7d1c34d771914439069ea">&#9670;&#160;</a></span>Coat</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IReadOnlyReactiveProperty&lt;int&gt; BalloonParty.Balloon.Model.BalloonModel.Coat</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Layers of foam: each takes an ordinary hit of its own before the balloon can be hurt. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1ICoatable.html#a995f2eadf8d3dc216dff582b269e23b9">BalloonParty.Slots.Capabilities.ICoatable</a>.</p>
 
 </div>
 </div>

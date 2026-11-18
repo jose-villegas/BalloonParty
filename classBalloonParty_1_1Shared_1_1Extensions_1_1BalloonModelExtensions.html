@@ -129,12 +129,20 @@ Static Package Functions</h2></td></tr>
 <tr class="memitem:a55dc9dff857adc298434b2efe558c885" id="r_a55dc9dff857adc298434b2efe558c885"><td class="memItemLeft" align="right" valign="top">static string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a55dc9dff857adc298434b2efe558c885">GetPopColorId</a> (this <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html">IBalloonModel</a> model)</td></tr>
 <tr class="memdesc:a55dc9dff857adc298434b2efe558c885"><td class="mdescLeft">&#160;</td><td class="mdescRight">The palette color a pop stamps with: the balloon's own color when it has one, the reserved impact color for colorless heavies (Tough/Unbreakable), and empty for other colorless types.  <br /></td></tr>
 <tr class="separator:a55dc9dff857adc298434b2efe558c885"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8fc97c000a1ba6c23f3c86dd5664a951" id="r_a8fc97c000a1ba6c23f3c86dd5664a951"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8fc97c000a1ba6c23f3c86dd5664a951">HitsToPop</a> (this <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html">IBalloonModel</a> model)</td></tr>
+<tr class="memdesc:a8fc97c000a1ba6c23f3c86dd5664a951"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many ordinary hits this balloon takes to pop: its coat's layers (<a class="el" href="interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1ICoatable.html" title="An actor that can wear foam: layers a ripe bubble cluster hands it when its fuse runs out.">ICoatable</a>), each taking a hit of its own, on top of the hits under it (<a class="el" href="#abc44eae4a1ce7c56fae6cb6cd01891ed">HitsUnderCoat</a>).  <br /></td></tr>
+<tr class="separator:a8fc97c000a1ba6c23f3c86dd5664a951"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67a60c0f6e4265c269176117df554046" id="r_a67a60c0f6e4265c269176117df554046"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a67a60c0f6e4265c269176117df554046">IsTough</a> (this <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html">IBalloonModel</a> model)</td></tr>
-<tr class="memdesc:a67a60c0f6e4265c269176117df554046"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether a piercing shot plows this actor rather than one-shotting it — a durable balloon with more than one hit left (the nuke too), or one that deflects an ordinary hit (an unbreakable, the golden balloon).  <br /></td></tr>
+<tr class="memdesc:a67a60c0f6e4265c269176117df554046"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether a piercing shot plows this actor rather than one-shotting it — a balloon that takes more than one hit to pop (the nuke too), or one that deflects an ordinary hit (an unbreakable, the golden balloon).  <br /></td></tr>
 <tr class="separator:a67a60c0f6e4265c269176117df554046"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad79887c93dc3f7747ee3626da2719867" id="r_ad79887c93dc3f7747ee3626da2719867"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad79887c93dc3f7747ee3626da2719867">WashesProjectileColor</a> (this <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html">IBalloonModel</a> model)</td></tr>
+<tr class="memdesc:ad79887c93dc3f7747ee3626da2719867"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether this balloon's contact washes the shot's stolen colour: a soap cluster (<a class="el" href="interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IWashesProjectileColor.html" title="Marks a balloon that &quot;washes&quot; a projectile on contact — resetting its stolen colour back to none,...">IWashesProjectileColor</a>) or a balloon wearing foam.  <br /></td></tr>
+<tr class="separator:ad79887c93dc3f7747ee3626da2719867"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
+<tr class="memitem:abc44eae4a1ce7c56fae6cb6cd01891ed" id="r_abc44eae4a1ce7c56fae6cb6cd01891ed"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abc44eae4a1ce7c56fae6cb6cd01891ed">HitsUnderCoat</a> (this <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html">IBalloonModel</a> model)</td></tr>
+<tr class="separator:abc44eae4a1ce7c56fae6cb6cd01891ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a502618d789455df1ce15145b182405a1" id="r_a502618d789455df1ce15145b182405a1"><td class="memItemLeft" align="right" valign="top">static&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a502618d789455df1ce15145b182405a1">readonly</a> (int dq, int dr)[] CubeDirections</td></tr>
 <tr class="separator:a502618d789455df1ce15145b182405a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac31320f9e6bcd8e8f29c18a48492e318" id="r_ac31320f9e6bcd8e8f29c18a48492e318"><td class="memItemLeft" align="right" valign="top">static string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac31320f9e6bcd8e8f29c18a48492e318">SearchRing</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, int centerQ, int centerR, int ring, <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html">IBalloonModel</a> exclude, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html">IGamePalette</a> palette)</td></tr>
@@ -266,6 +274,58 @@ Static Private Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a8fc97c000a1ba6c23f3c86dd5664a951" name="a8fc97c000a1ba6c23f3c86dd5664a951"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8fc97c000a1ba6c23f3c86dd5664a951">&#9670;&#160;</a></span>HitsToPop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int BalloonParty.Shared.Extensions.BalloonModelExtensions.HitsToPop </td>
+          <td>(</td>
+          <td class="paramtype">this <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html">IBalloonModel</a></td>          <td class="paramname"><span class="paramname"><em>model</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How many ordinary hits this balloon takes to pop: its coat's layers (<a class="el" href="interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1ICoatable.html" title="An actor that can wear foam: layers a ripe bubble cluster hands it when its fuse runs out.">ICoatable</a>), each taking a hit of its own, on top of the hits under it (<a class="el" href="#abc44eae4a1ce7c56fae6cb6cd01891ed">HitsUnderCoat</a>). </p>
+
+</div>
+</div>
+<a id="abc44eae4a1ce7c56fae6cb6cd01891ed" name="abc44eae4a1ce7c56fae6cb6cd01891ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc44eae4a1ce7c56fae6cb6cd01891ed">&#9670;&#160;</a></span>HitsUnderCoat()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int BalloonParty.Shared.Extensions.BalloonModelExtensions.HitsUnderCoat </td>
+          <td>(</td>
+          <td class="paramtype">this <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html">IBalloonModel</a></td>          <td class="paramname"><span class="paramname"><em>model</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a67a60c0f6e4265c269176117df554046" name="a67a60c0f6e4265c269176117df554046"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a67a60c0f6e4265c269176117df554046">&#9670;&#160;</a></span>IsTough()</h2>
 
@@ -289,7 +349,8 @@ Static Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Whether a piercing shot plows this actor rather than one-shotting it — a durable balloon with more than one hit left (the nuke too), or one that deflects an ordinary hit (an unbreakable, the golden balloon). </p>
+<p>Whether a piercing shot plows this actor rather than one-shotting it — a balloon that takes more than one hit to pop (the nuke too), or one that deflects an ordinary hit (an unbreakable, the golden balloon). </p>
+<p>A coat does not count, unlike in <a class="el" href="#a8fc97c000a1ba6c23f3c86dd5664a951" title="How many ordinary hits this balloon takes to pop: its coat&#39;s layers (ICoatable), each taking a hit of...">HitsToPop</a>: a pierce pops a coated balloon on contact, coat and all, so there is nothing to plow and discharge at the wall. </p>
 
 </div>
 </div>
@@ -407,6 +468,34 @@ Static Private Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad79887c93dc3f7747ee3626da2719867" name="ad79887c93dc3f7747ee3626da2719867"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad79887c93dc3f7747ee3626da2719867">&#9670;&#160;</a></span>WashesProjectileColor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool BalloonParty.Shared.Extensions.BalloonModelExtensions.WashesProjectileColor </td>
+          <td>(</td>
+          <td class="paramtype">this <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html">IBalloonModel</a></td>          <td class="paramname"><span class="paramname"><em>model</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Whether this balloon's contact washes the shot's stolen colour: a soap cluster (<a class="el" href="interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IWashesProjectileColor.html" title="Marks a balloon that &quot;washes&quot; a projectile on contact — resetting its stolen colour back to none,...">IWashesProjectileColor</a>) or a balloon wearing foam. </p>
+<p>Read before the hit is evaluated: the hit that takes the last layer off leaves no coat to read. </p>
 
 </div>
 </div>

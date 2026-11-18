@@ -129,11 +129,16 @@ Static Package Functions</h2></td></tr>
 <tr class="separator:a0e67caf30e0947866a7ffe2d6aa15f40"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6bfe4d3bc6d6a602b663559c4fbf20a" id="r_ac6bfe4d3bc6d6a602b663559c4fbf20a"><td class="memItemLeft" align="right" valign="top">static Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac6bfe4d3bc6d6a602b663559c4fbf20a">OriginForAngle</a> (float angleDegrees, in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotSolveContext.html">ShotSolveContext</a> context)</td></tr>
 <tr class="separator:ac6bfe4d3bc6d6a602b663559c4fbf20a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad330ee2b804dbade9abdbb73bf8c301" id="r_aad330ee2b804dbade9abdbb73bf8c301"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aad330ee2b804dbade9abdbb73bf8c301">RippleDamageOf</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html">IBalloonsConfiguration</a> balloonsConfig)</td></tr>
+<tr class="memdesc:aad330ee2b804dbade9abdbb73bf8c301"><td class="mdescLeft">&#160;</td><td class="mdescRight">The hit a ripe cluster's ripple deals each neighbour, as the game's <code>RipeBubbleBurst</code> reads it.  <br /></td></tr>
+<tr class="separator:aad330ee2b804dbade9abdbb73bf8c301"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5bb04b6ea6ee0575934b52f762abf92a" id="r_a5bb04b6ea6ee0575934b52f762abf92a"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structBalloonParty_1_1Solver_1_1ShotFlightSeed.html">ShotFlightSeed</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5bb04b6ea6ee0575934b52f762abf92a">SeedFor</a> (<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> loaded)</td></tr>
 <tr class="memdesc:a5bb04b6ea6ee0575934b52f762abf92a"><td class="mdescLeft">&#160;</td><td class="mdescRight">What <em>loaded</em> , the ball in the thrower, already carries: a lance armed there (a <a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a> pickup, or the Sharpshooter card as it loaded) with its speed and rainbow grants, or a rainbow <a class="el" href="namespaceBalloonParty_1_1Item_1_1Shield.html">Shield</a> grant that ends at the next wall.  <br /></td></tr>
 <tr class="separator:a5bb04b6ea6ee0575934b52f762abf92a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47c824d114545792f8154fcb4a8b2443" id="r_a47c824d114545792f8154fcb4a8b2443"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structBalloonParty_1_1Solver_1_1ShotSimulationResult.html">ShotSimulationResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a47c824d114545792f8154fcb4a8b2443">SimulateAt</a> (float angleDegrees, in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotSolveContext.html">ShotSolveContext</a> context, <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonState.html">ShotBalloonState</a>[] workingSet, List&lt; Vector2 &gt; pathOut=null, List&lt; float &gt; timesOut=null, float radiusBias=0f, string targetColorId=null)</td></tr>
 <tr class="separator:a47c824d114545792f8154fcb4a8b2443"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41fa381f338d8cea0c2046b5878371a8" id="r_a41fa381f338d8cea0c2046b5878371a8"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a41fa381f338d8cea0c2046b5878371a8">TryBuildTargetSnapshot</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html">IBalloonsConfiguration</a> balloonsConfig, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html">IGamePalette</a> palette, Vector2Int index, <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html">IWriteableSlotActor</a> actor, out <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a> snapshot)</td></tr>
+<tr class="separator:a41fa381f338d8cea0c2046b5878371a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
@@ -153,8 +158,6 @@ Static Private Member Functions</h2></td></tr>
 <tr class="separator:af54f5445c548833dd410a05a3d386847"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ea5fe4c35c8f5d99a13393d7b551b56" id="r_a6ea5fe4c35c8f5d99a13393d7b551b56"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6ea5fe4c35c8f5d99a13393d7b551b56">TryBuildStaticContactSnapshot</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, Vector2Int index, <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHitable.html">IHitable</a> hitable, out <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a> snapshot)</td></tr>
 <tr class="separator:a6ea5fe4c35c8f5d99a13393d7b551b56"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a41fa381f338d8cea0c2046b5878371a8" id="r_a41fa381f338d8cea0c2046b5878371a8"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a41fa381f338d8cea0c2046b5878371a8">TryBuildTargetSnapshot</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html">IBalloonsConfiguration</a> balloonsConfig, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html">IGamePalette</a> palette, Vector2Int index, <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html">IWriteableSlotActor</a> actor, out <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a> snapshot)</td></tr>
-<tr class="separator:a41fa381f338d8cea0c2046b5878371a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Gathers the live board/thrower/config into a <a class="el" href="structBalloonParty_1_1Solver_1_1ShotSolveContext.html" title="Everything one ShotSimulator.Simulate sweep needs, gathered from the live game — shared by the editor...">ShotSolveContext</a> and hosts the shared per-angle plumbing (rotated launch origin, one-call simulate). </p>
@@ -531,6 +534,34 @@ Static Private Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="aad330ee2b804dbade9abdbb73bf8c301" name="aad330ee2b804dbade9abdbb73bf8c301"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad330ee2b804dbade9abdbb73bf8c301">&#9670;&#160;</a></span>RippleDamageOf()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int BalloonParty.Solver.ShotBoardGather.RippleDamageOf </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html">IBalloonsConfiguration</a></td>          <td class="paramname"><span class="paramname"><em>balloonsConfig</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The hit a ripe cluster's ripple deals each neighbour, as the game's <code>RipeBubbleBurst</code> reads it. </p>
+<p>No fallback: a configuration without the ripe bubble block is a broken one, not a ripple of 1. </p>
+
+</div>
+</div>
 <a id="a5bb04b6ea6ee0575934b52f762abf92a" name="a5bb04b6ea6ee0575934b52f762abf92a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5bb04b6ea6ee0575934b52f762abf92a">&#9670;&#160;</a></span>SeedFor()</h2>
 
@@ -743,7 +774,7 @@ Static Private Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

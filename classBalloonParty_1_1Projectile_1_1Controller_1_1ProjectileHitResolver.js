@@ -1,9 +1,10 @@
 var classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver =
 [
     [ "ProjectileHitResolver", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a74771b454c72550e5d936d418bc04190", null ],
-    [ "ApplyColorChange", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a406b419d354f9b4fe533c7c0c035b85d", null ],
+    [ "ApplyColorChange", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#ae689a738830129f4da875b10780c4036", null ],
     [ "ConvertSideNeighboursToRainbow", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#aeb364cdbc61c7065f934faa2dd871c27", null ],
     [ "DischargePending", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a25017efe052d3822bddc0f56983f6648", null ],
+    [ "IsOneContactPop", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#ae8e2829cc626c1ef3b015b4db23604d3", null ],
     [ "RecolorSideNeighbor", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a975c6d6a957d54fe681d5f27dbfeab4a", null ],
     [ "Resolve", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a1313a3ba138a0b3c4c762305ec8fcffa", null ],
     [ "ResolveContactPop", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#abb3a7b6858c9cbd3eb20c8c5fb2104d4", null ],

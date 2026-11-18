@@ -29,7 +29,8 @@ var namespaceBalloonParty_1_1Solver =
     [ "ShotStaticActorSnapshot", "structBalloonParty_1_1Solver_1_1ShotStaticActorSnapshot.html", "structBalloonParty_1_1Solver_1_1ShotStaticActorSnapshot" ],
     [ "ShotContactKind", "namespaceBalloonParty_1_1Solver.html#a1769ac6bda0231538d8f844507a8355d", [
       [ "Poppable", "namespaceBalloonParty_1_1Solver.html#a1769ac6bda0231538d8f844507a8355da5111807ed3e431097d2b56c0c3041e0b", null ],
-      [ "Absorb", "namespaceBalloonParty_1_1Solver.html#a1769ac6bda0231538d8f844507a8355da6428bf61b19c9f6c90d034777a20ca77", null ]
+      [ "Absorb", "namespaceBalloonParty_1_1Solver.html#a1769ac6bda0231538d8f844507a8355da6428bf61b19c9f6c90d034777a20ca77", null ],
+      [ "PassThrough", "namespaceBalloonParty_1_1Solver.html#a1769ac6bda0231538d8f844507a8355dae1ff6a7360e99cb46db6bb5d3ff8e2eb", null ]
     ] ],
     [ "ShotRewardKind", "namespaceBalloonParty_1_1Solver.html#a542a88f2d2015fc35cc0479c6b46c6a7", [
       [ "None", "namespaceBalloonParty_1_1Solver.html#a542a88f2d2015fc35cc0479c6b46c6a7a6adf97f83acf6453d4a6a4b1070f3754", null ],

@@ -5,7 +5,7 @@ var searchData=
   ['paintsplash_2',['PaintSplash',['../namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda3892e1810e69b0e5f0065fbddd5ba998',1,'BalloonParty::Configuration::Effects']]],
   ['palette_3',['Palette',['../namespaceBalloonParty_1_1Configuration_1_1Effects.html#acd622b71fc538338a703329872e54688a278f9a3d3077c522e71022e302b9e0e4',1,'BalloonParty::Configuration::Effects']]],
   ['paper_4',['Paper',['../namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08ad0a662a5235ecde30739fe50cf0de830',1,'BalloonParty::Configuration::Level']]],
-  ['passthrough_5',['PassThrough',['../namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675ae1ff6a7360e99cb46db6bb5d3ff8e2eb',1,'BalloonParty::Slots::Capabilities']]],
+  ['passthrough_5',['PassThrough',['../namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675ae1ff6a7360e99cb46db6bb5d3ff8e2eb',1,'BalloonParty.Slots.Capabilities.PassThrough'],['../namespaceBalloonParty_1_1Solver.html#a1769ac6bda0231538d8f844507a8355dae1ff6a7360e99cb46db6bb5d3ff8e2eb',1,'BalloonParty.Solver.PassThrough']]],
   ['paused_6',['Paused',['../namespaceBalloonParty_1_1Shared_1_1Pool.html#a85ad373a8cb2fda2f8c1c544019bff48ae99180abf47a8b3a856e0bcb2656990a',1,'BalloonParty::Shared::Pool']]],
   ['pending_7',['Pending',['../namespaceBalloonParty_1_1Game_1_1Level.html#a57ec4a7422d3ec908dda0a536e08a712a2d13df6f8b5e4c5af9f87e0dc39df69d',1,'BalloonParty::Game::Level']]],
   ['pierce_8',['Pierce',['../namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56da1958644733cccedb376abfb93038da9a',1,'BalloonParty::Configuration::HeadsUp']]],

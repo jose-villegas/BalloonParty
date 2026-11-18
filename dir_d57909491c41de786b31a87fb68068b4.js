@@ -9,6 +9,7 @@ var dir_d57909491c41de786b31a87fb68068b4 =
     [ "RainbowBalloonVariant.cs", "RainbowBalloonVariant_8cs.html", "RainbowBalloonVariant_8cs" ],
     [ "SimpleBalloonVariant.cs", "SimpleBalloonVariant_8cs.html", "SimpleBalloonVariant_8cs" ],
     [ "SoapBubbleClusterVariant.cs", "SoapBubbleClusterVariant_8cs.html", "SoapBubbleClusterVariant_8cs" ],
+    [ "SoapBubbleShader.cs", "SoapBubbleShader_8cs.html", "SoapBubbleShader_8cs" ],
     [ "ToughBalloonVariant.cs", "ToughBalloonVariant_8cs.html", "ToughBalloonVariant_8cs" ],
     [ "UnbreakableBalloonVariant.cs", "UnbreakableBalloonVariant_8cs.html", "UnbreakableBalloonVariant_8cs" ],
     [ "UnbreakableFormationLook.cs", "UnbreakableFormationLook_8cs.html", "UnbreakableFormationLook_8cs" ]

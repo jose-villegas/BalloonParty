@@ -2,9 +2,9 @@
 <area shape="rect" id="Node000001" title="Actors without this capability are immovable and halt the pressure&#45;push cascade." alt="" coords="5,179,228,223"/>
 <area shape="rect" id="Node000002" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html" title=" " alt="" coords="276,179,478,223"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="243,198,278,200,273,202,244,204"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html" title=" " alt="" coords="526,5,728,50"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html" title="The plain balloon (and its silver, gold and rainbow skins): paintable, carries an item,..." alt="" coords="526,5,728,50"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="405,165,457,112,490,84,525,60,551,49,547,52,527,65,493,88,461,116,408,169"/>
-<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html" title="At destruction, distributes one ScoreAttribution per remaining bubble to a random palette colour...." alt="" coords="526,75,728,119"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html" title="Each hit scores the bubbles the cluster held, spread over random palette colours, and breaks the stre..." alt="" coords="526,75,728,119"/>
 <area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="436,169,525,129,559,119,554,121,527,134,438,174"/>
 <area shape="rect" id="Node000005" href="$classBalloonParty_1_1Balloon_1_1Model_1_1HeartBalloonModel.html" title="The heart reward balloon (PLAN&#45;RewardBalloons): a heart wrapped in bandages that gives a heart back." alt="" coords="526,144,728,189"/>
 <area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="493,182,528,180,523,181,494,187"/>

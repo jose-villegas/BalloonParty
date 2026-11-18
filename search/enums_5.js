@@ -3,8 +3,9 @@ var searchData=
   ['filtermode_0',['FilterMode',['../classBalloonParty_1_1Editor_1_1TextureAuditWindow.html#afea50b1b4489df1732b43dacd5e498b5',1,'BalloonParty::Editor::TextureAuditWindow']]],
   ['flightmode_1',['FlightMode',['../namespaceBalloonParty_1_1Item.html#a634ebc7255ad094bf6378c397db3ef04',1,'BalloonParty::Item']]],
   ['flightphase_2',['FlightPhase',['../namespaceBalloonParty_1_1Shared_1_1Pool.html#a85ad373a8cb2fda2f8c1c544019bff48',1,'BalloonParty::Shared::Pool']]],
-  ['foldrule_3',['FoldRule',['../namespaceBalloonParty_1_1Game_1_1Telemetry.html#a7d92d3154f481b1e25541b132865a4f1',1,'BalloonParty::Game::Telemetry']]],
-  ['formationphase_4',['FormationPhase',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a58402d3cd9ac1d9358b618890bc428a7',1,'BalloonParty::Game::Score::Behaviours::ShapeFormationTicker']]],
-  ['formationshape_5',['FormationShape',['../namespaceBalloonParty_1_1Balloon_1_1Formation.html#a7d189f644fea0191bb4f5acaef4bf746',1,'BalloonParty::Balloon::Formation']]],
-  ['frameratemode_6',['FrameRateMode',['../namespaceBalloonParty_1_1Shared_1_1Diagnostics.html#a5f963220a502f8d8158c5bc0c226698e',1,'BalloonParty::Shared::Diagnostics']]]
+  ['foamgift_3',['FoamGift',['../namespaceBalloonParty_1_1Shared_1_1Messages.html#a59eaf814cb0fd69d1473c2377bee7918',1,'BalloonParty::Shared::Messages']]],
+  ['foldrule_4',['FoldRule',['../namespaceBalloonParty_1_1Game_1_1Telemetry.html#a7d92d3154f481b1e25541b132865a4f1',1,'BalloonParty::Game::Telemetry']]],
+  ['formationphase_5',['FormationPhase',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a58402d3cd9ac1d9358b618890bc428a7',1,'BalloonParty::Game::Score::Behaviours::ShapeFormationTicker']]],
+  ['formationshape_6',['FormationShape',['../namespaceBalloonParty_1_1Balloon_1_1Formation.html#a7d189f644fea0191bb4f5acaef4bf746',1,'BalloonParty::Balloon::Formation']]],
+  ['frameratemode_7',['FrameRateMode',['../namespaceBalloonParty_1_1Shared_1_1Diagnostics.html#a5f963220a502f8d8158c5bc0c226698e',1,'BalloonParty::Shared::Diagnostics']]]
 ];

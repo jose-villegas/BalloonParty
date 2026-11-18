@@ -118,6 +118,9 @@ $(function(){initNavTree('namespaceBalloonParty_1_1Slots_1_1Capabilities.html','
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html">DamageContext</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1ICoatable.html">ICoatable</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An actor that can wear foam: layers a ripe bubble cluster hands it when its fuse runs out.  <a href="interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1ICoatable.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IDeflectsShots.html">IDeflectsShots</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A slot actor that bounces an ordinary shot rather than letting it through or popping.  <a href="interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IDeflectsShots.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -172,6 +175,7 @@ Enumerations</h2></td></tr>
 &#160;&#160;<a class="el" href="#af915a4f3df9f513ca2c08e1a87aff762aff6e0f3ea4bd148ea37497a00a98bf98">CarryStreak</a> = 1 &lt;&lt; 4
 , <a class="el" href="#af915a4f3df9f513ca2c08e1a87aff762adc6e84a67852dd96c1ba57da273b26ac">Beam</a> = 1 &lt;&lt; 5
 , <a class="el" href="#af915a4f3df9f513ca2c08e1a87aff762a3afe0d7cdba2953d9d9538360d4ad4bc">OwnPaint</a> = 1 &lt;&lt; 6
+, <a class="el" href="#af915a4f3df9f513ca2c08e1a87aff762ac0062863e3e99f67607ad1ae9a4299a7">Ripple</a> = 1 &lt;&lt; 7
 <br />
  }</td></tr>
 <tr class="separator:af915a4f3df9f513ca2c08e1a87aff762"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -220,6 +224,9 @@ Enumerations</h2></td></tr>
 <p>The beam's damage also carries <a class="el" href="#af915a4f3df9f513ca2c08e1a87aff762a71b82d588f8ca5360dd8f79f4452f61a">Piercing</a>, as a bomb's blast on its neighbours does; this tells the two apart, for the golden balloon, which a beam breaks and a blast must not. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="af915a4f3df9f513ca2c08e1a87aff762a3afe0d7cdba2953d9d9538360d4ad4bc" name="af915a4f3df9f513ca2c08e1a87aff762a3afe0d7cdba2953d9d9538360d4ad4bc"></a>OwnPaint&#160;</td><td class="fielddoc"><p>The shot popped a balloon it painted rainbow itself (the disco ball's wave, <code>ShotPaintLedger</code>): the pop scores at the streak as it stands and leaves it unchanged, so a shot can't climb on paint it laid. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af915a4f3df9f513ca2c08e1a87aff762ac0062863e3e99f67607ad1ae9a4299a7" name="af915a4f3df9f513ca2c08e1a87aff762ac0062863e3e99f67607ad1ae9a4299a7"></a>Ripple&#160;</td><td class="fielddoc"><p>A ripe bubble cluster's ripple struck the actor (<code>RipeBubbleBurst</code>). </p>
+<p>It lands after the pop that set it off, so it scores at the shot's streak as it stands and never changes it, not even to break it (<code>ScoreController.RecordStreakMultiplier</code>). It carries no <a class="el" href="#af915a4f3df9f513ca2c08e1a87aff762aa5dcddfe1229c26686d7abc62e4223ec" title="The projectile itself struck the actor, as opposed to an item/AOE effect (bomb, laser,...">DirectHit</a>, so it earns no pop-spawn either. <a class="el" href="namespaceBalloonParty_1_1Audio.html">Audio</a> and telemetry can tell it apart by this flag. </p>
 </td></tr>
 </table>
 

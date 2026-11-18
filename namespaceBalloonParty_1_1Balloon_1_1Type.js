@@ -8,6 +8,7 @@ var namespaceBalloonParty_1_1Balloon_1_1Type =
     [ "RainbowBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant.html", "classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant" ],
     [ "SimpleBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1SimpleBalloonVariant.html", "classBalloonParty_1_1Balloon_1_1Type_1_1SimpleBalloonVariant" ],
     [ "SoapBubbleClusterVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant" ],
+    [ "SoapBubbleShader", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleShader.html", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleShader" ],
     [ "ToughBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1ToughBalloonVariant.html", "classBalloonParty_1_1Balloon_1_1Type_1_1ToughBalloonVariant" ],
     [ "UnbreakableBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant" ],
     [ "UnbreakableFormationLook", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook" ],

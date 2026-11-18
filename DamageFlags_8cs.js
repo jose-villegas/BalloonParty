@@ -7,6 +7,7 @@ var DamageFlags_8cs =
       [ "BalloonParty.Slots.Capabilities.DamageFlags.DirectHit", "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762aa5dcddfe1229c26686d7abc62e4223ec", null ],
       [ "BalloonParty.Slots.Capabilities.DamageFlags.CarryStreak", "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762aff6e0f3ea4bd148ea37497a00a98bf98", null ],
       [ "BalloonParty.Slots.Capabilities.DamageFlags.Beam", "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762adc6e84a67852dd96c1ba57da273b26ac", null ],
-      [ "BalloonParty.Slots.Capabilities.DamageFlags.OwnPaint", "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762a3afe0d7cdba2953d9d9538360d4ad4bc", null ]
+      [ "BalloonParty.Slots.Capabilities.DamageFlags.OwnPaint", "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762a3afe0d7cdba2953d9d9538360d4ad4bc", null ],
+      [ "BalloonParty.Slots.Capabilities.DamageFlags.Ripple", "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762ac0062863e3e99f67607ad1ae9a4299a7", null ]
     ] ]
 ];

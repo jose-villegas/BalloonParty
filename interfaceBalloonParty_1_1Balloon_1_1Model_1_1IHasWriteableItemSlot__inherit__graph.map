@@ -1,6 +1,6 @@
 <map id="BalloonParty.Balloon.Model.IHasWriteableItemSlot" name="BalloonParty.Balloon.Model.IHasWriteableItemSlot">
 <area shape="rect" id="Node000001" title=" " alt="" coords="15,191,218,235"/>
-<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html" title=" " alt="" coords="15,283,218,328"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html" title="The plain balloon (and its silver, gold and rainbow skins): paintable, carries an item,..." alt="" coords="15,283,218,328"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="118,249,119,284,114,282,115,253"/>
 <area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasItemSlot.html" title="Extends IHasColor because item visuals are always tinted to the host&#39;s color." alt="" coords="5,98,228,143"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,156,119,191,114,190,115,161"/>

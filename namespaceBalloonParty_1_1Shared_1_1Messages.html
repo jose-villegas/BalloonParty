@@ -134,6 +134,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1BubbleMergedMessage.html">BubbleMergedMessage</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Published by <code>BubbleMergeService</code> as one bubble cluster gives bubbles to its neighbour, just before the two counts change, so a view can still read what each showed.  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1BubbleMergedMessage.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1BubbleRipenedMessage.html">BubbleRipenedMessage</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Published by <code>RipeBubbleService</code> when a bubble cluster reaches the merge cap and its fuse starts.  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1BubbleRipenedMessage.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ClearShotsInFlightMessage.html">ClearShotsInFlightMessage</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Commands the thrower to kill every shot in flight through its canonical death path, and to keep the ball waiting in the cannon.  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1ClearShotsInFlightMessage.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -231,6 +234,12 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1RestartRiseStartedMessage.html">RestartRiseStartedMessage</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Published when the restart rise after a loss begins: the new level's scenery is placed below view and starts rising in.  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1RestartRiseStartedMessage.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html">RipeBubbleBurstMessage</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Published by <code>RipeBubbleService</code> when a ripe cluster bursts.  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1RipeBubbleBurstMessage.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1RipeFuseBeatMessage.html">RipeFuseBeatMessage</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Published by <code>RipeBubbleService</code> on each of a ripe cluster's throbs: once a second, then the half-second beats in the last <code>IRipeBubbleSettings.ThrobFastSeconds</code> of its fuse, which are <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1RipeFuseBeatMessage.html#a93868a878c8ee37c51cf440de768353a">Fast</a>.  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1RipeFuseBeatMessage.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1RunResetMessage.html">RunResetMessage</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Broadcast after every <code>IRunResettable</code> has reset, for views that can't reset reactively (e.g. score progress bars, loaded projectile).  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1RunResetMessage.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -286,6 +295,17 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
+<tr class="memitem:a59eaf814cb0fd69d1473c2377bee7918" id="r_a59eaf814cb0fd69d1473c2377bee7918"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a59eaf814cb0fd69d1473c2377bee7918">FoamGift</a> { <a class="el" href="#a59eaf814cb0fd69d1473c2377bee7918a6e162ed9a2bc76307e0a249786f4951e">Coat</a>
+, <a class="el" href="#a59eaf814cb0fd69d1473c2377bee7918a249694a485fc5d3289c38986b4f8e887">Cluster</a>
+, <a class="el" href="#a59eaf814cb0fd69d1473c2377bee7918a980c0f693600b09962d3318bf55aaf8c">Leftover</a>
+ }</td></tr>
+<tr class="memdesc:a59eaf814cb0fd69d1473c2377bee7918"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where one bubble of a foam's hand-out went.  <a href="#a59eaf814cb0fd69d1473c2377bee7918">More...</a><br /></td></tr>
+<tr class="separator:a59eaf814cb0fd69d1473c2377bee7918"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac45f89e1e12dc060a80c4997f10bb76a" id="r_ac45f89e1e12dc060a80c4997f10bb76a"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac45f89e1e12dc060a80c4997f10bb76a">RipeBurstKind</a> { <a class="el" href="#ac45f89e1e12dc060a80c4997f10bb76aac0062863e3e99f67607ad1ae9a4299a7">Ripple</a>
+, <a class="el" href="#ac45f89e1e12dc060a80c4997f10bb76aa69a87c4b379ae01b6eeacc5eb274609b">Foam</a>
+ }</td></tr>
+<tr class="memdesc:ac45f89e1e12dc060a80c4997f10bb76a"><td class="mdescLeft">&#160;</td><td class="mdescRight">How a ripe bubble cluster went: popped by the player in time, or left until its fuse ran out.  <a href="#ac45f89e1e12dc060a80c4997f10bb76a">More...</a><br /></td></tr>
+<tr class="separator:ac45f89e1e12dc060a80c4997f10bb76a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a885ac3fd6e8e290b39752bfe7e21c5" id="r_a1a885ac3fd6e8e290b39752bfe7e21c5"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1a885ac3fd6e8e290b39752bfe7e21c5">ShieldGainSource</a> { <a class="el" href="#a1a885ac3fd6e8e290b39752bfe7e21c5a7d74f3b92b19da5e606d737d339a9679">Item</a>
 , <a class="el" href="#a1a885ac3fd6e8e290b39752bfe7e21c5af4bb7b4d64f470dc5e5aca7aa1cfe624">Streak</a>
 , <a class="el" href="#a1a885ac3fd6e8e290b39752bfe7e21c5ae38f161f104780d651e487674b3130ac">Ricochet</a>
@@ -294,6 +314,50 @@ Enumerations</h2></td></tr>
 <tr class="separator:a1a885ac3fd6e8e290b39752bfe7e21c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="a59eaf814cb0fd69d1473c2377bee7918" name="a59eaf814cb0fd69d1473c2377bee7918"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a59eaf814cb0fd69d1473c2377bee7918">&#9670;&#160;</a></span>FoamGift</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#a59eaf814cb0fd69d1473c2377bee7918">BalloonParty.Shared.Messages.FoamGift</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Where one bubble of a foam's hand-out went. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a59eaf814cb0fd69d1473c2377bee7918a6e162ed9a2bc76307e0a249786f4951e" name="a59eaf814cb0fd69d1473c2377bee7918a6e162ed9a2bc76307e0a249786f4951e"></a>Coat&#160;</td><td class="fielddoc"><p>A coat on the plain balloon in its direction. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a59eaf814cb0fd69d1473c2377bee7918a249694a485fc5d3289c38986b4f8e887" name="a59eaf814cb0fd69d1473c2377bee7918a249694a485fc5d3289c38986b4f8e887"></a>Cluster&#160;</td><td class="fielddoc"><p>One more bubble for the cluster in its direction. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a59eaf814cb0fd69d1473c2377bee7918a980c0f693600b09962d3318bf55aaf8c" name="a59eaf814cb0fd69d1473c2377bee7918a980c0f693600b09962d3318bf55aaf8c"></a>Leftover&#160;</td><td class="fielddoc"><p>No taker had room: it popped harmlessly. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="ac45f89e1e12dc060a80c4997f10bb76a" name="ac45f89e1e12dc060a80c4997f10bb76a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac45f89e1e12dc060a80c4997f10bb76a">&#9670;&#160;</a></span>RipeBurstKind</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#ac45f89e1e12dc060a80c4997f10bb76a">BalloonParty.Shared.Messages.RipeBurstKind</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>How a ripe bubble cluster went: popped by the player in time, or left until its fuse ran out. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ac45f89e1e12dc060a80c4997f10bb76aac0062863e3e99f67607ad1ae9a4299a7" name="ac45f89e1e12dc060a80c4997f10bb76aac0062863e3e99f67607ad1ae9a4299a7"></a>Ripple&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ac45f89e1e12dc060a80c4997f10bb76aa69a87c4b379ae01b6eeacc5eb274609b" name="ac45f89e1e12dc060a80c4997f10bb76aa69a87c4b379ae01b6eeacc5eb274609b"></a>Foam&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
 <a id="a1a885ac3fd6e8e290b39752bfe7e21c5" name="a1a885ac3fd6e8e290b39752bfe7e21c5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1a885ac3fd6e8e290b39752bfe7e21c5">&#9670;&#160;</a></span>ShieldGainSource</h2>
 

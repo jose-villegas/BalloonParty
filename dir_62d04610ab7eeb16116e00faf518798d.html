@@ -337,12 +337,15 @@ Where the per-flight numbers come from</h1>
 Streak breaks</h1>
 <p><code>max_streak</code> is the highest streak any <code>StreakChangedMessage</code> reported. <code>streak_breaks</code> counts a running streak dropping to zero, judged per ball: every ball has its own streak (<code>ColorStreakTracker</code>), and the message names it. The service remembers the last value each open flight announced, plus one shared value for messages with no ball or naming one not in flight (the tracker's shared streak). A zero after a positive value of the <em>same</em> streak is a break. A zero for a streak already at zero is not (the shared streak resets on every load), one ball's reset never reads as another's break, and a ball's streak ending with its flight is silent, so a flight ending is never a break. At level-up the tracker clears every streak and announces it once, so the service forgets the remembered values too.</p>
 <h1><a class="anchor" id="autotoc_md273"></a>
+Ripe bubble clusters</h1>
+<p>Six level counters follow the ripe bubble cluster (<code>Balloon/Controller/RipeBubbleService</code>). <code>clusters_ripened</code> counts <code>BubbleRipenedMessage</code>. Each <code>RipeBubbleBurstMessage</code> is either a ripple, the player popping a ripe cluster in time, or foam, its fuse running out. A ripple adds one to <code>ripple_bursts</code> and the neighbours its hits reached to <code>ripple_neighbours_hit</code>. A ripple goes out <code>BurstSeconds</code> after the pop, so one still waiting when the level ends is dropped and counts nothing. Foam adds one to <code>fuses_run_out</code> and the balloons it coated to <code>coats_applied</code>; the bubbles it hands to neighbouring clusters, and those left over, are not counted. <code>coats_removed</code> counts the hits that took a coat off (<code>ActorHitMessageExtensions.TookCoat</code>). Such a hit passes through like an absorb, but the foam caused it, not the balloon, so it is counted here and not in <code>absorbs</code>. A piercing or beam hit pops a coated balloon whole and counts as a pop.</p>
+<h1><a class="anchor" id="autotoc_md274"></a>
 Pause handling</h1>
 <p>Subscribes <code>PauseService.IsAnyPaused</code> directly (reference-counted and reset-safe) rather than counting <code>PausedMessage</code>/<code>ResumedMessage</code> edges, which leak on the loss path.</p>
-<h1><a class="anchor" id="autotoc_md274"></a>
+<h1><a class="anchor" id="autotoc_md275"></a>
 Registration</h1>
 <p><code>ITelemetrySink</code> → <code>CompositeTelemetrySink</code> registers unconditionally in <code>GameScopeRegistration.RegisterTelemetrySinks</code>, called from <code>GameLifetimeScope.Configure</code> before <code>RegisterGameplaySystems</code> — <code>GameplayMetricsService</code> depends on it without caring whether any leaf sink exists. <code>GameplayMetricsService</code> registers <b>last</b> in <code>RegisterGameplaySystems</code> so it never sits in front of a gameplay system in the start order. That is a preference, not a correctness argument, and the service must not depend on it: it registers last but is written to be order-independent, because gameplay systems re-publish from inside their own handlers. <code>LevelController.OnTransitionCompleted</code> reopens navigation, which fires a deferred loss, which publishes <code>GameOverMessage</code> — nested, before this service has seen the transition that message follows. <code>OnGameOver</code> therefore settles a pending level boundary itself rather than trusting that it already happened. Its clock is an explicit <code>Func&lt;float&gt;</code> parameter — <code>Time.unscaledTime</code>, the same way <code>SfxThrottleGate</code> takes its. <code>SessionTelemetryContext</code> registers in <code>AppLifetimeScope</code> so one play session keeps one id across scene reloads. <code>FlightStatsService</code> is registered earlier in <code>RegisterGameplaySystems</code> and lives in <code>Game/Flight/</code> — it is a gameplay service, not part of this subsystem.</p>
-<h1><a class="anchor" id="autotoc_md275"></a>
+<h1><a class="anchor" id="autotoc_md276"></a>
 What the service does and does not own</h1>
 <div class="fragment"><div class="line">stateDiagram-v2</div>
 <div class="line">    [*] --&gt; Idle</div>
@@ -371,7 +374,7 @@ What the service does and does not own</h1>
 <li><b>Nothing is persisted.</b> Scopes live in memory, are snapshotted, handed to the sink and reset. A metric someone wants to keep for the player has stopped being telemetry.</li>
 </ul>
 <p>Gating is three tiers, not one <code>#if</code>: the counting core ships (the popups need it), the export layer ships inert until consent, and the local file sink plus the cheat read are compiled out of release.</p>
-<h1><a class="anchor" id="autotoc_md276"></a>
+<h1><a class="anchor" id="autotoc_md277"></a>
 Design plan</h1>
 <p><a class="el" href="plan_gameplay_telemetry.html">Gameplay Telemetry</a> — pruned to the numbered requirements and risks this folder's comments cite (R1–R30, RK-1…RK-15), the extraction path, and the two pieces never built. This README is the first place to look; the plan is the second. </p>
 </div><!-- contents -->

@@ -1,12 +1,14 @@
 var structBalloonParty_1_1Solver_1_1ShotSimulationResult =
 [
-    [ "ShotSimulationResult", "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a1d26e191f36660b5140551c8cdecd1ff", null ],
+    [ "ShotSimulationResult", "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a8a72818988f3ac80d527b150c228a027", null ],
     [ "Absorbed", "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a912b1a1ff3255de9acd1bcfbd1eb712f", null ],
     [ "BoardCleared", "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#ac013727e59d0903d2130030feb0232d7", null ],
     [ "Capped", "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a13d013506632605b32f4a2f2cfebe3fc", null ],
     [ "Died", "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a45e2e9743dceda3ae170e0a6cb89f432", null ],
     [ "DiscoPops", "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a344cc65a94b06ec5a8963f06f9cab965", null ],
     [ "Events", "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a7337d1ee8e1b9ec6ffc8e4a18521ee60", null ],
+    [ "FinalColor", "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#abf0d982c35c9432e8d5d3d1521391067", null ],
+    [ "FinalStreak", "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#af1106edabd236a163dcaf656fe066e79", null ],
     [ "GoldenPops", "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#af118bad95657ceb9aae91533c84bac8e", null ],
     [ "HeartPops", "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#aa5a491399f7b4457ed099f9a1681af74", null ],
     [ "NukePops", "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a82e844db64461f26d5b3cbdb59c33c0b", null ],

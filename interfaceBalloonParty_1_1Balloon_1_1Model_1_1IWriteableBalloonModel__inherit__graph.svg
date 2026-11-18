@@ -238,7 +238,7 @@ var sectionId = 'dynsection-0';
 <!-- Node10 -->
 <g id="Node000010" class="node">
 <title>Node10</title>
-<g id="a_Node000010"><a xlink:href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html" target="_top" xlink:title=" ">
+<g id="a_Node000010"><a xlink:href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html" target="_top" xlink:title="The plain balloon (and its silver, gold and rainbow skins): paintable, carries an item,...">
 <polygon fill="white" stroke="#666666" points="1089.75,-293.5 938,-293.5 938,-260 1089.75,-260 1089.75,-293.5"/>
 <text xml:space="preserve" text-anchor="start" x="946" y="-280" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
 <text xml:space="preserve" text-anchor="middle" x="1013.88" y="-267.25" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonModel</text>
@@ -257,7 +257,7 @@ var sectionId = 'dynsection-0';
 <!-- Node11 -->
 <g id="Node000011" class="node">
 <title>Node11</title>
-<g id="a_Node000011"><a xlink:href="classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html" target="_top" xlink:title="At destruction, distributes one ScoreAttribution per remaining bubble to a random palette colour....">
+<g id="a_Node000011"><a xlink:href="classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html" target="_top" xlink:title="Each hit scores the bubbles the cluster held, spread over random palette colours, and breaks the stre...">
 <polygon fill="white" stroke="#666666" points="1089.75,-241.5 938,-241.5 938,-208 1089.75,-208 1089.75,-241.5"/>
 <text xml:space="preserve" text-anchor="start" x="946" y="-228" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
 <text xml:space="preserve" text-anchor="middle" x="1013.88" y="-215.25" font-family="Helvetica,sans-Serif" font-size="10.00">BubbleClusterModel</text>

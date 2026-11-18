@@ -3,6 +3,7 @@ var classBalloonParty_1_1Item_1_1ItemActivator =
     [ "ItemActivator", "classBalloonParty_1_1Item_1_1ItemActivator.html#ac557a8c3e54036c1b4882f948f608f73", null ],
     [ "ActivateAsync", "classBalloonParty_1_1Item_1_1ItemActivator.html#a7cebd1840a7a050b4a51d67626df028a", null ],
     [ "Dispose", "classBalloonParty_1_1Item_1_1ItemActivator.html#a6c8ff2ad0965891ce8f32f608de2b2d4", null ],
+    [ "HandlerReleasedBy", "classBalloonParty_1_1Item_1_1ItemActivator.html#a68bb69f1259d6e0b13a3c32a5da52872", null ],
     [ "OnActorHit", "classBalloonParty_1_1Item_1_1ItemActivator.html#a22ccf9fbacd93272fd51354902d853b1", null ],
     [ "Start", "classBalloonParty_1_1Item_1_1ItemActivator.html#ae97edac792725143e178eedad38e3aab", null ],
     [ "_cts", "classBalloonParty_1_1Item_1_1ItemActivator.html#a4c7d97fe5ed957f3425126c68eb15cd6", null ],

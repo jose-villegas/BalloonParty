@@ -1,0 +1,5 @@
+<map id="BalloonParty.Balloon.View.RipeBubbleBurstView" name="BalloonParty.Balloon.View.RipeBubbleBurstView">
+<area shape="rect" id="Node000001" title="Plays a ripe cluster&#39;s spiral and RipeBubbleBurstMessage." alt="" coords="5,81,199,126"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="40,5,164,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,47,104,81,100,79,100,51"/>
+</map>

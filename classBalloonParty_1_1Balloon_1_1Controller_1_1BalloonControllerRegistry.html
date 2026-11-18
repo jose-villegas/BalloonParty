@@ -141,6 +141,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ae12c581eb948b18190d4e679d39f72e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7aaecafb702ff19cdb4f948875259a67" id="r_a7aaecafb702ff19cdb4f948875259a67"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7aaecafb702ff19cdb4f948875259a67">Start</a> ()</td></tr>
 <tr class="separator:a7aaecafb702ff19cdb4f948875259a67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a301c4fe3e3e67e9516b62dc2f4902dda" id="r_a301c4fe3e3e67e9516b62dc2f4902dda"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a301c4fe3e3e67e9516b62dc2f4902dda">TryLeave</a> (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html">IBalloonModel</a> model, float lingerSeconds)</td></tr>
+<tr class="memdesc:a301c4fe3e3e67e9516b62dc2f4902dda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes one balloon off the board with no pop at all: its slot and type count are freed at once and nothing is published, while its view stays where it is for <em>lingerSeconds</em>  (for a look of its own to play out) and then returns to its pool.  <br /></td></tr>
+<tr class="separator:a301c4fe3e3e67e9516b62dc2f4902dda"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac2aed99c6840f0afc306b67cde9764fe" id="r_ac2aed99c6840f0afc306b67cde9764fe"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac2aed99c6840f0afc306b67cde9764fe">TryPopSingle</a> (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html">IBalloonModel</a> model, bool playPopVfx=true)</td></tr>
 <tr class="memdesc:ac2aed99c6840f0afc306b67cde9764fe"><td class="mdescLeft">&#160;</td><td class="mdescRight"><dl class="section return"><dt>Returns</dt><dd>False when the balloon isn't registered (already leaving the board).</dd></dl>
  <br /></td></tr>
@@ -454,6 +457,32 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a301c4fe3e3e67e9516b62dc2f4902dda" name="a301c4fe3e3e67e9516b62dc2f4902dda"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a301c4fe3e3e67e9516b62dc2f4902dda">&#9670;&#160;</a></span>TryLeave()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Balloon.Controller.BalloonControllerRegistry.TryLeave </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html">IBalloonModel</a></td>          <td class="paramname"><span class="paramname"><em>model</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>lingerSeconds</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Takes one balloon off the board with no pop at all: its slot and type count are freed at once and nothing is published, while its view stays where it is for <em>lingerSeconds</em>  (for a look of its own to play out) and then returns to its pool. </p>
+<dl class="section return"><dt>Returns</dt><dd>False when the balloon isn't registered (already leaving the board).</dd></dl>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Controller_1_1IBalloonPopper.html#a63bfad127baaa57b142cb1c8c3807b7f">BalloonParty.Balloon.Controller.IBalloonPopper</a>.</p>
 
 </div>
 </div>

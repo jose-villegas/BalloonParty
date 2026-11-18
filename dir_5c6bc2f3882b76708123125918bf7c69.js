@@ -1,5 +1,6 @@
 var dir_5c6bc2f3882b76708123125918bf7c69 =
 [
+    [ "ActorHitMessageExtensions.cs", "ActorHitMessageExtensions_8cs.html", "ActorHitMessageExtensions_8cs" ],
     [ "AnimationCurveExtensions.cs", "AnimationCurveExtensions_8cs.html", "AnimationCurveExtensions_8cs" ],
     [ "BalanceBiasExtensions.cs", "BalanceBiasExtensions_8cs.html", "BalanceBiasExtensions_8cs" ],
     [ "BalloonModelExtensions.cs", "BalloonModelExtensions_8cs.html", "BalloonModelExtensions_8cs" ],

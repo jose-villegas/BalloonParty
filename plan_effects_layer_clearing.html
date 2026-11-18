@@ -110,13 +110,13 @@ $(function(){initNavTree('plan_effects_layer_clearing.html',''); initResizable(t
   <div class="headertitle"><div class="title">Effects Layer Clearing</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md468"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md469"></a>
 Effects Layer Clearing</h1>
 <blockquote class="doxtable">
 <p>Working plan for keeping every ball in flight readable: the effects drawn above the board render into their own layer (a render target, the "effects map"), and that layer is laid over the frame through a clearing mask that opens a hole around each ball. The hole lingers and shrinks after the ball has gone by. </p>
 </blockquote>
 <hr  />
-<h2><a class="anchor" id="autotoc_md470"></a>
+<h2><a class="anchor" id="autotoc_md471"></a>
 Orientation</h2>
 <p>A shot is hard to follow once the board gets busy. Score shapes tumble over the balloons, trails stream to the score bar, heads-ups flash up, and item effects bloom. The ball, and the balloons it is hitting, vanish under all of it.</p>
 <p>Earlier attempts changed the objects themselves. They pushed score shapes away from the ball, bent trails around it, faded effects inside a small circle and moved the ball's sorting layer up and down. None of it read on a phone, and all of it was removed. This plan doesn't touch any object. It changes how the frame is put together:</p>
@@ -151,7 +151,7 @@ Orientation</h2>
 <td class="markdownTableBodyNone"><code>EffectsMapCompositor</code>   </td><td class="markdownTableBodyNone">MonoBehaviour, one per camera that has effects   </td><td class="markdownTableBodyNone">creates the effects camera and its target, takes the effect layers out of its own camera's mask while a map is live, and draws the composite quad   </td></tr>
 </table>
 <hr  />
-<h2><a class="anchor" id="autotoc_md472"></a>
+<h2><a class="anchor" id="autotoc_md473"></a>
 The layer split</h2>
 <p>The board is the set of physics layers that are the board today: <code>Scenario</code>, <code>Balloons</code>, <code>Grid</code>, <code>Projectile</code>, <code>Thrower</code>, <code>Items</code> (the badges on balloons) and <code>Limits</code>. Effects are what draws above it. They sit on two cameras, and that decides how they split:</p>
 <ul>
@@ -159,7 +159,7 @@ The layer split</h2>
 <li>The <b>HUD camera</b> (<code>Display/HudCamera</code>) draws on top of the finished, tonemapped frame. It draws the canvases, heads-ups and the score, heart and highlight trails.</li>
 </ul>
 <p>An effect has to be composited where it draws today. If a HUD effect moved into the main camera's map, the tonemapper would recolour it, which is what the HUD camera exists to stop. So there are two maps, one per camera, both read through the same mask.</p>
-<h3><a class="anchor" id="autotoc_md473"></a>
+<h3><a class="anchor" id="autotoc_md474"></a>
 HUD effects map (phase 2)</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -174,7 +174,7 @@ HUD effects map (phase 2)</h3>
 <td class="markdownTableBodyNone">Game canvas, hearts counter, launcher canvas   </td><td class="markdownTableBodyNone"><code>UI</code> layer   </td><td class="markdownTableBodyNone"><b>no</b>: that's the HUD, not effects   </td></tr>
 </table>
 <p>The <code>Trail</code> layer already holds the HUD's trails, so this phase needs no new physics layer. The composite quad draws at UI 3300, where the score trails draw today: above the canvases and popups (UI 3000), so trails still fly over the score bar, and under the card reveal (UI 31998). Inside the map the effects keep their own order. While the map runs, a heart or highlight trail sorts at 3300 instead of 100: over a popup, if one is open while a clearing is.</p>
-<h3><a class="anchor" id="autotoc_md474"></a>
+<h3><a class="anchor" id="autotoc_md475"></a>
 Main effects map (phase 3, in part)</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -204,7 +204,7 @@ Main effects map (phase 3, in part)</h3>
 </table>
 <p>The main camera's effects live on several physics layers that also hold board pieces (<code>Items</code> holds the badges as well as item VFX, <code>Projectile</code> the ball as well as the shield VFX). So this phase needs a new physics layer, <code>Effects</code> (17), added in the Editor (<code>TagManager.asset</code> is never edited by hand). The chaos effects above are on it; the rest of the table would move to it. The composite collapses these effects to one sorting position: Sky −1, below the danger walls and the light quad. One visible change comes with that: item VFX on PowerUps draw under bushes and puffs (GridActors) today, and would draw over them.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md476"></a>
+<h2><a class="anchor" id="autotoc_md477"></a>
 The clearing mask</h2>
 <p>One low-resolution, two-channel target: <code>RGHalf</code> (<code>ARGBHalf</code>, then <code>ARGB32</code>, where a device lacks it), screen size divided by <code>MaskDownscale</code> (default 4, so 270 × 600 on a 1080 × 2400 phone; the glass below reads its slope, which shows steps at 8 bits or past 4). Red is how cleared a point is; green is the radius of the stamp that set it, so the glass knows how big the dome under each point is. Two of them ping-pong. Once a frame, from <code>LateUpdate</code> (blits stay outside URP's RenderGraph, as <code><a class="el" href="Display_2README_8md.html">Display/README.md</a></code> requires), one blit:</p>
 <ol type="1">
@@ -212,7 +212,7 @@ The clearing mask</h2>
 <li><b>Stamp</b>: for each of up to <code>MaxStamps</code> capsules (8, the shader's fixed array), <code>mask = max(mask, profile(d / Radius))</code>, where <code>d</code> is the distance from the fragment to the capsule's segment, <code>Radius</code> that stamp's own, and <code>profile(x) = 1 − x²</code> inside the radius, 0 outside. Green takes the radius of whichever stamp, or last frame's value, won.</li>
 </ol>
 <p>The composite reads the mask bilinearly and fades the map by <code>fade = 1 − Strength × smoothstep(EdgeLow, EdgeHigh, mask)</code>. Because the stamp peaks at the centre and the decay is uniform, the visible edge (where <code>mask</code> crosses <code>EdgeLow</code>) moves inward over time. That is the decaying radius. The clearing's visible radius at age <code>t</code> is about \(R\sqrt{1 - E - t/L}\), with \(E\) the edge and \(L\) the linger time, so it closes up at \(t = L(1 - E)\).</p>
-<h3><a class="anchor" id="autotoc_md477"></a>
+<h3><a class="anchor" id="autotoc_md478"></a>
 The glass</h3>
 <p>The cut alone read too strong to the owner, so the clearing is drawn as a dome of thick glass over each ball. A stamp's profile, 1 − (d/R)², is a dome's height, so the composite takes the mask's slope (four more mask taps, a few texels apart) as the glass's surface:</p>
 <ul>
@@ -232,16 +232,16 @@ The glass</h3>
 </ul>
 <p><code>MaxStamps</code> caps the uniform array. It's a constant, not a setting: a shader array's size is fixed when it compiles. More balls than that in flight (a split shot, say) keep the nearest <code>MaxStamps</code> to the screen's centre. Nothing in today's shots comes close.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md479"></a>
+<h2><a class="anchor" id="autotoc_md480"></a>
 Compositing</h2>
 <p>The effects camera is a runtime child of the camera it serves, like <code>SceneCaptureService</code>'s capture camera. It has the same projection, mirrored every frame, culls only the effect layers, clears to transparent black and has post-processing off. Its target is the map: <code>ARGB32</code> for the HUD and <code>ARGBHalf</code> for the main camera, whose colour buffer is HDR and so keeps values above 1 for bloom.</p>
 <p>Effects render into the map <em>premultiplied</em>, with correct coverage in alpha. Most shaders already do that: URP's sprite shaders blend alpha with <code>One OneMinusSrcAlpha</code>, the built-in <code>Sprites/Default</code> and TMP are premultiplied, and <code>Particle/Glow</code> and <code>Particle/SceneLit</code> set alpha blending of their own. Shaders that write <code>Blend [_SrcBlend] [_DstBlend]</code> with no alpha term (<code>Particle/LightResponsive</code>, <code>Particle/SpecularDrop</code>, <code>Display/TraceGlitterLine</code>) would leave the wrong coverage. Each gets an explicit alpha blend: <code>One OneMinusSrcAlpha</code> when alpha-blended, <code>Zero One</code> when additive, so additive light adds no coverage. Phase 2 audits the materials actually in the HUD map. Phase 3 does the same for the main map.</p>
 <p>The composite is one camera-fitted quad (built with <code>QuadRendererBuilder</code>, like the light overlay) with <code>Blend One OneMinusSrcAlpha</code>, returning <code>map × fade</code>. With the mask empty, <code>fade</code> is 1 and the result is the effects exactly as they drew before, the same blend into the same frame.</p>
-<h3><a class="anchor" id="autotoc_md480"></a>
+<h3><a class="anchor" id="autotoc_md481"></a>
 Idle</h3>
 <p>While no ball is in flight and the mask has fully decayed, a map would only reproduce the frame. So the compositor turns it off: the effect layers go back into the camera's own mask, the effects camera stops and the quad hides. The first ball fired turns it back on. The mask is empty on that frame, so the switch can't be seen. Aiming, the level-up and menus cost nothing extra.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md482"></a>
+<h2><a class="anchor" id="autotoc_md483"></a>
 Mobile cost</h2>
 <p>Measured against a 1080 × 2400 panel at 60 fps (2.6 M pixels). Real numbers come from the device, not from this table.</p>
 <table class="markdownTable">
@@ -269,10 +269,10 @@ Mobile cost</h2>
 <li><b>Masking inside every effect shader</b> with no map: the cheapest on the GPU, but every effect shader, including the stock sprite, particle and TMP ones, would need a project copy that samples the mask. Every future effect would have to remember to opt in. It also isn't the layered composition asked for.</li>
 </ul>
 <hr  />
-<h2><a class="anchor" id="autotoc_md484"></a>
+<h2><a class="anchor" id="autotoc_md485"></a>
 Phases</h2>
 <p>Each phase follows the per-phase review protocol: implement, review, curate, owner signs off.</p>
-<h3><a class="anchor" id="autotoc_md485"></a>
+<h3><a class="anchor" id="autotoc_md486"></a>
 Phase 1: the clearing mask</h3>
 <ul>
 <li><code>IEffectsClearingSettings</code> + <code>EffectsClearingSettings</code> SO (under <code>Configuration/Effects/</code>), registered in <code>AppLifetimeScope</code>: <code>Enabled</code>, <code>MinClearRadius</code>, <code>MaxClearRadius</code>, <code>ShieldsForMaxRadius</code>, <code>LingerSeconds</code>, <code>EdgeLow</code>, <code>EdgeHigh</code>, <code>Strength</code>, <code>LensRefraction</code>, <code>LensDispersion</code>, <code>LensHighlight</code>, <code>MaskDownscale</code>, <code>MapDownscale</code>, <code>UseUnscaledTime</code>, mask and composite shaders.</li>
@@ -280,7 +280,7 @@ Phase 1: the clearing mask</h3>
 <li><code>EffectsClearingController</code> (run-scoped) feeding <code>EffectsClearingMaskView</code> (persistent camera) and the <code>EffectsClearingMask</code> shader. The mask shows in <code>Editor/Maps/GameRenderMapsWindow</code>.</li>
 <li>Nothing on screen changes yet. The mask can be watched in the maps window during a run.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md486"></a>
+<h3><a class="anchor" id="autotoc_md487"></a>
 Phase 2: the HUD effects map</h3>
 <ul>
 <li><code>EffectsMapCompositor</code> + <code>EffectsMapComposite</code> shader, on the HUD camera, reading the <code>Trail</code> layer.</li>
@@ -288,7 +288,7 @@ Phase 2: the HUD effects map</h3>
 <li>A <code>stage.py</code> command to hold a ball mid-flight (<code>ball x,y --from x,y --seconds s</code>), so a still can show a ball inside a burst of score shapes, with the clearing on and off.</li>
 <li>A phone check: does the shot read now? And a profile of the cost.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md487"></a>
+<h3><a class="anchor" id="autotoc_md488"></a>
 As built (phases 1 and 2)</h3>
 <ul>
 <li><b>Alpha audit.</b> The HUD map draws <code>Sprites/Default</code> (the trail heads; premultiplied, correct coverage), URP <code>Unlit</code> set to alpha blending with <code>One OneMinusSrcAlpha</code> on alpha (the highlight trail) and the project's <code>PencilLine</code> (premultiplied). The score trail's ribbon material (<code>TrailMaterial_ScoreTrail</code>) was on the built-in <code>Mobile/Particles/Alpha Blended</code>, which writes no correct coverage. It moved to <code>Sprites/Default</code>, which draws the same colour (texture × vertex colour, the material's tint white) and writes its coverage, so it looks the same drawn straight in.</li>
@@ -299,13 +299,13 @@ As built (phases 1 and 2)</h3>
 <li><b>Camera moves.</b> The mask is in screen space, so when the level-up rig pans and zooms in on the ball, last frame's stamps would stay where they were on screen, a stale dome off the ball, and the cinematic's slow-mo barely decays them. Each blit reads last frame's mask through the camera's change since (<code>ClearingView.ReprojectionFrom</code>) and scales its radii by the zoom, so the stamps stay on the world.</li>
 <li><b>Update order.</b> The mask view runs after every <code>LateUpdate</code> that moves the camera (<code>[DefaultExecutionOrder]</code> 1000), and the compositor right after it, so the stamps frame the view this frame renders and the map turns on in the same frame as the first stamp.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md488"></a>
+<h3><a class="anchor" id="autotoc_md489"></a>
 Phase 3: the main effects map (in part)</h3>
 <p>Started for the chaos effects, which open question 1 had put in the HUD map: there the lightning and the laser, made to pass the bloom threshold (<code>_HdrBoost</code> 2–3), were clipped to 1 with no bloom. The <code>Effects</code> physics layer is added, the pops, item effects and nuke cloud are on it, and the main camera has its own <code>EffectsMapCompositor</code> (<code>ARGBHalf</code>, composite at Sky −1, before post). The composite shader reads the map in <code>half</code>, since <code>fixed</code> is low precision on some mobile GPUs. The GI capture takes <code>Effects</code>, as it took them on <code>Trail</code>. The rest of the table above (range previews, shield VFX, the dust specks) waits on open question 2.</p>
 <p>Off, the main camera draws these effects in their own sorting places: under the ball, and the pops on <code>Default</code> under the balloons. So the map stays on for <code>MapHoldSeconds</code> (1.5, game time) after the mask empties, past the pops a shot set off, and no shard mid-air slips under the balloons when it turns off.</p>
 <p>The main camera's culling mask has two writers: <code>NavigationCameraReveal</code> replaces the whole mask on each navigation change, and the compositor takes <code>Effects</code> out while it runs. So the mask has one owner, <code>CameraCullingMask</code>, the way <code>TimeScaleService</code> owns the time scale: navigation sets the base mask (the game mask <em>includes</em> <code>Effects</code>), compositors claim the layers they suppress, and the camera draws the base mask minus the claims.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md490"></a>
+<h2><a class="anchor" id="autotoc_md491"></a>
 Out of scope</h2>
 <ul>
 <li>Anything that moves, bends or fades individual objects. That approach was tried and removed.</li>
@@ -316,7 +316,7 @@ Out of scope</h2>
 <li>Per-device resolution tiers for the maps. <code>MapDownscale</code> is a single setting for now.</li>
 </ul>
 <hr  />
-<h2><a class="anchor" id="autotoc_md492"></a>
+<h2><a class="anchor" id="autotoc_md493"></a>
 Open questions for the owner</h2>
 <ol type="1">
 <li><p class="startli"><b>Pops.</b> Answered: pops go to the upper layer and clear like the other effects. All nine <code>PSVFX_*Pop</code> prefabs (the default pop, which also plays for recolours and bubble merges, and the heart, golden, disco, nuke, soap, tough, tougher and unbreakable pops and armour breaks) are on <code>Effects</code>, so the main camera's map takes them and they draw over the board, balls included, except under the glass. They went to the HUD map on <code>Trail</code> first, which cost them the main camera's bloom and grading, so phase 3 started for them. Their legacy <code>Mobile/Particles/Alpha Blended</code> materials moved to <code>Sprites/Default</code>, which draws the same colour and writes coverage. The nuke blast's flood and the disco wash are discs on the ground beneath the balloons, and the blast lights the board itself, so they stay on the board: the glass can't lift a light.</p>

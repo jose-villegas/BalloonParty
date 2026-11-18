@@ -4,6 +4,7 @@ var namespaceBalloonParty_1_1Balloon_1_1View =
     [ "BalloonView", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView" ],
     [ "BubbleMergeView", "classBalloonParty_1_1Balloon_1_1View_1_1BubbleMergeView.html", "classBalloonParty_1_1Balloon_1_1View_1_1BubbleMergeView" ],
     [ "DiscoWaveView", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView" ],
+    [ "FoamCoatOverlay", "classBalloonParty_1_1Balloon_1_1View_1_1FoamCoatOverlay.html", "classBalloonParty_1_1Balloon_1_1View_1_1FoamCoatOverlay" ],
     [ "FormationGlowBeam", "structBalloonParty_1_1Balloon_1_1View_1_1FormationGlowBeam.html", "structBalloonParty_1_1Balloon_1_1View_1_1FormationGlowBeam" ],
     [ "FormationGlowBeams", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowBeams.html", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowBeams" ],
     [ "FormationGlowField", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField.html", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField" ],
@@ -11,6 +12,7 @@ var namespaceBalloonParty_1_1Balloon_1_1View =
     [ "FormationGlowView", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView" ],
     [ "GrowingDiscView", "classBalloonParty_1_1Balloon_1_1View_1_1GrowingDiscView.html", "classBalloonParty_1_1Balloon_1_1View_1_1GrowingDiscView" ],
     [ "IBalloonMotionView", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonMotionView.html", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonMotionView" ],
+    [ "IBalloonPopPrelude", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonPopPrelude.html", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonPopPrelude" ],
     [ "IBalloonSwayView", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonSwayView.html", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonSwayView" ],
     [ "IBalloonViewBinding", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonViewBinding.html", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonViewBinding" ],
     [ "IBubbleMergeReactive", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IBubbleMergeReactive.html", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IBubbleMergeReactive" ],
@@ -23,6 +25,9 @@ var namespaceBalloonParty_1_1Balloon_1_1View =
     [ "NukeCloudView", "classBalloonParty_1_1Balloon_1_1View_1_1NukeCloudView.html", "classBalloonParty_1_1Balloon_1_1View_1_1NukeCloudView" ],
     [ "PaintDripOverlay", "classBalloonParty_1_1Balloon_1_1View_1_1PaintDripOverlay.html", "classBalloonParty_1_1Balloon_1_1View_1_1PaintDripOverlay" ],
     [ "ParticleColorableRenderer", "classBalloonParty_1_1Balloon_1_1View_1_1ParticleColorableRenderer.html", "classBalloonParty_1_1Balloon_1_1View_1_1ParticleColorableRenderer" ],
+    [ "RipeBubbleBurstView", "classBalloonParty_1_1Balloon_1_1View_1_1RipeBubbleBurstView.html", "classBalloonParty_1_1Balloon_1_1View_1_1RipeBubbleBurstView" ],
+    [ "SoapBubbleHop", "classBalloonParty_1_1Balloon_1_1View_1_1SoapBubbleHop.html", "classBalloonParty_1_1Balloon_1_1View_1_1SoapBubbleHop" ],
+    [ "SoapBubbleSprites", "classBalloonParty_1_1Balloon_1_1View_1_1SoapBubbleSprites.html", "classBalloonParty_1_1Balloon_1_1View_1_1SoapBubbleSprites" ],
     [ "SpriteColorableRenderer", "classBalloonParty_1_1Balloon_1_1View_1_1SpriteColorableRenderer.html", "classBalloonParty_1_1Balloon_1_1View_1_1SpriteColorableRenderer" ],
     [ "ToughSnakeSpringView", "classBalloonParty_1_1Balloon_1_1View_1_1ToughSnakeSpringView.html", "classBalloonParty_1_1Balloon_1_1View_1_1ToughSnakeSpringView" ]
 ];

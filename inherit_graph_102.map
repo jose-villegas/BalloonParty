@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html" title="Tuning for the float&#45;away board effect: balloons float up on their own while swaying on a sine and ti..." alt="" coords="5,5,264,50"/>
+<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBubbleMergeCueSettings.html" title="How a bubble merge looks: the bubbles a giver passes on while it stays hop one by one to the receiver..." alt="" coords="5,5,255,50"/>
+<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Configuration_1_1Balloons_1_1BubbleMergeCueSettings.html" title=" " alt="" coords="303,5,548,50"/>
+<area shape="poly" id="edge80_Node000000_Node000001" title=" " alt="" coords="270,25,305,28,299,28,270,30"/>
 </map>

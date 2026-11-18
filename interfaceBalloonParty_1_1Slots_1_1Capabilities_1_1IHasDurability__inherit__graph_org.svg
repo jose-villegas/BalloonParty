@@ -21,7 +21,7 @@
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html" target="_top" xlink:title=" ">
+<g id="a_Node000003"><a xlink:href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html" target="_top" xlink:title="The plain balloon (and its silver, gold and rainbow skins): paintable, carries an item,...">
 <polygon fill="white" stroke="#666666" points="571.5,-241.5 419.75,-241.5 419.75,-208 571.5,-208 571.5,-241.5"/>
 <text xml:space="preserve" text-anchor="start" x="427.75" y="-228" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
 <text xml:space="preserve" text-anchor="middle" x="495.62" y="-215.25" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonModel</text>
@@ -40,7 +40,7 @@
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:href="classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html" target="_top" xlink:title="At destruction, distributes one ScoreAttribution per remaining bubble to a random palette colour....">
+<g id="a_Node000004"><a xlink:href="classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html" target="_top" xlink:title="Each hit scores the bubbles the cluster held, spread over random palette colours, and breaks the stre...">
 <polygon fill="white" stroke="#666666" points="571.5,-189.5 419.75,-189.5 419.75,-156 571.5,-156 571.5,-189.5"/>
 <text xml:space="preserve" text-anchor="start" x="427.75" y="-176" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
 <text xml:space="preserve" text-anchor="middle" x="495.62" y="-163.25" font-family="Helvetica,sans-Serif" font-size="10.00">BubbleClusterModel</text>

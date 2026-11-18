@@ -4,6 +4,6 @@
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="77,49,137,96,132,99,75,54"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="114,14,211,42"/>
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="164,55,165,99,160,96,160,59"/>
-<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Balloon_1_1Controller_1_1IBalloonPopper.html" title="Pops one balloon outside the hit path: its pop VFX play (unless asked not to), its slot is freed and ..." alt="" coords="235,5,460,50"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Balloon_1_1Controller_1_1IBalloonPopper.html" title="Takes one balloon off the board outside the hit path: popped (TryPopSingle: its pop VFX play unless a..." alt="" coords="235,5,460,50"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="292,57,207,100,205,95,287,58"/>
 </map>

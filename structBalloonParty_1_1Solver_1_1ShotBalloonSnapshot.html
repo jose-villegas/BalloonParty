@@ -130,9 +130,12 @@ $(function(){initNavTree('structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.ht
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a5de603fe9f4b4f8e42870b24e84cd978" id="r_a5de603fe9f4b4f8e42870b24e84cd978"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5de603fe9f4b4f8e42870b24e84cd978">ForColorTarget</a> (Vector2 position, float radius, string colorId, int scoreValue, int hitsRemaining, <a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html">BalanceProfile</a>? balance=null, <a class="el" href="structBalloonParty_1_1Solver_1_1ItemProfile.html">ItemProfile</a>? item=null)</td></tr>
-<tr class="memdesc:a5de603fe9f4b4f8e42870b24e84cd978"><td class="mdescLeft">&#160;</td><td class="mdescRight">A poppable/deflectable colour-scoring target — mirrors a live balloon with <code>IHasColor</code> (streak + colour adoption rules apply).  <br /></td></tr>
-<tr class="separator:a5de603fe9f4b4f8e42870b24e84cd978"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4c55d7b63da751ed72d55772f522bd4" id="r_ab4c55d7b63da751ed72d55772f522bd4"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab4c55d7b63da751ed72d55772f522bd4">ForBubbleClusterTarget</a> (Vector2 position, float radius, int bubbles, <a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html">BalanceProfile</a>? balance=null, bool ripe=false)</td></tr>
+<tr class="memdesc:ab4c55d7b63da751ed72d55772f522bd4"><td class="mdescLeft">&#160;</td><td class="mdescRight">A bubble cluster: colourless, washes the shot's colour on any contact, loses a bubble to each ordinary hit while the shot flies on, and scores the bubbles it held on every hit, breaking the streak.  <br /></td></tr>
+<tr class="separator:ab4c55d7b63da751ed72d55772f522bd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf8e7a91592d4ca8dd8cd3f83c0d3a85" id="r_aaf8e7a91592d4ca8dd8cd3f83c0d3a85"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaf8e7a91592d4ca8dd8cd3f83c0d3a85">ForColorTarget</a> (Vector2 position, float radius, string colorId, int scoreValue, int hitsRemaining, <a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html">BalanceProfile</a>? balance=null, <a class="el" href="structBalloonParty_1_1Solver_1_1ItemProfile.html">ItemProfile</a>? item=null, int coat=0)</td></tr>
+<tr class="memdesc:aaf8e7a91592d4ca8dd8cd3f83c0d3a85"><td class="mdescLeft">&#160;</td><td class="mdescRight">A poppable/deflectable colour-scoring target — mirrors a live balloon with <code>IHasColor</code> (streak + colour adoption rules apply).  <br /></td></tr>
+<tr class="separator:aaf8e7a91592d4ca8dd8cd3f83c0d3a85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a26f8a7fb0a3cd9dae0934d4fae2c11a0" id="r_a26f8a7fb0a3cd9dae0934d4fae2c11a0"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a26f8a7fb0a3cd9dae0934d4fae2c11a0">ForDiscoTarget</a> (Vector2 position, float radius, <a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html">BalanceProfile</a>? balance=null)</td></tr>
 <tr class="memdesc:a26f8a7fb0a3cd9dae0934d4fae2c11a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The disco ball reward balloon — see <a class="el" href="#aff353a649e17e25b440057a5f9f9e006" title="A plated reward balloon: colourless, deflecting every ordinary hit forever (int.MaxValue,...">ForPlatedTarget</a>.  <br /></td></tr>
 <tr class="separator:a26f8a7fb0a3cd9dae0934d4fae2c11a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -145,20 +148,23 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:ae668f67590c42d5103a8a4fc47647e70" id="r_ae668f67590c42d5103a8a4fc47647e70"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae668f67590c42d5103a8a4fc47647e70">ForNukeTarget</a> (Vector2 position, float radius, int hitsRemaining, <a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html">BalanceProfile</a>? balance=null)</td></tr>
 <tr class="memdesc:ae668f67590c42d5103a8a4fc47647e70"><td class="mdescLeft">&#160;</td><td class="mdescRight">The nuke reward balloon: a plated balloon that dents.  <br /></td></tr>
 <tr class="separator:ae668f67590c42d5103a8a4fc47647e70"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0a61d12c30167f287dd79b24044094d" id="r_ac0a61d12c30167f287dd79b24044094d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac0a61d12c30167f287dd79b24044094d">ForRainbowTarget</a> (Vector2 position, float radius, string colorId, int scoreValue, int hitsRemaining, <a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html">BalanceProfile</a>? balance=null, <a class="el" href="structBalloonParty_1_1Solver_1_1ItemProfile.html">ItemProfile</a>? item=null)</td></tr>
-<tr class="memdesc:ac0a61d12c30167f287dd79b24044094d"><td class="mdescLeft">&#160;</td><td class="mdescRight">A poppable rainbow/wildcard target — mirrors a live balloon whose colour is the reserved <code><a class="el" href="classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#ab1c22d1c348537d6dc9985e1c5728746" title="Reserved color id for the &quot;all colors&quot; wildcard (the rainbow balloon).">GamePalette.RainbowColorId</a></code> marker (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#a29a9300265ef19bd0ca54ca7234d0358" title="True if colorId  is the reserved &quot;all colors&quot; wildcard (GamePalette.RainbowColorId).">IGamePalette.IsRainbow</a>).  <br /></td></tr>
-<tr class="separator:ac0a61d12c30167f287dd79b24044094d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5850b35ea332f29d41063a75752b723e" id="r_a5850b35ea332f29d41063a75752b723e"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5850b35ea332f29d41063a75752b723e">ForRainbowTarget</a> (Vector2 position, float radius, string colorId, int scoreValue, int hitsRemaining, <a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html">BalanceProfile</a>? balance=null, <a class="el" href="structBalloonParty_1_1Solver_1_1ItemProfile.html">ItemProfile</a>? item=null, int coat=0)</td></tr>
+<tr class="memdesc:a5850b35ea332f29d41063a75752b723e"><td class="mdescLeft">&#160;</td><td class="mdescRight">A poppable rainbow/wildcard target — mirrors a live balloon whose colour is the reserved <code><a class="el" href="classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#ab1c22d1c348537d6dc9985e1c5728746" title="Reserved color id for the &quot;all colors&quot; wildcard (the rainbow balloon).">GamePalette.RainbowColorId</a></code> marker (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#a29a9300265ef19bd0ca54ca7234d0358" title="True if colorId  is the reserved &quot;all colors&quot; wildcard (GamePalette.RainbowColorId).">IGamePalette.IsRainbow</a>).  <br /></td></tr>
+<tr class="separator:a5850b35ea332f29d41063a75752b723e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac17d2677c674928759ad59ff0110bb2d" id="r_ac17d2677c674928759ad59ff0110bb2d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac17d2677c674928759ad59ff0110bb2d">ForStaticContact</a> (Vector2Int slotIndex, Vector2 position, float radius, <a class="el" href="namespaceBalloonParty_1_1Solver.html#a1769ac6bda0231538d8f844507a8355d">ShotContactKind</a> kind, int hitsRemaining=1)</td></tr>
 <tr class="memdesc:ac17d2677c674928759ad59ff0110bb2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">A collision-only archetype with no score and no balance-grid presence — Phase A's interactive statics (Deflector/Gatekeeper/Absorber).  <br /></td></tr>
 <tr class="separator:ac17d2677c674928759ad59ff0110bb2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab188e52fddc2ea32587c6c4172aba22b" id="r_ab188e52fddc2ea32587c6c4172aba22b"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab188e52fddc2ea32587c6c4172aba22b">ForToughTarget</a> (Vector2 position, float radius, int scoreValue, int hitsRemaining, <a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html">BalanceProfile</a>? balance=null, bool washesProjectileColor=false, bool paysSourceColor=false)</td></tr>
-<tr class="memdesc:ab188e52fddc2ea32587c6c4172aba22b"><td class="mdescLeft">&#160;</td><td class="mdescRight">A colourless target scored via the flat/streak-breaking tough rule — mirrors <code>ToughBalloonModel</code> (durable), an Unbreakable (<code>hitsRemaining == int.MaxValue</code>, forever-deflecting, <em>paysSourceColor</em>  true — see <a class="el" href="structBalloonParty_1_1Solver_1_1ColorProfile.html#a01df88a108acf70d833a841b4627f5cc">ColorProfile.PaysSourceColor</a>'s doc), or a soap-washing cluster (<em>washesProjectileColor</em>  — mirrors <code>BubbleClusterModel</code>'s <code>IWashesProjectileColor</code>).  <br /></td></tr>
-<tr class="separator:ab188e52fddc2ea32587c6c4172aba22b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1af3af5172b849a107abfee1f52b675a" id="r_a1af3af5172b849a107abfee1f52b675a"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1af3af5172b849a107abfee1f52b675a">ForToughTarget</a> (Vector2 position, float radius, int scoreValue, int hitsRemaining, <a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html">BalanceProfile</a>? balance=null, bool washesProjectileColor=false, bool paysSourceColor=false, int coat=0)</td></tr>
+<tr class="memdesc:a1af3af5172b849a107abfee1f52b675a"><td class="mdescLeft">&#160;</td><td class="mdescRight">A colourless target scored via the flat/streak-breaking tough rule — mirrors <code>ToughBalloonModel</code> (durable), an Unbreakable (<code>hitsRemaining == int.MaxValue</code>, forever-deflecting, <em>paysSourceColor</em>  true — see <a class="el" href="structBalloonParty_1_1Solver_1_1ColorProfile.html#a01df88a108acf70d833a841b4627f5cc">ColorProfile.PaysSourceColor</a>'s doc).  <br /></td></tr>
+<tr class="separator:a1af3af5172b849a107abfee1f52b675a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a67a76a6a801a0d36bb033a22bf925304" id="r_a67a76a6a801a0d36bb033a22bf925304"><td class="memItemLeft" align="right" valign="top">readonly? <a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html">BalanceProfile</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a67a76a6a801a0d36bb033a22bf925304">Balance</a></td></tr>
 <tr class="separator:a67a76a6a801a0d36bb033a22bf925304"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9ff7a2fd86fa9933a7856c0b6688f30" id="r_ac9ff7a2fd86fa9933a7856c0b6688f30"><td class="memItemLeft" align="right" valign="top">readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac9ff7a2fd86fa9933a7856c0b6688f30">Coat</a></td></tr>
+<tr class="memdesc:ac9ff7a2fd86fa9933a7856c0b6688f30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Layers of foam on a plain balloon (<code>ICoatable.Coat</code>): each takes an ordinary hit of its own, which washes the shot and scores nothing.  <br /></td></tr>
+<tr class="separator:ac9ff7a2fd86fa9933a7856c0b6688f30"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf5fc63a971d17396a5dfb9f1b8275dd" id="r_abf5fc63a971d17396a5dfb9f1b8275dd"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="structBalloonParty_1_1Solver_1_1ColorProfile.html">ColorProfile</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abf5fc63a971d17396a5dfb9f1b8275dd">Color</a></td></tr>
 <tr class="separator:abf5fc63a971d17396a5dfb9f1b8275dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6eafeb123b55382b8abdb57ca2eeae69" id="r_a6eafeb123b55382b8abdb57ca2eeae69"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="namespaceBalloonParty_1_1Solver.html#a1769ac6bda0231538d8f844507a8355d">ShotContactKind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6eafeb123b55382b8abdb57ca2eeae69">ContactKind</a></td></tr>
@@ -174,6 +180,9 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a92073e768704a4c8d4bbdf53a2010a8b" id="r_a92073e768704a4c8d4bbdf53a2010a8b"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="namespaceBalloonParty_1_1Solver.html#a542a88f2d2015fc35cc0479c6b46c6a7">ShotRewardKind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a92073e768704a4c8d4bbdf53a2010a8b">Reward</a></td></tr>
 <tr class="memdesc:a92073e768704a4c8d4bbdf53a2010a8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Which reward balloon this is, if any: its pop pays no score and leaves the streak alone (no reward balloon is <code>IHasScoreColor</code>, so <code>ScoreController</code> skips it).  <br /></td></tr>
 <tr class="separator:a92073e768704a4c8d4bbdf53a2010a8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa863f690f3a8c63a997eff2bd229cfc2" id="r_aa863f690f3a8c63a997eff2bd229cfc2"><td class="memItemLeft" align="right" valign="top">readonly bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa863f690f3a8c63a997eff2bd229cfc2">Ripe</a></td></tr>
+<tr class="memdesc:aa863f690f3a8c63a997eff2bd229cfc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">A bubble cluster at the merge cap (<code>BubbleClusterModel.Ripe</code>): any damaging hit bursts it whole and ripples into its neighbours.  <br /></td></tr>
+<tr class="separator:aa863f690f3a8c63a997eff2bd229cfc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab92f235305c7983ce35cb6db4d72574" id="r_aab92f235305c7983ce35cb6db4d72574"><td class="memItemLeft" align="right" valign="top">readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab92f235305c7983ce35cb6db4d72574">ScoreValue</a></td></tr>
 <tr class="separator:aab92f235305c7983ce35cb6db4d72574"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7e0c199e855e1d5d1da073d4dbae491" id="r_ab7e0c199e855e1d5d1da073d4dbae491"><td class="memItemLeft" align="right" valign="top">readonly? Vector2Int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab7e0c199e855e1d5d1da073d4dbae491">StaticSlotIndex</a></td></tr>
@@ -188,8 +197,8 @@ Properties</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a66f93dcea7fa84deb57c02e643856224" id="r_a66f93dcea7fa84deb57c02e643856224"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a66f93dcea7fa84deb57c02e643856224">ShotBalloonSnapshot</a> (Vector2 position, float radius, int scoreValue, int hitsRemaining, <a class="el" href="structBalloonParty_1_1Solver_1_1ColorProfile.html">ColorProfile</a> color, <a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html">BalanceProfile</a>? balance, <a class="el" href="namespaceBalloonParty_1_1Solver.html#a1769ac6bda0231538d8f844507a8355d">ShotContactKind</a> contactKind, <a class="el" href="structBalloonParty_1_1Solver_1_1ItemProfile.html">ItemProfile</a>? item, Vector2Int? staticSlotIndex, <a class="el" href="namespaceBalloonParty_1_1Solver.html#a542a88f2d2015fc35cc0479c6b46c6a7">ShotRewardKind</a> reward=<a class="el" href="namespaceBalloonParty_1_1Solver.html#a542a88f2d2015fc35cc0479c6b46c6a7a6adf97f83acf6453d4a6a4b1070f3754">ShotRewardKind.None</a>)</td></tr>
-<tr class="separator:a66f93dcea7fa84deb57c02e643856224"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f3b60b2b224777a727e774927d65e3e" id="r_a4f3b60b2b224777a727e774927d65e3e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4f3b60b2b224777a727e774927d65e3e">ShotBalloonSnapshot</a> (Vector2 position, float radius, int scoreValue, int hitsRemaining, <a class="el" href="structBalloonParty_1_1Solver_1_1ColorProfile.html">ColorProfile</a> color, <a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html">BalanceProfile</a>? balance, <a class="el" href="namespaceBalloonParty_1_1Solver.html#a1769ac6bda0231538d8f844507a8355d">ShotContactKind</a> contactKind, <a class="el" href="structBalloonParty_1_1Solver_1_1ItemProfile.html">ItemProfile</a>? item, Vector2Int? staticSlotIndex, <a class="el" href="namespaceBalloonParty_1_1Solver.html#a542a88f2d2015fc35cc0479c6b46c6a7">ShotRewardKind</a> reward=<a class="el" href="namespaceBalloonParty_1_1Solver.html#a542a88f2d2015fc35cc0479c6b46c6a7a6adf97f83acf6453d4a6a4b1070f3754">ShotRewardKind.None</a>, int coat=0, bool ripe=false)</td></tr>
+<tr class="separator:a4f3b60b2b224777a727e774927d65e3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
@@ -199,10 +208,10 @@ Static Private Member Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>One board actor as the solver sees it — enough to reproduce pop/deflect/score rules without a live <code>IBalloonModel</code>. </p>
-<p>Grown by composition (<a class="el" href="plan_shot_solver_accuracy.html">Shot Solver Accuracy</a> §3): a geometry/scoring core, a <a class="el" href="structBalloonParty_1_1Solver_1_1ColorProfile.html" title="Colour identity of a snapshot target — split out of the geometry/scoring core so rainbow/wildcard fie...">ColorProfile</a>, an optional <a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html" title="Balance-grid identity/behaviour for a snapshot target — absent (null on the owning ShotBalloonSnapsho...">BalanceProfile</a> (null ⇒ no dynamic stub backs this entry — see <a class="el" href="classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html" title="Owns a real headless SlotGrid + GridBalanceQuery + BalancePlanner over stub actors,...">ShotBoardDynamics</a>'s null-<code><a class="el" href="namespaceBalloonParty_1_1Slots_1_1Actor.html">Actor</a></code> gating), a <a class="el" href="namespaceBalloonParty_1_1Solver.html#a1769ac6bda0231538d8f844507a8355d" title="How a contact resolves once the ray reaches it.">ShotContactKind</a>, and an optional <a class="el" href="structBalloonParty_1_1Solver_1_1ItemProfile.html" title="A hosted item&#39;s data-only identity + spin state — rides only ShotBalloonSnapshot.ForColorTarget/ Shot...">ItemProfile</a> (data-only in this phase — the item layer reads it starting Phase C1). Construct via the named factories, never the (private) field-order constructor directly — that is what keeps every caller's field mapping honest as the struct grows. </p>
+<p>Grown by composition (<a class="el" href="plan_shot_solver_accuracy.html">Shot Solver Accuracy</a> §3): a geometry/scoring core, a <a class="el" href="structBalloonParty_1_1Solver_1_1ColorProfile.html" title="Colour identity of a snapshot target — split out of the geometry/scoring core so rainbow/wildcard fie...">ColorProfile</a>, an optional <a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html" title="Balance-grid identity/behaviour for a snapshot target — absent (null on the owning ShotBalloonSnapsho...">BalanceProfile</a> (null ⇒ no dynamic stub backs this entry — see <a class="el" href="classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html" title="Owns a real headless SlotGrid + GridBalanceQuery + BalancePlanner over stub actors,...">ShotBoardDynamics</a>'s null-<code><a class="el" href="namespaceBalloonParty_1_1Slots_1_1Actor.html">Actor</a></code> gating), a <a class="el" href="namespaceBalloonParty_1_1Solver.html#a1769ac6bda0231538d8f844507a8355d" title="How a contact resolves once the ray reaches it.">ShotContactKind</a>, and an optional <a class="el" href="structBalloonParty_1_1Solver_1_1ItemProfile.html" title="A hosted item&#39;s data-only identity + spin state — rides only ShotBalloonSnapshot.ForColorTarget/ Shot...">ItemProfile</a> (data-only in this phase — the item layer reads it starting Phase C1). A plain balloon may wear foam (<a class="el" href="#ac9ff7a2fd86fa9933a7856c0b6688f30" title="Layers of foam on a plain balloon (ICoatable.Coat): each takes an ordinary hit of its own,...">Coat</a>) and a bubble cluster may be <a class="el" href="#aa863f690f3a8c63a997eff2bd229cfc2" title="A bubble cluster at the merge cap (BubbleClusterModel.Ripe): any damaging hit bursts it whole and rip...">Ripe</a>. Construct via the named factories, never the (private) field-order constructor directly — that is what keeps every caller's field mapping honest as the struct grows. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a66f93dcea7fa84deb57c02e643856224" name="a66f93dcea7fa84deb57c02e643856224"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a66f93dcea7fa84deb57c02e643856224">&#9670;&#160;</a></span>ShotBalloonSnapshot()</h2>
+<a id="a4f3b60b2b224777a727e774927d65e3e" name="a4f3b60b2b224777a727e774927d65e3e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f3b60b2b224777a727e774927d65e3e">&#9670;&#160;</a></span>ShotBalloonSnapshot()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -258,7 +267,17 @@ Static Private Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceBalloonParty_1_1Solver.html#a542a88f2d2015fc35cc0479c6b46c6a7">ShotRewardKind</a></td>          <td class="paramname"><span class="paramname"><em>reward</em></span><span class="paramdefsep"> = </span><span class="paramdefval"><a class="el" href="namespaceBalloonParty_1_1Solver.html#a542a88f2d2015fc35cc0479c6b46c6a7a6adf97f83acf6453d4a6a4b1070f3754">ShotRewardKind::None</a></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="namespaceBalloonParty_1_1Solver.html#a542a88f2d2015fc35cc0479c6b46c6a7">ShotRewardKind</a></td>          <td class="paramname"><span class="paramname"><em>reward</em></span><span class="paramdefsep"> = </span><span class="paramdefval"><a class="el" href="namespaceBalloonParty_1_1Solver.html#a542a88f2d2015fc35cc0479c6b46c6a7a6adf97f83acf6453d4a6a4b1070f3754">ShotRewardKind::None</a></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>coat</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>ripe</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -271,8 +290,55 @@ Static Private Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a5de603fe9f4b4f8e42870b24e84cd978" name="a5de603fe9f4b4f8e42870b24e84cd978"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5de603fe9f4b4f8e42870b24e84cd978">&#9670;&#160;</a></span>ForColorTarget()</h2>
+<a id="ab4c55d7b63da751ed72d55772f522bd4" name="ab4c55d7b63da751ed72d55772f522bd4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4c55d7b63da751ed72d55772f522bd4">&#9670;&#160;</a></span>ForBubbleClusterTarget()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a> BalloonParty.Solver.ShotBalloonSnapshot.ForBubbleClusterTarget </td>
+          <td>(</td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>position</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>radius</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>bubbles</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html">BalanceProfile</a>?</td>          <td class="paramname"><span class="paramname"><em>balance</em></span><span class="paramdefsep"> = </span><span class="paramdefval">null</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>ripe</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A bubble cluster: colourless, washes the shot's colour on any contact, loses a bubble to each ordinary hit while the shot flies on, and scores the bubbles it held on every hit, breaking the streak. </p>
+<p>A <em>ripe</em>  one bursts whole on any damaging hit and ripples into its neighbours. Mirrors <code>BubbleClusterModel</code>. </p>
+
+</div>
+</div>
+<a id="aaf8e7a91592d4ca8dd8cd3f83c0d3a85" name="aaf8e7a91592d4ca8dd8cd3f83c0d3a85"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf8e7a91592d4ca8dd8cd3f83c0d3a85">&#9670;&#160;</a></span>ForColorTarget()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -313,7 +379,12 @@ Static Private Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Solver_1_1ItemProfile.html">ItemProfile</a>?</td>          <td class="paramname"><span class="paramname"><em>item</em></span><span class="paramdefsep"> = </span><span class="paramdefval">null</span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Solver_1_1ItemProfile.html">ItemProfile</a>?</td>          <td class="paramname"><span class="paramname"><em>item</em></span><span class="paramdefsep"> = </span><span class="paramdefval">null</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>coat</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -519,8 +590,8 @@ Static Private Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ac0a61d12c30167f287dd79b24044094d" name="ac0a61d12c30167f287dd79b24044094d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac0a61d12c30167f287dd79b24044094d">&#9670;&#160;</a></span>ForRainbowTarget()</h2>
+<a id="a5850b35ea332f29d41063a75752b723e" name="a5850b35ea332f29d41063a75752b723e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5850b35ea332f29d41063a75752b723e">&#9670;&#160;</a></span>ForRainbowTarget()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -561,7 +632,12 @@ Static Private Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Solver_1_1ItemProfile.html">ItemProfile</a>?</td>          <td class="paramname"><span class="paramname"><em>item</em></span><span class="paramdefsep"> = </span><span class="paramdefval">null</span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Solver_1_1ItemProfile.html">ItemProfile</a>?</td>          <td class="paramname"><span class="paramname"><em>item</em></span><span class="paramdefsep"> = </span><span class="paramdefval">null</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>coat</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -572,7 +648,7 @@ Static Private Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>A poppable rainbow/wildcard target — mirrors a live balloon whose colour is the reserved <code><a class="el" href="classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#ab1c22d1c348537d6dc9985e1c5728746" title="Reserved color id for the &quot;all colors&quot; wildcard (the rainbow balloon).">GamePalette.RainbowColorId</a></code> marker (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#a29a9300265ef19bd0ca54ca7234d0358" title="True if colorId  is the reserved &quot;all colors&quot; wildcard (GamePalette.RainbowColorId).">IGamePalette.IsRainbow</a>). </p>
-<p>Scoring pays every board-allowed colour (see <a class="el" href="classBalloonParty_1_1Solver_1_1ShotSimulator.html#adbcab1422f5654df4fca61e07fbae07b" title="Simulates one aim direction to completion.">ShotSimulator.Simulate</a>'s <code>allowedColors</code>); the streak rule depends on the shot's own state (wildcard-buffed, colourless-deferred, or colour-anchored) — see <code><a class="el" href="classBalloonParty_1_1Solver_1_1ShotSimulator.html#a1838fa96f7dc61d7719e89dcef0f365d">ShotSimulator.ResolvePopScore</a></code>. </p>
+<p>Scoring pays every board-allowed colour (see <a class="el" href="classBalloonParty_1_1Solver_1_1ShotSimulator.html#a63721fa68cced1c8c2316b30193d0376" title="Simulates one aim direction to completion.">ShotSimulator.Simulate</a>'s <code>allowedColors</code>); the streak rule depends on the shot's own state (wildcard-buffed, colourless-deferred, or colour-anchored) — see <code><a class="el" href="classBalloonParty_1_1Solver_1_1ShotSimulator.html#a1838fa96f7dc61d7719e89dcef0f365d">ShotSimulator.ResolvePopScore</a></code>. </p>
 
 </div>
 </div>
@@ -623,8 +699,8 @@ Static Private Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ab188e52fddc2ea32587c6c4172aba22b" name="ab188e52fddc2ea32587c6c4172aba22b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab188e52fddc2ea32587c6c4172aba22b">&#9670;&#160;</a></span>ForToughTarget()</h2>
+<a id="a1af3af5172b849a107abfee1f52b675a" name="a1af3af5172b849a107abfee1f52b675a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1af3af5172b849a107abfee1f52b675a">&#9670;&#160;</a></span>ForToughTarget()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -665,7 +741,12 @@ Static Private Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>paysSourceColor</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>paysSourceColor</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>coat</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -675,7 +756,8 @@ Static Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>A colourless target scored via the flat/streak-breaking tough rule — mirrors <code>ToughBalloonModel</code> (durable), an Unbreakable (<code>hitsRemaining == int.MaxValue</code>, forever-deflecting, <em>paysSourceColor</em>  true — see <a class="el" href="structBalloonParty_1_1Solver_1_1ColorProfile.html#a01df88a108acf70d833a841b4627f5cc">ColorProfile.PaysSourceColor</a>'s doc), or a soap-washing cluster (<em>washesProjectileColor</em>  — mirrors <code>BubbleClusterModel</code>'s <code>IWashesProjectileColor</code>). </p>
+<p>A colourless target scored via the flat/streak-breaking tough rule — mirrors <code>ToughBalloonModel</code> (durable), an Unbreakable (<code>hitsRemaining == int.MaxValue</code>, forever-deflecting, <em>paysSourceColor</em>  true — see <a class="el" href="structBalloonParty_1_1Solver_1_1ColorProfile.html#a01df88a108acf70d833a841b4627f5cc">ColorProfile.PaysSourceColor</a>'s doc). </p>
+<p>A bubble cluster has its own factory, <a class="el" href="#ab4c55d7b63da751ed72d55772f522bd4" title="A bubble cluster: colourless, washes the shot&#39;s colour on any contact, loses a bubble to each ordinar...">ForBubbleClusterTarget</a>. A plain balloon with no colour lands here too, so it carries its <em>coat</em>  as a coloured one does. </p>
 
 </div>
 </div>
@@ -691,6 +773,22 @@ Static Private Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac9ff7a2fd86fa9933a7856c0b6688f30" name="ac9ff7a2fd86fa9933a7856c0b6688f30"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9ff7a2fd86fa9933a7856c0b6688f30">&#9670;&#160;</a></span>Coat</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Solver.ShotBalloonSnapshot.Coat</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Layers of foam on a plain balloon (<code>ICoatable.Coat</code>): each takes an ordinary hit of its own, which washes the shot and scores nothing. </p>
 
 </div>
 </div>
@@ -791,6 +889,22 @@ Static Private Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Which reward balloon this is, if any: its pop pays no score and leaves the streak alone (no reward balloon is <code>IHasScoreColor</code>, so <code>ScoreController</code> skips it). </p>
+
+</div>
+</div>
+<a id="aa863f690f3a8c63a997eff2bd229cfc2" name="aa863f690f3a8c63a997eff2bd229cfc2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa863f690f3a8c63a997eff2bd229cfc2">&#9670;&#160;</a></span>Ripe</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly bool BalloonParty.Solver.ShotBalloonSnapshot.Ripe</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>A bubble cluster at the merge cap (<code>BubbleClusterModel.Ripe</code>): any damaging hit bursts it whole and ripples into its neighbours. </p>
 
 </div>
 </div>

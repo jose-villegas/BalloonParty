@@ -7,6 +7,7 @@ var ShotBoardSnapshot_8cs =
     [ "BalloonParty.Solver.ShotBalloonState", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html", "structBalloonParty_1_1Solver_1_1ShotBalloonState" ],
     [ "BalloonParty.Solver.ShotContactKind", "namespaceBalloonParty_1_1Solver.html#a1769ac6bda0231538d8f844507a8355d", [
       [ "BalloonParty.Solver.ShotContactKind.Poppable", "namespaceBalloonParty_1_1Solver.html#a1769ac6bda0231538d8f844507a8355da5111807ed3e431097d2b56c0c3041e0b", null ],
-      [ "BalloonParty.Solver.ShotContactKind.Absorb", "namespaceBalloonParty_1_1Solver.html#a1769ac6bda0231538d8f844507a8355da6428bf61b19c9f6c90d034777a20ca77", null ]
+      [ "BalloonParty.Solver.ShotContactKind.Absorb", "namespaceBalloonParty_1_1Solver.html#a1769ac6bda0231538d8f844507a8355da6428bf61b19c9f6c90d034777a20ca77", null ],
+      [ "BalloonParty.Solver.ShotContactKind.PassThrough", "namespaceBalloonParty_1_1Solver.html#a1769ac6bda0231538d8f844507a8355dae1ff6a7360e99cb46db6bb5d3ff8e2eb", null ]
     ] ]
 ];
