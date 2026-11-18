@@ -94,8 +94,7 @@ maps to a shape whose vertex count equals it: `2` line, `3` triangle, `4` tetrah
 triangular prism, `7` pentagonal dipyramid (J13), `8` cube, `9` triangular cupola, `10` elongated square
 dipyramid (J15), `12` hexagonal prism, `15` pentagonal cupola, `20` dodecahedron, `30` a ball of six 5-point
 outline stars (pens trace each star's silhouette without crossing the interior; five pens per star),
-`50` parabidiminished rhombicosidodecahedron (J80, face-walked), and `100` a waving sphere (sine-wave vertex
-displacement gives it an organic pulsing look) — the upper tiers favour a readable **silhouette** over vertex
+`50` parabidiminished rhombicosidodecahedron (J80, face-walked), and `100` a waving sphere (a sine-wave swell in the shader gives it an organic pulsing look) — the upper tiers favour a readable **silhouette** over vertex
 density. Every shape partitions its edges into closed **walks** a pen orbits forever — face-tracing loops (the
 pen goes around each flat face) for the Johnson solids, one outline per star, latitude/longitude rings for the
 sphere; some walks trace curves (spherical arcs), others trace straight edges. Each shape also carries a
@@ -128,25 +127,20 @@ position is \f$C(t) + Q(t) \cdot \big(\text{radius} \cdot \text{scale}(t) \cdot 
   shot (all formations share the axis; a directionless pop falls back to a per-shape random axis).
 - \f$\text{local}_p(t)\f$ — the pen's position on its closed walk, orbiting continuously at `PenSpeed` **world units/second**
   (parameterized by arc length): the first lap draws the wireframe, later laps re-ink it; `k` pens tile a
-  period-`P` walk in \f$P/k\f$. `Coverage` (a style dial, Range 0.2–2) sets each pen's ribbon time — \f$\ge 1\f$ solid
+  period-`P` walk in \f$P/k\f$. `Coverage` (a style dial, Range 0.2–2) sets how long each pen's ink lasts — \f$\ge 1\f$ solid
   wireframe, \f$<1\f$ chasing comet heads, \f$\ll 1\f$ orbiting pearls.
 
-With trails (`Baked` off), the whole figure is **rigid in formation space**: each tick every live pen ribbon is re-framed through
-`FlyingTrail.TransformRibbon(oldCenter, newCenter, delta, scaleRatio)` (\f$p' = \text{newCenter} + \text{delta} \cdot (p - \text{oldCenter}) \cdot \text{scaleRatio}\f$;
-pure translation at scale 1 is the identity-delta fast path). The ribbon **is** scale-corrected — old
-ink shrinks with the shape as it tapers toward the bar, which matters most on the long-ribbon shapes (few pens
-sharing a long walk) where unscaled old ink would outlive the taper and hold the big silhouette.
+The ink is drawn from the same centre, tumble, scale and pen distance each tick (see below), so the figure shrinks and
+travels with the shape as it tapers toward the bar.
 
 ### How a shape is drawn
 
-A shape's ink is drawn one of two ways, chosen by `ShapeInkSettings.Baked` (in the BigScore settings of
-`ScoreTrailBehaviourConfiguration`; on as shipped). Both are fed the same centre, tumble, scale and pen distance
-each tick, so they show the same shape at the same moment.
-
-**Baked (the shipped look): a pen on paper.** Each shape in flight is one `ShapeInkView`: a `MeshRenderer` on the
-shape's baked wire mesh, drawn by the `BalloonParty/Sprite/ShapeInk` shader. There are no pen objects. The mesh is
-static; the ticker hands the view one number a frame, how far every pen has moved along its walk since the launch
-(`Elapsed × LocalPenSpeed`), and the shader works the rest out per pixel:
+Each shape in flight is one `ShapeInkView`: a `MeshRenderer` on the shape's baked wire mesh, drawn by the
+`BalloonParty/Sprite/ShapeInk` shader as a pen on paper. There are no pen objects. The mesh is static; the ticker
+hands the view one number a frame, how far every pen has moved along its walk since the launch
+(`Elapsed × LocalPenSpeed`), and the shader works the rest out per pixel. If the BigScore settings have no ink
+material or curves (`ShapeInkSettings.Drawable` is false), the shape flies undrawn, with one logged warning; its
+guide trail and score still work.
 
 - A walk of perimeter `P` carries `k` pens `P / k` apart, so a pixel that knows its own distance along the walk
   knows how far behind the last pen to pass it sits. That distance is the ink's age. The ink's width, opacity and
@@ -171,21 +165,12 @@ static; the ticker hands the view one number a frame, how far every pen has move
 
 `ShapeInkMeshBuilder` bakes the mesh from a `FormationShape` the first time that shape flies (straight edges are
 one segment, arcs are cut every 6 degrees at points a pen passes through), and `ShapeInkPool`, owned by the
-ticker, keeps the meshes, the two material copies and the pooled views. The waving sphere's displacement is
-repeated in the shader (`Wave`, which must match `ShapeCatalog.WavingSphereDisplacer`), applied to the whole
+ticker, keeps the meshes, the three material copies (shadow, far half, near half) and the pooled views. The waving
+sphere's swell is done in the shader (`Wave`, sized by `ShapeCatalog.WaveAmplitude`), applied to the whole
 wire at once, so the sphere ripples as one surface. A snapped shape fades by thinning its ink to nothing over the
 snap fade; a frozen one simply stops, since its pen distance stops advancing.
 
-The same shader has a second look, `_InkLook` 0, that lays the trail's own ribbon picture along the ink with a
-round ball for the pen and round joints at sharp corners. It is kept for comparison.
-
-**Trails (`Baked` off): a pooled trail per pen.** Each pen is a pooled `FlyingTrail` whose `TrailRenderer` the
-ticker moves along its walk, and whose recorded ribbon it re-frames every tick (below). This is how the shapes
-were first drawn. It costs one object, one ribbon copy in and out, and one trail mesh per pen per frame, and its
-look depends on the frame rate: a trail samples its pen once a frame, so corners are cut and a long frame thins
-the shape out.
-
-The guiding central trail (below) is a `FlyingTrail` either way.
+The guiding central trail (below) is a `FlyingTrail`, with a round tip.
 
 ### Overlap Resolution
 
@@ -205,8 +190,7 @@ overkill for a background flourish):
    `FormationOverlapResolver.Resolve` — a pure, allocation-free O(n²) relaxation pass — over EVERY formation
    occupying space this tick, including ones from other concurrent groups and ones the level-up cinematic has
    frozen (see **Stationary formations** below); **Pass C** (`FinishAdvance`) commits the corrected center
-   (rotation/spin, ribbon re-framing, pen placement, guide, anchor, arrival report — the same math the old
-   single-pass `AdvanceFormation` did, just fed the corrected center); **Pass D** is a dedicated backward sweep
+   (rotation/spin, the ink's frame, guide, anchor, arrival report, all fed the corrected center); **Pass D** is a dedicated backward sweep
    that releases whatever Pass C flagged finished, kept separate from the other passes because removing a
    formation from `_states` by a recorded index mid-pass would go stale the instant an earlier-recorded
    formation gets relocated by a later swap-remove in the same frame.
@@ -252,9 +236,9 @@ overkill for a background flourish):
 
 **Transport bridge** — the group's anchor `TrailFlight` handle is the pause/snap/slow-mo interface, shared by
 every formation in the group (so a cinematic pause/completion fans out to the whole constellation), polled per
-tick: `Paused` freezes the formation and inflates its ribbon time so the drawn figure survives the freeze; `Idle`
+tick: `Paused` freezes the formation's clock, and the ink's age is read from that clock, so the drawn figure survives the freeze; `Idle`
 (the pan-in or a `CompleteAll` drove the principal home) **snaps** — report the value now at the anchor's
-position, fade the live pens out (unscaled, freeze-safe), release; `Speed` scales the formation clock (slow-mo).
+position, thin the ink out (unscaled, freeze-safe), release; `Speed` scales the formation clock (slow-mo).
 The flight stays registered (InFlight) through the group's whole life and is unregistered only once the last
 formation finishes, so a principal that lands first never falsely snaps the others. A group-CTS cancellation (run
 reset) releases everything **without** reporting. A `Reported` guard (plus the reporter's own backstop) keeps a

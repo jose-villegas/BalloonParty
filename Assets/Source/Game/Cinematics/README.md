@@ -66,9 +66,9 @@ Now that big scores fly as drawn constellations, snapping them away read as hars
    *confirm* the level-up, and nothing else would force those arrivals — the popup would never fire (a
    soft-lock, worst for a small `DefaultScore` final pop where one trail alone can't reach the colour's
    threshold). Letting them fly until `Pending` means every confirming arrival has already landed, so the
-   freeze can only ever catch pure visual survivors. The `ShapeFormationTicker` freezes each frozen
-   formation and inflates its ribbons; `TrailFlight.Pause` does the same for a plain `DefaultScore` orb
-   (`FlyingTrail.FreezeRibbon`) so its tail doesn't decay behind the popup.
+   freeze can only ever catch pure visual survivors. The `ShapeFormationTicker` stops the clock of each frozen
+   formation, which the drawn ink's age is read from, so the figure stays drawn; `TrailFlight.Pause` lengthens the
+   ribbon of a plain `DefaultScore` orb (`FlyingTrail.FreezeRibbon`) so its tail doesn't decay behind the popup.
 2. **Resolve at the transition seam.** `ScoreTrailService` implements `ITransitionOutgoingContent`; its
    `HoldOutgoing` (called by `LevelTransitionController` mid-Ascent, while the phase is still `Transitioning`)
    calls `Flights.CompleteAll()`. Each survivor's arrival fires — `ScoreController` banks its points (they were

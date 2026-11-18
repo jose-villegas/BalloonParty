@@ -27,30 +27,22 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 87d378ead725e435ea59d3efd530d934, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _PencilNoiseTex:
         m_Texture: {fileID: 2800000, guid: cc8b8fafc0034e8eabb2d4d54b345b66, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _HeadCentre: 0.4
     - _InkHalf: 0
-    - _InkLook: 1
     - _InkShadow: 0
     - _ShadowStencilComp: 8
     - _ShadowStencilPass: 0
     m_Colors:
-    - _BandHalf: {r: 0.27, g: 0.07, b: 0, a: 0}
     - _Far: {r: 0.5, g: 0.75, b: 0, a: 0.3}
     - _PenEdge: {r: 0.35, g: 0.12, b: 2.5, a: 0.18}
     - _PenGrain: {r: 0.45, g: 2, b: 6, a: 0}
     - _PenHand: {r: 0.012, g: 0.35, b: 0.25, a: 0.6}
     - _PenLight: {r: 1, g: 0.4, b: 0.4, a: 0}
-    - _PenRim: {r: 1.25, g: 0.7, b: 0.72, a: 0.45}
     - _PenWet: {r: 1, g: 0.12, b: 0.2, a: 1}
     - _Shadow: {r: 0.035, g: 0.45, b: 0.85, a: 1.5}
     - _ShadowColor: {r: 0.08, g: 0.1, b: 0.18, a: 1}

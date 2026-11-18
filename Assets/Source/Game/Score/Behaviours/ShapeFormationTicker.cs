@@ -99,8 +99,9 @@ namespace BalloonParty.Game.Score.Behaviours
     ///     • Transport bridge: every formation in a group shares a single <see cref="TrailFlight"/> anchor.
     ///       The flight stays registered (InFlight) through the group's whole life and is unregistered only
     ///       once the last formation finishes — if a principal that lands first unregistered eagerly, the
-    ///       cinematic would see Idle and snap the remaining shapes mid-travel. Paused inflates ribbon time
-    ///       so the drawn figure survives the freeze; Idle triggers the SnapFade.
+    ///       cinematic would see Idle and snap the remaining shapes mid-travel. Paused stops the formation's
+    ///       clock, and the ink's age is read from that clock, so the drawn figure survives the freeze; Idle
+    ///       triggers the SnapFade.
     ///
     ///     • <c>ReportOnce</c> publishes <c>ScoreTrailArrivedMessage</c> SYNCHRONOUSLY (MessagePipe) from
     ///       both Pass A (<c>Snap</c>) and Pass C (<c>FinishAdvance</c>). A subscriber that re-entrantly
@@ -112,16 +113,14 @@ namespace BalloonParty.Game.Score.Behaviours
     /// </summary>
     internal sealed class ShapeFormationTicker : ILateTickable, IScoreShapeCover, System.IDisposable
     {
-        private const int MaxVertexCount = 100;
         private const float SnapFadeDuration = 0.1f;
         private const float MinDuration = 0.0001f;
-        private const float FreezeRibbonTime = 600f;
 
         // Vertices rounding each end of the guiding trail: enough for its head to read as a round tip.
         private const int GuideTipVertices = 6;
 
-        // How fast the tumble's angular velocity eases toward its target (per second). Ramping it in keeps a
-        // high spin speed from snapping the ribbons with a big rotation delta on the first ticks.
+        // How fast the tumble's angular velocity eases toward its target (per second). Ramping it in winds a
+        // high spin speed up from rest instead of starting the shape at full speed.
         private const float SpinRampRate = 2f;
 
         private readonly List<FormationState> _states = new(16);
@@ -141,8 +140,7 @@ namespace BalloonParty.Game.Score.Behaviours
         // Pass C (their Center/LastScale are already stable, that's what "frozen"/"fading" means).
         private readonly List<FormationState> _stationary = new(8);
 
-        // The baked way of drawing a shape (ShapeInkSettings.Baked): one mesh view per formation in place of a
-        // trail per pen.
+        // What draws the shapes: one baked mesh view per formation, whose shader moves the pens.
         private readonly ShapeInkPool _ink = new();
 
         // Grow-only scratch for FormationOverlapResolver.Resolve's O(n²) pass — resized only when too small
@@ -197,8 +195,8 @@ namespace BalloonParty.Game.Score.Behaviours
             // across ticks instead of being recomputed fresh from CandidateCenter alone every frame.
             ResolveOverlaps(_pending, _stationary, dt);
 
-            // Pass C: commit each pending formation to its corrected center — rotation/ribbon reframe/pen
-            // placement/guide/anchor/report, same math the old single-pass AdvanceFormation did, just fed the
+            // Pass C: commit each pending formation to its corrected center — rotation/ink/guide/anchor/report,
+            // same math the old single-pass AdvanceFormation did, just fed the
             // corrected center instead of the raw travel one. Finished formations are flagged (PendingRelease),
             // not removed here — removing by a recorded _states index would go stale the instant an earlier,
             // already-recorded pending formation gets relocated by a later swap-remove elsewhere this frame.
@@ -223,8 +221,8 @@ namespace BalloonParty.Game.Score.Behaviours
 #if UNITY_EDITOR
         // Editor-only: the live world center and CURRENT bounding radius of every in-flight formation, for
         // BigScoreFormationGizmos. FormationRadius is the shape's radius at scale 1 (unit-magnitude vertices);
-        // LastScale is the travel curve's most recent sample (LocalToWorld multiplies every vertex by both),
-        // so their product is the sphere every pen is currently orbiting inside of.
+        // LastScale is the travel curve's most recent sample (the ink is drawn at their product), so that
+        // product is the sphere every pen is currently orbiting inside of.
         internal void ForEachActiveBounds(System.Action<Vector3, float> visit)
         {
             for (var i = 0; i < _states.Count; i++)
@@ -244,9 +242,9 @@ namespace BalloonParty.Game.Score.Behaviours
             return group;
         }
 
-        // Acquires the n orbiting pens and seeds a pooled formation state under its group. Pens are distributed
-        // across the shape's walks (PensPerWalk), evenly phase-offset along each, and each gets a per-walk ribbon
-        // coverage time so k pens tile a period-P walk (computed at scale 1 — conservative as the shape shrinks).
+        // Seeds a pooled formation state under its group and takes its ink view and guiding trail. The pens are
+        // not objects: the ink's shader places them from the distance travelled (ApplyInk), spread across the
+        // shape's walks (PensPerWalk) and evenly along each.
         internal void LaunchFormation(FormationGroup group, in BigScoreFormationRequest request)
         {
             var state = _pool.Count > 0 ? _pool.Pop() : new FormationState();
@@ -254,61 +252,21 @@ namespace BalloonParty.Game.Score.Behaviours
 
             var shape = request.Shape;
             var penSpeed = Mathf.Max(group.Settings.PenSpeed * shape.PenSpeedScale, MinDuration);
-            var coverage = group.Settings.Coverage;
             state.LocalPenSpeed = penSpeed / Mathf.Max(request.FormationRadius, MinDuration);
-
-            // Baked ink needs no pen objects: its shader places the pens from the time alone.
-            var ink = group.Settings.Ink;
-            var pen = 0;
-            for (var w = 0; w < shape.Walks.Length && !ink.Baked; w++)
-            {
-                var perimeter = shape.Perimeters[w];
-                var k = shape.PensPerWalk[w];
-                if (k <= 0)
-                {
-                    continue;
-                }
-
-                // Coverage = a k-pen share of one lap, scaled by the style dial. Lap period is the WORLD perimeter
-                // (at scale 1) over the pen speed, so ink density reads the same across shape sizes.
-                var lapPeriod = request.FormationRadius * perimeter / penSpeed;
-                var ribbonTime = lapPeriod / k * coverage;
-                for (var j = 0; j < k; j++)
-                {
-                    state.PenWalk[pen] = w;
-                    state.PenStartDist[pen] = (float)j / k * perimeter;
-                    state.PenRibbonTime[pen] = ribbonTime;
-                    state.PenSegment[pen] = 0;
-
-                    var vertex = group.Spawner.Acquire(group.Color);
-                    vertex.SetRibbonTime(ribbonTime);
-                    vertex.transform.position = request.Origin;
-                    vertex.transform.localScale = Vector3.one;
-                    vertex.ClearRibbon();
-                    // Pen down from t = 0: the shape blooms from a point (scale 0), so there are no deploy spokes.
-                    vertex.SetRibbonEmitting(true);
-                    state.Vertices[pen] = vertex;
-                    pen++;
-                }
-            }
-
-            state.VertexCount = pen;
-            state.VerticesLive = true;
 
             // A guiding central trail rides the formation centre, drawing the real travel path to the
             // bar underneath the shape — a comet line anchoring each constellation member to its bar.
-            // Its ribbon is deliberately NOT re-framed (its path is genuine motion, not shape geometry).
+            // It is a real trail, not part of the ink: its path is genuine motion, not shape geometry.
             state.Guide = group.Spawner.Acquire(group.Color);
             state.Guide.transform.position = state.Center;
             state.Guide.transform.localScale = Vector3.one;
             state.Guide.ClearRibbon();
             state.Guide.SetRoundTip(GuideTipVertices);
 
-            if (ink.Baked)
-            {
-                state.Ink = _ink.Acquire(shape, in ink, group.Color, state.Guide);
-                ApplyInk(state, 1f);
-            }
+            // Ink down from t = 0: the shape blooms from a point (scale 0), so there are no deploy spokes.
+            var ink = group.Settings.Ink;
+            state.Ink = _ink.Acquire(shape, in ink, group.Color, state.Guide);
+            ApplyInk(state, 1f);
 
             // Sample the random landing offset ONCE; the live target re-reads the endpoint centre every tick.
             if (group.Target != null)
@@ -333,13 +291,13 @@ namespace BalloonParty.Game.Score.Behaviours
             // Run reset recreated the group CTS — discard WITHOUT reporting (the reset clears the run's score).
             if (group.CancellationToken.IsCancellationRequested)
             {
-                ReleaseVertices(state);
+                ReleaseDrawing(state);
                 ReleaseStateAt(index);
                 DecrementGroup(group);
                 return;
             }
 
-            // Post-snap: run the unscaled vertex fade-out to completion, then drop the state. Still-fading
+            // Post-snap: run the unscaled ink fade-out to completion, then drop the state. Still-fading
             // formations still occupy screen space, so they stay a (weight-0, immovable) repeller until gone.
             if (state.Phase == FormationPhase.SnapFade)
             {
@@ -358,18 +316,15 @@ namespace BalloonParty.Game.Score.Behaviours
 
             var flightPhase = group.Flight.Phase;
 
-            // Cinematic froze the principal — freeze the whole formation and inflate the ribbons so the drawn
-            // figure doesn't decay while the cinematic owns the anchor transform. Still stays a repeller: a
-            // full-size, frozen constellation is exactly when a flythrough from another group is most visible.
+            // Cinematic froze the principal — freeze the whole formation. Its clock stops with it, and the ink's
+            // age is read from that clock, so the drawn figure doesn't decay while the cinematic owns the anchor
+            // transform. Still stays a repeller: a full-size, frozen constellation is exactly when a flythrough
+            // from another group is most visible.
             if (flightPhase == FlightPhase.Paused)
             {
-                FreezeRibbons(state);
                 _stationary.Add(state);
                 return;
             }
-
-            // Unpaused — restore the computed coverage times before advancing.
-            ThawRibbons(state);
 
             // Cinematic pan-in / CompleteAll drove the principal to Idle — snap this formation now.
             if (flightPhase == FlightPhase.Idle)
@@ -385,8 +340,7 @@ namespace BalloonParty.Game.Score.Behaviours
         // Pass A (first half of the old AdvanceFormation): where this formation WANTS to be and how big it
         // WANTS to be this frame, before any cross-formation overlap correction. Advances Elapsed (must happen
         // exactly once per tick) and evaluates the deterministic travel/scale curves; does not touch Center,
-        // Rotation or LastScale yet — those still hold last frame's values, needed as FinishAdvance's "old"
-        // state for ribbon re-framing.
+        // Rotation or LastScale yet — FinishAdvance commits those once Pass B has corrected the center.
         private static void ComputeCandidateCenter(FormationState state, float dt)
         {
             state.Elapsed += dt;
@@ -496,62 +450,27 @@ namespace BalloonParty.Game.Score.Behaviours
         }
 
         // Pass C (second half of the old AdvanceFormation): commits the formation to its CORRECTED center.
-        // TransformRibbon is already generic to arbitrary translation, so feeding it the corrected center
-        // instead of the raw travel one needs no changes there; state.Guide rides the corrected center too —
-        // it's documented as drawing the formation's ACTUAL path, so showing the corrected wiggle is the point.
+        // The ink is one mesh posed afresh each tick, so it follows the corrected center with nothing to
+        // re-frame; state.Guide rides the corrected center too — it's documented as drawing the formation's
+        // ACTUAL path, so showing the corrected wiggle is the point.
         private void FinishAdvance(FormationState state, float dt)
         {
             var settings = state.Group.Settings;
-            var oldCenter = state.Center;
-            var oldRotation = state.Rotation;
             var newCenter = state.CandidateCenter + state.SeparationOffset;
-            var scale = state.CandidateScale;
 
             // Tumble spins from t = 0 (invisible while the shape is a point). Ease the angular VELOCITY toward
-            // its target and integrate the angle, so a high spin speed ramps in instead of snapping the ribbons
-            // with a large rotation delta on the first ticks.
+            // its target and integrate the angle, so a high spin speed winds up instead of starting at full.
             var targetSpin = settings.SpinSpeedDegrees * state.Shape.SpinScale;
             state.SpinSpeed = Mathf.Lerp(state.SpinSpeed, targetSpin, 1f - Mathf.Exp(-SpinRampRate * dt));
             state.SpinAngle += state.SpinSpeed * dt;
-            var newRotation = Quaternion.AngleAxis(state.SpinAngle, state.SpinAxis) * state.InitialRotation;
-            var delta = newRotation * Quaternion.Inverse(oldRotation);
-
-            // Re-frame the drawn ink by the same translate+tumble+SCALE the live frame moved through, so the
-            // drawn figure shrinks with the shape as it approaches the bar. Scale correction matters most on
-            // the long-ribbon shapes (the 12's one-pen-per-pentagram walks): un-scaled old ink outlives the
-            // taper and holds the big silhouette. The ratio guards the curve's taper through zero — once the
-            // old scale is ~0 every recorded point already sits at the centre, so 0 simply keeps it there.
-            var scaleRatio = state.LastScale > 1e-4f ? scale / state.LastScale : (scale > 1e-4f ? 1f : 0f);
-            var reframeRibbons = state.VerticesLive
-                && (newCenter != oldCenter || delta != Quaternion.identity || !Mathf.Approximately(scaleRatio, 1f));
 
             state.Center = newCenter;
-            state.Rotation = newRotation;
-            state.LastScale = scale;
+            state.Rotation = Quaternion.AngleAxis(state.SpinAngle, state.SpinAxis) * state.InitialRotation;
+            state.LastScale = state.CandidateScale;
 
             if (state.Guide != null)
             {
                 state.Guide.transform.position = newCenter;
-            }
-
-            // Reframe each pen's ribbon before writing its new head position — same per-pen order as before,
-            // just one pass over the pens instead of two.
-            for (var p = 0; p < state.VertexCount; p++)
-            {
-                if (reframeRibbons)
-                {
-                    state.Vertices[p].TransformRibbon(oldCenter, newCenter, delta, scaleRatio);
-                }
-
-                var local = PenOrbitLocal(state, p);
-                if (state.Shape.Displacer != null)
-                {
-                    local = state.Shape.Displacer(local, state.Elapsed,
-                        state.Group.Settings.DisplacementScale * state.Shape.DisplacementScale,
-                        state.Group.Settings.DisplacementSpeed * state.Shape.DisplacementSpeed);
-                }
-
-                state.Vertices[p].transform.position = LocalToWorld(state, local * scale);
             }
 
             ApplyInk(state, 1f);
@@ -563,16 +482,15 @@ namespace BalloonParty.Game.Score.Behaviours
             }
 
             ReportOnce(state, state.LiveTarget);
-            ReleaseVertices(state);
+            ReleaseDrawing(state);
             state.PendingRelease = true;
         }
 
-        // True once the fade completes and the vertices have been released.
+        // True once the fade completes and the ink and guide have been released.
         private bool AdvanceSnapFade(FormationState state, float unscaledDt)
         {
             state.FadeElapsed += unscaledDt;
             var fade = Mathf.Clamp01(state.FadeElapsed / SnapFadeDuration);
-            ScaleVertices(state, 1f - fade);
             ApplyInk(state, 1f - fade);
 
             if (fade < 1f)
@@ -580,7 +498,7 @@ namespace BalloonParty.Game.Score.Behaviours
                 return false;
             }
 
-            ReleaseVertices(state);
+            ReleaseDrawing(state);
             return true;
         }
 
@@ -589,7 +507,7 @@ namespace BalloonParty.Game.Score.Behaviours
         {
             ReportOnce(state, group.Anchor != null ? group.Anchor.position : state.Center);
 
-            if (state.VerticesLive)
+            if (state.Guide != null)
             {
                 state.Phase = FormationPhase.SnapFade;
                 state.FadeElapsed = 0f;
@@ -598,36 +516,6 @@ namespace BalloonParty.Game.Score.Behaviours
 
             ReleaseStateAt(index);
             DecrementGroup(group);
-        }
-
-        private void FreezeRibbons(FormationState state)
-        {
-            if (state.Frozen || !state.VerticesLive)
-            {
-                return;
-            }
-
-            for (var i = 0; i < state.VertexCount; i++)
-            {
-                state.Vertices[i].SetRibbonTime(FreezeRibbonTime);
-            }
-
-            state.Frozen = true;
-        }
-
-        private void ThawRibbons(FormationState state)
-        {
-            if (!state.Frozen || !state.VerticesLive)
-            {
-                return;
-            }
-
-            for (var i = 0; i < state.VertexCount; i++)
-            {
-                state.Vertices[i].SetRibbonTime(state.PenRibbonTime[i]);
-            }
-
-            state.Frozen = false;
         }
 
         private static void ReportOnce(FormationState state, Vector3 at)
@@ -656,7 +544,7 @@ namespace BalloonParty.Game.Score.Behaviours
             ReleaseGroup(group);
         }
 
-        private void ReleaseVertices(FormationState state)
+        private void ReleaseDrawing(FormationState state)
         {
             if (state.Guide != null)
             {
@@ -669,22 +557,6 @@ namespace BalloonParty.Game.Score.Behaviours
                 _ink.Release(state.Ink);
                 state.Ink = null;
             }
-
-            if (!state.VerticesLive)
-            {
-                return;
-            }
-
-            for (var i = 0; i < state.VertexCount; i++)
-            {
-                if (state.Vertices[i] != null)
-                {
-                    state.Group.Spawner.Release(state.Vertices[i]);
-                    state.Vertices[i] = null;
-                }
-            }
-
-            state.VerticesLive = false;
         }
 
         private void ReleaseStateAt(int index)
@@ -738,13 +610,8 @@ namespace BalloonParty.Game.Score.Behaviours
             }
         }
 
-        private static Vector3 LocalToWorld(FormationState state, Vector3 local)
-        {
-            return state.Center + state.Rotation * (state.FormationRadius * local);
-        }
-
-        // Hands the baked ink this frame's pose and how far the pens have come: the same centre, tumble, scale
-        // and pen distance the trail pens are placed from, so the two ways of drawing agree.
+        // Hands the ink this frame's pose and how far the pens have come since the launch: the shader places
+        // every pen from that one distance.
         private static void ApplyInk(FormationState state, float fade)
         {
             if (state.Ink == null)
@@ -754,7 +621,7 @@ namespace BalloonParty.Game.Score.Behaviours
 
             var settings = state.Group.Settings;
             var shape = state.Shape;
-            var waveAmplitude = shape.Displacer != null
+            var waveAmplitude = shape.Waves
                 ? ShapeCatalog.WaveAmplitude * settings.DisplacementScale * shape.DisplacementScale
                 : 0f;
             state.Ink.Apply(new ShapeInkFrame(
@@ -766,29 +633,6 @@ namespace BalloonParty.Game.Score.Behaviours
                 fade,
                 waveAmplitude,
                 state.Elapsed * settings.DisplacementSpeed * shape.DisplacementSpeed));
-        }
-
-        // The pen's local position on its closed walk at the current orbit time (FormationShape.PointOnWalk).
-        private static Vector3 PenOrbitLocal(FormationState state, int p)
-        {
-            var w = state.PenWalk[p];
-            var perimeter = state.Shape.Perimeters[w];
-            var d = perimeter > Mathf.Epsilon
-                ? Mathf.Repeat(state.PenStartDist[p] + state.Elapsed * state.LocalPenSpeed, perimeter)
-                : 0f;
-            return state.Shape.PointOnWalk(w, d, ref state.PenSegment[p]);
-        }
-
-        private static void ScaleVertices(FormationState state, float scale)
-        {
-            var value = Vector3.one * scale;
-            for (var i = 0; i < state.VertexCount; i++)
-            {
-                if (state.Vertices[i] != null)
-                {
-                    state.Vertices[i].transform.localScale = value;
-                }
-            }
         }
 
         private enum FormationPhase
@@ -837,12 +681,6 @@ namespace BalloonParty.Game.Score.Behaviours
 
         private sealed class FormationState
         {
-            internal readonly FlyingTrail[] Vertices = new FlyingTrail[MaxVertexCount];
-            internal readonly int[] PenWalk = new int[MaxVertexCount];
-            internal readonly float[] PenStartDist = new float[MaxVertexCount];
-            internal readonly float[] PenRibbonTime = new float[MaxVertexCount];
-            internal readonly int[] PenSegment = new int[MaxVertexCount];
-
             internal FormationGroup Group;
             internal FormationShape Shape;
             internal Vector3 Origin;
@@ -862,13 +700,10 @@ namespace BalloonParty.Game.Score.Behaviours
             internal FormationPhase Phase;
             internal int Value;
             internal int RangeLast;
-            internal int VertexCount;
             internal bool IsPrincipal;
-            internal bool VerticesLive;
             internal FlyingTrail Guide;
             internal ShapeInkView Ink;
             internal bool Reported;
-            internal bool Frozen;
 
             // This tick's not-yet-committed travel center/scale/live-target (Pass A), read by Pass B (folded
             // with SeparationOffset into the apparent position), then committed to Center/LastScale by Pass C
@@ -918,12 +753,9 @@ namespace BalloonParty.Game.Score.Behaviours
                 Elapsed = 0f;
                 FadeElapsed = 0f;
                 Phase = FormationPhase.Travel;
-                VertexCount = 0;
-                VerticesLive = false;
                 Guide = null;
                 Ink = null;
                 Reported = false;
-                Frozen = false;
                 PendingRelease = false;
                 SeparationOffset = Vector3.zero;
             }

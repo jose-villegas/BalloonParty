@@ -71,7 +71,6 @@ MonoBehaviour:
     _separationRelaxRate: 1.5
     _principalPushDamping: 0.9
     _ink:
-      _baked: 1
       _material: {fileID: 2100000, guid: 2b68385f799742df979e12397564b1fc, type: 2}
       _width:
         serializedVersion: 2

@@ -6,9 +6,9 @@ Shader "BalloonParty/Sprite/ShapeInk"
     // all moved on by the same distance since the launch, so from that one number each pixel knows how far
     // behind the last pen to pass it sits. That distance is the ink's age, and the ink's width, fade and colour
     // are read from it (the ink ramp).
-    // The pen itself is a ball. Each segment of the mesh carries a spare square for it, which the vertex stage
-    // moves to wherever on that segment a pen is, or folds away while none is there.
-    // Ribbon and ball face the camera and keep their size in world units however the shape is scaled.
+    // The pen itself is the stroke's own rounded end. Each segment of the mesh carries a spare square for it,
+    // which the vertex stage moves to wherever on that segment a pen is, or folds away while none is there.
+    // Ribbon and pen face the camera and keep their size in world units however the shape is scaled.
     // A shape is drawn three times, by three materials. First its drop shadow (_InkShadow 1): the whole ink
     // again, moved away from the scene's light as the game's other drop shadows are, dark, soft-edged and
     // fading with the light. The stencil lets each pixel take the shadow once, so strokes that cross or lie
@@ -16,24 +16,18 @@ Shader "BalloonParty/Sprite/ShapeInk"
     // (_InkHalf -1), then the half in front (_InkHalf 1). The shapes are wire frames of rounded solids, so
     // that alone puts the near side over the far side.
     //
-    // Two looks (_InkLook):
-    // 0, the ribbon picture: the look of the trails this stands in for. The ribbon is the trail's picture laid
-    //    along the ink; where the ink is longer than the gap between two pens the pixel carries two inks, the
-    //    newer over the older; the pen is a disc on the picture's solid band; a sharp corner carries a joint, a
-    //    disc that closes the two ribbon ends meeting there.
-    // 1, a pen on paper: a hand-drawn stroke, after the sketchy edges of a drafting program. The line wavers
-    //    and its pressure wavers with it, its edge is ragged and paper specks show through (the heads-ups'
-    //    pencil noise, laid along the stroke so the grain stays with the line as the shape tumbles), and ink
-    //    pools darker at its edges. It can be darker while wet (_PenWet.x; not as shipped, where a darker
-    //    head reads as a dot riding the line). A straight edge runs on a little past each corner, as a
-    //    quick hand does, and a second, fainter stroke rides beside the first (_Sketch.x, 0 for none). The
-    //    edges on the far side of the shape are drawn as hidden edges are: lighter and thinner, and dashed
-    //    if asked (_Far.z; unbroken as shipped). The pen is the stroke's own rounded end. The ink takes the scene's light
-    //    (SceneLight.cginc) as the gameplay surfaces do: the time of day tints and dims it, part-way, and a
-    //    light passing close (a spark, a laser, lightning) colours and brightens it, never past white.
+    // The look is a pen on paper: a hand-drawn stroke, after the sketchy edges of a drafting program. The line
+    // wavers and its pressure wavers with it, its edge is ragged and paper specks show through (the heads-ups'
+    // pencil noise, laid along the stroke so the grain stays with the line as the shape tumbles), and ink pools
+    // darker at its edges. It can be darker while wet (_PenWet.x; not as shipped, where a darker head reads as
+    // a dot riding the line). A straight edge runs on a little past each corner, as a quick hand does, and a
+    // second, fainter stroke rides beside the first (_Sketch.x, 0 for none). The edges on the far side of the
+    // shape are drawn as hidden edges are: lighter and thinner, and dashed if asked (_Far.z; unbroken as
+    // shipped). The ink takes the scene's light (SceneLight.cginc) as the gameplay surfaces do: the time of day
+    // tints and dims it, part-way, and a light passing close (a spark, a laser, lightning) colours and
+    // brightens it, never past white.
     Properties
     {
-        _InkLook ("Look (0 ribbon picture, 1 pen on paper)", Float) = 1
         _InkRamp ("Ink Ramp (R width over the widest, G alpha, B tail mix)", 2D) = "white" {}
         _TailColor ("Tail Color", Color) = (0.95, 0.95, 0.91, 1)
         _InkHalf ("Half drawn (-1 behind the centre, 1 in front, 0 both)", Float) = 0
@@ -45,12 +39,6 @@ Shader "BalloonParty/Sprite/ShapeInk"
         // The shadow's stencil, set by ShapeInkPool: it writes and tests a bit of its own, the ink ignores it.
         [HideInInspector] _ShadowStencilComp ("Shadow Stencil Comp", Float) = 8
         [HideInInspector] _ShadowStencilPass ("Shadow Stencil Pass", Float) = 0
-
-        [Header(Ribbon picture)]
-        _MainTex ("Ribbon (u along the ink, v across)", 2D) = "white" {}
-        _HeadCentre ("Where the picture's solid band sits across it, at the head (v)", Range(0, 1)) = 0.4
-        _BandHalf ("The solid band's half-height in the picture: at the head (x), at the tail (y)", Vector) = (0.27, 0.07, 0, 0)
-        _PenRim ("Pen ball: size over the band (x), rim reach in radii (y), rim darkness (z), rim strength (w)", Vector) = (1.25, 0.7, 0.72, 0.45)
 
         [Header(Pen on paper)]
         [NoScaleOffset] _PencilNoiseTex ("Pencil Noise (edge RGB, grain A)", 2D) = "black" {}
@@ -96,28 +84,21 @@ Shader "BalloonParty/Sprite/ShapeInk"
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
 
-            // A corner turning more than this (20 degrees, ShapeInkMeshBuilder.JointTurnDegrees) is a sharp one:
-            // its miter would run off to a spike, so the ribbon ends square there.
+            // A corner turning more than this (20 degrees) is a sharp one: its miter would run off to a spike,
+            // so the ribbon ends square there and the stroke runs on past the corner.
             #define MITER_MIN_COS 0.94
             // The longest a miter may reach, in ribbon half-widths.
             #define MITER_MAX 2.0
             // Must match ShapeInkRamp.Size.
             #define RAMP_SIZE 128.0
-            // A ball's or a joint's square, in ink half-widths: room for the pen ball and its rim.
-            #define ROUND_REACH 1.4
 
-            sampler2D _MainTex;
             sampler2D _InkRamp;
             sampler2D _PencilNoiseTex;
             half4 _TailColor;
-            float _InkLook;
             float _InkHalf;
             float _InkShadow;
             half4 _ShadowColor;
             float4 _Shadow;
-            float _HeadCentre;
-            float4 _BandHalf;
-            float4 _PenRim;
             float4 _PenEdge;
             float4 _PenGrain;
             float4 _PenHand;
@@ -136,20 +117,17 @@ Shader "BalloonParty/Sprite/ShapeInk"
             float4 _InkSize;
             float4 _InkWave;
 
-            // What ShapeInkMeshBuilder writes. A ribbon vertex (kind 0) sits on its end of the segment; a pen
-            // ball's vertex (kind 1, 2, ...: the first, second, ... pen on the segment) sits on the near end;
-            // a joint's vertex (kind -1) sits on its corner.
+            // What ShapeInkMeshBuilder writes. A ribbon vertex (kind 0) sits on its end of the segment; a pen's
+            // vertex (kind 1, 2, ...: the first, second, ... pen on the segment) sits on the near end.
             struct appdata_t
             {
                 float4 vertex    : POSITION;
                 // (distance along the walk here, gap between two pens, the walk's index, kind)
                 float4 walk      : TEXCOORD0;
-                // The other end of the segment (a joint's: the walk's next point), and the side of the ribbon or
-                // of the square (w, -1 or 1).
+                // The other end of the segment, and the side of the ribbon or of the square (w, -1 or 1).
                 float4 other     : TEXCOORD1;
                 // Ribbon: the walk's next point past this end, and whether this is the far end (w).
-                // Ball and joint: the far end's distance along the walk (x, balls only) and the square's corner
-                // along the segment (y).
+                // Pen: the far end's distance along the walk (x) and the square's corner along the segment (y).
                 float4 neighbour : TEXCOORD2;
                 // Ribbon: the other end's distance along the walk (x).
                 float4 extra     : TEXCOORD3;
@@ -159,13 +137,13 @@ Shader "BalloonParty/Sprite/ShapeInk"
             {
                 float4 vertex : SV_POSITION;
                 // (the segment's near end's distance along the walk, its far end's, gap between two pens,
-                // kind: 0 ribbon, 1 ball, -1 joint)
+                // kind: 0 ribbon, 1 pen)
                 float4 ink    : TEXCOORD0;
                 // How far in front of the shape's centre the point is, toward the camera.
                 float toward  : TEXCOORD1;
                 // Ribbon: (distance from the segment's near end along it, the segment's length, signed distance
-                // across it, the walk's seed for the hand's noise). Ball and joint: where in the square the pixel
-                // is, from its middle, along the segment (x) and across it (z). All lengths in world units.
+                // across it, the walk's seed for the hand's noise). Pen: where in the square the pixel is, from
+                // its middle, along the segment (x) and across it (z). All lengths in world units.
                 float4 span   : TEXCOORD2;
                 // Where the point is in the world, for the scene light there.
                 float2 world  : TEXCOORD3;
@@ -185,7 +163,8 @@ Shader "BalloonParty/Sprite/ShapeInk"
                 return world;
             }
 
-            // Must match ShapeCatalog.WavingSphereDisplacer.
+            // The waving sphere's swell, along its own radius: three sines along directions that don't line up,
+            // so it undulates without visibly repeating. _InkWave.x is 0 for every other shape.
             float3 Wave(float3 p)
             {
                 float t = _InkWave.y;
@@ -240,7 +219,7 @@ Shader "BalloonParty/Sprite/ShapeInk"
                 else
                 {
                     // A sharp corner: a pen on paper runs on past it.
-                    past = _Sketch.z * _InkPen.w * step(0.5, _InkLook);
+                    past = _Sketch.z * _InkPen.w;
                 }
 
                 OUT.toward = Toward(here, viewAxis);
@@ -271,7 +250,7 @@ Shader "BalloonParty/Sprite/ShapeInk"
                 return OUT;
             }
 
-            v2f Ball(appdata_t IN, float3 here, float3 other, float3 viewAxis, float3 fallback)
+            v2f PenEnd(appdata_t IN, float3 here, float3 other, float3 viewAxis, float3 fallback)
             {
                 float start = IN.walk.x;
                 float gap = IN.walk.y;
@@ -287,18 +266,9 @@ Shader "BalloonParty/Sprite/ShapeInk"
                 float3 centre = lerp(here, other, saturate((pen - start) / max(end - start, 1e-6)));
 
                 // Folded onto the pen's point while no pen is on this segment: a square of no size draws nothing.
-                // The whole ball goes with the half its pen is in.
-                float size = _InkLook > 0.5 ? _PenWet.w : ROUND_REACH;
-                float reach = _InkSize.z * _InkPen.w * size + abs(_PenHand.x) + 0.02;
+                // The whole square goes with the half its pen is in.
+                float reach = _InkSize.z * _InkPen.w * _PenWet.w + abs(_PenHand.x) + 0.02;
                 return Square(IN, centre, along, viewAxis, reach * present, 1.0, pen);
-            }
-
-            v2f Joint(appdata_t IN, float3 here, float3 other, float3 viewAxis, float3 fallback)
-            {
-                // A pen on paper runs past its corners and needs none closed.
-                float3 along = DirectionOr(OnViewPlane(other - here, viewAxis), fallback);
-                float reach = _InkSize.y * _InkPen.w * ROUND_REACH * step(_InkLook, 0.5);
-                return Square(IN, here, along, viewAxis, reach, -1.0, IN.walk.x);
             }
 
             v2f vert(appdata_t IN)
@@ -310,12 +280,7 @@ Shader "BalloonParty/Sprite/ShapeInk"
 
                 if (IN.walk.w > 0.5)
                 {
-                    return Ball(IN, here, other, viewAxis, fallback);
-                }
-
-                if (IN.walk.w < -0.5)
-                {
-                    return Joint(IN, here, other, viewAxis, fallback);
+                    return PenEnd(IN, here, other, viewAxis, fallback);
                 }
 
                 return Ribbon(IN, here, other, viewAxis, fallback);
@@ -333,100 +298,6 @@ Shader "BalloonParty/Sprite/ShapeInk"
                 float band = max(_Far.w, 1e-3);
                 return smoothstep(-band, band, toward / max(_InkPen.z, 1e-4));
             }
-
-            // ---- The ribbon picture ----
-
-            // One pen's ink at this pixel, premultiplied: behind is how far behind that pen the pixel sits.
-            half4 PictureInk(float behind, float ribbon, float travelled, float across, float pixel)
-            {
-                float u = behind / ribbon;
-                half3 ramp = Ramp(u);
-                float halfWidth = max(ramp.r * _InkSize.y * _InkPen.w, 1e-4);
-                float v = across / halfWidth;
-
-                // The ribbon's own picture carries its soft edges; this only cuts it off where it ends.
-                float edge = saturate((halfWidth - abs(across)) / pixel + 0.5);
-
-                // Nothing past the ink's length, and nothing the pen has not reached yet.
-                float drawn = step(behind, ribbon) * step(behind, travelled);
-
-                half4 tex = tex2Dlod(_MainTex, float4(saturate(u), saturate(v * 0.5 + 0.5), 0, 0));
-                half4 c;
-                c.rgb = tex.rgb * lerp(_InkColor.rgb, _TailColor.rgb, ramp.b);
-                c.a = tex.a * ramp.g * _InkColor.a * edge * drawn;
-                c.rgb *= c.a;
-                return c;
-            }
-
-            // The ribbon picture's solid band at u along the ink: where its middle sits across the ribbon (x) and
-            // its half-width (y), both in world units for an ink of this half-width. The band narrows and
-            // centres toward the tail, as the picture's wedge does.
-            float2 Band(float u, float halfWidth)
-            {
-                float centre = lerp(_HeadCentre, 0.5, saturate(u));
-                float half01 = lerp(_BandHalf.x, _BandHalf.y, saturate(u));
-                return float2((centre - 0.5) * 2.0 * halfWidth, half01 * 2.0 * halfWidth);
-            }
-
-            // A flat disc, premultiplied, with a soft darker rim past its edge (rim 0 for none).
-            half4 Disc(float radius, float2 fromMiddle, half3 colour, float alpha, float rim, float pixel)
-            {
-                float distance = length(fromMiddle);
-                float inside = saturate((radius - distance) / pixel + 0.5);
-                float past = saturate((distance - radius) / max(radius * _PenRim.y, 1e-5));
-                float shade = (1.0 - past) * (1.0 - past) * rim * (1.0 - inside);
-
-                half4 c;
-                c.a = (inside + shade) * alpha;
-                c.rgb = colour * (inside + shade * _PenRim.z) * alpha;
-                return c;
-            }
-
-            // One pen's ink at a corner, as a disc as wide as the ribbon's solid band there: behind is how far
-            // behind that pen the corner sits.
-            half4 JointInk(float behind, float ribbon, float travelled, float2 local, float pixel)
-            {
-                float u = behind / ribbon;
-                half3 ramp = Ramp(u);
-                float halfWidth = max(ramp.r * _InkSize.y * _InkPen.w, 1e-4);
-                float drawn = step(behind, ribbon) * step(behind, travelled);
-                half3 colour = lerp(_InkColor.rgb, _TailColor.rgb, ramp.b);
-                float2 band = Band(u, halfWidth);
-                return Disc(band.y, local - float2(0.0, band.x), colour, ramp.g * _InkColor.a * drawn, 0.0, pixel);
-            }
-
-            half4 Picture(v2f IN, float behind, float ribbon, float travelled)
-            {
-                float2 local = IN.span.xz;
-                float gap = IN.ink.z;
-                float discPixel = max(fwidth(local.x) + fwidth(local.y), 1e-5) * 0.5;
-                half4 result;
-                if (IN.ink.w > 0.5)
-                {
-                    // The pen: a ball on the ribbon's solid band, a little wider than it, with a soft rim.
-                    float2 band = Band(0.0, max(_InkSize.z * _InkPen.w, 1e-4));
-                    result = Disc(band.y * _PenRim.x, local - float2(0.0, band.x), _InkColor.rgb,
-                        Ramp(0.0).g * _InkColor.a, _PenRim.w, discPixel);
-                }
-                else if (IN.ink.w < -0.5)
-                {
-                    // The ink is at most two gaps long (Coverage's ceiling), so two pens' inks can lie here.
-                    half4 older = JointInk(behind + gap, ribbon, travelled, local, discPixel);
-                    half4 newer = JointInk(behind, ribbon, travelled, local, discPixel);
-                    result = newer + older * (1.0 - newer.a);
-                }
-                else
-                {
-                    float pixel = max(fwidth(IN.span.z), 1e-5);
-                    half4 older = PictureInk(behind + gap, ribbon, travelled, IN.span.z, pixel);
-                    half4 newer = PictureInk(behind, ribbon, travelled, IN.span.z, pixel);
-                    result = newer + older * (1.0 - newer.a);
-                }
-
-                return result;
-            }
-
-            // ---- A pen on paper ----
 
             // The ink's colour as old as u: darker while wet, then drying toward the tail's colour.
             half3 PenColour(float u, half3 ramp)
@@ -501,8 +372,7 @@ Shader "BalloonParty/Sprite/ShapeInk"
                 float pixel = max(fwidth(across), 1e-5);
                 float discPixel = max(fwidth(local.x) + fwidth(local.y), 1e-5) * 0.5;
 
-                // A joint's square is folded away for a pen on paper, so it never gets here with anything to draw.
-                half4 result = 0;
+                half4 result;
                 if (IN.ink.w > 0.5)
                 {
                     // The pen: the stroke's own rounded end. It sits where the stroke has wavered to at the pen,
@@ -518,7 +388,7 @@ Shader "BalloonParty/Sprite/ShapeInk"
                     float alpha = inside * ramp.g * _InkColor.a * (1.0 - _PenWet.z * hand.y) * lerp(_Far.x, 1.0, front);
                     result = half4(PenColour(0.0, ramp) * alpha, alpha);
                 }
-                else if (IN.ink.w > -0.5)
+                else
                 {
                     float beyond = max(max(-IN.span.x, IN.span.x - IN.span.y), 0.0);
                     float run = saturate(beyond / max(_Sketch.z * _InkPen.w, 1e-5));
@@ -553,30 +423,21 @@ Shader "BalloonParty/Sprite/ShapeInk"
                 // Read outside the branches below: a light-field tap wants its screen-space gradients.
                 float3 light = SceneLightTintAt(IN.world) + SceneLightAmbientRegrade(_PenLight.y, _PenLight.z);
 
+                half4 ink = Pen(IN, along, behind, ribbon, travelled);
                 if (_InkShadow > 0.5)
                 {
                     // The ink's shape, in the shadow's colour: no light, no shadow.
-                    half4 cast = _InkLook > 0.5
-                        ? Pen(IN, along, behind, ribbon, travelled)
-                        : Picture(IN, behind, ribbon, travelled);
-                    float shade = cast.a * _Shadow.y * _ShadowColor.a * ShadowLightFade();
+                    float shade = ink.a * _Shadow.y * _ShadowColor.a * ShadowLightFade();
                     return half4(_ShadowColor.rgb * shade, shade);
                 }
 
-                if (_InkLook > 0.5)
-                {
-                    half4 ink = Pen(IN, along, behind, ribbon, travelled);
-
-                    // Lit, then scaled back, hue kept, until no channel passes the ink's own opacity: the ink
-                    // is premultiplied, and an ink brighter than white would bloom.
-                    half3 lit = ink.rgb * light;
-                    half peak = max(lit.r, max(lit.g, lit.b)) / max(ink.a, 1e-4);
-                    lit *= min(1.0, 1.0 / max(peak, 1e-3));
-                    ink.rgb = lerp(ink.rgb, lit, _PenLight.x);
-                    return ink;
-                }
-
-                return Picture(IN, behind, ribbon, travelled);
+                // Lit, then scaled back, hue kept, until no channel passes the ink's own opacity: the ink is
+                // premultiplied, and an ink brighter than white would bloom.
+                half3 lit = ink.rgb * light;
+                half peak = max(lit.r, max(lit.g, lit.b)) / max(ink.a, 1e-4);
+                lit *= min(1.0, 1.0 / max(peak, 1e-3));
+                ink.rgb = lerp(ink.rgb, lit, _PenLight.x);
+                return ink;
             }
             ENDCG
         }

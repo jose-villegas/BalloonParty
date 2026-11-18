@@ -204,14 +204,14 @@ namespace BalloonParty.Tests.Game
                     }
                 }
 
-                Assert.AreEqual(expected * 4, baked.Positions.Length - baked.BallStart, $"shape {denomination}");
+                Assert.AreEqual(expected * 4, baked.Positions.Length - baked.RibbonVertices, $"shape {denomination}");
 
-                for (var first = baked.BallStart; first < baked.Positions.Length; first += 4)
+                for (var first = baked.RibbonVertices; first < baked.Positions.Length; first += 4)
                 {
                     for (var corner = 0; corner < 4; corner++)
                     {
-                        Assert.GreaterOrEqual(baked.Walk[first + corner].w, ShapeInkMeshBuilder.FirstBallKind,
-                            $"shape {denomination}: a square's vertices are all pen balls");
+                        Assert.GreaterOrEqual(baked.Walk[first + corner].w, ShapeInkMeshBuilder.FirstPenKind,
+                            $"shape {denomination}: a square's vertices are all pens");
                         Assert.AreEqual(baked.Positions[first], baked.Positions[first + corner],
                             $"shape {denomination}: a square's vertices all sit on the segment's near end");
                         Assert.Greater(baked.Neighbour[first + corner].x, baked.Walk[first + corner].x,
@@ -224,44 +224,6 @@ namespace BalloonParty.Tests.Game
                     Assert.AreEqual(-1f, baked.Other[first].w, $"shape {denomination}");
                     Assert.AreEqual(1f, baked.Other[first + 1].w, $"shape {denomination}");
                 }
-            }
-        }
-
-        [Test]
-        public void Build_EveryCatalogShape_PutsAJointOnEachSharpCornerAndNowhereElse()
-        {
-            foreach (var denomination in ShapeCatalog.Denominations)
-            {
-                var baked = Bake(Shape(denomination));
-                var joints = new List<Vector3>();
-                for (var first = baked.RibbonVertices; first < baked.BallStart; first += 4)
-                {
-                    joints.Add(baked.Positions[first]);
-                    Assert.AreEqual(-1f, baked.Neighbour[first].y, $"shape {denomination}");
-                    Assert.AreEqual(1f, baked.Neighbour[first + 2].y, $"shape {denomination}");
-                    Assert.AreEqual(-1f, baked.Other[first].w, $"shape {denomination}");
-                    Assert.AreEqual(1f, baked.Other[first + 1].w, $"shape {denomination}");
-                }
-
-                // Every ribbon piece's near end is a point of its walk; the piece before it ends there.
-                var sharp = 0;
-                for (var first = 0; first < baked.RibbonVertices; first += 4)
-                {
-                    var here = baked.Positions[first];
-                    var before = (Vector3)baked.Neighbour[first];
-                    var after = baked.Positions[first + 2];
-                    var turn = Vector3.Angle(here - before, after - here);
-                    var walk = baked.Walk[first].z;
-                    var jointed = joints.Exists(joint => Vector3.Distance(joint, here) < Tolerance);
-
-                    if (turn > ShapeInkMeshBuilder.JointTurnDegrees)
-                    {
-                        sharp++;
-                        Assert.IsTrue(jointed, $"shape {denomination}, walk {walk}: a {turn:0} degree corner has no joint");
-                    }
-                }
-
-                Assert.AreEqual(sharp, joints.Count, $"shape {denomination}: one joint for each sharp corner");
             }
         }
 
@@ -284,7 +246,7 @@ namespace BalloonParty.Tests.Game
         {
             var width = new AnimationCurve(new Keyframe(0f, 0.1f), new Keyframe(0.5f, 0.4f), new Keyframe(1f, 0f));
             var settings = new ShapeInkSettings(
-                true, null, width, AnimationCurve.Linear(0f, 1f, 1f, 0f), AnimationCurve.Linear(0f, 0f, 1f, 1f));
+                null, width, AnimationCurve.Linear(0f, 1f, 1f, 0f), AnimationCurve.Linear(0f, 0f, 1f, 1f));
             var pixels = new Color32[ShapeInkRamp.Size];
 
             var widest = ShapeInkRamp.Fill(in settings, pixels);
@@ -299,12 +261,12 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void Settings_WithoutAMaterial_AreNotBaked()
+        public void Settings_WithoutAMaterial_AreNotDrawable()
         {
             var curve = AnimationCurve.Linear(0f, 1f, 1f, 0f);
 
-            Assert.IsFalse(new ShapeInkSettings(true, null, curve, curve, curve).Baked);
-            Assert.IsFalse(default(ShapeInkSettings).Baked);
+            Assert.IsFalse(new ShapeInkSettings(null, curve, curve, curve).Drawable);
+            Assert.IsFalse(default(ShapeInkSettings).Drawable);
         }
 
         private static FormationShape Shape(int denomination)
@@ -334,9 +296,8 @@ namespace BalloonParty.Tests.Game
             internal readonly List<Vector4> Other;
             internal readonly List<Vector4> Neighbour;
 
-            // The ribbon pieces come first, then the joints, then the pen balls' squares.
+            // The ribbon pieces come first, then the pens' squares.
             internal readonly int RibbonVertices;
-            internal readonly int BallStart;
 
             internal BakedShape(Vector3[] positions, List<Vector4> walk, List<Vector4> other, List<Vector4> neighbour)
             {
@@ -350,12 +311,6 @@ namespace BalloonParty.Tests.Game
                        && Mathf.Approximately(walk[RibbonVertices].w, ShapeInkMeshBuilder.RibbonKind))
                 {
                     RibbonVertices++;
-                }
-
-                BallStart = RibbonVertices;
-                while (BallStart < walk.Count && Mathf.Approximately(walk[BallStart].w, ShapeInkMeshBuilder.JointKind))
-                {
-                    BallStart++;
                 }
             }
         }

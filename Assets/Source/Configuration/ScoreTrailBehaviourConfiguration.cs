@@ -55,11 +55,11 @@ namespace BalloonParty.Configuration
                  "is still a point): spins the pens + drawn ink as the shape travels to the bar.")]
         [SerializeField] private float _spinSpeedDegrees;
 
-        [Tooltip("Amplitude multiplier for shapes with a vertex displacer (the waving sphere). 1 = authored default.")]
+        [Tooltip("Amplitude multiplier for shapes that wave (the waving sphere). 1 = authored default.")]
         [Range(0f, 3f)]
         [SerializeField] private float _displacementScale;
 
-        [Tooltip("Time multiplier for vertex displacement animation speed. 1 = authored default.")]
+        [Tooltip("Time multiplier for how fast such a shape waves. 1 = authored default.")]
         [Range(0f, 5f)]
         [SerializeField] private float _displacementSpeed;
 

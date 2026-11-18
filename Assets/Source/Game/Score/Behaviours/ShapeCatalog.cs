@@ -4,14 +4,6 @@ using UnityEngine;
 namespace BalloonParty.Game.Score.Behaviours
 {
     /// <summary>
-    ///     Per-frame vertex displacement function: receives a local position on the shape, the
-    ///     formation's elapsed time, an amplitude scale factor and a time-speed factor (both from the
-    ///     SO config). Returns the displaced position. Applied after orbit interpolation and before
-    ///     the world transform, so movements are in local shape space.
-    /// </summary>
-    internal delegate Vector3 VertexDisplacer(Vector3 localPosition, float elapsedTime, float scale, float speed);
-
-    /// <summary>
     ///     A CLOSED WALK a pen orbits forever: an ordered cyclic list of vertex indices whose consecutive pairs
     ///     (including the wrap from last back to first) are the edges to trace. A 2-vertex walk is a back-and-forth
     ///     shuttle (the degenerate loop that IS the "line" shape). <see cref="Arc"/> chooses interpolation: an arc
@@ -63,9 +55,9 @@ namespace BalloonParty.Game.Score.Behaviours
         internal readonly float[] Perimeters;
         internal readonly float[][] Cumulative;
 
-        // Optional per-frame vertex displacement (sine-wave sphere, etc.). Applied after orbit interpolation,
-        // before world transform. Null means static vertices.
-        internal readonly VertexDisplacer Displacer;
+        // Whether the shape's surface swells and sinks as it flies (the waving sphere). The ink's shader does
+        // the waving (ShapeInk.shader's Wave); the baked mesh stays the still shape.
+        internal readonly bool Waves;
 
         // Per-shape multipliers on the global displacement knobs — lets the catalog author tune amplitude and
         // animation speed per shape independently of the SO baseline. 1 = use the global value as-is.
@@ -75,7 +67,7 @@ namespace BalloonParty.Game.Score.Behaviours
         internal FormationShape(
             int denomination, float radiusScale, Vector3[] vertices, FormationWalk[] walks,
             bool alignToHit = false, float spinScale = 1f, float penSpeedScale = 1f,
-            VertexDisplacer displacer = null, float displacementScale = 1f, float displacementSpeed = 1f)
+            bool waves = false, float displacementScale = 1f, float displacementSpeed = 1f)
         {
             Denomination = denomination;
             RadiusScale = radiusScale;
@@ -84,7 +76,7 @@ namespace BalloonParty.Game.Score.Behaviours
             AlignToHit = alignToHit;
             Vertices = vertices;
             Walks = walks;
-            Displacer = displacer;
+            Waves = waves;
             DisplacementScale = displacementScale;
             DisplacementSpeed = displacementSpeed;
             PensPerWalk = DistributePens(denomination, walks);
@@ -216,8 +208,8 @@ namespace BalloonParty.Game.Score.Behaviours
         // φ (golden ratio) — the dodecahedron's vertex coordinates are framed on it.
         private const float Phi = 1.6180339887498949f;
 
-        // The waving sphere's swell at a displacement scale of 1, as a share of its radius. The ink shader
-        // (ShapeInk.shader's Wave) repeats the displacer, so the two must change together.
+        // The waving sphere's swell at a displacement scale of 1, as a share of its radius (the size of
+        // ShapeInk.shader's Wave).
         internal const float WaveAmplitude = 0.09f;
 
         private static readonly int[] LadderDenominations = { 100, 50, 30, 20, 15, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
@@ -854,23 +846,7 @@ namespace BalloonParty.Game.Score.Behaviours
                 walks[rings + s] = new FormationWalk(loop, arc: true);
             }
 
-            return Build(100, 1.6f, vertices, walks, spinScale: 0.4f, penSpeedScale: 1.2f,
-                displacer: WavingSphereDisplacer);
-        }
-
-        // Sum-of-sines radial displacement: three non-aligned spatial frequencies produce organic
-        // undulation without obvious repetition. Cost: 3 sin + 3 dot per pen per frame (~trivial).
-        private static Vector3 WavingSphereDisplacer(Vector3 pos, float time, float scale, float speed)
-        {
-            // pos is already unit-length (slerp on unit-sphere vertices).
-            var n = pos;
-            var t = time * speed;
-            var phase1 = (0.8f * pos.x + 0.4f * pos.y + 0.2f * pos.z) * 4.5f + t * 4.0f;
-            var phase2 = (-0.3f * pos.x + 0.9f * pos.y + 0.5f * pos.z) * 3.7f + t * 3.2f;
-            var phase3 = (0.5f * pos.x - 0.6f * pos.y + 0.8f * pos.z) * 5.2f + t * 4.8f;
-            var displacement = (Mathf.Sin(phase1) + 0.6f * Mathf.Sin(phase2)
-                + 0.35f * Mathf.Sin(phase3)) * WaveAmplitude * scale;
-            return pos + n * displacement;
+            return Build(100, 1.6f, vertices, walks, spinScale: 0.4f, penSpeedScale: 1.2f, waves: true);
         }
 
         private static FormationWalk Chord(params int[] vertices)
@@ -1086,7 +1062,7 @@ namespace BalloonParty.Game.Score.Behaviours
         private static FormationShape Build(
             int denomination, float radiusScale, Vector3[] vertices, FormationWalk[] walks,
             bool alignToHit = false, float spinScale = 1f, float penSpeedScale = 1f,
-            VertexDisplacer displacer = null, float displacementScale = 1f, float displacementSpeed = 1f)
+            bool waves = false, float displacementScale = 1f, float displacementSpeed = 1f)
         {
             var maxMagnitude = 0f;
             for (var i = 0; i < vertices.Length; i++)
@@ -1109,7 +1085,7 @@ namespace BalloonParty.Game.Score.Behaviours
 
             return new FormationShape(
                 denomination, radiusScale, vertices, walks, alignToHit, spinScale, penSpeedScale,
-                displacer, displacementScale, displacementSpeed);
+                waves, displacementScale, displacementSpeed);
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BalloonParty.Configuration;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Rendering;
 using BalloonParty.UI.Score;
 using UnityEngine;
@@ -24,7 +25,6 @@ namespace BalloonParty.Game.Score.Behaviours
         private static readonly int InkShadowId = Shader.PropertyToID("_InkShadow");
         private static readonly int ShadowStencilCompId = Shader.PropertyToID("_ShadowStencilComp");
         private static readonly int ShadowStencilPassId = Shader.PropertyToID("_ShadowStencilPass");
-        private static readonly int InkLookId = Shader.PropertyToID("_InkLook");
         private static readonly int PenHandId = Shader.PropertyToID("_PenHand");
         private static readonly int SketchId = Shader.PropertyToID("_Sketch");
 
@@ -39,6 +39,7 @@ namespace BalloonParty.Game.Score.Behaviours
         private Material _source;
         private Texture2D _ramp;
         private Vector3 _size;
+        private bool _warned;
 
         public void Dispose()
         {
@@ -61,9 +62,24 @@ namespace BalloonParty.Game.Score.Behaviours
             DestroyMaterial();
         }
 
-        /// <summary>A view showing <paramref name="shape" /> in <paramref name="color" />, sorted and layered as <paramref name="guide" />.</summary>
+        /// <summary>
+        ///     A view showing <paramref name="shape" /> in <paramref name="color" />, sorted and layered as
+        ///     <paramref name="guide" />. Null when the settings have no ink to draw with
+        ///     (<see cref="ShapeInkSettings.Drawable" />): the shape then flies undrawn, its points still counted.
+        /// </summary>
         internal ShapeInkView Acquire(FormationShape shape, in ShapeInkSettings settings, Color color, FlyingTrail guide)
         {
+            if (!settings.Drawable)
+            {
+                if (!_warned)
+                {
+                    _warned = true;
+                    Log.Warn("ShapeInk", "The score shapes have no ink material or curves set, so they fly undrawn.");
+                }
+
+                return null;
+            }
+
             PrepareMaterial(in settings);
 
             if (!_meshes.TryGetValue(shape, out var mesh))
@@ -153,15 +169,10 @@ namespace BalloonParty.Game.Score.Behaviours
                 inkHalfWidth + RimPadding + StrokeRoom(_materials[0]), inkHalfWidth, settings.Width.Evaluate(0f) * 0.5f);
         }
 
-        // The pen-on-paper look draws off the walk's line: the stroke wavers, and a second one rides beside
-        // it. The mesh ribbon needs that much more room each side.
+        // The ink is drawn off the walk's line: the stroke wavers, and a second one rides beside it. The mesh
+        // ribbon needs that much more room each side.
         private static float StrokeRoom(Material material)
         {
-            if (material.GetFloat(InkLookId) < 0.5f)
-            {
-                return 0f;
-            }
-
             return Mathf.Abs(material.GetVector(PenHandId).x) + Mathf.Abs(material.GetVector(SketchId).y);
         }
 

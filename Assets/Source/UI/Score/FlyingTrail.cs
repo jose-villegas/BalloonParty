@@ -38,8 +38,6 @@ namespace BalloonParty.UI.Score
         private bool _followUnscaled;
         private bool _following;
         private Gradient _flightGradient;
-        // Shared scratch for TransformRibbon — main-thread only, grown on demand, never shrunk.
-        private static Vector3[] _ribbonScratch = new Vector3[256];
 
         private Color _defaultColor;
         private Vector3 _defaultScale;
@@ -244,55 +242,10 @@ namespace BalloonParty.UI.Score
             _trailRenderer.time = _defaultRibbonTime;
         }
 
-        // Pen up/down: formations travel between vertices without drawing (deploy), then emit while
-        // actually tracing chords — otherwise the deploy spokes bury the drawn shape.
+        // Pen up/down: a trail can travel without drawing, then emit once it should leave a line.
         internal void SetRibbonEmitting(bool emitting)
         {
             _trailRenderer.emitting = emitting;
-        }
-
-        // Re-frames the recorded ribbon by the formation's delta transform (translate + 3D rotate + scale).
-        // Ribbons record WORLD positions, so a formation that glides, tumbles, or shrinks while it draws
-        // would shear every line; carrying each drawn point through
-        // p' = newCenter + scaleRatio·(delta·(p − oldCenter)) keeps the whole figure glued to formation
-        // space — the drawn ink shrinks with the shape as the travel curve tapers toward the bar.
-        internal void TransformRibbon(Vector3 oldCenter, Vector3 newCenter, Quaternion delta, float scaleRatio)
-        {
-            var count = _trailRenderer.positionCount;
-            if (count == 0)
-            {
-                return;
-            }
-
-            if (_ribbonScratch.Length < count)
-            {
-                _ribbonScratch = new Vector3[Mathf.NextPowerOfTwo(count)];
-            }
-
-            _trailRenderer.GetPositions(_ribbonScratch);
-
-            // Pure translation is the common case (fixed tilt, scale on a curve plateau) — skip the
-            // quaternion rotate and the scale multiply entirely.
-            if (delta == Quaternion.identity && Mathf.Approximately(scaleRatio, 1f))
-            {
-                var offset = newCenter - oldCenter;
-
-                for (var i = 0; i < count; i++)
-                {
-                    _ribbonScratch[i] += offset;
-                }
-            }
-            else
-            {
-                for (var i = 0; i < count; i++)
-                {
-                    _ribbonScratch[i] = newCenter + delta * (_ribbonScratch[i] - oldCenter) * scaleRatio;
-                }
-            }
-
-            // SetPositions applies only positionCount entries (== count) and ignores any surplus, so the
-            // oversized shared scratch never needs shrinking (see ChainLightningView/PredictionTraceView).
-            _trailRenderer.SetPositions(_ribbonScratch);
         }
 
         internal void ClearRibbon()

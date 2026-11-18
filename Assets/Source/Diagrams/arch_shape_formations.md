@@ -38,7 +38,7 @@ digraph ShapeFormations {
         Catalog [label="ShapeCatalog (static)\ndenomination -> FormationShape\nunit-sphere verts, closed walks,\nperimeters, PensPerWalk\nwarmed at scope Start()"];
         Ticker [label="ShapeFormationTicker : ILateTickable\npooled FormationGroup/State\nC(t) travel, Q(t) tumble,\nscale(t) curve, pen arc-length orbit"];
         OverlapResolver [label="FormationOverlapResolver (pure)\nO(n^2) push-apart, once/tick,\nacross EVERY pending formation\n(including other concurrent groups)"];
-        Pens [label="Pens + anchor + guide\npooled FlyingTrail pens\n(TrailRenderer ink),\nanchor Transform = principal,\nguide traces the travel path"];
+        Pens [label="Ink + anchor + guide\none baked ShapeInkView\nper shape (ShapeInk shader),\nanchor Transform = principal,\nguide traces the travel path"];
         Flights [label="TrailFlightRegistry<TrailId>\nanchor registered as the\ngroup's principal flight"];
     }
 
@@ -93,7 +93,7 @@ digraph ShapeFormations {
 ## What this diagram shows
 
 How a single big pop becomes a cluster of tumbling 3D polyhedra whose edges are drawn
-live by orbiting trail-renderer "pens" — and how that machinery slots into the existing
+live by a shader that sweeps "pens" along a baked wire mesh — and how that machinery slots into the existing
 score pipeline without the rest of the game knowing shapes exist.
 
 **Scoring → choreography seam:** `ScoreController` publishes one `ScorePointsGroupMessage`
@@ -130,10 +130,10 @@ C(t) + Q(t)\cdot\Big(\mathit{radius}\cdot \mathit{scale}(t)\cdot \mathit{local}_
 bar centre, `Q(t)` tumbles about the shared (or per-shape-overridden) spin axis, `scale(t)`
 comes from the settings' bloom-hold-taper curve, and `localₚ(t)` is the pen's position on
 its walk, parameterized by arc length so world-units-per-second pen speed is constant
-regardless of segment length. Pens are pooled `FlyingTrail`s acquired from the group's
-`TrailSpawner` — each one *is* a `TrailRenderer`; moving it live-draws the ink, and
-`TransformRibbon` re-frames already-drawn ink by the same translate+tumble+scale delta
-so old ink shrinks and travels with the shape instead of lagging behind. A `Guide` trail
+regardless of segment length. Each shape is one pooled `ShapeInkView` showing a wire mesh baked once per shape; the
+ticker hands it the centre, tumble, scale and the distance every pen has travelled, and
+the `ShapeInk` shader places the pens and ages the ink per pixel, so the whole figure
+shrinks and travels with the shape. A `Guide` trail
 rides the formation centre, tracing the genuine travel path underneath the shape. Only
 the principal formation's centre is written back to the group's anchor each tick
 (`WriteAnchor`) — that anchor transform is the one thing `TrailFlightRegistry` and the
@@ -147,7 +147,7 @@ including formations from OTHER concurrent groups, since one AoE pop can trigger
 a pure O(n²) "push circles apart" relaxation with no persisted velocity state (recomputed
 fresh every tick against that frame's own deterministic position, so the golden-spiral path
 is always the anchor a correction can only perturb, never drift away from); **Pass C**
-commits the corrected centre through the same rotation/ribbon/pen/anchor math described
+commits the corrected centre through the same rotation/ink/anchor math described
 above; **Pass D** is a dedicated release sweep, kept separate because flagging-then-sweeping
 is the only safe way to remove a deferred formation without an index going stale under the
 class's existing swap-remove pooling.
@@ -166,11 +166,11 @@ formations plug into that machinery. `LevelUpCinematic` tracks the principal exa
 any other trail, through `Flights.Get`/`Pause`/`Complete` — a formation's anchor
 `Transform` satisfies the same contract a `FlyingTrail`'s transform does. When
 `LevelUpPhase` reaches `Pending`, `Flights.PauseAll()` freezes every still-airborne
-formation (the ticker inflates ribbon lifetimes so drawn ink survives the freeze without
-decaying); when the level transition resolves outgoing content, `LevelTransitionController`
+formation (the ticker stops the formation's clock, which the ink's age is read from, so the
+drawn figure survives the freeze without decaying); when the level transition resolves outgoing content, `LevelTransitionController`
 calls `ScoreTrailService.HoldOutgoing`, which calls `Flights.CompleteAll()` — the ticker
 sees each surviving formation's `Flight.Phase` go `Idle`, reports its value immediately,
-and fades its pens out on an unscaled `SnapFade` rather than snapping instantly.
+and thins its ink out on an unscaled `SnapFade` rather than snapping instantly.
 
 ## Key contracts this enforces
 
@@ -186,7 +186,7 @@ and fades its pens out on an unscaled `SnapFade` rather than snapping instantly.
    ticker never mutates a `FormationShape`, so every formation of the same denomination
    shares one immutable geometry table.
 4. **One registered flight per group, not per pen.** The cinematic and the transition
-   seam only ever address the group's anchor; a formation's dozens of pens are pooled
-   `FlyingTrail`s invisible to `TrailFlightRegistry` and are cleaned up entirely by
-   `ShapeFormationTicker` (`ReleaseVertices`) once the group's `Flight` says so.
+   seam only ever address the group's anchor; a formation's ink view and guide trail are
+   invisible to `TrailFlightRegistry` and are cleaned up entirely by
+   `ShapeFormationTicker` (`ReleaseDrawing`) once the group's `Flight` says so.
 
