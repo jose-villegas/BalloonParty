@@ -8,9 +8,10 @@ Shader "BalloonParty/Display/EffectsMapComposite"
     // A stamp's profile, 1 - (d/r)^2, is a dome's height, so the mask's slope is the glass's surface: the effects
     // refract toward the dome's middle (magnified, so they spread away from the ball and pile up under the rim),
     // split a little by colour at the steep rim, and fade under the glass by the clearing strength. A glint on
-    // the dome is added light, so it shows over the board too. It is the scene's light on the glass
-    // (SceneLight.cginc): it sits on the side of the dome the light comes from, and takes the light's colour
-    // and strength, so it dims and tints with the time of day.
+    // the dome is added light, so it shows over the board too. Its highlight is the scene's light on the
+    // glass (SceneLight.cginc): it sits on the side of the dome the light comes from, and takes the light's
+    // colour and strength, so it dims and tints with the time of day. The rim stays as bright as it is
+    // authored: it is what shows where the glass is, at night too.
     Properties
     {
         [NoScaleOffset] _EffectsMapTex ("Effects Map", 2D) = "black" {}
@@ -132,11 +133,13 @@ Shader "BalloonParty/Display/EffectsMapComposite"
                 float3 light = float3(SceneLightDirection() * GLINT_LIGHT_PLANAR, GLINT_LIGHT_TOWARD_VIEWER);
                 float mirror = pow(saturate(dot(reflect(float3(0, 0, -1), normal), light)), 24.0);
                 float rim = pow(saturate(length(slope)), 4.0) * 0.35;
-                half glint = (mirror + rim) * _EffectsClearLens.w * glass;
 
-                // Reflected light has the light's colour and no more than its strength.
+                // The reflected highlight has the light's colour and no more than its strength; the rim keeps
+                // its own, so the dome's outline doesn't fade with the day.
+                half3 glint = (mirror * SceneLightTint() + rim) * (_EffectsClearLens.w * glass);
+
                 half4 result = effects * fade;
-                result.rgb += glint * SceneLightTint();
+                result.rgb += glint;
                 return result;
             }
             ENDCG

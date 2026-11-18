@@ -147,8 +147,8 @@ taps, a few texels apart) as the glass's surface:
   readable.
 - **Glint.** A mirror highlight off the dome's normal and a thin bright rim (`LensHighlight`) are added
   light, so the dome shows over the board too, not only over effects. The light is the scene's
-  (`Include/SceneLight.cginc`): the highlight sits on the side of the dome the light comes from, and both take
-  the light's colour and strength, so they dim and tint with the time of day. It is the glass's, not a map's: each
+  (`Include/SceneLight.cginc`): the highlight sits on the side of the dome the light comes from and takes
+  the light's colour and strength, so it dims and tints with the time of day; the rim keeps its authored brightness. It is the glass's, not a map's: each
   composite quad stays on while a clearing is open, with a transparent texture standing in for a map not
   rendered that frame. Both composites add it, the main one before bloom and the tonemapper and the HUD's
   after; that second glint came with the main map (tuned at 0.6 when the HUD's was the only one), and is kept
