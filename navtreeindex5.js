@@ -1,5 +1,6 @@
 var NAVTREEINDEX5 =
 {
+"arch_trail_composition.html#autotoc_md127":[2,9,0,0],
 "arch_trail_composition.html#autotoc_md128":[2,9,0,1],
 "arch_turn_pipeline.html":[2,3],
 "arch_turn_pipeline.html#autotoc_md129":[2,3,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX5 =
 "classBalloonParty_1_1Audio_1_1Editor_1_1AttributionRecord.html#a7f9e81dc2ce12a5b81d4fb47bfddbf4c":[5,0,0,0,1,1,1],
 "classBalloonParty_1_1Audio_1_1Editor_1_1AttributionRecord.html#a7f9e81dc2ce12a5b81d4fb47bfddbf4c":[6,0,0,0,1,1,1],
 "classBalloonParty_1_1Audio_1_1Editor_1_1AttributionRecord.html#a80ceec4a026a851b62dce99b6f621779":[5,0,0,0,1,1,2],
-"classBalloonParty_1_1Audio_1_1Editor_1_1AttributionRecord.html#a80ceec4a026a851b62dce99b6f621779":[6,0,0,0,1,1,2],
-"classBalloonParty_1_1Audio_1_1Editor_1_1AttributionRecord.html#a926bd71cc52e4c030926c66f6496d2b1":[5,0,0,0,1,1,3]
+"classBalloonParty_1_1Audio_1_1Editor_1_1AttributionRecord.html#a80ceec4a026a851b62dce99b6f621779":[6,0,0,0,1,1,2]
 };

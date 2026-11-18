@@ -1,5 +1,14 @@
 var NAVTREEINDEX58 =
 {
+"classBalloonParty_1_1Game_1_1Assist_1_1ArmourNeed.html#a9b9c3fa527ad3f60177bde1933f530ca":[5,0,0,6,0,0,6],
+"classBalloonParty_1_1Game_1_1Assist_1_1ArmourNeed.html#a9b9c3fa527ad3f60177bde1933f530ca":[6,0,0,6,0,0,6],
+"classBalloonParty_1_1Game_1_1Assist_1_1ArmourNeed.html#ab6978fdba806ecc460a4330281316ccf":[5,0,0,6,0,0,14],
+"classBalloonParty_1_1Game_1_1Assist_1_1ArmourNeed.html#ab6978fdba806ecc460a4330281316ccf":[6,0,0,6,0,0,14],
+"classBalloonParty_1_1Game_1_1Assist_1_1ArmourNeed.html#acccd12775609a243dbbe76a0c73af173":[5,0,0,6,0,0,11],
+"classBalloonParty_1_1Game_1_1Assist_1_1ArmourNeed.html#acccd12775609a243dbbe76a0c73af173":[6,0,0,6,0,0,11],
+"classBalloonParty_1_1Game_1_1Assist_1_1ArmourNeed.html#acd2276ff5322371f4656b8708967d695":[5,0,0,6,0,0,7],
+"classBalloonParty_1_1Game_1_1Assist_1_1ArmourNeed.html#acd2276ff5322371f4656b8708967d695":[6,0,0,6,0,0,7],
+"classBalloonParty_1_1Game_1_1Assist_1_1ArmourNeed.html#ad836c7e329c6d72e403c826e811763e3":[5,0,0,6,0,0,12],
 "classBalloonParty_1_1Game_1_1Assist_1_1ArmourNeed.html#ad836c7e329c6d72e403c826e811763e3":[6,0,0,6,0,0,12],
 "classBalloonParty_1_1Game_1_1Assist_1_1ArmourNeed.html#ae5d894c45e8c71aaa5c54ef8f4ef70a8":[5,0,0,6,0,0,4],
 "classBalloonParty_1_1Game_1_1Assist_1_1ArmourNeed.html#ae5d894c45e8c71aaa5c54ef8f4ef70a8":[6,0,0,6,0,0,4],
@@ -240,14 +249,5 @@ var NAVTREEINDEX58 =
 "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#aced2faf1f4e3638f99fee5fcf731d57e":[5,0,0,6,1,1,5],
 "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#aced2faf1f4e3638f99fee5fcf731d57e":[6,0,0,6,1,1,5],
 "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#acf4883c6ad6b15bea9cb7d6d176dd114":[5,0,0,6,1,1,0],
-"classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#acf4883c6ad6b15bea9cb7d6d176dd114":[6,0,0,6,1,1,0],
-"classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#ad0626894ffb8799a0636248cb5fe42e9":[5,0,0,6,1,1,18],
-"classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#ad0626894ffb8799a0636248cb5fe42e9":[6,0,0,6,1,1,18],
-"classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#ad3a774f88dfa6a9307612e9e4d4bd1d9":[5,0,0,6,1,1,6],
-"classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#ad3a774f88dfa6a9307612e9e4d4bd1d9":[6,0,0,6,1,1,6],
-"classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#ad8606a7469e79115a773bd5b61684a24":[5,0,0,6,1,1,15],
-"classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#ad8606a7469e79115a773bd5b61684a24":[6,0,0,6,1,1,15],
-"classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#ae9639baa7efd942db67301a316976d14":[5,0,0,6,1,1,2],
-"classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#ae9639baa7efd942db67301a316976d14":[6,0,0,6,1,1,2],
-"classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#aec05337071a0f49ae917788a05473118":[5,0,0,6,1,1,27]
+"classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#acf4883c6ad6b15bea9cb7d6d176dd114":[6,0,0,6,1,1,0]
 };

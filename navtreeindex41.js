@@ -1,5 +1,6 @@
 var NAVTREEINDEX41 =
 {
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#af467183c001d9001c9e6468dad5daa84":[5,0,0,3,9,21,37],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#af467183c001d9001c9e6468dad5daa84":[6,0,0,3,9,21,37],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#afeceb64217bca261eea6950260b23fe5":[5,0,0,3,9,21,20],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#afeceb64217bca261eea6950260b23fe5":[6,0,0,3,9,21,20],
@@ -248,6 +249,5 @@ var NAVTREEINDEX41 =
 "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#ac7ede047ba477d4c1432ac3dd91dc044":[5,0,0,3,9,33,23],
 "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#ac7ede047ba477d4c1432ac3dd91dc044":[6,0,0,3,9,33,23],
 "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#ace8cfc41cc7809c0e57d89d0922a981e":[5,0,0,3,9,33,27],
-"classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#ace8cfc41cc7809c0e57d89d0922a981e":[6,0,0,3,9,33,27],
-"classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#ad2bbaadf703dd7b4beec315f6805f0cf":[5,0,0,3,9,33,36]
+"classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#ace8cfc41cc7809c0e57d89d0922a981e":[6,0,0,3,9,33,27]
 };

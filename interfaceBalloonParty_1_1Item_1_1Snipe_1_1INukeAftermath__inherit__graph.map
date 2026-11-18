@@ -1,0 +1,5 @@
+<map id="BalloonParty.Item.Snipe.INukeAftermath" name="BalloonParty.Item.Snipe.INukeAftermath">
+<area shape="rect" id="Node000001" title="What the Snipe roll asks about the last nuke: how much its going off raises the card&#39;s chance now." alt="" coords="5,5,185,50"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Item_1_1Snipe_1_1NukeAftermath.html" title="The stretch after a nuke goes off (NukeDetonatedMessage) in which the Sharpshooter card&#39;s Snipe roll ..." alt="" coords="5,98,185,143"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,64,98,99,92,97,93,68"/>
+</map>

@@ -1,5 +1,6 @@
 var NAVTREEINDEX40 =
 {
+"classBalloonParty_1_1Configuration_1_1Level_1_1ExtraColorLevelSettings.html#a5d59d99f7acc4565fe5c74f91ada14e2":[5,0,0,3,9,5,16],
 "classBalloonParty_1_1Configuration_1_1Level_1_1ExtraColorLevelSettings.html#a5d59d99f7acc4565fe5c74f91ada14e2":[6,0,0,3,9,5,16],
 "classBalloonParty_1_1Configuration_1_1Level_1_1ExtraColorLevelSettings.html#aa73806ffe8f31a53e6e4faff5ceb85bf":[5,0,0,3,9,5,11],
 "classBalloonParty_1_1Configuration_1_1Level_1_1ExtraColorLevelSettings.html#aa73806ffe8f31a53e6e4faff5ceb85bf":[6,0,0,3,9,5,11],
@@ -248,6 +249,5 @@ var NAVTREEINDEX40 =
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#ae696a65f0bc275b73d752783070ba7be":[5,0,0,3,9,21,21],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#ae696a65f0bc275b73d752783070ba7be":[6,0,0,3,9,21,21],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#af1e8d8a3bdb41ac702738847f075cb28":[5,0,0,3,9,21,32],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#af1e8d8a3bdb41ac702738847f075cb28":[6,0,0,3,9,21,32],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#af467183c001d9001c9e6468dad5daa84":[5,0,0,3,9,21,37]
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#af1e8d8a3bdb41ac702738847f075cb28":[6,0,0,3,9,21,32]
 };

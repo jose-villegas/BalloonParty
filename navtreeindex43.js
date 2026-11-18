@@ -1,5 +1,6 @@
 var NAVTREEINDEX43 =
 {
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a5e2a7cc7c81ce1065c7ae39acb3a9a2b":[5,0,0,3,27,24],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a5e2a7cc7c81ce1065c7ae39acb3a9a2b":[6,0,0,3,27,24],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a606cb57855413f1975a21cb1d2a762a8":[5,0,0,3,27,13],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a606cb57855413f1975a21cb1d2a762a8":[6,0,0,3,27,13],
@@ -248,6 +249,5 @@ var NAVTREEINDEX43 =
 "classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#a2d6b1990189ae2d092c0034f9550785a":[5,0,0,3,35,11],
 "classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#a2d6b1990189ae2d092c0034f9550785a":[6,0,0,3,35,11],
 "classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#a2fca25645ebb435b8d4734a2c2201a4e":[5,0,0,3,35,3],
-"classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#a2fca25645ebb435b8d4734a2c2201a4e":[6,0,0,3,35,3],
-"classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#a3e9c3e275d68511f7ceaa6b8064c59eb":[5,0,0,3,35,17]
+"classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#a2fca25645ebb435b8d4734a2c2201a4e":[6,0,0,3,35,3]
 };

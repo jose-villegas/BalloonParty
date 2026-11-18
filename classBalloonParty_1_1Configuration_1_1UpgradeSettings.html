@@ -142,6 +142,12 @@ Properties</h2></td></tr>
 <tr class="memitem:a4abdf175b2a88d0c4e53d76c10abce01" id="r_a4abdf175b2a88d0c4e53d76c10abce01"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4abdf175b2a88d0c4e53d76c10abce01">CardsOffered</a><code> [get]</code></td></tr>
 <tr class="memdesc:a4abdf175b2a88d0c4e53d76c10abce01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cards dealt per pick; fewer when fewer cards are left unmaxed.  <br /></td></tr>
 <tr class="separator:a4abdf175b2a88d0c4e53d76c10abce01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e57d61269a0cd519cfd7f91d7049910" id="r_a1e57d61269a0cd519cfd7f91d7049910"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1e57d61269a0cd519cfd7f91d7049910">NukeAftermathSnipeChanceScale</a><code> [get]</code></td></tr>
+<tr class="memdesc:a1e57d61269a0cd519cfd7f91d7049910"><td class="mdescLeft">&#160;</td><td class="mdescRight">For <a class="el" href="#a4a79f918ee469d8b12abe6ce92252798" title="Seconds of game time after a nuke goes off in which the Snipe chance is scaled. 0 = never.">NukeAftermathSnipeSeconds</a> after a nuke goes off, the Sharpshooter card's Snipe chance times this, on top of a purple level's scale.  <br /></td></tr>
+<tr class="separator:a1e57d61269a0cd519cfd7f91d7049910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a79f918ee469d8b12abe6ce92252798" id="r_a4a79f918ee469d8b12abe6ce92252798"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4a79f918ee469d8b12abe6ce92252798">NukeAftermathSnipeSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:a4a79f918ee469d8b12abe6ce92252798"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds of game time after a nuke goes off in which the Snipe chance is scaled. 0 = never.  <br /></td></tr>
+<tr class="separator:a4a79f918ee469d8b12abe6ce92252798"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a345ecd47c34b9217c085c39c64c6cab5" id="r_a345ecd47c34b9217c085c39c64c6cab5"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a345ecd47c34b9217c085c39c64c6cab5">PurpleLevelSnipeChanceScale</a><code> [get]</code></td></tr>
 <tr class="memdesc:a345ecd47c34b9217c085c39c64c6cab5"><td class="mdescLeft">&#160;</td><td class="mdescRight">On a purple (extra-colour) level, the Sharpshooter card's Snipe chance times this: its golden balloons are armoured, and the lance is what cracks them.  <br /></td></tr>
 <tr class="separator:a345ecd47c34b9217c085c39c64c6cab5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -157,6 +163,10 @@ Private Attributes</h2></td></tr>
 <tr class="separator:aee34641b7cc8bcd2c2c9216e9709fbf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a872268b93be311dd2839b324f39774cf" id="r_a872268b93be311dd2839b324f39774cf"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a872268b93be311dd2839b324f39774cf">_cardsOffered</a> = 3</td></tr>
 <tr class="separator:a872268b93be311dd2839b324f39774cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab57fe9025da0ea84e1ca20a0604d5190" id="r_ab57fe9025da0ea84e1ca20a0604d5190"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab57fe9025da0ea84e1ca20a0604d5190">_nukeAftermathSnipeChanceScale</a> = 1.5f</td></tr>
+<tr class="separator:ab57fe9025da0ea84e1ca20a0604d5190"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4301773992fa776a651c0bceaa6d5bb3" id="r_a4301773992fa776a651c0bceaa6d5bb3"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4301773992fa776a651c0bceaa6d5bb3">_nukeAftermathSnipeSeconds</a> = 20f</td></tr>
+<tr class="separator:a4301773992fa776a651c0bceaa6d5bb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc3cfbfae54a2e0be429eb2b01344910" id="r_acc3cfbfae54a2e0be429eb2b01344910"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acc3cfbfae54a2e0be429eb2b01344910">_purpleLevelSnipeChanceScale</a> = 3f</td></tr>
 <tr class="separator:acc3cfbfae54a2e0be429eb2b01344910"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa0730b84d05c1596ec73dab1b66c45ef" id="r_aa0730b84d05c1596ec73dab1b66c45ef"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa0730b84d05c1596ec73dab1b66c45ef">_snipeCooldownSeconds</a> = 8f</td></tr>
@@ -231,6 +241,50 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">int BalloonParty.Configuration.UpgradeSettings._cardsOffered = 3</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab57fe9025da0ea84e1ca20a0604d5190" name="ab57fe9025da0ea84e1ca20a0604d5190"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab57fe9025da0ea84e1ca20a0604d5190">&#9670;&#160;</a></span>_nukeAftermathSnipeChanceScale</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.UpgradeSettings._nukeAftermathSnipeChanceScale = 1.5f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4301773992fa776a651c0bceaa6d5bb3" name="a4301773992fa776a651c0bceaa6d5bb3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4301773992fa776a651c0bceaa6d5bb3">&#9670;&#160;</a></span>_nukeAftermathSnipeSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.UpgradeSettings._nukeAftermathSnipeSeconds = 20f</td>
         </tr>
       </table>
   </td>
@@ -360,6 +414,59 @@ Private Attributes</h2></td></tr>
 <p>Cards dealt per pick; fewer when fewer cards are left unmaxed. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeSettings.html#a778207b2fb53d5a3637ffaa2c7db3cae">BalloonParty.Shared.IUpgradeSettings</a>.</p>
+
+</div>
+</div>
+<a id="a1e57d61269a0cd519cfd7f91d7049910" name="a1e57d61269a0cd519cfd7f91d7049910"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e57d61269a0cd519cfd7f91d7049910">&#9670;&#160;</a></span>NukeAftermathSnipeChanceScale</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.UpgradeSettings.NukeAftermathSnipeChanceScale</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>For <a class="el" href="#a4a79f918ee469d8b12abe6ce92252798" title="Seconds of game time after a nuke goes off in which the Snipe chance is scaled. 0 = never.">NukeAftermathSnipeSeconds</a> after a nuke goes off, the Sharpshooter card's Snipe chance times this, on top of a purple level's scale. </p>
+<p>1 = no change. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeSettings.html#afc9d93e436b0befc3952594628c7cbf3">BalloonParty.Shared.IUpgradeSettings</a>.</p>
+
+</div>
+</div>
+<a id="a4a79f918ee469d8b12abe6ce92252798" name="a4a79f918ee469d8b12abe6ce92252798"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a79f918ee469d8b12abe6ce92252798">&#9670;&#160;</a></span>NukeAftermathSnipeSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.UpgradeSettings.NukeAftermathSnipeSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds of game time after a nuke goes off in which the Snipe chance is scaled. 0 = never. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeSettings.html#a4e619e511aaddbf6d7bbb0f10e530c90">BalloonParty.Shared.IUpgradeSettings</a>.</p>
 
 </div>
 </div>

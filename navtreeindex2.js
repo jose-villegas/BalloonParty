@@ -218,6 +218,7 @@ var NAVTREEINDEX2 =
 "NudgeOverride_8cs.html":[7,0,9,3],
 "NudgeService_8cs.html":[7,0,9,5],
 "NudgeType_8cs.html":[7,0,9,6],
+"NukeAftermath_8cs.html":[7,0,8,7,4],
 "NukeArmedMessage_8cs.html":[7,0,14,7,26],
 "NukeBalloonModel_8cs.html":[7,0,1,2,16],
 "NukeBlastSettings_8cs.html":[7,0,3,0,23],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "PaintSplashViewEditor_8cs.html":[7,0,6,36],
 "PaintSplashView_8cs.html":[7,0,8,4,3],
 "PaintSpread_8cs.html":[7,0,8,4,4],
-"PaintTargets_8cs.html":[7,0,8,4,5],
-"PaintTriangle_8cs.html":[7,0,8,4,6]
+"PaintTargets_8cs.html":[7,0,8,4,5]
 };

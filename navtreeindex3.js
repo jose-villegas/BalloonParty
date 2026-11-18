@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"PaintTriangle_8cs.html":[7,0,8,4,6],
 "PaletteChannelEncoding_8cs.html":[7,0,3,10,4],
 "PaletteColorMaskAttribute_8cs.html":[7,0,3,10,5],
 "PaletteColorMaskDrawer_8cs.html":[7,0,3,4,6],
@@ -217,7 +218,7 @@ var NAVTREEINDEX3 =
 "ShapeInkRamp_8cs.html":[7,0,7,9,0,14],
 "ShapeInkSettings_8cs.html":[7,0,3,26],
 "ShapeInkView_8cs.html":[7,0,18,8,9],
-"SharpshooterSnipeGift_8cs.html":[7,0,8,7,4],
+"SharpshooterSnipeGift_8cs.html":[7,0,8,7,5],
 "ShieldChainPlanner_8cs.html":[7,0,8,6,0],
 "ShieldChainSettings_8cs.html":[7,0,3,27],
 "ShieldChainWindow_8cs.html":[7,0,6,6,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "ShotSolverWindow_8cs.html":[7,0,6,7,0],
 "ShotWall_8cs.html":[7,0,15,2,5],
 "ShoveVector_8cs.html":[7,0,15,2,6],
-"ShowIfEnumAttribute_8cs.html":[7,0,14,34],
-"ShowIfEnumDrawer_8cs.html":[7,0,6,49]
+"ShowIfEnumAttribute_8cs.html":[7,0,14,34]
 };

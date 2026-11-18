@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"ShowIfEnumDrawer_8cs.html":[7,0,6,49],
 "SightFadeReaction_8cs.html":[7,0,8,30],
 "SightGlitterDriftReaction_8cs.html":[7,0,8,31],
 "SightRampReaction_8cs.html":[7,0,8,32],
@@ -30,14 +31,14 @@ var NAVTREEINDEX4 =
 "SmokeFieldView_8cs.html":[7,0,13,0,4],
 "SnakeBody_8cs.html":[7,0,1,1,6],
 "SnakeWalk_8cs.html":[7,0,1,1,7],
-"SnipeChanceRoll_8cs.html":[7,0,8,7,5],
-"SnipeDischargeBloom_8cs.html":[7,0,8,7,6],
-"SnipeItemHandler_8cs.html":[7,0,8,7,7],
-"SnipeLanceLinePrefab_8cs.html":[7,0,8,7,8],
-"SnipeLanceLineView_8cs.html":[7,0,8,7,10],
-"SnipeLanceLines_8cs.html":[7,0,8,7,9],
-"SnipeLanceStroke_8cs.html":[7,0,8,7,11],
-"SnipeLanceTrace_8cs.html":[7,0,8,7,12],
+"SnipeChanceRoll_8cs.html":[7,0,8,7,6],
+"SnipeDischargeBloom_8cs.html":[7,0,8,7,7],
+"SnipeItemHandler_8cs.html":[7,0,8,7,8],
+"SnipeLanceLinePrefab_8cs.html":[7,0,8,7,9],
+"SnipeLanceLineView_8cs.html":[7,0,8,7,11],
+"SnipeLanceLines_8cs.html":[7,0,8,7,10],
+"SnipeLanceStroke_8cs.html":[7,0,8,7,12],
+"SnipeLanceTrace_8cs.html":[7,0,8,7,13],
 "SnipeRangePreview_8cs.html":[7,0,8,5,15],
 "SnipeWhirlwindView_8cs.html":[7,0,17,1],
 "SoapBubbleClusterVariant_8cs.html":[7,0,1,5,8],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "arch_static_state.html#autotoc_md124":[2,12,0,0],
 "arch_static_state.html#autotoc_md125":[2,12,0,1],
 "arch_trail_composition.html":[2,9],
-"arch_trail_composition.html#autotoc_md126":[2,9,0],
-"arch_trail_composition.html#autotoc_md127":[2,9,0,0]
+"arch_trail_composition.html#autotoc_md126":[2,9,0]
 };
