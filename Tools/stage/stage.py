@@ -218,6 +218,27 @@ class Stage:
             around = f"{around[0]};{around[1]}"
         return self.call("Capture", os.path.abspath(path).replace("\\", "/"), around, int(size))
 
+    def maps(self, directory, sheet=True, title=""):
+        """Writes every render map (the ones the Game Render Maps window lists) into `directory` as it stands
+        this frame: <map>-rgb.png and <map>-a.png at the map's own resolution, the frame itself as frame.png,
+        and with `sheet` all of them side by side as sheet.png. Returns {map: (width, height, max colour, max
+        alpha)}, with None for a map that doesn't exist yet."""
+        directory = os.path.abspath(directory).replace("\\", "/")
+        found = {}
+        for entry in self.call("Maps", directory).split("|"):
+            name, _, value = entry.partition("=")
+            if value == "none":
+                found[name] = None
+                continue
+            size, top, top_alpha = value.split(",")
+            width, height = size.split("x")
+            found[name] = (int(width), int(height), float(top), float(top_alpha))
+        self.capture(os.path.join(directory, "frame.png"))
+        if sheet:
+            import map_sheet
+            map_sheet.compose(directory, found, title)
+        return found
+
     def end(self):
         """Clears frozen effects, gives the game back its clock, level-ups and balloons, and leaves Play mode."""
         self.call("End")
@@ -295,6 +316,10 @@ def main():
     capture.add_argument("path")
     capture.add_argument("--around", default="", help="a balloon type, col,row, or a world point x;y")
     capture.add_argument("--size", type=int, default=480)
+    maps = sub.add_parser("maps", help="write every render map, the frame and a sheet of them all to a folder")
+    maps.add_argument("directory")
+    maps.add_argument("--title", default="", help="a heading for the sheet")
+    maps.add_argument("--no-sheet", action="store_true", help="only the PNGs, no sheet.png (which needs Pillow)")
     sub.add_parser("end", help="clear frozen pops, let the game run and leave Play mode")
     args = parser.parse_args()
 
@@ -342,6 +367,8 @@ def main():
                        args.shields)
         elif args.command == "capture":
             stage.capture(args.path, args.around, args.size)
+        elif args.command == "maps":
+            stage.maps(args.directory, not args.no_sheet, args.title)
         elif args.command == "end":
             stage.end()
     except StageError as error:

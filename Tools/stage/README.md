@@ -42,6 +42,7 @@ and only `advance`, `clear`, `pop --settle` and dealing a board let game time ru
 | `ball x,y [--from x,y] [--seconds S] [--shields N]` | A ball in flight at a world point, held still, with the effects above the board cleared around it, as wide as its `N` shields (default 1) make the clearing. With `--from`, it flies there over `S` seconds of game time first (default 0.5), so the clearing it leaves behind has closed up as it would in a shot |
 | `clear-effects` | Removes the frozen pops and the staged balls, and shows the balloons the pops hid |
 | `capture PATH [--around TARGET] [--size N]` | Renders the camera to a PNG: the whole frame, or an `N`-pixel square around a balloon or a world point `x;y` |
+| `maps DIR [--title T] [--no-sheet]` | Writes every render map the Game Render Maps window lists (scene capture, disturbance field, light field and its colour map, GI light buffer, background field, smoke field, and the effects maps once a ball has flown) into `DIR` as it stands this frame: `<map>-rgb.png` for its colour channels and `<map>-a.png` for its alpha as grey, at the map's own resolution, plus the frame as `frame.png` and all of them side by side as `sheet.png`. A map brighter than 1 is scaled down to fit and the sheet says by how much; maps that don't exist yet or are empty are named under the heading |
 | `end` | Clears the frozen pops and leaves Play mode, giving the game back its clock, level-ups and balloons (leaving Play mode any other way does too) |
 
 Balloons float: a cleared slot is filled from below while the pops play out, so a cleared patch doesn't
@@ -72,5 +73,15 @@ stage.end()
 python3 Tools/stage/contact_sheet.py out.png --cols dawn day dusk night --row "hand-made" 'Logs/stage/old-{}.png' --row baked 'Logs/stage/new-{}.png'
 ```
 
+To see what a look is made of, `maps` writes the render maps behind a staged frame. Take it once per state
+(a light on and off, night and day) and the sheets compare:
+
+```bash
+python3 Tools/stage/stage.py maps Logs/stage/maps-night --title "Night, ring light on"
+python3 Tools/stage/map_sheet.py Logs/stage/maps-night --title "Night, ring light on"   # the sheet again, from the PNGs
+```
+
+What each channel of a map means is in `Assets/Source/Editor/Maps/README.md` and the window's tooltips.
+
 Captures under `Logs/` stay out of git. Needs the Unity CLI (`com.unity.pipeline`) and, for the contact
-sheet, Pillow.
+sheet and the map sheet, Pillow.

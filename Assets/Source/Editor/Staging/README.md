@@ -30,6 +30,7 @@ until then.
 | `Ball(x, y, fromPoint, seconds, shields)` | A ball in flight at a world point, carrying `shields` (which size its clearing), held still, so a capture shows the effects cleared around it (`Plans/PLAN-EffectsLayerClearing.md`). With `fromPoint` ("x,y") and `seconds`, it flies there in a straight line over that much game time first (under `Advance`), so the clearing behind it has decayed as in a shot. Only the ball's look (the prefab built under an inactive parent and stripped of scripts and physics), put on `IProjectileRegistryWriter`'s in-flight list, which is what the clearing follows |
 | `ClearEffects()` | Removes the frozen pops and the staged balls (retired from the registry), and shows the balloons the pops hid |
 | `Capture(path, around, size)` | Renders the main camera straight to a texture (fresh even while the Editor is unfocused): the frame, or a square around a balloon or a world point |
+| `Maps(directory)` | Writes every render map the Game Render Maps window lists (`Editor/Maps`, through `GameRenderMapsWindow.CurrentMaps`) as it stands this frame, at its own resolution: `name-rgb.png` for its colour channels and `name-a.png` for its alpha as grey. Channels brighter than 1 are scaled down to fit, and the answer gives each map's size and its brightest colour and alpha, or `none` for a map that doesn't exist yet |
 
 A `.shader` file passed to `FreezePop` is compiled without importing it, its relative includes rewritten
 to project paths from its own folder. So a shader in a worktree can be tried in the Editor, which has the

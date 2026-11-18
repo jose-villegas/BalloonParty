@@ -14,6 +14,7 @@ using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Level;
 using BalloonParty.Configuration.Palette;
+using BalloonParty.Editor.Maps;
 using BalloonParty.Game;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
@@ -601,6 +602,71 @@ namespace BalloonParty.Editor.Staging
             File.WriteAllBytes(path, pixels.EncodeToPNG());
             Object.DestroyImmediate(pixels);
             return $"wrote {cropWidth}x{cropHeight} to {path}";
+        }
+
+        /// <summary>
+        ///     Writes every render map the Game Render Maps window lists into <paramref name="directory" />, as it
+        ///     stands this frame and at its own resolution: <c>name-rgb.png</c> holds its colour channels and
+        ///     <c>name-a.png</c> its alpha as grey. Channels brighter than 1 are scaled down to fit. Answers one
+        ///     entry per map, <c>name=WxH,max colour,max alpha</c> or <c>name=none</c> for a map that doesn't exist
+        ///     yet, joined by <c>|</c>.
+        /// </summary>
+        public static string Maps(string directory)
+        {
+            Directory.CreateDirectory(directory);
+            var answer = new StringBuilder();
+            foreach (var (name, texture) in GameRenderMapsWindow.CurrentMaps())
+            {
+                var file = name.ToLowerInvariant().Replace(' ', '-');
+                answer.Append(answer.Length > 0 ? "|" : "").Append(file).Append('=');
+                answer.Append(texture != null ? WriteMap(texture, Path.Combine(directory, file)) : "none");
+            }
+
+            return answer.ToString();
+        }
+
+        private static string WriteMap(Texture texture, string pathWithoutSuffix)
+        {
+            // Through a float target, so a map's own format (half, 16-bit, single channel) reads the same way.
+            var target = RenderTexture.GetTemporary(
+                texture.width, texture.height, 0, RenderTextureFormat.ARGBFloat, RenderTextureReadWrite.Linear);
+            Graphics.Blit(texture, target);
+            var active = RenderTexture.active;
+            RenderTexture.active = target;
+            var read = new Texture2D(texture.width, texture.height, TextureFormat.RGBAFloat, false, true);
+            read.ReadPixels(new Rect(0, 0, texture.width, texture.height), 0, 0);
+            RenderTexture.active = active;
+            RenderTexture.ReleaseTemporary(target);
+
+            var pixels = read.GetPixels();
+            var maxColor = 0f;
+            var maxAlpha = 0f;
+            foreach (var pixel in pixels)
+            {
+                maxColor = Mathf.Max(maxColor, pixel.maxColorComponent);
+                maxAlpha = Mathf.Max(maxAlpha, pixel.a);
+            }
+
+            var colorScale = maxColor > 1f ? 1f / maxColor : 1f;
+            var alphaScale = maxAlpha > 1f ? 1f / maxAlpha : 1f;
+            var color = new Color32[pixels.Length];
+            var alpha = new Color32[pixels.Length];
+            for (var i = 0; i < pixels.Length; i++)
+            {
+                var pixel = pixels[i];
+                color[i] = new Color(pixel.r * colorScale, pixel.g * colorScale, pixel.b * colorScale, 1f);
+                var grey = Mathf.Clamp01(pixel.a * alphaScale);
+                alpha[i] = new Color(grey, grey, grey, 1f);
+            }
+
+            var written = new Texture2D(texture.width, texture.height, TextureFormat.RGBA32, false, true);
+            written.SetPixels32(color);
+            File.WriteAllBytes(pathWithoutSuffix + "-rgb.png", written.EncodeToPNG());
+            written.SetPixels32(alpha);
+            File.WriteAllBytes(pathWithoutSuffix + "-a.png", written.EncodeToPNG());
+            Object.DestroyImmediate(written);
+            Object.DestroyImmediate(read);
+            return FormattableString.Invariant($"{texture.width}x{texture.height},{maxColor:0.##},{maxAlpha:0.##}");
         }
 
         private static ScenarioKind ParseScenario(string scenario)

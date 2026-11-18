@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Display;
@@ -122,6 +123,21 @@ namespace BalloonParty.Editor.Maps
 
             DrawInfoBar(texture);
             DrawPreview(texture, descriptor.HasPaletteChannel && _decodePalette, descriptor.PaletteChannel);
+        }
+
+        /// <summary>
+        ///     Every map the window lists with its texture as it is now, null while the map doesn't exist, for
+        ///     tools that write them out (<c>SceneStage.Maps</c>).
+        /// </summary>
+        internal static IEnumerable<(string Name, Texture Texture)> CurrentMaps()
+        {
+            foreach (var descriptor in Descriptors)
+            {
+                if (!descriptor.IsCustom)
+                {
+                    yield return (descriptor.Name, descriptor.Fetch());
+                }
+            }
         }
 
         private void DrawMapSelector()
