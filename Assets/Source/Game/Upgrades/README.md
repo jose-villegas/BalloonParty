@@ -67,7 +67,10 @@ chance is low on purpose: each ball loaded without a Snipe while the player is i
 dangerous board) raises the next ball's chance (`IAssistSettings.SnipePity`, see `Game/Assist/README.md`), so
 the lance comes when it's needed rather than when the player is already winning. On a purple (extra-colour)
 level the card's chance is tripled (`IUpgradeSettings.PurpleLevelSnipeChanceScale`, 3): one stack rolls 3% a
-ball, three stacks 9%, since that level's golden balloons are armoured and the lance is what cracks them. A hit arms the ball the way a Snipe pickup arms the ball still in the thrower
+ball, three stacks 9%, since that level's golden balloons are armoured and the lance is what cracks them. For
+20 s of game time after a nuke goes off the chance is also times 1.5 (`NukeAftermathSnipeChanceScale`,
+`NukeAftermathSnipeSeconds`; `Item/Snipe/NukeAftermath`), a slight lift while the board refills, on top of the
+purple level's scale. A hit arms the ball the way a Snipe pickup arms the ball still in the thrower
 (`ISnipeArmer`, implemented by `SnipeItemHandler`): it pierces, carries the Snipe's speed buff, and its
 pencil line starts at the muzzle when it fires. So it plays, scores and discharges like any Snipe lance,
 and the thrower's "ready" heads-up reads it as armed through `IsPiercing`. While it waits in the thrower it

@@ -28,7 +28,8 @@ namespace BalloonParty.Item.Snipe
     ///     (<see cref="IArmourNeed" />) or a bomb has sat under a formation's cover (<see cref="ICoveredBombNeed" />),
     ///     whichever is the most. After a hit, no load rolls for
     ///     <see cref="IUpgradeSettings.SnipeCooldownSeconds" />, so rapid fire can't chain lances. A purple level
-    ///     raises the card's chance (<see cref="IUpgradeSettings.PurpleLevelSnipeChanceScale" />). A guaranteed
+    ///     raises the card's chance (<see cref="IUpgradeSettings.PurpleLevelSnipeChanceScale" />), and so, a little,
+    ///     does a nuke that has just gone off (<see cref="INukeAftermath" />). A guaranteed
     ///     load (<see cref="ISnipeGuarantee" />, the first golden balloon's lesson) arms with no roll and no cooldown.
     /// </summary>
     internal sealed class SnipeChanceRoll : ISnipeChanceRoll, ISnipeGuarantee, IRunResettable
@@ -39,6 +40,7 @@ namespace BalloonParty.Item.Snipe
         private readonly IPlayerNeed _need;
         private readonly IArmourNeed _armour;
         private readonly ICoveredBombNeed _coveredBomb;
+        private readonly INukeAftermath _nukeAftermath;
         private readonly IActiveLevelParameters _level;
         private readonly PityRoll _pity;
 
@@ -51,7 +53,8 @@ namespace BalloonParty.Item.Snipe
         public int ResetOrder => RunResetOrder.Counters;
 
         internal SnipeChanceRoll(IWeaponStats weapon, ISnipeArmer armer, IUpgradeSettings settings, IPlayerNeed need,
-            IArmourNeed armour, ICoveredBombNeed coveredBomb, IAssistSettings assist, IActiveLevelParameters level)
+            IArmourNeed armour, ICoveredBombNeed coveredBomb, INukeAftermath nukeAftermath, IAssistSettings assist,
+            IActiveLevelParameters level)
         {
             _weapon = weapon;
             _armer = armer;
@@ -59,6 +62,7 @@ namespace BalloonParty.Item.Snipe
             _need = need;
             _armour = armour;
             _coveredBomb = coveredBomb;
+            _nukeAftermath = nukeAftermath;
             _level = level;
             _pity = new PityRoll(assist.SnipePity);
         }
@@ -95,6 +99,8 @@ namespace BalloonParty.Item.Snipe
                 chance *= _settings.PurpleLevelSnipeChanceScale;
             }
 
+            // Never below the card's own chance, whatever the scale says.
+            chance *= Mathf.Max(1f, _nukeAftermath.SnipeChanceScale);
             var need = Mathf.Max(_need.Need, _armour.Need, _coveredBomb.Need);
             if (!_pity.Roll(chance, need, Random01()))
             {

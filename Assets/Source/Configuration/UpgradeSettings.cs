@@ -99,10 +99,20 @@ namespace BalloonParty.Configuration
             "golden balloons there. 3 = a 1% card rolls 3% a pen. 1 = no change.")]
         [SerializeField] [Min(1f)] private float _purpleLevelSnipeChanceScale = 3f;
 
+        [Tooltip("For Nuke Aftermath Snipe Seconds after a nuke goes off, the Sharpshooter card's Snipe chance times " +
+            "this, on top of a purple level's scale: a slight lift while the board refills. 1.5 = a 1% card rolls " +
+            "1.5% a pen. 1 = no change.")]
+        [SerializeField] [Min(1f)] private float _nukeAftermathSnipeChanceScale = 1.5f;
+
+        [Tooltip("Seconds of game time after a nuke goes off in which the Snipe chance is scaled. 0 = never.")]
+        [SerializeField] [Min(0f)] private float _nukeAftermathSnipeSeconds = 20f;
+
         public int CardEveryLevels => _cardEveryLevels;
         public int CardsOffered => _cardsOffered;
         public IReadOnlyList<IUpgradeCardSettings> Cards => _cards;
         public float SnipeCooldownSeconds => _snipeCooldownSeconds;
         public float PurpleLevelSnipeChanceScale => _purpleLevelSnipeChanceScale;
+        public float NukeAftermathSnipeChanceScale => _nukeAftermathSnipeChanceScale;
+        public float NukeAftermathSnipeSeconds => _nukeAftermathSnipeSeconds;
     }
 }

@@ -90,5 +90,14 @@ namespace BalloonParty.Shared
         ///     balloons are armoured, and the lance is what cracks them. 1 = no change.
         /// </summary>
         float PurpleLevelSnipeChanceScale { get; }
+
+        /// <summary>
+        ///     For <see cref="NukeAftermathSnipeSeconds" /> after a nuke goes off, the Sharpshooter card's Snipe chance
+        ///     times this, on top of a purple level's scale. 1 = no change.
+        /// </summary>
+        float NukeAftermathSnipeChanceScale { get; }
+
+        /// <summary>Seconds of game time after a nuke goes off in which the Snipe chance is scaled. 0 = never.</summary>
+        float NukeAftermathSnipeSeconds { get; }
     }
 }

@@ -24,6 +24,7 @@ namespace BalloonParty.Tests.Item
         private IPlayerNeed _need;
         private IArmourNeed _armour;
         private ICoveredBombNeed _coveredBomb;
+        private INukeAftermath _nukeAftermath;
         private IAssistSettings _assist;
         private ILevelParameters _levelNow;
         private IActiveLevelParameters _level;
@@ -39,6 +40,8 @@ namespace BalloonParty.Tests.Item
             _need = Substitute.For<IPlayerNeed>();
             _armour = Substitute.For<IArmourNeed>();
             _coveredBomb = Substitute.For<ICoveredBombNeed>();
+            _nukeAftermath = Substitute.For<INukeAftermath>();
+            _nukeAftermath.SnipeChanceScale.Returns(1f);
             var pity = Substitute.For<IPitySettings>();
             pity.GrowthPerMiss.Returns(4f);
             pity.MaxChance.Returns(0.5f);
@@ -48,7 +51,8 @@ namespace BalloonParty.Tests.Item
             _levelNow = Substitute.For<ILevelParameters>();
             _level = Substitute.For<IActiveLevelParameters>();
             _level.Current.Returns(_levelNow);
-            _roll = new SnipeChanceRoll(_weapon, _armer, _settings, _need, _armour, _coveredBomb, _assist, _level)
+            _roll = new SnipeChanceRoll(
+                _weapon, _armer, _settings, _need, _armour, _coveredBomb, _nukeAftermath, _assist, _level)
             {
                 Now = () => 0f
             };
@@ -91,6 +95,41 @@ namespace BalloonParty.Tests.Item
             Draw(draw);
 
             Assert.AreEqual(armed, _roll.TryArm(new ProjectileModel()));
+        }
+
+        // A card of 10% and an aftermath of 1.5: a draw of 0.12 misses the card alone and hits within the aftermath.
+        [TestCase(1f, 0.12f, false)]
+        [TestCase(1.5f, 0.12f, true)]
+        [TestCase(1.5f, 0.16f, false)]
+        public void TryArm_AfterANuke_ScalesTheCardsChance(float scale, float draw, bool armed)
+        {
+            _weapon.SnipeChance.Returns(0.1f);
+            _nukeAftermath.SnipeChanceScale.Returns(scale);
+            Draw(draw);
+
+            Assert.AreEqual(armed, _roll.TryArm(new ProjectileModel()));
+        }
+
+        [Test]
+        public void TryArm_AfterANuke_OnAPurpleLevel_BothScalesApply()
+        {
+            _weapon.SnipeChance.Returns(0.1f);
+            _levelNow.IsExtraColorLevel.Returns(true);
+            _nukeAftermath.SnipeChanceScale.Returns(1.5f);
+            Draw(0.4f);
+
+            Assert.IsTrue(_roll.TryArm(new ProjectileModel()), "10% x 3 x 1.5 = 45%");
+        }
+
+        [Test]
+        public void TryArm_AfterANuke_WithoutTheCard_StillNeverArms()
+        {
+            _weapon.SnipeChance.Returns(0f);
+            _nukeAftermath.SnipeChanceScale.Returns(1.5f);
+            Draw(0f);
+
+            Assert.IsFalse(_roll.TryArm(new ProjectileModel()));
+            Assert.AreEqual(0, _draws);
         }
 
         [Test]
@@ -154,7 +193,8 @@ namespace BalloonParty.Tests.Item
             // Two stacks of 0.15 from the real card arithmetic: a draw of 0.25 misses one stack, hits two.
             var rig = new UpgradeRig(Substitute.For<IProjectileFlightConfig>());
             var card = UpgradeRig.Card(UpgradeKind.SnipeChance, 0.15f);
-            var roll = new SnipeChanceRoll(rig.Upgrades, _armer, rig.Settings, _need, _armour, _coveredBomb, _assist, _level)
+            var roll = new SnipeChanceRoll(
+                rig.Upgrades, _armer, rig.Settings, _need, _armour, _coveredBomb, _nukeAftermath, _assist, _level)
             {
                 Random01 = () => 0.25f,
                 Now = () => 0f
