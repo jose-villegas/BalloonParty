@@ -1,5 +1,7 @@
 var NAVTREEINDEX132 =
 {
+"structBalloonParty_1_1Editor_1_1Bush_1_1BushLeafExtractor_1_1TipCandidate.html#ab8e5da6a5c5090e547638055753ca0fc":[5,0,0,5,0,7,1,2],
+"structBalloonParty_1_1Editor_1_1Bush_1_1BushLeafExtractor_1_1TipCandidate.html#ab8e5da6a5c5090e547638055753ca0fc":[6,0,0,5,0,7,1,2],
 "structBalloonParty_1_1Editor_1_1Bush_1_1BushLeafExtractor_1_1TipCandidate.html#ac82a841d8e945425509e2f6fe63fdba4":[5,0,0,5,0,7,1,1],
 "structBalloonParty_1_1Editor_1_1Bush_1_1BushLeafExtractor_1_1TipCandidate.html#ac82a841d8e945425509e2f6fe63fdba4":[6,0,0,5,0,7,1,1],
 "structBalloonParty_1_1Editor_1_1Bush_1_1LeafAtlasPacker_1_1PackResult.html":[5,0,0,5,0,9,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX132 =
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpMergeKey.html#ad163dd85e18087af96b12c71af0e86f5":[5,0,0,6,5,3,6],
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpMergeKey.html#ad163dd85e18087af96b12c71af0e86f5":[6,0,0,6,5,3,6],
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpMergeKey.html#ad7b1d7a07e396afef29cd10ff99c4104":[5,0,0,6,5,3,0],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpMergeKey.html#ad7b1d7a07e396afef29cd10ff99c4104":[6,0,0,6,5,3,0],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpOffer.html":[5,0,0,6,5,4],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpOffer.html":[6,0,0,6,5,4]
+"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpMergeKey.html#ad7b1d7a07e396afef29cd10ff99c4104":[6,0,0,6,5,3,0]
 };

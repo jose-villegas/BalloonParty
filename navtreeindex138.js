@@ -1,5 +1,7 @@
 var NAVTREEINDEX138 =
 {
+"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseStartedMessage.html#acf3c096a6322dc1a74ba9fda76a97248":[5,0,0,12,7,35,2],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseStartedMessage.html#acf3c096a6322dc1a74ba9fda76a97248":[6,0,0,12,7,35,2],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseStartedMessage.html#af419d8104ea3c5066d6ad6e27f07abd1":[5,0,0,12,7,35,1],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseStartedMessage.html#af419d8104ea3c5066d6ad6e27f07abd1":[6,0,0,12,7,35,1],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDestroyedMessage.html":[5,0,0,12,7,36],
@@ -247,7 +249,5 @@ var NAVTREEINDEX138 =
 "structBalloonParty_1_1Shared_1_1Rendering_1_1ColorCycleState.html#aeae6958bc2883e4cd5a302ff1f4cc289":[5,0,0,12,10,4,0],
 "structBalloonParty_1_1Shared_1_1Rendering_1_1ColorCycleState.html#aeae6958bc2883e4cd5a302ff1f4cc289":[6,0,0,12,10,4,0],
 "structBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService_1_1Registration.html":[5,0,0,12,11,4,1],
-"structBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService_1_1Registration.html":[6,0,0,12,11,4,1],
-"structBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService_1_1Registration.html#a0c04b4596c4483d56377bd23ec5f9526":[5,0,0,12,11,4,1,0],
-"structBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService_1_1Registration.html#a0c04b4596c4483d56377bd23ec5f9526":[6,0,0,12,11,4,1,0]
+"structBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService_1_1Registration.html":[6,0,0,12,11,4,1]
 };

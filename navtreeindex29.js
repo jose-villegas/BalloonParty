@@ -1,5 +1,7 @@
 var NAVTREEINDEX29 =
 {
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#a95a070c501beeb1f8a777b57a6b61898":[5,0,0,3,3,2,5],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#a95a070c501beeb1f8a777b57a6b61898":[6,0,0,3,3,2,5],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#ad5207f6d9b7a0cc494cbfbe3a906b5e8":[5,0,0,3,3,2,0],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#ad5207f6d9b7a0cc494cbfbe3a906b5e8":[6,0,0,3,3,2,0],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#ae4cc13ea2a43bfeaf783c7bf5e4b7430":[5,0,0,3,3,2,1],
@@ -247,7 +249,5 @@ var NAVTREEINDEX29 =
 "classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteMaskDrawer.html#a80963d948c84b69a8f449f40211aaea2":[5,0,0,3,4,10,3],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteMaskDrawer.html#a80963d948c84b69a8f449f40211aaea2":[6,0,0,3,4,10,3],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteMaskDrawer.html#ace5523be3c4ee1c8b28b440a894043c0":[5,0,0,3,4,10,2],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteMaskDrawer.html#ace5523be3c4ee1c8b28b440a894043c0":[6,0,0,3,4,10,2],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1ProjectileFlightConfigEditor.html":[5,0,0,3,4,11],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1ProjectileFlightConfigEditor.html":[6,0,0,3,4,11]
+"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteMaskDrawer.html#ace5523be3c4ee1c8b28b440a894043c0":[6,0,0,3,4,10,2]
 };

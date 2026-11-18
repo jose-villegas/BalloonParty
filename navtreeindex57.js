@@ -1,5 +1,7 @@
 var NAVTREEINDEX57 =
 {
+"classBalloonParty_1_1Game_1_1Cinematics_1_1HeartTrailFocus.html":[5,0,0,6,2,11],
+"classBalloonParty_1_1Game_1_1Cinematics_1_1HeartTrailFocus.html":[6,0,0,6,2,11],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1HeartTrailFocus.html#a12ae6b92799f956d2ee5fb171c2da861":[5,0,0,6,2,11,1],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1HeartTrailFocus.html#a12ae6b92799f956d2ee5fb171c2da861":[6,0,0,6,2,11,1],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1HeartTrailFocus.html#a324d6e15fc1760688b109ef7479e225d":[5,0,0,6,2,11,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX57 =
 "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a3c6ea11c56efc8d697704e520a9bd31f":[5,0,0,6,15,16],
 "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a3c6ea11c56efc8d697704e520a9bd31f":[6,0,0,6,15,16],
 "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a431ee2108bdae6c062366fee70813f33":[5,0,0,6,15,13],
-"classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a431ee2108bdae6c062366fee70813f33":[6,0,0,6,15,13],
-"classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a44ab957ab0bf92b667b188359777e982":[5,0,0,6,15,31],
-"classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a44ab957ab0bf92b667b188359777e982":[6,0,0,6,15,31]
+"classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a431ee2108bdae6c062366fee70813f33":[6,0,0,6,15,13]
 };

@@ -1,5 +1,7 @@
 var NAVTREEINDEX99 =
 {
+"classBalloonParty_1_1Solver_1_1ShotItemLayer.html#a6140e9593a53d58133a405701849bc10":[5,0,0,14,12,19],
+"classBalloonParty_1_1Solver_1_1ShotItemLayer.html#a6140e9593a53d58133a405701849bc10":[6,0,0,14,12,19],
 "classBalloonParty_1_1Solver_1_1ShotItemLayer.html#a71cab26187cd8bf80aa1db1fcd86ee3f":[5,0,0,14,12,11],
 "classBalloonParty_1_1Solver_1_1ShotItemLayer.html#a71cab26187cd8bf80aa1db1fcd86ee3f":[6,0,0,14,12,11],
 "classBalloonParty_1_1Solver_1_1ShotItemLayer.html#a733a96f0ace0dcb007bece10487b1216":[5,0,0,14,12,12],
@@ -247,7 +249,5 @@ var NAVTREEINDEX99 =
 "classBalloonParty_1_1Thrower_1_1AimDirectionHistory.html":[5,0,0,15,0],
 "classBalloonParty_1_1Thrower_1_1AimDirectionHistory.html":[6,0,0,15,0],
 "classBalloonParty_1_1Thrower_1_1AimDirectionHistory.html#a08f9d4befb8025ff3ba271188113fc70":[5,0,0,15,0,2],
-"classBalloonParty_1_1Thrower_1_1AimDirectionHistory.html#a08f9d4befb8025ff3ba271188113fc70":[6,0,0,15,0,2],
-"classBalloonParty_1_1Thrower_1_1AimDirectionHistory.html#a0ddcd101fa51064029859b7463bc175c":[5,0,0,15,0,3],
-"classBalloonParty_1_1Thrower_1_1AimDirectionHistory.html#a0ddcd101fa51064029859b7463bc175c":[6,0,0,15,0,3]
+"classBalloonParty_1_1Thrower_1_1AimDirectionHistory.html#a08f9d4befb8025ff3ba271188113fc70":[6,0,0,15,0,2]
 };

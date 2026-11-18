@@ -18,6 +18,7 @@ var classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView =
     [ "_renderer", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#a13dde4c1d491b860ef5dad8ddfc27383", null ],
     [ "_settings", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#a60a81bbbffceec5eefd306bd8e5639d9", null ],
     [ "_sources", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#a78395f677e63816daa2567182cb385d0", null ],
+    [ "BalloonsLayer", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#a18e29fe234bc70dfb195c6bd70f0cfb6", null ],
     [ "ColorId", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#aa9f81661a37d6016c33b039109e65229", null ],
     [ "CountId", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#aa061c7c4703c27920289d9c71c0f1489", null ],
     [ "DissolveId", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#a949f1b89273c89ea6b27fb2764658bd6", null ],
