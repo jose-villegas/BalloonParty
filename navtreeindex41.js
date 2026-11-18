@@ -1,5 +1,9 @@
 var NAVTREEINDEX41 =
 {
+"classBalloonParty_1_1Display_1_1EffectsClearingController.html":[6,0,0,4,5],
+"classBalloonParty_1_1Display_1_1EffectsClearingController.html#a0259cb2c607fff42d30be1c58286f561":[5,0,0,4,5,6],
+"classBalloonParty_1_1Display_1_1EffectsClearingController.html#a0259cb2c607fff42d30be1c58286f561":[6,0,0,4,5,6],
+"classBalloonParty_1_1Display_1_1EffectsClearingController.html#a0e4bf7771deb593bcc03126e7643f23e":[5,0,0,4,5,5],
 "classBalloonParty_1_1Display_1_1EffectsClearingController.html#a0e4bf7771deb593bcc03126e7643f23e":[6,0,0,4,5,5],
 "classBalloonParty_1_1Display_1_1EffectsClearingController.html#a293b5ad594c60f577c52ce3b2cb605ec":[5,0,0,4,5,7],
 "classBalloonParty_1_1Display_1_1EffectsClearingController.html#a293b5ad594c60f577c52ce3b2cb605ec":[6,0,0,4,5,7],
@@ -245,9 +249,5 @@ var NAVTREEINDEX41 =
 "classBalloonParty_1_1Display_1_1NavigationCameraReveal.html#af2dffb6ddd4e08805f86db50b75750b1":[6,0,0,4,12,2],
 "classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html":[5,0,0,4,13],
 "classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html":[6,0,0,4,13],
-"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#a12861a200bf35d6f87876fc18893bc11":[5,0,0,4,13,1],
-"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#a12861a200bf35d6f87876fc18893bc11":[6,0,0,4,13,1],
-"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#a1ecd80e7c0ffd3068b1e24f95f032d7d":[5,0,0,4,13,4],
-"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#a1ecd80e7c0ffd3068b1e24f95f032d7d":[6,0,0,4,13,4],
-"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#a77918dda4cfdca86c50c1fea1b6f8bc6":[5,0,0,4,13,3]
+"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#a12861a200bf35d6f87876fc18893bc11":[5,0,0,4,13,1]
 };

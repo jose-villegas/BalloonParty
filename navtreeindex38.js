@@ -1,5 +1,9 @@
 var NAVTREEINDEX38 =
 {
+"classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#aba7a91ac8d695f343912a5b83027e10c":[6,0,0,3,9,30,4],
+"classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#abbd9b543237b766bd4d277d54ad31e5d":[5,0,0,3,9,30,6],
+"classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#abbd9b543237b766bd4d277d54ad31e5d":[6,0,0,3,9,30,6],
+"classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#abd0d28088f40f2b45a8fba123661031f":[5,0,0,3,9,30,1],
 "classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#abd0d28088f40f2b45a8fba123661031f":[6,0,0,3,9,30,1],
 "classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#ae0fac9d219284970edfd7728048c7038":[5,0,0,3,9,30,18],
 "classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#ae0fac9d219284970edfd7728048c7038":[6,0,0,3,9,30,18],
@@ -245,9 +249,5 @@ var NAVTREEINDEX38 =
 "classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteEntry.html#a92eff46b3cdf11cb8d2560351a40bdab":[6,0,0,3,10,8,5],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteEntry.html#a93e5f2baf663d1b63e74fb700a6bc358":[5,0,0,3,10,8,2],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteEntry.html#a93e5f2baf663d1b63e74fb700a6bc358":[6,0,0,3,10,8,2],
-"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteEntry.html#a9cca9788a3bcf2a11e9b1981f4367da9":[5,0,0,3,10,8,4],
-"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteEntry.html#a9cca9788a3bcf2a11e9b1981f4367da9":[6,0,0,3,10,8,4],
-"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteEntry.html#ab835c8c796aa55c5527ff44d20057b6f":[5,0,0,3,10,8,3],
-"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteEntry.html#ab835c8c796aa55c5527ff44d20057b6f":[6,0,0,3,10,8,3],
-"classBalloonParty_1_1Configuration_1_1PitySettings.html":[5,0,0,3,25]
+"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteEntry.html#a9cca9788a3bcf2a11e9b1981f4367da9":[5,0,0,3,10,8,4]
 };

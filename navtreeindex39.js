@@ -1,5 +1,9 @@
 var NAVTREEINDEX39 =
 {
+"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteEntry.html#a9cca9788a3bcf2a11e9b1981f4367da9":[6,0,0,3,10,8,4],
+"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteEntry.html#ab835c8c796aa55c5527ff44d20057b6f":[5,0,0,3,10,8,3],
+"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteEntry.html#ab835c8c796aa55c5527ff44d20057b6f":[6,0,0,3,10,8,3],
+"classBalloonParty_1_1Configuration_1_1PitySettings.html":[5,0,0,3,25],
 "classBalloonParty_1_1Configuration_1_1PitySettings.html":[6,0,0,3,25],
 "classBalloonParty_1_1Configuration_1_1PitySettings.html#a01fd57282d6565ec245b950318629389":[5,0,0,3,25,0],
 "classBalloonParty_1_1Configuration_1_1PitySettings.html#a01fd57282d6565ec245b950318629389":[6,0,0,3,25,0],
@@ -245,9 +249,5 @@ var NAVTREEINDEX39 =
 "classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#aa634ff80371c4081929680f77d282a22":[6,0,0,3,29,0],
 "classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#ab7b8fd69e97e814c066e281fb4c35028":[5,0,0,3,29,13],
 "classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#ab7b8fd69e97e814c066e281fb4c35028":[6,0,0,3,29,13],
-"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#abaeb09222d0547a6b4fe71a9bcc37f17":[5,0,0,3,29,1],
-"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#abaeb09222d0547a6b4fe71a9bcc37f17":[6,0,0,3,29,1],
-"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#ad0a64e70d7d8d41c3fa63ba33bdbc11d":[5,0,0,3,29,5],
-"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#ad0a64e70d7d8d41c3fa63ba33bdbc11d":[6,0,0,3,29,5],
-"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#ae50419a0d7a8da0c50bbbd7f1f3d164d":[5,0,0,3,29,8]
+"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#abaeb09222d0547a6b4fe71a9bcc37f17":[5,0,0,3,29,1]
 };

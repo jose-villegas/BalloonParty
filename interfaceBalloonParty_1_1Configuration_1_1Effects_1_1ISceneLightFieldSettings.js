@@ -2,6 +2,7 @@ var interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightFieldSetting
 [
     [ "AccumulateShader", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightFieldSettings.html#a5bfc4d729e00c2fda6bd01c096b8a457", null ],
     [ "AccumulationCeiling", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightFieldSettings.html#a1f2b19b78a740e53870c2bfdeae67fe7", null ],
+    [ "ColorDownscale", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightFieldSettings.html#ad8602e484688f0acd65b816b31404fdb", null ],
     [ "DirectionResponse", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightFieldSettings.html#a8fecfb97bf89a5371e7ac4f035fcec8c", null ],
     [ "FieldFrameInterval", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightFieldSettings.html#a57839e097a9cd74d1f67c1b8d289679b", null ],
     [ "FillShader", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightFieldSettings.html#a1ba53276625f03c4d52ff8f3756cf2fa", null ],

@@ -49,6 +49,7 @@ var classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow =
     [ "PaletteChannelId", "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#a1756501c9b26af457e5f8d4e4ef5eae6", null ],
     [ "PaletteColorsId", "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#a4641aca826ff32400ba16c016bfd9860", null ],
     [ "SceneCaptureTexId", "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#a9ad27b6c21c7642e30b3424f48cf2136", null ],
+    [ "SceneLightColorTexId", "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#aa2899cc2b1e86bbc7d5b47579d4cb7df", null ],
     [ "SceneLightTexId", "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#ab817c795fb48718ac341fdb47847fbb3", null ],
     [ "SmokeTexId", "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#a11f01902de14a6252ca2a4b5cc37bcba", null ]
 ];

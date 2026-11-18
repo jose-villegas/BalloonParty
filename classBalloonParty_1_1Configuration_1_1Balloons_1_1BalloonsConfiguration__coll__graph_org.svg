@@ -779,7 +779,7 @@
 <!-- Node32 -->
 <g id="Node000032" class="node">
 <title>Node32</title>
-<g id="a_Node000032"><a xlink:href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldResources.html" target="_top" xlink:title="Holds the scene&#45;light field&#39;s GPU resources (two ping&#45;pong RTs + the fill/accumulate/gradient materia...">
+<g id="a_Node000032"><a xlink:href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldResources.html" target="_top" xlink:title="Holds the scene&#45;light field&#39;s GPU resources (two ping&#45;pong RTs, the smaller colour map,...">
 <polygon fill="white" stroke="#666666" points="173.5,-685.5 3.75,-685.5 3.75,-652 173.5,-652 173.5,-685.5"/>
 <text xml:space="preserve" text-anchor="start" x="11.75" y="-672" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Shared.Scene</text>
 <text xml:space="preserve" text-anchor="middle" x="88.62" y="-659.25" font-family="Helvetica,sans-Serif" font-size="10.00">Light.SceneLightFieldResources</text>

@@ -113,7 +113,7 @@ $(function(){initNavTree('arch_light_field.html',''); initResizable(true); });
 <div class="textblock"><h1><a class="anchor" id="autotoc_md89"></a>
 Scene Light Field (2D Multi-Light)</h1>
 <div class="dotgraph">
-<iframe scrolling="no" frameborder="0" src="dot_inline_dotgraph_2.svg" width="1339" height="1884"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<iframe scrolling="no" frameborder="0" src="dot_inline_dotgraph_2.svg" width="1339" height="1930"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <h2><a class="anchor" id="autotoc_md90"></a>
 What this diagram shows</h2>
 <p>The <b>scene light field</b> — a screen/world-space RT that collapses N point/area lights into a single per-position composite (direction + magnitude + colour) that every consumer samples once. The architecture mirrors the disturbance field: a batched stamp pipeline producing a global RT, shared coordinates, and a cginc include for consumers.</p>
@@ -122,7 +122,7 @@ What this diagram shows</h2>
 <p><b>The pipeline</b> (three blit passes over two ping-pong RTs):</p>
 <ol type="1">
 <li><b>Fill</b> — clears to rest (R=0, GB=0.5 neutral, A=0). The rest state encodes "no local light" — the ambient comes from the globals <code>TimeOfDayService</code> pushes, not from the field.</li>
-<li><b>Accumulate</b> — batches up to 32 lights per blit (mirrors <code>DisturbanceStampBatched</code>). Each light is a capsule: falloff uses aspect-corrected distance to the segment <code>[start, end]</code>. R is soft-clamped ( \( \mathit{MaxBoost}\cdot\big(1-e^{-\mathit{sum}/\mathit{MaxBoost}}\big) \)); A writes the dominant light's palette index ( \( (\mathit{index}+1)/16 \)). GB passes through.</li>
+<li><b>Accumulate</b> — batches up to 32 lights per blit (mirrors <code>DisturbanceStampBatched</code>). Each light is a capsule: falloff uses aspect-corrected distance to the segment <code>[start, end]</code>. R is soft-clamped ( \( \mathit{MaxBoost}\cdot\big(1-e^{-\mathit{sum}/\mathit{MaxBoost}}\big) \)); A writes the dominant light's palette index ( \( (\mathit{index}+1)/16 \)). GB passes through. A second pass of the same shader renders the <b>light-colour map</b> (<code>_SceneLightColorTex</code>, <code>ARGB32</code>, the field's size divided by <code>ColorDownscale</code>): RGB = the tagged lights' palette colours blended by how much light each adds, times A; A = the tagged share of the local light.</li>
 <li><b>Gradient</b> — derives direction from <code>grad(R)</code> via central difference. Blends from rest GB toward the gradient direction by \( \mathrm{saturate}(\mathit{localR}\cdot \mathit{DirectionResponse}) \) — presence-weighted, so flat regions keep the global direction and bright regions capture the local one.</li>
 </ol>
 <p><b>Consumers</b> read the field through <code>SceneLight.cginc</code> (<code>SceneLightDirectionAt</code>, <code>…MagnitudeAt</code>, <code>…TintAt</code>, <code>ShadowLightFadeAt</code>). When <code>_SceneLightFieldOn &lt; 0.5</code> (field off, edit mode, or no service alive) all helpers return the flat globals — bit-identical to the pre-field state. This makes the field a strictly additive seam.</p>
@@ -132,13 +132,13 @@ Key design decisions</h2>
 <li><b>Lights are state, not events.</b> Unlike the disturbance field (fire a stamp, it lingers/diffuses), a light is simply on or off. The caller owns the lifecycle — there is no decay in the service. A flash is just the caller DOTweening <code>Intensity</code> to zero and disposing.</li>
 <li><b>Direction is derived, not stamped.</b> The gradient pass computes direction from <code>grad(R)</code> — the heightfield-normal trick. This makes area lights trivial: authors paint brightness only (capsule stamps for beams) and every shape gets plausible directions automatically.</li>
 <li><b>The field is purely local.</b> R stores only the local boost above ambient; the ambient magnitude and direction come from the globals <code>TimeOfDayService</code> pushes, added by the include's helpers. This means ambient tweaks (day/night, fade-outs) never dirty the field and never re-render it.</li>
-<li><b>Palette colour via intensity-driven soft edge.</b> The A channel carries a quantised palette index, but <code>SceneLightTintAt</code> decodes it into a smooth colour glow by blending key→palette by \( \mathrm{saturate}((R - \mathit{rest}) / \mathit{RAMP}) \) — the smooth bilinear R magnitude drives the colour edge, not the hard index texels. Overlapping lights meet in the dark (between them R is low → colour fades out).</li>
+<li><b>Palette colour from a filterable map, with an intensity-driven soft edge.</b> A palette index can't be filtered, so colour lives in the separate light-colour map; <code>SceneLightTintAt</code> takes one bilinear tap of it and blends key→palette by \( \mathrm{saturate}((R - \mathit{rest}) / \mathit{RAMP}) \) — the smooth bilinear R magnitude drives the colour edge. Overlapping coloured lights blend through their mix. The A index stays only for the palette-mask exclusion, which needs the dominant light's identity.</li>
 <li><b>Device-build safety.</b> All three <code>Hidden/</code> shaders are serialized on the settings SO (<code>ISceneLightFieldSettings</code>). <code>Shader.Find</code> is an editor-only fallback — an unassigned slot breaks the field on device.</li>
 <li><b>Dirty-gated cost.</b> The pipeline is skipped entirely when nothing changed. An idle scene with static lights pays zero GPU cost per frame. The field runs at <code>TexelsPerUnit = 32</code> (finer than the disturbance field's 8) — affordable because it's not ticked every frame.</li>
 <li><b>Cadence-capped, not just dirty-gated.</b> A light that dirties every tick (a tracked projectile) would otherwise re-render at the display's full refresh rate for identical visuals — 2× the GPU cost on a 120 Hz panel versus 60 Hz. <code>FieldFrameInterval</code> is authored as "every N frames at 60 fps" and reinterpreted as seconds, accumulated with unscaled time (mirroring <code>SceneCaptureService</code>'s capture cadence), decoupling render cost from display refresh. The very first render is exempt from the cap so consumers never sample an empty RT.</li>
 </ol>
 <h2><a class="anchor" id="autotoc_md92"></a>
-Channel encoding (single RT)</h2>
+Channel encoding</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Channel   </th><th class="markdownTableHeadNone">Meaning   </th><th class="markdownTableHeadNone">Rest value    </th></tr>
@@ -147,8 +147,9 @@ Channel encoding (single RT)</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><b>G/B</b>   </td><td class="markdownTableBodyNone">0.5-biased \( \mathit{weight}\cdot \mathit{localDir} \) (direction toward nearest local light)   </td><td class="markdownTableBodyNone"><code>0.5</code> (neutral)    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b>A</b>   </td><td class="markdownTableBodyNone">Palette colour index \( (\mathit{index}+1)/16 \); 0 = use <code>_SceneLightColor</code>   </td><td class="markdownTableBodyNone"><code>0</code> exactly   </td></tr>
+<td class="markdownTableBodyNone"><b>A</b>   </td><td class="markdownTableBodyNone">Dominant light's palette index \( (\mathit{index}+1)/16 \); 0 = untagged. Point-sampled, used only for the palette-mask exclusion   </td><td class="markdownTableBodyNone"><code>0</code> exactly   </td></tr>
 </table>
+<p>The light-colour map <code>_SceneLightColorTex</code> is a separate, smaller <code>ARGB32</code> RT: RGB = tagged lights' blended palette colour times A, A = the tagged share of the local light. Consumers read the palette colour from it as <code>keyColor * (1 - a) + rgb</code>.</p>
 <h2><a class="anchor" id="autotoc_md93"></a>
 Current game sources</h2>
 <table class="markdownTable">

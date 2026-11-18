@@ -119,7 +119,7 @@ var architecture =
       [ "Scene Light Field (2D Multi-Light)", "arch_light_field.html#autotoc_md89", [
         [ "What this diagram shows", "arch_light_field.html#autotoc_md90", null ],
         [ "Key design decisions", "arch_light_field.html#autotoc_md91", null ],
-        [ "Channel encoding (single RT)", "arch_light_field.html#autotoc_md92", null ],
+        [ "Channel encoding", "arch_light_field.html#autotoc_md92", null ],
         [ "Current game sources", "arch_light_field.html#autotoc_md93", null ],
         [ "Relationship to the GI", "arch_light_field.html#autotoc_md94", null ],
         [ "See also", "arch_light_field.html#autotoc_md95", null ]

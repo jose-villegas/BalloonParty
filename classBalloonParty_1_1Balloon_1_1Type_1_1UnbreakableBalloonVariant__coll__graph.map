@@ -49,7 +49,7 @@
 <area shape="poly" id="edge22_Node000001_Node000019" title=" " alt="" coords="906,653,1200,483,1195,486,909,657"/>
 <area shape="rect" id="Node000020" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightFieldSettings.html" title="Read&#45;only tuning for the scene&#45;light field (see Milestone 3)." alt="" coords="356,810,584,855"/>
 <area shape="poly" id="edge29_Node000019_Node000020" title=" " alt="" coords="599,841,656,835,711,819,750,796,785,766,814,735,835,710,839,707,818,738,789,770,753,800,713,824,657,840,601,846"/>
-<area shape="rect" id="Node000021" href="$classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldResources.html" title="Holds the scene&#45;light field&#39;s GPU resources (two ping&#45;pong RTs + the fill/accumulate/gradient materia..." alt="" coords="357,880,583,924"/>
+<area shape="rect" id="Node000021" href="$classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldResources.html" title="Holds the scene&#45;light field&#39;s GPU resources (two ping&#45;pong RTs, the smaller colour map,..." alt="" coords="357,880,583,924"/>
 <area shape="poly" id="edge30_Node000019_Node000021" title=" " alt="" coords="598,898,656,886,711,863,755,829,792,786,820,743,840,710,844,707,825,746,796,789,759,833,713,868,658,891,600,903"/>
 <area shape="rect" id="Node000022" href="$interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html" title=" " alt="" coords="753,1032,955,1076"/>
 <area shape="poly" id="edge32_Node000001_Node000022" title=" " alt="" coords="970,1063,1009,1060,1046,1053,1082,1038,1113,1017,1127,1000,1140,977,1164,917,1183,842,1199,759,1221,598,1233,487,1236,483,1227,598,1205,760,1189,843,1169,918,1145,980,1131,1003,1116,1021,1084,1043,1048,1058,1009,1066,971,1068"/>

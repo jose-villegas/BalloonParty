@@ -1,5 +1,11 @@
 var NAVTREEINDEX90 =
 {
+"classBalloonParty_1_1Shared_1_1Pool_1_1TrailEndpointRegistry.html#a9819483c6321a4f74baa74b0e9650d9f":[6,0,0,12,9,13,1],
+"classBalloonParty_1_1Shared_1_1Pool_1_1TrailEndpointRegistry.html#ab58f9c087358859838d4b4834fa2c8f8":[5,0,0,12,9,13,0],
+"classBalloonParty_1_1Shared_1_1Pool_1_1TrailEndpointRegistry.html#ab58f9c087358859838d4b4834fa2c8f8":[6,0,0,12,9,13,0],
+"classBalloonParty_1_1Shared_1_1Pool_1_1TrailEndpointRegistry.html#abfb65224e2fdf049264cb6eb6df77ffd":[5,0,0,12,9,13,2],
+"classBalloonParty_1_1Shared_1_1Pool_1_1TrailEndpointRegistry.html#abfb65224e2fdf049264cb6eb6df77ffd":[6,0,0,12,9,13,2],
+"classBalloonParty_1_1Shared_1_1Pool_1_1TrailFlight.html":[5,0,0,12,9,14],
 "classBalloonParty_1_1Shared_1_1Pool_1_1TrailFlight.html":[6,0,0,12,9,14],
 "classBalloonParty_1_1Shared_1_1Pool_1_1TrailFlight.html#a0c3fab1eb78d5ea4585e9371511d2bf9":[5,0,0,12,9,14,5],
 "classBalloonParty_1_1Shared_1_1Pool_1_1TrailFlight.html#a0c3fab1eb78d5ea4585e9371511d2bf9":[6,0,0,12,9,14,5],
@@ -243,11 +249,5 @@ var NAVTREEINDEX90 =
 "classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html#a394037d1048e9cb48ee00d3e555512c1":[6,0,0,12,10,17,5],
 "classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html#a71e2f9917c6cf60a1cc7f860ea7065e3":[5,0,0,12,10,17,14],
 "classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html#a71e2f9917c6cf60a1cc7f860ea7065e3":[6,0,0,12,10,17,14],
-"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html#a75c9ac259ef4dd8c4bc79c0fe2faf2d8":[5,0,0,12,10,17,4],
-"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html#a75c9ac259ef4dd8c4bc79c0fe2faf2d8":[6,0,0,12,10,17,4],
-"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html#a7e65ec517b2421f33a81ed9ac337ea8d":[5,0,0,12,10,17,8],
-"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html#a7e65ec517b2421f33a81ed9ac337ea8d":[6,0,0,12,10,17,8],
-"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html#a7f248adfd313648f56ee881330d3dc30":[5,0,0,12,10,17,2],
-"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html#a7f248adfd313648f56ee881330d3dc30":[6,0,0,12,10,17,2],
-"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html#a810c86e5a086cc549856858f9e7b6d2e":[5,0,0,12,10,17,13]
+"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html#a75c9ac259ef4dd8c4bc79c0fe2faf2d8":[5,0,0,12,10,17,4]
 };

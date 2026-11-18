@@ -1956,7 +1956,7 @@ var sectionId = 'dynsection-1';
 <!-- Node61 -->
 <g id="Node000061" class="node">
 <title>Node61</title>
-<g id="a_Node000061"><a xlink:href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldResources.html" target="_top" xlink:title="Holds the scene&#45;light field&#39;s GPU resources (two ping&#45;pong RTs + the fill/accumulate/gradient materia...">
+<g id="a_Node000061"><a xlink:href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldResources.html" target="_top" xlink:title="Holds the scene&#45;light field&#39;s GPU resources (two ping&#45;pong RTs, the smaller colour map,...">
 <polygon fill="white" stroke="#666666" points="728.38,-882.5 558.62,-882.5 558.62,-849 728.38,-849 728.38,-882.5"/>
 <text xml:space="preserve" text-anchor="start" x="566.62" y="-869" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Shared.Scene</text>
 <text xml:space="preserve" text-anchor="middle" x="643.5" y="-856.25" font-family="Helvetica,sans-Serif" font-size="10.00">Light.SceneLightFieldResources</text>

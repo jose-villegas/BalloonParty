@@ -119,13 +119,16 @@ $(function(){initNavTree('classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLigh
 </div><!--header-->
 <div class="contents">
 
-<p>Holds the scene-light field's GPU resources (two ping-pong RTs + the fill/accumulate/gradient materials) and the blit-and-swap, separate from <a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html" title="Owns the scene-light FIELD — a small screen/world-space RT (the disturbance-field architecture applie...">SceneLightFieldService</a>'s per-tick logic — mirrors DisturbanceFieldResources.  
+<p>Holds the scene-light field's GPU resources (two ping-pong RTs, the smaller colour map, and the fill/accumulate/gradient materials) and the blit-and-swap, separate from <a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html" title="Owns the scene-light FIELD — a small screen/world-space RT (the disturbance-field architecture applie...">SceneLightFieldService</a>'s per-tick logic — mirrors DisturbanceFieldResources.  
  <a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a77a97f748c1f06476abbe4d1d731d8c3" id="r_a77a97f748c1f06476abbe4d1d731d8c3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a77a97f748c1f06476abbe4d1d731d8c3">BlitAndSwap</a> (Material material)</td></tr>
 <tr class="separator:a77a97f748c1f06476abbe4d1d731d8c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac76763c62c231d0687c237a9ce615f9b" id="r_ac76763c62c231d0687c237a9ce615f9b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac76763c62c231d0687c237a9ce615f9b">BlitColor</a> ()</td></tr>
+<tr class="memdesc:ac76763c62c231d0687c237a9ce615f9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renders the colour map from the lights the accumulate material was just given.  <br /></td></tr>
+<tr class="separator:ac76763c62c231d0687c237a9ce615f9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad14fc521e82bbc9d755671e064b7640a" id="r_ad14fc521e82bbc9d755671e064b7640a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad14fc521e82bbc9d755671e064b7640a">Dispose</a> ()</td></tr>
 <tr class="separator:ad14fc521e82bbc9d755671e064b7640a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a59da51a5596da2a06a2a8abcdce4e7e7" id="r_a59da51a5596da2a06a2a8abcdce4e7e7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a59da51a5596da2a06a2a8abcdce4e7e7">Fill</a> ()</td></tr>
@@ -134,13 +137,16 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a425f0cf127e09ae4ae1551ae9dd06bd5" id="r_a425f0cf127e09ae4ae1551ae9dd06bd5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a425f0cf127e09ae4ae1551ae9dd06bd5">Gradient</a> ()</td></tr>
 <tr class="memdesc:a425f0cf127e09ae4ae1551ae9dd06bd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pass 3 — recomputes GB from grad(R).  <br /></td></tr>
 <tr class="separator:a425f0cf127e09ae4ae1551ae9dd06bd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a399169f587dd1f70824385813a70f646" id="r_a399169f587dd1f70824385813a70f646"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a399169f587dd1f70824385813a70f646">Initialize</a> (int width, int height, Shader fill, Shader accumulate, Shader gradient)</td></tr>
-<tr class="separator:a399169f587dd1f70824385813a70f646"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a80ebaa4b47e2e2dabf7d716c8bdd16ec" id="r_a80ebaa4b47e2e2dabf7d716c8bdd16ec"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a80ebaa4b47e2e2dabf7d716c8bdd16ec">Initialize</a> (int width, int height, int colorDownscale, Shader fill, Shader accumulate, Shader gradient)</td></tr>
+<tr class="separator:a80ebaa4b47e2e2dabf7d716c8bdd16ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
 <tr class="memitem:a8842ab11e5c2e1d555f86bdbf976ebb3" id="r_a8842ab11e5c2e1d555f86bdbf976ebb3"><td class="memItemLeft" align="right" valign="top">Material&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8842ab11e5c2e1d555f86bdbf976ebb3">AccumulateMaterial</a><code> [get]</code></td></tr>
 <tr class="separator:a8842ab11e5c2e1d555f86bdbf976ebb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b651b14631c2fa809d2ea5251f1b591" id="r_a2b651b14631c2fa809d2ea5251f1b591"><td class="memItemLeft" align="right" valign="top">RenderTexture&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2b651b14631c2fa809d2ea5251f1b591">ColorTexture</a><code> [get]</code></td></tr>
+<tr class="memdesc:a2b651b14631c2fa809d2ea5251f1b591"><td class="mdescLeft">&#160;</td><td class="mdescRight">What colour the local light is at each point: the tagged lights' blended palette colour times alpha, alpha the share of the local light that is tagged.  <br /></td></tr>
+<tr class="separator:a2b651b14631c2fa809d2ea5251f1b591"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8cffe701886e49e80269f3760ff2446e" id="r_a8cffe701886e49e80269f3760ff2446e"><td class="memItemLeft" align="right" valign="top">static RenderTextureFormat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8cffe701886e49e80269f3760ff2446e">FieldFormat</a><code> [get]</code></td></tr>
 <tr class="separator:a8cffe701886e49e80269f3760ff2446e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a451f85d9be94a10683bd8d1d1b7bbc81" id="r_a451f85d9be94a10683bd8d1d1b7bbc81"><td class="memItemLeft" align="right" valign="top">RenderTexture&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a451f85d9be94a10683bd8d1d1b7bbc81">FieldTexture</a><code> [get]</code></td></tr>
@@ -159,6 +165,8 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
+<tr class="memitem:a9c2282a869884f0535a1a8f3b9bb951c" id="r_a9c2282a869884f0535a1a8f3b9bb951c"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9c2282a869884f0535a1a8f3b9bb951c">Clear</a> (RenderTexture rt, Color color)</td></tr>
+<tr class="separator:a9c2282a869884f0535a1a8f3b9bb951c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a483367da04fbcac1a8065981a08e30a5" id="r_a483367da04fbcac1a8065981a08e30a5"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a483367da04fbcac1a8065981a08e30a5">ClearToRest</a> (RenderTexture rt)</td></tr>
 <tr class="separator:a483367da04fbcac1a8065981a08e30a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6527ddaadfbcd839067e3b060f9e221b" id="r_a6527ddaadfbcd839067e3b060f9e221b"><td class="memItemLeft" align="right" valign="top">static RenderTexture&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6527ddaadfbcd839067e3b060f9e221b">CreateRT</a> (int width, int height, RenderTextureFormat format)</td></tr>
@@ -174,6 +182,8 @@ Static Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a0aebd8cf8ec0ad56bae34bb26ec47ee5" id="r_a0aebd8cf8ec0ad56bae34bb26ec47ee5"><td class="memItemLeft" align="right" valign="top">Material&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0aebd8cf8ec0ad56bae34bb26ec47ee5">_accumulateMaterial</a></td></tr>
 <tr class="separator:a0aebd8cf8ec0ad56bae34bb26ec47ee5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3aa53af8325d9b64fea3c4f792fe2e0" id="r_af3aa53af8325d9b64fea3c4f792fe2e0"><td class="memItemLeft" align="right" valign="top">RenderTexture&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af3aa53af8325d9b64fea3c4f792fe2e0">_color</a></td></tr>
+<tr class="separator:af3aa53af8325d9b64fea3c4f792fe2e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4bcb0d1cab3687d5a7c2f5dd45d566b9" id="r_a4bcb0d1cab3687d5a7c2f5dd45d566b9"><td class="memItemLeft" align="right" valign="top">RenderTexture&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4bcb0d1cab3687d5a7c2f5dd45d566b9">_fieldA</a></td></tr>
 <tr class="separator:a4bcb0d1cab3687d5a7c2f5dd45d566b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5fef14724d2ec48925661c160b704c3" id="r_aa5fef14724d2ec48925661c160b704c3"><td class="memItemLeft" align="right" valign="top">RenderTexture&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa5fef14724d2ec48925661c160b704c3">_fieldB</a></td></tr>
@@ -187,13 +197,19 @@ Private Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
+<tr class="memitem:a7e35aa902879a5b4ca53bbba6fbe425a" id="r_a7e35aa902879a5b4ca53bbba6fbe425a"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7e35aa902879a5b4ca53bbba6fbe425a">ColorPass</a> = 1</td></tr>
+<tr class="separator:a7e35aa902879a5b4ca53bbba6fbe425a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a698915efbeae21d84bbe1b38a1b81bca" id="r_a698915efbeae21d84bbe1b38a1b81bca"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a698915efbeae21d84bbe1b38a1b81bca">FieldPass</a> = 0</td></tr>
+<tr class="separator:a698915efbeae21d84bbe1b38a1b81bca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af57d64877a165171f88fd1ed98ce1de5" id="r_af57d64877a165171f88fd1ed98ce1de5"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af57d64877a165171f88fd1ed98ce1de5">GlobalSceneLightColorTexId</a> = Shader.PropertyToID(&quot;_SceneLightColorTex&quot;)</td></tr>
+<tr class="separator:af57d64877a165171f88fd1ed98ce1de5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc55faea69d490ae31eb055ad0b89e3f" id="r_afc55faea69d490ae31eb055ad0b89e3f"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afc55faea69d490ae31eb055ad0b89e3f">GlobalSceneLightTexId</a> = Shader.PropertyToID(&quot;_SceneLightTex&quot;)</td></tr>
 <tr class="separator:afc55faea69d490ae31eb055ad0b89e3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3188b8af3166f8253c205159ec94c492" id="r_a3188b8af3166f8253c205159ec94c492"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3188b8af3166f8253c205159ec94c492">TexelSizeId</a> = Shader.PropertyToID(&quot;_FieldTexelSize&quot;)</td></tr>
 <tr class="separator:a3188b8af3166f8253c205159ec94c492"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Holds the scene-light field's GPU resources (two ping-pong RTs + the fill/accumulate/gradient materials) and the blit-and-swap, separate from <a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html" title="Owns the scene-light FIELD — a small screen/world-space RT (the disturbance-field architecture applie...">SceneLightFieldService</a>'s per-tick logic — mirrors DisturbanceFieldResources. </p>
+<div class="textblock"><p>Holds the scene-light field's GPU resources (two ping-pong RTs, the smaller colour map, and the fill/accumulate/gradient materials) and the blit-and-swap, separate from <a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html" title="Owns the scene-light FIELD — a small screen/world-space RT (the disturbance-field architecture applie...">SceneLightFieldService</a>'s per-tick logic — mirrors DisturbanceFieldResources. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a77a97f748c1f06476abbe4d1d731d8c3" name="a77a97f748c1f06476abbe4d1d731d8c3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a77a97f748c1f06476abbe4d1d731d8c3">&#9670;&#160;</a></span>BlitAndSwap()</h2>
@@ -208,6 +224,54 @@ Static Private Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac76763c62c231d0687c237a9ce615f9b" name="ac76763c62c231d0687c237a9ce615f9b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac76763c62c231d0687c237a9ce615f9b">&#9670;&#160;</a></span>BlitColor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Shared.SceneLight.SceneLightFieldResources.BlitColor </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Renders the colour map from the lights the accumulate material was just given. </p>
+
+</div>
+</div>
+<a id="a9c2282a869884f0535a1a8f3b9bb951c" name="a9c2282a869884f0535a1a8f3b9bb951c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c2282a869884f0535a1a8f3b9bb951c">&#9670;&#160;</a></span>Clear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void BalloonParty.Shared.SceneLight.SceneLightFieldResources.Clear </td>
+          <td>(</td>
+          <td class="paramtype">RenderTexture</td>          <td class="paramname"><span class="paramname"><em>rt</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Color</td>          <td class="paramname"><span class="paramname"><em>color</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -353,8 +417,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a399169f587dd1f70824385813a70f646" name="a399169f587dd1f70824385813a70f646"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a399169f587dd1f70824385813a70f646">&#9670;&#160;</a></span>Initialize()</h2>
+<a id="a80ebaa4b47e2e2dabf7d716c8bdd16ec" name="a80ebaa4b47e2e2dabf7d716c8bdd16ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a80ebaa4b47e2e2dabf7d716c8bdd16ec">&#9670;&#160;</a></span>Initialize()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -368,6 +432,11 @@ Static Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>height</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>colorDownscale</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -491,6 +560,28 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="af3aa53af8325d9b64fea3c4f792fe2e0" name="af3aa53af8325d9b64fea3c4f792fe2e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3aa53af8325d9b64fea3c4f792fe2e0">&#9670;&#160;</a></span>_color</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">RenderTexture BalloonParty.Shared.SceneLight.SceneLightFieldResources._color</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a4bcb0d1cab3687d5a7c2f5dd45d566b9" name="a4bcb0d1cab3687d5a7c2f5dd45d566b9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4bcb0d1cab3687d5a7c2f5dd45d566b9">&#9670;&#160;</a></span>_fieldA</h2>
 
@@ -601,6 +692,72 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a7e35aa902879a5b4ca53bbba6fbe425a" name="a7e35aa902879a5b4ca53bbba6fbe425a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e35aa902879a5b4ca53bbba6fbe425a">&#9670;&#160;</a></span>ColorPass</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int BalloonParty.Shared.SceneLight.SceneLightFieldResources.ColorPass = 1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a698915efbeae21d84bbe1b38a1b81bca" name="a698915efbeae21d84bbe1b38a1b81bca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a698915efbeae21d84bbe1b38a1b81bca">&#9670;&#160;</a></span>FieldPass</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int BalloonParty.Shared.SceneLight.SceneLightFieldResources.FieldPass = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af57d64877a165171f88fd1ed98ce1de5" name="af57d64877a165171f88fd1ed98ce1de5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af57d64877a165171f88fd1ed98ce1de5">&#9670;&#160;</a></span>GlobalSceneLightColorTexId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Shared.SceneLight.SceneLightFieldResources.GlobalSceneLightColorTexId = Shader.PropertyToID(&quot;_SceneLightColorTex&quot;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="afc55faea69d490ae31eb055ad0b89e3f" name="afc55faea69d490ae31eb055ad0b89e3f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afc55faea69d490ae31eb055ad0b89e3f">&#9670;&#160;</a></span>GlobalSceneLightTexId</h2>
 
@@ -665,6 +822,31 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2b651b14631c2fa809d2ea5251f1b591" name="a2b651b14631c2fa809d2ea5251f1b591"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b651b14631c2fa809d2ea5251f1b591">&#9670;&#160;</a></span>ColorTexture</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">RenderTexture BalloonParty.Shared.SceneLight.SceneLightFieldResources.ColorTexture</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>What colour the local light is at each point: the tagged lights' blended palette colour times alpha, alpha the share of the local light that is tagged. </p>
+<p>Bound globally as <code>_SceneLightColorTex</code>. </p>
 
 </div>
 </div>

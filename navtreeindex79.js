@@ -1,5 +1,11 @@
 var NAVTREEINDEX79 =
 {
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#acab932aa31ebd3af9723473d860c608b":[6,0,0,10,1,6,1],
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#ae054a86bb87f386f88a22353380ea133":[5,0,0,10,1,6,11],
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#ae054a86bb87f386f88a22353380ea133":[6,0,0,10,1,6,11],
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#ae0845f03174bc4c1f8aae728f6d4e81a":[5,0,0,10,1,6,2],
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#ae0845f03174bc4c1f8aae728f6d4e81a":[6,0,0,10,1,6,2],
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#ae7f098e20558c0cc66fde849add2b9b6":[5,0,0,10,1,6,12],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#ae7f098e20558c0cc66fde849add2b9b6":[6,0,0,10,1,6,12],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#aea9636eaaa8b4bbcc2415f75b59064c6":[5,0,0,10,1,6,3],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#aea9636eaaa8b4bbcc2415f75b59064c6":[6,0,0,10,1,6,3],
@@ -243,11 +249,5 @@ var NAVTREEINDEX79 =
 "classBalloonParty_1_1Projectile_1_1ProjectileFacingSource.html#a0455f48f1e8b0c3d323b44777ee40e1b":[6,0,0,10,7,3],
 "classBalloonParty_1_1Projectile_1_1ProjectileFacingSource.html#a227680c58caac747ee8a684ec2c9b1dd":[5,0,0,10,7,6],
 "classBalloonParty_1_1Projectile_1_1ProjectileFacingSource.html#a227680c58caac747ee8a684ec2c9b1dd":[6,0,0,10,7,6],
-"classBalloonParty_1_1Projectile_1_1ProjectileFacingSource.html#a2a0b346a7769cefa569c80644d51cc9b":[5,0,0,10,7,1],
-"classBalloonParty_1_1Projectile_1_1ProjectileFacingSource.html#a2a0b346a7769cefa569c80644d51cc9b":[6,0,0,10,7,1],
-"classBalloonParty_1_1Projectile_1_1ProjectileFacingSource.html#a38a115b6b19393b2c163e12d8240b1d6":[5,0,0,10,7,5],
-"classBalloonParty_1_1Projectile_1_1ProjectileFacingSource.html#a38a115b6b19393b2c163e12d8240b1d6":[6,0,0,10,7,5],
-"classBalloonParty_1_1Projectile_1_1ProjectileFacingSource.html#a42a1a42f9b965a562dde23d1c29932cd":[5,0,0,10,7,8],
-"classBalloonParty_1_1Projectile_1_1ProjectileFacingSource.html#a42a1a42f9b965a562dde23d1c29932cd":[6,0,0,10,7,8],
-"classBalloonParty_1_1Projectile_1_1ProjectileFacingSource.html#a6a21b1c5022e5db2829df466debb2b6d":[5,0,0,10,7,2]
+"classBalloonParty_1_1Projectile_1_1ProjectileFacingSource.html#a2a0b346a7769cefa569c80644d51cc9b":[5,0,0,10,7,1]
 };

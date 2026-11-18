@@ -31,7 +31,7 @@
 <area shape="poly" id="edge32_Node000019_Node000009" title=" " alt="" coords="506,1014,551,1048,604,1078,632,1087,659,1090,686,1087,710,1075,721,1060,723,1042,723,1023,734,1003,749,994,754,992,738,1007,728,1024,728,1042,726,1061,714,1079,687,1092,659,1096,630,1092,602,1083,548,1053,505,1019"/>
 <area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightFieldSettings.html" title="Read&#45;only tuning for the scene&#45;light field (see Milestone 3)." alt="" coords="356,704,584,749"/>
 <area shape="poly" id="edge9_Node000003_Node000010" title=" " alt="" coords="599,701,752,674,748,677,601,705"/>
-<area shape="rect" id="Node000011" href="$classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldResources.html" title="Holds the scene&#45;light field&#39;s GPU resources (two ping&#45;pong RTs + the fill/accumulate/gradient materia..." alt="" coords="357,635,583,679"/>
+<area shape="rect" id="Node000011" href="$classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldResources.html" title="Holds the scene&#45;light field&#39;s GPU resources (two ping&#45;pong RTs, the smaller colour map,..." alt="" coords="357,635,583,679"/>
 <area shape="poly" id="edge10_Node000003_Node000011" title=" " alt="" coords="598,654,753,656,748,658,599,660"/>
 <area shape="rect" id="Node000012" href="$classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldCoordinates.html" title="Converts world positions/radii to the normalised UV space the stamp shaders expect." alt="" coords="352,565,588,610"/>
 <area shape="poly" id="edge11_Node000003_Node000012" title=" " alt="" coords="602,609,753,637,748,639,604,614"/>

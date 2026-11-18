@@ -150,6 +150,9 @@ Properties</h2></td></tr>
 <tr class="memitem:a5a1bbecf163313781d4a07f57404e117" id="r_a5a1bbecf163313781d4a07f57404e117"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5a1bbecf163313781d4a07f57404e117">CloudShadowGate</a><code> [get]</code></td></tr>
 <tr class="memdesc:a5a1bbecf163313781d4a07f57404e117"><td class="mdescLeft">&#160;</td><td class="mdescRight">How strongly the shared background field gates the GI shadow: 1 = shadow only survives on cloud (full gating), 0 = cloud ignored (shadow everywhere).  <br /></td></tr>
 <tr class="separator:a5a1bbecf163313781d4a07f57404e117"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2aa02609ddebd62826b0d5fc50bdf8f4" id="r_a2aa02609ddebd62826b0d5fc50bdf8f4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2aa02609ddebd62826b0d5fc50bdf8f4">ColorDownscale</a><code> [get]</code></td></tr>
+<tr class="memdesc:a2aa02609ddebd62826b0d5fc50bdf8f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many times coarser than the field the light-colour map is, per axis.  <br /></td></tr>
+<tr class="separator:a2aa02609ddebd62826b0d5fc50bdf8f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b2d4503264e9879254ba00d4e40ccc8" id="r_a2b2d4503264e9879254ba00d4e40ccc8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2b2d4503264e9879254ba00d4e40ccc8">DegreesPerLevel</a><code> [get]</code></td></tr>
 <tr class="memdesc:a2b2d4503264e9879254ba00d4e40ccc8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Degrees the toward-light direction advances per level, counter-clockwise (the gradient's <code>t = angle / 360</code>).  <br /></td></tr>
 <tr class="separator:a2b2d4503264e9879254ba00d4e40ccc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -263,6 +266,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a08afa51d3dfc605965c3b401c7cb864b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5bfae6209ce1f3872c3f7e63dcfbfebe" id="r_a5bfae6209ce1f3872c3f7e63dcfbfebe"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5bfae6209ce1f3872c3f7e63dcfbfebe">_cloudShadowGate</a> = 1f</td></tr>
 <tr class="separator:a5bfae6209ce1f3872c3f7e63dcfbfebe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a53c6c1fd3c1e2d16731f3b7782bcd5" id="r_a5a53c6c1fd3c1e2d16731f3b7782bcd5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5a53c6c1fd3c1e2d16731f3b7782bcd5">_colorDownscale</a> = 2</td></tr>
+<tr class="separator:a5a53c6c1fd3c1e2d16731f3b7782bcd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3bf280aa3223ca0f280a136d188b3332" id="r_a3bf280aa3223ca0f280a136d188b3332"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3bf280aa3223ca0f280a136d188b3332">_degreesPerLevel</a> = 15f</td></tr>
 <tr class="separator:a3bf280aa3223ca0f280a136d188b3332"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af79840a89b0d5c81110f86d5e75ceddf" id="r_af79840a89b0d5c81110f86d5e75ceddf"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af79840a89b0d5c81110f86d5e75ceddf">_directionResponse</a> = 1f</td></tr>
@@ -460,6 +465,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">float BalloonParty.Configuration.Effects.SceneLightFieldSettings._cloudShadowGate = 1f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5a53c6c1fd3c1e2d16731f3b7782bcd5" name="a5a53c6c1fd3c1e2d16731f3b7782bcd5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a53c6c1fd3c1e2d16731f3b7782bcd5">&#9670;&#160;</a></span>_colorDownscale</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Effects.SceneLightFieldSettings._colorDownscale = 2</td>
         </tr>
       </table>
   </td>
@@ -1342,6 +1369,33 @@ Private Attributes</h2></td></tr>
 <p>No effect when no cloud field is in the scene. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IScreenSpaceLightSettings.html#ae1a50a866fb9fbf88f394052024c1687">BalloonParty.Configuration.Effects.IScreenSpaceLightSettings</a>.</p>
+
+</div>
+</div>
+<a id="a2aa02609ddebd62826b0d5fc50bdf8f4" name="a2aa02609ddebd62826b0d5fc50bdf8f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2aa02609ddebd62826b0d5fc50bdf8f4">&#9670;&#160;</a></span>ColorDownscale</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Effects.SceneLightFieldSettings.ColorDownscale</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How many times coarser than the field the light-colour map is, per axis. </p>
+<p>A light's colour changes more slowly across it than its brightness, and the map is read through a bilinear filter. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightFieldSettings.html#ad8602e484688f0acd65b816b31404fdb">BalloonParty.Configuration.Effects.ISceneLightFieldSettings</a>.</p>
 
 </div>
 </div>

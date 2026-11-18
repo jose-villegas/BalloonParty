@@ -131,6 +131,9 @@ Properties</h2></td></tr>
 <tr class="memitem:a1f2b19b78a740e53870c2bfdeae67fe7" id="r_a1f2b19b78a740e53870c2bfdeae67fe7"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1f2b19b78a740e53870c2bfdeae67fe7">AccumulationCeiling</a><code> [get]</code></td></tr>
 <tr class="memdesc:a1f2b19b78a740e53870c2bfdeae67fe7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ceiling on the summed magnitude boost overlapping lights can add above the rest (soft-clamped in the accumulate shader) so overlaps never blow R out.  <br /></td></tr>
 <tr class="separator:a1f2b19b78a740e53870c2bfdeae67fe7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8602e484688f0acd65b816b31404fdb" id="r_ad8602e484688f0acd65b816b31404fdb"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad8602e484688f0acd65b816b31404fdb">ColorDownscale</a><code> [get]</code></td></tr>
+<tr class="memdesc:ad8602e484688f0acd65b816b31404fdb"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many times coarser than the field the light-colour map is, per axis.  <br /></td></tr>
+<tr class="separator:ad8602e484688f0acd65b816b31404fdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8fecfb97bf89a5371e7ac4f035fcec8c" id="r_a8fecfb97bf89a5371e7ac4f035fcec8c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8fecfb97bf89a5371e7ac4f035fcec8c">DirectionResponse</a><code> [get]</code></td></tr>
 <tr class="memdesc:a8fecfb97bf89a5371e7ac4f035fcec8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">How strongly a light's local magnitude bends the field direction toward it: <code>weight = saturate(localR * DirectionResponse)</code>.  <br /></td></tr>
 <tr class="separator:a8fecfb97bf89a5371e7ac4f035fcec8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -199,6 +202,33 @@ Properties</h2></td></tr>
 <p>Ceiling on the summed magnitude boost overlapping lights can add above the rest (soft-clamped in the accumulate shader) so overlaps never blow R out. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#a31009a3c2e0857f4967f09d25513aab8">BalloonParty.Configuration.Effects.SceneLightFieldSettings</a>.</p>
+
+</div>
+</div>
+<a id="ad8602e484688f0acd65b816b31404fdb" name="ad8602e484688f0acd65b816b31404fdb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8602e484688f0acd65b816b31404fdb">&#9670;&#160;</a></span>ColorDownscale</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Effects.ISceneLightFieldSettings.ColorDownscale</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How many times coarser than the field the light-colour map is, per axis. </p>
+<p>A light's colour changes more slowly across it than its brightness, and the map is read through a bilinear filter. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#a2aa02609ddebd62826b0d5fc50bdf8f4">BalloonParty.Configuration.Effects.SceneLightFieldSettings</a>.</p>
 
 </div>
 </div>

@@ -1,5 +1,11 @@
 var NAVTREEINDEX68 =
 {
+"classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html":[6,0,0,6,11,5],
+"classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a039c8a7d612ba419c5c782dad780545b":[5,0,0,6,11,5,71],
+"classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a039c8a7d612ba419c5c782dad780545b":[6,0,0,6,11,5,71],
+"classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a05d6acb103cbc34b19e3eae691b9a74d":[5,0,0,6,11,5,3],
+"classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a05d6acb103cbc34b19e3eae691b9a74d":[6,0,0,6,11,5,3],
+"classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a11699648e5d47772eb9e3e91f0f2ca46":[5,0,0,6,11,5,0],
 "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a11699648e5d47772eb9e3e91f0f2ca46":[6,0,0,6,11,5,0],
 "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a117624d390ff92ad4f889f76ddfca671":[5,0,0,6,11,5,38],
 "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a117624d390ff92ad4f889f76ddfca671":[6,0,0,6,11,5,38],
@@ -243,11 +249,5 @@ var NAVTREEINDEX68 =
 "classBalloonParty_1_1Item_1_1ItemActivator.html#a8e4e107fd6a32efae9602b239f3f5c2c":[6,0,0,7,15,8],
 "classBalloonParty_1_1Item_1_1ItemActivator.html#a951704c43c86a5490a620e61c764d485":[5,0,0,7,15,6],
 "classBalloonParty_1_1Item_1_1ItemActivator.html#a951704c43c86a5490a620e61c764d485":[6,0,0,7,15,6],
-"classBalloonParty_1_1Item_1_1ItemActivator.html#ac557a8c3e54036c1b4882f948f608f73":[5,0,0,7,15,0],
-"classBalloonParty_1_1Item_1_1ItemActivator.html#ac557a8c3e54036c1b4882f948f608f73":[6,0,0,7,15,0],
-"classBalloonParty_1_1Item_1_1ItemActivator.html#add32f82f3ca7525c27fc12d052694338":[5,0,0,7,15,10],
-"classBalloonParty_1_1Item_1_1ItemActivator.html#add32f82f3ca7525c27fc12d052694338":[6,0,0,7,15,10],
-"classBalloonParty_1_1Item_1_1ItemActivator.html#ae97edac792725143e178eedad38e3aab":[5,0,0,7,15,4],
-"classBalloonParty_1_1Item_1_1ItemActivator.html#ae97edac792725143e178eedad38e3aab":[6,0,0,7,15,4],
-"classBalloonParty_1_1Item_1_1ItemAssigner.html":[5,0,0,7,16]
+"classBalloonParty_1_1Item_1_1ItemActivator.html#ac557a8c3e54036c1b4882f948f608f73":[5,0,0,7,15,0]
 };
