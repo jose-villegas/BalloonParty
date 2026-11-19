@@ -149,6 +149,21 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Shared_1_1AimAngleGrid.html">AimAngleGrid</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The thrower's reachable-angle domain rule: the absolute step grid a quantized aim snaps to, and the sample grid a sweep over an arc uses to visit exactly those angles.  <a href="classBalloonParty_1_1Shared_1_1AimAngleGrid.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1BumperCircle.html">BumperCircle</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">One permanent bumper (the cap of a meadow mushroom) as the ball meets it: a circle the ball's centre bounces off.  <a href="structBalloonParty_1_1Shared_1_1BumperCircle.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1BumperContact.html">BumperContact</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The ball touching a bumper: where its centre is, how it came in, and the bumper it hit.  <a href="structBalloonParty_1_1Shared_1_1BumperContact.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Shared_1_1BumperKick.html">BumperKick</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The forgiving kick's geometry: a ball leaving a cap close enough to the line of a cap of another wall is bent onto it, and landed where its next bounce carries the rally on.  <a href="classBalloonParty_1_1Shared_1_1BumperKick.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1BumperKickTuning.html">BumperKickTuning</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The numbers of the forgiving kick (<a class="el" href="classBalloonParty_1_1Shared_1_1BumperKick.html" title="The forgiving kick&#39;s geometry: a ball leaving a cap close enough to the line of a cap of another wall...">BumperKick</a>): how wide its cone is, and how far beside a mushroom's centre it may land the ball.  <a href="structBalloonParty_1_1Shared_1_1BumperKickTuning.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Shared_1_1BumperSweep.html">BumperSweep</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The swept test of a ball against the board's bumpers: which bumper circle the ball's centre enters first on a straight run, and how far along.  <a href="classBalloonParty_1_1Shared_1_1BumperSweep.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Shared_1_1CircleContact.html">CircleContact</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Analytic ray-circle entry, shared by the projectile's real deflection (<code>ProjectileMotionResolver</code>) and the aim telegraph (<code>PredictionTraceCalculator</code>).  <a href="classBalloonParty_1_1Shared_1_1CircleContact.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -164,8 +179,17 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Shared_1_1EnumIndexedAttribute.html">EnumIndexedAttribute</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Labels a serialized array indexed by enum ordinal with the enum value's name instead of "Element N".  <a href="classBalloonParty_1_1Shared_1_1EnumIndexedAttribute.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Shared_1_1ForgivingKickRule.html">ForgivingKickRule</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The bounce with a forgiving kick: a ball leaving a mushroom close enough to the line of another one is bent onto it and landed where its next bounce carries the chain on, so a chain needs a good first hit and not a perfect flight.  <a href="classBalloonParty_1_1Shared_1_1ForgivingKickRule.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IAssistSettings.html">IAssistSettings</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Help that comes only when the player needs it: how need is judged (<code>Game/Assist/PlayerNeed</code>) and how each chance-rolled help forgives misses made in need (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IPitySettings.html" title="How a chance roll forgives a player in trouble (Game/Assist/PityRoll): each roll it misses while the ...">IPitySettings</a>).  <a href="interfaceBalloonParty_1_1Shared_1_1IAssistSettings.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IBumperBounceRule.html">IBumperBounceRule</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Which way the ball leaves a bumper.  <a href="interfaceBalloonParty_1_1Shared_1_1IBumperBounceRule.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IBumperField.html">IBumperField</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The permanent bumpers on the board (the meadow's mushrooms) as a ball meets them: circles its centre bounces off.  <a href="interfaceBalloonParty_1_1Shared_1_1IBumperField.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IDeflectorField.html">IDeflectorField</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The deflectors the aim telegraph must bounce off, in the geometry the projectile will actually meet.  <a href="interfaceBalloonParty_1_1Shared_1_1IDeflectorField.html#details">More...</a><br /></td></tr>
@@ -175,6 +199,12 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Shared_1_1ImpactEventBus.html">ImpactEventBus</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frame-scoped impact events, written via <a class="el" href="classBalloonParty_1_1Shared_1_1ImpactEventBus.html#a01c8f87beaf4e59083b263030853a28c" title="blast  marks the impact as an explosion that throws aside what it lands in (the water&#39;s crater).">Report</a> and cleared each end-of-frame.  <a href="classBalloonParty_1_1Shared_1_1ImpactEventBus.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IMushroomBlast.html">IMushroomBlast</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Blasts reaching the meadow's mushrooms (<a class="el" href="plan_meadow_mushrooms.html">Meadow Mushrooms</a>): what the bomb and the nuke tell when they go off, so that neither has to know what a mushroom is.  <a href="interfaceBalloonParty_1_1Shared_1_1IMushroomBlast.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IMushroomRegrowth.html">IMushroomRegrowth</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The caps a lance has cut (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IBumperField.html#aa072da4a35fcbe9fe66428b46ed1adcd" title="A lance cut the cap at index  of Bumpers: it has left the list when this returns, and the indices aft...">IBumperField.Cut</a>) and that have not grown back yet, for whoever keeps the time they grow back by (<a class="el" href="plan_meadow_mushrooms.html">Meadow Mushrooms</a>).  <a href="interfaceBalloonParty_1_1Shared_1_1IMushroomRegrowth.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IPierceItemField.html">IPierceItemField</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The pierce-arming item hosts the aim telegraph must know about, in the geometry the projectile will actually meet — so it can stop drawing a deflection off every tough beyond the first one hit, matching a piercing shot's real behaviour.  <a href="interfaceBalloonParty_1_1Shared_1_1IPierceItemField.html#details">More...</a><br /></td></tr>
@@ -200,6 +230,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IShieldChainSettings.html">IShieldChainSettings</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tuning for how shield chains are planned: the fan of openings tried, and how selective the planner is about where a shield may land.  <a href="interfaceBalloonParty_1_1Shared_1_1IShieldChainSettings.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IShotOrigin.html">IShotOrigin</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where shots come from and how big the ball is, for the board-side code that plans or resolves against a flight and cannot reach into the thrower's own scope.  <a href="interfaceBalloonParty_1_1Shared_1_1IShotOrigin.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html">ISlotGridConfig</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Slot grid layout: size, spacing, and origin offset.  <a href="interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -208,6 +241,21 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeSettings.html">IUpgradeSettings</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">When the level-up deals cards, how many, and from which deck.  <a href="interfaceBalloonParty_1_1Shared_1_1IUpgradeSettings.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Shared_1_1MushroomBlastRule.html">MushroomBlastRule</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The sway a bomb's blast gives the mushrooms it reaches without taking their caps off (<a class="el" href="plan_meadow_mushrooms.html">Meadow Mushrooms</a>).  <a href="classBalloonParty_1_1Shared_1_1MushroomBlastRule.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1MushroomBlastTuning.html">MushroomBlastTuning</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far a bomb's blast shakes the meadow's mushrooms.  <a href="structBalloonParty_1_1Shared_1_1MushroomBlastTuning.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Shared_1_1MushroomChainRule.html">MushroomChainRule</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The meadow's mushroom chain: a ball that bounces from one wall of caps to another enough times in one flight, without touching a wall of the board in between, is paid the Snipe lance.  <a href="classBalloonParty_1_1Shared_1_1MushroomChainRule.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1MushroomChainRules.html">MushroomChainRules</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The numbers and switches of the mushroom chain, as <a class="el" href="classBalloonParty_1_1Shared_1_1MushroomChainRule.html" title="The meadow&#39;s mushroom chain: a ball that bounces from one wall of caps to another enough times in one...">MushroomChainRule</a> takes them.  <a href="structBalloonParty_1_1Shared_1_1MushroomChainRules.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1MushroomChainState.html">MushroomChainState</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">One flight's tally of mushroom bounces, which <a class="el" href="classBalloonParty_1_1Shared_1_1MushroomChainRule.html" title="The meadow&#39;s mushroom chain: a ball that bounces from one wall of caps to another enough times in one...">MushroomChainRule</a> reads and writes: how many hits count since the flight began or last touched a wall of the board, how many times it has bounced off a cap in that stretch, and which wall of caps was hit last.  <a href="structBalloonParty_1_1Shared_1_1MushroomChainState.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Shared_1_1MusicalNoteAttribute.html">MusicalNoteAttribute</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renders an <code>int</code> semitone field as a musical-note dropdown (C, C#, D, …) instead of a raw number.  <a href="classBalloonParty_1_1Shared_1_1MusicalNoteAttribute.html#details">More...</a><br /></td></tr>
@@ -227,6 +275,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Shared_1_1StreakShieldRule.html">StreakShieldRule</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The one place that says when a continued colour streak pays a projectile shield.  <a href="classBalloonParty_1_1Shared_1_1StreakShieldRule.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Shared_1_1TrueReflectRule.html">TrueReflectRule</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The plain bounce: the ball leaves a bumper along the mirror image of how it came in.  <a href="classBalloonParty_1_1Shared_1_1TrueReflectRule.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Shared_1_1UnitCircleAttribute.html">UnitCircleAttribute</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a Vector2 field as a unit-circle direction picker: click or drag inside the disc to aim the vector (written back normalized).  <a href="classBalloonParty_1_1Shared_1_1UnitCircleAttribute.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -236,9 +287,18 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1WallLimits.html">WallLimits</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The four play-area walls unpacked from <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#a1a90655ab365960c9ecc27329d948aee">IProjectileFlightConfig.LimitsClockwise</a> (x = top, y = right, z = bottom, w = left).  <a href="structBalloonParty_1_1Shared_1_1WallLimits.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1XorShift32.html">XorShift32</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A small seeded generator of whole numbers (xorshift32).  <a href="structBalloonParty_1_1Shared_1_1XorShift32.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
+<tr class="memitem:a14d42352d0649735cb4e25a909827511" id="r_a14d42352d0649735cb4e25a909827511"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a14d42352d0649735cb4e25a909827511">MushroomReward</a> { <a class="el" href="#a14d42352d0649735cb4e25a909827511a6adf97f83acf6453d4a6a4b1070f3754">None</a>
+, <a class="el" href="#a14d42352d0649735cb4e25a909827511a551c5c03a1a91f2cf90e0d9a9b6dd378">Arm</a>
+, <a class="el" href="#a14d42352d0649735cb4e25a909827511ae1ff6a7360e99cb46db6bb5d3ff8e2eb">PassThrough</a>
+ }</td></tr>
+<tr class="memdesc:a14d42352d0649735cb4e25a909827511"><td class="mdescLeft">&#160;</td><td class="mdescRight">What a ball that is not a lance gets from a mushroom it meets: a bounce, with or without the lance, or no bounce at all.  <a href="#a14d42352d0649735cb4e25a909827511">More...</a><br /></td></tr>
+<tr class="separator:a14d42352d0649735cb4e25a909827511"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a54f7c8f51fc5a46c93f1ad9577243523" id="r_a54f7c8f51fc5a46c93f1ad9577243523"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a54f7c8f51fc5a46c93f1ad9577243523">UpgradeKind</a> { <br />
 &#160;&#160;<a class="el" href="#a54f7c8f51fc5a46c93f1ad9577243523a816190aef027b1d71a17ab86998a40a5">BallCap</a>
 , <a class="el" href="#a54f7c8f51fc5a46c93f1ad9577243523a13306407a9fcc8bf32cafa63c19d150a">FasterReload</a>
@@ -254,6 +314,39 @@ Enumerations</h2></td></tr>
 <tr class="separator:a54f7c8f51fc5a46c93f1ad9577243523"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="a14d42352d0649735cb4e25a909827511" name="a14d42352d0649735cb4e25a909827511"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14d42352d0649735cb4e25a909827511">&#9670;&#160;</a></span>MushroomReward</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#a14d42352d0649735cb4e25a909827511">BalloonParty.Shared.MushroomReward</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>What a ball that is not a lance gets from a mushroom it meets: a bounce, with or without the lance, or no bounce at all. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a14d42352d0649735cb4e25a909827511a6adf97f83acf6453d4a6a4b1070f3754" name="a14d42352d0649735cb4e25a909827511a6adf97f83acf6453d4a6a4b1070f3754"></a>None&#160;</td><td class="fielddoc"><p>The ball bounces; nothing is paid. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a14d42352d0649735cb4e25a909827511a551c5c03a1a91f2cf90e0d9a9b6dd378" name="a14d42352d0649735cb4e25a909827511a551c5c03a1a91f2cf90e0d9a9b6dd378"></a>Arm&#160;</td><td class="fielddoc"><p>The ball bounces and the count reached the chain target: it becomes the lance. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a14d42352d0649735cb4e25a909827511ae1ff6a7360e99cb46db6bb5d3ff8e2eb" name="a14d42352d0649735cb4e25a909827511ae1ff6a7360e99cb46db6bb5d3ff8e2eb"></a>PassThrough&#160;</td><td class="fielddoc"><p>No bounce. </p>
+<p>The stretch has had every bounce it is allowed (<a class="el" href="structBalloonParty_1_1Shared_1_1MushroomChainRules.html#a61367a373e7f453407b1501689ff0e11" title="The most bounces off mushrooms a ball makes between two walls, the ones that did not count included.">MushroomChainRules.MaxBouncesPerStretch</a>), so the mushrooms let this ball through until it meets a wall. The caller must not turn the ball and must not ask the bounce rule. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
 <a id="a54f7c8f51fc5a46c93f1ad9577243523" name="a54f7c8f51fc5a46c93f1ad9577243523"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a54f7c8f51fc5a46c93f1ad9577243523">&#9670;&#160;</a></span>UpgradeKind</h2>
 

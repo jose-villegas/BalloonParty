@@ -8,7 +8,7 @@ var searchData=
   ['ink_5',['Ink',['../namespaceBalloonParty_1_1Configuration_1_1Effects.html#abd031b2ebaae099e719c3ec4e6322d5ca2bf0074bb2c7b5812e901258f98f91d3',1,'BalloonParty::Configuration::Effects']]],
   ['item_6',['Item',['../namespaceBalloonParty_1_1Shared_1_1Messages.html#a1a885ac3fd6e8e290b39752bfe7e21c5a7d74f3b92b19da5e606d737d339a9679',1,'BalloonParty::Shared::Messages']]],
   ['itembomb_7',['ItemBomb',['../namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a9b64e6917351bd901c3c22c9a30976d0',1,'BalloonParty::Audio']]],
-  ['itemcover_8',['ItemCover',['../namespaceBalloonParty_1_1Balloon_1_1Formation.html#a7d189f644fea0191bb4f5acaef4bf746ad762f03b0ac739c5834f7b68c2c7ddb7',1,'BalloonParty::Balloon::Formation']]],
+  ['itemcover_8',['ItemCover',['../namespaceBalloonParty_1_1Balloon_1_1Formation.html#a7d189f644fea0191bb4f5acaef4bf746ad762f03b0ac739c5834f7b68c2c7ddb7',1,'BalloonParty.Balloon.Formation.ItemCover'],['../namespaceBalloonParty_1_1Balloon_1_1Formation.html#a8d2d65777aaac2e933178f9b7ba0c7b9ad762f03b0ac739c5834f7b68c2c7ddb7',1,'BalloonParty.Balloon.Formation.ItemCover']]],
   ['itemlaser_9',['ItemLaser',['../namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13aea6d6b2324b239a8f8a0e13f5e475edb',1,'BalloonParty::Audio']]],
   ['itemlightning_10',['ItemLightning',['../namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a2d5c6580c7d4149e5ebbf9889d4ab536',1,'BalloonParty::Audio']]],
   ['itemodds_11',['ItemOdds',['../namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523acf271677f22958bc28853c01ef5e5079',1,'BalloonParty::Shared']]],

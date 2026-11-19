@@ -7,6 +7,7 @@ var dir_3b325fd31330afee9baefa515a12872f =
     [ "FoamCoatOverlay.cs", "FoamCoatOverlay_8cs.html", "FoamCoatOverlay_8cs" ],
     [ "FormationGlowBeams.cs", "FormationGlowBeams_8cs.html", "FormationGlowBeams_8cs" ],
     [ "FormationGlowField.cs", "FormationGlowField_8cs.html", "FormationGlowField_8cs" ],
+    [ "FormationGlowHosts.cs", "FormationGlowHosts_8cs.html", "FormationGlowHosts_8cs" ],
     [ "FormationGlowSources.cs", "FormationGlowSources_8cs.html", "FormationGlowSources_8cs" ],
     [ "FormationGlowView.cs", "FormationGlowView_8cs.html", "FormationGlowView_8cs" ],
     [ "GrowingDiscView.cs", "GrowingDiscView_8cs.html", "GrowingDiscView_8cs" ],

@@ -18,6 +18,7 @@ var SmokeFieldSettings_8cs =
       [ "BalloonParty.Configuration.Effects.PaintSource.ToughDeflect", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda4925b41d0df91ae83e84e0ca1fedecf6", null ],
       [ "BalloonParty.Configuration.Effects.PaintSource.SnipeSkyLight", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda5f9970ae34cc55664cd63fa680706728", null ],
       [ "BalloonParty.Configuration.Effects.PaintSource.PaintSplash", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda3892e1810e69b0e5f0065fbddd5ba998", null ],
-      [ "BalloonParty.Configuration.Effects.PaintSource.BalloonPop", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda8e42741ff46f887bb0109738fbae034d", null ]
+      [ "BalloonParty.Configuration.Effects.PaintSource.BalloonPop", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda8e42741ff46f887bb0109738fbae034d", null ],
+      [ "BalloonParty.Configuration.Effects.PaintSource.MushroomSpores", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda8622ce3a50a8c376fb7fe6a6e55892c8", null ]
     ] ]
 ];

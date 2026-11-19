@@ -138,6 +138,8 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloon
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a944855d0e161e453c5eed26300685716" id="r_a944855d0e161e453c5eed26300685716"><td class="memItemLeft" align="right" valign="top">override <a class="el" href="namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675">HitOutcome</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1PlatedBalloonModel.html#a944855d0e161e453c5eed26300685716">EvaluateHit</a> (<a class="el" href="structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html">DamageContext</a> context)</td></tr>
 <tr class="separator:a944855d0e161e453c5eed26300685716"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b3de9f8e1232c8b9ab10d3db0eae12b" id="r_a0b3de9f8e1232c8b9ab10d3db0eae12b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a0b3de9f8e1232c8b9ab10d3db0eae12b">SetHeldByCover</a> (bool held)</td></tr>
+<tr class="separator:a0b3de9f8e1232c8b9ab10d3db0eae12b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea56ecf61f3446e632329fee67d94ed8" id="r_aea56ecf61f3446e632329fee67d94ed8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#aea56ecf61f3446e632329fee67d94ed8">WeightBias</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, Vector2Int candidate)</td></tr>
 <tr class="memdesc:aea56ecf61f3446e632329fee67d94ed8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Offset added to <em>candidate</em> 's balance weight; higher = preferred.  <br /></td></tr>
 <tr class="separator:aea56ecf61f3446e632329fee67d94ed8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -178,8 +180,13 @@ Properties</h2></td></tr>
 <tr class="memitem:a23aad630e6dd316a26c31b21063ae9e0" id="r_a23aad630e6dd316a26c31b21063ae9e0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a23aad630e6dd316a26c31b21063ae9e0">DirectBalanceMotion</a><code> [get]</code></td></tr>
 <tr class="memdesc:a23aad630e6dd316a26c31b21063ae9e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Animate a resolve straight to the final slot instead of touring every waypoint.  <br /></td></tr>
 <tr class="separator:a23aad630e6dd316a26c31b21063ae9e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57ca7dc93c85ce072508e4c8569420ee" id="r_a57ca7dc93c85ce072508e4c8569420ee"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a57ca7dc93c85ce072508e4c8569420ee">HeldByCover</a><code> [get, private set]</code></td></tr>
+<tr class="memdesc:a57ca7dc93c85ce072508e4c8569420ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">A cover stands round it now. One cover at most holds a balloon.  <br /></td></tr>
+<tr class="separator:a57ca7dc93c85ce072508e4c8569420ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37f033fca8c42c486e3755289d518315" id="r_a37f033fca8c42c486e3755289d518315"><td class="memItemLeft" align="right" valign="top">ReactiveProperty&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a37f033fca8c42c486e3755289d518315">HitsRemaining</a><code> [get]</code></td></tr>
 <tr class="separator:a37f033fca8c42c486e3755289d518315"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c9c8eb3fb9a51688d435d6e8788befc" id="r_a7c9c8eb3fb9a51688d435d6e8788befc"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a7c9c8eb3fb9a51688d435d6e8788befc">IsAnchored</a><code> [get]</code></td></tr>
+<tr class="separator:a7c9c8eb3fb9a51688d435d6e8788befc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a128f930790cc3c403f5a9e41dabb8e02" id="r_a128f930790cc3c403f5a9e41dabb8e02"><td class="memItemLeft" align="right" valign="top">ReactiveProperty&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a128f930790cc3c403f5a9e41dabb8e02">IsStable</a> = new(true)<code> [get]</code></td></tr>
 <tr class="separator:a128f930790cc3c403f5a9e41dabb8e02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4317e4eba6bbe3ecc25b2cf82c48d935" id="r_a4317e4eba6bbe3ecc25b2cf82c48d935"><td class="memItemLeft" align="right" valign="top">IReadOnlyReactiveProperty&lt; bool &gt; IDynamicSlotActor.&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a4317e4eba6bbe3ecc25b2cf82c48d935">IsStable</a><code> [get]</code></td></tr>
@@ -296,6 +303,33 @@ Properties</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0b3de9f8e1232c8b9ab10d3db0eae12b" name="a0b3de9f8e1232c8b9ab10d3db0eae12b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b3de9f8e1232c8b9ab10d3db0eae12b">&#9670;&#160;</a></span>SetHeldByCover()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Balloon.Model.BalloonModelBase.SetHeldByCover </td>
+          <td>(</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>held</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inherited">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableCoverHost.html#a5f2155fa4827e82120910a7612e55f39">BalloonParty.Balloon.Model.IWriteableCoverHost</a>.</p>
 
 </div>
 </div>
@@ -541,6 +575,32 @@ Properties</h2></td></tr>
 
 </div>
 </div>
+<a id="a57ca7dc93c85ce072508e4c8569420ee" name="a57ca7dc93c85ce072508e4c8569420ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57ca7dc93c85ce072508e4c8569420ee">&#9670;&#160;</a></span>HeldByCover</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Balloon.Model.BalloonModelBase.HeldByCover</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel private-set">private set</span><span class="mlabel inherited">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A cover stands round it now. One cover at most holds a balloon. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableCoverHost.html#ac23fe608e612bf0fe85ce8e5ea450d24">BalloonParty.Balloon.Model.IWriteableCoverHost</a>.</p>
+
+</div>
+</div>
 <a id="a37f033fca8c42c486e3755289d518315" name="a37f033fca8c42c486e3755289d518315"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a37f033fca8c42c486e3755289d518315">&#9670;&#160;</a></span>HitsRemaining</h2>
 
@@ -560,6 +620,30 @@ Properties</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7c9c8eb3fb9a51688d435d6e8788befc" name="a7c9c8eb3fb9a51688d435d6e8788befc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c9c8eb3fb9a51688d435d6e8788befc">&#9670;&#160;</a></span>IsAnchored</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool BalloonParty.Balloon.Model.BalloonModelBase.IsAnchored</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel inherited">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceAnchor.html#a65e30fc3412dd9860ab400aec32bd8e8">BalloonParty.Slots.Actor.IBalanceAnchor</a>.</p>
 
 </div>
 </div>

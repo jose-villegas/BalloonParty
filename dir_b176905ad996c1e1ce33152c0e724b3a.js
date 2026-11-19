@@ -1,6 +1,9 @@
 var dir_b176905ad996c1e1ce33152c0e724b3a =
 [
     [ "ActiveProjectilePierce.cs", "ActiveProjectilePierce_8cs.html", "ActiveProjectilePierce_8cs" ],
+    [ "BumperBounce.cs", "BumperBounce_8cs.html", "BumperBounce_8cs" ],
+    [ "BumperLookahead.cs", "BumperLookahead_8cs.html", "BumperLookahead_8cs" ],
+    [ "CapCut.cs", "CapCut_8cs.html", "CapCut_8cs" ],
     [ "DeflectChainController.cs", "DeflectChainController_8cs.html", "DeflectChainController_8cs" ],
     [ "PierceDischargeEffects.cs", "PierceDischargeEffects_8cs.html", "PierceDischargeEffects_8cs" ],
     [ "PierceTelegraphScan.cs", "PierceTelegraphScan_8cs.html", "PierceTelegraphScan_8cs" ],

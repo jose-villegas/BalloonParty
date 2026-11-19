@@ -1,0 +1,5 @@
+<map id="BalloonParty.Shared.TrueReflectRule" name="BalloonParty.Shared.TrueReflectRule">
+<area shape="rect" id="Node000001" title="The plain bounce: the ball leaves a bumper along the mirror image of how it came in." alt="" coords="19,98,201,143"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Shared_1_1IBumperBounceRule.html" title="Which way the ball leaves a bumper." alt="" coords="5,5,215,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="112,64,112,99,108,97,108,68"/>
+</map>

@@ -152,6 +152,20 @@ Files</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IGridActorModel_8cs.html">IGridActorModel.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="MushroomBumperModel_8cs.html">MushroomBumperModel.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="MushroomCapSpring_8cs.html">MushroomCapSpring.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="MushroomCutTimeline_8cs.html">MushroomCutTimeline.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="MushroomSporeBurst_8cs.html">MushroomSporeBurst.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="MushroomSporePlanner_8cs.html">MushroomSporePlanner.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="MushroomSporeRouter_8cs.html">MushroomSporeRouter.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="MushroomView_8cs.html">MushroomView.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PuffCloudView_8cs.html">PuffCloudView.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PuffCloudViewController_8cs.html">PuffCloudViewController.cs</a></td></tr>
@@ -163,7 +177,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Concrete grid actor models and the Puff cloud / Bush visual systems. Both visual systems build on the generic cluster infrastructure in <code>Slots/Actor/Cluster/</code> (<code>SlotClusterRegistry&lt;TModel&gt;</code>, <code>ClusterView</code>, <code>ClusterViewController</code>).</p>
-<h1><a class="anchor" id="autotoc_md1175"></a>
+<h1><a class="anchor" id="autotoc_md1220"></a>
 Actor Models</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -179,22 +193,34 @@ Actor Models</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>GatekeeperActorModel</code>   </td><td class="markdownTableBodyNone">Durability-based column blocker — <code>Deflect</code> on survival, <code>Pop</code> on death    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>GridActorType</code>   </td><td class="markdownTableBodyNone">Enum identifying actor types — <code>Puff</code>, etc.   </td></tr>
+<td class="markdownTableBodyNone"><code>MushroomBumperModel</code>   </td><td class="markdownTableBodyNone">A meadow mushroom (<code><a class="el" href="PLAN-MeadowMushrooms_8md.html">Plans/PLAN-MeadowMushrooms.md</a></code>): a permanent bumper. Static, never hit, moved by nothing, and not <code>IPassThrough</code>, so it blocks traversal as a bush does. It has no collider and no hit response: the ball bounces off the circle <code>Slots/Grid/MushroomBoard</code> builds for it. It is one cap of a wall of caps: <code>ChainIndex</code> is its place in the layout the level was dealt, which becomes its bumper's id (the name is from when a chain was planned through single mushrooms), and <code>Wall</code> is the wall it stands in, which the chain counts by and the kick never bends toward. See <code><a class="el" href="Slots_2README_8md.html">Slots/README.md</a></code>, <em>Mushroom placement</em>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>GridActorType</code>   </td><td class="markdownTableBodyNone">Enum identifying actor types — <code>Puff</code>, etc. Assets store the number, so append a value and never reorder. <code>Mushroom</code> is the meadow's bumper (<code><a class="el" href="PLAN-MeadowMushrooms_8md.html">Plans/PLAN-MeadowMushrooms.md</a></code>): a meadow level's parameters carry a gate for it, <code>StaticActorSpawner</code> places its chain, and <code>GridActorConfiguration</code> lists it with the <code>Mushroom</code> prefab   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md1176"></a>
+<h1><a class="anchor" id="autotoc_md1221"></a>
 Grid Actor View &amp; Pool</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">File   </th><th class="markdownTableHeadNone">What it does    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>GridActorView</code>   </td><td class="markdownTableBodyNone"><code>MonoBehaviour</code> view for grid actors — <code>IPoolable</code> + <code>ISlotActorView</code> + <code>TweenTracker</code>. Invisible for Puff slots (cloud visual is separate).    </td></tr>
+<td class="markdownTableBodyNone"><code>GridActorView</code>   </td><td class="markdownTableBodyNone"><code>MonoBehaviour</code> view for grid actors — <code>IPoolable</code> + <code>ISlotActorView</code> + <code>TweenTracker</code>. Invisible for Puff slots (cloud visual is separate). Its pool hooks are virtual, for a view that has something of its own to reset (<code>MushroomView</code>)    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>GridActorPoolChannel</code>   </td><td class="markdownTableBodyNone">Pool channel for <code>GridActorView</code> prefabs   </td></tr>
+<td class="markdownTableBodyNone"><code>GridActorPoolChannel</code>   </td><td class="markdownTableBodyNone">Pool channel for <code>GridActorView</code> prefabs    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>MushroomView</code>   </td><td class="markdownTableBodyNone">The meadow mushroom's view, a <code>GridActorView</code>: the one renderer the <code>Grid/Mushroom</code> shader draws the mushroom and its shadow on, and the cap's answer to a hit. On a <code>MushroomBouncedMessage</code> for the slot the grid holds it at, it pushes its <code>MushroomCapSpring</code> and switches itself on; each frame it hands the shader the lean and the swell through a <code>MaterialPropertyBlock</code>; once the spring is still it switches itself off. Back in the pool it is at rest, off and unsubscribed. A lance cuts its cap: on a <code>MushroomCutMessage</code> for its slot <code>Cut(worldPoint, direction)</code> draws the cap in two pieces that part along the lance's line, fall and fade, and leaves the bare stem (<code>IsCut</code> is true and a <code>Hit</code> does nothing); on a <code>MushroomRegrownMessage</code> <code>Regrow()</code> pops the cap back. A blast is not a cut: on a <code>MushroomCutMessage</code> whose cause is <code>Blast</code>, <code>BlowOff(away)</code> throws the cap off whole, away from the blast; and on a <code>MushroomSwayedMessage</code> for its slot <code>Sway(away, strength)</code> leans a whole cap away from the blast and lets it swing back, a hit with no ball (a bare stem does not sway). <code>EmitSpores(burst)</code> lets a burst's specks go from the <code>Spores</code> particle system the prefab carries, each with its own way inside the burst's fan, speed, size, life and a colour between the tuned green and blue (rolled from the view's own generator, never the run's); a cap a blast threw trails a few more while it rises. It sleeps on a bare stem as it does on a whole cap, and is whole again from the pool, with no speck in the air. See <code><a class="el" href="Slots_2README_8md.html">Slots/README.md</a></code>, <em>The mushroom on the board</em>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>MushroomCapSpring</code>   </td><td class="markdownTableBodyNone">The cap's motion, a plain struct with no engine state: <code>Hit(incoming, speed)</code> pushes the lean along the ball's way in, <code>Sway(away, strength)</code> pushes it away from a blast by the tuned sway's lean, <code>Pay()</code> swells the cap when a bounce pays the lance, <code>Step(deltaTime)</code> moves both springs on and answers false once the cap has come to rest (and is then exactly at rest), <code>Reset()</code> stops it there. Tuned by <code>MushroomLeanTuning</code> (<code>Slots/Actor/</code>, authored on <code>IMushroomSettings.Lean</code>)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>MushroomSporePlanner</code> / <code>MushroomSporeBurst</code>   </td><td class="markdownTableBodyNone">What a mushroom lets go when something happens to its cap, plain C# told the time: <code>TryHit</code> (a cone out of the far rim, the way the ball was going, by its speed; nothing under the least speed or while the mushroom is still quiet from its last puff), <code>TryCut</code> (a little more, along the lance's way) and <code>TryBlast</code> (a wide burst, held for a delay), each answering a <code>MushroomSporeBurst</code>: where it leaves from, which way, the smoke's cone and the count, speed and fan of the specks. It keeps the board's shared budget, which shrinks what is asked when much has just been let go    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>MushroomSporeRouter</code>   </td><td class="markdownTableBodyNone">The spores' glue, an entry point: hears <code>MushroomBouncedMessage</code> and <code>MushroomCutMessage</code>, asks the planner, stamps the smoke's cone into <code>SmokeFieldService</code> as capsules and hands the specks to the <code>MushroomView</code> the grid holds at the slot. A blast's burst waits its delay in a fixed list, kept with the view it is for: it is let go only if that view still stands in the slot, and the list is dropped on a run reset (<code>IRunResettable</code>) and on a new level    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>MushroomCutTimeline</code>   </td><td class="markdownTableBodyNone">What a cap a lance has cut is doing, a plain struct with no engine state: <code>Cut()</code> takes the cap off and starts its two pieces parting, <code>Regrow()</code> starts it popping back, <code>Step(deltaTime, tuning)</code> moves either on and answers false once nothing moves (the stem bare, or the cap whole), <code>Reset()</code> is a whole cap. It holds what the shader draws: <code>CapGrow</code>, <code>PieceFade</code>, <code>PieceHeight</code>, and <code>Part</code>, <code>Carry</code>, <code>Turn</code> and <code>PieceSize</code> for a tuning. Every value is worked out from the time since the cut or the regrow began, so it is the same at any frame rate. <code>Blow()</code> takes the cap off whole instead: one piece (<code>IsBlown</code>), thrown (<code>Part</code>), lifted (<code>Arc</code>, a larger <code>PieceSize</code>, a <code>ShadowHeight</code> over 1), turning, then landing and fading, by <code>MushroomCutTuning.Blown</code>. Tuned by <code>MushroomCutTuning</code> (<code>Slots/Actor/</code>, authored on <code>IMushroomSettings.Cut</code>)   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md1177"></a>
+<h1><a class="anchor" id="autotoc_md1222"></a>
 Bush System</h1>
 <p>The Bush system renders baked 2D skeletal bushes over groups of adjacent Bush slots. Branch maps and leaf attachment points are baked offline via the Bush Baker editor window. At runtime, branches are a static textured quad per slot; leaves are <code>DrawMeshInstanced</code> quads with GPU-driven wind and rattle animation. Zero GameObjects per leaf, zero CPU animation cost. Every slot's leaves are merged into one instanced draw per depth tier (inner/outer), so a whole bush submits two leaf draws plus one branch draw per slot, with materials shared (two leaf materials; one branch material per variant).</p>
-<h2><a class="anchor" id="autotoc_md1178"></a>
+<h2><a class="anchor" id="autotoc_md1223"></a>
 View Layer</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -216,10 +242,10 @@ View Layer</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>BushClusterRegistry</code>   </td><td class="markdownTableBodyNone"><code>SlotClusterRegistry&lt;BushObstacleModel&gt;</code>. Subscribes to grid changes (no <code>setupOnly</code>) because spawner places actors async after <code>Start()</code>.   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md1179"></a>
+<h2><a class="anchor" id="autotoc_md1224"></a>
 Level-transition Ascent participation</h2>
 <p><code>ClusterViewController</code> parents its single view under the shared <code>ScenarioContentRoot</code> (<code>Slots/Actor/</code>) so the level-transition Ascent (<code><a class="el" href="LevelTransitionController_8cs.html">Game/Level/LevelTransitionController.cs</a></code>) can slide the whole scenario in by moving that one root. For that to move the visuals — which otherwise render in absolute world space — the renderers follow their transform: <code>ClusterView</code> pushes <code>_SlotCentersLocal</code> (centers relative to the quad origin) and <code>PuffCloud.shader</code> masks against <code>worldPos - objectOrigin</code>, divided by how much the quad has been scaled since it was configured (<code>_RestScale</code>; byte-identical to the old world math at rest, since origin == bounds center and the scale is unchanged then); <code>BushView</code> offsets its baked world matrices by how far its transform has moved or scaled from where it was configured (its live matrix times its rest inverse, a no-op at rest). The sky/ground mist reveal scales the root about the camera (<code>ScenarioContentRoot.SetDepth</code>), so both follow it too, and the bushes also fade with the meadow's hole through it (<code>GroundSceneryAt</code> in <code>Ground.cginc</code>, read by <code>BushLeaf</code> and <code>BushBranch</code>): the meadow and its bushes leave for the sky, or arrive from it, together. Both capture their rest state when they are configured, which must happen with the root at rest: unmoved and unscaled. See the plan's Phase 3b notes for the full rationale.</p>
-<h2><a class="anchor" id="autotoc_md1180"></a>
+<h2><a class="anchor" id="autotoc_md1225"></a>
 GPU Animation (BushLeaf.shader)</h2>
 <p>All leaf animation runs in the <b>vertex shader</b> — no CPU-side <code>ITickable</code> or per-frame matrix updates:</p>
 <ul>
@@ -227,10 +253,10 @@ GPU Animation (BushLeaf.shader)</h2>
 <li><b>Rattle</b> — samples the global <code>_DisturbanceTex</code> (from <code>DisturbanceFieldService</code>) at the leaf's world position. Displacement vector is crossed with the leaf direction for signed rotation, modulated by configurable damping power curve. The disturbance field's own diffusion/reform handles the settle decay.</li>
 <li><b>Per-instance data</b> — <code>_LeafWind</code> float4 (phase, depth, baseAngle, scale) packed into <code>MaterialPropertyBlock</code> at setup, never updated.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md1181"></a>
+<h2><a class="anchor" id="autotoc_md1226"></a>
 Disturbance Field Interaction</h2>
 <p>Bush leaves react to the same disturbance field as Puff clouds. Any event that stamps the field (projectile wake, balloon pop, bomb detonation, paint splash) causes nearby leaves to rattle. The interaction is automatic — the shader reads global <code>_DisturbanceTex</code> without any C# wiring. Toggle via <code>_RATTLE_ON</code> keyword.</p>
-<h2><a class="anchor" id="autotoc_md1182"></a>
+<h2><a class="anchor" id="autotoc_md1227"></a>
 Configuration</h2>
 <p><code>BushSettings</code> (ScriptableObject in <code>Configuration/</code>) — <code>IBushSettings</code>. Holds:</p><ul>
 <li><b>Prefab</b> — <code>BushView</code> prefab reference</li>
@@ -241,10 +267,10 @@ Configuration</h2>
 <li><b>Rattle</b> — enabled toggle, amplitude, frequency, damping</li>
 <li><b>Editor Preview</b> (<code>#if UNITY_EDITOR</code>) — <code>LiveTuning</code> toggle + a <code>Revision</code> counter bumped by the SO's <code>OnValidate</code>. When on, <code>BushView</code> polls <code>Revision</code> and <b>rebuilds</b> the bush (materials + render data) whenever any field changes, so <b>all</b> fields preview live — colours, AO, wind, and structural ones (atlas, gradient, world size, depth split). Editor-only (stripped from builds), but works <b>in Play mode</b>: bushes are configured only by the DI controller (an entry point), which runs in play mode, so tune with the editor playing.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md1183"></a>
+<h2><a class="anchor" id="autotoc_md1228"></a>
 Baking</h2>
 <p>Baked assets are generated via <b>Tools &gt; Bush Baker</b> (editor window). The bake shaders and pipeline live in <code>Assets/Source/Editor/Bush/</code> and <code>Assets/Shaders/BalloonParty/Grid/Editor/</code>. See <code><a class="el" href="Editor_2Bush_2README_8md.html">Editor/Bush/README.md</a></code>.</p>
-<h1><a class="anchor" id="autotoc_md1184"></a>
+<h1><a class="anchor" id="autotoc_md1229"></a>
 Puff Cloud System</h1>
 <p>The Puff cloud system renders GPU-driven clouds over groups of adjacent Puff slots. Multiple Puff slots that are hex-adjacent merge into a single continuous cloud body. The system follows MVC via the generic cluster infrastructure in <code>Slots/Actor/Cluster/</code>:</p>
 <ul>
@@ -252,7 +278,7 @@ Puff Cloud System</h1>
 <li><b>View:</b> <code>PuffCloudView</code></li>
 <li><b>Controller:</b> <code>PuffCloudViewController</code></li>
 </ul>
-<h2><a class="anchor" id="autotoc_md1185"></a>
+<h2><a class="anchor" id="autotoc_md1230"></a>
 Model Layer</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -260,7 +286,7 @@ Model Layer</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>PuffClusterRegistry</code>   </td><td class="markdownTableBodyNone">Thin <code>SlotClusterRegistry&lt;PuffObstacleModel&gt;</code> subclass. The base registry subscribes to <code>SlotGrid.OnChanged</code> (Puff slots can be added/removed at runtime), flood-fills hex adjacency into <code>SlotCluster</code>s, handles merging/splitting/resizing, assigns <code>ClusterId</code> back to each model, and publishes <code>SlotClusterChangedEvent</code> via <code>OnClusterChanged</code>.   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md1186"></a>
+<h2><a class="anchor" id="autotoc_md1231"></a>
 View Layer</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -268,7 +294,7 @@ View Layer</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>PuffCloudView</code>   </td><td class="markdownTableBodyNone">Thin <code>ClusterView</code> subclass — a <code>MonoBehaviour</code> (<code>[ExecuteAlways]</code>) driving the <code>BalloonParty/Grid/PuffCloud</code> shader on a <code>SpriteRenderer</code> quad. <code>Configure(positions, count, bounds, settings)</code> positions/scales the quad over the combined bounds and pushes <code>_SlotCentersWorld</code>, <code>_SlotCount</code>, and <code>_AnimationSpeed</code> once via <code>MaterialPropertyBlock</code>. The runtime animation clock is shader-driven (<code>_Time.y * _AnimationSpeed</code>) — no per-frame property pushes; <code>_TimeOffset</code> is only fed in edit mode, where <code>_Time</code> is frozen. Disturbance is not managed here — the shader reads the global <code>_DisturbanceTex</code> maintained by <code>DisturbanceFieldService</code> (<code>Shared/Disturbance/</code>).   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md1187"></a>
+<h2><a class="anchor" id="autotoc_md1232"></a>
 Controller Layer</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -276,16 +302,17 @@ Controller Layer</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>PuffCloudViewController</code>   </td><td class="markdownTableBodyNone">Thin <code>ClusterViewController&lt;PuffObstacleModel, PuffCloudView, IPuffCloudSettings&gt;</code> subclass. The base controller instantiates <b>one</b> view instance and, on any cluster change, collects every slot position across <b>all</b> clusters (16-entry buffer cap) and reconfigures it — the single quad spans the bounding box of every cluster on the board. Applies sorting layer and order from <code>PuffCloudSettings</code>.   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md1188"></a>
+<h2><a class="anchor" id="autotoc_md1233"></a>
 Configuration</h2>
 <p><code>PuffCloudSettings</code> (ScriptableObject in <code>Configuration/</code>) — <code>IPuffCloudSettings</code>. Holds the <code>CloudPrefab</code> reference, animation speed, bounding-box padding, and sorting layer/order. Disturbance-field tuning lives in <code>DisturbanceFieldSettings</code>, not here.</p>
-<h2><a class="anchor" id="autotoc_md1189"></a>
+<h2><a class="anchor" id="autotoc_md1234"></a>
 Prefabs</h2>
 <ul>
 <li><b><code>Puff.prefab</code></b> — <code>GridActorView</code> + <code>TweenTracker</code> only. Invisible grid occupancy marker.</li>
 <li><b><code>PuffCloud.prefab</code></b> — <code>SpriteRenderer</code> (PuffCloud material, no sprite) + <code>PuffCloudView</code>. Instantiated once by <code>PuffCloudViewController</code>, referenced by <code>PuffCloudSettings.CloudPrefab</code>.</li>
+<li><b><code>Mushroom.prefab</code></b> (<code>Prefabs/Grid/Mushroom/</code>) — <code>MushroomView</code> + <code>TweenTracker</code> + a child <code>Spores</code> (a particle system on the <code>Effects</code> layer with the <code>MushroomSpore</code> material, drawn over the balloons, that never plays by itself: the view emits into it) + a <code>MeshRenderer</code> on <code>MushroomQuad</code> (a plain quad beside the prefab, sized for the mushroom's radius, its furthest lean, its shadow and how far a cut cap's pieces fly) with the <code>Mushroom</code> material, on the <code>Grid</code> layer and at the bottom of the <code>Balloons</code> sorting layer (order -10, under the balloons, their shadows, the ball and the bursts). No collider, no sprite, no shadow child: the shader draws the shadow. Built by <code>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Meadow &gt; Build Mushroom Prefab</code>; do not edit it by hand, run the builder again (after changing the mushroom's radius, its furthest lean or how far a cut's pieces part or are carried too, which the quad is sized from).</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md1190"></a>
+<h2><a class="anchor" id="autotoc_md1235"></a>
 Shaders</h2>
 <p>All in <code>Assets/Shaders/BalloonParty/Grid/</code>:</p>
 <table class="markdownTable">

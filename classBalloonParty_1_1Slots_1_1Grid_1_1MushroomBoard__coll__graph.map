@@ -1,0 +1,25 @@
+<map id="BalloonParty.Slots.Grid.MushroomBoard" name="BalloonParty.Slots.Grid.MushroomBoard">
+<area shape="rect" id="Node000001" title="The meadow&#39;s mushrooms as the ball meets them (Meadow Mushrooms): one bumper circle for every whole M..." alt="" coords="979,144,1151,189"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Shared_1_1IBumperField.html" title="The permanent bumpers on the board (the meadow&#39;s mushrooms) as a ball meets them: circles its centre ..." alt="" coords="634,5,844,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="835,53,854,60,945,101,1025,144,1019,143,943,106,852,65,834,58"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Shared_1_1IMushroomRegrowth.html" title="The caps a lance has cut (IBumperField.Cut) and that have not grown back yet, for whoever keeps the t..." alt="" coords="625,75,853,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="862,120,981,148,975,148,862,126"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" title=" " alt="" coords="653,144,825,189"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="841,164,981,166,976,167,841,169"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html" title="Tracks slots in&#45;transit from balance animations so spawn paths avoid them." alt="" coords="266,40,439,85"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="454,79,527,96,602,118,626,129,662,143,657,143,624,134,600,124,526,102,454,84"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,40,212,85"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="226,60,268,61,264,64,228,65"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html" title="Slot grid layout: size, spacing, and origin offset." alt="" coords="261,109,444,154"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="460,139,655,158,650,159,460,144"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="264,179,442,223"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="457,189,655,173,650,175,458,194"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="19,179,198,223"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="213,198,265,200,260,202,214,204"/>
+<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="264,248,442,293"/>
+<area shape="poly" id="edge9_Node000004_Node000010" title=" " alt="" coords="457,249,528,232,600,210,624,199,655,190,661,189,626,203,602,215,529,237,458,254"/>
+<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IMushroomSettings.html" title="Tuning of the meadow&#39;s mushrooms (Meadow Mushrooms): the chain that pays the lance,..." alt="" coords="629,213,849,258"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="862,207,975,185,981,184,863,212"/>
+<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Shared_1_1IShotOrigin.html" title="Where shots come from and how big the ball is, for the board&#45;side code that plans or resolves against..." alt="" coords="645,283,833,327"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="832,275,852,268,903,248,953,225,1023,190,1028,188,956,230,905,253,854,273,833,280"/>
+</map>

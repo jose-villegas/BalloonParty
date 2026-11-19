@@ -126,7 +126,7 @@ $(function(){initNavTree('classBalloonParty_1_1Solver_1_1ShotItemLayer.html','')
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Solver_1_1ShotItemLayer__coll__graph.svg" width="400" height="275"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Solver_1_1ShotItemLayer__coll__graph.svg" width="540" height="275"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
@@ -136,7 +136,7 @@ Package Functions</h2></td></tr>
 <tr class="memitem:a9934800b145bacf0246898f5af0584b2" id="r_a9934800b145bacf0246898f5af0584b2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9934800b145bacf0246898f5af0584b2">ResetForNewFlight</a> ()</td></tr>
 <tr class="separator:a9934800b145bacf0246898f5af0584b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2b1bdeb494241b9799a713924baf4e4" id="r_aa2b1bdeb494241b9799a713924baf4e4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1Solver_1_1ShotItemOutcome.html">ShotItemOutcome</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa2b1bdeb494241b9799a713924baf4e4">Resolve</a> (in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotItemActivation.html">ShotItemActivation</a> activation, string projectileColorId, <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonState.html">ShotBalloonState</a>[] workingSet, int activeCount, List&lt; <a class="el" href="structBalloonParty_1_1Item_1_1Effects_1_1EffectHit.html">EffectHit</a> &gt; hitsOut)</td></tr>
-<tr class="memdesc:aa2b1bdeb494241b9799a713924baf4e4"><td class="mdescLeft">&#160;</td><td class="mdescRight"><em>hitsOut</em> , when non-null, is cleared and filled with this activation's <a class="el" href="structBalloonParty_1_1Item_1_1Effects_1_1EffectHit.html" title="One effect core&#39;s verdict on one occupant — the loop, not the core, applies it (see ShotItemLayer/App...">EffectHit</a>s (caller-owned scratch list, same convention as <code><a class="el" href="classBalloonParty_1_1Solver_1_1ShotSimulator.html#a910fc601a3511d2ce831baf73cef09c0" title="Simulates one aim direction to completion.">ShotSimulator.Simulate</a></code>'s <code>pathOut</code>).  <br /></td></tr>
+<tr class="memdesc:aa2b1bdeb494241b9799a713924baf4e4"><td class="mdescLeft">&#160;</td><td class="mdescRight"><em>hitsOut</em> , when non-null, is cleared and filled with this activation's <a class="el" href="structBalloonParty_1_1Item_1_1Effects_1_1EffectHit.html" title="One effect core&#39;s verdict on one occupant — the loop, not the core, applies it (see ShotItemLayer/App...">EffectHit</a>s (caller-owned scratch list, same convention as <code><a class="el" href="classBalloonParty_1_1Solver_1_1ShotSimulator.html#a25048cb9262c8e3927699dfd800317e9" title="Simulates one aim direction to completion.">ShotSimulator.Simulate</a></code>'s <code>pathOut</code>).  <br /></td></tr>
 <tr class="separator:aa2b1bdeb494241b9799a713924baf4e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac0bad12198ec1507df0dba3ecede0a2d" id="r_ac0bad12198ec1507df0dba3ecede0a2d"><td class="memItemLeft" align="right" valign="top">Vector2Int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac0bad12198ec1507df0dba3ecede0a2d">SlotOf</a> (int handle)</td></tr>
 <tr class="memdesc:ac0bad12198ec1507df0dba3ecede0a2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resolves an <a class="el" href="structBalloonParty_1_1Item_1_1Effects_1_1EffectHit.html#af3ec7cf96db948da93089ed47ce12711">EffectHit.Handle</a> the most recent <a class="el" href="#aa2b1bdeb494241b9799a713924baf4e4" title="hitsOut , when non-null, is cleared and filled with this activation&#39;s EffectHits (caller-owned scratc...">Resolve</a> call produced back into the working-set <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a637f15de3887be771d088f8743597c77">ShotBalloonState.SlotIndex</a> it identifies — a thin passthrough onto the bound effect board (<a class="el" href="plan_shot_solver_accuracy.html">Shot Solver Accuracy</a> Phase C2's handle-boxing reconciliation; <code>ApplyEffectHits</code> is the caller).  <br /></td></tr>
@@ -146,6 +146,9 @@ Package Functions</h2></td></tr>
 <tr class="separator:aa3c65a1093063dba63596626642e3406"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a71cab26187cd8bf80aa1db1fcd86ee3f" id="r_a71cab26187cd8bf80aa1db1fcd86ee3f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a71cab26187cd8bf80aa1db1fcd86ee3f">TryDequeue</a> (out <a class="el" href="structBalloonParty_1_1Solver_1_1ShotItemActivation.html">ShotItemActivation</a> activation)</td></tr>
 <tr class="separator:a71cab26187cd8bf80aa1db1fcd86ee3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4916af76f4c7a5f711ce1474efb1ff7" id="r_af4916af76f4c7a5f711ce1474efb1ff7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af4916af76f4c7a5f711ce1474efb1ff7">TryTakeBombBlast</a> (out <a class="el" href="structBalloonParty_1_1Solver_1_1ShotItemActivation.html">ShotItemActivation</a> bomb, out <a class="el" href="structBalloonParty_1_1Item_1_1Bomb_1_1BombBlastParams.html">BombBlastParams</a> blast)</td></tr>
+<tr class="memdesc:af4916af76f4c7a5f711ce1474efb1ff7"><td class="mdescLeft">&#160;</td><td class="mdescRight">The next bomb that went off since this was last asked: its activation (where, in which slot, a rainbow one or not) and its blast.  <br /></td></tr>
+<tr class="separator:af4916af76f4c7a5f711ce1474efb1ff7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-attribs" name="pac-static-attribs"></a>
 Static Package Attributes</h2></td></tr>
@@ -174,6 +177,10 @@ Static Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a733a96f0ace0dcb007bece10487b1216" id="r_a733a96f0ace0dcb007bece10487b1216"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a733a96f0ace0dcb007bece10487b1216">_activationCount</a></td></tr>
 <tr class="separator:a733a96f0ace0dcb007bece10487b1216"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4546b601f7af8e4e5241140c8a001074" id="r_a4546b601f7af8e4e5241140c8a001074"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1Item_1_1Bomb_1_1BombBlastParams.html">BombBlastParams</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4546b601f7af8e4e5241140c8a001074">_bombBlast</a></td></tr>
+<tr class="separator:a4546b601f7af8e4e5241140c8a001074"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d320921460b7517d3c12452e460614a" id="r_a2d320921460b7517d3c12452e460614a"><td class="memItemLeft" align="right" valign="top">readonly List&lt; <a class="el" href="structBalloonParty_1_1Solver_1_1ShotItemActivation.html">ShotItemActivation</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2d320921460b7517d3c12452e460614a">_bombBlasts</a> = new(4)</td></tr>
+<tr class="separator:a2d320921460b7517d3c12452e460614a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31b12640ed84dadbdbb488a2f574af16" id="r_a31b12640ed84dadbdbb488a2f574af16"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Solver_1_1ShotSimEffectBoard.html">ShotSimEffectBoard</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31b12640ed84dadbdbb488a2f574af16">_effectBoard</a></td></tr>
 <tr class="separator:a31b12640ed84dadbdbb488a2f574af16"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab492d01d3ea0a6ff7d01f1d51a85c54c" id="r_ab492d01d3ea0a6ff7d01f1d51a85c54c"><td class="memItemLeft" align="right" valign="top">readonly IReadOnlyDictionary&lt; <a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Items.html#a099921060840def79dc9111a19107f2b">ItemType</a>, <a class="el" href="structBalloonParty_1_1Item_1_1Effects_1_1ItemEffectParams.html">ItemEffectParams</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab492d01d3ea0a6ff7d01f1d51a85c54c">_effectParams</a></td></tr>
@@ -296,7 +303,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p><em>hitsOut</em> , when non-null, is cleared and filled with this activation's <a class="el" href="structBalloonParty_1_1Item_1_1Effects_1_1EffectHit.html" title="One effect core&#39;s verdict on one occupant — the loop, not the core, applies it (see ShotItemLayer/App...">EffectHit</a>s (caller-owned scratch list, same convention as <code><a class="el" href="classBalloonParty_1_1Solver_1_1ShotSimulator.html#a910fc601a3511d2ce831baf73cef09c0" title="Simulates one aim direction to completion.">ShotSimulator.Simulate</a></code>'s <code>pathOut</code>). </p>
+<p><em>hitsOut</em> , when non-null, is cleared and filled with this activation's <a class="el" href="structBalloonParty_1_1Item_1_1Effects_1_1EffectHit.html" title="One effect core&#39;s verdict on one occupant — the loop, not the core, applies it (see ShotItemLayer/App...">EffectHit</a>s (caller-owned scratch list, same convention as <code><a class="el" href="classBalloonParty_1_1Solver_1_1ShotSimulator.html#a25048cb9262c8e3927699dfd800317e9" title="Simulates one aim direction to completion.">ShotSimulator.Simulate</a></code>'s <code>pathOut</code>). </p>
 
 </div>
 </div>
@@ -590,6 +597,38 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="af4916af76f4c7a5f711ce1474efb1ff7" name="af4916af76f4c7a5f711ce1474efb1ff7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af4916af76f4c7a5f711ce1474efb1ff7">&#9670;&#160;</a></span>TryTakeBombBlast()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Solver.ShotItemLayer.TryTakeBombBlast </td>
+          <td>(</td>
+          <td class="paramtype">out <a class="el" href="structBalloonParty_1_1Solver_1_1ShotItemActivation.html">ShotItemActivation</a></td>          <td class="paramname"><span class="paramname"><em>bomb</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out <a class="el" href="structBalloonParty_1_1Item_1_1Bomb_1_1BombBlastParams.html">BombBlastParams</a></td>          <td class="paramname"><span class="paramname"><em>blast</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The next bomb that went off since this was last asked: its activation (where, in which slot, a rainbow one or not) and its blast. </p>
+<p>False when there is none left. <code><a class="el" href="classBalloonParty_1_1Solver_1_1ShotSimulator.html" title="Pure, headless, deterministic billiard simulator for one aim direction (see plan_shot_geometry).">ShotSimulator</a></code> asks before each event it looks for, to blow the caps off the mushrooms next to the bomb (<code><a class="el" href="classBalloonParty_1_1Solver_1_1ShotBumperLayer.html#a0f9d3a5598ab686ee3926ab55f209b07" title="A bomb went off in the flight being simulated, the one that stood in bombSlot : the caps the game&#39;s M...">ShotBumperLayer.BlowOff</a></code>). </p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a733a96f0ace0dcb007bece10487b1216" name="a733a96f0ace0dcb007bece10487b1216"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a733a96f0ace0dcb007bece10487b1216">&#9670;&#160;</a></span>_activationCount</h2>
@@ -602,6 +641,50 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">int BalloonParty.Solver.ShotItemLayer._activationCount</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4546b601f7af8e4e5241140c8a001074" name="a4546b601f7af8e4e5241140c8a001074"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4546b601f7af8e4e5241140c8a001074">&#9670;&#160;</a></span>_bombBlast</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structBalloonParty_1_1Item_1_1Bomb_1_1BombBlastParams.html">BombBlastParams</a> BalloonParty.Solver.ShotItemLayer._bombBlast</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2d320921460b7517d3c12452e460614a" name="a2d320921460b7517d3c12452e460614a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d320921460b7517d3c12452e460614a">&#9670;&#160;</a></span>_bombBlasts</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly List&lt;<a class="el" href="structBalloonParty_1_1Solver_1_1ShotItemActivation.html">ShotItemActivation</a>&gt; BalloonParty.Solver.ShotItemLayer._bombBlasts = new(4)</td>
         </tr>
       </table>
   </td>

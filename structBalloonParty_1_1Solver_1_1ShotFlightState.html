@@ -116,8 +116,15 @@ $(function(){initNavTree('structBalloonParty_1_1Solver_1_1ShotFlightState.html',
 </div><!--header-->
 <div class="contents">
 
-<p>Mutable per-flight state threaded through <a class="el" href="classBalloonParty_1_1Solver_1_1ShotSimulator.html#a910fc601a3511d2ce831baf73cef09c0" title="Simulates one aim direction to completion.">ShotSimulator.Simulate</a> — passed by <code>ref</code> to every helper that mutates it (a by-value pass would silently drop the mutation).  
+<p>Mutable per-flight state threaded through <a class="el" href="classBalloonParty_1_1Solver_1_1ShotSimulator.html#a25048cb9262c8e3927699dfd800317e9" title="Simulates one aim direction to completion.">ShotSimulator.Simulate</a> — passed by <code>ref</code> to every helper that mutates it (a by-value pass would silently drop the mutation).  
  <a href="#details">More...</a></p>
+<div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for BalloonParty.Solver.ShotFlightState:</div>
+<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-0-content" class="dyncontent" style="display:none;">
+<div class="center"><iframe scrolling="no" frameborder="0" src="structBalloonParty_1_1Solver_1_1ShotFlightState__coll__graph.svg" width="571" height="195"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -164,6 +171,12 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a7b19ece1cdadf6e179052f9fc5fae696"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a219fdc0febaf6797d2669e55ef9a7c1b" id="r_a219fdc0febaf6797d2669e55ef9a7c1b"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a219fdc0febaf6797d2669e55ef9a7c1b">LastBouncePosition</a></td></tr>
 <tr class="separator:a219fdc0febaf6797d2669e55ef9a7c1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb601d29f83f61036063c8c602af094b" id="r_aeb601d29f83f61036063c8c602af094b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1Solver_1_1ShotLeftBumper.html">ShotLeftBumper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeb601d29f83f61036063c8c602af094b">LeftBumper</a></td></tr>
+<tr class="separator:aeb601d29f83f61036063c8c602af094b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6073de5464fcd783f5708041eb9fa371" id="r_a6073de5464fcd783f5708041eb9fa371"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1Shared_1_1MushroomChainState.html">MushroomChainState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6073de5464fcd783f5708041eb9fa371">MushroomChain</a></td></tr>
+<tr class="separator:a6073de5464fcd783f5708041eb9fa371"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a023ddf8a56990b870d8fd0b3141dc2" id="r_a8a023ddf8a56990b870d8fd0b3141dc2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1Solver_1_1ShotMushroomTally.html">ShotMushroomTally</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8a023ddf8a56990b870d8fd0b3141dc2">Mushrooms</a></td></tr>
+<tr class="separator:a8a023ddf8a56990b870d8fd0b3141dc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2bdd441a1d3200b8dd0d1460bd9cb2d0" id="r_a2bdd441a1d3200b8dd0d1460bd9cb2d0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2bdd441a1d3200b8dd0d1460bd9cb2d0">NukePops</a></td></tr>
 <tr class="separator:a2bdd441a1d3200b8dd0d1460bd9cb2d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1487ef45a6da652d21d356a9df9996a3" id="r_a1487ef45a6da652d21d356a9df9996a3"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1487ef45a6da652d21d356a9df9996a3">PierceSpeedScale</a></td></tr>
@@ -203,7 +216,7 @@ Properties</h2></td></tr>
 <tr class="separator:a00f850a31cdb91f76619efdb01092df2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Mutable per-flight state threaded through <a class="el" href="classBalloonParty_1_1Solver_1_1ShotSimulator.html#a910fc601a3511d2ce831baf73cef09c0" title="Simulates one aim direction to completion.">ShotSimulator.Simulate</a> — passed by <code>ref</code> to every helper that mutates it (a by-value pass would silently drop the mutation). </p>
+<div class="textblock"><p>Mutable per-flight state threaded through <a class="el" href="classBalloonParty_1_1Solver_1_1ShotSimulator.html#a25048cb9262c8e3927699dfd800317e9" title="Simulates one aim direction to completion.">ShotSimulator.Simulate</a> — passed by <code>ref</code> to every helper that mutates it (a by-value pass would silently drop the mutation). </p>
 <p>Board/geometry inputs (working set, walls, dynamics, cruise config) and the timeline outputs (path/timestamps) are deliberately NOT here — this is flight-local scoring/motion state only. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a3b485bada6d87b27f8b1fe1a976333c3" name="a3b485bada6d87b27f8b1fe1a976333c3"></a>
@@ -498,6 +511,48 @@ Properties</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">Vector2 BalloonParty.Solver.ShotFlightState.LastBouncePosition</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aeb601d29f83f61036063c8c602af094b" name="aeb601d29f83f61036063c8c602af094b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb601d29f83f61036063c8c602af094b">&#9670;&#160;</a></span>LeftBumper</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structBalloonParty_1_1Solver_1_1ShotLeftBumper.html">ShotLeftBumper</a> BalloonParty.Solver.ShotFlightState.LeftBumper</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6073de5464fcd783f5708041eb9fa371" name="a6073de5464fcd783f5708041eb9fa371"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6073de5464fcd783f5708041eb9fa371">&#9670;&#160;</a></span>MushroomChain</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structBalloonParty_1_1Shared_1_1MushroomChainState.html">MushroomChainState</a> BalloonParty.Solver.ShotFlightState.MushroomChain</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8a023ddf8a56990b870d8fd0b3141dc2" name="a8a023ddf8a56990b870d8fd0b3141dc2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a023ddf8a56990b870d8fd0b3141dc2">&#9670;&#160;</a></span>Mushrooms</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structBalloonParty_1_1Solver_1_1ShotMushroomTally.html">ShotMushroomTally</a> BalloonParty.Solver.ShotFlightState.Mushrooms</td>
         </tr>
       </table>
 </div><div class="memdoc">

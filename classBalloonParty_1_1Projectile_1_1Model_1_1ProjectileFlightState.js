@@ -1,8 +1,14 @@
 var classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState =
 [
     [ "HasPendingPierceHit", "classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState.html#aacf3f6a34072cfe61a06b4985a7a26cc", null ],
+    [ "LeaveBumper", "classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState.html#a4e424b600b5b55107d5fae6011470c93", null ],
+    [ "LeavingBumperId", "classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState.html#aab1ae05d3fd87f240c7082b18908d65d", null ],
+    [ "_leftBumperDirection", "classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState.html#ab8a6fac5a5fd315d9ce3cdb9165586a3", null ],
+    [ "_leftBumperId", "classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState.html#aa5a8d52bab7d93dd8cafadb3ad49c3dc", null ],
+    [ "MushroomChain", "classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState.html#a16903663a2f6f2ffd86eabe9f7cf2043", null ],
     [ "BankedPierceCharges", "classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState.html#a3e94d4b87df9ba33e0cc8e20fa5e89fd", null ],
     [ "BankedRainbowPierceCharges", "classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState.html#acc102c7ef779104b25bed2756a620bd7", null ],
+    [ "CapsCut", "classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState.html#a3f96507abb09c48fa2dab0541cdd7d39", null ],
     [ "ConsecutiveSweeps", "classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState.html#a3e4c665e0ac5757788de5de268c33a89", null ],
     [ "ConsecutiveWallBounces", "classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState.html#aab7dec1aa571b705096cff54037ab663", null ],
     [ "CurrentSpeed", "classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState.html#a4cc37bdeb2997a270777b81c2519a5f0", null ],

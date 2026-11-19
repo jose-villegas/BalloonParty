@@ -1,0 +1,5 @@
+<map id="BalloonParty.Shared.BumperContact" name="BalloonParty.Shared.BumperContact">
+<area shape="rect" id="Node000001" title="The ball touching a bumper: where its centre is, how it came in, and the bumper it hit." alt="" coords="5,115,211,160"/>
+<area shape="rect" id="Node000002" href="$structBalloonParty_1_1Shared_1_1BumperCircle.html" title="One permanent bumper (the cap of a meadow mushroom) as the ball meets it: a circle the ball&#39;s centre ..." alt="" coords="5,5,211,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,64,111,115,105,114,106,68"/>
+</map>

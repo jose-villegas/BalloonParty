@@ -1,0 +1,7 @@
+<map id="BalloonParty.Slots.Actor.MushroomPlacementLimits" name="BalloonParty.Slots.Actor.MushroomPlacementLimits">
+<area shape="rect" id="Node000001" title="What a level&#39;s mushrooms keep to: how many walls of caps, how long a wall is, how many caps in all,..." alt="" coords="316,40,515,85"/>
+<area shape="rect" id="Node000002" href="$structBalloonParty_1_1Slots_1_1Actor_1_1MushroomLayoutBand.html" title="What a layout of mushroom walls must measure to be dealt: flown from every angle the thrower can aim ..." alt="" coords="18,5,197,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="212,37,318,50,313,52,212,42"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Slots_1_1Actor_1_1MushroomCannonClearance.html" title="The room a layout leaves the cannon: no cap close to it, and no wall broad in front of it." alt="" coords="5,75,210,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="225,81,318,73,313,74,225,86"/>
+</map>

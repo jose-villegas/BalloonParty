@@ -161,6 +161,27 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafTier.html">LeafTier</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">One depth tier of leaf instances for a single slot.  <a href="structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafTier.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomBumperModel.html">MushroomBumperModel</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A meadow mushroom (<a class="el" href="plan_meadow_mushrooms.html">Meadow Mushrooms</a>): a permanent bumper the ball bounces off.  <a href="classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomBumperModel.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCapSpring.html">MushroomCapSpring</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The motion of a mushroom's cap after a hit (<a class="el" href="plan_meadow_mushrooms.html">Meadow Mushrooms</a>): a spring that is pushed along the ball's way in, so the cap leans away from the hit and wobbles back along that same line, and a second one that swells the cap when the bounce pays the lance.  <a href="structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCapSpring.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCutTimeline.html">MushroomCutTimeline</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">What a mushroom's cap is doing once it has come off (<a class="el" href="plan_meadow_mushrooms.html">Meadow Mushrooms</a>): a lance's cut, the two pieces parting, turning, falling and fading; or a blast, the cap thrown off whole, lifted, turning, landing and fading; the bare stem after either, and the cap popping back.  <a href="structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCutTimeline.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomSporeBurst.html">MushroomSporeBurst</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">One release of a mushroom's spores (<a class="el" href="plan_meadow_mushrooms.html">Meadow Mushrooms</a>), as worked out by <a class="el" href="classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomSporePlanner.html" title="Decides what a mushroom lets go when something happens to its cap (Meadow Mushrooms): a ball&#39;s hit pu...">MushroomSporePlanner</a>: a cone of smoke and a count of specks, where they leave from and which way.  <a href="structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomSporeBurst.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomSporePlanner.html">MushroomSporePlanner</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decides what a mushroom lets go when something happens to its cap (<a class="el" href="plan_meadow_mushrooms.html">Meadow Mushrooms</a>): a ball's hit puffs a small cone of spores the way the ball was going, scaled by its speed; a lance's cut a little more, along the lance's way; a blast a wide burst, the way the cap is blown.  <a href="classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomSporePlanner.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomSporeRouter.html">MushroomSporeRouter</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lets a meadow mushroom's spores go (<a class="el" href="plan_meadow_mushrooms.html">Meadow Mushrooms</a>): hears what happens to a cap (a ball's bounce, a lance's cut, a blast), asks <a class="el" href="classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomSporePlanner.html" title="Decides what a mushroom lets go when something happens to its cap (Meadow Mushrooms): a ball&#39;s hit pu...">MushroomSporePlanner</a> what that is worth, and sends the smoke to the game's smoke field and the specks to the mushroom's own view.  <a href="classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomSporeRouter.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomView.html">MushroomView</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A meadow mushroom on the board (<a class="el" href="plan_meadow_mushrooms.html">Meadow Mushrooms</a>): the quad the <code>Grid/Mushroom</code> shader draws the mushroom and its shadow on, and the cap's answer to what happens to it.  <a href="classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomView.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudView.html">PuffCloudView</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cloud renderer for Puff clusters; inherits all behaviour from <a class="el" href="classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterView.html" title="Expects the shader to declare _SlotCentersWorld (Vector4[]), _SlotCount (int), and _TimeOffset (float...">ClusterView</a>.  <a href="classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudView.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -185,9 +206,16 @@ Enumerations</h2></td></tr>
 , <a class="el" href="#a88ec606a89830d8d05e349537cc52473a59988751eea31359e0983b22e1531b70">Absorber</a> = 3
 , <br />
 &#160;&#160;<a class="el" href="#a88ec606a89830d8d05e349537cc52473aecb135155dc653bbc220d4448490d15e">Gatekeeper</a> = 4
+, <a class="el" href="#a88ec606a89830d8d05e349537cc52473ab93c3d9029fa42815abf0551db0cec98">Mushroom</a> = 5
 <br />
  }</td></tr>
 <tr class="separator:a88ec606a89830d8d05e349537cc52473"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8fd7dde02f60c4a136d518281f0406a8" id="r_a8fd7dde02f60c4a136d518281f0406a8"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8fd7dde02f60c4a136d518281f0406a8">MushroomSporeKind</a> : byte { <a class="el" href="#a8fd7dde02f60c4a136d518281f0406a8aebfe5e1791db03c4cd6ab95801e0977d">Hit</a>
+, <a class="el" href="#a8fd7dde02f60c4a136d518281f0406a8aeb334dca00e390e0d3ebf52d205807d7">Cut</a>
+, <a class="el" href="#a8fd7dde02f60c4a136d518281f0406a8aaf67fdbf7db7b0248cb8f15ecc5675a3">Blast</a>
+ }</td></tr>
+<tr class="memdesc:a8fd7dde02f60c4a136d518281f0406a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">What let a mushroom's spores go, from the least to the most.  <a href="#a8fd7dde02f60c4a136d518281f0406a8">More...</a><br /></td></tr>
+<tr class="separator:a8fd7dde02f60c4a136d518281f0406a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
 <a id="a88ec606a89830d8d05e349537cc52473" name="a88ec606a89830d8d05e349537cc52473"></a>
@@ -207,6 +235,39 @@ Enumerations</h2></td></tr>
 <tr><td class="fieldname"><a id="a88ec606a89830d8d05e349537cc52473a68e6202e50e4806f18d28cab574e0d82" name="a88ec606a89830d8d05e349537cc52473a68e6202e50e4806f18d28cab574e0d82"></a>Deflector&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a88ec606a89830d8d05e349537cc52473a59988751eea31359e0983b22e1531b70" name="a88ec606a89830d8d05e349537cc52473a59988751eea31359e0983b22e1531b70"></a>Absorber&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a88ec606a89830d8d05e349537cc52473aecb135155dc653bbc220d4448490d15e" name="a88ec606a89830d8d05e349537cc52473aecb135155dc653bbc220d4448490d15e"></a>Gatekeeper&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a88ec606a89830d8d05e349537cc52473ab93c3d9029fa42815abf0551db0cec98" name="a88ec606a89830d8d05e349537cc52473ab93c3d9029fa42815abf0551db0cec98"></a>Mushroom&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<a id="a8fd7dde02f60c4a136d518281f0406a8" name="a8fd7dde02f60c4a136d518281f0406a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8fd7dde02f60c4a136d518281f0406a8">&#9670;&#160;</a></span>MushroomSporeKind</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#a8fd7dde02f60c4a136d518281f0406a8">BalloonParty.Slots.Actor.Archetype.MushroomSporeKind</a> : byte</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>What let a mushroom's spores go, from the least to the most. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a8fd7dde02f60c4a136d518281f0406a8aebfe5e1791db03c4cd6ab95801e0977d" name="a8fd7dde02f60c4a136d518281f0406a8aebfe5e1791db03c4cd6ab95801e0977d"></a>Hit&#160;</td><td class="fielddoc"><p>A ball bounced off the cap. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a8fd7dde02f60c4a136d518281f0406a8aeb334dca00e390e0d3ebf52d205807d7" name="a8fd7dde02f60c4a136d518281f0406a8aeb334dca00e390e0d3ebf52d205807d7"></a>Cut&#160;</td><td class="fielddoc"><p>A lance cut the cap. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a8fd7dde02f60c4a136d518281f0406a8aaf67fdbf7db7b0248cb8f15ecc5675a3" name="a8fd7dde02f60c4a136d518281f0406a8aaf67fdbf7db7b0248cb8f15ecc5675a3"></a>Blast&#160;</td><td class="fielddoc"><p>A blast blew the cap off. </p>
+</td></tr>
 </table>
 
 </div>

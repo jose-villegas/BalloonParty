@@ -1,0 +1,9 @@
+<map id="BalloonParty.Audio.Routing.MushroomSoundRouter" name="BalloonParty.Audio.Routing.MushroomSoundRouter">
+<area shape="rect" id="Node000001" title="The meadow&#39;s mushrooms in sound (Meadow Mushrooms): a soft bump on every bounce, a step higher with e..." alt="" coords="62,115,262,160"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,14,90,42"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="73,50,142,114,137,116,71,55"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="114,14,211,42"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="164,55,165,116,160,114,160,59"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Audio_1_1ISoundPlayer.html" title=" " alt="" coords="235,5,425,50"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="286,58,197,117,195,112,281,59"/>
+</map>

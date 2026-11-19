@@ -4,5 +4,7 @@ var namespaceBalloonParty_1_1Configuration_1_1GridActors =
     [ "GridActorPrefabEntry", "classBalloonParty_1_1Configuration_1_1GridActors_1_1GridActorPrefabEntry.html", "classBalloonParty_1_1Configuration_1_1GridActors_1_1GridActorPrefabEntry" ],
     [ "GridActorTypeGate", "structBalloonParty_1_1Configuration_1_1GridActors_1_1GridActorTypeGate.html", "structBalloonParty_1_1Configuration_1_1GridActors_1_1GridActorTypeGate" ],
     [ "IGridActorConfiguration", "interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IGridActorConfiguration.html", "interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IGridActorConfiguration" ],
+    [ "IMushroomSettings", "interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IMushroomSettings.html", "interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IMushroomSettings" ],
+    [ "MushroomSettings", "classBalloonParty_1_1Configuration_1_1GridActors_1_1MushroomSettings.html", "classBalloonParty_1_1Configuration_1_1GridActors_1_1MushroomSettings" ],
     [ "ResolvedGridActorGate", "structBalloonParty_1_1Configuration_1_1GridActors_1_1ResolvedGridActorGate.html", "structBalloonParty_1_1Configuration_1_1GridActors_1_1ResolvedGridActorGate" ]
 ];

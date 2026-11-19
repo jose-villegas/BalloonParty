@@ -24,7 +24,7 @@ var searchData=
   ['sky_21',['Sky',['../namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08a03462a41aec357b74c89eb8d272532f7',1,'BalloonParty::Configuration::Level']]],
   ['smoke_22',['Smoke',['../namespaceBalloonParty_1_1Configuration_1_1Effects.html#abd031b2ebaae099e719c3ec4e6322d5cabc93fd0fa19ed26b6adf8293ada55404',1,'BalloonParty::Configuration::Effects']]],
   ['smooth_23',['Smooth',['../namespaceBalloonParty_1_1Configuration_1_1Level.html#a6f10485b2af91bced864457369fdcd4bae510cdf33cd497134b47b9316314d4b4',1,'BalloonParty::Configuration::Level']]],
-  ['snake_24',['Snake',['../namespaceBalloonParty_1_1Balloon_1_1Formation.html#a7d189f644fea0191bb4f5acaef4bf746adfa90f1b4eb3affbd3b46af34ed2477c',1,'BalloonParty::Balloon::Formation']]],
+  ['snake_24',['Snake',['../namespaceBalloonParty_1_1Balloon_1_1Formation.html#a7d189f644fea0191bb4f5acaef4bf746adfa90f1b4eb3affbd3b46af34ed2477c',1,'BalloonParty.Balloon.Formation.Snake'],['../namespaceBalloonParty_1_1Balloon_1_1Formation.html#a8d2d65777aaac2e933178f9b7ba0c7b9adfa90f1b4eb3affbd3b46af34ed2477c',1,'BalloonParty.Balloon.Formation.Snake']]],
   ['snapfade_25',['SnapFade',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a58402d3cd9ac1d9358b618890bc428a7a8d4d60912514a7a5716c2b4131aaa227',1,'BalloonParty::Game::Score::Behaviours::ShapeFormationTicker']]],
   ['snipe_26',['Snipe',['../namespaceBalloonParty_1_1Configuration_1_1Items.html#a099921060840def79dc9111a19107f2ba82a0147abe0fb08bde142ccf08ae65f7',1,'BalloonParty::Configuration::Items']]],
   ['snipechance_27',['SnipeChance',['../namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523af210f104048eb74ed397b391dea7c920',1,'BalloonParty::Shared']]],

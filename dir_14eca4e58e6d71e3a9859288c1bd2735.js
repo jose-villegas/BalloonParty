@@ -34,6 +34,8 @@ var dir_14eca4e58e6d71e3a9859288c1bd2735 =
     [ "LevelPacingWindow.cs", "LevelPacingWindow_8cs.html", "LevelPacingWindow_8cs" ],
     [ "LevelRangeEntryDrawer.cs", "LevelRangeEntryDrawer_8cs.html", "LevelRangeEntryDrawer_8cs" ],
     [ "MetricBindingDrawer.cs", "MetricBindingDrawer_8cs.html", "MetricBindingDrawer_8cs" ],
+    [ "MushroomPrefabBuilder.cs", "MushroomPrefabBuilder_8cs.html", "MushroomPrefabBuilder_8cs" ],
+    [ "MushroomWallBaker.cs", "MushroomWallBaker_8cs.html", "MushroomWallBaker_8cs" ],
     [ "MusicalNoteDrawer.cs", "MusicalNoteDrawer_8cs.html", "MusicalNoteDrawer_8cs" ],
     [ "PaintDripOverlayEditor.cs", "PaintDripOverlayEditor_8cs.html", "PaintDripOverlayEditor_8cs" ],
     [ "PaintSplashViewEditor.cs", "PaintSplashViewEditor_8cs.html", "PaintSplashViewEditor_8cs" ],

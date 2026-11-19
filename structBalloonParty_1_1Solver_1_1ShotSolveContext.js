@@ -1,8 +1,9 @@
 var structBalloonParty_1_1Solver_1_1ShotSolveContext =
 [
-    [ "ShotSolveContext", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a5bdcc02670a9efb406d9a860e4ded2e9", null ],
+    [ "ShotSolveContext", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#adec8b862a0ae57100c492782def28273", null ],
     [ "AllowedColors", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a2b1eaaee78d366ddc37b0bcf63ac85bf", null ],
     [ "Board", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a6c2497ec7b3aa65f161da19e89aae850", null ],
+    [ "Bumpers", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a93802fc73af42c4d98d7b103b77c1882", null ],
     [ "CruiseConfig", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#acdb2a043e58dee4b3060d3bf532225a0", null ],
     [ "Dynamics", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a26ee4965efe4ac2194354b8517586afa", null ],
     [ "Items", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#ac9544259dea3752f60667e2cebe94450", null ],

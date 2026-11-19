@@ -128,6 +128,9 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevel
 Properties</h2></td></tr>
 <tr class="memitem:ad47ae9a0a6075b903bc54ecbe58eb2e1" id="r_ad47ae9a0a6075b903bc54ecbe58eb2e1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html">ILevelParameters</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad47ae9a0a6075b903bc54ecbe58eb2e1">Current</a><code> [get]</code></td></tr>
 <tr class="separator:ad47ae9a0a6075b903bc54ecbe58eb2e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a58fa7b7d58c6fb662fc9c204d26e34c2" id="r_a58fa7b7d58c6fb662fc9c204d26e34c2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a58fa7b7d58c6fb662fc9c204d26e34c2">Level</a><code> [get]</code></td></tr>
+<tr class="memdesc:a58fa7b7d58c6fb662fc9c204d26e34c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">The level <a class="el" href="#ad47ae9a0a6075b903bc54ecbe58eb2e1">Current</a> was resolved for.  <br /></td></tr>
+<tr class="separator:a58fa7b7d58c6fb662fc9c204d26e34c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Single read surface for the live per-level difficulty mix; never read <code><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html" title="Level pacing; read by LevelDifficultyResolver (and by the balloon spawner&#39;s pool prewarm,...">ILevelPacingConfiguration</a></code> directly. </p>
@@ -153,6 +156,33 @@ Properties</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#acd6a4cb24f44e277b67e76d03d6f8d33">BalloonParty.Game.Level.LevelDifficultyResolver</a>.</p>
+
+</div>
+</div>
+<a id="a58fa7b7d58c6fb662fc9c204d26e34c2" name="a58fa7b7d58c6fb662fc9c204d26e34c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a58fa7b7d58c6fb662fc9c204d26e34c2">&#9670;&#160;</a></span>Level</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Game.Level.IActiveLevelParameters.Level</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The level <a class="el" href="#ad47ae9a0a6075b903bc54ecbe58eb2e1">Current</a> was resolved for. </p>
+<p>Ask this, and not the level in progress, for anything that must match what <a class="el" href="#ad47ae9a0a6075b903bc54ecbe58eb2e1">Current</a> says: the two are set by different messages, and between a level-up and its dismissal <a class="el" href="#ad47ae9a0a6075b903bc54ecbe58eb2e1">Current</a> is already the next level's. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#af3c6cf9b5efc5073036ffadacb128fdc">BalloonParty.Game.Level.LevelDifficultyResolver</a>.</p>
 
 </div>
 </div>

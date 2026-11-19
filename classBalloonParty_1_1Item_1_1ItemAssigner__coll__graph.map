@@ -1,43 +1,45 @@
 <map id="BalloonParty.Item.ItemAssigner" name="BalloonParty.Item.ItemAssigner">
-<area shape="rect" id="Node000001" title=" " alt="" coords="992,407,1217,434"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="693,5,777,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="792,14,835,15,882,23,928,38,969,64,1007,103,1037,150,1060,199,1077,250,1098,343,1105,407,1100,405,1093,344,1072,252,1055,201,1032,152,1003,107,966,68,926,43,881,28,835,21,794,19"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="660,57,810,85"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="825,61,862,63,900,70,936,82,969,101,1005,135,1034,175,1056,219,1074,264,1096,348,1104,407,1099,405,1090,349,1069,266,1052,221,1029,178,1001,139,966,105,934,87,898,75,861,68,826,66"/>
-<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,164,212,208"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="197,157,261,145,394,138,577,140,748,147,845,157,884,168,913,180,939,197,969,223,1014,270,1051,322,1099,407,1094,406,1047,325,1010,273,966,226,936,201,910,185,882,173,844,162,748,152,577,145,394,144,261,150,200,161"/>
-<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html" title="Tracks slots in&#45;transit from balance animations so spawn paths avoid them." alt="" coords="266,229,439,274"/>
-<area shape="poly" id="edge7_Node000007_Node000004" title=" " alt="" coords="208,210,269,227,264,230,210,215"/>
-<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html" title="Single read surface for the live per&#45;level difficulty mix; never read ILevelPacingConfiguration direc..." alt="" coords="641,294,829,339"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="844,340,968,374,1064,406,1058,407,967,379,844,346"/>
-<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" title=" " alt="" coords="649,225,821,270"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="824,272,846,279,908,300,969,326,1035,367,1088,406,1082,406,1032,371,966,331,906,305,844,284,825,277"/>
-<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="453,257,468,258,535,259,601,258,651,256,646,258,601,263,535,265,468,263,456,262"/>
-<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html" title="Slot grid layout: size, spacing, and origin offset." alt="" coords="261,160,444,204"/>
-<area shape="poly" id="edge12_Node000001_Node000008" title=" " alt="" coords="459,175,544,175,641,179,744,190,845,210,911,230,969,266,1010,301,1046,340,1096,407,1091,406,1042,343,1006,305,966,271,909,235,844,215,744,195,641,184,544,180,461,180"/>
-<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="449,206,469,210,562,225,651,238,646,240,561,230,468,215,451,211"/>
-<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="264,298,442,343"/>
-<area shape="poly" id="edge9_Node000006_Node000009" title=" " alt="" coords="456,306,601,282,660,269,656,272,602,287,458,311"/>
-<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="19,298,198,343"/>
-<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="212,318,265,319,261,322,214,323"/>
-<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="264,368,442,412"/>
-<area shape="poly" id="edge11_Node000006_Node000011" title=" " alt="" coords="455,381,493,374,531,363,567,347,600,326,608,316,611,305,614,292,624,280,651,265,646,269,627,284,619,295,616,306,613,318,603,330,569,352,533,368,494,379,458,386"/>
-<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Balloon_1_1BalloonContactRadii.html" title="Per&#45;type contact radius, read once off the authored prefabs." alt="" coords="631,364,839,408"/>
-<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="853,394,994,409,989,411,854,400"/>
-<area shape="rect" id="Node000013" href="$interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html" title="Read&#45;only projectile flight configuration: physics, cruise, sweep, pierce, and doom tuning." alt="" coords="625,433,845,478"/>
-<area shape="poly" id="edge14_Node000001_Node000013" title=" " alt="" coords="859,441,994,430,989,432,860,446"/>
-<area shape="rect" id="Node000014" href="$interfaceBalloonParty_1_1Shared_1_1IRunConfig.html" title="Run&#45;level rules: starting hit points, retry allowance, the level&#45;complete beat and upgrade cards." alt="" coords="643,502,827,547"/>
-<area shape="poly" id="edge15_Node000001_Node000014" title=" " alt="" coords="841,496,967,462,1063,434,1058,436,968,467,843,501"/>
-<area shape="rect" id="Node000015" href="$interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html" title="The run&#39;s weapon after its upgrade cards: the configured base plus every card held." alt="" coords="628,572,842,616"/>
-<area shape="poly" id="edge16_Node000001_Node000015" title=" " alt="" coords="823,564,844,557,906,536,966,510,1032,470,1083,436,1087,433,1035,474,969,515,908,541,846,562,825,569"/>
-<area shape="rect" id="Node000016" href="$classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html" title="Where a shot leaves from, readable outside the thrower&#39;s own scope." alt="" coords="628,641,842,686"/>
-<area shape="poly" id="edge17_Node000001_Node000016" title=" " alt="" coords="839,633,904,607,966,570,1006,536,1042,497,1091,436,1096,433,1046,501,1010,539,969,574,906,611,840,638"/>
-<area shape="rect" id="Node000017" href="$interfaceBalloonParty_1_1Shared_1_1IDeflectorField.html" title="The deflectors the aim telegraph must bounce off, in the geometry the projectile will actually meet." alt="" coords="626,710,844,755"/>
-<area shape="poly" id="edge18_Node000001_Node000017" title=" " alt="" coords="857,702,914,678,966,643,991,618,1014,590,1052,530,1079,474,1096,437,1100,433,1084,476,1057,533,1018,593,995,622,969,648,917,683,859,707"/>
-<area shape="rect" id="Node000018" href="$interfaceBalloonParty_1_1Game_1_1Assist_1_1IPlayerNeed.html" title="How much trouble the player is in right now, 0 (none) to 1 (one mistake from losing the run)." alt="" coords="639,780,831,824"/>
-<area shape="poly" id="edge19_Node000001_Node000018" title=" " alt="" coords="845,782,909,758,939,742,966,721,997,687,1023,648,1045,606,1062,564,1086,487,1099,437,1102,433,1092,489,1067,566,1050,608,1028,650,1001,690,969,725,942,746,911,763,847,787"/>
-<area shape="rect" id="Node000019" href="$classBalloonParty_1_1Game_1_1Assist_1_1PityRoll.html" title="A chance roll that forgives a player in trouble." alt="" coords="639,849,831,894"/>
-<area shape="poly" id="edge20_Node000001_Node000019" title=" " alt="" coords="845,856,909,834,939,818,966,797,1003,753,1032,704,1055,651,1072,597,1093,500,1101,437,1104,433,1098,501,1078,599,1060,653,1037,706,1007,757,970,801,942,822,911,839,846,861"/>
-<area shape="rect" id="Node000020" href="$interfaceBalloonParty_1_1Shared_1_1IPitySettings.html" title="How a chance roll forgives a player in trouble (Game/Assist/PityRoll): each roll it misses while the ..." alt="" coords="261,849,444,894"/>
-<area shape="poly" id="edge21_Node000019_Node000020" title=" " alt="" coords="460,869,642,871,636,871,460,874"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="996,407,1221,434"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="697,5,781,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="796,14,839,15,886,23,932,38,973,64,1011,103,1041,150,1064,199,1081,250,1102,343,1109,407,1104,405,1097,344,1076,252,1059,201,1036,152,1007,107,970,68,930,43,885,28,839,21,798,19"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="664,57,814,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="829,61,866,63,904,70,940,82,973,101,1009,135,1038,175,1060,219,1078,264,1100,348,1108,407,1103,405,1094,349,1073,266,1056,221,1033,178,1005,139,970,105,938,87,902,75,865,68,830,66"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,198,212,243"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="156,188,206,163,260,145,308,138,377,134,552,133,727,140,799,147,849,157,888,168,917,180,943,197,973,223,1018,270,1055,322,1103,407,1098,406,1051,325,1014,273,970,226,940,201,914,185,886,173,848,162,798,153,727,146,552,138,378,139,309,143,262,150,208,168,160,192"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html" title="Tracks slots in&#45;transit from balance animations so spawn paths avoid them." alt="" coords="268,298,441,343"/>
+<area shape="poly" id="edge7_Node000007_Node000004" title=" " alt="" coords="174,247,262,283,294,297,289,299,260,288,176,252"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html" title="Single read surface for the live per&#45;level difficulty mix; never read ILevelPacingConfiguration direc..." alt="" coords="645,294,833,339"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="848,340,972,374,1068,406,1062,407,971,379,848,346"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" title=" " alt="" coords="653,225,825,270"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="828,272,850,279,912,300,973,326,1039,367,1092,406,1086,406,1036,371,970,331,910,305,848,284,829,277"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="455,306,605,282,664,269,660,271,606,287,458,311"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html" title="Slot grid layout: size, spacing, and origin offset." alt="" coords="263,160,446,204"/>
+<area shape="poly" id="edge12_Node000001_Node000008" title=" " alt="" coords="461,175,546,175,644,179,748,190,849,210,915,230,973,266,1014,301,1050,340,1100,407,1095,406,1046,343,1010,305,970,271,913,235,848,215,747,195,644,184,546,180,463,180"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="453,206,473,210,566,225,655,238,650,240,565,230,472,215,455,211"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="266,368,444,412"/>
+<area shape="poly" id="edge9_Node000006_Node000009" title=" " alt="" coords="458,381,496,374,534,363,571,347,604,326,612,316,615,305,618,292,628,280,655,265,650,269,631,284,623,295,620,306,617,318,607,330,573,352,536,368,497,379,460,386"/>
+<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="19,368,198,412"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="212,388,267,388,263,391,214,392"/>
+<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="266,229,444,274"/>
+<area shape="poly" id="edge11_Node000006_Node000011" title=" " alt="" coords="458,257,472,258,539,259,605,258,655,256,650,258,605,263,539,265,472,263,460,262"/>
+<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Balloon_1_1BalloonContactRadii.html" title="Per&#45;type contact radius, read once off the authored prefabs." alt="" coords="635,364,843,408"/>
+<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="857,394,998,409,993,411,858,400"/>
+<area shape="rect" id="Node000013" href="$interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html" title="Read&#45;only projectile flight configuration: physics, cruise, sweep, pierce, and doom tuning." alt="" coords="629,433,849,478"/>
+<area shape="poly" id="edge14_Node000001_Node000013" title=" " alt="" coords="863,441,998,430,993,432,864,446"/>
+<area shape="rect" id="Node000014" href="$interfaceBalloonParty_1_1Shared_1_1IRunConfig.html" title="Run&#45;level rules: starting hit points, retry allowance, the level&#45;complete beat and upgrade cards." alt="" coords="647,502,831,547"/>
+<area shape="poly" id="edge15_Node000001_Node000014" title=" " alt="" coords="845,496,971,462,1067,434,1062,436,972,467,847,501"/>
+<area shape="rect" id="Node000015" href="$interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html" title="The run&#39;s weapon after its upgrade cards: the configured base plus every card held." alt="" coords="632,572,846,616"/>
+<area shape="poly" id="edge16_Node000001_Node000015" title=" " alt="" coords="827,564,848,557,910,536,970,510,1036,470,1087,436,1091,433,1039,474,973,515,912,541,850,562,829,569"/>
+<area shape="rect" id="Node000016" href="$classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html" title="Where a shot leaves from, readable outside the thrower&#39;s own scope." alt="" coords="632,641,846,686"/>
+<area shape="poly" id="edge17_Node000001_Node000016" title=" " alt="" coords="843,633,908,607,970,570,1010,536,1046,497,1095,436,1100,433,1050,501,1014,539,973,574,910,611,844,638"/>
+<area shape="rect" id="Node000017" href="$interfaceBalloonParty_1_1Shared_1_1IShotOrigin.html" title="Where shots come from and how big the ball is, for the board&#45;side code that plans or resolves against..." alt="" coords="261,641,448,686"/>
+<area shape="poly" id="edge18_Node000016_Node000017" title=" " alt="" coords="464,661,634,662,629,664,464,666"/>
+<area shape="rect" id="Node000018" href="$interfaceBalloonParty_1_1Shared_1_1IDeflectorField.html" title="The deflectors the aim telegraph must bounce off, in the geometry the projectile will actually meet." alt="" coords="630,710,848,755"/>
+<area shape="poly" id="edge19_Node000001_Node000018" title=" " alt="" coords="861,702,918,678,970,643,995,618,1018,590,1056,530,1083,474,1100,437,1104,433,1088,476,1061,533,1022,593,999,622,973,648,921,683,863,707"/>
+<area shape="rect" id="Node000019" href="$interfaceBalloonParty_1_1Game_1_1Assist_1_1IPlayerNeed.html" title="How much trouble the player is in right now, 0 (none) to 1 (one mistake from losing the run)." alt="" coords="643,780,835,824"/>
+<area shape="poly" id="edge20_Node000001_Node000019" title=" " alt="" coords="849,782,913,758,943,742,970,721,1001,687,1027,648,1049,606,1066,564,1090,487,1103,437,1106,433,1096,489,1071,566,1054,608,1032,650,1005,690,973,725,946,746,915,763,851,787"/>
+<area shape="rect" id="Node000020" href="$classBalloonParty_1_1Game_1_1Assist_1_1PityRoll.html" title="A chance roll that forgives a player in trouble." alt="" coords="643,849,835,894"/>
+<area shape="poly" id="edge21_Node000001_Node000020" title=" " alt="" coords="849,856,913,834,943,818,970,797,1007,753,1036,704,1059,651,1076,597,1097,500,1105,437,1108,433,1102,501,1082,599,1064,653,1041,706,1011,757,974,801,946,822,915,839,850,861"/>
+<area shape="rect" id="Node000021" href="$interfaceBalloonParty_1_1Shared_1_1IPitySettings.html" title="How a chance roll forgives a player in trouble (Game/Assist/PityRoll): each roll it misses while the ..." alt="" coords="263,849,446,894"/>
+<area shape="poly" id="edge22_Node000020_Node000021" title=" " alt="" coords="462,869,645,871,640,871,462,874"/>
 </map>

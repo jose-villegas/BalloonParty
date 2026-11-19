@@ -133,8 +133,8 @@ $(function(){initNavTree('classBalloonParty_1_1Item_1_1Bomb_1_1BombItemHandler.h
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa3c88b3eb5be8a820c08869e5af45b52" id="r_aa3c88b3eb5be8a820c08869e5af45b52"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa3c88b3eb5be8a820c08869e5af45b52">BombItemHandler</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Items_1_1IItemConfiguration.html">IItemConfiguration</a> itemConfig, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1Messages_1_1IHitDispatcher.html">IHitDispatcher</a> hitDispatcher, IPublisher&lt; <a class="el" href="structBalloonParty_1_1Nudge_1_1NudgeMessage.html">NudgeMessage</a> &gt; nudgePublisher, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html">IGamePalette</a> palette, <a class="el" href="classBalloonParty_1_1Item_1_1ItemEffectPlayer.html">ItemEffectPlayer</a> effectPlayer, <a class="el" href="classBalloonParty_1_1Item_1_1BalloonOverlapQuery.html">BalloonOverlapQuery</a> overlap, <a class="el" href="classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html">DisturbanceFieldService</a> disturbanceField, <a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html">SceneLightFieldService</a> lightField)</td></tr>
-<tr class="separator:aa3c88b3eb5be8a820c08869e5af45b52"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a417871497b0d700924923f857ed5e6ce" id="r_a417871497b0d700924923f857ed5e6ce"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a417871497b0d700924923f857ed5e6ce">BombItemHandler</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Items_1_1IItemConfiguration.html">IItemConfiguration</a> itemConfig, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1Messages_1_1IHitDispatcher.html">IHitDispatcher</a> hitDispatcher, IPublisher&lt; <a class="el" href="structBalloonParty_1_1Nudge_1_1NudgeMessage.html">NudgeMessage</a> &gt; nudgePublisher, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html">IGamePalette</a> palette, <a class="el" href="classBalloonParty_1_1Item_1_1ItemEffectPlayer.html">ItemEffectPlayer</a> effectPlayer, <a class="el" href="classBalloonParty_1_1Item_1_1BalloonOverlapQuery.html">BalloonOverlapQuery</a> overlap, <a class="el" href="classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html">DisturbanceFieldService</a> disturbanceField, <a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html">SceneLightFieldService</a> lightField, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IMushroomBlast.html">IMushroomBlast</a> mushrooms)</td></tr>
+<tr class="separator:a417871497b0d700924923f857ed5e6ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab82ab313bc86942391d0e215d81007eb" id="r_ab82ab313bc86942391d0e215d81007eb"><td class="memItemLeft" align="right" valign="top">UniTask&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab82ab313bc86942391d0e215d81007eb">Activate</a> (<a class="el" href="structBalloonParty_1_1Item_1_1ItemActivationContext.html">ItemActivationContext</a> activation)</td></tr>
 <tr class="memdesc:ab82ab313bc86942391d0e215d81007eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Activations can overlap, so per-activation state must live in locals, never handler fields.  <br /></td></tr>
 <tr class="separator:ab82ab313bc86942391d0e215d81007eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -165,6 +165,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a4dae44781aba8f6d9e0d2f8601ecbbfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2104103f1080cca5bc693cca8bcfdd5f" id="r_a2104103f1080cca5bc693cca8bcfdd5f"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html">SceneLightFieldService</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2104103f1080cca5bc693cca8bcfdd5f">_lightField</a></td></tr>
 <tr class="separator:a2104103f1080cca5bc693cca8bcfdd5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab07bf9c4b471dd7e5310407c70f88547" id="r_ab07bf9c4b471dd7e5310407c70f88547"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IMushroomBlast.html">IMushroomBlast</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab07bf9c4b471dd7e5310407c70f88547">_mushrooms</a></td></tr>
+<tr class="separator:ab07bf9c4b471dd7e5310407c70f88547"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a554dd2426fc5e0b8df93b0f4287f50e1" id="r_a554dd2426fc5e0b8df93b0f4287f50e1"><td class="memItemLeft" align="right" valign="top">readonly Vector2Int[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a554dd2426fc5e0b8df93b0f4287f50e1">_neighborBuffer</a> = new Vector2Int[6]</td></tr>
 <tr class="separator:a554dd2426fc5e0b8df93b0f4287f50e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac3ea43f9f2b8dd67693f62fc21c05bbb" id="r_ac3ea43f9f2b8dd67693f62fc21c05bbb"><td class="memItemLeft" align="right" valign="top">readonly IPublisher&lt; <a class="el" href="structBalloonParty_1_1Nudge_1_1NudgeMessage.html">NudgeMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac3ea43f9f2b8dd67693f62fc21c05bbb">_nudgePublisher</a></td></tr>
@@ -177,8 +179,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a70acc924d5d5464bb57e53fd532c206b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="aa3c88b3eb5be8a820c08869e5af45b52" name="aa3c88b3eb5be8a820c08869e5af45b52"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa3c88b3eb5be8a820c08869e5af45b52">&#9670;&#160;</a></span>BombItemHandler()</h2>
+<a id="a417871497b0d700924923f857ed5e6ce" name="a417871497b0d700924923f857ed5e6ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a417871497b0d700924923f857ed5e6ce">&#9670;&#160;</a></span>BombItemHandler()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -221,7 +223,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html">SceneLightFieldService</a></td>          <td class="paramname"><span class="paramname"><em>lightField</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html">SceneLightFieldService</a></td>          <td class="paramname"><span class="paramname"><em>lightField</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IMushroomBlast.html">IMushroomBlast</a></td>          <td class="paramname"><span class="paramname"><em>mushrooms</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -457,6 +464,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly <a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html">SceneLightFieldService</a> BalloonParty.Item.Bomb.BombItemHandler._lightField</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab07bf9c4b471dd7e5310407c70f88547" name="ab07bf9c4b471dd7e5310407c70f88547"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab07bf9c4b471dd7e5310407c70f88547">&#9670;&#160;</a></span>_mushrooms</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IMushroomBlast.html">IMushroomBlast</a> BalloonParty.Item.Bomb.BombItemHandler._mushrooms</td>
         </tr>
       </table>
   </td>

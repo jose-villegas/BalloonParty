@@ -1,0 +1,13 @@
+<map id="BalloonParty.Slots.Actor.MushroomPlacementSource" name="BalloonParty.Slots.Actor.MushroomPlacementSource">
+<area shape="rect" id="Node000001" title="The live game&#39;s IMushroomPlacementSource: the level being laid out, the run&#39;s seed and the balloon sp..." alt="" coords="358,135,561,179"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IMushroomPlacementSource.html" title="What the level being laid out says about where its mushrooms may stand, beyond the grid itself: the s..." alt="" coords="21,5,228,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="222,52,245,60,334,96,414,134,408,134,332,101,243,65,223,58"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html" title="Level pacing; read by LevelDifficultyResolver (and by the balloon spawner&#39;s pool prewarm,..." alt="" coords="10,75,239,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="254,117,334,132,360,138,355,139,333,137,254,123"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSeed.html" title="The run&#39;s own roll, mixed into what may differ from one run to the next (which levels are on the grou..." alt="" coords="5,143,244,171"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="258,154,360,156,355,158,259,160"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html" title="Single read surface for the live per&#45;level difficulty mix; never read ILevelPacingConfiguration direc..." alt="" coords="31,195,218,239"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="233,195,360,174,355,176,234,200"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html" title=" " alt="" coords="10,264,239,309"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="222,256,243,249,332,213,409,181,414,179,334,218,245,254,224,261"/>
+</map>

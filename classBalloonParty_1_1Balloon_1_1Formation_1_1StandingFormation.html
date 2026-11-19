@@ -146,6 +146,12 @@ Properties</h2></td></tr>
 <tr class="memitem:afbb3961fe761fccb2e2435f93704a750" id="r_afbb3961fe761fccb2e2435f93704a750"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afbb3961fe761fccb2e2435f93704a750">Heading</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:afbb3961fe761fccb2e2435f93704a750"><td class="mdescLeft">&#160;</td><td class="mdescRight">A snake's walking direction (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1HexCoordinates.html#ab98ceaa27dad848be1ada5a45480c8bf" title="The neighbour one step from slot  in direction : 0 east, then clockwise on screen in 60° turns.">Slots.Grid.HexCoordinates.Step</a>); its members run head first.  <br /></td></tr>
 <tr class="separator:afbb3961fe761fccb2e2435f93704a750"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada68dcb0930559ff344bec274c0128d9" id="r_ada68dcb0930559ff344bec274c0128d9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html">IWriteableSlotActor</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ada68dcb0930559ff344bec274c0128d9">Host</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:ada68dcb0930559ff344bec274c0128d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The balloon an item cover stands round, held on <a class="el" href="#a3322ba8e3932bfe47f8482de91dea55a" title="Where Host stood when the cover was planned.">HostSlot</a> for as long as it is the host (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableCoverHost.html" title="A balloon a cover formation can stand round and hold where it is, the side only UnbreakableFormationS...">IWriteableCoverHost</a>); null for any other shape, and once that balloon has popped or been taken off the board (the cover then stands round nothing until it changes).  <br /></td></tr>
+<tr class="separator:ada68dcb0930559ff344bec274c0128d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3322ba8e3932bfe47f8482de91dea55a" id="r_a3322ba8e3932bfe47f8482de91dea55a"><td class="memItemLeft" align="right" valign="top">Vector2Int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3322ba8e3932bfe47f8482de91dea55a">HostSlot</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a3322ba8e3932bfe47f8482de91dea55a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where <a class="el" href="#ada68dcb0930559ff344bec274c0128d9" title="The balloon an item cover stands round, held on HostSlot for as long as it is the host (IWriteableCov...">Host</a> stood when the cover was planned.  <br /></td></tr>
+<tr class="separator:a3322ba8e3932bfe47f8482de91dea55a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac199b85c9ed13b99be3ce3f83f0c3ef9" id="r_ac199b85c9ed13b99be3ce3f83f0c3ef9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac199b85c9ed13b99be3ce3f83f0c3ef9">Id</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:ac199b85c9ed13b99be3ce3f83f0c3ef9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Which formation this is, unlike any other standing with it; each member carries it (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember.html#a3ce670557f6017a2a9f4c6b845e63361" title="Which formation it is in: the same for every member of one, and unlike any other formation&#39;s.">IFormationMember.FormationId</a>).  <br /></td></tr>
 <tr class="separator:ac199b85c9ed13b99be3ce3f83f0c3ef9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -326,6 +332,54 @@ Properties</h2></td></tr>
 </div><div class="memdoc">
 
 <p>A snake's walking direction (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1HexCoordinates.html#ab98ceaa27dad848be1ada5a45480c8bf" title="The neighbour one step from slot  in direction : 0 east, then clockwise on screen in 60° turns.">Slots.Grid.HexCoordinates.Step</a>); its members run head first. </p>
+
+</div>
+</div>
+<a id="ada68dcb0930559ff344bec274c0128d9" name="ada68dcb0930559ff344bec274c0128d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada68dcb0930559ff344bec274c0128d9">&#9670;&#160;</a></span>Host</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html">IWriteableSlotActor</a> BalloonParty.Balloon.Formation.StandingFormation.Host</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel set">set</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The balloon an item cover stands round, held on <a class="el" href="#a3322ba8e3932bfe47f8482de91dea55a" title="Where Host stood when the cover was planned.">HostSlot</a> for as long as it is the host (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableCoverHost.html" title="A balloon a cover formation can stand round and hold where it is, the side only UnbreakableFormationS...">IWriteableCoverHost</a>); null for any other shape, and once that balloon has popped or been taken off the board (the cover then stands round nothing until it changes). </p>
+
+</div>
+</div>
+<a id="a3322ba8e3932bfe47f8482de91dea55a" name="a3322ba8e3932bfe47f8482de91dea55a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3322ba8e3932bfe47f8482de91dea55a">&#9670;&#160;</a></span>HostSlot</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector2Int BalloonParty.Balloon.Formation.StandingFormation.HostSlot</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel set">set</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Where <a class="el" href="#ada68dcb0930559ff344bec274c0128d9" title="The balloon an item cover stands round, held on HostSlot for as long as it is the host (IWriteableCov...">Host</a> stood when the cover was planned. </p>
 
 </div>
 </div>

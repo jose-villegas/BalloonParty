@@ -1,13 +1,15 @@
 var classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView =
 [
     [ "CastLight", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#a43cd027effba49f5693a3080e7969001", null ],
-    [ "Construct", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#adcd7acb391be2e535ab798b9c965e4a3", null ],
+    [ "Construct", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#a1e4ebcb0d1c37c278b4bd444a54d4388", null ],
     [ "LateUpdate", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#a6b6eee36b3975e5232a6d711bb117307", null ],
     [ "OnDestroy", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#a8d15b0b55f8ccb08235c1fccded57dd7", null ],
     [ "_beams", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#ad00e4681e2e02fba4c3365387518a0bc", null ],
+    [ "_coveredHosts", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#a7d50b760b8f75cd766a31a8fe9149e30", null ],
     [ "_field", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#a80a7559781ba344fb3750a9f27fa6e51", null ],
     [ "_formations", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#a30a9d67e165a6c104b3f2cf5865108a3", null ],
     [ "_groups", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#af4bda7b129cf385a4709f34f51930480", null ],
+    [ "_hosts", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#a73ba7a8dc2a44dc771d998a8a452fbaa", null ],
     [ "_lightColorIndex", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#a660ef4759c592f7cca459658b3306c1a", null ],
     [ "_lightField", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#aeb867ab2337eed5ccf183880b073c364", null ],
     [ "_lightJoinDistance", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#a6f8dabb3ac8a68cbb7623459797107fc", null ],

@@ -1,0 +1,5 @@
+<map id="BalloonParty.Item.Bomb.MushroomBlast" name="BalloonParty.Item.Bomb.MushroomBlast">
+<area shape="rect" id="Node000001" title="What a blast does to the meadow&#39;s mushrooms (Meadow Mushrooms): a bomb blows the caps off the ones ne..." alt="" coords="5,98,256,143"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Shared_1_1IMushroomBlast.html" title="Blasts reaching the meadow&#39;s mushrooms (Meadow Mushrooms): what the bomb and the nuke tell when they ..." alt="" coords="17,5,244,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="132,64,133,99,128,97,129,68"/>
+</map>

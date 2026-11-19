@@ -108,6 +108,7 @@ $(function(){initNavTree('structBalloonParty_1_1Configuration_1_1Level_1_1Balloo
 
 <div class="header">
   <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pac-methods">Package Functions</a> &#124;
 <a href="#properties">Properties</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
@@ -130,6 +131,12 @@ $(function(){initNavTree('structBalloonParty_1_1Configuration_1_1Level_1_1Balloo
 <div class="center"><iframe scrolling="no" frameborder="0" src="structBalloonParty_1_1Configuration_1_1Level_1_1BalloonContentEntry__coll__graph.svg" width="507" height="126"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a28ac1c58f142a87c9404c7bf5cee9b42" id="r_a28ac1c58f142a87c9404c7bf5cee9b42"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a28ac1c58f142a87c9404c7bf5cee9b42">AllowedOn</a> (<a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a> scenario)</td></tr>
+<tr class="memdesc:a28ac1c58f142a87c9404c7bf5cee9b42"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether a level set on <em>scenario</em>  may include the piece.  <br /></td></tr>
+<tr class="separator:a28ac1c58f142a87c9404c7bf5cee9b42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
 <tr class="memitem:a4aa1c6bfd56c5e52ed52d686e3690e68" id="r_a4aa1c6bfd56c5e52ed52d686e3690e68"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4aa1c6bfd56c5e52ed52d686e3690e68">BalloonContentEntry</a> (<a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60e">BalloonType</a> type, <a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a866818b2757667473c47a5f54ecd7c61">ContentRole</a> role, int unlockLevel, int cost, <a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html">ContentWeightRamp</a> weight, AnimationCurve initialCountWeights=null, AnimationCurve waveCountWeights=null, int introGuaranteedCount=0, int guaranteedInitialCount=0, bool withheld=false)</td></tr>
@@ -142,15 +149,9 @@ Properties</h2></td></tr>
 <tr class="memitem:ac87be6307f14f4fd736131821fc3e1cd" id="r_ac87be6307f14f4fd736131821fc3e1cd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac87be6307f14f4fd736131821fc3e1cd">Cost</a><code> [get]</code></td></tr>
 <tr class="memdesc:ac87be6307f14f4fd736131821fc3e1cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Budget a level spends to include the piece. 0 = a staple, in every level from its unlock on.  <br /></td></tr>
 <tr class="separator:ac87be6307f14f4fd736131821fc3e1cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab073fa944df778cc64a8ef995c729e3" id="r_aab073fa944df778cc64a8ef995c729e3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab073fa944df778cc64a8ef995c729e3">KeptOffWater</a><code> [get]</code></td></tr>
-<tr class="memdesc:aab073fa944df778cc64a8ef995c729e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether water levels leave the piece out: the water surface has no clouds or bushes, and nothing on it bounces shots but the unbreakable balloon.  <br /></td></tr>
-<tr class="separator:aab073fa944df778cc64a8ef995c729e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab6ec57c01c9ebfd69feaa98c40b9b7d6" id="r_ab6ec57c01c9ebfd69feaa98c40b9b7d6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab6ec57c01c9ebfd69feaa98c40b9b7d6">MaxCount</a><code> [get]</code></td></tr>
 <tr class="memdesc:ab6ec57c01c9ebfd69feaa98c40b9b7d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type's board cap, read the way the level's own weight entry reads it. 0 = uncapped.  <br /></td></tr>
 <tr class="separator:ab6ec57c01c9ebfd69feaa98c40b9b7d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a923a78b5571ec589026a3002ea9173fc" id="r_a923a78b5571ec589026a3002ea9173fc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a923a78b5571ec589026a3002ea9173fc">RequiresGround</a><code> [get]</code></td></tr>
-<tr class="memdesc:a923a78b5571ec589026a3002ea9173fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the piece needs ground under it; sky levels leave it out.  <br /></td></tr>
-<tr class="separator:a923a78b5571ec589026a3002ea9173fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3a09dbe216b2bd357cc215fb80863e1f" id="r_a3a09dbe216b2bd357cc215fb80863e1f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a866818b2757667473c47a5f54ecd7c61">ContentRole</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3a09dbe216b2bd357cc215fb80863e1f">Role</a><code> [get]</code></td></tr>
 <tr class="memdesc:a3a09dbe216b2bd357cc215fb80863e1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Which budget pays for the piece.  <br /></td></tr>
 <tr class="separator:a3a09dbe216b2bd357cc215fb80863e1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -259,6 +260,28 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a28ac1c58f142a87c9404c7bf5cee9b42" name="a28ac1c58f142a87c9404c7bf5cee9b42"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28ac1c58f142a87c9404c7bf5cee9b42">&#9670;&#160;</a></span>AllowedOn()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Configuration.Level.BalloonContentEntry.AllowedOn </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a></td>          <td class="paramname"><span class="paramname"><em>scenario</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Whether a level set on <em>scenario</em>  may include the piece. </p>
+<p>A level leaves out what its scenario doesn't allow before any budget is spent, so the budget buys the pieces that are allowed. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1IContentPiece.html#a79f3defa680b05b5f60d9afd4c3d9bbc">BalloonParty.Configuration.Level.IContentPiece</a>.</p>
+
+</div>
+</div>
 <a id="a94b11939eeb1cf96abc2b1a3ac03cd72" name="a94b11939eeb1cf96abc2b1a3ac03cd72"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a94b11939eeb1cf96abc2b1a3ac03cd72">&#9670;&#160;</a></span>ToWeight()</h2>
 
@@ -536,32 +559,6 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aab073fa944df778cc64a8ef995c729e3" name="aab073fa944df778cc64a8ef995c729e3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aab073fa944df778cc64a8ef995c729e3">&#9670;&#160;</a></span>KeptOffWater</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool BalloonParty.Configuration.Level.BalloonContentEntry.KeptOffWater</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Whether water levels leave the piece out: the water surface has no clouds or bushes, and nothing on it bounces shots but the unbreakable balloon. </p>
-
-<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1IContentPiece.html#a482f29377060683d65040cb1dd85b19c">BalloonParty.Configuration.Level.IContentPiece</a>.</p>
-
-</div>
-</div>
 <a id="ab6ec57c01c9ebfd69feaa98c40b9b7d6" name="ab6ec57c01c9ebfd69feaa98c40b9b7d6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab6ec57c01c9ebfd69feaa98c40b9b7d6">&#9670;&#160;</a></span>MaxCount</h2>
 
@@ -583,32 +580,6 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The type's board cap, read the way the level's own weight entry reads it. 0 = uncapped. </p>
-
-</div>
-</div>
-<a id="a923a78b5571ec589026a3002ea9173fc" name="a923a78b5571ec589026a3002ea9173fc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a923a78b5571ec589026a3002ea9173fc">&#9670;&#160;</a></span>RequiresGround</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool BalloonParty.Configuration.Level.BalloonContentEntry.RequiresGround</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Whether the piece needs ground under it; sky levels leave it out. </p>
-
-<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1IContentPiece.html#a019e688c26fd45e909bfffdaa3c5fe9e">BalloonParty.Configuration.Level.IContentPiece</a>.</p>
 
 </div>
 </div>

@@ -11,6 +11,7 @@ var classBalloonParty_1_1Scenario_1_1SmokeFieldService =
     [ "Dispose", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html#a03231d8b04d8d533e7a38b3f987f1d14", null ],
     [ "FlushPendingStamps", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html#a407e5247da1b6ef17145ea09227efde5", null ],
     [ "Paint", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html#ae5a6ccb1778723605c5f79a31fe866a2", null ],
+    [ "Paint", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html#ae0b60df0f3f1923583914cd09db14f45", null ],
     [ "Paint", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html#a3e19eda368c5febd2324e2fc4b6ede09", null ],
     [ "PaintScatter", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html#a4021c51facf0e110bae144c7f05e0df6", null ],
     [ "PushBoundsGlobals", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html#aa6512b6de933b512b0bbbfeb3a8a4c3f", null ],

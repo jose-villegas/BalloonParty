@@ -8,6 +8,7 @@ var namespaceBalloonParty_1_1Balloon_1_1View =
     [ "FormationGlowBeam", "structBalloonParty_1_1Balloon_1_1View_1_1FormationGlowBeam.html", "structBalloonParty_1_1Balloon_1_1View_1_1FormationGlowBeam" ],
     [ "FormationGlowBeams", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowBeams.html", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowBeams" ],
     [ "FormationGlowField", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField.html", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField" ],
+    [ "FormationGlowHosts", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowHosts.html", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowHosts" ],
     [ "FormationGlowSources", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowSources.html", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowSources" ],
     [ "FormationGlowView", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView" ],
     [ "GrowingDiscView", "classBalloonParty_1_1Balloon_1_1View_1_1GrowingDiscView.html", "classBalloonParty_1_1Balloon_1_1View_1_1GrowingDiscView" ],

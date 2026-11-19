@@ -15,6 +15,7 @@ var namespaceBalloonParty_1_1Balloon_1_1Model =
     [ "IFormationMember", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember.html", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember" ],
     [ "IHasWriteableItemSlot", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IHasWriteableItemSlot.html", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IHasWriteableItemSlot" ],
     [ "IWriteableBalloonModel", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableBalloonModel.html", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableBalloonModel" ],
+    [ "IWriteableCoverHost", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableCoverHost.html", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableCoverHost" ],
     [ "IWriteableFormationMember", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember" ],
     [ "NukeBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1NukeBalloonModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1NukeBalloonModel" ],
     [ "PlatedBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1PlatedBalloonModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1PlatedBalloonModel" ],

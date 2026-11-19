@@ -1,0 +1,11 @@
+<map id="BalloonParty.Item.Snipe.MushroomRegrowController" name="BalloonParty.Item.Snipe.MushroomRegrowController">
+<area shape="rect" id="Node000001" title="Grows back the caps a lance cut (Meadow Mushrooms), in time with the board: a cut cap pops back on on..." alt="" coords="360,92,563,136"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="79,5,159,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="173,28,233,42,336,69,399,91,394,91,335,74,232,47,174,33"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Shared_1_1IMushroomRegrowth.html" title="The caps a lance has cut (IBumperField.Cut) and that have not grown back yet, for whoever keeps the t..." alt="" coords="5,57,233,102"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="248,90,362,103,357,105,248,95"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Balloon_1_1Controller_1_1IBoardBeat.html" title="The board&#39;s rhythm, for whatever else on the board keeps time with it: the unbreakables&#39; beat (IUnbre..." alt="" coords="6,126,232,171"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="247,133,362,123,357,125,248,138"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html" title="Which shots exist right now: the one held in the thrower, and every one in flight (oldest first)." alt="" coords="34,196,204,240"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="218,188,335,154,392,137,398,136,336,159,219,193"/>
+</map>

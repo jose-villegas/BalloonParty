@@ -9,6 +9,7 @@ var dir_26e03dec91059616e9650e61929395a7 =
     [ "IBalanceBiasSource.cs", "IBalanceBiasSource_8cs.html", "IBalanceBiasSource_8cs" ],
     [ "IBalanceInfluence.cs", "IBalanceInfluence_8cs.html", "IBalanceInfluence_8cs" ],
     [ "IDynamicSlotActor.cs", "IDynamicSlotActor_8cs.html", "IDynamicSlotActor_8cs" ],
+    [ "IMushroomPlacementSource.cs", "IMushroomPlacementSource_8cs.html", "IMushroomPlacementSource_8cs" ],
     [ "IPaintReactive.cs", "IPaintReactive_8cs.html", "IPaintReactive_8cs" ],
     [ "IPreBalanceRelocatable.cs", "IPreBalanceRelocatable_8cs.html", "IPreBalanceRelocatable_8cs" ],
     [ "ISlotActor.cs", "ISlotActor_8cs.html", "ISlotActor_8cs" ],
@@ -17,6 +18,16 @@ var dir_26e03dec91059616e9650e61929395a7 =
     [ "ITransitionOutgoingContent.cs", "ITransitionOutgoingContent_8cs.html", "ITransitionOutgoingContent_8cs" ],
     [ "IWriteableDynamicSlotActor.cs", "IWriteableDynamicSlotActor_8cs.html", "IWriteableDynamicSlotActor_8cs" ],
     [ "IWriteableSlotActor.cs", "IWriteableSlotActor_8cs.html", "IWriteableSlotActor_8cs" ],
+    [ "MushroomCutTuning.cs", "MushroomCutTuning_8cs.html", "MushroomCutTuning_8cs" ],
+    [ "MushroomLeanTuning.cs", "MushroomLeanTuning_8cs.html", "MushroomLeanTuning_8cs" ],
+    [ "MushroomPlacementLimits.cs", "MushroomPlacementLimits_8cs.html", "MushroomPlacementLimits_8cs" ],
+    [ "MushroomPlacementSource.cs", "MushroomPlacementSource_8cs.html", "MushroomPlacementSource_8cs" ],
+    [ "MushroomSporeTuning.cs", "MushroomSporeTuning_8cs.html", "MushroomSporeTuning_8cs" ],
+    [ "MushroomThrowTuning.cs", "MushroomThrowTuning_8cs.html", "MushroomThrowTuning_8cs" ],
+    [ "MushroomWallCatalogue.cs", "MushroomWallCatalogue_8cs.html", "MushroomWallCatalogue_8cs" ],
+    [ "MushroomWallCatalogue.Generated.cs", "MushroomWallCatalogue_8Generated_8cs.html", "MushroomWallCatalogue_8Generated_8cs" ],
+    [ "MushroomWallLayout.cs", "MushroomWallLayout_8cs.html", "MushroomWallLayout_8cs" ],
+    [ "MushroomWallPicker.cs", "MushroomWallPicker_8cs.html", "MushroomWallPicker_8cs" ],
     [ "RandomSlotSelectionStrategy.cs", "RandomSlotSelectionStrategy_8cs.html", "RandomSlotSelectionStrategy_8cs" ],
     [ "ScenarioContentRoot.cs", "ScenarioContentRoot_8cs.html", "ScenarioContentRoot_8cs" ],
     [ "SlotActorKind.cs", "SlotActorKind_8cs.html", "SlotActorKind_8cs" ],
@@ -24,5 +35,6 @@ var dir_26e03dec91059616e9650e61929395a7 =
     [ "SpeckField.cs", "SpeckField_8cs.html", "SpeckField_8cs" ],
     [ "SpeckProfile.cs", "SpeckProfile_8cs.html", "SpeckProfile_8cs" ],
     [ "StaticActorModel.cs", "StaticActorModel_8cs.html", "StaticActorModel_8cs" ],
-    [ "StaticActorSpawner.cs", "StaticActorSpawner_8cs.html", "StaticActorSpawner_8cs" ]
+    [ "StaticActorSpawner.cs", "StaticActorSpawner_8cs.html", "StaticActorSpawner_8cs" ],
+    [ "WallSlotSelectionStrategy.cs", "WallSlotSelectionStrategy_8cs.html", "WallSlotSelectionStrategy_8cs" ]
 ];

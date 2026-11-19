@@ -1,3 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$structBalloonParty_1_1Shared_1_1Messages_1_1BubbleRipenedMessage.html" title="Published by RipeBubbleService when a bubble cluster reaches the merge cap and its fuse starts." alt="" coords="5,5,229,50"/>
+<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Shared_1_1IBumperBounceRule.html" title="Which way the ball leaves a bumper." alt="" coords="5,40,215,85"/>
+<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Shared_1_1ForgivingKickRule.html" title="The bounce with a forgiving kick: a ball leaving a mushroom close enough to the line of another one i..." alt="" coords="263,5,477,50"/>
+<area shape="poly" id="edge705_Node000000_Node000001" title=" " alt="" coords="230,44,265,41,260,43,231,49"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Shared_1_1TrueReflectRule.html" title="The plain bounce: the ball leaves a bumper along the mirror image of how it came in." alt="" coords="279,75,460,119"/>
+<area shape="poly" id="edge706_Node000000_Node000002" title=" " alt="" coords="230,76,281,85,276,85,230,81"/>
 </map>

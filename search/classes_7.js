@@ -31,5 +31,6 @@ var searchData=
   ['hitvfxoverride_28',['HitVfxOverride',['../classBalloonParty_1_1Configuration_1_1Balloons_1_1HitVfxOverride.html',1,'BalloonParty::Configuration::Balloons']]],
   ['hitvfxoverridedrawer_29',['HitVfxOverrideDrawer',['../classBalloonParty_1_1Configuration_1_1Editor_1_1HitVfxOverrideDrawer.html',1,'BalloonParty::Configuration::Editor']]],
   ['hop_30',['Hop',['../structBalloonParty_1_1Balloon_1_1View_1_1BubbleMergeView_1_1Hop.html',1,'BalloonParty::Balloon::View::BubbleMergeView']]],
-  ['hudcamera_31',['HudCamera',['../classBalloonParty_1_1Display_1_1HudCamera.html',1,'BalloonParty::Display']]]
+  ['hostring_31',['HostRing',['../classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowHosts_1_1HostRing.html',1,'BalloonParty::Balloon::View::FormationGlowHosts']]],
+  ['hudcamera_32',['HudCamera',['../classBalloonParty_1_1Display_1_1HudCamera.html',1,'BalloonParty::Display']]]
 ];

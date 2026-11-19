@@ -185,6 +185,21 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpFillTrailsMessage.html">LevelUpFillTrailsMessage</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1MushroomBouncedMessage.html">MushroomBouncedMessage</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="namespaceBalloonParty_1_1Projectile.html">Projectile</a> bounced off a meadow mushroom (<a class="el" href="plan_meadow_mushrooms.html">Meadow Mushrooms</a>).  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1MushroomBouncedMessage.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1MushroomCutMessage.html">MushroomCutMessage</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A meadow mushroom lost its cap (<a class="el" href="plan_meadow_mushrooms.html">Meadow Mushrooms</a>): a lance cut it, or a blast blew it off.  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1MushroomCutMessage.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1MushroomLanceMessage.html">MushroomLanceMessage</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A chain of mushroom bounces armed <a class="el" href="namespaceBalloonParty_1_1Projectile.html">Projectile</a> as the Snipe lance (<a class="el" href="plan_meadow_mushrooms.html">Meadow Mushrooms</a>): published by <code>MushroomChainController</code> once the lance has been granted, at the bounce that completed the chain.  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1MushroomLanceMessage.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1MushroomRegrownMessage.html">MushroomRegrownMessage</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The cap a lance cut off a meadow mushroom (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1MushroomCutMessage.html" title="A meadow mushroom lost its cap (Meadow Mushrooms): a lance cut it, or a blast blew it off.">MushroomCutMessage</a>) has grown back (<a class="el" href="plan_meadow_mushrooms.html">Meadow Mushrooms</a>): from here on the ball bounces off it again.  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1MushroomRegrownMessage.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1MushroomSwayedMessage.html">MushroomSwayedMessage</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A bomb's blast reached a meadow mushroom without taking its cap off (<a class="el" href="plan_meadow_mushrooms.html">Meadow Mushrooms</a>): the mushroom is not in one of the six slots next to the bomb, where caps are blown off, and its cap still overlaps the blast.  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1MushroomSwayedMessage.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1NukeArmedMessage.html">NukeArmedMessage</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Published by <code>NukeFuse</code> when a nuke is armed (PLAN-NukeBalloon) and its fuse starts.  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1NukeArmedMessage.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -301,6 +316,11 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:a59eaf814cb0fd69d1473c2377bee7918"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where one bubble of a foam's hand-out went.  <a href="#a59eaf814cb0fd69d1473c2377bee7918">More...</a><br /></td></tr>
 <tr class="separator:a59eaf814cb0fd69d1473c2377bee7918"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7c7839727e8b04bfadbaa13309585b4" id="r_ae7c7839727e8b04bfadbaa13309585b4"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae7c7839727e8b04bfadbaa13309585b4">MushroomCutCause</a> { <a class="el" href="#ae7c7839727e8b04bfadbaa13309585b4ac668c28c93c0329c208c37de8b2a88c6">Lance</a>
+, <a class="el" href="#ae7c7839727e8b04bfadbaa13309585b4aaf67fdbf7db7b0248cb8f15ecc5675a3">Blast</a>
+ }</td></tr>
+<tr class="memdesc:ae7c7839727e8b04bfadbaa13309585b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">What took the cap off a meadow mushroom (MushroomCutMessage.Cause).  <a href="#ae7c7839727e8b04bfadbaa13309585b4">More...</a><br /></td></tr>
+<tr class="separator:ae7c7839727e8b04bfadbaa13309585b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac45f89e1e12dc060a80c4997f10bb76a" id="r_ac45f89e1e12dc060a80c4997f10bb76a"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac45f89e1e12dc060a80c4997f10bb76a">RipeBurstKind</a> { <a class="el" href="#ac45f89e1e12dc060a80c4997f10bb76aac0062863e3e99f67607ad1ae9a4299a7">Ripple</a>
 , <a class="el" href="#ac45f89e1e12dc060a80c4997f10bb76aa69a87c4b379ae01b6eeacc5eb274609b">Foam</a>
  }</td></tr>
@@ -333,6 +353,36 @@ Enumerations</h2></td></tr>
 <tr><td class="fieldname"><a id="a59eaf814cb0fd69d1473c2377bee7918a249694a485fc5d3289c38986b4f8e887" name="a59eaf814cb0fd69d1473c2377bee7918a249694a485fc5d3289c38986b4f8e887"></a>Cluster&#160;</td><td class="fielddoc"><p>One more bubble for the cluster in its direction. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a59eaf814cb0fd69d1473c2377bee7918a980c0f693600b09962d3318bf55aaf8c" name="a59eaf814cb0fd69d1473c2377bee7918a980c0f693600b09962d3318bf55aaf8c"></a>Leftover&#160;</td><td class="fielddoc"><p>No taker had room: it popped harmlessly. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="ae7c7839727e8b04bfadbaa13309585b4" name="ae7c7839727e8b04bfadbaa13309585b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae7c7839727e8b04bfadbaa13309585b4">&#9670;&#160;</a></span>MushroomCutCause</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#ae7c7839727e8b04bfadbaa13309585b4">BalloonParty.Shared.Messages.MushroomCutCause</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>What took the cap off a meadow mushroom (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1MushroomCutMessage.html#aedc2a75b2b19d854ac4725dfc27b3eea" title="What took the cap off: it decides what Point and Direction mean.">MushroomCutMessage.Cause</a>). </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ae7c7839727e8b04bfadbaa13309585b4ac668c28c93c0329c208c37de8b2a88c6" name="ae7c7839727e8b04bfadbaa13309585b4ac668c28c93c0329c208c37de8b2a88c6"></a>Lance&#160;</td><td class="fielddoc"><p>A lance flew through the cap and cut it in two along its line. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae7c7839727e8b04bfadbaa13309585b4aaf67fdbf7db7b0248cb8f15ecc5675a3" name="ae7c7839727e8b04bfadbaa13309585b4aaf67fdbf7db7b0248cb8f15ecc5675a3"></a>Blast&#160;</td><td class="fielddoc"><p>A blast blew the cap off whole: a bomb next to it, or a nuke anywhere on the board. </p>
 </td></tr>
 </table>
 

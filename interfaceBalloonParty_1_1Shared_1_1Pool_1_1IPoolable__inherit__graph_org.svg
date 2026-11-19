@@ -188,32 +188,13 @@
 </a>
 </g>
 </g>
-<!-- Node16 -->
-<g id="Node000016" class="node">
-<title>Node16</title>
-<g id="a_Node000016"><a xlink:href="classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html" target="_top" xlink:title="One short handwritten line in world space (a TextMeshPro, not on a canvas), so it sits where it happe...">
-<polygon fill="white" stroke="#666666" points="336.12,-137.5 196.38,-137.5 196.38,-104 336.12,-104 336.12,-137.5"/>
-<text xml:space="preserve" text-anchor="start" x="204.38" y="-124" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.UI.HeadsUp.</text>
-<text xml:space="preserve" text-anchor="middle" x="266.25" y="-111.25" font-family="Helvetica,sans-Serif" font-size="10.00">HandwrittenHeadsUp</text>
-</a>
-</g>
-</g>
-<!-- Node1&#45;&gt;Node16 -->
-<g id="edge15_Node000001_Node000016" class="edge">
-<title>Node1&#45;&gt;Node16</title>
-<g id="a_edge15_Node000001_Node000016"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M82.11,-275.39C97.87,-240.38 129.85,-180.27 175.75,-146.75 181.89,-142.26 188.79,-138.55 195.97,-135.47"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="78.96,-273.85 78.17,-284.42 85.37,-276.65 78.96,-273.85"/>
-</a>
-</g>
-</g>
 <!-- Node17 -->
 <g id="Node000017" class="node">
 <title>Node17</title>
-<g id="a_Node000017"><a xlink:href="classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="342.5,-85.5 190,-85.5 190,-52 342.5,-52 342.5,-85.5"/>
-<text xml:space="preserve" text-anchor="start" x="198" y="-72" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.UI.Score.Flying</text>
-<text xml:space="preserve" text-anchor="middle" x="266.25" y="-59.25" font-family="Helvetica,sans-Serif" font-size="10.00">Trail</text>
+<g id="a_Node000017"><a xlink:href="classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html" target="_top" xlink:title="One short handwritten line in world space (a TextMeshPro, not on a canvas), so it sits where it happe...">
+<polygon fill="white" stroke="#666666" points="336.12,-137.5 196.38,-137.5 196.38,-104 336.12,-104 336.12,-137.5"/>
+<text xml:space="preserve" text-anchor="start" x="204.38" y="-124" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.UI.HeadsUp.</text>
+<text xml:space="preserve" text-anchor="middle" x="266.25" y="-111.25" font-family="Helvetica,sans-Serif" font-size="10.00">HandwrittenHeadsUp</text>
 </a>
 </g>
 </g>
@@ -221,18 +202,18 @@
 <g id="edge16_Node000001_Node000017" class="edge">
 <title>Node1&#45;&gt;Node17</title>
 <g id="a_edge16_Node000001_Node000017"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M77.33,-274.64C89.07,-229.87 118.21,-142.55 175.75,-94.75 179.98,-91.23 184.67,-88.19 189.61,-85.56"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="73.99,-273.54 74.96,-284.1 80.78,-275.25 73.99,-273.54"/>
+<path fill="none" stroke="#63b8ff" d="M82.11,-275.39C97.87,-240.38 129.85,-180.27 175.75,-146.75 181.89,-142.26 188.79,-138.55 195.97,-135.47"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="78.96,-273.85 78.17,-284.42 85.37,-276.65 78.96,-273.85"/>
 </a>
 </g>
 </g>
 <!-- Node18 -->
 <g id="Node000018" class="node">
 <title>Node18</title>
-<g id="a_Node000018"><a xlink:href="classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice.html" target="_top" xlink:title="Floating progress notice: rises in while fading up, holds, then rises out while fading down.">
-<polygon fill="white" stroke="#666666" points="348.5,-33.5 184,-33.5 184,0 348.5,0 348.5,-33.5"/>
-<text xml:space="preserve" text-anchor="start" x="192" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.UI.Score.Progress</text>
-<text xml:space="preserve" text-anchor="middle" x="266.25" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">Notice</text>
+<g id="a_Node000018"><a xlink:href="classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="#666666" points="342.5,-85.5 190,-85.5 190,-52 342.5,-52 342.5,-85.5"/>
+<text xml:space="preserve" text-anchor="start" x="198" y="-72" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.UI.Score.Flying</text>
+<text xml:space="preserve" text-anchor="middle" x="266.25" y="-59.25" font-family="Helvetica,sans-Serif" font-size="10.00">Trail</text>
 </a>
 </g>
 </g>
@@ -240,6 +221,25 @@
 <g id="edge17_Node000001_Node000018" class="edge">
 <title>Node1&#45;&gt;Node18</title>
 <g id="a_edge17_Node000001_Node000018"><a xlink:title=" ">
+<path fill="none" stroke="#63b8ff" d="M77.33,-274.64C89.07,-229.87 118.21,-142.55 175.75,-94.75 179.98,-91.23 184.67,-88.19 189.61,-85.56"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="73.99,-273.54 74.96,-284.1 80.78,-275.25 73.99,-273.54"/>
+</a>
+</g>
+</g>
+<!-- Node19 -->
+<g id="Node000019" class="node">
+<title>Node19</title>
+<g id="a_Node000019"><a xlink:href="classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice.html" target="_top" xlink:title="Floating progress notice: rises in while fading up, holds, then rises out while fading down.">
+<polygon fill="white" stroke="#666666" points="348.5,-33.5 184,-33.5 184,0 348.5,0 348.5,-33.5"/>
+<text xml:space="preserve" text-anchor="start" x="192" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.UI.Score.Progress</text>
+<text xml:space="preserve" text-anchor="middle" x="266.25" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">Notice</text>
+</a>
+</g>
+</g>
+<!-- Node1&#45;&gt;Node19 -->
+<g id="edge18_Node000001_Node000019" class="edge">
+<title>Node1&#45;&gt;Node19</title>
+<g id="a_edge18_Node000001_Node000019"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M74.2,-274.3C81.97,-220.94 106.25,-105.59 175.75,-42.75 179.47,-39.39 183.6,-36.46 187.99,-33.9"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="70.75,-273.7 72.88,-284.08 77.69,-274.64 70.75,-273.7"/>
 </a>
@@ -249,9 +249,9 @@
 <g id="Node000009" class="node">
 <title>Node9</title>
 <g id="a_Node000009"><a xlink:href="classBalloonParty_1_1Item_1_1Lightning_1_1ChainLightningView.html" target="_top" xlink:title="Poolable chain&#45;lightning effect.">
-<polygon fill="white" stroke="#666666" points="545.25,-371.5 392.75,-371.5 392.75,-338 545.25,-338 545.25,-371.5"/>
-<text xml:space="preserve" text-anchor="start" x="400.75" y="-358" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.Lightning.</text>
-<text xml:space="preserve" text-anchor="middle" x="469" y="-345.25" font-family="Helvetica,sans-Serif" font-size="10.00">ChainLightningView</text>
+<polygon fill="white" stroke="#666666" points="545.25,-397.5 392.75,-397.5 392.75,-364 545.25,-364 545.25,-397.5"/>
+<text xml:space="preserve" text-anchor="start" x="400.75" y="-384" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.Lightning.</text>
+<text xml:space="preserve" text-anchor="middle" x="469" y="-371.25" font-family="Helvetica,sans-Serif" font-size="10.00">ChainLightningView</text>
 </a>
 </g>
 </g>
@@ -259,8 +259,8 @@
 <g id="edge8_Node000008_Node000009" class="edge">
 <title>Node8&#45;&gt;Node9</title>
 <g id="a_edge8_Node000008_Node000009"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M346.07,-297.96C349.72,-299.47 353.3,-301.07 356.75,-302.75 374.49,-311.41 375.24,-319.65 392.75,-328.75 398.88,-331.94 405.49,-334.87 412.15,-337.53"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="347.62,-294.81 337.03,-294.49 345.11,-301.34 347.62,-294.81"/>
+<path fill="none" stroke="#63b8ff" d="M346.67,-296.46C350.19,-298.37 353.57,-300.46 356.75,-302.75 379.56,-319.17 370.36,-337.76 392.75,-354.75 397.15,-358.09 402.02,-361.02 407.1,-363.59"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="348.36,-293.39 337.83,-292.21 345.33,-299.7 348.36,-293.39"/>
 </a>
 </g>
 </g>
@@ -268,9 +268,9 @@
 <g id="Node000010" class="node">
 <title>Node10</title>
 <g id="a_Node000010"><a xlink:href="classBalloonParty_1_1Item_1_1Paint_1_1PaintSplashView.html" target="_top" xlink:title="Poolable paint&#45;splash effect.">
-<polygon fill="white" stroke="#666666" points="534.75,-319.5 403.25,-319.5 403.25,-286 534.75,-286 534.75,-319.5"/>
-<text xml:space="preserve" text-anchor="start" x="411.25" y="-306" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.Paint.</text>
-<text xml:space="preserve" text-anchor="middle" x="469" y="-293.25" font-family="Helvetica,sans-Serif" font-size="10.00">PaintSplashView</text>
+<polygon fill="white" stroke="#666666" points="534.75,-345.5 403.25,-345.5 403.25,-312 534.75,-312 534.75,-345.5"/>
+<text xml:space="preserve" text-anchor="start" x="411.25" y="-332" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.Paint.</text>
+<text xml:space="preserve" text-anchor="middle" x="469" y="-319.25" font-family="Helvetica,sans-Serif" font-size="10.00">PaintSplashView</text>
 </a>
 </g>
 </g>
@@ -278,8 +278,8 @@
 <g id="edge9_Node000008_Node000010" class="edge">
 <title>Node8&#45;&gt;Node10</title>
 <g id="a_edge9_Node000008_Node000010"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M347.88,-287.19C366.21,-289.57 385.44,-292.06 403.02,-294.33"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="348.49,-283.74 338.12,-285.93 347.59,-290.68 348.49,-283.74"/>
+<path fill="none" stroke="#63b8ff" d="M344.95,-296.88C364.13,-301.84 384.47,-307.11 402.98,-311.91"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="345.84,-293.49 335.28,-294.37 344.09,-300.27 345.84,-293.49"/>
 </a>
 </g>
 </g>
@@ -287,9 +287,9 @@
 <g id="Node000011" class="node">
 <title>Node11</title>
 <g id="a_Node000011"><a xlink:href="classBalloonParty_1_1Shared_1_1Pool_1_1AnimatorEffectView.html" target="_top" xlink:title="Poolable effect driven by an Animator; completion is timer&#45;based off the first clip&#39;s length.">
-<polygon fill="white" stroke="#666666" points="538.88,-267.5 399.12,-267.5 399.12,-234 538.88,-234 538.88,-267.5"/>
-<text xml:space="preserve" text-anchor="start" x="407.12" y="-254" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Shared.Pool.</text>
-<text xml:space="preserve" text-anchor="middle" x="469" y="-241.25" font-family="Helvetica,sans-Serif" font-size="10.00">AnimatorEffectView</text>
+<polygon fill="white" stroke="#666666" points="538.88,-293.5 399.12,-293.5 399.12,-260 538.88,-260 538.88,-293.5"/>
+<text xml:space="preserve" text-anchor="start" x="407.12" y="-280" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Shared.Pool.</text>
+<text xml:space="preserve" text-anchor="middle" x="469" y="-267.25" font-family="Helvetica,sans-Serif" font-size="10.00">AnimatorEffectView</text>
 </a>
 </g>
 </g>
@@ -297,8 +297,8 @@
 <g id="edge10_Node000008_Node000011" class="edge">
 <title>Node8&#45;&gt;Node11</title>
 <g id="a_edge10_Node000008_Node000011"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M347.59,-266.35C364.49,-264.16 382.17,-261.87 398.63,-259.73"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="347.59,-262.82 338.12,-267.57 348.49,-269.76 347.59,-262.82"/>
+<path fill="none" stroke="#63b8ff" d="M348.07,-276.75C364.82,-276.75 382.33,-276.75 398.63,-276.75"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="348.13,-273.25 338.13,-276.75 348.13,-280.25 348.13,-273.25"/>
 </a>
 </g>
 </g>
@@ -306,9 +306,9 @@
 <g id="Node000013" class="node">
 <title>Node13</title>
 <g id="a_Node000013"><a xlink:href="classBalloonParty_1_1Shared_1_1Pool_1_1ParticleEffectView.html" target="_top" xlink:title="Poolable effect driven by a ParticleSystem; completion is detected automatically when it finishes.">
-<polygon fill="white" stroke="#666666" points="538.88,-215.5 399.12,-215.5 399.12,-182 538.88,-182 538.88,-215.5"/>
-<text xml:space="preserve" text-anchor="start" x="407.12" y="-202" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Shared.Pool.</text>
-<text xml:space="preserve" text-anchor="middle" x="469" y="-189.25" font-family="Helvetica,sans-Serif" font-size="10.00">ParticleEffectView</text>
+<polygon fill="white" stroke="#666666" points="538.88,-241.5 399.12,-241.5 399.12,-208 538.88,-208 538.88,-241.5"/>
+<text xml:space="preserve" text-anchor="start" x="407.12" y="-228" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Shared.Pool.</text>
+<text xml:space="preserve" text-anchor="middle" x="469" y="-215.25" font-family="Helvetica,sans-Serif" font-size="10.00">ParticleEffectView</text>
 </a>
 </g>
 </g>
@@ -316,8 +316,8 @@
 <g id="edge12_Node000008_Node000013" class="edge">
 <title>Node8&#45;&gt;Node13</title>
 <g id="a_edge12_Node000008_Node000013"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M346.07,-255.54C349.72,-254.03 353.3,-252.43 356.75,-250.75 374.49,-242.09 375.24,-233.85 392.75,-224.75 398.88,-221.56 405.49,-218.63 412.15,-215.97"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="345.11,-252.16 337.03,-259.01 347.62,-258.69 345.11,-252.16"/>
+<path fill="none" stroke="#63b8ff" d="M344.72,-256.68C363.5,-251.82 383.4,-246.66 401.61,-241.95"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="344.09,-253.23 335.28,-259.13 345.84,-260.01 344.09,-253.23"/>
 </a>
 </g>
 </g>
@@ -325,9 +325,9 @@
 <g id="Node000012" class="node">
 <title>Node12</title>
 <g id="a_Node000012"><a xlink:href="classBalloonParty_1_1Item_1_1Laser_1_1LaserView.html" target="_top" xlink:title="Animator&#45;driven laser effect that tints its wired renderers to the colour it receives — the host ball...">
-<polygon fill="white" stroke="#666666" points="714.25,-267.5 581.25,-267.5 581.25,-234 714.25,-234 714.25,-267.5"/>
-<text xml:space="preserve" text-anchor="start" x="589.25" y="-254" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.Laser.</text>
-<text xml:space="preserve" text-anchor="middle" x="647.75" y="-241.25" font-family="Helvetica,sans-Serif" font-size="10.00">LaserView</text>
+<polygon fill="white" stroke="#666666" points="714.25,-293.5 581.25,-293.5 581.25,-260 714.25,-260 714.25,-293.5"/>
+<text xml:space="preserve" text-anchor="start" x="589.25" y="-280" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.Laser.</text>
+<text xml:space="preserve" text-anchor="middle" x="647.75" y="-267.25" font-family="Helvetica,sans-Serif" font-size="10.00">LaserView</text>
 </a>
 </g>
 </g>
@@ -335,8 +335,27 @@
 <g id="edge11_Node000011_Node000012" class="edge">
 <title>Node11&#45;&gt;Node12</title>
 <g id="a_edge11_Node000011_Node000012"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M550.65,-250.75C560.73,-250.75 570.95,-250.75 580.78,-250.75"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="550.86,-247.25 540.86,-250.75 550.86,-254.25 550.86,-247.25"/>
+<path fill="none" stroke="#63b8ff" d="M550.65,-276.75C560.73,-276.75 570.95,-276.75 580.78,-276.75"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="550.86,-273.25 540.86,-276.75 550.86,-280.25 550.86,-273.25"/>
+</a>
+</g>
+</g>
+<!-- Node16 -->
+<g id="Node000016" class="node">
+<title>Node16</title>
+<g id="a_Node000016"><a xlink:href="classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomView.html" target="_top" xlink:title="A meadow mushroom on the board (Meadow Mushrooms): the quad the Grid/Mushroom shader draws the mushro...">
+<polygon fill="white" stroke="#666666" points="541.12,-189.5 396.88,-189.5 396.88,-156 541.12,-156 541.12,-189.5"/>
+<text xml:space="preserve" text-anchor="start" x="404.88" y="-176" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Actor.</text>
+<text xml:space="preserve" text-anchor="middle" x="469" y="-163.25" font-family="Helvetica,sans-Serif" font-size="10.00">Archetype.MushroomView</text>
+</a>
+</g>
+</g>
+<!-- Node15&#45;&gt;Node16 -->
+<g id="edge15_Node000015_Node000016" class="edge">
+<title>Node15&#45;&gt;Node16</title>
+<g id="a_edge15_Node000015_Node000016"><a xlink:title=" ">
+<path fill="none" stroke="#63b8ff" d="M347,-172.75C363.42,-172.75 380.61,-172.75 396.71,-172.75"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="347.29,-169.25 337.29,-172.75 347.29,-176.25 347.29,-169.25"/>
 </a>
 </g>
 </g>

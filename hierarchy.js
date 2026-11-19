@@ -43,6 +43,7 @@ var hierarchy =
     [ "BalloonParty.Configuration.Balloons.BalloonTypeWeight", "structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html", null ],
     [ "BalloonParty.Game.BalloonWander", "classBalloonParty_1_1Game_1_1BalloonWander.html", null ],
     [ "BalloonParty.Game.BalloonWanderSettings", "classBalloonParty_1_1Game_1_1BalloonWanderSettings.html", null ],
+    [ "BalloonParty.Shared.BumperKick.BearingLine", "structBalloonParty_1_1Shared_1_1BumperKick_1_1BearingLine.html", null ],
     [ "BalloonParty.Game.Score.Behaviours.BigScoreFormationRequest", "structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreFormationRequest.html", null ],
     [ "BalloonParty.Configuration.BigScoreFormationSettings", "structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html", null ],
     [ "BalloonParty.Game.Score.Behaviours.BigScoreGroupRequest", "structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreGroupRequest.html", null ],
@@ -72,6 +73,13 @@ var hierarchy =
     [ "BalloonParty.Game.Score.Behaviours.ShapeInkMeshBuilder.Buffers", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkMeshBuilder_1_1Buffers.html", null ],
     [ "BalloonParty.Shared.Diagnostics.BuildInfo", "classBalloonParty_1_1Shared_1_1Diagnostics_1_1BuildInfo.html", null ],
     [ "BalloonParty.Editor.Release.ReleaseUploadWindow.BuildInfoData", "classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow_1_1BuildInfoData.html", null ],
+    [ "BalloonParty.Projectile.Controller.BumperBounce", "structBalloonParty_1_1Projectile_1_1Controller_1_1BumperBounce.html", null ],
+    [ "BalloonParty.Shared.BumperCircle", "structBalloonParty_1_1Shared_1_1BumperCircle.html", null ],
+    [ "BalloonParty.Shared.BumperContact", "structBalloonParty_1_1Shared_1_1BumperContact.html", null ],
+    [ "BalloonParty.Shared.BumperKick", "classBalloonParty_1_1Shared_1_1BumperKick.html", null ],
+    [ "BalloonParty.Shared.BumperKickTuning", "structBalloonParty_1_1Shared_1_1BumperKickTuning.html", null ],
+    [ "BalloonParty.Projectile.Controller.BumperLookahead", "classBalloonParty_1_1Projectile_1_1Controller_1_1BumperLookahead.html", null ],
+    [ "BalloonParty.Shared.BumperSweep", "classBalloonParty_1_1Shared_1_1BumperSweep.html", null ],
     [ "BalloonParty.Editor.Bush.BushBranchBaker", "classBalloonParty_1_1Editor_1_1Bush_1_1BushBranchBaker.html", null ],
     [ "BalloonParty.Editor.Bush.BushBranchBakeSettings", "classBalloonParty_1_1Editor_1_1Bush_1_1BushBranchBakeSettings.html", null ],
     [ "BalloonParty.Editor.Bush.BushBranchGenerator", "classBalloonParty_1_1Editor_1_1Bush_1_1BushBranchGenerator.html", null ],
@@ -88,6 +96,7 @@ var hierarchy =
     [ "BalloonParty.Game.Cinematics.CameraRigCinematicConfig", "classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematicConfig.html", null ],
     [ "BalloonParty.Configuration.Cinematics.CameraRigCinematicSettings", "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CameraRigCinematicSettings.html", null ],
     [ "BalloonParty.Shared.Rendering.CameraVolumes", "classBalloonParty_1_1Shared_1_1Rendering_1_1CameraVolumes.html", null ],
+    [ "BalloonParty.Projectile.Controller.CapCut", "structBalloonParty_1_1Projectile_1_1Controller_1_1CapCut.html", null ],
     [ "BalloonParty.Editor.CardIconSpriteAssetBuilder", "classBalloonParty_1_1Editor_1_1CardIconSpriteAssetBuilder.html", null ],
     [ "BalloonParty.Editor.CardRevealBuilder", "classBalloonParty_1_1Editor_1_1CardRevealBuilder.html", null ],
     [ "BalloonParty.Editor.CardRevealShredsBuilder", "classBalloonParty_1_1Editor_1_1CardRevealShredsBuilder.html", null ],
@@ -113,6 +122,8 @@ var hierarchy =
     [ "BalloonParty.Game.Score.ColorStreak", "classBalloonParty_1_1Game_1_1Score_1_1ColorStreak.html", null ],
     [ "BalloonParty.Shared.ContactRadius", "classBalloonParty_1_1Shared_1_1ContactRadius.html", null ],
     [ "BalloonParty.Configuration.Level.ContentWeightRamp", "structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html", null ],
+    [ "BalloonParty.Balloon.Formation.CoveredHost", "structBalloonParty_1_1Balloon_1_1Formation_1_1CoveredHost.html", null ],
+    [ "BalloonParty.Slots.Grid.MushroomBoard.CutCap", "structBalloonParty_1_1Slots_1_1Grid_1_1MushroomBoard_1_1CutCap.html", null ],
     [ "BalloonParty.Slots.Capabilities.DamageContext", "structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html", null ],
     [ "BalloonParty.Shared.Math.DampedSpring1D", "structBalloonParty_1_1Shared_1_1Math_1_1DampedSpring1D.html", null ],
     [ "BalloonParty.Shared.Math.DampedSpring2D", "structBalloonParty_1_1Shared_1_1Math_1_1DampedSpring2D.html", null ],
@@ -181,12 +192,14 @@ var hierarchy =
     [ "BalloonParty.Balloon.View.FormationGlowBeam", "structBalloonParty_1_1Balloon_1_1View_1_1FormationGlowBeam.html", null ],
     [ "BalloonParty.Balloon.View.FormationGlowBeams", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowBeams.html", null ],
     [ "BalloonParty.Balloon.View.FormationGlowField", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField.html", null ],
+    [ "BalloonParty.Balloon.View.FormationGlowHosts", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowHosts.html", null ],
     [ "BalloonParty.Balloon.View.FormationGlowSources", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowSources.html", null ],
     [ "BalloonParty.Game.Score.Behaviours.ShapeFormationTicker.FormationGroup", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationGroup.html", null ],
     [ "BalloonParty.Balloon.Model.FormationMembership", "classBalloonParty_1_1Balloon_1_1Model_1_1FormationMembership.html", null ],
     [ "BalloonParty.Game.Score.Behaviours.FormationOverlapResolver", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationOverlapResolver.html", null ],
     [ "BalloonParty.Balloon.Formation.FormationPlanner", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html", null ],
     [ "BalloonParty.Game.Score.Behaviours.FormationShape", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationShape.html", null ],
+    [ "BalloonParty.Balloon.Formation.FormationShapesExtensions", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationShapesExtensions.html", null ],
     [ "BalloonParty.Game.Score.Behaviours.ShapeFormationTicker.FormationState", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html", null ],
     [ "BalloonParty.Game.Score.Behaviours.FormationWalk", "structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationWalk.html", null ],
     [ "BalloonParty.UI.FormattedLabel", "structBalloonParty_1_1UI_1_1FormattedLabel.html", null ],
@@ -258,12 +271,6 @@ var hierarchy =
       [ "BalloonParty.Configuration.Effects.BackgroundFieldSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html", null ]
     ] ],
     [ "BalloonParty.Slots.Actor.IBalanceAnchor", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceAnchor.html", [
-      [ "BalloonParty.Balloon.Model.NukeBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1NukeBalloonModel.html", null ],
-      [ "BalloonParty.Balloon.Model.ToughBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html", null ],
-      [ "BalloonParty.Balloon.Model.UnbreakableBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html", null ],
-      [ "BalloonParty.Solver.ShotSimDynamicActor", "classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html", null ]
-    ] ],
-    [ "BalloonParty.Slots.Actor.IBalanceBiasSource", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceBiasSource.html", [
       [ "BalloonParty.Balloon.Model.BalloonModelBase", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html", [
         [ "BalloonParty.Balloon.Model.BalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html", null ],
         [ "BalloonParty.Balloon.Model.BubbleClusterModel", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html", null ],
@@ -276,6 +283,10 @@ var hierarchy =
         [ "BalloonParty.Balloon.Model.ToughBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html", null ],
         [ "BalloonParty.Balloon.Model.UnbreakableBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html", null ]
       ] ],
+      [ "BalloonParty.Solver.ShotSimDynamicActor", "classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html", null ]
+    ] ],
+    [ "BalloonParty.Slots.Actor.IBalanceBiasSource", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceBiasSource.html", [
+      [ "BalloonParty.Balloon.Model.BalloonModelBase", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html", null ],
       [ "BalloonParty.Solver.ShotSimDynamicActor", "classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html", null ]
     ] ],
     [ "BalloonParty.Slots.Actor.IBalanceInfluence", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceInfluence.html", [
@@ -355,6 +366,13 @@ var hierarchy =
     ] ],
     [ "BalloonParty.Configuration.Buffs.IBuffConfiguration", "interfaceBalloonParty_1_1Configuration_1_1Buffs_1_1IBuffConfiguration.html", [
       [ "BalloonParty.Configuration.Buffs.BuffConfiguration", "classBalloonParty_1_1Configuration_1_1Buffs_1_1BuffConfiguration.html", null ]
+    ] ],
+    [ "BalloonParty.Shared.IBumperBounceRule", "interfaceBalloonParty_1_1Shared_1_1IBumperBounceRule.html", [
+      [ "BalloonParty.Shared.ForgivingKickRule", "classBalloonParty_1_1Shared_1_1ForgivingKickRule.html", null ],
+      [ "BalloonParty.Shared.TrueReflectRule", "classBalloonParty_1_1Shared_1_1TrueReflectRule.html", null ]
+    ] ],
+    [ "BalloonParty.Shared.IBumperField", "interfaceBalloonParty_1_1Shared_1_1IBumperField.html", [
+      [ "BalloonParty.Slots.Grid.MushroomBoard", "classBalloonParty_1_1Slots_1_1Grid_1_1MushroomBoard.html", null ]
     ] ],
     [ "BalloonParty.Shared.Cadence.ICadencedEffect", "interfaceBalloonParty_1_1Shared_1_1Cadence_1_1ICadencedEffect.html", [
       [ "BalloonParty.Display.SceneCaptureService", "classBalloonParty_1_1Display_1_1SceneCaptureService.html", null ],
@@ -437,6 +455,9 @@ var hierarchy =
     [ "BalloonParty.Game.Assist.ICoveredBombNeed", "interfaceBalloonParty_1_1Game_1_1Assist_1_1ICoveredBombNeed.html", [
       [ "BalloonParty.Game.Assist.CoveredBombNeed", "classBalloonParty_1_1Game_1_1Assist_1_1CoveredBombNeed.html", null ]
     ] ],
+    [ "BalloonParty.Balloon.Formation.ICoveredHosts", "interfaceBalloonParty_1_1Balloon_1_1Formation_1_1ICoveredHosts.html", [
+      [ "BalloonParty.Balloon.Formation.UnbreakableFormationService", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html", null ]
+    ] ],
     [ "BalloonParty.Game.Danger.IDangerLevel", "interfaceBalloonParty_1_1Game_1_1Danger_1_1IDangerLevel.html", [
       [ "BalloonParty.Game.Danger.SpaceDanger", "classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html", null ]
     ] ],
@@ -459,6 +480,7 @@ var hierarchy =
       [ "BalloonParty.Audio.Routing.DangerSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1DangerSoundRouter.html", null ],
       [ "BalloonParty.Audio.Routing.DiscoSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1DiscoSoundRouter.html", null ],
       [ "BalloonParty.Audio.Routing.ItemSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter.html", null ],
+      [ "BalloonParty.Audio.Routing.MushroomSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1MushroomSoundRouter.html", null ],
       [ "BalloonParty.Audio.Routing.MusicSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html", null ],
       [ "BalloonParty.Audio.Routing.NukeSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1NukeSoundRouter.html", null ],
       [ "BalloonParty.Audio.Routing.ProgressionSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html", null ],
@@ -527,6 +549,7 @@ var hierarchy =
       [ "BalloonParty.Item.Preview.ItemPreviewTicker", "classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewTicker.html", null ],
       [ "BalloonParty.Item.Preview.ItemRangePreviewController", "classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html", null ],
       [ "BalloonParty.Item.Snipe.GoldenSnipeGift", "classBalloonParty_1_1Item_1_1Snipe_1_1GoldenSnipeGift.html", null ],
+      [ "BalloonParty.Item.Snipe.MushroomChainController", "classBalloonParty_1_1Item_1_1Snipe_1_1MushroomChainController.html", null ],
       [ "BalloonParty.Item.Snipe.NukeAftermath", "classBalloonParty_1_1Item_1_1Snipe_1_1NukeAftermath.html", null ],
       [ "BalloonParty.Item.Snipe.SharpshooterSnipeGift", "classBalloonParty_1_1Item_1_1Snipe_1_1SharpshooterSnipeGift.html", null ],
       [ "BalloonParty.Item.Snipe.SnipeDischargeBloom", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeDischargeBloom.html", null ],
@@ -555,6 +578,7 @@ var hierarchy =
       [ "BalloonParty.Shared.SceneLight.SceneLightFieldService", "classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html", null ],
       [ "BalloonParty.Shared.SceneLight.SceneLightFieldService.LightRegistrationHandle", "classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService_1_1LightRegistrationHandle.html", null ],
       [ "BalloonParty.Shared.SceneLight.TimeOfDayClock", "classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html", null ],
+      [ "BalloonParty.Slots.Actor.Archetype.MushroomSporeRouter", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomSporeRouter.html", null ],
       [ "BalloonParty.Slots.Actor.Cluster.ClusterViewController< TModel, TView, TSettings >", "classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterViewController-3-g.html", [
         [ "BalloonParty.Slots.Actor.Archetype.BushViewController", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushViewController.html", null ],
         [ "BalloonParty.Slots.Actor.Archetype.PuffCloudViewController", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudViewController.html", null ]
@@ -628,6 +652,7 @@ var hierarchy =
     ] ],
     [ "BalloonParty.Balloon.View.IFormationGlowSource", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IFormationGlowSource.html", [
       [ "BalloonParty.Balloon.Type.UnbreakableFormationLook", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html", null ],
+      [ "BalloonParty.Balloon.View.FormationGlowHosts.HostRing", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowHosts_1_1HostRing.html", null ],
       [ "BalloonParty.Balloon.View.FormationGlowSources.Registration", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowSources_1_1Registration.html", null ]
     ] ],
     [ "BalloonParty.Balloon.Model.IFormationMember", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember.html", [
@@ -802,6 +827,18 @@ var hierarchy =
       [ "BalloonParty.Audio.SfxService", "classBalloonParty_1_1Audio_1_1SfxService.html", null ]
     ] ],
     [ "BalloonParty.Shared.ImpactEventBus.Impact", "structBalloonParty_1_1Shared_1_1ImpactEventBus_1_1Impact.html", null ],
+    [ "BalloonParty.Shared.IMushroomBlast", "interfaceBalloonParty_1_1Shared_1_1IMushroomBlast.html", [
+      [ "BalloonParty.Item.Bomb.MushroomBlast", "classBalloonParty_1_1Item_1_1Bomb_1_1MushroomBlast.html", null ]
+    ] ],
+    [ "BalloonParty.Slots.Actor.IMushroomPlacementSource", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IMushroomPlacementSource.html", [
+      [ "BalloonParty.Slots.Actor.MushroomPlacementSource", "classBalloonParty_1_1Slots_1_1Actor_1_1MushroomPlacementSource.html", null ]
+    ] ],
+    [ "BalloonParty.Shared.IMushroomRegrowth", "interfaceBalloonParty_1_1Shared_1_1IMushroomRegrowth.html", [
+      [ "BalloonParty.Slots.Grid.MushroomBoard", "classBalloonParty_1_1Slots_1_1Grid_1_1MushroomBoard.html", null ]
+    ] ],
+    [ "BalloonParty.Configuration.GridActors.IMushroomSettings", "interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IMushroomSettings.html", [
+      [ "BalloonParty.Configuration.GridActors.MushroomSettings", "classBalloonParty_1_1Configuration_1_1GridActors_1_1MushroomSettings.html", null ]
+    ] ],
     [ "BalloonParty.Shared.GameState.INavigation", "interfaceBalloonParty_1_1Shared_1_1GameState_1_1INavigation.html", [
       [ "BalloonParty.Shared.GameState.NavigationService", "classBalloonParty_1_1Shared_1_1GameState_1_1NavigationService.html", null ]
     ] ],
@@ -873,7 +910,9 @@ var hierarchy =
       [ "BalloonParty.Projectile.View.ProjectileView", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html", null ],
       [ "BalloonParty.Shared.Pool.EffectView", "classBalloonParty_1_1Shared_1_1Pool_1_1EffectView.html", null ],
       [ "BalloonParty.Shared.Pool.PoolableParticle", "classBalloonParty_1_1Shared_1_1Pool_1_1PoolableParticle.html", null ],
-      [ "BalloonParty.Slots.Actor.Archetype.GridActorView", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1GridActorView.html", null ],
+      [ "BalloonParty.Slots.Actor.Archetype.GridActorView", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1GridActorView.html", [
+        [ "BalloonParty.Slots.Actor.Archetype.MushroomView", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomView.html", null ]
+      ] ],
       [ "BalloonParty.UI.HeadsUp.HandwrittenHeadsUp", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html", null ],
       [ "BalloonParty.UI.Score.FlyingTrail", "classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html", null ],
       [ "BalloonParty.UI.Score.ProgressNotice", "classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice.html", null ]
@@ -1026,6 +1065,7 @@ var hierarchy =
       [ "BalloonParty.Item.Snipe.SnipeChanceRoll", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html", null ],
       [ "BalloonParty.Shared.Pause.PauseService", "classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html", null ],
       [ "BalloonParty.Shared.Pause.TimeScaleService", "classBalloonParty_1_1Shared_1_1Pause_1_1TimeScaleService.html", null ],
+      [ "BalloonParty.Slots.Actor.Archetype.MushroomSporeRouter", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomSporeRouter.html", null ],
       [ "BalloonParty.Slots.Grid.BalancePathHolder", "classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html", null ]
     ] ],
     [ "BalloonParty.Game.Run.IRunResumeRequest", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResumeRequest.html", [
@@ -1095,6 +1135,9 @@ var hierarchy =
     [ "BalloonParty.Game.Upgrades.IShieldsPerBall", "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IShieldsPerBall.html", [
       [ "BalloonParty.Game.Upgrades.RunUpgrades", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html", null ]
     ] ],
+    [ "BalloonParty.Shared.IShotOrigin", "interfaceBalloonParty_1_1Shared_1_1IShotOrigin.html", [
+      [ "BalloonParty.Thrower.ThrowerOriginProvider", "classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html", null ]
+    ] ],
     [ "BalloonParty.Scenario.ISkyBackdrop", "interfaceBalloonParty_1_1Scenario_1_1ISkyBackdrop.html", [
       [ "BalloonParty.Scenario.SkyScatterService", "classBalloonParty_1_1Scenario_1_1SkyScatterService.html", null ]
     ] ],
@@ -1116,6 +1159,7 @@ var hierarchy =
         [ "BalloonParty.Slots.Actor.Archetype.GatekeeperActorModel", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1GatekeeperActorModel.html", null ],
         [ "BalloonParty.Slots.Actor.Archetype.IGridActorModel", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1IGridActorModel.html", [
           [ "BalloonParty.Slots.Actor.Archetype.BushObstacleModel", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushObstacleModel.html", null ],
+          [ "BalloonParty.Slots.Actor.Archetype.MushroomBumperModel", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomBumperModel.html", null ],
           [ "BalloonParty.Slots.Actor.Archetype.PuffObstacleModel", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html", null ]
         ] ],
         [ "BalloonParty.Slots.Actor.Cluster.IClusterableSlotActor", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1IClusterableSlotActor.html", [
@@ -1142,7 +1186,8 @@ var hierarchy =
     ] ],
     [ "BalloonParty.Slots.Actor.ISlotSelectionStrategy", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotSelectionStrategy.html", [
       [ "BalloonParty.Slots.Actor.ClusterSlotSelectionStrategy", "classBalloonParty_1_1Slots_1_1Actor_1_1ClusterSlotSelectionStrategy.html", null ],
-      [ "BalloonParty.Slots.Actor.RandomSlotSelectionStrategy", "classBalloonParty_1_1Slots_1_1Actor_1_1RandomSlotSelectionStrategy.html", null ]
+      [ "BalloonParty.Slots.Actor.RandomSlotSelectionStrategy", "classBalloonParty_1_1Slots_1_1Actor_1_1RandomSlotSelectionStrategy.html", null ],
+      [ "BalloonParty.Slots.Actor.WallSlotSelectionStrategy", "classBalloonParty_1_1Slots_1_1Actor_1_1WallSlotSelectionStrategy.html", null ]
     ] ],
     [ "BalloonParty.Configuration.Effects.ISmokeFieldSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISmokeFieldSettings.html", [
       [ "BalloonParty.Configuration.Effects.SmokeFieldSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1SmokeFieldSettings.html", null ]
@@ -1195,6 +1240,7 @@ var hierarchy =
       [ "BalloonParty.Audio.Routing.DangerSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1DangerSoundRouter.html", null ],
       [ "BalloonParty.Audio.Routing.DiscoSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1DiscoSoundRouter.html", null ],
       [ "BalloonParty.Audio.Routing.ItemSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter.html", null ],
+      [ "BalloonParty.Audio.Routing.MushroomSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1MushroomSoundRouter.html", null ],
       [ "BalloonParty.Audio.Routing.MusicSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html", null ],
       [ "BalloonParty.Audio.Routing.NukeSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1NukeSoundRouter.html", null ],
       [ "BalloonParty.Audio.Routing.ProgressionSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html", null ],
@@ -1248,6 +1294,7 @@ var hierarchy =
       [ "BalloonParty.Item.Preview.ItemPreviewPoolBootstrap", "classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewPoolBootstrap.html", null ],
       [ "BalloonParty.Item.Preview.ItemRangePreviewController", "classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html", null ],
       [ "BalloonParty.Item.Snipe.GoldenSnipeGift", "classBalloonParty_1_1Item_1_1Snipe_1_1GoldenSnipeGift.html", null ],
+      [ "BalloonParty.Item.Snipe.MushroomChainController", "classBalloonParty_1_1Item_1_1Snipe_1_1MushroomChainController.html", null ],
       [ "BalloonParty.Item.Snipe.NukeAftermath", "classBalloonParty_1_1Item_1_1Snipe_1_1NukeAftermath.html", null ],
       [ "BalloonParty.Item.Snipe.SharpshooterSnipeGift", "classBalloonParty_1_1Item_1_1Snipe_1_1SharpshooterSnipeGift.html", null ],
       [ "BalloonParty.Item.Snipe.SnipeDischargeBloom", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeDischargeBloom.html", null ],
@@ -1270,6 +1317,7 @@ var hierarchy =
       [ "BalloonParty.Shared.SceneLight.TimeOfDayClock", "classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html", null ],
       [ "BalloonParty.Shared.SceneLight.TimeOfDayService", "classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayService.html", null ],
       [ "BalloonParty.Shared.Thermal.ThermalFrameRateGovernor", "classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html", null ],
+      [ "BalloonParty.Slots.Actor.Archetype.MushroomSporeRouter", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomSporeRouter.html", null ],
       [ "BalloonParty.Slots.Actor.Cluster.ClusterViewController< TModel, TView, TSettings >", "classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterViewController-3-g.html", null ],
       [ "BalloonParty.Slots.Actor.Cluster.SlotClusterRegistry< TModel >", "classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterRegistry-1-g.html", null ],
       [ "BalloonParty.Slots.Actor.GridActorHitController", "classBalloonParty_1_1Slots_1_1Actor_1_1GridActorHitController.html", null ],
@@ -1322,6 +1370,7 @@ var hierarchy =
       [ "BalloonParty.Game.Level.LevelController", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html", null ],
       [ "BalloonParty.Game.Level.TimeOfDayCycle", "classBalloonParty_1_1Game_1_1Level_1_1TimeOfDayCycle.html", null ],
       [ "BalloonParty.Game.Run.RunResumeController", "classBalloonParty_1_1Game_1_1Run_1_1RunResumeController.html", null ],
+      [ "BalloonParty.Item.Snipe.MushroomRegrowController", "classBalloonParty_1_1Item_1_1Snipe_1_1MushroomRegrowController.html", null ],
       [ "BalloonParty.Item.Snipe.SnipeLanceLines", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html", null ],
       [ "BalloonParty.Projectile.Controller.ProjectileDoomedTimeScaleController", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html", null ],
       [ "BalloonParty.Scenario.BackgroundFieldService", "classBalloonParty_1_1Scenario_1_1BackgroundFieldService.html", null ],
@@ -1332,6 +1381,7 @@ var hierarchy =
       [ "BalloonParty.Shared.SceneLight.TimeOfDayClock", "classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html", null ],
       [ "BalloonParty.Shared.SceneLight.TimeOfDayService", "classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayService.html", null ],
       [ "BalloonParty.Shared.Thermal.ThermalFrameRateGovernor", "classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html", null ],
+      [ "BalloonParty.Slots.Actor.Archetype.MushroomSporeRouter", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomSporeRouter.html", null ],
       [ "BalloonParty.Thrower.ThrowerController", "classBalloonParty_1_1Thrower_1_1ThrowerController.html", null ]
     ] ],
     [ "BalloonParty.Shared.SceneLight.ITimeOfDayNight", "interfaceBalloonParty_1_1Shared_1_1SceneLight_1_1ITimeOfDayNight.html", [
@@ -1383,6 +1433,9 @@ var hierarchy =
     [ "BalloonParty.Configuration.Ranges.IWeightedEntry", "interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html", [
       [ "BalloonParty.Configuration.Level.ResolvedBalloonEntry", "classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry.html", null ],
       [ "BalloonParty.Configuration.Level.ResolvedItemEntry", "classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedItemEntry.html", null ]
+    ] ],
+    [ "BalloonParty.Balloon.Model.IWriteableCoverHost", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableCoverHost.html", [
+      [ "BalloonParty.Balloon.Model.BalloonModelBase", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html", null ]
     ] ],
     [ "BalloonParty.UI.ClothRibbon.KeepOut", "structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html", null ],
     [ "BalloonParty.Editor.GameOverLayoutBuilder.Kit", "classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Kit.html", null ],
@@ -1590,6 +1643,40 @@ var hierarchy =
     [ "BalloonParty.Balloon.Controller.PressurePropagation.Move", "structBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation_1_1Move.html", null ],
     [ "BalloonParty.Balloon.Controller.BalanceDebugRecorder.MoveRecord", "structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1MoveRecord.html", null ],
     [ "BalloonParty.Slots.Grid.MoveWeightEvaluator", "classBalloonParty_1_1Slots_1_1Grid_1_1MoveWeightEvaluator.html", null ],
+    [ "BalloonParty.Editor.MushroomBakeBoard", "classBalloonParty_1_1Editor_1_1MushroomBakeBoard.html", null ],
+    [ "BalloonParty.Editor.MushroomBakeCount", "classBalloonParty_1_1Editor_1_1MushroomBakeCount.html", null ],
+    [ "BalloonParty.Shared.MushroomBlastRule", "classBalloonParty_1_1Shared_1_1MushroomBlastRule.html", null ],
+    [ "BalloonParty.Shared.MushroomBlastTuning", "structBalloonParty_1_1Shared_1_1MushroomBlastTuning.html", null ],
+    [ "BalloonParty.Shared.Messages.MushroomBouncedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1MushroomBouncedMessage.html", null ],
+    [ "BalloonParty.Slots.Actor.MushroomCannonClearance", "structBalloonParty_1_1Slots_1_1Actor_1_1MushroomCannonClearance.html", null ],
+    [ "BalloonParty.Editor.MushroomCannonView", "structBalloonParty_1_1Editor_1_1MushroomCannonView.html", null ],
+    [ "BalloonParty.Slots.Actor.Archetype.MushroomCapSpring", "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCapSpring.html", null ],
+    [ "BalloonParty.Shared.MushroomChainRule", "classBalloonParty_1_1Shared_1_1MushroomChainRule.html", null ],
+    [ "BalloonParty.Shared.MushroomChainRules", "structBalloonParty_1_1Shared_1_1MushroomChainRules.html", null ],
+    [ "BalloonParty.Shared.MushroomChainState", "structBalloonParty_1_1Shared_1_1MushroomChainState.html", null ],
+    [ "BalloonParty.Shared.Messages.MushroomCutMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1MushroomCutMessage.html", null ],
+    [ "BalloonParty.Slots.Actor.Archetype.MushroomCutTimeline", "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCutTimeline.html", null ],
+    [ "BalloonParty.Slots.Actor.MushroomCutTuning", "structBalloonParty_1_1Slots_1_1Actor_1_1MushroomCutTuning.html", null ],
+    [ "BalloonParty.Shared.Messages.MushroomLanceMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1MushroomLanceMessage.html", null ],
+    [ "BalloonParty.Slots.Actor.MushroomLayoutBand", "structBalloonParty_1_1Slots_1_1Actor_1_1MushroomLayoutBand.html", null ],
+    [ "BalloonParty.Slots.Actor.MushroomLeanTuning", "structBalloonParty_1_1Slots_1_1Actor_1_1MushroomLeanTuning.html", null ],
+    [ "BalloonParty.Slots.Actor.MushroomPlacementLimits", "structBalloonParty_1_1Slots_1_1Actor_1_1MushroomPlacementLimits.html", null ],
+    [ "BalloonParty.Editor.MushroomPrefabBuilder", "classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder.html", null ],
+    [ "BalloonParty.Shared.Messages.MushroomRegrownMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1MushroomRegrownMessage.html", null ],
+    [ "BalloonParty.Slots.Actor.Archetype.MushroomSporeBurst", "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomSporeBurst.html", null ],
+    [ "BalloonParty.Slots.Actor.MushroomSporeHit", "structBalloonParty_1_1Slots_1_1Actor_1_1MushroomSporeHit.html", null ],
+    [ "BalloonParty.Slots.Actor.Archetype.MushroomSporePlanner", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomSporePlanner.html", null ],
+    [ "BalloonParty.Slots.Actor.MushroomSporeSpecks", "structBalloonParty_1_1Slots_1_1Actor_1_1MushroomSporeSpecks.html", null ],
+    [ "BalloonParty.Slots.Actor.MushroomSporeTuning", "structBalloonParty_1_1Slots_1_1Actor_1_1MushroomSporeTuning.html", null ],
+    [ "BalloonParty.Shared.Messages.MushroomSwayedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1MushroomSwayedMessage.html", null ],
+    [ "BalloonParty.Slots.Actor.MushroomThrowTuning", "structBalloonParty_1_1Slots_1_1Actor_1_1MushroomThrowTuning.html", null ],
+    [ "BalloonParty.Editor.MushroomWallBaker", "classBalloonParty_1_1Editor_1_1MushroomWallBaker.html", null ],
+    [ "BalloonParty.Slots.Actor.MushroomWallCap", "structBalloonParty_1_1Slots_1_1Actor_1_1MushroomWallCap.html", null ],
+    [ "BalloonParty.Slots.Actor.MushroomWallCatalogue", "classBalloonParty_1_1Slots_1_1Actor_1_1MushroomWallCatalogue.html", null ],
+    [ "BalloonParty.Slots.Actor.MushroomWallLayout", "classBalloonParty_1_1Slots_1_1Actor_1_1MushroomWallLayout.html", null ],
+    [ "BalloonParty.Editor.MushroomWallMeasure", "structBalloonParty_1_1Editor_1_1MushroomWallMeasure.html", null ],
+    [ "BalloonParty.Slots.Actor.MushroomWallPick", "structBalloonParty_1_1Slots_1_1Actor_1_1MushroomWallPick.html", null ],
+    [ "BalloonParty.Slots.Actor.MushroomWallPicker", "classBalloonParty_1_1Slots_1_1Actor_1_1MushroomWallPicker.html", null ],
     [ "BalloonParty.Shared.Extensions.MusicalPitchExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1MusicalPitchExtensions.html", null ],
     [ "NaughtyInspector", null, [
       [ "BalloonParty.Editor.ChainLightningViewEditor", "classBalloonParty_1_1Editor_1_1ChainLightningViewEditor.html", null ],
@@ -1736,6 +1823,7 @@ var hierarchy =
     [ "BalloonParty.Shared.Messages.RipeFuseBeatMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1RipeFuseBeatMessage.html", null ],
     [ "BalloonParty.Balloon.Controller.BalloonBalancer.RoamCandidate", "structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer_1_1RoamCandidate.html", null ],
     [ "BalloonParty.Balloon.Controller.RoamRests", "classBalloonParty_1_1Balloon_1_1Controller_1_1RoamRests.html", null ],
+    [ "BalloonParty.Projectile.Controller.BumperLookahead.Run", "structBalloonParty_1_1Projectile_1_1Controller_1_1BumperLookahead_1_1Run.html", null ],
     [ "BalloonParty.Shared.Messages.RunResetMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1RunResetMessage.html", null ],
     [ "BalloonParty.Game.Run.RunResetOrder", "classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder.html", null ],
     [ "BalloonParty.Shared.Messages.RunRestartCompletedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1RunRestartCompletedMessage.html", null ],
@@ -1827,6 +1915,8 @@ var hierarchy =
     [ "BalloonParty.Solver.ShotBalloonState", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html", null ],
     [ "BalloonParty.Solver.ShotBoardDynamics", "classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html", null ],
     [ "BalloonParty.Solver.ShotBoardGather", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html", null ],
+    [ "BalloonParty.Solver.ShotBumperBounce", "structBalloonParty_1_1Solver_1_1ShotBumperBounce.html", null ],
+    [ "BalloonParty.Solver.ShotBumperLayer", "classBalloonParty_1_1Solver_1_1ShotBumperLayer.html", null ],
     [ "BalloonParty.Solver.ShotCruiseConfig", "structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html", null ],
     [ "BalloonParty.Solver.ShotDynamicActorSnapshot", "structBalloonParty_1_1Solver_1_1ShotDynamicActorSnapshot.html", null ],
     [ "BalloonParty.Solver.ShotFlightSeed", "structBalloonParty_1_1Solver_1_1ShotFlightSeed.html", null ],
@@ -1834,7 +1924,9 @@ var hierarchy =
     [ "BalloonParty.Solver.ShotItemActivation", "structBalloonParty_1_1Solver_1_1ShotItemActivation.html", null ],
     [ "BalloonParty.Solver.ShotItemLayer", "classBalloonParty_1_1Solver_1_1ShotItemLayer.html", null ],
     [ "BalloonParty.Solver.ShotItemOutcome", "structBalloonParty_1_1Solver_1_1ShotItemOutcome.html", null ],
+    [ "BalloonParty.Solver.ShotLeftBumper", "structBalloonParty_1_1Solver_1_1ShotLeftBumper.html", null ],
     [ "BalloonParty.Solver.ShotMotionMath", "classBalloonParty_1_1Solver_1_1ShotMotionMath.html", null ],
+    [ "BalloonParty.Solver.ShotMushroomTally", "structBalloonParty_1_1Solver_1_1ShotMushroomTally.html", null ],
     [ "BalloonParty.Solver.ShotNudgeImpulse", "structBalloonParty_1_1Solver_1_1ShotNudgeImpulse.html", null ],
     [ "BalloonParty.Solver.ShotPopCause", "structBalloonParty_1_1Solver_1_1ShotPopCause.html", null ],
     [ "BalloonParty.Solver.ShotRanking", "classBalloonParty_1_1Solver_1_1ShotRanking.html", null ],
@@ -1904,7 +1996,6 @@ var hierarchy =
     [ "BalloonParty.Game.Telemetry.TelemetryStopwatch", "classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryStopwatch.html", null ],
     [ "BalloonParty.Editor.TexturePreviewBox", "classBalloonParty_1_1Editor_1_1TexturePreviewBox.html", null ],
     [ "BalloonParty.Game.Assist.ThreatEase", "classBalloonParty_1_1Game_1_1Assist_1_1ThreatEase.html", null ],
-    [ "BalloonParty.Thrower.ThrowerOriginProvider", "classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html", null ],
     [ "BalloonParty.Shared.Messages.ThrowerReadyMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ThrowerReadyMessage.html", null ],
     [ "BalloonParty.Thrower.ThrowerReload", "classBalloonParty_1_1Thrower_1_1ThrowerReload.html", null ],
     [ "BalloonParty.Thrower.ThrowerSettings", "classBalloonParty_1_1Thrower_1_1ThrowerSettings.html", null ],
@@ -1940,6 +2031,7 @@ var hierarchy =
     [ "BalloonParty.Audio.VoiceLimiter", "classBalloonParty_1_1Audio_1_1VoiceLimiter.html", null ],
     [ "BalloonParty.Audio.VoicePlayback", "structBalloonParty_1_1Audio_1_1VoicePlayback.html", null ],
     [ "BalloonParty.Audio.SfxService.VoiceSlot", "structBalloonParty_1_1Audio_1_1SfxService_1_1VoiceSlot.html", null ],
+    [ "BalloonParty.Slots.Actor.Archetype.MushroomSporeRouter.Waiting", "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomSporeRouter_1_1Waiting.html", null ],
     [ "BalloonParty.Game.Score.Behaviours.ShapeInkMeshBuilder.Walk", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkMeshBuilder_1_1Walk.html", null ],
     [ "BalloonParty.Shared.Messages.WallHitMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage.html", null ],
     [ "BalloonParty.Shared.WallLimits", "structBalloonParty_1_1Shared_1_1WallLimits.html", null ],
@@ -1948,5 +2040,6 @@ var hierarchy =
     [ "BalloonParty.Game.Health.WaveDeficit", "structBalloonParty_1_1Game_1_1Health_1_1WaveDeficit.html", null ],
     [ "BalloonParty.Game.Health.WaveDeficitCalculator", "classBalloonParty_1_1Game_1_1Health_1_1WaveDeficitCalculator.html", null ],
     [ "BalloonParty.Shared.Extensions.WeightedPickExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1WeightedPickExtensions.html", null ],
-    [ "BalloonParty.UI.HeadsUp.WriteOnMath", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnMath.html", null ]
+    [ "BalloonParty.UI.HeadsUp.WriteOnMath", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnMath.html", null ],
+    [ "BalloonParty.Shared.XorShift32", "structBalloonParty_1_1Shared_1_1XorShift32.html", null ]
 ];

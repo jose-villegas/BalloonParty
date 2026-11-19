@@ -149,6 +149,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad31a5f7aeb2119ad6fd0cd66339c7684" id="r_ad31a5f7aeb2119ad6fd0cd66339c7684"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad31a5f7aeb2119ad6fd0cd66339c7684">OnLanceArmed</a> (<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> shot)</td></tr>
 <tr class="memdesc:ad31a5f7aeb2119ad6fd0cd66339c7684"><td class="mdescLeft">&#160;</td><td class="mdescRight">A fresh lance armed on <em>shot</em> , wherever it is right now.  <br /></td></tr>
 <tr class="separator:ad31a5f7aeb2119ad6fd0cd66339c7684"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34bf627454e1518b3d820806a11964b6" id="r_a34bf627454e1518b3d820806a11964b6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a34bf627454e1518b3d820806a11964b6">OnLanceArmedAt</a> (<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> shot, Vector3 point)</td></tr>
+<tr class="memdesc:a34bf627454e1518b3d820806a11964b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">A fresh lance armed on <em>shot</em>  in flight at a point the arming knows better than the ball's last drawn position does: a mushroom bounce arms from inside the ball's fixed step, before the ball has been moved to where that step leaves it.  <br /></td></tr>
+<tr class="separator:a34bf627454e1518b3d820806a11964b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1bc898ff92af47dc7f28de5edcbfc78b" id="r_a1bc898ff92af47dc7f28de5edcbfc78b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1bc898ff92af47dc7f28de5edcbfc78b">OnLanceRearmed</a> (<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> shot, Vector3 wall)</td></tr>
 <tr class="memdesc:a1bc898ff92af47dc7f28de5edcbfc78b"><td class="mdescLeft">&#160;</td><td class="mdescRight">A banked charge re-armed <em>shot</em>  at the discharge wall it just left.  <br /></td></tr>
 <tr class="separator:a1bc898ff92af47dc7f28de5edcbfc78b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -422,6 +425,32 @@ Private Attributes</h2></td></tr>
 <p>A fresh lance armed on <em>shot</em> , wherever it is right now. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeLanceArming.html#a074b49c3c7e2215de96620813bf5a02f">BalloonParty.Item.Snipe.ISnipeLanceArming</a>.</p>
+
+</div>
+</div>
+<a id="a34bf627454e1518b3d820806a11964b6" name="a34bf627454e1518b3d820806a11964b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a34bf627454e1518b3d820806a11964b6">&#9670;&#160;</a></span>OnLanceArmedAt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Item.Snipe.SnipeLanceLines.OnLanceArmedAt </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a></td>          <td class="paramname"><span class="paramname"><em>shot</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>point</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>A fresh lance armed on <em>shot</em>  in flight at a point the arming knows better than the ball's last drawn position does: a mushroom bounce arms from inside the ball's fixed step, before the ball has been moved to where that step leaves it. </p>
+<p>Its run starts at <em>point</em> . </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeLanceArming.html#ad039122aaf2b4657b4745db9a6e30bd6">BalloonParty.Item.Snipe.ISnipeLanceArming</a>.</p>
 
 </div>
 </div>

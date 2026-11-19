@@ -18,20 +18,22 @@
 <area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="154,418,241,457,275,470,270,472,239,462,155,423"/>
 <area shape="rect" id="Node000015" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1GridActorView.html" title=" " alt="" coords="268,541,452,586"/>
 <area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="126,422,177,477,208,504,241,527,270,542,265,543,238,531,204,508,173,480,126,427"/>
-<area shape="rect" id="Node000016" href="$classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html" title="One short handwritten line in world space (a TextMeshPro, not on a canvas), so it sits where it happe..." alt="" coords="267,611,454,655"/>
-<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="115,424,137,466,164,512,199,557,241,596,269,613,264,614,238,600,195,561,160,515,132,468,115,429"/>
-<area shape="rect" id="Node000017" href="$classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html" title=" " alt="" coords="259,680,462,725"/>
-<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="109,425,127,481,154,545,191,610,215,640,241,666,261,680,255,680,238,670,211,643,187,613,149,547,122,482,108,430"/>
-<area shape="rect" id="Node000018" href="$classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice.html" title="Floating progress notice: rises in while fading up, holds, then rises out while fading down." alt="" coords="251,749,470,794"/>
-<area shape="poly" id="edge17_Node000001_Node000018" title=" " alt="" coords="105,426,119,494,144,577,161,620,183,662,210,701,241,735,259,749,253,748,238,739,206,704,179,665,156,622,139,579,114,495,104,431"/>
-<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Item_1_1Lightning_1_1ChainLightningView.html" title="Poolable chain&#45;lightning effect." alt="" coords="529,299,732,343"/>
-<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="465,394,480,388,504,371,528,353,557,343,553,345,530,358,507,375,482,393,468,399"/>
-<area shape="rect" id="Node000010" href="$classBalloonParty_1_1Item_1_1Paint_1_1PaintSplashView.html" title="Poolable paint&#45;splash effect." alt="" coords="543,368,718,413"/>
-<area shape="poly" id="edge9_Node000008_Node000010" title=" " alt="" coords="468,409,545,400,540,403,470,414"/>
-<area shape="rect" id="Node000011" href="$classBalloonParty_1_1Shared_1_1Pool_1_1AnimatorEffectView.html" title="Poolable effect driven by an Animator; completion is timer&#45;based off the first clip&#39;s length." alt="" coords="538,437,724,482"/>
-<area shape="poly" id="edge10_Node000008_Node000011" title=" " alt="" coords="468,436,539,447,534,448,469,441"/>
-<area shape="rect" id="Node000013" href="$classBalloonParty_1_1Shared_1_1Pool_1_1ParticleEffectView.html" title="Poolable effect driven by a ParticleSystem; completion is detected automatically when it finishes." alt="" coords="538,507,724,551"/>
-<area shape="poly" id="edge12_Node000008_Node000013" title=" " alt="" coords="467,451,482,457,507,475,530,492,558,506,552,506,528,497,504,479,480,462,467,456"/>
-<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Item_1_1Laser_1_1LaserView.html" title="Animator&#45;driven laser effect that tints its wired renderers to the colour it receives — the host ball..." alt="" coords="780,437,958,482"/>
-<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="739,457,782,459,777,460,740,462"/>
+<area shape="rect" id="Node000017" href="$classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html" title="One short handwritten line in world space (a TextMeshPro, not on a canvas), so it sits where it happe..." alt="" coords="267,611,454,655"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="115,424,137,466,164,512,199,557,241,596,269,613,264,614,238,600,195,561,160,515,132,468,115,429"/>
+<area shape="rect" id="Node000018" href="$classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html" title=" " alt="" coords="259,680,462,725"/>
+<area shape="poly" id="edge17_Node000001_Node000018" title=" " alt="" coords="109,425,127,481,154,545,191,610,215,640,241,666,261,680,255,680,238,670,211,643,187,613,149,547,122,482,108,430"/>
+<area shape="rect" id="Node000019" href="$classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice.html" title="Floating progress notice: rises in while fading up, holds, then rises out while fading down." alt="" coords="251,749,470,794"/>
+<area shape="poly" id="edge18_Node000001_Node000019" title=" " alt="" coords="105,426,119,494,144,577,161,620,183,662,210,701,241,735,259,749,253,748,238,739,206,704,179,665,156,622,139,579,114,495,104,431"/>
+<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Item_1_1Lightning_1_1ChainLightningView.html" title="Poolable chain&#45;lightning effect." alt="" coords="529,264,732,309"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="466,397,479,388,495,372,503,355,511,337,527,319,550,308,546,311,531,323,515,340,508,357,499,375,483,392,469,401"/>
+<area shape="rect" id="Node000010" href="$classBalloonParty_1_1Item_1_1Paint_1_1PaintSplashView.html" title="Poolable paint&#45;splash effect." alt="" coords="543,333,718,378"/>
+<area shape="poly" id="edge9_Node000008_Node000010" title=" " alt="" coords="464,396,545,377,540,379,466,401"/>
+<area shape="rect" id="Node000011" href="$classBalloonParty_1_1Shared_1_1Pool_1_1AnimatorEffectView.html" title="Poolable effect driven by an Animator; completion is timer&#45;based off the first clip&#39;s length." alt="" coords="538,403,724,447"/>
+<area shape="poly" id="edge10_Node000008_Node000011" title=" " alt="" coords="469,422,539,424,534,426,470,428"/>
+<area shape="rect" id="Node000013" href="$classBalloonParty_1_1Shared_1_1Pool_1_1ParticleEffectView.html" title="Poolable effect driven by a ParticleSystem; completion is detected automatically when it finishes." alt="" coords="538,472,724,517"/>
+<area shape="poly" id="edge12_Node000008_Node000013" title=" " alt="" coords="465,449,543,471,538,472,465,454"/>
+<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Item_1_1Laser_1_1LaserView.html" title="Animator&#45;driven laser effect that tints its wired renderers to the colour it receives — the host ball..." alt="" coords="780,403,958,447"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="739,422,782,424,777,426,740,428"/>
+<area shape="rect" id="Node000016" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomView.html" title="A meadow mushroom on the board (Meadow Mushrooms): the quad the Grid/Mushroom shader draws the mushro..." alt="" coords="534,541,727,586"/>
+<area shape="poly" id="edge15_Node000015_Node000016" title=" " alt="" coords="468,561,537,563,532,564,468,566"/>
 </map>

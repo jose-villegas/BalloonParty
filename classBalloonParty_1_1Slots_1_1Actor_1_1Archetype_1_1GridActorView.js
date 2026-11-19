@@ -1,7 +1,7 @@
 var classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1GridActorView =
 [
-    [ "OnDespawned", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1GridActorView.html#af25aaeb480cd6357e3bb932cb6de0dbd", null ],
-    [ "OnSpawned", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1GridActorView.html#a559cbbbd9c116f2424fb8c31f3332dee", null ],
+    [ "OnDespawned", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1GridActorView.html#ae050225890db9459edeae632c1abe773", null ],
+    [ "OnSpawned", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1GridActorView.html#af7e121a1e7f9a794da0fac17f907e166", null ],
     [ "_collider", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1GridActorView.html#ada3166707eab6f8b19917b81911abd93", null ],
     [ "_tweenTracker", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1GridActorView.html#a5500c61032c18133f6a86ecc50b38b6e", null ],
     [ "ActorKind", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1GridActorView.html#a9c86baedbd389d408374b16053126000", null ],

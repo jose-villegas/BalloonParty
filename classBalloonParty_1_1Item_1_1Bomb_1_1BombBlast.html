@@ -121,6 +121,9 @@ $(function(){initNavTree('classBalloonParty_1_1Item_1_1Bomb_1_1BombBlast.html','
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
 Static Package Functions</h2></td></tr>
+<tr class="memitem:aff3e17c78ae5f39d2d818202c7cf89d2" id="r_aff3e17c78ae5f39d2d818202c7cf89d2"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aff3e17c78ae5f39d2d818202c7cf89d2">Pierces</a> (Vector2 origin, Vector2Int hostSlot, bool isRainbowHost, in <a class="el" href="structBalloonParty_1_1Item_1_1Bomb_1_1BombBlastParams.html">BombBlastParams</a> p, Vector2Int slot, Vector2 position, float radius)</td></tr>
+<tr class="memdesc:aff3e17c78ae5f39d2d818202c7cf89d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the blast breaks outright what stands in <em>slot</em>  at <em>position</em> : the hit that ignores how tough a thing is, and the only one that breaks an unbreakable balloon.  <br /></td></tr>
+<tr class="separator:aff3e17c78ae5f39d2d818202c7cf89d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af234468d24fbfc2e89591135fe9f6bd9" id="r_af234468d24fbfc2e89591135fe9f6bd9"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af234468d24fbfc2e89591135fe9f6bd9">Resolve</a> (<a class="el" href="interfaceBalloonParty_1_1Item_1_1Effects_1_1IEffectBoard.html">IEffectBoard</a> board, Vector2 origin, Vector2Int hostSlot, bool isRainbowHost, string rainbowColorId, in <a class="el" href="structBalloonParty_1_1Item_1_1Bomb_1_1BombBlastParams.html">BombBlastParams</a> p, List&lt; <a class="el" href="structBalloonParty_1_1Item_1_1Effects_1_1EffectHit.html">EffectHit</a> &gt; hitsOut)</td></tr>
 <tr class="memdesc:af234468d24fbfc2e89591135fe9f6bd9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Normal (non-rainbow host) blast: every occupant whose CENTRE lies within <a class="el" href="structBalloonParty_1_1Item_1_1Bomb_1_1BombBlastParams.html#a6c9d1d2fbe6316e7c2198d18b335d6a2">BombBlastParams.Radius</a> plus its own radius takes a hit — mirrors <code>Physics2D.OverlapCircle</code>'s circle-vs-circle overlap test exactly.  <br /></td></tr>
 <tr class="separator:af234468d24fbfc2e89591135fe9f6bd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -129,6 +132,10 @@ Static Package Functions</h2></td></tr>
 Static Private Member Functions</h2></td></tr>
 <tr class="memitem:a26c8a12a5eabc98c7fd36dd95b78026f" id="r_a26c8a12a5eabc98c7fd36dd95b78026f"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a26c8a12a5eabc98c7fd36dd95b78026f">IsHexNeighbor</a> (Vector2Int slot)</td></tr>
 <tr class="separator:a26c8a12a5eabc98c7fd36dd95b78026f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32b3824721e53136a49ec905a75a18b5" id="r_a32b3824721e53136a49ec905a75a18b5"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a32b3824721e53136a49ec905a75a18b5">KillSqr</a> (in <a class="el" href="structBalloonParty_1_1Item_1_1Bomb_1_1BombBlastParams.html">BombBlastParams</a> p)</td></tr>
+<tr class="separator:a32b3824721e53136a49ec905a75a18b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ecc2447fce13319aa75ca729d0b38bd" id="r_a1ecc2447fce13319aa75ca729d0b38bd"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ecc2447fce13319aa75ca729d0b38bd">Reaches</a> (Vector2 origin, in <a class="el" href="structBalloonParty_1_1Item_1_1Bomb_1_1BombBlastParams.html">BombBlastParams</a> p, Vector2 position, float radius)</td></tr>
+<tr class="separator:a1ecc2447fce13319aa75ca729d0b38bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab0e6d7b610ece0b71cd30c52afb3a36" id="r_aab0e6d7b610ece0b71cd30c52afb3a36"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab0e6d7b610ece0b71cd30c52afb3a36">ResolveNormal</a> (<a class="el" href="interfaceBalloonParty_1_1Item_1_1Effects_1_1IEffectBoard.html">IEffectBoard</a> board, Vector2 origin, Vector2Int hostSlot, in <a class="el" href="structBalloonParty_1_1Item_1_1Bomb_1_1BombBlastParams.html">BombBlastParams</a> p, List&lt; <a class="el" href="structBalloonParty_1_1Item_1_1Effects_1_1EffectHit.html">EffectHit</a> &gt; hitsOut)</td></tr>
 <tr class="separator:aab0e6d7b610ece0b71cd30c52afb3a36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ed69024c320b8c9152c62325a1fa0b8" id="r_a6ed69024c320b8c9152c62325a1fa0b8"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6ed69024c320b8c9152c62325a1fa0b8">ResolveRainbow</a> (<a class="el" href="interfaceBalloonParty_1_1Item_1_1Effects_1_1IEffectBoard.html">IEffectBoard</a> board, Vector2 origin, string rainbowColorId, in <a class="el" href="structBalloonParty_1_1Item_1_1Bomb_1_1BombBlastParams.html">BombBlastParams</a> p, List&lt; <a class="el" href="structBalloonParty_1_1Item_1_1Effects_1_1EffectHit.html">EffectHit</a> &gt; hitsOut)</td></tr>
@@ -156,6 +163,127 @@ Static Private Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramtype">Vector2Int</td>          <td class="paramname"><span class="paramname"><em>slot</em></span></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a32b3824721e53136a49ec905a75a18b5" name="a32b3824721e53136a49ec905a75a18b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32b3824721e53136a49ec905a75a18b5">&#9670;&#160;</a></span>KillSqr()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static float BalloonParty.Item.Bomb.BombBlast.KillSqr </td>
+          <td>(</td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Item_1_1Bomb_1_1BombBlastParams.html">BombBlastParams</a></td>          <td class="paramname"><span class="paramname"><em>p</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aff3e17c78ae5f39d2d818202c7cf89d2" name="aff3e17c78ae5f39d2d818202c7cf89d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff3e17c78ae5f39d2d818202c7cf89d2">&#9670;&#160;</a></span>Pierces()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool BalloonParty.Item.Bomb.BombBlast.Pierces </td>
+          <td>(</td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>origin</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector2Int</td>          <td class="paramname"><span class="paramname"><em>hostSlot</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>isRainbowHost</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Item_1_1Bomb_1_1BombBlastParams.html">BombBlastParams</a></td>          <td class="paramname"><span class="paramname"><em>p</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector2Int</td>          <td class="paramname"><span class="paramname"><em>slot</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>position</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>radius</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Whether the blast breaks outright what stands in <em>slot</em>  at <em>position</em> : the hit that ignores how tough a thing is, and the only one that breaks an unbreakable balloon. </p>
+<p>It is what <a class="el" href="#af234468d24fbfc2e89591135fe9f6bd9" title="Normal (non-rainbow host) blast: every occupant whose CENTRE lies within BombBlastParams....">Resolve</a> marks EffectHitKind.PiercingDamage, asked of one thing and built of the same tests: for a normal host, a hex neighbour of <em>hostSlot</em>  that the blast reaches (its centre within <a class="el" href="structBalloonParty_1_1Item_1_1Bomb_1_1BombBlastParams.html#a6c9d1d2fbe6316e7c2198d18b335d6a2">BombBlastParams.Radius</a> plus its own <em>radius</em> ); for a rainbow host, a centre within <a class="el" href="structBalloonParty_1_1Item_1_1Bomb_1_1BombBlastParams.html#a6c9d1d2fbe6316e7c2198d18b335d6a2">BombBlastParams.Radius</a> alone. The meadow's mushrooms lose their caps by it (<code><a class="el" href="classBalloonParty_1_1Item_1_1Bomb_1_1MushroomBlast.html" title="What a blast does to the meadow&#39;s mushrooms (Meadow Mushrooms): a bomb blows the caps off the ones ne...">MushroomBlast</a></code>, and <code>ShotBumperLayer.BlowOff</code> for the shot solver), so a bomb takes a cap off exactly where it would break an unbreakable. </p>
+
+</div>
+</div>
+<a id="a1ecc2447fce13319aa75ca729d0b38bd" name="a1ecc2447fce13319aa75ca729d0b38bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ecc2447fce13319aa75ca729d0b38bd">&#9670;&#160;</a></span>Reaches()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool BalloonParty.Item.Bomb.BombBlast.Reaches </td>
+          <td>(</td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>origin</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Item_1_1Bomb_1_1BombBlastParams.html">BombBlastParams</a></td>          <td class="paramname"><span class="paramname"><em>p</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>position</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>radius</em></span>&#160;)</td>
         </tr>
       </table>
   </td>

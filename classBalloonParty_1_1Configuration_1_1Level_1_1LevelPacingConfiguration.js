@@ -19,6 +19,7 @@ var classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration =
     [ "BubbleRise", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#ad289011958ae9a0c3f979828e319c097", null ],
     [ "DebugPresets", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#a652b65b2ea24a4009930ad130baa69e1", null ],
     [ "Generation", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#af55728b16b09c77ef692b1b90b1f00b1", null ],
+    [ "Mushrooms", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#a79089996b5c2330cb5a831d27f8391a8", null ],
     [ "ScoringCurve", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#ac4477083100c07602672f5cae85b3d04", null ],
     [ "SpawnClock", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#a676accc007bace0b31d928d489f23f03", null ]
 ];

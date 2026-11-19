@@ -1,0 +1,7 @@
+<map id="BalloonParty.Slots.Actor.Archetype.MushroomCapSpring" name="BalloonParty.Slots.Actor.Archetype.MushroomCapSpring">
+<area shape="rect" id="Node000001" title="The motion of a mushroom&#39;s cap after a hit (Meadow Mushrooms): a spring that is pushed along the ball..." alt="" coords="96,115,322,160"/>
+<area shape="rect" id="Node000002" href="$structBalloonParty_1_1Shared_1_1Math_1_1DampedSpring2D.html" title="Second&#45;order damped spring tracking a 2D target." alt="" coords="5,5,197,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="135,59,190,114,185,115,133,64"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Shared_1_1Math_1_1DampedSpring1D.html" title="Second&#45;order damped spring tracking a scalar target." alt="" coords="221,5,413,50"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="287,60,232,117,229,112,282,62"/>
+</map>

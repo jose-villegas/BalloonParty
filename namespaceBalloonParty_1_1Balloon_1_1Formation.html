@@ -116,11 +116,19 @@ $(function(){initNavTree('namespaceBalloonParty_1_1Balloon_1_1Formation.html',''
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Balloon_1_1Formation_1_1CoveredHost.html">CoveredHost</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A balloon an item cover stands round, and the formation that covers it.  <a href="structBalloonParty_1_1Balloon_1_1Formation_1_1CoveredHost.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html">FormationAssignment</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">One member and the formation slot it goes to.  <a href="structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html">FormationPlanner</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds where a formation of one shape can stand and which candidate goes to which of its slots.  <a href="classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Formation_1_1FormationShapesExtensions.html">FormationShapesExtensions</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Formation_1_1ICoveredHosts.html">ICoveredHosts</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The balloons item covers stand round now, for views that draw a cover as one body with what it covers (<code>Balloon/View/FormationGlowHosts</code>).  <a href="interfaceBalloonParty_1_1Balloon_1_1Formation_1_1ICoveredHosts.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IFormationReinforcements.html">IFormationReinforcements</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unbreakables the board's formations have called in.  <a href="interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IFormationReinforcements.html#details">More...</a><br /></td></tr>
@@ -156,6 +164,19 @@ Enumerations</h2></td></tr>
 <br />
  }</td></tr>
 <tr class="separator:a7d189f644fea0191bb4f5acaef4bf746"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d2d65777aaac2e933178f9b7ba0c7b9" id="r_a8d2d65777aaac2e933178f9b7ba0c7b9"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8d2d65777aaac2e933178f9b7ba0c7b9">FormationShapes</a> { <br />
+&#160;&#160;<a class="el" href="#a8d2d65777aaac2e933178f9b7ba0c7b9a6adf97f83acf6453d4a6a4b1070f3754">None</a> = 0
+, <a class="el" href="#a8d2d65777aaac2e933178f9b7ba0c7b9ac1b5fa03ecdb95d4a45dd1c40b02527f">Horizontal</a> = 1 &lt;&lt; (int)FormationShape.Horizontal
+, <a class="el" href="#a8d2d65777aaac2e933178f9b7ba0c7b9aace42d58d8723571e509d82185dd2c89">DiagonalDownRight</a> = 1 &lt;&lt; (int)FormationShape.DiagonalDownRight
+, <a class="el" href="#a8d2d65777aaac2e933178f9b7ba0c7b9ac8848fb0039ce52e76ac6c6355f652ca">DiagonalDownLeft</a> = 1 &lt;&lt; (int)FormationShape.DiagonalDownLeft
+, <br />
+&#160;&#160;<a class="el" href="#a8d2d65777aaac2e933178f9b7ba0c7b9ad762f03b0ac739c5834f7b68c2c7ddb7">ItemCover</a> = 1 &lt;&lt; (int)FormationShape.ItemCover
+, <a class="el" href="#a8d2d65777aaac2e933178f9b7ba0c7b9adfa90f1b4eb3affbd3b46af34ed2477c">Snake</a> = 1 &lt;&lt; (int)FormationShape.Snake
+, <a class="el" href="#a8d2d65777aaac2e933178f9b7ba0c7b9ab1c94ca2fbc3e78fc30069c8d0f01680">All</a> = Horizontal | DiagonalDownRight | DiagonalDownLeft | ItemCover | Snake
+<br />
+ }</td></tr>
+<tr class="memdesc:a8d2d65777aaac2e933178f9b7ba0c7b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">A set of FormationShapes, one bit each: the shapes a level lets its unbreakables form (<code>ILevelParameters.AllowedFormationShapes</code>).  <a href="#a8d2d65777aaac2e933178f9b7ba0c7b9">More...</a><br /></td></tr>
+<tr class="separator:a8d2d65777aaac2e933178f9b7ba0c7b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
 <a id="a7d189f644fea0191bb4f5acaef4bf746" name="a7d189f644fea0191bb4f5acaef4bf746"></a>
@@ -183,6 +204,40 @@ Enumerations</h2></td></tr>
 <tr><td class="fieldname"><a id="a7d189f644fea0191bb4f5acaef4bf746ac8848fb0039ce52e76ac6c6355f652ca" name="a7d189f644fea0191bb4f5acaef4bf746ac8848fb0039ce52e76ac6c6355f652ca"></a>DiagonalDownLeft&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a7d189f644fea0191bb4f5acaef4bf746ad762f03b0ac739c5834f7b68c2c7ddb7" name="a7d189f644fea0191bb4f5acaef4bf746ad762f03b0ac739c5834f7b68c2c7ddb7"></a>ItemCover&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a7d189f644fea0191bb4f5acaef4bf746adfa90f1b4eb3affbd3b46af34ed2477c" name="a7d189f644fea0191bb4f5acaef4bf746adfa90f1b4eb3affbd3b46af34ed2477c"></a>Snake&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<a id="a8d2d65777aaac2e933178f9b7ba0c7b9" name="a8d2d65777aaac2e933178f9b7ba0c7b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d2d65777aaac2e933178f9b7ba0c7b9">&#9670;&#160;</a></span>FormationShapes</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#a8d2d65777aaac2e933178f9b7ba0c7b9">BalloonParty.Balloon.Formation.FormationShapes</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A set of <a class="el" href="#a7d189f644fea0191bb4f5acaef4bf746">FormationShape</a>s, one bit each: the shapes a level lets its unbreakables form (<code>ILevelParameters.AllowedFormationShapes</code>). </p>
+<p>The meadow allows the snake alone. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a8d2d65777aaac2e933178f9b7ba0c7b9a6adf97f83acf6453d4a6a4b1070f3754" name="a8d2d65777aaac2e933178f9b7ba0c7b9a6adf97f83acf6453d4a6a4b1070f3754"></a>None&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a8d2d65777aaac2e933178f9b7ba0c7b9ac1b5fa03ecdb95d4a45dd1c40b02527f" name="a8d2d65777aaac2e933178f9b7ba0c7b9ac1b5fa03ecdb95d4a45dd1c40b02527f"></a>Horizontal&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a8d2d65777aaac2e933178f9b7ba0c7b9aace42d58d8723571e509d82185dd2c89" name="a8d2d65777aaac2e933178f9b7ba0c7b9aace42d58d8723571e509d82185dd2c89"></a>DiagonalDownRight&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a8d2d65777aaac2e933178f9b7ba0c7b9ac8848fb0039ce52e76ac6c6355f652ca" name="a8d2d65777aaac2e933178f9b7ba0c7b9ac8848fb0039ce52e76ac6c6355f652ca"></a>DiagonalDownLeft&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a8d2d65777aaac2e933178f9b7ba0c7b9ad762f03b0ac739c5834f7b68c2c7ddb7" name="a8d2d65777aaac2e933178f9b7ba0c7b9ad762f03b0ac739c5834f7b68c2c7ddb7"></a>ItemCover&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a8d2d65777aaac2e933178f9b7ba0c7b9adfa90f1b4eb3affbd3b46af34ed2477c" name="a8d2d65777aaac2e933178f9b7ba0c7b9adfa90f1b4eb3affbd3b46af34ed2477c"></a>Snake&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a8d2d65777aaac2e933178f9b7ba0c7b9ab1c94ca2fbc3e78fc30069c8d0f01680" name="a8d2d65777aaac2e933178f9b7ba0c7b9ab1c94ca2fbc3e78fc30069c8d0f01680"></a>All&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 </div>

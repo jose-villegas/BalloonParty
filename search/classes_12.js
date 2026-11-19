@@ -55,6 +55,7 @@ var searchData=
   ['transformextensions_52',['TransformExtensions',['../classBalloonParty_1_1Shared_1_1Extensions_1_1TransformExtensions.html',1,'BalloonParty::Shared::Extensions']]],
   ['transformsnapshot_53',['TransformSnapshot',['../structBalloonParty_1_1Item_1_1TransformSnapshot.html',1,'BalloonParty::Item']]],
   ['transformtrailendpoint_54',['TransformTrailEndpoint',['../classBalloonParty_1_1Shared_1_1Pool_1_1TransformTrailEndpoint.html',1,'BalloonParty::Shared::Pool']]],
-  ['tweenoscillator_55',['TweenOscillator',['../classBalloonParty_1_1Shared_1_1Animation_1_1TweenOscillator.html',1,'BalloonParty::Shared::Animation']]],
-  ['tweentracker_56',['TweenTracker',['../classBalloonParty_1_1Shared_1_1Animation_1_1TweenTracker.html',1,'BalloonParty::Shared::Animation']]]
+  ['truereflectrule_55',['TrueReflectRule',['../classBalloonParty_1_1Shared_1_1TrueReflectRule.html',1,'BalloonParty::Shared']]],
+  ['tweenoscillator_56',['TweenOscillator',['../classBalloonParty_1_1Shared_1_1Animation_1_1TweenOscillator.html',1,'BalloonParty::Shared::Animation']]],
+  ['tweentracker_57',['TweenTracker',['../classBalloonParty_1_1Shared_1_1Animation_1_1TweenTracker.html',1,'BalloonParty::Shared::Animation']]]
 ];

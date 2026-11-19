@@ -1,0 +1,5 @@
+<map id="BalloonParty.Slots.Actor.WallSlotSelectionStrategy" name="BalloonParty.Slots.Actor.WallSlotSelectionStrategy">
+<area shape="rect" id="Node000001" title="The slots of a meadow level&#39;s mushrooms: walls of caps, from the baked catalogue (MushroomWallPicker)..." alt="" coords="5,98,195,143"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotSelectionStrategy.html" title="Lets each actor type provide its own slot&#45;picking logic (e.g. adjacency vs. isolation)." alt="" coords="11,5,189,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="102,64,102,99,98,97,98,68"/>
+</map>

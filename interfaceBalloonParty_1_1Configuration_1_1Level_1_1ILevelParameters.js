@@ -10,6 +10,7 @@ var interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters =
     [ "TryGetGridActorGate", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#a1bc38eea988f7472569ccc7a1e74963f", null ],
     [ "AllowedColors", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#ab9107c0de283663a49c81f66d02d1024", null ],
     [ "AllowedColorsMask", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#a249f8cf811f4e4cbc66df319b13f785c", null ],
+    [ "AllowedFormationShapes", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#ac2f3529ed1c3b3c8157c3ac64c9d7cf9", null ],
     [ "BoardLines", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#a17461a491eb0534886f81b4a1889c85f", null ],
     [ "ExtraItemChance", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#a2c6617b6814a3386d96b308f0ef7c29f", null ],
     [ "InitialItemCountWeights", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#ac02d312b64af5af347c94bd2d6f68419", null ],

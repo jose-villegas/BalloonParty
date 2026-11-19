@@ -145,6 +145,9 @@ Properties</h2></td></tr>
 <tr class="separator:a4dc4b4513ca9d8bd892c94934e9c4a2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7909bcc38346b71d0414ae7d06ce131a" id="r_a7909bcc38346b71d0414ae7d06ce131a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7909bcc38346b71d0414ae7d06ce131a">Enabled</a><code> [get]</code></td></tr>
 <tr class="separator:a7909bcc38346b71d0414ae7d06ce131a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8cd971a90b91950740d391c9af3d4d3" id="r_ab8cd971a90b91950740d391c9af3d4d3"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab8cd971a90b91950740d391c9af3d4d3">GiftCoverPreference</a><code> [get]</code></td></tr>
+<tr class="memdesc:ab8cd971a90b91950740d391c9af3d4d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">How strongly a cover prefers a gift balloon (golden, heart, disco ball, nuke) to a balloon carrying a bomb, a snipe or a lightning, in slots of travel for each member.  <br /></td></tr>
+<tr class="separator:ab8cd971a90b91950740d391c9af3d4d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c4e050eb426c54d560e1bed7c3428db" id="r_a3c4e050eb426c54d560e1bed7c3428db"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3c4e050eb426c54d560e1bed7c3428db">HorizontalBottomClearance</a><code> [get]</code></td></tr>
 <tr class="memdesc:a3c4e050eb426c54d560e1bed7c3428db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bottom rows a horizontal line never uses, at least <a class="el" href="#ab5c0ad5596ec2193680a896854ae5369" title="Bottom rows a formation never uses, so spawn lines always have room to enter.">BottomClearance</a>, so a wall across the board stands well above the cannon.  <br /></td></tr>
 <tr class="separator:a3c4e050eb426c54d560e1bed7c3428db"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -154,10 +157,10 @@ Properties</h2></td></tr>
 <tr class="memitem:a6f3a845f32d75da37c96e1286a17a5a6" id="r_a6f3a845f32d75da37c96e1286a17a5a6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6f3a845f32d75da37c96e1286a17a5a6">HorizontalWeight</a><code> [get]</code></td></tr>
 <tr class="separator:a6f3a845f32d75da37c96e1286a17a5a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa84fab0e4a5973cf3526846188886627" id="r_aa84fab0e4a5973cf3526846188886627"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa84fab0e4a5973cf3526846188886627">ItemCoverHoldCycles</a><code> [get]</code></td></tr>
-<tr class="memdesc:aa84fab0e4a5973cf3526846188886627"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cycles an item cover holds, counting the cycle it formed on.  <br /></td></tr>
+<tr class="memdesc:aa84fab0e4a5973cf3526846188886627"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cycles a cover (round an item carrier or a gift balloon) holds, counting the cycle it formed on.  <br /></td></tr>
 <tr class="separator:aa84fab0e4a5973cf3526846188886627"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad1f360877b29faa467fd44b79fd21b78" id="r_ad1f360877b29faa467fd44b79fd21b78"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad1f360877b29faa467fd44b79fd21b78">ItemCoverWeight</a><code> [get]</code></td></tr>
-<tr class="memdesc:ad1f360877b29faa467fd44b79fd21b78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pick weight of ringing an item; only in the pick while an item is on the board.  <br /></td></tr>
+<tr class="memdesc:ad1f360877b29faa467fd44b79fd21b78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pick weight of a cover.  <br /></td></tr>
 <tr class="separator:ad1f360877b29faa467fd44b79fd21b78"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a54b257c309ca06e84eae8aebeaff85bc" id="r_a54b257c309ca06e84eae8aebeaff85bc"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a54b257c309ca06e84eae8aebeaff85bc">JoinSnakeChance</a><code> [get]</code></td></tr>
 <tr class="memdesc:a54b257c309ca06e84eae8aebeaff85bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Chance that each member of a formation changing shape on its cycle leaves it and flies to an unbreakable snake's tail instead, while that snake has room (<a class="el" href="#a8327aceebc4cc2d91f047ac53c595b11" title="Most unbreakables in one formation; the rest roam, or form a formation of their own.">MaxMembers</a>): snakes grow from the other formations rather than new ones forming.  <br /></td></tr>
@@ -223,6 +226,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a94334a00556d7fa9f4c1aed5df10598f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a93acf9f2d01c02dcf4cf2628752908f3" id="r_a93acf9f2d01c02dcf4cf2628752908f3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a93acf9f2d01c02dcf4cf2628752908f3">_enabled</a> = true</td></tr>
 <tr class="separator:a93acf9f2d01c02dcf4cf2628752908f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a2de710fe31a75df7845e6384a1a15d" id="r_a9a2de710fe31a75df7845e6384a1a15d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9a2de710fe31a75df7845e6384a1a15d">_giftCoverPreference</a> = 2f</td></tr>
+<tr class="separator:a9a2de710fe31a75df7845e6384a1a15d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f8435bb42127b8aa098e7c6d68f5bd6" id="r_a8f8435bb42127b8aa098e7c6d68f5bd6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8f8435bb42127b8aa098e7c6d68f5bd6">_horizontalBottomClearance</a> = 4</td></tr>
 <tr class="separator:a8f8435bb42127b8aa098e7c6d68f5bd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a22133efd2192d0418037e04af7b6ab08" id="r_a22133efd2192d0418037e04af7b6ab08"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a22133efd2192d0418037e04af7b6ab08">_horizontalMaxMembers</a> = 3</td></tr>
@@ -368,6 +373,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">bool BalloonParty.Configuration.Balloons.UnbreakableFormationSettings._enabled = true</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9a2de710fe31a75df7845e6384a1a15d" name="a9a2de710fe31a75df7845e6384a1a15d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a2de710fe31a75df7845e6384a1a15d">&#9670;&#160;</a></span>_giftCoverPreference</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.UnbreakableFormationSettings._giftCoverPreference = 2f</td>
         </tr>
       </table>
   </td>
@@ -993,6 +1020,33 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ab8cd971a90b91950740d391c9af3d4d3" name="ab8cd971a90b91950740d391c9af3d4d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8cd971a90b91950740d391c9af3d4d3">&#9670;&#160;</a></span>GiftCoverPreference</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.UnbreakableFormationSettings.GiftCoverPreference</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How strongly a cover prefers a gift balloon (golden, heart, disco ball, nuke) to a balloon carrying a bomb, a snipe or a lightning, in slots of travel for each member. </p>
+<p>A spot's cost is the slots its members travel to it, plus 3 for each balloon they move out of the way; a gift's spot counts as this many slots cheaper for each member of the cover. So the gift is covered unless covering the item carrier would save every member more than this many slots on average. 0: no preference, the cheaper spot wins. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a0132b253190bfa0bd75e94bc057e36b9">BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings</a>.</p>
+
+</div>
+</div>
 <a id="a3c4e050eb426c54d560e1bed7c3428db" name="a3c4e050eb426c54d560e1bed7c3428db"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3c4e050eb426c54d560e1bed7c3428db">&#9670;&#160;</a></span>HorizontalBottomClearance</h2>
 
@@ -1089,7 +1143,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Cycles an item cover holds, counting the cycle it formed on. </p>
+<p>Cycles a cover (round an item carrier or a gift balloon) holds, counting the cycle it formed on. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a6bf06f13d2bfc9828f5af9637c7819d6">BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings</a>.</p>
 
@@ -1115,7 +1169,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Pick weight of ringing an item; only in the pick while an item is on the board. </p>
+<p>Pick weight of a cover. </p>
+<p>It finds a spot only while a balloon carrying a bomb, a snipe or a lightning, or a gift balloon, is on the board. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a8673f39cf5e400fa604513f81968d1b3">BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings</a>.</p>
 

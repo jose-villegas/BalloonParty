@@ -1,0 +1,11 @@
+<map id="BalloonParty.Slots.Grid.MushroomBoard.CutCap" name="BalloonParty.Slots.Grid.MushroomBoard.CutCap">
+<area shape="rect" id="Node000001" title=" " alt="" coords="41,397,221,442"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomBumperModel.html" title="A meadow mushroom (Meadow Mushrooms): a permanent bumper the ball bounces off." alt="" coords="5,287,257,332"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="133,346,133,397,129,395,129,350"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1IGridActorModel.html" title="A static grid actor that knows its own GridActorType, so the spawner can match without switching on t..." alt="" coords="33,193,229,238"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="132,251,134,288,128,286,130,256"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="42,99,220,144"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="132,157,134,193,128,192,130,162"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="42,5,220,50"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="132,63,134,99,128,98,130,68"/>
+</map>

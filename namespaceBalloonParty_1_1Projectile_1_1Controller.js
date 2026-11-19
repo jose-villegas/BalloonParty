@@ -1,6 +1,9 @@
 var namespaceBalloonParty_1_1Projectile_1_1Controller =
 [
     [ "ActiveProjectilePierce", "classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce" ],
+    [ "BumperBounce", "structBalloonParty_1_1Projectile_1_1Controller_1_1BumperBounce.html", "structBalloonParty_1_1Projectile_1_1Controller_1_1BumperBounce" ],
+    [ "BumperLookahead", "classBalloonParty_1_1Projectile_1_1Controller_1_1BumperLookahead.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1BumperLookahead" ],
+    [ "CapCut", "structBalloonParty_1_1Projectile_1_1Controller_1_1CapCut.html", "structBalloonParty_1_1Projectile_1_1Controller_1_1CapCut" ],
     [ "DeflectChainController", "classBalloonParty_1_1Projectile_1_1Controller_1_1DeflectChainController.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1DeflectChainController" ],
     [ "IActiveProjectilePierce", "interfaceBalloonParty_1_1Projectile_1_1Controller_1_1IActiveProjectilePierce.html", "interfaceBalloonParty_1_1Projectile_1_1Controller_1_1IActiveProjectilePierce" ],
     [ "PierceCastCandidate", "structBalloonParty_1_1Projectile_1_1Controller_1_1PierceCastCandidate.html", "structBalloonParty_1_1Projectile_1_1Controller_1_1PierceCastCandidate" ],
@@ -21,7 +24,8 @@ var namespaceBalloonParty_1_1Projectile_1_1Controller =
     [ "ProjectileStepOutcome", "namespaceBalloonParty_1_1Projectile_1_1Controller.html#ac2f91b5b592a9fafc9ba1d5f2a395649", [
       [ "Moved", "namespaceBalloonParty_1_1Projectile_1_1Controller.html#ac2f91b5b592a9fafc9ba1d5f2a395649a95bfdefaaf01553cbf21ccd942855c69", null ],
       [ "Bounced", "namespaceBalloonParty_1_1Projectile_1_1Controller.html#ac2f91b5b592a9fafc9ba1d5f2a395649a6592f349ddfe64e333b3c4f1d17161af", null ],
-      [ "Destroyed", "namespaceBalloonParty_1_1Projectile_1_1Controller.html#ac2f91b5b592a9fafc9ba1d5f2a395649aaefbd0597f1bc2493bbc18898243513b", null ]
+      [ "Destroyed", "namespaceBalloonParty_1_1Projectile_1_1Controller.html#ac2f91b5b592a9fafc9ba1d5f2a395649aaefbd0597f1bc2493bbc18898243513b", null ],
+      [ "BumperBounced", "namespaceBalloonParty_1_1Projectile_1_1Controller.html#ac2f91b5b592a9fafc9ba1d5f2a395649aa9472dda5d410f3448b7fe1eae1e0b3c", null ]
     ] ],
     [ "ProjectileSweepOutcome", "namespaceBalloonParty_1_1Projectile_1_1Controller.html#a269c35de6ac7d821e1a397646dd92704", [
       [ "RunBroken", "namespaceBalloonParty_1_1Projectile_1_1Controller.html#a269c35de6ac7d821e1a397646dd92704a43ec9846892f6095cd124df606a773eb", null ],

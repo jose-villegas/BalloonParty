@@ -1,32 +1,41 @@
 <map id="BalloonParty.Slots.Actor.StaticActorSpawner" name="BalloonParty.Slots.Actor.StaticActorSpawner">
-<area shape="rect" id="Node000001" title=" " alt="" coords="1030,206,1208,251"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="706,5,790,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="805,20,852,27,904,38,958,57,1007,84,1040,112,1068,144,1108,206,1103,205,1064,147,1036,115,1004,88,956,62,903,44,851,32,806,25"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Slots_1_1Spawner_1_1IGridSpawner.html" title=" " alt="" coords="648,57,848,102"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="863,80,936,93,972,104,1007,118,1036,137,1063,159,1104,206,1098,205,1059,163,1033,141,1004,123,971,109,935,98,864,85"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="278,125,428,153"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="443,133,558,133,699,139,854,155,931,169,1006,186,1062,206,1057,206,1005,191,930,174,853,161,699,144,558,138,444,138"/>
-<area shape="rect" id="Node000015" href="$classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html" title="Parent transform for scenario static content; a level transition moves this root, not each child." alt="" coords="659,177,837,222"/>
-<area shape="poly" id="edge15_Node000015_Node000004" title=" " alt="" coords="443,150,661,185,656,187,444,155"/>
-<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" title=" " alt="" coords="662,246,834,291"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="849,256,1005,239,1032,238,1027,239,1006,244,850,261"/>
-<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html" title="Tracks slots in&#45;transit from balance animations so spawn paths avoid them." alt="" coords="266,177,439,222"/>
-<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="454,214,664,252,659,254,454,220"/>
-<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,177,212,222"/>
-<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="226,197,268,198,264,200,228,202"/>
-<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html" title="Slot grid layout: size, spacing, and origin offset." alt="" coords="261,246,444,291"/>
-<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="460,266,664,268,659,269,460,271"/>
-<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="264,316,442,360"/>
-<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="456,317,664,283,659,285,458,322"/>
-<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="19,316,198,360"/>
-<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="212,335,265,337,260,339,214,340"/>
-<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="264,385,442,430"/>
-<area shape="poly" id="edge10_Node000005_Node000011" title=" " alt="" coords="456,394,530,374,566,358,600,338,607,330,611,321,615,311,624,301,659,285,664,283,627,305,619,314,616,323,612,333,603,342,569,363,532,379,457,399"/>
-<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html" title=" " alt="" coords="655,316,841,360"/>
-<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="856,313,1005,272,1064,252,1069,251,1006,277,857,318"/>
-<area shape="rect" id="Node000013" href="$interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IGridActorConfiguration.html" title=" " alt="" coords="625,385,871,430"/>
-<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="872,378,940,355,1004,325,1055,288,1094,252,1099,250,1058,292,1007,329,941,360,874,383"/>
-<area shape="rect" id="Node000014" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html" title="Single read surface for the live per&#45;level difficulty mix; never read ILevelPacingConfiguration direc..." alt="" coords="654,454,842,499"/>
-<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="856,457,932,433,970,415,1004,393,1039,359,1068,320,1106,253,1110,250,1072,323,1043,363,1007,397,972,420,934,438,857,462"/>
-<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="852,205,1032,221,1027,222,853,210"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="1360,262,1538,307"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="1036,5,1120,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1136,17,1183,22,1236,33,1290,52,1338,81,1359,101,1378,124,1409,174,1431,222,1444,263,1439,261,1426,224,1404,176,1374,127,1355,105,1334,85,1287,57,1235,38,1183,28,1137,23"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Slots_1_1Spawner_1_1IGridSpawner.html" title=" " alt="" coords="978,57,1178,102"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1193,76,1267,88,1304,101,1337,118,1375,150,1404,189,1427,228,1442,263,1437,260,1422,230,1400,192,1371,154,1335,123,1302,106,1266,94,1194,81"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="660,101,810,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="825,113,933,118,1064,134,1133,147,1203,164,1272,186,1337,213,1380,236,1418,262,1413,261,1377,240,1335,218,1270,191,1202,169,1132,152,1063,139,933,124,826,118"/>
+<area shape="rect" id="Node000015" href="$classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html" title="Parent transform for scenario static content; a level transition moves this root, not each child." alt="" coords="989,182,1168,227"/>
+<area shape="poly" id="edge15_Node000015_Node000004" title=" " alt="" coords="825,131,846,138,870,151,930,171,991,188,986,189,928,176,868,156,844,143,825,136"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" title=" " alt="" coords="649,361,821,406"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="836,373,1007,358,1201,334,1362,305,1357,306,1201,339,1008,363,837,379"/>
+<area shape="rect" id="Node000016" href="$classBalloonParty_1_1Slots_1_1Actor_1_1WallSlotSelectionStrategy.html" title="The slots of a meadow level&#39;s mushrooms: walls of caps, from the baked catalogue (MushroomWallPicker)..." alt="" coords="984,262,1173,307"/>
+<area shape="poly" id="edge18_Node000016_Node000005" title=" " alt="" coords="829,354,1000,307,995,308,831,359"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html" title="Tracks slots in&#45;transit from balance animations so spawn paths avoid them." alt="" coords="266,268,439,312"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="454,308,602,342,661,360,656,360,601,347,454,313"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,268,212,312"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="226,287,268,289,264,291,228,292"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html" title="Slot grid layout: size, spacing, and origin offset." alt="" coords="261,337,444,382"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="460,363,651,377,646,379,460,369"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="264,406,442,451"/>
+<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="456,414,651,392,646,394,458,419"/>
+<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="19,406,198,451"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="212,426,265,427,261,430,214,431"/>
+<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="264,476,442,520"/>
+<area shape="poly" id="edge10_Node000005_Node000011" title=" " alt="" coords="457,473,601,434,679,407,684,405,602,439,458,478"/>
+<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html" title=" " alt="" coords="985,422,1172,467"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="1186,444,1262,433,1299,422,1335,407,1366,386,1393,359,1432,309,1437,306,1397,362,1369,390,1337,412,1301,427,1263,438,1187,449"/>
+<area shape="rect" id="Node000013" href="$interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IGridActorConfiguration.html" title=" " alt="" coords="956,492,1201,536"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="1216,506,1278,490,1307,478,1334,462,1373,427,1402,384,1424,341,1439,309,1443,305,1429,343,1407,387,1377,430,1338,466,1310,483,1279,495,1217,511"/>
+<area shape="rect" id="Node000014" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html" title="Single read surface for the live per&#45;level difficulty mix; never read ILevelPacingConfiguration direc..." alt="" coords="985,561,1172,606"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="1187,579,1225,573,1264,563,1301,547,1334,526,1359,502,1380,475,1411,413,1431,354,1442,309,1446,306,1436,355,1416,416,1384,478,1363,506,1338,530,1304,552,1266,568,1227,578,1188,584"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="1183,224,1362,265,1357,266,1183,230"/>
+<area shape="poly" id="edge16_Node000001_Node000016" title=" " alt="" coords="1188,282,1362,284,1357,285,1189,287"/>
+<area shape="rect" id="Node000017" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotSelectionStrategy.html" title="Lets each actor type provide its own slot&#45;picking logic (e.g. adjacency vs. isolation)." alt="" coords="646,153,824,198"/>
+<area shape="poly" id="edge17_Node000016_Node000017" title=" " alt="" coords="822,200,845,207,1008,261,1003,262,844,212,823,205"/>
+<area shape="rect" id="Node000018" href="$interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IMushroomSettings.html" title="Tuning of the meadow&#39;s mushrooms (Meadow Mushrooms): the chain that pays the lance,..." alt="" coords="625,222,845,267"/>
+<area shape="poly" id="edge19_Node000016_Node000018" title=" " alt="" coords="860,256,986,273,980,274,860,262"/>
+<area shape="rect" id="Node000019" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IMushroomPlacementSource.html" title="What the level being laid out says about where its mushrooms may stand, beyond the grid itself: the s..." alt="" coords="631,292,839,336"/>
+<area shape="poly" id="edge20_Node000016_Node000019" title=" " alt="" coords="853,301,986,292,981,293,854,306"/>
 </map>

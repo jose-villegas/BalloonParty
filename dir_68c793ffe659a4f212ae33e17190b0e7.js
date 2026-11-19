@@ -15,6 +15,7 @@ var dir_68c793ffe659a4f212ae33e17190b0e7 =
     [ "IFormationMember.cs", "IFormationMember_8cs.html", "IFormationMember_8cs" ],
     [ "IHasWriteableItemSlot.cs", "IHasWriteableItemSlot_8cs.html", "IHasWriteableItemSlot_8cs" ],
     [ "IWriteableBalloonModel.cs", "IWriteableBalloonModel_8cs.html", "IWriteableBalloonModel_8cs" ],
+    [ "IWriteableCoverHost.cs", "IWriteableCoverHost_8cs.html", "IWriteableCoverHost_8cs" ],
     [ "IWriteableFormationMember.cs", "IWriteableFormationMember_8cs.html", "IWriteableFormationMember_8cs" ],
     [ "NukeBalloonModel.cs", "NukeBalloonModel_8cs.html", "NukeBalloonModel_8cs" ],
     [ "PlatedBalloonModel.cs", "PlatedBalloonModel_8cs.html", "PlatedBalloonModel_8cs" ],

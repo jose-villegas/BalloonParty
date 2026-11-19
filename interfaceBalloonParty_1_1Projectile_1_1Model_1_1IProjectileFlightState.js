@@ -3,6 +3,7 @@ var interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState =
     [ "HasPendingPierceHit", "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#a3e0ed8183bef941447e76ba763b97f88", null ],
     [ "BankedPierceCharges", "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#a32e532c39b4fee88a28a45d660761bf7", null ],
     [ "BankedRainbowPierceCharges", "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#aeefcee399460e5cebb1a645a2f90e49d", null ],
+    [ "CapsCut", "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#a24f39c2ee6a178c4a8d57ef9012f4be2", null ],
     [ "ConsecutiveSweeps", "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#a77fc2bdc76d44d23f00fca08cec1559f", null ],
     [ "ConsecutiveWallBounces", "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#a965f538ffa7a6bb2ad295e8b32c9edd6", null ],
     [ "CurrentSpeed", "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#a7241c77b83287709308490b40c693745", null ],

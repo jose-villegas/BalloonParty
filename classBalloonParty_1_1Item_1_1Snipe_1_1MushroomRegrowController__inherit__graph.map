@@ -1,0 +1,5 @@
+<map id="BalloonParty.Item.Snipe.MushroomRegrowController" name="BalloonParty.Item.Snipe.MushroomRegrowController">
+<area shape="rect" id="Node000001" title="Grows back the caps a lance cut (Meadow Mushrooms), in time with the board: a cut cap pops back on on..." alt="" coords="5,81,209,126"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="67,5,147,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,47,109,81,105,79,105,51"/>
+</map>

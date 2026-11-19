@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingValidator =
 [
-    [ "RequiresGround", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingValidator.html#a48b20a23d1cfbf8f2bc48ecdb38fc6c6", null ],
+    [ "IsKeptOffTheSky", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingValidator.html#a05cfe4d95d718e79f86853963b43ef6e", null ],
     [ "Validate", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingValidator.html#addac679d2ee0c3f2c8c0a48e23262a07", null ],
     [ "ValidateGroundOnlyInPresets", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingValidator.html#a96981ccb1dbdd330675caa360349be8c", null ],
     [ "WarnOnEmptyWeightedSets", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingValidator.html#a9a28fc82b71b979fb08944a264420390", null ],

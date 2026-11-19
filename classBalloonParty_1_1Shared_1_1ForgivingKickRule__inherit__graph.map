@@ -1,0 +1,5 @@
+<map id="BalloonParty.Shared.ForgivingKickRule" name="BalloonParty.Shared.ForgivingKickRule">
+<area shape="rect" id="Node000001" title="The bounce with a forgiving kick: a ball leaving a mushroom close enough to the line of another one i..." alt="" coords="5,98,220,143"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Shared_1_1IBumperBounceRule.html" title="Which way the ball leaves a bumper." alt="" coords="8,5,217,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,64,115,99,110,97,111,68"/>
+</map>

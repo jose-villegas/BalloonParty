@@ -1,0 +1,5 @@
+<map id="BalloonParty.Shared.IShotOrigin" name="BalloonParty.Shared.IShotOrigin">
+<area shape="rect" id="Node000001" title="Where shots come from and how big the ball is, for the board&#45;side code that plans or resolves against..." alt="" coords="19,5,206,50"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html" title="Where a shot leaves from, readable outside the thrower&#39;s own scope." alt="" coords="5,98,220,143"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,64,115,99,110,97,111,68"/>
+</map>

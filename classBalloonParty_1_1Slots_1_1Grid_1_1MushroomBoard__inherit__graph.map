@@ -1,0 +1,7 @@
+<map id="BalloonParty.Slots.Grid.MushroomBoard" name="BalloonParty.Slots.Grid.MushroomBoard">
+<area shape="rect" id="Node000001" title="The meadow&#39;s mushrooms as the ball meets them (Meadow Mushrooms): one bumper circle for every whole M..." alt="" coords="145,98,318,143"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Shared_1_1IBumperField.html" title="The permanent bumpers on the board (the meadow&#39;s mushrooms) as a ball meets them: circles its centre ..." alt="" coords="5,5,215,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="151,57,205,97,200,98,150,62"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Shared_1_1IMushroomRegrowth.html" title="The caps a lance has cut (IBumperField.Cut) and that have not grown back yet, for whoever keeps the t..." alt="" coords="239,5,466,50"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="315,58,262,100,259,95,310,60"/>
+</map>

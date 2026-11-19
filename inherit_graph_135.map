@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleIds.html" title="The size of a table indexed by HeadsUpStyleId." alt="" coords="5,5,202,50"/>
+<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IMushroomSettings.html" title="Tuning of the meadow&#39;s mushrooms (Meadow Mushrooms): the chain that pays the lance,..." alt="" coords="5,5,225,50"/>
+<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Configuration_1_1GridActors_1_1MushroomSettings.html" title="Inspector&#45;authored IMushroomSettings." alt="" coords="273,5,488,50"/>
+<area shape="poly" id="edge93_Node000000_Node000001" title=" " alt="" coords="240,25,275,28,269,28,240,30"/>
 </map>

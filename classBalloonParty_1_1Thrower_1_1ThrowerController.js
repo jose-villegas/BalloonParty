@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Thrower_1_1ThrowerController =
 [
-    [ "ThrowerController", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a9441701b70b90b816aa091aa790b08da", null ],
+    [ "ThrowerController", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#af35e9748c9671127dd0a059ab8ba64bf", null ],
     [ "AnnounceReady", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a09f2ce83ee2de61aa7ca8ed288bbd4fe", null ],
     [ "ClampAndQuantizeAimDirection", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#acfc24424de127a8fecc2acf833a7bbfa", null ],
     [ "ClearLoaded", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ae6bf5b80cebe205ab8fa4b438c1416b1", null ],
@@ -34,6 +34,8 @@ var classBalloonParty_1_1Thrower_1_1ThrowerController =
     [ "WarmPoolForCap", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ad0fceef92ce5710e0c0f49e49eb40ca3", null ],
     [ "_aimHistory", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a6d314878533cbfdc6b5df124904c508f", null ],
     [ "_boardClearSubscriber", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ab4556eddb1977a5a50bc4c56621ded51", null ],
+    [ "_bounceRule", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a462fda60cc8ccb4e4cebef96a0b26bef", null ],
+    [ "_bumperField", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a8b56fb82508a0bf136731a53dd6d1406", null ],
     [ "_clearShotsSubscriber", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a9e450db097f39a1f7ac0a1c073c215b7", null ],
     [ "_deflectorField", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a12c652fed197903c0c5679ec5bade6f4", null ],
     [ "_destroyedSubscriber", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a1a4ffb17683b6de23c92c56b641652d8", null ],
@@ -54,6 +56,7 @@ var classBalloonParty_1_1Thrower_1_1ThrowerController =
     [ "_loadedProjectile", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ad0bde76211da1b11cfa35d3a0a17bc47", null ],
     [ "_loadedPublisher", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a5102f4bfcfccdc139343074116db7b83", null ],
     [ "_loadedView", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a36f7f1f7304bcdb2b1903c0bc8257bbe", null ],
+    [ "_mushroomSettings", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a8e3f00a6f56a45e0b6962ec3536d9f00", null ],
     [ "_originProvider", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#adba443e866a8fc17ffcbcadd59e8dfbd", null ],
     [ "_palette", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a433abf591321788c4cd692b3a66b9c76", null ],
     [ "_pauseService", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ad178d569e4f52cbbe30576952cc2f64c", null ],

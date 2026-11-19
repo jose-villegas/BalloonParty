@@ -26,6 +26,11 @@ var namespaceBalloonParty_1_1Shared_1_1Messages =
     [ "LevelUpAbortedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpAbortedMessage.html", null ],
     [ "LevelUpDismissedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpDismissedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpDismissedMessage" ],
     [ "LevelUpFillTrailsMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpFillTrailsMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpFillTrailsMessage" ],
+    [ "MushroomBouncedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1MushroomBouncedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1MushroomBouncedMessage" ],
+    [ "MushroomCutMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1MushroomCutMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1MushroomCutMessage" ],
+    [ "MushroomLanceMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1MushroomLanceMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1MushroomLanceMessage" ],
+    [ "MushroomRegrownMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1MushroomRegrownMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1MushroomRegrownMessage" ],
+    [ "MushroomSwayedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1MushroomSwayedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1MushroomSwayedMessage" ],
     [ "NukeArmedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1NukeArmedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1NukeArmedMessage" ],
     [ "NukeBreatherMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1NukeBreatherMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1NukeBreatherMessage" ],
     [ "NukeCountdownMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1NukeCountdownMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1NukeCountdownMessage" ],
@@ -68,6 +73,10 @@ var namespaceBalloonParty_1_1Shared_1_1Messages =
       [ "Coat", "namespaceBalloonParty_1_1Shared_1_1Messages.html#a59eaf814cb0fd69d1473c2377bee7918a6e162ed9a2bc76307e0a249786f4951e", null ],
       [ "Cluster", "namespaceBalloonParty_1_1Shared_1_1Messages.html#a59eaf814cb0fd69d1473c2377bee7918a249694a485fc5d3289c38986b4f8e887", null ],
       [ "Leftover", "namespaceBalloonParty_1_1Shared_1_1Messages.html#a59eaf814cb0fd69d1473c2377bee7918a980c0f693600b09962d3318bf55aaf8c", null ]
+    ] ],
+    [ "MushroomCutCause", "namespaceBalloonParty_1_1Shared_1_1Messages.html#ae7c7839727e8b04bfadbaa13309585b4", [
+      [ "Lance", "namespaceBalloonParty_1_1Shared_1_1Messages.html#ae7c7839727e8b04bfadbaa13309585b4ac668c28c93c0329c208c37de8b2a88c6", null ],
+      [ "Blast", "namespaceBalloonParty_1_1Shared_1_1Messages.html#ae7c7839727e8b04bfadbaa13309585b4aaf67fdbf7db7b0248cb8f15ecc5675a3", null ]
     ] ],
     [ "RipeBurstKind", "namespaceBalloonParty_1_1Shared_1_1Messages.html#ac45f89e1e12dc060a80c4997f10bb76a", [
       [ "Ripple", "namespaceBalloonParty_1_1Shared_1_1Messages.html#ac45f89e1e12dc060a80c4997f10bb76aac0062863e3e99f67607ad1ae9a4299a7", null ],

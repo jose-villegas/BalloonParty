@@ -1,0 +1,5 @@
+<map id="BalloonParty.Balloon.Formation.ICoveredHosts" name="BalloonParty.Balloon.Formation.ICoveredHosts">
+<area shape="rect" id="Node000001" title="The balloons item covers stand round now, for views that draw a cover as one body with what it covers..." alt="" coords="5,5,234,50"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html" title="Gathers the board&#39;s unbreakables into formations, as many as there are members for." alt="" coords="5,98,234,143"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,64,122,99,117,97,118,68"/>
+</map>

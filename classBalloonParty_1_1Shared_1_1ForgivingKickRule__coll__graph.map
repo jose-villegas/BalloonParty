@@ -1,0 +1,7 @@
+<map id="BalloonParty.Shared.ForgivingKickRule" name="BalloonParty.Shared.ForgivingKickRule">
+<area shape="rect" id="Node000001" title="The bounce with a forgiving kick: a ball leaving a mushroom close enough to the line of another one i..." alt="" coords="336,40,550,85"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Shared_1_1IBumperBounceRule.html" title="Which way the ball leaves a bumper." alt="" coords="10,5,220,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="235,38,338,50,333,52,235,43"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IMushroomSettings.html" title="Tuning of the meadow&#39;s mushrooms (Meadow Mushrooms): the chain that pays the lance,..." alt="" coords="5,75,225,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="240,81,338,73,332,74,241,86"/>
+</map>

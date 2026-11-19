@@ -1,0 +1,9 @@
+<map id="BalloonParty.Slots.Actor.MushroomWallPick" name="BalloonParty.Slots.Actor.MushroomWallPick">
+<area shape="rect" id="Node000001" title="What MushroomWallPicker picks a layout for." alt="" coords="607,40,785,85"/>
+<area shape="rect" id="Node000002" href="$structBalloonParty_1_1Slots_1_1Actor_1_1MushroomPlacementLimits.html" title="What a level&#39;s mushrooms keep to: how many walls of caps, how long a wall is, how many caps in all,..." alt="" coords="316,40,515,85"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="531,60,609,62,604,63,531,65"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Slots_1_1Actor_1_1MushroomLayoutBand.html" title="What a layout of mushroom walls must measure to be dealt: flown from every angle the thrower can aim ..." alt="" coords="18,5,197,50"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="212,37,318,50,313,52,212,42"/>
+<area shape="rect" id="Node000004" href="$structBalloonParty_1_1Slots_1_1Actor_1_1MushroomCannonClearance.html" title="The room a layout leaves the cannon: no cap close to it, and no wall broad in front of it." alt="" coords="5,75,210,119"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="225,81,318,73,313,74,225,86"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="BalloonParty.Solver.ShotFlightState" name="BalloonParty.Solver.ShotFlightState">
+<area shape="rect" id="Node000001" title="Mutable per&#45;flight state threaded through ShotSimulator.Simulate — passed by ref to every helper that..." alt="" coords="387,75,565,119"/>
+<area shape="rect" id="Node000002" href="$structBalloonParty_1_1Shared_1_1MushroomChainState.html" title="One flight&#39;s tally of mushroom bounces, which MushroomChainRule reads and writes: how many hits count..." alt="" coords="5,5,229,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="244,49,363,72,389,79,383,79,362,77,244,54"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Solver_1_1ShotLeftBumper.html" title="The mushroom a simulated ball bounced off last and the direction it left along, mirroring what Projec..." alt="" coords="28,75,206,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="222,94,389,96,384,98,222,100"/>
+<area shape="rect" id="Node000004" href="$structBalloonParty_1_1Solver_1_1ShotMushroomTally.html" title="What a simulated flight&#39;s mushrooms did (Meadow Mushrooms), for the result: all zero on a board witho..." alt="" coords="28,144,206,189"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="221,144,362,117,384,115,389,114,363,122,222,149"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="BalloonParty.Slots.Actor.MushroomWallCatalogue" name="BalloonParty.Slots.Actor.MushroomWallCatalogue">
+<area shape="rect" id="Node000001" title="The layouts a meadow level&#39;s mushrooms are dealt from, by how many walls they have." alt="" coords="5,132,190,177"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Slots_1_1Actor_1_1MushroomWallLayout.html" title="One way a level&#39;s mushrooms stand: two to four walls of caps, with what the layout measured when it w..." alt="" coords="8,5,187,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="100,64,100,132,95,131,95,68"/>
+</map>

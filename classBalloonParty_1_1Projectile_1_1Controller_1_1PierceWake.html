@@ -109,7 +109,6 @@ $(function(){initNavTree('classBalloonParty_1_1Projectile_1_1Controller_1_1Pierc
 <div class="header">
   <div class="summary">
 <a href="#pac-static-methods">Static Package Functions</a> &#124;
-<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="classBalloonParty_1_1Projectile_1_1Controller_1_1PierceWake-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Projectile.Controller.PierceWake Class Reference</div></div>
 </div><!--header-->
@@ -123,14 +122,12 @@ Static Package Functions</h2></td></tr>
 <tr class="memitem:acd2a7b284b4b987070ae6267292f1d0c" id="r_acd2a7b284b4b987070ae6267292f1d0c"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acd2a7b284b4b987070ae6267292f1d0c">Report</a> (<a class="el" href="classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html">DisturbanceFieldService</a> field, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html">IProjectileFlightConfig</a> config, Vector3 from, in <a class="el" href="structBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileStep.html">ProjectileStep</a> step, bool wasPiercing, bool stillPiercing, float stepSeconds)</td></tr>
 <tr class="memdesc:acd2a7b284b4b987070ae6267292f1d0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reports the wake of one fixed step of a shot's flight, from <em>from</em>  to where <em>step</em>  left it.  <br /></td></tr>
 <tr class="separator:acd2a7b284b4b987070ae6267292f1d0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7532587ff8291ecb4850470018dc00af" id="r_a7532587ff8291ecb4850470018dc00af"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7532587ff8291ecb4850470018dc00af">ReportStretch</a> (<a class="el" href="classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html">DisturbanceFieldService</a> field, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html">IProjectileFlightConfig</a> config, Vector3 from, Vector3 to, float seconds)</td></tr>
+<tr class="memdesc:a7532587ff8291ecb4850470018dc00af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reports the wake of one straight stretch a lance flew, in <em>seconds</em> .  <br /></td></tr>
+<tr class="separator:a7532587ff8291ecb4850470018dc00af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7647fd6d1e8f72dfb301360e2abac4c5" id="r_a7647fd6d1e8f72dfb301360e2abac4c5"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structBalloonParty_1_1Shared_1_1ImpactEventBus_1_1Blast.html">ImpactEventBus.Blast</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7647fd6d1e8f72dfb301360e2abac4c5">WallBlast</a> (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html">IProjectileFlightConfig</a> config, <a class="el" href="namespaceBalloonParty_1_1Projectile_1_1Controller.html#ac2f91b5b592a9fafc9ba1d5f2a395649">ProjectileStepOutcome</a> outcome, bool wasPiercing, bool stillPiercing, int pendingPlows)</td></tr>
 <tr class="memdesc:a7647fd6d1e8f72dfb301360e2abac4c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The blast the wall stamp carries when a shot meets a wall: the small crater that ends a lance's wake, where its charge ends.  <br /></td></tr>
 <tr class="separator:a7647fd6d1e8f72dfb301360e2abac4c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
-Static Private Member Functions</h2></td></tr>
-<tr class="memitem:a7532587ff8291ecb4850470018dc00af" id="r_a7532587ff8291ecb4850470018dc00af"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7532587ff8291ecb4850470018dc00af">ReportStretch</a> (<a class="el" href="classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html">DisturbanceFieldService</a> field, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html">IProjectileFlightConfig</a> config, Vector3 from, Vector3 to, float seconds)</td></tr>
-<tr class="separator:a7532587ff8291ecb4850470018dc00af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>What a piercing shot in flight (a Snipe lance, or a cruise-earned pierce: the same state on the shot) reports to the impact bus beside an ordinary ball's stamps, for the water. </p>
@@ -189,7 +186,8 @@ Static Private Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Reports the wake of one fixed step of a shot's flight, from <em>from</em>  to where <em>step</em>  left it. </p>
-<p><em>wasPiercing</em>  is the shot's state as the step began and <em>stillPiercing</em>  once the wall it reached (if any) has been resolved: the way to a wall is the lance's it flew in as, the way on from it only a lance's still armed. </p>
+<p><em>wasPiercing</em>  is the shot's state as the step began and <em>stillPiercing</em>  once the wall it reached (if any) has been resolved: the way to a wall is the lance's it flew in as, the way on from it only a lance's still armed.</p>
+<p>A lance is not turned by a mushroom (it cuts the cap and flies on), so its wake turns at walls alone. The one step that both bounces off a mushroom and ends piercing is the one whose bounce armed the ball: it ends on the mushroom, the caller passes the bounce point as <em>from</em> , and there is no stretch to report. </p>
 
 </div>
 </div>
@@ -230,10 +228,13 @@ Static Private Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Reports the wake of one straight stretch a lance flew, in <em>seconds</em> . </p>
+<p>A stretch of no length reports nothing: a shot held still parts no water. </p>
 
 </div>
 </div>

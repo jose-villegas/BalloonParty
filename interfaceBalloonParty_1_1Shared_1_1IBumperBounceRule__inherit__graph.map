@@ -1,0 +1,7 @@
+<map id="BalloonParty.Shared.IBumperBounceRule" name="BalloonParty.Shared.IBumperBounceRule">
+<area shape="rect" id="Node000001" title="Which way the ball leaves a bumper." alt="" coords="118,5,328,50"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Shared_1_1ForgivingKickRule.html" title="The bounce with a forgiving kick: a ball leaving a mushroom close enough to the line of another one i..." alt="" coords="5,98,220,143"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="188,59,140,100,137,95,183,61"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Shared_1_1TrueReflectRule.html" title="The plain bounce: the ball leaves a bumper along the mirror image of how it came in." alt="" coords="243,98,424,143"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="262,57,310,98,305,97,260,62"/>
+</map>

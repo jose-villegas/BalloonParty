@@ -1,0 +1,5 @@
+<map id="BalloonParty.Balloon.Formation.CoveredHost" name="BalloonParty.Balloon.Formation.CoveredHost">
+<area shape="rect" id="Node000001" title="A balloon an item cover stands round, and the formation that covers it." alt="" coords="5,115,234,160"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="30,5,209,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,64,122,115,117,113,118,68"/>
+</map>

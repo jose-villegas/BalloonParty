@@ -12,9 +12,9 @@
 <g id="Node000001" class="node">
 <title>Node1</title>
 <g id="a_Node000001"><a xlink:title=" ">
-<polygon fill="#999999" stroke="#666666" points="1235.25,-293.5 1083.5,-293.5 1083.5,-260 1235.25,-260 1235.25,-293.5"/>
-<text xml:space="preserve" text-anchor="start" x="1091.5" y="-280" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
-<text xml:space="preserve" text-anchor="middle" x="1159.38" y="-267.25" font-family="Helvetica,sans-Serif" font-size="10.00">UnbreakableBalloonModel</text>
+<polygon fill="#999999" stroke="#666666" points="1235.25,-267.5 1083.5,-267.5 1083.5,-234 1235.25,-234 1235.25,-267.5"/>
+<text xml:space="preserve" text-anchor="start" x="1091.5" y="-254" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
+<text xml:space="preserve" text-anchor="middle" x="1159.38" y="-241.25" font-family="Helvetica,sans-Serif" font-size="10.00">UnbreakableBalloonModel</text>
 </a>
 </g>
 </g>
@@ -22,9 +22,9 @@
 <g id="Node000002" class="node">
 <title>Node2</title>
 <g id="a_Node000002"><a xlink:href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="970.25,-501.5 818.5,-501.5 818.5,-468 970.25,-468 970.25,-501.5"/>
-<text xml:space="preserve" text-anchor="start" x="826.5" y="-488" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
-<text xml:space="preserve" text-anchor="middle" x="894.38" y="-475.25" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonModelBase</text>
+<polygon fill="white" stroke="#666666" points="970.25,-449.5 818.5,-449.5 818.5,-416 970.25,-416 970.25,-449.5"/>
+<text xml:space="preserve" text-anchor="start" x="826.5" y="-436" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
+<text xml:space="preserve" text-anchor="middle" x="894.38" y="-423.25" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonModelBase</text>
 </a>
 </g>
 </g>
@@ -32,8 +32,8 @@
 <g id="edge1_Node000001_Node000002" class="edge">
 <title>Node2&#45;&gt;Node1</title>
 <g id="a_edge1_Node000001_Node000002"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M968.39,-463.3C971.6,-461.86 974.73,-460.34 977.75,-458.75 1055.88,-417.47 1121.45,-330.78 1146.96,-293.92"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="967.26,-459.98 959.38,-467.06 969.95,-466.44 967.26,-459.98"/>
+<path fill="none" stroke="#63b8ff" d="M967.81,-411.42C971.21,-409.94 974.54,-408.39 977.75,-406.75 1048.99,-370.42 1115.48,-300.2 1143.89,-267.84"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="966.8,-408.06 958.85,-415.06 969.43,-414.54 966.8,-408.06"/>
 </a>
 </g>
 </g>
@@ -51,8 +51,8 @@
 <g id="edge2_Node000002_Node000003" class="edge">
 <title>Node3&#45;&gt;Node2</title>
 <g id="a_edge2_Node000002_Node000003"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M735.86,-451.11C762.71,-456.85 792.11,-463.12 818.16,-468.69"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="736.91,-447.76 726.4,-449.09 735.45,-454.6 736.91,-447.76"/>
+<path fill="none" stroke="#63b8ff" d="M736.22,-432.75C762.97,-432.75 792.22,-432.75 818.16,-432.75"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="736.43,-429.25 726.43,-432.75 736.43,-436.25 736.43,-429.25"/>
 </a>
 </g>
 </g>
@@ -75,20 +75,20 @@
 </a>
 </g>
 </g>
-<!-- Node21 -->
-<g id="Node000021" class="node">
-<title>Node21</title>
-<g id="a_Node000021"><a xlink:href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html" target="_top" xlink:title="The side of a formation member that only UnbreakableFormationService drives.">
+<!-- Node22 -->
+<g id="Node000022" class="node">
+<title>Node22</title>
+<g id="a_Node000022"><a xlink:href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html" target="_top" xlink:title="The side of a formation member that only UnbreakableFormationService drives.">
 <polygon fill="white" stroke="#666666" points="727,-605.5 570.75,-605.5 570.75,-572 727,-572 727,-605.5"/>
 <text xml:space="preserve" text-anchor="start" x="578.75" y="-592" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
 <text xml:space="preserve" text-anchor="middle" x="648.88" y="-579.25" font-family="Helvetica,sans-Serif" font-size="10.00">IWriteableFormationMember</text>
 </a>
 </g>
 </g>
-<!-- Node4&#45;&gt;Node21 -->
-<g id="edge24_Node000021_Node000004" class="edge">
-<title>Node4&#45;&gt;Node21</title>
-<g id="a_edge24_Node000021_Node000004"><a xlink:title=" ">
+<!-- Node4&#45;&gt;Node22 -->
+<g id="edge25_Node000022_Node000004" class="edge">
+<title>Node4&#45;&gt;Node22</title>
+<g id="a_edge25_Node000022_Node000004"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M496.97,-532.78C517.57,-542.58 542.51,-553.87 565.5,-562.75 573.47,-565.83 581.98,-568.83 590.39,-571.62"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="498.53,-529.65 488,-528.48 495.5,-535.96 498.53,-529.65"/>
 </a>
@@ -240,8 +240,8 @@
 <g id="edge12_Node000002_Node000011" class="edge">
 <title>Node11&#45;&gt;Node2</title>
 <g id="a_edge12_Node000002_Node000011"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M721.44,-401.98C725.14,-403.5 728.76,-405.09 732.25,-406.75 770.11,-424.79 773.14,-440.71 811,-458.75 817.77,-461.98 825.04,-464.93 832.35,-467.6"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="722.9,-398.79 712.31,-398.44 720.37,-405.32 722.9,-398.79"/>
+<path fill="none" stroke="#63b8ff" d="M741.69,-400.36C766.94,-405.75 794.01,-411.53 818.2,-416.7"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="742.61,-396.97 732.1,-398.31 741.15,-403.82 742.61,-396.97"/>
 </a>
 </g>
 </g>
@@ -249,9 +249,9 @@
 <g id="Node000012" class="node">
 <title>Node12</title>
 <g id="a_Node000012"><a xlink:href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceInfluence.html" target="_top" xlink:title="Lets a dynamic actor shape how the balancer moves it: a per&#45;candidate weight offset added to the supp...">
-<polygon fill="white" stroke="#666666" points="715.75,-553.5 582,-553.5 582,-520 715.75,-520 715.75,-553.5"/>
-<text xml:space="preserve" text-anchor="start" x="590" y="-540" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Actor.</text>
-<text xml:space="preserve" text-anchor="middle" x="648.88" y="-527.25" font-family="Helvetica,sans-Serif" font-size="10.00">IBalanceInfluence</text>
+<polygon fill="white" stroke="#666666" points="715.75,-345.5 582,-345.5 582,-312 715.75,-312 715.75,-345.5"/>
+<text xml:space="preserve" text-anchor="start" x="590" y="-332" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Actor.</text>
+<text xml:space="preserve" text-anchor="middle" x="648.88" y="-319.25" font-family="Helvetica,sans-Serif" font-size="10.00">IBalanceInfluence</text>
 </a>
 </g>
 </g>
@@ -259,8 +259,8 @@
 <g id="edge13_Node000002_Node000012" class="edge">
 <title>Node12&#45;&gt;Node2</title>
 <g id="a_edge13_Node000002_Node000012"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M727.04,-520.27C756.15,-514.05 789.21,-506.99 818.14,-500.82"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="726.62,-516.78 717.57,-522.29 728.08,-523.63 726.62,-516.78"/>
+<path fill="none" stroke="#63b8ff" d="M721.44,-349.98C725.14,-351.5 728.76,-353.09 732.25,-354.75 770.11,-372.79 773.14,-388.71 811,-406.75 817.77,-409.98 825.04,-412.93 832.35,-415.6"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="722.9,-346.79 712.31,-346.44 720.37,-353.32 722.9,-346.79"/>
 </a>
 </g>
 </g>
@@ -268,9 +268,9 @@
 <g id="Node000013" class="node">
 <title>Node13</title>
 <g id="a_Node000013"><a xlink:href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceBiasSource.html" target="_top" xlink:title="The read&#45;set the balance&#45;bias formulas (BalloonParty.Shared.Extensions.BalanceBiasExtensions) need fr...">
-<polygon fill="white" stroke="#666666" points="715.75,-501.5 582,-501.5 582,-468 715.75,-468 715.75,-501.5"/>
-<text xml:space="preserve" text-anchor="start" x="590" y="-488" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Actor.</text>
-<text xml:space="preserve" text-anchor="middle" x="648.88" y="-475.25" font-family="Helvetica,sans-Serif" font-size="10.00">IBalanceBiasSource</text>
+<polygon fill="white" stroke="#666666" points="715.75,-293.5 582,-293.5 582,-260 715.75,-260 715.75,-293.5"/>
+<text xml:space="preserve" text-anchor="start" x="590" y="-280" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Actor.</text>
+<text xml:space="preserve" text-anchor="middle" x="648.88" y="-267.25" font-family="Helvetica,sans-Serif" font-size="10.00">IBalanceBiasSource</text>
 </a>
 </g>
 </g>
@@ -278,56 +278,56 @@
 <g id="edge14_Node000002_Node000013" class="edge">
 <title>Node13&#45;&gt;Node2</title>
 <g id="a_edge14_Node000002_Node000013"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M727.42,-484.75C756.44,-484.75 789.34,-484.75 818.14,-484.75"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="727.6,-481.25 717.6,-484.75 727.6,-488.25 727.6,-481.25"/>
+<path fill="none" stroke="#63b8ff" d="M724.74,-298.62C727.32,-299.93 729.83,-301.3 732.25,-302.75 764.57,-322.04 772.05,-330.48 793,-361.75 804.99,-379.65 795.21,-392.1 811,-406.75 814.63,-410.12 818.69,-413.05 823.01,-415.6"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="726.48,-295.57 715.93,-294.56 723.55,-301.93 726.48,-295.57"/>
 </a>
 </g>
 </g>
 <!-- Node14 -->
 <g id="Node000014" class="node">
 <title>Node14</title>
-<g id="a_Node000014"><a xlink:href="interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasDeflectStamp.html" target="_top" xlink:title="An actor whose projectile deflect stamps the disturbance field at its slot — heavy types jolt the air...">
-<polygon fill="white" stroke="#666666" points="977.75,-449.5 811,-449.5 811,-416 977.75,-416 977.75,-449.5"/>
-<text xml:space="preserve" text-anchor="start" x="819" y="-436" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Capabilities.</text>
-<text xml:space="preserve" text-anchor="middle" x="894.38" y="-423.25" font-family="Helvetica,sans-Serif" font-size="10.00">IHasDeflectStamp</text>
+<g id="a_Node000014"><a xlink:href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceAnchor.html" target="_top" xlink:title="A dynamic actor that can be pinned where it is.">
+<polygon fill="white" stroke="#666666" points="715.75,-553.5 582,-553.5 582,-520 715.75,-520 715.75,-553.5"/>
+<text xml:space="preserve" text-anchor="start" x="590" y="-540" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Actor.</text>
+<text xml:space="preserve" text-anchor="middle" x="648.88" y="-527.25" font-family="Helvetica,sans-Serif" font-size="10.00">IBalanceAnchor</text>
 </a>
 </g>
 </g>
-<!-- Node14&#45;&gt;Node1 -->
-<g id="edge15_Node000001_Node000014" class="edge">
-<title>Node14&#45;&gt;Node1</title>
-<g id="a_edge15_Node000001_Node000014"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M966.96,-411.56C970.65,-410.03 974.27,-408.43 977.75,-406.75 1042.32,-375.65 1108.15,-321.36 1139.52,-293.82"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="965.89,-408.22 957.84,-415.11 968.43,-414.74 965.89,-408.22"/>
+<!-- Node14&#45;&gt;Node2 -->
+<g id="edge15_Node000002_Node000014" class="edge">
+<title>Node14&#45;&gt;Node2</title>
+<g id="a_edge15_Node000002_Node000014"><a xlink:title=" ">
+<path fill="none" stroke="#63b8ff" d="M718.69,-515.86C723.3,-514.2 727.86,-512.49 732.25,-510.75 778.17,-492.5 829.2,-466.83 861.29,-450"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="717.59,-512.54 709.29,-519.12 719.88,-519.15 717.59,-512.54"/>
 </a>
 </g>
 </g>
 <!-- Node15 -->
 <g id="Node000015" class="node">
 <title>Node15</title>
-<g id="a_Node000015"><a xlink:href="interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScore.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="977.75,-397.5 811,-397.5 811,-364 977.75,-364 977.75,-397.5"/>
-<text xml:space="preserve" text-anchor="start" x="819" y="-384" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Capabilities.</text>
-<text xml:space="preserve" text-anchor="middle" x="894.38" y="-371.25" font-family="Helvetica,sans-Serif" font-size="10.00">IHasScore</text>
+<g id="a_Node000015"><a xlink:href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableCoverHost.html" target="_top" xlink:title="A balloon a cover formation can stand round and hold where it is, the side only UnbreakableFormationS...">
+<polygon fill="white" stroke="#666666" points="724.75,-501.5 573,-501.5 573,-468 724.75,-468 724.75,-501.5"/>
+<text xml:space="preserve" text-anchor="start" x="581" y="-488" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
+<text xml:space="preserve" text-anchor="middle" x="648.88" y="-475.25" font-family="Helvetica,sans-Serif" font-size="10.00">IWriteableCoverHost</text>
 </a>
 </g>
 </g>
-<!-- Node15&#45;&gt;Node1 -->
-<g id="edge16_Node000001_Node000015" class="edge">
-<title>Node15&#45;&gt;Node1</title>
-<g id="a_edge16_Node000001_Node000015"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M963.2,-359.95C968.15,-358.25 973.04,-356.51 977.75,-354.75 1028.48,-335.85 1085.63,-310.45 1121.81,-293.85"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="962.15,-356.61 953.79,-363.12 964.38,-363.25 962.15,-356.61"/>
+<!-- Node15&#45;&gt;Node2 -->
+<g id="edge16_Node000002_Node000015" class="edge">
+<title>Node15&#45;&gt;Node2</title>
+<g id="a_edge16_Node000002_Node000015"><a xlink:title=" ">
+<path fill="none" stroke="#63b8ff" d="M735.86,-466.39C762.71,-460.65 792.11,-454.38 818.16,-448.81"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="735.45,-462.9 726.4,-468.41 736.91,-469.74 735.45,-462.9"/>
 </a>
 </g>
 </g>
 <!-- Node16 -->
 <g id="Node000016" class="node">
 <title>Node16</title>
-<g id="a_Node000016"><a xlink:href="interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScoreColor.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="977.75,-345.5 811,-345.5 811,-312 977.75,-312 977.75,-345.5"/>
-<text xml:space="preserve" text-anchor="start" x="819" y="-332" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Capabilities.</text>
-<text xml:space="preserve" text-anchor="middle" x="894.38" y="-319.25" font-family="Helvetica,sans-Serif" font-size="10.00">IHasScoreColor</text>
+<g id="a_Node000016"><a xlink:href="interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasDeflectStamp.html" target="_top" xlink:title="An actor whose projectile deflect stamps the disturbance field at its slot — heavy types jolt the air...">
+<polygon fill="white" stroke="#666666" points="977.75,-397.5 811,-397.5 811,-364 977.75,-364 977.75,-397.5"/>
+<text xml:space="preserve" text-anchor="start" x="819" y="-384" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Capabilities.</text>
+<text xml:space="preserve" text-anchor="middle" x="894.38" y="-371.25" font-family="Helvetica,sans-Serif" font-size="10.00">IHasDeflectStamp</text>
 </a>
 </g>
 </g>
@@ -335,18 +335,18 @@
 <g id="edge17_Node000001_Node000016" class="edge">
 <title>Node16&#45;&gt;Node1</title>
 <g id="a_edge17_Node000001_Node000016"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M989.41,-310.16C1020.16,-304.08 1053.89,-297.41 1083.08,-291.64"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="988.84,-306.7 979.71,-312.07 990.2,-313.57 988.84,-306.7"/>
+<path fill="none" stroke="#63b8ff" d="M966.02,-359.57C970.02,-358.03 973.96,-356.42 977.75,-354.75 1035.56,-329.34 1098.48,-290.25 1132.69,-267.94"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="964.93,-356.25 956.75,-362.99 967.35,-362.81 964.93,-356.25"/>
 </a>
 </g>
 </g>
 <!-- Node17 -->
 <g id="Node000017" class="node">
 <title>Node17</title>
-<g id="a_Node000017"><a xlink:href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IPreBalanceRelocatable.html" target="_top" xlink:title="A dynamic actor that repositions itself before the turn&#39;s rebalance.">
-<polygon fill="white" stroke="#666666" points="961.25,-293.5 827.5,-293.5 827.5,-260 961.25,-260 961.25,-293.5"/>
-<text xml:space="preserve" text-anchor="start" x="835.5" y="-280" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Actor.</text>
-<text xml:space="preserve" text-anchor="middle" x="894.38" y="-267.25" font-family="Helvetica,sans-Serif" font-size="10.00">IPreBalanceRelocatable</text>
+<g id="a_Node000017"><a xlink:href="interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScore.html" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="#666666" points="977.75,-345.5 811,-345.5 811,-312 977.75,-312 977.75,-345.5"/>
+<text xml:space="preserve" text-anchor="start" x="819" y="-332" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Capabilities.</text>
+<text xml:space="preserve" text-anchor="middle" x="894.38" y="-319.25" font-family="Helvetica,sans-Serif" font-size="10.00">IHasScore</text>
 </a>
 </g>
 </g>
@@ -354,18 +354,18 @@
 <g id="edge18_Node000001_Node000017" class="edge">
 <title>Node17&#45;&gt;Node1</title>
 <g id="a_edge18_Node000001_Node000017"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M972.82,-276.75C1007.66,-276.75 1048.63,-276.75 1083.2,-276.75"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="973.25,-273.25 963.25,-276.75 973.25,-280.25 973.25,-273.25"/>
+<path fill="none" stroke="#63b8ff" d="M964.21,-308.34C1006.59,-295.77 1060.3,-279.84 1100.48,-267.92"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="963.46,-304.91 954.87,-311.11 965.45,-311.62 963.46,-304.91"/>
 </a>
 </g>
 </g>
 <!-- Node18 -->
 <g id="Node000018" class="node">
 <title>Node18</title>
-<g id="a_Node000018"><a xlink:href="interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IResistsPaint.html" target="_top" xlink:title="A structural actor that paint runs off without recolouring — tough, unbreakable, armored.">
-<polygon fill="white" stroke="#666666" points="977.75,-241.5 811,-241.5 811,-208 977.75,-208 977.75,-241.5"/>
-<text xml:space="preserve" text-anchor="start" x="819" y="-228" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Capabilities.</text>
-<text xml:space="preserve" text-anchor="middle" x="894.38" y="-215.25" font-family="Helvetica,sans-Serif" font-size="10.00">IResistsPaint</text>
+<g id="a_Node000018"><a xlink:href="interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScoreColor.html" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="#666666" points="977.75,-293.5 811,-293.5 811,-260 977.75,-260 977.75,-293.5"/>
+<text xml:space="preserve" text-anchor="start" x="819" y="-280" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Capabilities.</text>
+<text xml:space="preserve" text-anchor="middle" x="894.38" y="-267.25" font-family="Helvetica,sans-Serif" font-size="10.00">IHasScoreColor</text>
 </a>
 </g>
 </g>
@@ -373,18 +373,18 @@
 <g id="edge19_Node000001_Node000018" class="edge">
 <title>Node18&#45;&gt;Node1</title>
 <g id="a_edge19_Node000001_Node000018"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M989.41,-243.34C1020.16,-249.42 1053.89,-256.09 1083.08,-261.86"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="990.2,-239.93 979.71,-241.43 988.84,-246.8 990.2,-239.93"/>
+<path fill="none" stroke="#63b8ff" d="M989.41,-267.45C1020.16,-264.41 1053.89,-261.08 1083.08,-258.19"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="989.34,-263.94 979.74,-268.41 990.03,-270.91 989.34,-263.94"/>
 </a>
 </g>
 </g>
 <!-- Node19 -->
 <g id="Node000019" class="node">
 <title>Node19</title>
-<g id="a_Node000019"><a xlink:href="interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IDeflectsShots.html" target="_top" xlink:title="A slot actor that bounces an ordinary shot rather than letting it through or popping.">
-<polygon fill="white" stroke="#666666" points="977.75,-189.5 811,-189.5 811,-156 977.75,-156 977.75,-189.5"/>
-<text xml:space="preserve" text-anchor="start" x="819" y="-176" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Capabilities.</text>
-<text xml:space="preserve" text-anchor="middle" x="894.38" y="-163.25" font-family="Helvetica,sans-Serif" font-size="10.00">IDeflectsShots</text>
+<g id="a_Node000019"><a xlink:href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IPreBalanceRelocatable.html" target="_top" xlink:title="A dynamic actor that repositions itself before the turn&#39;s rebalance.">
+<polygon fill="white" stroke="#666666" points="961.25,-241.5 827.5,-241.5 827.5,-208 961.25,-208 961.25,-241.5"/>
+<text xml:space="preserve" text-anchor="start" x="835.5" y="-228" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Actor.</text>
+<text xml:space="preserve" text-anchor="middle" x="894.38" y="-215.25" font-family="Helvetica,sans-Serif" font-size="10.00">IPreBalanceRelocatable</text>
 </a>
 </g>
 </g>
@@ -392,18 +392,18 @@
 <g id="edge20_Node000001_Node000019" class="edge">
 <title>Node19&#45;&gt;Node1</title>
 <g id="a_edge20_Node000001_Node000019"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M963.2,-193.55C968.15,-195.25 973.04,-196.99 977.75,-198.75 1028.48,-217.65 1085.63,-243.05 1121.81,-259.65"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="964.38,-190.25 953.79,-190.38 962.15,-196.89 964.38,-190.25"/>
+<path fill="none" stroke="#63b8ff" d="M972.82,-232.41C1007.66,-235.85 1048.63,-239.9 1083.2,-243.32"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="973.54,-228.96 963.25,-231.46 972.85,-235.93 973.54,-228.96"/>
 </a>
 </g>
 </g>
 <!-- Node20 -->
 <g id="Node000020" class="node">
 <title>Node20</title>
-<g id="a_Node000020"><a xlink:href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceAnchor.html" target="_top" xlink:title="A dynamic actor that can be pinned where it is.">
-<polygon fill="white" stroke="#666666" points="961.25,-137.5 827.5,-137.5 827.5,-104 961.25,-104 961.25,-137.5"/>
-<text xml:space="preserve" text-anchor="start" x="835.5" y="-124" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Actor.</text>
-<text xml:space="preserve" text-anchor="middle" x="894.38" y="-111.25" font-family="Helvetica,sans-Serif" font-size="10.00">IBalanceAnchor</text>
+<g id="a_Node000020"><a xlink:href="interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IResistsPaint.html" target="_top" xlink:title="A structural actor that paint runs off without recolouring — tough, unbreakable, armored.">
+<polygon fill="white" stroke="#666666" points="977.75,-189.5 811,-189.5 811,-156 977.75,-156 977.75,-189.5"/>
+<text xml:space="preserve" text-anchor="start" x="819" y="-176" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Capabilities.</text>
+<text xml:space="preserve" text-anchor="middle" x="894.38" y="-163.25" font-family="Helvetica,sans-Serif" font-size="10.00">IResistsPaint</text>
 </a>
 </g>
 </g>
@@ -411,8 +411,18 @@
 <g id="edge21_Node000001_Node000020" class="edge">
 <title>Node20&#45;&gt;Node1</title>
 <g id="a_edge21_Node000001_Node000020"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M966.91,-142.04C970.61,-143.54 974.25,-145.11 977.75,-146.75 1042.69,-177.07 1108.36,-231.71 1139.6,-259.5"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="968.36,-138.85 957.77,-138.54 965.85,-145.39 968.36,-138.85"/>
+<path fill="none" stroke="#63b8ff" d="M964.21,-193.16C1006.59,-205.73 1060.3,-221.66 1100.48,-233.58"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="965.45,-189.88 954.87,-190.39 963.46,-196.59 965.45,-189.88"/>
+</a>
+</g>
+</g>
+<!-- Node21 -->
+<g id="Node000021" class="node">
+<title>Node21</title>
+<g id="a_Node000021"><a xlink:href="interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IDeflectsShots.html" target="_top" xlink:title="A slot actor that bounces an ordinary shot rather than letting it through or popping.">
+<polygon fill="white" stroke="#666666" points="977.75,-137.5 811,-137.5 811,-104 977.75,-104 977.75,-137.5"/>
+<text xml:space="preserve" text-anchor="start" x="819" y="-124" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Capabilities.</text>
+<text xml:space="preserve" text-anchor="middle" x="894.38" y="-111.25" font-family="Helvetica,sans-Serif" font-size="10.00">IDeflectsShots</text>
 </a>
 </g>
 </g>
@@ -420,86 +430,95 @@
 <g id="edge22_Node000001_Node000021" class="edge">
 <title>Node21&#45;&gt;Node1</title>
 <g id="a_edge22_Node000001_Node000021"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M738.52,-579.34C806.87,-569.38 902.16,-549.5 977.75,-510.75 1072.29,-462.29 1132.04,-339.21 1151.45,-293.86"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="738.28,-575.84 728.87,-580.7 739.26,-582.77 738.28,-575.84"/>
+<path fill="none" stroke="#63b8ff" d="M966.02,-141.93C970.02,-143.47 973.96,-145.08 977.75,-146.75 1035.56,-172.16 1098.48,-211.25 1132.69,-233.56"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="967.35,-138.69 956.75,-138.51 964.93,-145.25 967.35,-138.69"/>
 </a>
 </g>
 </g>
-<!-- Node22 -->
-<g id="Node000022" class="node">
-<title>Node22</title>
-<g id="a_Node000022"><a xlink:href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember.html" target="_top" xlink:title="A balloon that can join an unbreakable formation; the view reads it to swap its lights.">
-<polygon fill="white" stroke="#666666" points="527.38,-605.5 375.62,-605.5 375.62,-572 527.38,-572 527.38,-605.5"/>
-<text xml:space="preserve" text-anchor="start" x="383.62" y="-592" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
-<text xml:space="preserve" text-anchor="middle" x="451.5" y="-579.25" font-family="Helvetica,sans-Serif" font-size="10.00">IFormationMember</text>
-</a>
-</g>
-</g>
-<!-- Node22&#45;&gt;Node21 -->
-<g id="edge23_Node000021_Node000022" class="edge">
-<title>Node22&#45;&gt;Node21</title>
-<g id="a_edge23_Node000021_Node000022"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M539.01,-588.75C549.46,-588.75 560.08,-588.75 570.39,-588.75"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="539.27,-585.25 529.27,-588.75 539.27,-592.25 539.27,-585.25"/>
+<!-- Node22&#45;&gt;Node1 -->
+<g id="edge23_Node000001_Node000022" class="edge">
+<title>Node22&#45;&gt;Node1</title>
+<g id="a_edge23_Node000001_Node000022"><a xlink:title=" ">
+<path fill="none" stroke="#63b8ff" d="M731.36,-568.38C824.17,-541.23 974.67,-484.6 1065.5,-384.75 1100.36,-346.43 1132.84,-294.42 1148.53,-267.88"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="730.44,-565 721.79,-571.13 732.37,-571.73 730.44,-565"/>
 </a>
 </g>
 </g>
 <!-- Node23 -->
 <g id="Node000023" class="node">
 <title>Node23</title>
-<g id="a_Node000023"><a xlink:href="structBalloonParty_1_1Balloon_1_1Model_1_1ColorSource.html" target="_top" xlink:title="Shared colour resolution for score&#45;scatter models (Tough/Cluster/rainbow&#45;mode BalloonModel).">
+<g id="a_Node000023"><a xlink:href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember.html" target="_top" xlink:title="A balloon that can join an unbreakable formation; the view reads it to swap its lights.">
+<polygon fill="white" stroke="#666666" points="527.38,-605.5 375.62,-605.5 375.62,-572 527.38,-572 527.38,-605.5"/>
+<text xml:space="preserve" text-anchor="start" x="383.62" y="-592" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
+<text xml:space="preserve" text-anchor="middle" x="451.5" y="-579.25" font-family="Helvetica,sans-Serif" font-size="10.00">IFormationMember</text>
+</a>
+</g>
+</g>
+<!-- Node23&#45;&gt;Node22 -->
+<g id="edge24_Node000022_Node000023" class="edge">
+<title>Node23&#45;&gt;Node22</title>
+<g id="a_edge24_Node000022_Node000023"><a xlink:title=" ">
+<path fill="none" stroke="#63b8ff" d="M539.01,-588.75C549.46,-588.75 560.08,-588.75 570.39,-588.75"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="539.27,-585.25 529.27,-588.75 539.27,-592.25 539.27,-585.25"/>
+</a>
+</g>
+</g>
+<!-- Node24 -->
+<g id="Node000024" class="node">
+<title>Node24</title>
+<g id="a_Node000024"><a xlink:href="structBalloonParty_1_1Balloon_1_1Model_1_1ColorSource.html" target="_top" xlink:title="Shared colour resolution for score&#45;scatter models (Tough/Cluster/rainbow&#45;mode BalloonModel).">
 <polygon fill="white" stroke="#666666" points="970.25,-85.5 818.5,-85.5 818.5,-52 970.25,-52 970.25,-85.5"/>
 <text xml:space="preserve" text-anchor="start" x="826.5" y="-72" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
 <text xml:space="preserve" text-anchor="middle" x="894.38" y="-59.25" font-family="Helvetica,sans-Serif" font-size="10.00">ColorSource</text>
 </a>
 </g>
 </g>
-<!-- Node23&#45;&gt;Node1 -->
-<g id="edge25_Node000001_Node000023" class="edge">
-<title>Node23&#45;&gt;Node1</title>
-<g id="a_edge25_Node000001_Node000023"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M972.5,-89.51C1003.99,-100.86 1039.13,-117.5 1065.5,-141 1105.15,-176.34 1136.21,-231.99 1150.23,-259.78"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="974,-86.33 963.41,-86.36 971.71,-92.94 974,-86.33"/>
+<!-- Node24&#45;&gt;Node1 -->
+<g id="edge26_Node000001_Node000024" class="edge">
+<title>Node24&#45;&gt;Node1</title>
+<g id="a_edge26_Node000001_Node000024"><a xlink:title=" ">
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M970.61,-89.59C1002.1,-100.78 1037.76,-116.92 1065.5,-139 1100.63,-166.96 1131.81,-210.07 1147.55,-233.74"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="972.13,-86.41 961.54,-86.47 969.86,-93.03 972.13,-86.41"/>
 </a>
 </g>
-<text xml:space="preserve" text-anchor="middle" x="1030.62" y="-144.25" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _colorSource</text>
+<text xml:space="preserve" text-anchor="middle" x="1030.62" y="-142.25" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _colorSource</text>
 </g>
-<!-- Node24 -->
-<g id="Node000024" class="node">
-<title>Node24</title>
-<g id="a_Node000024"><a xlink:href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html" target="_top" xlink:title=" ">
+<!-- Node25 -->
+<g id="Node000025" class="node">
+<title>Node25</title>
+<g id="a_Node000025"><a xlink:href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="722.5,-85.5 575.25,-85.5 575.25,-52 722.5,-52 722.5,-85.5"/>
 <text xml:space="preserve" text-anchor="start" x="583.25" y="-72" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
 <text xml:space="preserve" text-anchor="middle" x="648.88" y="-59.25" font-family="Helvetica,sans-Serif" font-size="10.00">Palette.IGamePalette</text>
 </a>
 </g>
 </g>
-<!-- Node24&#45;&gt;Node23 -->
-<g id="edge26_Node000023_Node000024" class="edge">
-<title>Node24&#45;&gt;Node23</title>
-<g id="a_edge26_Node000023_Node000024"><a xlink:title=" ">
+<!-- Node25&#45;&gt;Node24 -->
+<g id="edge27_Node000024_Node000025" class="edge">
+<title>Node25&#45;&gt;Node24</title>
+<g id="a_edge27_Node000024_Node000025"><a xlink:title=" ">
 <path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M734.43,-68.75C761.7,-68.75 791.72,-68.75 818.26,-68.75"/>
 <polygon fill="#9a32cd" stroke="#9a32cd" points="734.45,-65.25 724.45,-68.75 734.45,-72.25 734.45,-65.25"/>
 </a>
 </g>
 <text xml:space="preserve" text-anchor="middle" x="771.62" y="-72" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _palette</text>
 </g>
-<!-- Node25 -->
-<g id="Node000025" class="node">
-<title>Node25</title>
-<g id="a_Node000025"><a xlink:href="classBalloonParty_1_1Balloon_1_1Model_1_1FormationMembership.html" target="_top" xlink:title="The formation state a member keeps for UnbreakableFormationService.">
+<!-- Node26 -->
+<g id="Node000026" class="node">
+<title>Node26</title>
+<g id="a_Node000026"><a xlink:href="classBalloonParty_1_1Balloon_1_1Model_1_1FormationMembership.html" target="_top" xlink:title="The formation state a member keeps for UnbreakableFormationService.">
 <polygon fill="white" stroke="#666666" points="970.25,-33.5 818.5,-33.5 818.5,0 970.25,0 970.25,-33.5"/>
 <text xml:space="preserve" text-anchor="start" x="826.5" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
 <text xml:space="preserve" text-anchor="middle" x="894.38" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">FormationMembership</text>
 </a>
 </g>
 </g>
-<!-- Node25&#45;&gt;Node1 -->
-<g id="edge27_Node000001_Node000025" class="edge">
-<title>Node25&#45;&gt;Node1</title>
-<g id="a_edge27_Node000001_Node000025"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M981.38,-35.36C1011.05,-45.35 1042.55,-60.44 1065.5,-83 1118.3,-134.91 1145.06,-222.81 1154.41,-259.67"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="982.59,-32.07 972,-32.36 980.46,-38.74 982.59,-32.07"/>
+<!-- Node26&#45;&gt;Node1 -->
+<g id="edge28_Node000001_Node000026" class="edge">
+<title>Node26&#45;&gt;Node1</title>
+<g id="a_edge28_Node000001_Node000026"><a xlink:title=" ">
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M981.45,-36.37C1010.82,-46.44 1042.11,-61.31 1065.5,-83 1112.86,-126.91 1141.78,-200.6 1153,-233.72"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="982.77,-33.12 972.17,-33.35 980.6,-39.77 982.77,-33.12"/>
 </a>
 </g>
 <text xml:space="preserve" text-anchor="middle" x="1030.62" y="-86.25" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _membership</text>

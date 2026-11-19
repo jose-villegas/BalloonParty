@@ -1,9 +1,11 @@
 <map id="BalloonParty.Solver.ShotItemLayer" name="BalloonParty.Solver.ShotItemLayer">
-<area shape="rect" id="Node000001" title="Item&#45;carrier selection + params for the shot solver (Shot Solver Accuracy Phase C) — selection and ou..." alt="" coords="112,225,291,269"/>
+<area shape="rect" id="Node000001" title="Item&#45;carrier selection + params for the shot solver (Shot Solver Accuracy Phase C) — selection and ou..." alt="" coords="224,225,403,269"/>
 <area shape="rect" id="Node000002" href="$classBalloonParty_1_1Solver_1_1ShotSimEffectBoard.html" title="Solver&#45;side IEffectBoard — runs purely over the working set + ShotSlotLattice (Shot Solver Accuracy P..." alt="" coords="112,115,291,160"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="204,174,204,225,199,223,200,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="236,168,294,224,288,224,234,173"/>
 <area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Item_1_1Effects_1_1IEffectBoard.html" title="The occupant read&#45;set an item&#45;effect core selects against — implemented by GridEffectBoard (live) and..." alt="" coords="5,5,193,50"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="131,59,184,114,178,115,130,64"/>
 <area shape="rect" id="Node000004" href="$structBalloonParty_1_1Solver_1_1ShotSlotLattice.html" title="The hex&#45;lattice geometry an item effect core needs, snapshotted once — no SlotGrid/dynamics reference..." alt="" coords="216,5,395,50"/>
 <area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="276,60,224,116,221,112,272,63"/>
+<area shape="rect" id="Node000005" href="$structBalloonParty_1_1Item_1_1Bomb_1_1BombBlastParams.html" title="Bomb&#39;s config&#45;free blast&#45;selection scalars (Shot Solver Accuracy Phase C2) — mirrors BombSettings&#39;s k..." alt="" coords="315,115,534,160"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="394,170,337,226,335,222,389,171"/>
 </map>

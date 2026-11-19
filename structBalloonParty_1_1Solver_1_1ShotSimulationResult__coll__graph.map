@@ -1,0 +1,5 @@
+<map id="BalloonParty.Solver.ShotSimulationResult" name="BalloonParty.Solver.ShotSimulationResult">
+<area shape="rect" id="Node000001" title="Outcome of one deterministic flight — see ShotSimulator.Simulate." alt="" coords="5,115,184,160"/>
+<area shape="rect" id="Node000002" href="$structBalloonParty_1_1Solver_1_1ShotMushroomTally.html" title="What a simulated flight&#39;s mushrooms did (Meadow Mushrooms), for the result: all zero on a board witho..." alt="" coords="5,5,184,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,64,97,115,92,114,93,68"/>
+</map>

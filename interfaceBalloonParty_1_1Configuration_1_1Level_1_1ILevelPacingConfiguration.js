@@ -9,5 +9,6 @@ var interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration
     [ "ThresholdForLevel", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#a0a88ccb8e2d04f18b81f3e270360c2e9", null ],
     [ "BubbleRise", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#abb6cfe2651270ba34003a4dc45264127", null ],
     [ "DebugPresets", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#a9194824970276fefd009ced094c08603", null ],
+    [ "Mushrooms", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#a31c9caf3de94d46408be4b9c1220e690", null ],
     [ "SpawnClock", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#ad862b1390b2758345251f0a76a6768d2", null ]
 ];

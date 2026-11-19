@@ -17,6 +17,13 @@ var namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype =
     [ "IGridActorModel", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1IGridActorModel.html", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1IGridActorModel" ],
     [ "LeafBatch", "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafBatch.html", "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafBatch" ],
     [ "LeafTier", "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafTier.html", "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafTier" ],
+    [ "MushroomBumperModel", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomBumperModel.html", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomBumperModel" ],
+    [ "MushroomCapSpring", "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCapSpring.html", "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCapSpring" ],
+    [ "MushroomCutTimeline", "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCutTimeline.html", "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCutTimeline" ],
+    [ "MushroomSporeBurst", "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomSporeBurst.html", "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomSporeBurst" ],
+    [ "MushroomSporePlanner", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomSporePlanner.html", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomSporePlanner" ],
+    [ "MushroomSporeRouter", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomSporeRouter.html", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomSporeRouter" ],
+    [ "MushroomView", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomView.html", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomView" ],
     [ "PuffCloudView", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudView.html", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudView" ],
     [ "PuffCloudViewController", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudViewController.html", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudViewController" ],
     [ "PuffClusterRegistry", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry" ],
@@ -27,6 +34,12 @@ var namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype =
       [ "Bush", "namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473ac7174dc75237a0361780548a1af6872b", null ],
       [ "Deflector", "namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473a68e6202e50e4806f18d28cab574e0d82", null ],
       [ "Absorber", "namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473a59988751eea31359e0983b22e1531b70", null ],
-      [ "Gatekeeper", "namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473aecb135155dc653bbc220d4448490d15e", null ]
+      [ "Gatekeeper", "namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473aecb135155dc653bbc220d4448490d15e", null ],
+      [ "Mushroom", "namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473ab93c3d9029fa42815abf0551db0cec98", null ]
+    ] ],
+    [ "MushroomSporeKind", "namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a8fd7dde02f60c4a136d518281f0406a8", [
+      [ "Hit", "namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a8fd7dde02f60c4a136d518281f0406a8aebfe5e1791db03c4cd6ab95801e0977d", null ],
+      [ "Cut", "namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a8fd7dde02f60c4a136d518281f0406a8aeb334dca00e390e0d3ebf52d205807d7", null ],
+      [ "Blast", "namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a8fd7dde02f60c4a136d518281f0406a8aaf67fdbf7db7b0248cb8f15ecc5675a3", null ]
     ] ]
 ];

@@ -1,25 +1,27 @@
 <map id="BalloonParty.Item.Shield.ShieldReachabilityField" name="BalloonParty.Item.Shield.ShieldReachabilityField">
-<area shape="rect" id="Node000001" title="Which slots an affordable shot can still reach, so the balancer can prefer keeping a shield somewhere..." alt="" coords="978,248,1161,293"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" title=" " alt="" coords="649,109,821,154"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="824,157,846,164,901,183,955,205,1032,248,1027,247,953,210,899,188,844,169,824,162"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html" title="Tracks slots in&#45;transit from balance animations so spawn paths avoid them." alt="" coords="266,5,439,50"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="453,46,602,84,673,108,668,109,601,89,454,52"/>
+<area shape="rect" id="Node000001" title="Which slots an affordable shot can still reach, so the balancer can prefer keeping a shield somewhere..." alt="" coords="982,248,1165,293"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" title=" " alt="" coords="653,109,825,154"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="828,157,850,164,905,183,959,205,1036,248,1031,247,957,210,903,188,848,169,828,162"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html" title="Tracks slots in&#45;transit from balance animations so spawn paths avoid them." alt="" coords="268,5,441,50"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="456,46,606,84,677,108,672,109,605,89,456,51"/>
 <area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,5,212,50"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="226,25,268,26,264,29,229,30"/>
-<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html" title="Slot grid layout: size, spacing, and origin offset." alt="" coords="261,75,444,119"/>
-<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="460,104,651,123,646,125,460,109"/>
-<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="264,144,442,189"/>
-<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="456,154,651,138,646,141,458,160"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="226,25,270,26,266,29,228,30"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html" title="Slot grid layout: size, spacing, and origin offset." alt="" coords="263,75,446,119"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="462,104,655,123,650,125,462,109"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="266,144,444,189"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="459,154,655,138,650,141,460,160"/>
 <area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="19,144,198,189"/>
-<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="212,164,265,165,261,168,214,169"/>
-<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="264,213,442,258"/>
-<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="456,214,528,198,600,176,624,164,660,154,655,156,626,169,602,180,529,203,458,220"/>
-<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html" title="Read&#45;only projectile flight configuration: physics, cruise, sweep, pierce, and doom tuning." alt="" coords="625,179,845,223"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="860,224,980,251,975,252,860,229"/>
-<area shape="rect" id="Node000010" href="$classBalloonParty_1_1Balloon_1_1BalloonContactRadii.html" title="Per&#45;type contact radius, read once off the authored prefabs." alt="" coords="631,248,839,293"/>
-<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="854,268,980,270,974,271,854,273"/>
-<area shape="rect" id="Node000011" href="$classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html" title="Where a shot leaves from, readable outside the thrower&#39;s own scope." alt="" coords="628,317,842,362"/>
-<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="857,312,975,290,980,289,858,317"/>
-<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Shared_1_1IShieldChainSettings.html" title="Tuning for how shield chains are planned: the fan of openings tried, and how selective the planner is..." alt="" coords="636,387,834,431"/>
-<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="823,379,844,372,899,353,953,332,1028,294,1033,292,955,336,901,358,846,377,824,384"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="212,164,267,165,263,168,214,169"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="266,213,444,258"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="458,215,531,198,604,176,628,164,664,154,659,156,630,169,606,180,532,203,460,220"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html" title="Read&#45;only projectile flight configuration: physics, cruise, sweep, pierce, and doom tuning." alt="" coords="629,179,849,223"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="864,224,984,251,979,252,864,229"/>
+<area shape="rect" id="Node000010" href="$classBalloonParty_1_1Balloon_1_1BalloonContactRadii.html" title="Per&#45;type contact radius, read once off the authored prefabs." alt="" coords="635,248,843,293"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="858,268,984,270,978,271,858,273"/>
+<area shape="rect" id="Node000011" href="$classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html" title="Where a shot leaves from, readable outside the thrower&#39;s own scope." alt="" coords="632,317,846,362"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="861,312,979,290,984,289,862,317"/>
+<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Shared_1_1IShotOrigin.html" title="Where shots come from and how big the ball is, for the board&#45;side code that plans or resolves against..." alt="" coords="261,317,448,362"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="464,337,634,339,629,340,464,342"/>
+<area shape="rect" id="Node000013" href="$interfaceBalloonParty_1_1Shared_1_1IShieldChainSettings.html" title="Tuning for how shield chains are planned: the fan of openings tried, and how selective the planner is..." alt="" coords="640,387,838,431"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="827,379,848,372,903,353,957,332,1032,294,1037,292,959,336,905,358,850,377,828,384"/>
 </map>

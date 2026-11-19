@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Balloon_1_1View_1_1FormationGlowBeam.html" target="_top" xlink:title="The light one group of joined formation rings casts: a beam from one end of the group to the other.">
+<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Balloon_1_1View_1_1BubbleMergeView_1_1Hop.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="145,-33.5 0,-33.5 0,0 145,0 145,-33.5"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.View.</text>
-<text xml:space="preserve" text-anchor="middle" x="72.5" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">FormationGlowBeam</text>
+<text xml:space="preserve" text-anchor="middle" x="72.5" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">BubbleMergeView.Hop</text>
 </a>
 </g>
 </g>

@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Balloon_1_1Reward_1_1NukeBlast =
 [
-    [ "NukeBlast", "classBalloonParty_1_1Balloon_1_1Reward_1_1NukeBlast.html#acba63c3e25daa99996d6c3dd3e0a79e0", null ],
+    [ "NukeBlast", "classBalloonParty_1_1Balloon_1_1Reward_1_1NukeBlast.html#a339156451408c4edac771b1ed2432657", null ],
     [ "Advance", "classBalloonParty_1_1Balloon_1_1Reward_1_1NukeBlast.html#a7752aa429d13202e23956c8e91c34a51", null ],
     [ "Detonate", "classBalloonParty_1_1Balloon_1_1Reward_1_1NukeBlast.html#a6e1f60806b7fc9fbc84b40d1f8f3acad", null ],
     [ "Dispose", "classBalloonParty_1_1Balloon_1_1Reward_1_1NukeBlast.html#aec0d0ddbaedaae612dcf55571b22d134", null ],
@@ -22,6 +22,7 @@ var classBalloonParty_1_1Balloon_1_1Reward_1_1NukeBlast =
     [ "_grid", "classBalloonParty_1_1Balloon_1_1Reward_1_1NukeBlast.html#a4d2f26a4c83391db1870372d462021ba", null ],
     [ "_levelProgress", "classBalloonParty_1_1Balloon_1_1Reward_1_1NukeBlast.html#a5114b7ca9357f87523fed84476568e58", null ],
     [ "_maxRadius", "classBalloonParty_1_1Balloon_1_1Reward_1_1NukeBlast.html#a43690b27450ffc173a6b6433d08857d9", null ],
+    [ "_mushrooms", "classBalloonParty_1_1Balloon_1_1Reward_1_1NukeBlast.html#ae2de9b236a68ef668e38784a4cfb4725", null ],
     [ "_nudged", "classBalloonParty_1_1Balloon_1_1Reward_1_1NukeBlast.html#a8f888d6ce4db67139271810cd38535a8", null ],
     [ "_nudgePublisher", "classBalloonParty_1_1Balloon_1_1Reward_1_1NukeBlast.html#a571d10e9527f6d4cfd419365e4f5f4a5", null ],
     [ "_popper", "classBalloonParty_1_1Balloon_1_1Reward_1_1NukeBlast.html#a7073042ac5e9b659a787e1798d507661", null ],

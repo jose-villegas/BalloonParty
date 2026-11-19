@@ -29,5 +29,6 @@ var classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver =
     [ "RainbowBandCountId", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#afe881b18f90cd3831e49e626a97c2123", null ],
     [ "ResolveSeedSalt", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#aee16bfa97a5e15201844cad2d4b530bf", null ],
     [ "Current", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#acd6a4cb24f44e277b67e76d03d6f8d33", null ],
+    [ "Level", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#af3c6cf9b5efc5073036ffadacb128fdc", null ],
     [ "ResetOrder", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#a7aedd59f89d3c03ca453d72e916116fb", null ]
 ];

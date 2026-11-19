@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Item_1_1Bomb_1_1BombItemHandler =
 [
-    [ "BombItemHandler", "classBalloonParty_1_1Item_1_1Bomb_1_1BombItemHandler.html#aa3c88b3eb5be8a820c08869e5af45b52", null ],
+    [ "BombItemHandler", "classBalloonParty_1_1Item_1_1Bomb_1_1BombItemHandler.html#a417871497b0d700924923f857ed5e6ce", null ],
     [ "Activate", "classBalloonParty_1_1Item_1_1Bomb_1_1BombItemHandler.html#ab82ab313bc86942391d0e215d81007eb", null ],
     [ "BlastBalloons", "classBalloonParty_1_1Item_1_1Bomb_1_1BombItemHandler.html#ac106b67b4169df1c94f84fab47c8c3cb", null ],
     [ "ConvertAfterDelay", "classBalloonParty_1_1Item_1_1Bomb_1_1BombItemHandler.html#a1ba111264b28ec69e38fc00abfd56bc4", null ],
@@ -10,6 +10,7 @@ var classBalloonParty_1_1Item_1_1Bomb_1_1BombItemHandler =
     [ "_hitDispatcher", "classBalloonParty_1_1Item_1_1Bomb_1_1BombItemHandler.html#a04f09ebc145909e45992e39e8cfcb815", null ],
     [ "_itemConfig", "classBalloonParty_1_1Item_1_1Bomb_1_1BombItemHandler.html#a4dae44781aba8f6d9e0d2f8601ecbbfc", null ],
     [ "_lightField", "classBalloonParty_1_1Item_1_1Bomb_1_1BombItemHandler.html#a2104103f1080cca5bc693cca8bcfdd5f", null ],
+    [ "_mushrooms", "classBalloonParty_1_1Item_1_1Bomb_1_1BombItemHandler.html#ab07bf9c4b471dd7e5310407c70f88547", null ],
     [ "_neighborBuffer", "classBalloonParty_1_1Item_1_1Bomb_1_1BombItemHandler.html#a554dd2426fc5e0b8df93b0f4287f50e1", null ],
     [ "_nudgePublisher", "classBalloonParty_1_1Item_1_1Bomb_1_1BombItemHandler.html#ac3ea43f9f2b8dd67693f62fc21c05bbb", null ],
     [ "_overlap", "classBalloonParty_1_1Item_1_1Bomb_1_1BombItemHandler.html#a8e02503e8391271fb82f197b2bcb7f51", null ],

@@ -8,6 +8,7 @@ var classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines =
     [ "HoldsStrokes", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#af7d2ccfa09af417fe581f9c45c9682a0", null ],
     [ "IndexOfDrawingStroke", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#aa659e84dc7e243d25287ca0aeffb3d34", null ],
     [ "OnLanceArmed", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#ad31a5f7aeb2119ad6fd0cd66339c7684", null ],
+    [ "OnLanceArmedAt", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#a34bf627454e1518b3d820806a11964b6", null ],
     [ "OnLanceRearmed", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#a1bc898ff92af47dc7f28de5edcbfc78b", null ],
     [ "OnRetired", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#afd26dcca9ace01108d3909512b8ea460", null ],
     [ "OnWallReached", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#a7f21b1eb0c70b60dd47fe6ecf537d9f9", null ],

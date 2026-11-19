@@ -109,7 +109,10 @@ $(function(){initNavTree('classBalloonParty_1_1Projectile_1_1Model_1_1Projectile
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pac-methods">Package Functions</a> &#124;
+<a href="#pac-attribs">Package Attributes</a> &#124;
 <a href="#properties">Properties</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Projectile.Model.ProjectileFlightState Class Reference</div></div>
 </div><!--header-->
@@ -126,7 +129,7 @@ $(function(){initNavTree('classBalloonParty_1_1Projectile_1_1Model_1_1Projectile
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState__coll__graph.svg" width="212" height="148"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState__coll__graph.svg" width="590" height="126"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -135,12 +138,28 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aacf3f6a34072cfe61a06b4985a7a26cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the shot plowed <em>balloon</em>  and hasn't discharged it yet.  <br /></td></tr>
 <tr class="separator:aacf3f6a34072cfe61a06b4985a7a26cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
+Package Functions</h2></td></tr>
+<tr class="memitem:a4e424b600b5b55107d5fae6011470c93" id="r_a4e424b600b5b55107d5fae6011470c93"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4e424b600b5b55107d5fae6011470c93">LeaveBumper</a> (int bumperId, Vector2 direction)</td></tr>
+<tr class="memdesc:a4e424b600b5b55107d5fae6011470c93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notes that the ball has just bounced off bumper <em>bumperId</em>  and leaves it along <em>direction</em> .  <br /></td></tr>
+<tr class="separator:a4e424b600b5b55107d5fae6011470c93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab1ae05d3fd87f240c7082b18908d65d" id="r_aab1ae05d3fd87f240c7082b18908d65d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab1ae05d3fd87f240c7082b18908d65d">LeavingBumperId</a> (Vector2 direction)</td></tr>
+<tr class="memdesc:aab1ae05d3fd87f240c7082b18908d65d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The id of the bumper a ball flying <em>direction</em>  is still on its way out of, which a swept test must leave out, or <a class="el" href="structBalloonParty_1_1Shared_1_1MushroomChainState.html#a0c9287e78202c6a8bb55f46ffa6de7fc" title="No cap: what a caller passes for the cap a ball is leaving when it is leaving none.">MushroomChainState.NoBumper</a> once the ball has turned since that bounce.  <br /></td></tr>
+<tr class="separator:aab1ae05d3fd87f240c7082b18908d65d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-attribs" name="pac-attribs"></a>
+Package Attributes</h2></td></tr>
+<tr class="memitem:a16903663a2f6f2ffd86eabe9f7cf2043" id="r_a16903663a2f6f2ffd86eabe9f7cf2043"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1Shared_1_1MushroomChainState.html">MushroomChainState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a16903663a2f6f2ffd86eabe9f7cf2043">MushroomChain</a></td></tr>
+<tr class="separator:a16903663a2f6f2ffd86eabe9f7cf2043"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
 <tr class="memitem:a3e94d4b87df9ba33e0cc8e20fa5e89fd" id="r_a3e94d4b87df9ba33e0cc8e20fa5e89fd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3e94d4b87df9ba33e0cc8e20fa5e89fd">BankedPierceCharges</a><code> [get, set]</code></td></tr>
 <tr class="separator:a3e94d4b87df9ba33e0cc8e20fa5e89fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc102c7ef779104b25bed2756a620bd7" id="r_acc102c7ef779104b25bed2756a620bd7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acc102c7ef779104b25bed2756a620bd7">BankedRainbowPierceCharges</a><code> [get, set]</code></td></tr>
 <tr class="separator:acc102c7ef779104b25bed2756a620bd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f96507abb09c48fa2dab0541cdd7d39" id="r_a3f96507abb09c48fa2dab0541cdd7d39"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3f96507abb09c48fa2dab0541cdd7d39">CapsCut</a><code> [get, set]</code></td></tr>
+<tr class="separator:a3f96507abb09c48fa2dab0541cdd7d39"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e4c665e0ac5757788de5de268c33a89" id="r_a3e4c665e0ac5757788de5de268c33a89"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3e4c665e0ac5757788de5de268c33a89">ConsecutiveSweeps</a><code> [get, set]</code></td></tr>
 <tr class="separator:a3e4c665e0ac5757788de5de268c33a89"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab7dec1aa571b705096cff54037ab663" id="r_aab7dec1aa571b705096cff54037ab663"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab7dec1aa571b705096cff54037ab663">ConsecutiveWallBounces</a><code> [get, set]</code></td></tr>
@@ -177,6 +196,13 @@ Properties</h2></td></tr>
 <tr class="separator:a4addd6cebde41dbf85e5e9871d51cdb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0008e8d3f177927abdc4a13553346628" id="r_a0008e8d3f177927abdc4a13553346628"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0008e8d3f177927abdc4a13553346628">WallHitSequence</a><code> [get, set]</code></td></tr>
 <tr class="separator:a0008e8d3f177927abdc4a13553346628"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:ab8a6fac5a5fd315d9ce3cdb9165586a3" id="r_ab8a6fac5a5fd315d9ce3cdb9165586a3"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab8a6fac5a5fd315d9ce3cdb9165586a3">_leftBumperDirection</a></td></tr>
+<tr class="separator:ab8a6fac5a5fd315d9ce3cdb9165586a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5a8d52bab7d93dd8cafadb3ad49c3dc" id="r_aa5a8d52bab7d93dd8cafadb3ad49c3dc"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa5a8d52bab7d93dd8cafadb3ad49c3dc">_leftBumperId</a> = MushroomChainState.NoBumper</td></tr>
+<tr class="separator:aa5a8d52bab7d93dd8cafadb3ad49c3dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="aacf3f6a34072cfe61a06b4985a7a26cc" name="aacf3f6a34072cfe61a06b4985a7a26cc"></a>
@@ -197,6 +223,131 @@ Properties</h2></td></tr>
 <p>Whether the shot plowed <em>balloon</em>  and hasn't discharged it yet. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#a3e0ed8183bef941447e76ba763b97f88">BalloonParty.Projectile.Model.IProjectileFlightState</a>.</p>
+
+</div>
+</div>
+<a id="a4e424b600b5b55107d5fae6011470c93" name="a4e424b600b5b55107d5fae6011470c93"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e424b600b5b55107d5fae6011470c93">&#9670;&#160;</a></span>LeaveBumper()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Projectile.Model.ProjectileFlightState.LeaveBumper </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>bumperId</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>direction</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Notes that the ball has just bounced off bumper <em>bumperId</em>  and leaves it along <em>direction</em> . </p>
+
+</div>
+</div>
+<a id="aab1ae05d3fd87f240c7082b18908d65d" name="aab1ae05d3fd87f240c7082b18908d65d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab1ae05d3fd87f240c7082b18908d65d">&#9670;&#160;</a></span>LeavingBumperId()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Projectile.Model.ProjectileFlightState.LeavingBumperId </td>
+          <td>(</td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>direction</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The id of the bumper a ball flying <em>direction</em>  is still on its way out of, which a swept test must leave out, or <a class="el" href="structBalloonParty_1_1Shared_1_1MushroomChainState.html#a0c9287e78202c6a8bb55f46ffa6de7fc" title="No cap: what a caller passes for the cap a ball is leaving when it is leaving none.">MushroomChainState.NoBumper</a> once the ball has turned since that bounce. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="ab8a6fac5a5fd315d9ce3cdb9165586a3" name="ab8a6fac5a5fd315d9ce3cdb9165586a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8a6fac5a5fd315d9ce3cdb9165586a3">&#9670;&#160;</a></span>_leftBumperDirection</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector2 BalloonParty.Projectile.Model.ProjectileFlightState._leftBumperDirection</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa5a8d52bab7d93dd8cafadb3ad49c3dc" name="aa5a8d52bab7d93dd8cafadb3ad49c3dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5a8d52bab7d93dd8cafadb3ad49c3dc">&#9670;&#160;</a></span>_leftBumperId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Projectile.Model.ProjectileFlightState._leftBumperId = MushroomChainState.NoBumper</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a16903663a2f6f2ffd86eabe9f7cf2043" name="a16903663a2f6f2ffd86eabe9f7cf2043"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16903663a2f6f2ffd86eabe9f7cf2043">&#9670;&#160;</a></span>MushroomChain</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structBalloonParty_1_1Shared_1_1MushroomChainState.html">MushroomChainState</a> BalloonParty.Projectile.Model.ProjectileFlightState.MushroomChain</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -246,6 +397,30 @@ Properties</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#aeefcee399460e5cebb1a645a2f90e49d">BalloonParty.Projectile.Model.IProjectileFlightState</a>.</p>
+
+</div>
+</div>
+<a id="a3f96507abb09c48fa2dab0541cdd7d39" name="a3f96507abb09c48fa2dab0541cdd7d39"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f96507abb09c48fa2dab0541cdd7d39">&#9670;&#160;</a></span>CapsCut</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Projectile.Model.ProjectileFlightState.CapsCut</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel set">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#a24f39c2ee6a178c4a8d57ef9012f4be2">BalloonParty.Projectile.Model.IProjectileFlightState</a>.</p>
 
 </div>
 </div>

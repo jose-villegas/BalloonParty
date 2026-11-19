@@ -5,6 +5,7 @@ var namespaceBalloonParty_1_1Audio_1_1Routing =
     [ "DiscoSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1DiscoSoundRouter.html", "classBalloonParty_1_1Audio_1_1Routing_1_1DiscoSoundRouter" ],
     [ "ItemSightSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1ItemSightSoundRouter.html", "classBalloonParty_1_1Audio_1_1Routing_1_1ItemSightSoundRouter" ],
     [ "ItemSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter.html", "classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter" ],
+    [ "MushroomSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1MushroomSoundRouter.html", "classBalloonParty_1_1Audio_1_1Routing_1_1MushroomSoundRouter" ],
     [ "MusicSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter" ],
     [ "NukeSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1NukeSoundRouter.html", "classBalloonParty_1_1Audio_1_1Routing_1_1NukeSoundRouter" ],
     [ "ProgressionSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter" ],

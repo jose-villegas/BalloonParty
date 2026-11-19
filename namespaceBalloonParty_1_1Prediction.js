@@ -11,6 +11,7 @@ var namespaceBalloonParty_1_1Prediction =
     [ "PredictionTraceEndKind", "namespaceBalloonParty_1_1Prediction.html#a254a3b76e2281f08bf6f5a0b1024809b", [
       [ "OpenAir", "namespaceBalloonParty_1_1Prediction.html#a254a3b76e2281f08bf6f5a0b1024809ba694d154d83bf9e21a5dccd5cbf861add", null ],
       [ "Wall", "namespaceBalloonParty_1_1Prediction.html#a254a3b76e2281f08bf6f5a0b1024809ba94e8a499539d1a472f3b5dbbb85508c0", null ],
-      [ "Deflector", "namespaceBalloonParty_1_1Prediction.html#a254a3b76e2281f08bf6f5a0b1024809ba68e6202e50e4806f18d28cab574e0d82", null ]
+      [ "Deflector", "namespaceBalloonParty_1_1Prediction.html#a254a3b76e2281f08bf6f5a0b1024809ba68e6202e50e4806f18d28cab574e0d82", null ],
+      [ "Bumper", "namespaceBalloonParty_1_1Prediction.html#a254a3b76e2281f08bf6f5a0b1024809ba8500b63132a4f08ad0e93aa4802c3b13", null ]
     ] ]
 ];

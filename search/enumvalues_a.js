@@ -11,5 +11,15 @@ var searchData=
   ['metric_8',['Metric',['../namespaceBalloonParty_1_1UI_1_1Telemetry.html#a20e80a757cebf98f741774a57e8c5311a216ab40cda5c7c00ff42a4efb1827d89',1,'BalloonParty::UI::Telemetry']]],
   ['moved_9',['Moved',['../namespaceBalloonParty_1_1Projectile_1_1Controller.html#ac2f91b5b592a9fafc9ba1d5f2a395649a95bfdefaaf01553cbf21ccd942855c69',1,'BalloonParty::Projectile::Controller']]],
   ['multiplicative_10',['Multiplicative',['../namespaceBalloonParty_1_1Projectile_1_1Model.html#a51a7cfe4e8f083cd12e30f878834e748a0d73bf5decac382ed6a8adc3838fd7e2',1,'BalloonParty::Projectile::Model']]],
-  ['music_11',['Music',['../namespaceBalloonParty_1_1Audio_1_1Configuration.html#ac5b2f541d895bda884bd17d9aaa85d4ba47dcbd834e669233d7eb8a51456ed217',1,'BalloonParty::Audio::Configuration']]]
+  ['mushroom_11',['Mushroom',['../namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473ab93c3d9029fa42815abf0551db0cec98',1,'BalloonParty::Slots::Actor::Archetype']]],
+  ['mushroombounce_12',['MushroomBounce',['../namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13acbf683fd6bb9724f4a8f22a0e80fdd67',1,'BalloonParty::Audio']]],
+  ['mushroombounces_13',['MushroomBounces',['../namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba88a335b863201ab2a8cb1ed89a3eab70',1,'BalloonParty::Game::Telemetry']]],
+  ['mushroomcapsblown_14',['MushroomCapsBlown',['../namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebaa84e23d45260e4c3a97ba8e966ca7a5e',1,'BalloonParty::Game::Telemetry']]],
+  ['mushroomcapscut_15',['MushroomCapsCut',['../namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba8b5d0a90bc349306e82d0ef1fd547d4c',1,'BalloonParty::Game::Telemetry']]],
+  ['mushroomchainsbroken_16',['MushroomChainsBroken',['../namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebadc214f09159749bd384ec0cd1241c77f',1,'BalloonParty::Game::Telemetry']]],
+  ['mushroomchainscompleted_17',['MushroomChainsCompleted',['../namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebaf31fb13dd0dafafdc5080928bdb92f8d',1,'BalloonParty::Game::Telemetry']]],
+  ['mushroomchainsoneshort_18',['MushroomChainsOneShort',['../namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba6efee8c832118d69a327c3138b23bcca',1,'BalloonParty::Game::Telemetry']]],
+  ['mushroomchargesbanked_19',['MushroomChargesBanked',['../namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba0c8676d1718fa94a3fea008829847bfe',1,'BalloonParty::Game::Telemetry']]],
+  ['mushroomspores_20',['MushroomSpores',['../namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda8622ce3a50a8c376fb7fe6a6e55892c8',1,'BalloonParty::Configuration::Effects']]],
+  ['music_21',['Music',['../namespaceBalloonParty_1_1Audio_1_1Configuration.html#ac5b2f541d895bda884bd17d9aaa85d4ba47dcbd834e669233d7eb8a51456ed217',1,'BalloonParty::Audio::Configuration']]]
 ];

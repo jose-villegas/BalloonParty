@@ -1,0 +1,5 @@
+<map id="BalloonParty.Slots.Actor.MushroomPlacementSource" name="BalloonParty.Slots.Actor.MushroomPlacementSource">
+<area shape="rect" id="Node000001" title="The live game&#39;s IMushroomPlacementSource: the level being laid out, the run&#39;s seed and the balloon sp..." alt="" coords="7,98,211,143"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IMushroomPlacementSource.html" title="What the level being laid out says about where its mushrooms may stand, beyond the grid itself: the s..." alt="" coords="5,5,213,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,64,111,99,107,97,107,68"/>
+</map>

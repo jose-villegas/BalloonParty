@@ -1,3 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$classBalloonParty_1_1Thrower_1_1ThrowerReload.html" title="The thrower&#39;s reload rules: how far the held ball has slid from the pivot to the muzzle,..." alt="" coords="5,5,220,50"/>
+<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotSelectionStrategy.html" title="Lets each actor type provide its own slot&#45;picking logic (e.g. adjacency vs. isolation)." alt="" coords="5,75,184,119"/>
+<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Slots_1_1Actor_1_1ClusterSlotSelectionStrategy.html" title="Quarantines closed clusters&#39; neighbor slots so separately&#45;seeded clusters never touch and merge past ..." alt="" coords="236,5,443,50"/>
+<area shape="poly" id="edge813_Node000000_Node000001" title=" " alt="" coords="190,67,260,49,256,52,192,72"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Slots_1_1Actor_1_1RandomSlotSelectionStrategy.html" title="Shuffles all empty slots and picks the first N." alt="" coords="232,75,447,119"/>
+<area shape="poly" id="edge814_Node000000_Node000002" title=" " alt="" coords="199,94,234,96,229,98,200,100"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Slots_1_1Actor_1_1WallSlotSelectionStrategy.html" title="The slots of a meadow level&#39;s mushrooms: walls of caps, from the baked catalogue (MushroomWallPicker)..." alt="" coords="245,144,434,189"/>
+<area shape="poly" id="edge815_Node000000_Node000003" title=" " alt="" coords="191,121,261,143,255,144,190,127"/>
 </map>

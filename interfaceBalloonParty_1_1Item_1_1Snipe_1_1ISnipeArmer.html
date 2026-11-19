@@ -129,6 +129,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af8f1620f237dc2b3ab6abe5b3e55abf6" id="r_af8f1620f237dc2b3ab6abe5b3e55abf6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af8f1620f237dc2b3ab6abe5b3e55abf6">Arm</a> (<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html">IWriteableProjectileModel</a> shot)</td></tr>
 <tr class="memdesc:af8f1620f237dc2b3ab6abe5b3e55abf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Arms <em>shot</em>  as a plain (not rainbow) lance with the <a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a>'s speed buff, and opens its pencil line: at the muzzle when it fires, if it's still in the thrower.  <br /></td></tr>
 <tr class="separator:af8f1620f237dc2b3ab6abe5b3e55abf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26a835f29ff25144d27eb4067fe4d48a" id="r_a26a835f29ff25144d27eb4067fe4d48a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a26a835f29ff25144d27eb4067fe4d48a">ArmAt</a> (<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html">IWriteableProjectileModel</a> shot, Vector3 at)</td></tr>
+<tr class="memdesc:a26a835f29ff25144d27eb4067fe4d48a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Arms <em>shot</em> , a ball in flight that is not piercing, as a plain lance earned there with no pickup behind it (the meadow's mushroom chain): as <a class="el" href="#af8f1620f237dc2b3ab6abe5b3e55abf6" title="Arms shot  as a plain (not rainbow) lance with the Snipe&#39;s speed buff, and opens its pencil line: at ...">Arm</a> arms one, its pencil line starting at <em>at</em> .  <br /></td></tr>
+<tr class="separator:a26a835f29ff25144d27eb4067fe4d48a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Arms a shot as a <a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a> lance without a pickup: what <a class="el" href="classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html" title="Handles the Snipe item: arms the shot that popped the holder as a piercing lance — it plows through b...">SnipeItemHandler</a> does for one. </p>
@@ -151,6 +154,38 @@ Public Member Functions</h2></td></tr>
 <p>Arms <em>shot</em>  as a plain (not rainbow) lance with the <a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a>'s speed buff, and opens its pencil line: at the muzzle when it fires, if it's still in the thrower. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html#a89a08d4eca6a41cb1442269e9428197a">BalloonParty.Item.Snipe.SnipeItemHandler</a>.</p>
+
+</div>
+</div>
+<a id="a26a835f29ff25144d27eb4067fe4d48a" name="a26a835f29ff25144d27eb4067fe4d48a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26a835f29ff25144d27eb4067fe4d48a">&#9670;&#160;</a></span>ArmAt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Item.Snipe.ISnipeArmer.ArmAt </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html">IWriteableProjectileModel</a></td>          <td class="paramname"><span class="paramname"><em>shot</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>at</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Arms <em>shot</em> , a ball in flight that is not piercing, as a plain lance earned there with no pickup behind it (the meadow's mushroom chain): as <a class="el" href="#af8f1620f237dc2b3ab6abe5b3e55abf6" title="Arms shot  as a plain (not rainbow) lance with the Snipe&#39;s speed buff, and opens its pencil line: at ...">Arm</a> arms one, its pencil line starting at <em>at</em> . </p>
+<p>Never asked for a ball already piercing: two pierces cannot overlap, and a lance bounces off no mushroom, so the chain's rule (<code>MushroomChainRule.OnBounce</code>) only ever arms a ball that is not one. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">at</td><td>Where the lance was earned, which is where its straight run begins.</td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html#a1e15de67a0ef62324edb4ccd009bb780">BalloonParty.Item.Snipe.SnipeItemHandler</a>.</p>
 
 </div>
 </div>

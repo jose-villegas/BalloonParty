@@ -177,8 +177,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:a17c71fedbb8d66a93c150935a10db679" id="r_a17c71fedbb8d66a93c150935a10db679"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a17c71fedbb8d66a93c150935a10db679">LevelParameters</a> (int boardLines, int itemCadence, AnimationCurve initialItemCountWeights, AnimationCurve itemCountWeights, <a class="el" href="structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html">BalloonTypeWeight</a>[] balloonWeights, <a class="el" href="structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html">ItemTypeWeight</a>[] itemWeights, <a class="el" href="structBalloonParty_1_1Configuration_1_1GridActors_1_1ResolvedGridActorGate.html">ResolvedGridActorGate</a>[] gridActorGates, int allowedColorsMask, float spawnIntervalScale=1f, bool isExtraColorLevel=false, float extraItemChance=0f)</td></tr>
-<tr class="separator:a17c71fedbb8d66a93c150935a10db679"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86eced9513921ba71c88f8cb59d1a504" id="r_a86eced9513921ba71c88f8cb59d1a504"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a86eced9513921ba71c88f8cb59d1a504">LevelParameters</a> (int boardLines, int itemCadence, AnimationCurve initialItemCountWeights, AnimationCurve itemCountWeights, <a class="el" href="structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html">BalloonTypeWeight</a>[] balloonWeights, <a class="el" href="structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html">ItemTypeWeight</a>[] itemWeights, <a class="el" href="structBalloonParty_1_1Configuration_1_1GridActors_1_1ResolvedGridActorGate.html">ResolvedGridActorGate</a>[] gridActorGates, int allowedColorsMask, float spawnIntervalScale=1f, bool isExtraColorLevel=false, float extraItemChance=0f, <a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Formation.html#a8d2d65777aaac2e933178f9b7ba0c7b9">FormationShapes</a> allowedFormationShapes=FormationShapes.All)</td></tr>
+<tr class="separator:a86eced9513921ba71c88f8cb59d1a504"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d1ee4491163e2a385c93a96d477eaab" id="r_a9d1ee4491163e2a385c93a96d477eaab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9d1ee4491163e2a385c93a96d477eaab">BindResolved</a> (IReadOnlyList&lt; <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry.html">ResolvedBalloonEntry</a> &gt; balloonPickList, IReadOnlyList&lt; <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedItemEntry.html">ResolvedItemEntry</a> &gt; itemPickList, IReadOnlyList&lt; <a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html">ItemSettings</a> &gt; items, IReadOnlyList&lt; string &gt; allowedColorNames)</td></tr>
 <tr class="separator:a9d1ee4491163e2a385c93a96d477eaab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -194,6 +194,9 @@ Properties</h2></td></tr>
 <tr class="memitem:a4e97b2969509440bc4f20570d6a5d1ba" id="r_a4e97b2969509440bc4f20570d6a5d1ba"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4e97b2969509440bc4f20570d6a5d1ba">AllowedColorsMask</a><code> [get]</code></td></tr>
 <tr class="memdesc:a4e97b2969509440bc4f20570d6a5d1ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same bit-per-color convention as <a class="el" href="classBalloonParty_1_1Balloon_1_1Type_1_1ColorableBalloonVariant.html">ColorableBalloonVariant</a>'s mask — all bits set = every palette color.  <br /></td></tr>
 <tr class="separator:a4e97b2969509440bc4f20570d6a5d1ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af17baa9630ee598b573396e65d0e307c" id="r_af17baa9630ee598b573396e65d0e307c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Formation.html#a8d2d65777aaac2e933178f9b7ba0c7b9">FormationShapes</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af17baa9630ee598b573396e65d0e307c">AllowedFormationShapes</a><code> [get]</code></td></tr>
+<tr class="memdesc:af17baa9630ee598b573396e65d0e307c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The shapes the level's unbreakables may form: the snake alone on the meadow, every shape elsewhere.  <br /></td></tr>
+<tr class="separator:af17baa9630ee598b573396e65d0e307c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72c28855613282e30d9d53baf4f1f498" id="r_a72c28855613282e30d9d53baf4f1f498"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html">BalloonTypeWeight</a>[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a72c28855613282e30d9d53baf4f1f498">BalloonWeights</a><code> [get]</code></td></tr>
 <tr class="separator:a72c28855613282e30d9d53baf4f1f498"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31f04c2c8c976166a57a155774a3e054" id="r_a31f04c2c8c976166a57a155774a3e054"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31f04c2c8c976166a57a155774a3e054">BoardLines</a><code> [get]</code></td></tr>
@@ -225,6 +228,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a65a2cedb0f5b9f1106659f1f4d7e0ad1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa939468e246463399b012baa70931dd" id="r_aaa939468e246463399b012baa70931dd"><td class="memItemLeft" align="right" valign="top">readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaa939468e246463399b012baa70931dd">_allowedColorsMask</a> = ~0</td></tr>
 <tr class="separator:aaa939468e246463399b012baa70931dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ece5f09f99bc8e448d81942f09bbc3c" id="r_a6ece5f09f99bc8e448d81942f09bbc3c"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Formation.html#a8d2d65777aaac2e933178f9b7ba0c7b9">FormationShapes</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6ece5f09f99bc8e448d81942f09bbc3c">_allowedFormationShapes</a> = FormationShapes.All</td></tr>
+<tr class="separator:a6ece5f09f99bc8e448d81942f09bbc3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a81f230fd98caf43e49b51d367756a6ea" id="r_a81f230fd98caf43e49b51d367756a6ea"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry.html">ResolvedBalloonEntry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a81f230fd98caf43e49b51d367756a6ea">_balloonPickList</a> = Array.Empty&lt;<a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry.html">ResolvedBalloonEntry</a>&gt;()</td></tr>
 <tr class="separator:a81f230fd98caf43e49b51d367756a6ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ed30f80cdbe93ab9092eb8062068aa4" id="r_a3ed30f80cdbe93ab9092eb8062068aa4"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html">BalloonTypeWeight</a>[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3ed30f80cdbe93ab9092eb8062068aa4">_balloonWeights</a></td></tr>
@@ -274,8 +279,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a17c71fedbb8d66a93c150935a10db679" name="a17c71fedbb8d66a93c150935a10db679"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a17c71fedbb8d66a93c150935a10db679">&#9670;&#160;</a></span>LevelParameters() <span class="overload">[2/2]</span></h2>
+<a id="a86eced9513921ba71c88f8cb59d1a504" name="a86eced9513921ba71c88f8cb59d1a504"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86eced9513921ba71c88f8cb59d1a504">&#9670;&#160;</a></span>LevelParameters() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -336,7 +341,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>extraItemChance</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0f</span>&#160;)</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>extraItemChance</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Formation.html#a8d2d65777aaac2e933178f9b7ba0c7b9">FormationShapes</a></td>          <td class="paramname"><span class="paramname"><em>allowedFormationShapes</em></span><span class="paramdefsep"> = </span><span class="paramdefval">FormationShapes::All</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -676,6 +686,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly int BalloonParty.Configuration.Level.LevelParameters._allowedColorsMask = ~0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6ece5f09f99bc8e448d81942f09bbc3c" name="a6ece5f09f99bc8e448d81942f09bbc3c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ece5f09f99bc8e448d81942f09bbc3c">&#9670;&#160;</a></span>_allowedFormationShapes</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly <a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Formation.html#a8d2d65777aaac2e933178f9b7ba0c7b9">FormationShapes</a> BalloonParty.Configuration.Level.LevelParameters._allowedFormationShapes = FormationShapes.All</td>
         </tr>
       </table>
   </td>
@@ -1053,6 +1085,33 @@ Private Attributes</h2></td></tr>
 <p>Same bit-per-color convention as <a class="el" href="classBalloonParty_1_1Balloon_1_1Type_1_1ColorableBalloonVariant.html">ColorableBalloonVariant</a>'s mask — all bits set = every palette color. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#a249f8cf811f4e4cbc66df319b13f785c">BalloonParty.Configuration.Level.ILevelParameters</a>.</p>
+
+</div>
+</div>
+<a id="af17baa9630ee598b573396e65d0e307c" name="af17baa9630ee598b573396e65d0e307c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af17baa9630ee598b573396e65d0e307c">&#9670;&#160;</a></span>AllowedFormationShapes</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Formation.html#a8d2d65777aaac2e933178f9b7ba0c7b9">FormationShapes</a> BalloonParty.Configuration.Level.LevelParameters.AllowedFormationShapes</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The shapes the level's unbreakables may form: the snake alone on the meadow, every shape elsewhere. </p>
+<p>A shape left out is never picked, so unbreakables with no allowed shape to join stay loose. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#ac2f3529ed1c3b3c8157c3ac64c9d7cf9">BalloonParty.Configuration.Level.ILevelParameters</a>.</p>
 
 </div>
 </div>

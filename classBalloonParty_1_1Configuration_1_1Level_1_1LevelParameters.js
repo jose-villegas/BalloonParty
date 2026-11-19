@@ -1,7 +1,7 @@
 var classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters =
 [
     [ "LevelParameters", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a5e8b79d0962e3ea8001a88acfc9588ec", null ],
-    [ "LevelParameters", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a17c71fedbb8d66a93c150935a10db679", null ],
+    [ "LevelParameters", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a86eced9513921ba71c88f8cb59d1a504", null ],
     [ "BindResolved", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a9d1ee4491163e2a385c93a96d477eaab", null ],
     [ "FillExtraItems", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a1e85588004e70196f38908e5ef6b0d6a", null ],
     [ "FillGuaranteedBalloons", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a986faa6e911d6afd8bf6aeabeeb7218d", null ],
@@ -14,6 +14,7 @@ var classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters =
     [ "TryGetGridActorGate", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#abd4881ddfe8eb3864566e881afdd9ec9", null ],
     [ "_allowedColorNames", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a65a2cedb0f5b9f1106659f1f4d7e0ad1", null ],
     [ "_allowedColorsMask", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#aaa939468e246463399b012baa70931dd", null ],
+    [ "_allowedFormationShapes", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a6ece5f09f99bc8e448d81942f09bbc3c", null ],
     [ "_balloonPickList", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a81f230fd98caf43e49b51d367756a6ea", null ],
     [ "_balloonWeights", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a3ed30f80cdbe93ab9092eb8062068aa4", null ],
     [ "_boardLines", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a5c20579427e7cbb656783d28894b38b2", null ],
@@ -30,6 +31,7 @@ var classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters =
     [ "_spawnIntervalScale", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a68e48ca1c07590e94a641a3627b4ff7d", null ],
     [ "AllowedColors", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a38284c731da835e650da19a1f855e716", null ],
     [ "AllowedColorsMask", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a4e97b2969509440bc4f20570d6a5d1ba", null ],
+    [ "AllowedFormationShapes", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#af17baa9630ee598b573396e65d0e307c", null ],
     [ "BalloonWeights", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a72c28855613282e30d9d53baf4f1f498", null ],
     [ "BoardLines", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a31f04c2c8c976166a57a155774a3e054", null ],
     [ "ExtraItemChance", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#af1e8d8a3bdb41ac702738847f075cb28", null ],

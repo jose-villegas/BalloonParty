@@ -85,6 +85,7 @@ var namespaceBalloonParty_1_1Audio =
       [ "BalloonPopNuke", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13adb7eca984272c01c74a2622e5a01b1d9", null ],
       [ "NukeArmed", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a5789cd0386ca1bdd30425205cedc3a41", null ],
       [ "NukeCountdownBeep", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13aedf7bc9af90fcd9072222b9702c382ee", null ],
-      [ "NukeBreatherWind", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13ab74917b5b60e2219272312eb2fe7ca00", null ]
+      [ "NukeBreatherWind", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13ab74917b5b60e2219272312eb2fe7ca00", null ],
+      [ "MushroomBounce", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13acbf683fd6bb9724f4a8f22a0e80fdd67", null ]
     ] ]
 ];

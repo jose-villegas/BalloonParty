@@ -152,6 +152,9 @@ Package Functions</h2></td></tr>
 <tr class="memitem:ae5a6ccb1778723605c5f79a31fe866a2" id="r_ae5a6ccb1778723605c5f79a31fe866a2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae5a6ccb1778723605c5f79a31fe866a2">Paint</a> (<a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bd">PaintSource</a> source, Vector3 worldPosition, int paletteIndex=-1)</td></tr>
 <tr class="memdesc:ae5a6ccb1778723605c5f79a31fe866a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Paints at the given world position using the source's profile.  <br /></td></tr>
 <tr class="separator:ae5a6ccb1778723605c5f79a31fe866a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0b60df0f3f1923583914cd09db14f45" id="r_ae0b60df0f3f1923583914cd09db14f45"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae0b60df0f3f1923583914cd09db14f45">Paint</a> (<a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bd">PaintSource</a> source, Vector3 worldPosition, Vector3 prevWorldPosition, float radius, float opacityScale)</td></tr>
+<tr class="memdesc:ae0b60df0f3f1923583914cd09db14f45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Paints a capsule from <em>prevWorldPosition</em>  to <em>worldPosition</em>  in the source's colour, with a radius of the caller's and the profile's opacity scaled by <em>opacityScale</em> : for a source whose stamps differ in size, as a cone built of capsules does.  <br /></td></tr>
+<tr class="separator:ae0b60df0f3f1923583914cd09db14f45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e19eda368c5febd2324e2fc4b6ede09" id="r_a3e19eda368c5febd2324e2fc4b6ede09"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3e19eda368c5febd2324e2fc4b6ede09">Paint</a> (<a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bd">PaintSource</a> source, Vector3 worldPosition, Vector3 prevWorldPosition, int paletteIndex=-1)</td></tr>
 <tr class="memdesc:a3e19eda368c5febd2324e2fc4b6ede09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Paints a capsule from <em>prevWorldPosition</em>  to <em>worldPosition</em>  using the source's profile.  <br /></td></tr>
 <tr class="separator:a3e19eda368c5febd2324e2fc4b6ede09"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -575,7 +578,7 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <a id="ae5a6ccb1778723605c5f79a31fe866a2" name="ae5a6ccb1778723605c5f79a31fe866a2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae5a6ccb1778723605c5f79a31fe866a2">&#9670;&#160;</a></span>Paint() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5a6ccb1778723605c5f79a31fe866a2">&#9670;&#160;</a></span>Paint() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -611,8 +614,54 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ae0b60df0f3f1923583914cd09db14f45" name="ae0b60df0f3f1923583914cd09db14f45"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0b60df0f3f1923583914cd09db14f45">&#9670;&#160;</a></span>Paint() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Scenario.SmokeFieldService.Paint </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bd">PaintSource</a></td>          <td class="paramname"><span class="paramname"><em>source</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>worldPosition</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>prevWorldPosition</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>radius</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>opacityScale</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Paints a capsule from <em>prevWorldPosition</em>  to <em>worldPosition</em>  in the source's colour, with a radius of the caller's and the profile's opacity scaled by <em>opacityScale</em> : for a source whose stamps differ in size, as a cone built of capsules does. </p>
+
+</div>
+</div>
 <a id="a3e19eda368c5febd2324e2fc4b6ede09" name="a3e19eda368c5febd2324e2fc4b6ede09"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3e19eda368c5febd2324e2fc4b6ede09">&#9670;&#160;</a></span>Paint() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e19eda368c5febd2324e2fc4b6ede09">&#9670;&#160;</a></span>Paint() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">

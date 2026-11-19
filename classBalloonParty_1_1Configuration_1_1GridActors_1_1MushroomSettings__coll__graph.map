@@ -1,0 +1,25 @@
+<map id="BalloonParty.Configuration.GridActors.MushroomSettings" name="BalloonParty.Configuration.GridActors.MushroomSettings">
+<area shape="rect" id="Node000001" title="Inspector&#45;authored IMushroomSettings." alt="" coords="667,248,882,293"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IMushroomSettings.html" title="Tuning of the meadow&#39;s mushrooms (Meadow Mushrooms): the chain that pays the lance,..." alt="" coords="318,5,537,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="522,53,540,60,595,84,645,118,680,150,712,185,760,248,755,247,708,188,676,153,641,122,593,89,538,65,523,58"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Shared_1_1MushroomChainRules.html" title="The numbers and switches of the mushroom chain, as MushroomChainRule takes them." alt="" coords="316,75,539,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="521,122,540,129,593,152,644,180,745,247,739,247,642,185,591,157,538,134,522,128"/>
+<area shape="rect" id="Node000004" href="$structBalloonParty_1_1Shared_1_1BumperKickTuning.html" title="The numbers of the forgiving kick (BumperKick): how wide its cone is, and how far beside a mushroom&#39;s..." alt="" coords="325,144,530,189"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="526,191,644,225,707,247,702,248,642,230,526,196"/>
+<area shape="rect" id="Node000005" href="$structBalloonParty_1_1Slots_1_1Actor_1_1MushroomPlacementLimits.html" title="What a level&#39;s mushrooms keep to: how many walls of caps, how long a wall is, how many caps in all,..." alt="" coords="328,213,527,258"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="542,244,669,259,664,260,543,250"/>
+<area shape="rect" id="Node000006" href="$structBalloonParty_1_1Slots_1_1Actor_1_1MushroomLayoutBand.html" title="What a layout of mushroom walls must measure to be dealt: flown from every angle the thrower can aim ..." alt="" coords="18,179,197,223"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="212,210,330,223,325,226,213,215"/>
+<area shape="rect" id="Node000007" href="$structBalloonParty_1_1Slots_1_1Actor_1_1MushroomCannonClearance.html" title="The room a layout leaves the cannon: no cap close to it, and no wall broad in front of it." alt="" coords="5,248,210,293"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="224,255,330,245,325,248,226,260"/>
+<area shape="rect" id="Node000008" href="$structBalloonParty_1_1Slots_1_1Actor_1_1MushroomLeanTuning.html" title="How a mushroom&#39;s cap answers a hit (MushroomCapSpring): how far it leans, how it wobbles back,..." alt="" coords="338,283,516,327"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="531,292,669,280,664,282,532,297"/>
+<area shape="rect" id="Node000009" href="$structBalloonParty_1_1Slots_1_1Actor_1_1MushroomSporeTuning.html" title="The spores a meadow mushroom lets go (Meadow Mushrooms): a puff of smoke and a few specks when a ball..." alt="" coords="338,352,516,397"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="524,345,642,310,707,292,702,294,644,315,526,350"/>
+<area shape="rect" id="Node000010" href="$structBalloonParty_1_1Slots_1_1Actor_1_1MushroomCutTuning.html" title="How a mushroom&#39;s cap falls when a lance cuts it and how it pops back (MushroomCutTimeline): how far t..." alt="" coords="338,421,516,466"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="520,413,538,407,591,384,642,356,740,294,744,292,644,360,593,388,540,411,522,418"/>
+<area shape="rect" id="Node000011" href="$structBalloonParty_1_1Slots_1_1Actor_1_1MushroomThrowTuning.html" title="How a mushroom&#39;s cap flies when a blast blows it off whole (MushroomCutTimeline): how far it is throw..." alt="" coords="18,421,197,466"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="212,441,340,443,335,445,213,446"/>
+<area shape="rect" id="Node000012" href="$structBalloonParty_1_1Shared_1_1MushroomBlastTuning.html" title="How far a bomb&#39;s blast shakes the meadow&#39;s mushrooms." alt="" coords="316,491,539,535"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="522,482,538,476,593,452,641,419,676,387,708,352,755,294,760,292,712,356,680,391,645,423,595,457,540,481,523,488"/>
+</map>

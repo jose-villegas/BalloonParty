@@ -121,16 +121,23 @@ $(function(){initNavTree('classBalloonParty_1_1Prediction_1_1PredictionTraceCalc
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator__coll__graph.svg" width="580" height="264"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator__coll__graph.svg" width="580" height="472"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a78ab1909dc7d5aa5eba9e9586a00a8ca" id="r_a78ab1909dc7d5aa5eba9e9586a00a8ca"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a78ab1909dc7d5aa5eba9e9586a00a8ca">PredictionTraceCalculator</a> (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html">IPredictionTraceConfig</a> config, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html">IProjectileFlightConfig</a> flightConfig, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IDeflectorField.html">IDeflectorField</a> deflectorField, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IPierceItemField.html">IPierceItemField</a> pierceItemField)</td></tr>
-<tr class="separator:a78ab1909dc7d5aa5eba9e9586a00a8ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40d1c0b556ebd1848535bae42a4cc751" id="r_a40d1c0b556ebd1848535bae42a4cc751"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a40d1c0b556ebd1848535bae42a4cc751">Calculate</a> (Vector3 origin, Vector3 direction, float projectileContactRadius, List&lt; Vector3 &gt; results, out <a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a> end, bool startsPiercing=false)</td></tr>
-<tr class="memdesc:a40d1c0b556ebd1848535bae42a4cc751"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the prediction trace, bouncing off all four walls and off any balloon that would deflect the shot rather than let it through — until the path crosses a pierce-item host, from which point on it just continues straight through every tough instead, matching a piercing shot's real flight.  <br /></td></tr>
-<tr class="separator:a40d1c0b556ebd1848535bae42a4cc751"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3cc42920e2c67f00c91b8c51c060de0e" id="r_a3cc42920e2c67f00c91b8c51c060de0e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3cc42920e2c67f00c91b8c51c060de0e">PredictionTraceCalculator</a> (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html">IPredictionTraceConfig</a> config, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html">IProjectileFlightConfig</a> flightConfig, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IDeflectorField.html">IDeflectorField</a> deflectorField, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IPierceItemField.html">IPierceItemField</a> pierceItemField, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IBumperField.html">IBumperField</a> bumperField=null, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IBumperBounceRule.html">IBumperBounceRule</a> bounceRule=null, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IMushroomSettings.html">IMushroomSettings</a> mushrooms=null)</td></tr>
+<tr class="memdesc:a3cc42920e2c67f00c91b8c51c060de0e"><td class="mdescLeft">&#160;</td><td class="mdescRight"><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bumperField</td><td>The board's bumpers (the meadow's mushrooms), with the rule the ball leaves one by and the chain's settings: the three the live flight has (<code>ProjectileMotionResolver</code>). </td></tr>
+  </table>
+  </dd>
+</dl>
+ <br /></td></tr>
+<tr class="separator:a3cc42920e2c67f00c91b8c51c060de0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2b17510fea179225e18af2dd57362df" id="r_aa2b17510fea179225e18af2dd57362df"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa2b17510fea179225e18af2dd57362df">Calculate</a> (Vector3 origin, Vector3 direction, float projectileContactRadius, List&lt; Vector3 &gt; results, out <a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a> end, bool startsPiercing=false, <a class="el" href="structBalloonParty_1_1Shared_1_1MushroomChainState.html">MushroomChainState</a> chain=default)</td></tr>
+<tr class="memdesc:aa2b17510fea179225e18af2dd57362df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the prediction trace, bouncing off all four walls and off any balloon that would deflect the shot rather than let it through — until the path crosses a pierce-item host, from which point on it just continues straight through every tough instead, matching a piercing shot's real flight.  <br /></td></tr>
+<tr class="separator:aa2b17510fea179225e18af2dd57362df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-types" name="pri-types"></a>
 Private Types</h2></td></tr>
@@ -143,8 +150,12 @@ Private Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:aa77a3e690e05695917a25cfd1ab6e7d9" id="r_aa77a3e690e05695917a25cfd1ab6e7d9"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1BumperCircle.html">BumperCircle</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa77a3e690e05695917a25cfd1ab6e7d9">BumpersInPlay</a> ()</td></tr>
+<tr class="separator:aa77a3e690e05695917a25cfd1ab6e7d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab49e4f4075026316b829d0121343d41e" id="r_ab49e4f4075026316b829d0121343d41e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a3da9399151e38b6b17f5f76319cab383">StepEvent</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab49e4f4075026316b829d0121343d41e">ResolveStepEvent</a> (Vector3 stepStart, Vector3 direction, float shift, float projectileContactRadius, out Vector3 contact, out Vector2 normal, out Vector3 surface, out Vector3 pierceContact)</td></tr>
 <tr class="separator:ab49e4f4075026316b829d0121343d41e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52b680b471f388ea65c320b68e2f994d" id="r_a52b680b471f388ea65c320b68e2f994d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a52b680b471f388ea65c320b68e2f994d">TryFindBumper</a> (IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1BumperCircle.html">BumperCircle</a> &gt; bumpers, in <a class="el" href="structBalloonParty_1_1Shared_1_1WallLimits.html">WallLimits</a> walls, in <a class="el" href="structBalloonParty_1_1Shared_1_1MushroomChainState.html">MushroomChainState</a> chain, Vector3 stepStart, Vector3 direction, float length, int leavingId, out int index, out float entry)</td></tr>
+<tr class="separator:a52b680b471f388ea65c320b68e2f994d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac76e57718990ef5a083967f6febfb874" id="r_ac76e57718990ef5a083967f6febfb874"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac76e57718990ef5a083967f6febfb874">TryFindNearestDeflector</a> (Vector3 origin, Vector3 direction, float maxDistance, float projectileContactRadius, out Vector3 contact, out Vector2 normal, out Vector3 surface, out float entryDistance)</td></tr>
 <tr class="separator:ac76e57718990ef5a083967f6febfb874"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd8838c5f991a00d63502d8028f0aed4" id="r_acd8838c5f991a00d63502d8028f0aed4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acd8838c5f991a00d63502d8028f0aed4">TryFindNearestPierceItem</a> (Vector3 origin, Vector3 direction, float maxDistance, float projectileContactRadius, out Vector3 contact, out float entryDistance)</td></tr>
@@ -152,6 +163,10 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:a6e792b185c99169402c622193465be86" id="r_a6e792b185c99169402c622193465be86"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IBumperBounceRule.html">IBumperBounceRule</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6e792b185c99169402c622193465be86">_bounceRule</a></td></tr>
+<tr class="separator:a6e792b185c99169402c622193465be86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abdcc58c0098640aed2994013a004e321" id="r_abdcc58c0098640aed2994013a004e321"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IBumperField.html">IBumperField</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abdcc58c0098640aed2994013a004e321">_bumperField</a></td></tr>
+<tr class="separator:abdcc58c0098640aed2994013a004e321"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeadbdbccff150502b91078c83d250dd2" id="r_aeadbdbccff150502b91078c83d250dd2"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html">IPredictionTraceConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeadbdbccff150502b91078c83d250dd2">_config</a></td></tr>
 <tr class="separator:aeadbdbccff150502b91078c83d250dd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a610d4977191c85d2d5d2befbae373d2b" id="r_a610d4977191c85d2d5d2befbae373d2b"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IDeflectorField.html">IDeflectorField</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a610d4977191c85d2d5d2befbae373d2b">_deflectorField</a></td></tr>
@@ -160,6 +175,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:abbc9434859c808bfcd298619f0293d50"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e17c975cb9ea34b25bf27347a10c31c" id="r_a6e17c975cb9ea34b25bf27347a10c31c"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html">IProjectileFlightConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6e17c975cb9ea34b25bf27347a10c31c">_flightConfig</a></td></tr>
 <tr class="separator:a6e17c975cb9ea34b25bf27347a10c31c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21543fbc64976ecee4a4d6be27e0f272" id="r_a21543fbc64976ecee4a4d6be27e0f272"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IMushroomSettings.html">IMushroomSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a21543fbc64976ecee4a4d6be27e0f272">_mushrooms</a></td></tr>
+<tr class="separator:a21543fbc64976ecee4a4d6be27e0f272"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af818bc7b4262782ba289da15755a6ca1" id="r_af818bc7b4262782ba289da15755a6ca1"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IPierceItemField.html">IPierceItemField</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af818bc7b4262782ba289da15755a6ca1">_pierceItemField</a></td></tr>
 <tr class="separator:af818bc7b4262782ba289da15755a6ca1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac139020429531f6a1101df4d22f5d8c6" id="r_ac139020429531f6a1101df4d22f5d8c6"><td class="memItemLeft" align="right" valign="top">readonly List&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1PierceItemCircle.html">PierceItemCircle</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac139020429531f6a1101df4d22f5d8c6">_pierceItems</a> = new()</td></tr>
@@ -195,8 +212,8 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a78ab1909dc7d5aa5eba9e9586a00a8ca" name="a78ab1909dc7d5aa5eba9e9586a00a8ca"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a78ab1909dc7d5aa5eba9e9586a00a8ca">&#9670;&#160;</a></span>PredictionTraceCalculator()</h2>
+<a id="a3cc42920e2c67f00c91b8c51c060de0e" name="a3cc42920e2c67f00c91b8c51c060de0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3cc42920e2c67f00c91b8c51c060de0e">&#9670;&#160;</a></span>PredictionTraceCalculator()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -219,16 +236,65 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IPierceItemField.html">IPierceItemField</a></td>          <td class="paramname"><span class="paramname"><em>pierceItemField</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IPierceItemField.html">IPierceItemField</a></td>          <td class="paramname"><span class="paramname"><em>pierceItemField</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IBumperField.html">IBumperField</a></td>          <td class="paramname"><span class="paramname"><em>bumperField</em></span><span class="paramdefsep"> = </span><span class="paramdefval">null</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IBumperBounceRule.html">IBumperBounceRule</a></td>          <td class="paramname"><span class="paramname"><em>bounceRule</em></span><span class="paramdefsep"> = </span><span class="paramdefval">null</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IMushroomSettings.html">IMushroomSettings</a></td>          <td class="paramname"><span class="paramname"><em>mushrooms</em></span><span class="paramdefsep"> = </span><span class="paramdefval">null</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
+<p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bumperField</td><td>The board's bumpers (the meadow's mushrooms), with the rule the ball leaves one by and the chain's settings: the three the live flight has (<code>ProjectileMotionResolver</code>). </td></tr>
+  </table>
+  </dd>
+</dl>
+</p>
+<p>Without them the line is the one it was before the meadow had mushrooms.</p>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a40d1c0b556ebd1848535bae42a4cc751" name="a40d1c0b556ebd1848535bae42a4cc751"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a40d1c0b556ebd1848535bae42a4cc751">&#9670;&#160;</a></span>Calculate()</h2>
+<a id="aa77a3e690e05695917a25cfd1ab6e7d9" name="aa77a3e690e05695917a25cfd1ab6e7d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa77a3e690e05695917a25cfd1ab6e7d9">&#9670;&#160;</a></span>BumpersInPlay()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1BumperCircle.html">BumperCircle</a> &gt; BalloonParty.Prediction.PredictionTraceCalculator.BumpersInPlay </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa2b17510fea179225e18af2dd57362df" name="aa2b17510fea179225e18af2dd57362df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2b17510fea179225e18af2dd57362df">&#9670;&#160;</a></span>Calculate()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -261,18 +327,25 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>startsPiercing</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>startsPiercing</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Shared_1_1MushroomChainState.html">MushroomChainState</a></td>          <td class="paramname"><span class="paramname"><em>chain</em></span><span class="paramdefsep"> = </span><span class="paramdefval">default</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Calculates the prediction trace, bouncing off all four walls and off any balloon that would deflect the shot rather than let it through — until the path crosses a pierce-item host, from which point on it just continues straight through every tough instead, matching a piercing shot's real flight. </p>
 <p>Walls and deflections share one reflection budget. They cost the shot differently — a wall spends a shield and a deflection does not — but the budget here is about how much the telegraph gives away, not about what the shot can afford, and to the player both are the same event: the line turned. </p>
+<p><b>Mushrooms</b> (<a class="el" href="plan_meadow_mushrooms.html">Meadow Mushrooms</a>) bend the line the way they will bend the ball: the same swept test (<a class="el" href="classBalloonParty_1_1Shared_1_1BumperSweep.html" title="The swept test of a ball against the board&#39;s bumpers: which bumper circle the ball&#39;s centre enters fi...">BumperSweep</a>), the same count (<a class="el" href="classBalloonParty_1_1Shared_1_1MushroomChainRule.html" title="The meadow&#39;s mushroom chain: a ball that bounces from one wall of caps to another enough times in one...">MushroomChainRule</a>) and the same bounce rule, asked in the live flight's order, so the forgiving kick shows in the line. A bounce spends the one reflection budget. The bounce that completes a chain arms the ball, so the line is a lance's from that corner on (<a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html#a06f3dfb4584c59437428c7684037859b" title="Index into the trace&#39;s points where the shot starts piercing, or -1 if it never does.">PredictionTraceEnd.PierceStartIndex</a>): through balloons and through mushrooms, whose caps the lance cuts. A cap already cut is not in the field and bends nothing. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">projectileContactRadius</td><td>The shot's own contact radius. Every deflector (and pierce-item host) is inflated by it, because contact happens when the two circles touch — <code>ProjectileView</code> passes <code>SurfaceRadius + _contactRadius</code> to the real deflection for the same reason. Treating the shot as a point shrinks every target and draws grazing hits as misses. </td></tr>
     <tr><td class="paramname">end</td><td>Where piercing began (or -1), plus what the line ran into at the end and that contact's surface normal. Piercing's index lets a view style just the trailing pierced run; the end contact lets one draw the bounce leaving it without re-deriving a normal this already solved. </td></tr>
-    <tr><td class="paramname">startsPiercing</td><td>The shot leaves the muzzle already piercing (a ball loaded as a Snipe lance): the whole line runs straight through balloons, turning only at walls, and its pierce starts at its first point. </td></tr>
+    <tr><td class="paramname">startsPiercing</td><td>The shot leaves the muzzle already piercing (a ball loaded as a Snipe lance): the whole line runs straight through balloons and mushrooms, turning only at walls, and its pierce starts at its first point. </td></tr>
+    <tr><td class="paramname">chain</td><td>The ball's tally of mushroom bounces as it leaves the muzzle (<code>ProjectileFlightState.MushroomChain</code>): the kick depends on the count. A ball that has not flown has the default. </td></tr>
   </table>
   </dd>
 </dl>
@@ -327,6 +400,70 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">out Vector3</td>          <td class="paramname"><span class="paramname"><em>pierceContact</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a52b680b471f388ea65c320b68e2f994d" name="a52b680b471f388ea65c320b68e2f994d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52b680b471f388ea65c320b68e2f994d">&#9670;&#160;</a></span>TryFindBumper()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Prediction.PredictionTraceCalculator.TryFindBumper </td>
+          <td>(</td>
+          <td class="paramtype">IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1BumperCircle.html">BumperCircle</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>bumpers</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Shared_1_1WallLimits.html">WallLimits</a></td>          <td class="paramname"><span class="paramname"><em>walls</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Shared_1_1MushroomChainState.html">MushroomChainState</a></td>          <td class="paramname"><span class="paramname"><em>chain</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>stepStart</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>direction</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>length</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>leavingId</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out int</td>          <td class="paramname"><span class="paramname"><em>index</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out float</td>          <td class="paramname"><span class="paramname"><em>entry</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -447,6 +584,50 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a6e792b185c99169402c622193465be86" name="a6e792b185c99169402c622193465be86"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e792b185c99169402c622193465be86">&#9670;&#160;</a></span>_bounceRule</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IBumperBounceRule.html">IBumperBounceRule</a> BalloonParty.Prediction.PredictionTraceCalculator._bounceRule</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abdcc58c0098640aed2994013a004e321" name="abdcc58c0098640aed2994013a004e321"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abdcc58c0098640aed2994013a004e321">&#9670;&#160;</a></span>_bumperField</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IBumperField.html">IBumperField</a> BalloonParty.Prediction.PredictionTraceCalculator._bumperField</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aeadbdbccff150502b91078c83d250dd2" name="aeadbdbccff150502b91078c83d250dd2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aeadbdbccff150502b91078c83d250dd2">&#9670;&#160;</a></span>_config</h2>
 
@@ -524,6 +705,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html">IProjectileFlightConfig</a> BalloonParty.Prediction.PredictionTraceCalculator._flightConfig</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a21543fbc64976ecee4a4d6be27e0f272" name="a21543fbc64976ecee4a4d6be27e0f272"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21543fbc64976ecee4a4d6be27e0f272">&#9670;&#160;</a></span>_mushrooms</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IMushroomSettings.html">IMushroomSettings</a> BalloonParty.Prediction.PredictionTraceCalculator._mushrooms</td>
         </tr>
       </table>
   </td>

@@ -1,13 +1,15 @@
 <map id="BalloonParty.Balloon.Formation.UnbreakableFormationService" name="BalloonParty.Balloon.Formation.UnbreakableFormationService">
-<area shape="rect" id="Node000001" title="Gathers the board&#39;s unbreakables into formations, as many as there are members for." alt="" coords="282,117,510,162"/>
+<area shape="rect" id="Node000001" title="Gathers the board&#39;s unbreakables into formations, as many as there are members for." alt="" coords="282,148,510,192"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="77,5,162,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="176,26,235,42,306,77,365,116,360,117,303,82,233,47,177,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="176,24,206,31,235,42,276,65,314,93,375,147,370,147,311,97,273,70,233,47,205,36,177,29"/>
 <area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="16,57,223,102"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="237,102,293,115,288,117,238,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="211,104,235,111,333,146,328,148,233,116,212,109"/>
 <area shape="rect" id="Node000004" title=" " alt="" coords="71,125,168,153"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="183,137,284,138,279,141,184,142"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="183,144,284,156,279,159,184,149"/>
 <area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IFormationReinforcements.html" title="Unbreakables the board&#39;s formations have called in." alt="" coords="5,177,234,222"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="239,171,292,161,287,163,241,176"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="248,183,284,181,279,183,250,188"/>
 <area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IToughSnakeBody.html" title="The tough snake as it stands, for views that draw it as one body." alt="" coords="5,246,234,291"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="217,238,233,231,302,196,359,163,364,161,304,200,235,236,219,243"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="212,238,233,231,343,191,338,194,235,236,214,243"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Balloon_1_1Formation_1_1ICoveredHosts.html" title="The balloons item covers stand round now, for views that draw a cover as one body with what it covers..." alt="" coords="5,316,234,360"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="221,307,232,301,273,275,312,245,371,194,376,191,315,250,276,279,235,305,223,312"/>
 </map>

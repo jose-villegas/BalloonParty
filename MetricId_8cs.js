@@ -36,6 +36,13 @@ var MetricId_8cs =
       [ "BalloonParty.Game.Telemetry.MetricId.RippleNeighboursHit", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebaf16f1e40f839a226cfbad7299ba17083", null ],
       [ "BalloonParty.Game.Telemetry.MetricId.FusesRunOut", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebaea45586b88a6597bf4d1563c9b9c9800", null ],
       [ "BalloonParty.Game.Telemetry.MetricId.CoatsApplied", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba5f4d398f48fb16bda12a8899f185cd87", null ],
-      [ "BalloonParty.Game.Telemetry.MetricId.CoatsRemoved", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba96b46cfcb37ab029c8467a29d99c6926", null ]
+      [ "BalloonParty.Game.Telemetry.MetricId.CoatsRemoved", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba96b46cfcb37ab029c8467a29d99c6926", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.MushroomBounces", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba88a335b863201ab2a8cb1ed89a3eab70", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.MushroomChainsCompleted", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebaf31fb13dd0dafafdc5080928bdb92f8d", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.MushroomCapsCut", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba8b5d0a90bc349306e82d0ef1fd547d4c", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.MushroomChainsBroken", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebadc214f09159749bd384ec0cd1241c77f", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.MushroomChainsOneShort", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba6efee8c832118d69a327c3138b23bcca", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.MushroomCapsBlown", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebaa84e23d45260e4c3a97ba8e966ca7a5e", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.MushroomChargesBanked", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba0c8676d1718fa94a3fea008829847bfe", null ]
     ] ]
 ];

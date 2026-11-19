@@ -5,6 +5,7 @@ var interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationS
     [ "BottomClearance", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#abf9e9826d99af0a92744527a179189d9", null ],
     [ "DiagonalWeight", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#abff06e34c00e3b222969a654fdfff118", null ],
     [ "Enabled", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a84106b8faf66b27add61798fa20625ef", null ],
+    [ "GiftCoverPreference", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a0132b253190bfa0bd75e94bc057e36b9", null ],
     [ "HorizontalBottomClearance", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a29d6af280feaabfa6fc0601541bd818c", null ],
     [ "HorizontalMaxMembers", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#aa690423d9a3d9014f13e12cf857a2f87", null ],
     [ "HorizontalWeight", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a5b37aa7112069dd23b5e36c1b1492f94", null ],

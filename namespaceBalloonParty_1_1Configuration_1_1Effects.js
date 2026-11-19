@@ -58,7 +58,8 @@ var namespaceBalloonParty_1_1Configuration_1_1Effects =
       [ "ToughDeflect", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda4925b41d0df91ae83e84e0ca1fedecf6", null ],
       [ "SnipeSkyLight", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda5f9970ae34cc55664cd63fa680706728", null ],
       [ "PaintSplash", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda3892e1810e69b0e5f0065fbddd5ba998", null ],
-      [ "BalloonPop", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda8e42741ff46f887bb0109738fbae034d", null ]
+      [ "BalloonPop", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda8e42741ff46f887bb0109738fbae034d", null ],
+      [ "MushroomSpores", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda8622ce3a50a8c376fb7fe6a6e55892c8", null ]
     ] ],
     [ "StampSource", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0e", [
       [ "Projectile", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0eaae7968d26b598ce434958b0825b7a4ac", null ],
