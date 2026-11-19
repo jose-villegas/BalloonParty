@@ -1,5 +1,13 @@
 var NAVTREEINDEX45 =
 {
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ab6006532a08fac86e0e6788db4565cbf":[6,0,0,3,27,47],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ab6b17a333f0000cae6b3da4d4dbb0021":[5,0,0,3,27,21],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ab6b17a333f0000cae6b3da4d4dbb0021":[6,0,0,3,27,21],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ab779baf137ca780db50ada2f7235b6fc":[5,0,0,3,27,17],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ab779baf137ca780db50ada2f7235b6fc":[6,0,0,3,27,17],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#abaaafe05a0f98b57cc6d71206210271b":[5,0,0,3,27,23],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#abaaafe05a0f98b57cc6d71206210271b":[6,0,0,3,27,23],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ac2f59d9bb0ae0d60b22f038eb1eeb0b4":[5,0,0,3,27,49],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ac2f59d9bb0ae0d60b22f038eb1eeb0b4":[6,0,0,3,27,49],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ac3b7f460bac8bf66958da027958c26ab":[5,0,0,3,27,39],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ac3b7f460bac8bf66958da027958c26ab":[6,0,0,3,27,39],
@@ -241,13 +249,5 @@ var NAVTREEINDEX45 =
 "classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a0e516ee54bad96bf0120ab7bcb669cd7":[6,0,0,3,36,7],
 "classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a1e57d61269a0cd519cfd7f91d7049910":[5,0,0,3,36,10],
 "classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a1e57d61269a0cd519cfd7f91d7049910":[6,0,0,3,36,10],
-"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a345ecd47c34b9217c085c39c64c6cab5":[5,0,0,3,36,12],
-"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a345ecd47c34b9217c085c39c64c6cab5":[6,0,0,3,36,12],
-"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a4301773992fa776a651c0bceaa6d5bb3":[5,0,0,3,36,4],
-"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a4301773992fa776a651c0bceaa6d5bb3":[6,0,0,3,36,4],
-"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a4a79f918ee469d8b12abe6ce92252798":[5,0,0,3,36,11],
-"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a4a79f918ee469d8b12abe6ce92252798":[6,0,0,3,36,11],
-"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a4abdf175b2a88d0c4e53d76c10abce01":[5,0,0,3,36,9],
-"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a4abdf175b2a88d0c4e53d76c10abce01":[6,0,0,3,36,9],
-"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a50a0e99f27e2552ecaf5ceb81b691fda":[5,0,0,3,36,8]
+"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a345ecd47c34b9217c085c39c64c6cab5":[5,0,0,3,36,12]
 };

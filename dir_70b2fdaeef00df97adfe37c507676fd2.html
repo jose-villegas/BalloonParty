@@ -129,10 +129,10 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>The grid that holds all actors in play. Actors are anything that can occupy a slot — balloons today, static obstacles and spawners in the future.</p>
-<h1><a class="anchor" id="autotoc_md1237"></a>
+<h1><a class="anchor" id="autotoc_md1238"></a>
 Actor abstraction</h1>
 <p>Every grid occupant is an <code>ISlotActor</code>. The grid never speaks directly in balloon types.</p>
-<h2><a class="anchor" id="autotoc_md1238"></a>
+<h2><a class="anchor" id="autotoc_md1239"></a>
 Core interfaces</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -150,7 +150,7 @@ Core interfaces</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>SlotActorKind</code>   </td><td class="markdownTableBodyNone">Enum — <code>Dynamic</code> (balancer can relocate, contributes weight) or <code>Static</code> (fixed, contributes weight, balancer skips)   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md1239"></a>
+<h2><a class="anchor" id="autotoc_md1240"></a>
 Capability interfaces</h2>
 <p>Optional traits actors can advertise to consumers:</p>
 <table class="markdownTable">
@@ -239,7 +239,7 @@ Capability interfaces</h2>
 <div class="line">    PredictionTraceCalculator --&gt; IPierceItemField : aim telegraph, pierce-through</div>
 <div class="line">    ItemAssigner --&gt; IDeflectorField : chain planning</div>
 <div class="line">    ShieldChainWindow --&gt; IDeflectorField : editor scan</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md1240"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md1241"></a>
 Hit types</h2>
 <p><code>DamageContext</code> wraps damage with optional flags:</p>
 <table class="markdownTable">
@@ -275,7 +275,7 @@ Hit types</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>PuffObstacleModel</code>   </td><td class="markdownTableBodyNone">neither   </td><td class="markdownTableBodyNone">Structural obstacle; <code>IPassThrough</code> — animation paths can cross it. <code>IClusterableSlotActor</code> — gains <code>ClusterId</code> linking to a visual <code>SlotCluster</code>.   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md1241"></a>
+<h1><a class="anchor" id="autotoc_md1242"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -294,7 +294,7 @@ Contents</h1>
 <td class="markdownTableBodyNone"><code>Spawner/</code>   </td><td class="markdownTableBodyNone">Spawner coordination — <code>IGridSpawner</code>, <code>SpawnStage</code>, <code>GridSpawnerCoordinator</code> (namespace <code><a class="el" href="namespaceBalloonParty_1_1Slots_1_1Spawner.html">BalloonParty.Slots.Spawner</a></code>)   </td></tr>
 </table>
 <p><code>IShieldSlotPreference</code> living here while <code>Item/Shield/</code> implements it is this codebase's cleanest example of dependency inversion: <code>MoveWeightEvaluator</code> depends on an interface beside it in <code>Slots</code>, never on the item layer, so the shot solver's board mirror can leave the preference null instead of being taught about a bias it has no thrower to measure from.</p>
-<h1><a class="anchor" id="autotoc_md1242"></a>
+<h1><a class="anchor" id="autotoc_md1243"></a>
 How it works</h1>
 <p>The grid is a two-dimensional space of slots arranged in a staggered pattern (odd rows offset by half a column). Each slot is either empty or occupied by an actor model and its view. <code>SlotGrid</code> itself only converts a slot coordinate into a world position (<code>IndexToWorldPosition</code>); balance queries — which slots are unbalanced (missing support from below) and what the best empty slot is for an actor to move into — live on <code>GridBalanceQuery</code>.</p>
 <p><code>GridBalanceQuery.IsUnbalanced</code> flags a slot missing support from below. <code>GridBalanceQuery.OptimalNextEmptySlot</code> delegates to <code>MoveWeightEvaluator.OptimalBalanceMove</code>, which uses a recursive weight algorithm to decide between two candidate slots (directly above and diagonally above). The weight of a candidate = count of occupied slots in the tree above it. Higher weight = more support = preferred. On tie, the diagonal candidate wins (via <code>&gt;=</code> comparison).</p>
@@ -303,11 +303,11 @@ How it works</h1>
 <p><code>AllEmptySlots</code> yields every empty slot across the full grid — used by <code>StaticActorSpawner</code>.</p>
 <p><code>IsTraversable(col, row)</code> returns true if the slot is empty or the occupant implements <code>IPassThrough</code> — used by <code>ComputePath</code> to build spawn animation waypoints.</p>
 <p><code>ComputePath(source, target)</code> returns world-space waypoints along the straight-line grid path between two slot indices. Either endpoint may be outside grid bounds. Non-traversable in-bounds slots and in-transit balance slots log a diagnostic (<code>Log.Info</code>, stripped from release builds — spawn-burst storms can hit this path often enough to matter at 120 Hz); rerouting is deferred.</p>
-<h1><a class="anchor" id="autotoc_md1243"></a>
+<h1><a class="anchor" id="autotoc_md1244"></a>
 Balance Path Holder</h1>
 <p><code>BalancePathHolder</code> tracks grid slots that are in-transit due to balance animations. When the balancer relocates a balloon from slot A to slot B, both A and B are reserved as in-transit under that actor. This lets <code>ComputePath</code> flag when a spawn animation path crosses a slot that a balance animation is currently traversing — even if the grid data already reflects the post-balance state.</p>
 <p>Transit slots are tracked per-actor and released via <code>Release(actor)</code> when the balance animation's <code>OnComplete</code> fires. This means transit data persists across multiple balance passes — a second balance triggered after spawning does not erase transit from the first balance's still-running animations.</p>
-<h1><a class="anchor" id="autotoc_md1244"></a>
+<h1><a class="anchor" id="autotoc_md1245"></a>
 Spawner Coordination</h1>
 <p><code>GridSpawnerCoordinator</code> owns the sequencing of all grid population. Individual spawners (<code>StaticActorSpawner</code>, <code>BalloonSpawner</code>) implement <code>IGridSpawner</code> and declare their priority via <code>SpawnStage</code>. The coordinator:</p>
 <ol type="1">
@@ -327,7 +327,7 @@ Spawner Coordination</h1>
 <div class="line">SpawnStage.BalloonActors (100) ──→  BalloonSpawner.SpawnAsync</div>
 </div><!-- fragment --><p>Spawners are injected as <code>IEnumerable&lt;IGridSpawner&gt;</code> via VContainer's collection injection — each registered with <code>.As&lt;IGridSpawner&gt;()</code> in <code>GameLifetimeScope</code>.</p>
 <p><code>StaticActorSpawner.Start()</code> registers the pool immediately (synchronous, runs at scene start before the gate opens). <code>BalloonSpawner.Start()</code> starts pre-warming pools asynchronously and stores the task; <code>SpawnAsync</code> awaits it before populating the grid — so pre-warm and navigation wait overlap rather than serialize.</p>
-<h1><a class="anchor" id="autotoc_md1245"></a>
+<h1><a class="anchor" id="autotoc_md1246"></a>
 Interactions</h1>
 <ul>
 <li><b>BalloonSpawner</b> — calls <code>Balance()</code> once before all line spawns so existing balloons consolidate upward first; then calls <code>Place</code> for each new balloon into remaining empty slots; uses <code>ComputePath</code> for spawn animation waypoints; publishes <code>BalanceBalloonsMessage</code> after spawning for a final settling pass</li>
@@ -338,7 +338,7 @@ Interactions</h1>
 <li><b>PaintItemHandler</b> — buckets paintable slots to the nearest of the splash's covering blobs (not hex neighbors); casts <code>At()</code> result to <code>IPaintable</code> for painting</li>
 <li><b>ISlotGridConfig</b> — provides <code>SlotsSize</code>, <code>SlotSeparation</code>, <code>SlotsOffset</code> for grid construction and position calculations</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md1246"></a>
+<h1><a class="anchor" id="autotoc_md1247"></a>
 Slot Selection Strategies</h1>
 <p><code>ISlotSelectionStrategy</code> abstracts how <code>StaticActorSpawner</code> picks which empty slots an actor type should occupy. Each <code>GridActorPrefabEntry</code> declares a <code>SlotPlacementMode</code> enum that maps to a strategy. Strategies are lazily cached — one instance per mode.</p>
 <table class="markdownTable">
@@ -351,7 +351,7 @@ Slot Selection Strategies</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>ClusterSlotSelectionStrategy</code>   </td><td class="markdownTableBodyNone"><code>Cluster</code>   </td><td class="markdownTableBodyNone">Seeds a cluster at a random slot, then greedily expands into hex neighbors. Each cluster is capped at <code>MaxPerCluster</code> slots (from the level pacing gate, <code>ResolvedGridActorGate.MaxPerCluster</code>). When a cluster is full or has no more neighbors, the next seed is biased toward the opposite side of the grid — maximising the minimum distance to all previous cluster centroids. Produces multiple small, spatially distributed clusters.   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md1247"></a>
+<h1><a class="anchor" id="autotoc_md1248"></a>
 Mushroom placement</h1>
 <p>A meadow level's mushrooms stand in <b>walls</b>: one to three caps in neighbouring slots, in a line along a row or along either diagonal of the slot lattice, two to four walls a level (<code><a class="el" href="PLAN-MeadowMushrooms_8md.html">Plans/PLAN-MeadowMushrooms.md</a></code>, <em>Walls with a kick as built</em>). A ball that bounces from one wall to another three times in a flight, without touching a wall of the board, is paid the Snipe lance; a lance bounces off none of them and cuts the caps in its way, which grow back (A lance cuts the cap). Where the walls stand is not worked out when a level is dealt: it is picked from a catalogue of layouts baked ahead of time, each kept for what it measured.</p>
 <table class="markdownTable">
@@ -387,7 +387,7 @@ Mushroom placement</h1>
 </table>
 <p><b>What a layout is kept for.</b> Flown from every angle the thrower can aim at (511, a third of a degree apart), on a board with nothing else on it and the one shield a ball starts with, a layout must arm the lance on 7 to 16 in 100 of the angles, in a widest unbroken run of 2 degrees or more, on at least 20 angles (<code>MushroomLayoutBand.Accepts</code>). Shapes are not judged. Walls that send the ball to each other (facing walls, lanes, funnels opening toward the cannon) are the ones that measure inside the band; a wall above another, or a funnel opening away, does not. Of the boards that leave the cannon its room, about one of two walls in ten is inside it, four of three walls in five, two of four walls in five (the rest of those arm too often).</p>
 <p><b>The bake.</b> <code>MushroomWallBaker</code> (<code>Editor/</code>, <code>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Bake Mushroom Wall Catalogue</code>) draws candidate boards to the limits with a seeded generator, turns away the ones that crowd the cannon, flies each of the rest with the shot simulator (<code>Solver/</code>), keeps the ones inside the band with room to spare (<code>ArmingMarginAngles</code>, 8 arming angles at each end of the share, and <code>WindowMarginAngles</code>, 2 angles of window over its floor), picks up to 64 of each count that differ by two caps or more, and writes the generated file. The room is there because a layout does not measure the same on every runtime: a ball that grazes a cap on one misses it on another. Between the runtime the catalogue was baked on and the Editor's, a layout measured up to 3 arming angles apart and no angle of window; the tests allow an entry 4 and 1, and the game on a device runs on a third runtime no test flies on. The board is small enough that the bake sees every board there is (2452, 3828 and 3468 of 2, 3 and 4 walls). Of those, 1284, 818 and 326 leave the cannon its room, and 18, 305 and 45 of them are inside the band with the bake's room: a full 64 exists only for three walls, and the 18 and the 45 are every board of two and of four that qualifies. <code>MushroomAimGridTests</code> flies every entry again and holds <code>BakedWith</code> against what ships, so the catalogue has to be baked again after a change to the board, the cannon, the aim grid or a mushroom setting; <code>MushroomSettings.Validate</code> says when the catalogue has no layout for a count the settings ask for.</p>
-<h2><a class="anchor" id="autotoc_md1248"></a>
+<h2><a class="anchor" id="autotoc_md1249"></a>
 From the catalogue to the board</h2>
 <p>A mushroom cap is a static actor like a bush: a <code>MushroomBumperModel</code> (<code>Actor/Archetype/</code>) stands in its slot for the whole level, is never hit, and is moved by nothing (the balance race, the wave-start roam and pressure shoves only move dynamic actors). It is not <code>IPassThrough</code>, so a rising balloon stops under it, as under a bush. It has no collider: the ball's bounce is worked out against circles (<code><a class="el" href="Projectile_2README_8md.html">Projectile/README.md</a></code>, <em>Mushroom bounce</em>).</p>
 <table class="markdownTable">
@@ -407,7 +407,7 @@ From the catalogue to the board</h2>
 <td class="markdownTableBodyNone">6   </td><td class="markdownTableBodyNone"><code>MushroomBoard</code> (<code>Grid/</code>)   </td><td class="markdownTableBodyNone">Reads the whole caps off the grid as <code>IBumperField</code> (<code>Shared/</code>), leaving out the ones a lance has cut until they grow back: one <code>BumperCircle</code> each, its id the cap's <code>ChainIndex</code>, its wall the cap's <code>Wall</code>, its centre the slot's world position at rest, its radius the cap's plus the ball's, kept in the order of the ids. Rebuilt when the grid has changed since it was last read (<code>SlotGrid.MutationVersion</code>) or the ball's radius has; reading it on an unchanged board costs two comparisons and allocates nothing   </td></tr>
 </table>
 <p><b>What makes them appear.</b> The spawner only places the types <code>GridActorConfiguration</code> lists. Its <code>Mushroom</code> entry names the <code>Mushroom</code> prefab (<code>Assets/Prefabs/Grid/Mushroom/</code>), a <code>MushroomView</code> with no collider; the entry's placement mode is not read. <code>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Meadow &gt; Build Mushroom Prefab</code> (<code>Editor/MushroomPrefabBuilder</code>) builds the prefab and adds the entry. The tests still place models with no view, through an entry that has no prefab.</p>
-<h2><a class="anchor" id="autotoc_md1249"></a>
+<h2><a class="anchor" id="autotoc_md1250"></a>
 The mushroom on the board</h2>
 <p><code>MushroomView</code> (<code>Actor/Archetype/</code>) is the mushroom's view: a <code>GridActorView</code>, pooled by <code>StaticActorSpawner</code> like the bushes' slots. It has one renderer, a quad on the <code>BalloonParty/Grid/Mushroom</code> shader, which draws the mushroom as the board is seen, from above, with its shadow, from the quad's own position, and reads no texture (<code>Shaders/BalloonParty/README.md</code>). At rest what shows is the cap, a disc that is exactly the circle the ball bounces off; the stem stands under it. Nothing about it is painted or baked.</p>
 <table class="markdownTable">
@@ -445,6 +445,7 @@ The mushroom on the board</h2>
 </table>
 <p>The timeline is worked out from the time passed, not carried from frame to frame, so a slow frame shows the same fall and it ends exactly at rest. Its numbers are <code>IMushroomSettings.Cut</code> (<code>MushroomCutTuning</code>, in <code>Actor/</code>). Back in the pool, and on every spawn, the cap is whole. A slot's centre and the lance's line are all the view needs: an edge clip takes a sliver off, a cut through the middle halves the cap. A cap cut as it pops back is cut at the size it had, so its pieces do not start full size.</p>
 <p><b>A blast takes the cap off whole, or sways it.</b> A bomb blows the cap off each mushroom next to it and a nuke off every one (<code>Item/Bomb/MushroomBlast</code>; the plan's <em>Blasts take caps off</em>). The cap's <code>MushroomCutMessage</code> then has the cause <code>Blast</code>, and <code>MushroomView.BlowOff</code> throws it away from the blast in one piece: thrown 0.9 world units in 1.1 seconds, lifted (drawn larger, its shadow further off), turning, landing, shrinking and fading, with the stem and its roots left as after a cut (<code>MushroomCutTimeline.Blow</code>, tuned by <code>IMushroomSettings.Cut.Blown</code>, a <code>MushroomThrowTuning</code>). The caps a bomb's blast reaches without taking them get a <code>MushroomSwayedMessage</code>, and <code>MushroomView.Sway</code> pushes the same spring a ball's hit pushes, away from the blast, by <code>Lean.SwayLean</code> (0.15) times the message's strength: the cap leans away and swings back toward the blast. A sway pays nothing, and a bare stem does not sway. At night the warts on a cap glow past white and bloom.</p>
+<p><b>An idle cap breathes and rocks.</b> So that the mushrooms are not lost among the balloons, the bushes and the smoke, a cap nothing has touched is never still (the plan's <em>An idle cap</em>). It swells and settles every 2.6 seconds, by 8% of its radius at the most and only ever outward, so it is never drawn smaller than the circle the ball bounces off; its shadow moves off as it swells, its warts spread, and at night their glow rises and falls with it. Each mushroom is at its own point of the breath by where it stands, so the caps of a wall breathe nearly together and a breath runs across the board. And it rocks in the disturbance field (<code>Shared/Disturbance</code>), the one the grass and the bush leaves answer: a ball flying close past, a pop beside it or a far blast's wave leans the cap the way the field is pushed and the lean swings until the field lets go, a second or so, never further than 0.065 (a cannon shot's hit leans it 0.14). None of it is a rule: the collider, the kick, the aim line and the solver know nothing of it. And none of it is <code>MushroomView</code>'s work: the view hands the shader three vectors from <code>IMushroomSettings.Idle</code> (<code>MushroomIdleTuning</code>) once, when it is spawned, and stays switched off while its cap is at rest, so an idle mushroom costs the CPU what it did. A cap's place in the breath's wave is the point of the ground it stands on, so the wave does not run fast or slow while an ascent carries the board. The quad the mushroom is drawn on takes its size from <code>Actor/MushroomQuadRoom</code>, which adds up the most a cap can need at once; the builder uses it and a test holds the built quad to it. A hit's lean, a blast's sway, a cut and the regrow play over the breath; a bare stem neither breathes nor rocks, and a cap growing back picks the breath up as it grows.</p>
 <p><b>A mushroom lets spores go.</b> A hit puffs a small cone of smoke and a few green to blue specks out of the cap's far rim, the way the ball was going, more for a faster ball and nothing for a soft touch; a lance's cut a little more, along the lance's way; a blast a wide burst from where the cap sat, a moment after, with the flying cap trailing a few specks (the plan's <em>A puff of spores</em>). <code>MushroomSporeRouter</code> (<code>Actor/Archetype/</code>, an entry point) hears <code>MushroomBouncedMessage</code> and <code>MushroomCutMessage</code> and asks <code>MushroomSporePlanner</code> what each is worth: the planner keeps a mushroom quiet for 0.4 seconds after a hit's puff and shares one budget across the board, so a rally is a few puffs and a nuke's seven caps are not a fog. The smoke goes to the smoke field (<code>Scenario/SmokeFieldService</code>, the <code>MushroomSpores</code> source), which lights, drifts and fades it as its own (a hit's puff is gone in about a second); the specks go to the view (<code>MushroomView.EmitSpores</code>), which emits them into the <code>Spores</code> particle system its prefab carries. The numbers are <code>IMushroomSettings.Spores</code> (<code>MushroomSporeTuning</code>, in <code>Actor/</code>).</p>
 <p><b>What a bare stem is.</b> The cut stalk seen from above, drawn by the same shader: fibres out from a darker middle, an uneven rim where the cap tore away, a skirt of gill remnants, quiet enough to sit in the grass since nothing bounces off it. Roots run out from its foot over the ground and fork as they go, to just inside where the cap's rim was, so a whole cap hides them; a hard knock shows a tip or two past the stem's foot. Both are turned by the mushroom's seed, so the stems of a wall differ. A falling piece hides the stem and the roots until its edge has drawn back off them.</p>
 <p>The mushroom sits in the scene as a bush does. Its layer is <code>Grid</code>, which the GI's scene capture reads, so it occludes and bounces light as its neighbours do. It draws at the bottom of the <code>Balloons</code> sorting layer (order -10): a mushroom grows from the ground, so a balloon that overlaps a knocked cap, the balloons' shadows, a pop's burst, the ball and a lance's line all draw over it and over the shadow it casts. Its shadow lies down-light of it, as far as a balloon's baked shadow lies from a balloon, swings away from a local light and fades with the light. Through a mist reveal the mushroom and its shadow fade with the meadow (<code>GroundSceneryAt</code>), as the bushes do. </p>

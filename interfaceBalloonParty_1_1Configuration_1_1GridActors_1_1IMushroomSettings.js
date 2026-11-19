@@ -3,6 +3,7 @@ var interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IMushroomSettings =
     [ "Blast", "interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IMushroomSettings.html#aa14c56f3074e3db7e0d1f4f89ec0a927", null ],
     [ "Cut", "interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IMushroomSettings.html#a5c1fd1258e54f8f6e34d04f41e514e55", null ],
     [ "ForgivingKick", "interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IMushroomSettings.html#a442acc7091c155c2b6594e7ce09cb349", null ],
+    [ "Idle", "interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IMushroomSettings.html#a48fdcf9e85a85f534684e58fb67c8d40", null ],
     [ "Kick", "interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IMushroomSettings.html#aa1cb0eb4d99d6412396d80eb13d014ec", null ],
     [ "Lean", "interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IMushroomSettings.html#ab4e75e689b17a62108f3416141ee56c9", null ],
     [ "PermanentSlotLimit", "interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IMushroomSettings.html#ad931cd05451cbf87a486714ed058c63e", null ],

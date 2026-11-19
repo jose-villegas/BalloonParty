@@ -1,5 +1,11 @@
 var NAVTREEINDEX98 =
 {
+"classBalloonParty_1_1Shared_1_1Pool_1_1SimplePoolChannel-1-g.html#af9947fb47bbcf9ff54006a64d90c2131":[6,0,0,12,9,11,3],
+"classBalloonParty_1_1Shared_1_1Pool_1_1TrailEndpointKeys.html":[5,0,0,12,9,12],
+"classBalloonParty_1_1Shared_1_1Pool_1_1TrailEndpointKeys.html":[6,0,0,12,9,12],
+"classBalloonParty_1_1Shared_1_1Pool_1_1TrailEndpointKeys.html#a6491f80175fd37af0e90a00ed2145344":[5,0,0,12,9,12,0],
+"classBalloonParty_1_1Shared_1_1Pool_1_1TrailEndpointKeys.html#a6491f80175fd37af0e90a00ed2145344":[6,0,0,12,9,12,0],
+"classBalloonParty_1_1Shared_1_1Pool_1_1TrailEndpointKeys.html#ada010d3c66753cb25bc8293dbcd19a03":[5,0,0,12,9,12,1],
 "classBalloonParty_1_1Shared_1_1Pool_1_1TrailEndpointKeys.html#ada010d3c66753cb25bc8293dbcd19a03":[6,0,0,12,9,12,1],
 "classBalloonParty_1_1Shared_1_1Pool_1_1TrailEndpointRegistry.html":[5,0,0,12,9,13],
 "classBalloonParty_1_1Shared_1_1Pool_1_1TrailEndpointRegistry.html":[6,0,0,12,9,13],
@@ -243,11 +249,5 @@ var NAVTREEINDEX98 =
 "classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteLayerCombiner.html#ab86cc580ac33545b96e55e71716e3464":[6,0,0,12,10,16,0],
 "classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteLayerCombiner.html#abb8a05036673dfabea076155ed3a0730":[5,0,0,12,10,16,6],
 "classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteLayerCombiner.html#abb8a05036673dfabea076155ed3a0730":[6,0,0,12,10,16,6],
-"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteLayerCombiner.html#af918600c1a3c6b8685e70c4708d981ac":[5,0,0,12,10,16,5],
-"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteLayerCombiner.html#af918600c1a3c6b8685e70c4708d981ac":[6,0,0,12,10,16,5],
-"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html":[5,0,0,12,10,17],
-"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html":[6,0,0,12,10,17],
-"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html#a1d731d087f821dae7c0b7997d24ccc1d":[5,0,0,12,10,17,7],
-"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html#a1d731d087f821dae7c0b7997d24ccc1d":[6,0,0,12,10,17,7],
-"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html#a394037d1048e9cb48ee00d3e555512c1":[5,0,0,12,10,17,5]
+"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteLayerCombiner.html#af918600c1a3c6b8685e70c4708d981ac":[5,0,0,12,10,16,5]
 };

@@ -2,7 +2,7 @@ var searchData=
 [
   ['k_20chosen_20by_20the_20owner_3a_20every_20cap_20a_20lance_20cuts_20banks_20a_20charge_0',['Decision K, chosen by the owner: every cap a lance cuts banks a charge',['../plan_meadow_mushrooms.html#autotoc_md809',1,'']]],
   ['keep_20drawing_20during_20completing_1',['6.6 ColorProgressBar must keep drawing during Completing',['../plan_level_up_timing.html#autotoc_md795',1,'']]],
-  ['keep_20it_2',['Why keep it',['../plan_web_demo_hosting.html#autotoc_md1035',1,'']]],
+  ['keep_20it_2',['Why keep it',['../plan_web_demo_hosting.html#autotoc_md1036',1,'']]],
   ['keep_20the_20watchdog_20regardless_3',['11. Keep the watchdog regardless',['../plan_level_up_timing.html#autotoc_md801',1,'']]],
   ['keep_20tipping_20identity_20as_20presentation_4',['4. Detect on projected progress; keep tipping identity as presentation',['../plan_level_up_timing.html#autotoc_md787',1,'']]],
   ['keeponlylabel_5',['KeepOnlyLabel',['../classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder.html#ae5ba0c22629520e7ff5e88302b0ecea9',1,'BalloonParty::Editor::GameOverLayoutBuilder']]],
@@ -11,7 +11,7 @@ var searchData=
   ['keeps_8',['Keeps',['../classBalloonParty_1_1Editor_1_1MushroomWallBaker.html#a661180e508978fa892a489cc22fb370e',1,'BalloonParty::Editor::MushroomWallBaker']]],
   ['keeps_9',['Rules a formation keeps',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/Balloon/Formation/README.md#autotoc_md28',1,'']]],
   ['keepthebeatthroughadoomedglide_10',['KeepTheBeatThroughADoomedGlide',['../classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a8916ef62da3a96882ab2ff85f4dbaaea',1,'BalloonParty::Balloon::Controller::BalloonBalancer']]],
-  ['kept_20strong_11',['Tier 1: UI arrival storm — &lt;strong&gt;RESOLVED 2026-07-23: U1 reverted, U2 kept&lt;/strong&gt;',['../plan_performance_recovery.html#autotoc_md901',1,'']]],
+  ['kept_20strong_11',['Tier 1: UI arrival storm — &lt;strong&gt;RESOLVED 2026-07-23: U1 reverted, U2 kept&lt;/strong&gt;',['../plan_performance_recovery.html#autotoc_md902',1,'']]],
   ['key_12',['Key',['../structBalloonParty_1_1Editor_1_1BalloonIdleSwayBaker_1_1PlayedPoint.html#a565312b5e1e43e3c2b2e25366345f199',1,'BalloonParty.Editor.BalloonIdleSwayBaker.PlayedPoint.Key'],['../classBalloonParty_1_1Game_1_1Run_1_1PlayerPrefsRunSave.html#a0acfb3b81be1601553f2cc1071e42f1b',1,'BalloonParty.Game.Run.PlayerPrefsRunSave.Key'],['../classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html#a9f88741b5f4da7044302d299ea68c10b',1,'BalloonParty.Configuration.Level.LevelGenerator.Key()']]],
   ['key_20contracts_20this_20enforces_13',['Key contracts this enforces',['../arch_shape_formations.html#autotoc_md119',1,'']]],
   ['key_20design_20decisions_14',['Key design decisions',['../arch_bush_system.html#autotoc_md85',1,'Key design decisions'],['../arch_light_field.html#autotoc_md94',1,'Key design decisions']]],
@@ -39,6 +39,6 @@ var searchData=
   ['kit_36',['Kit',['../classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Kit.html',1,'BalloonParty::Editor::GameOverLayoutBuilder']]],
   ['knot_37',['Knot',['../classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#a0c6d4aeb0d4d6efbeb82c53f15fe67d4',1,'BalloonParty::Balloon::View::BalloonView']]],
   ['knotfromcentre_38',['KnotFromCentre',['../classBalloonParty_1_1Game_1_1LaunchBalloonView.html#abce06f9b47c5e804e19d874ede7e6fed',1,'BalloonParty::Game::LaunchBalloonView']]],
-  ['known_20gap_39',['Known gap',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/Shared/Cadence/README.md#autotoc_md1153',1,'']]],
+  ['known_20gap_39',['Known gap',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/Shared/Cadence/README.md#autotoc_md1154',1,'']]],
   ['known_20residual_20scoped_20cosmetic_40',['10. Known residual (scoped, cosmetic)',['../plan_level_up_timing.html#autotoc_md800',1,'']]]
 ];

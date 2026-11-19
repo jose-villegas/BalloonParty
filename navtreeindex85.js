@@ -1,5 +1,11 @@
 var NAVTREEINDEX85 =
 {
+"classBalloonParty_1_1Prediction_1_1PredictionTraceLights.html#ae30116ee518a64e1fbe7b2360bc84419":[6,0,0,9,3,7],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceLights.html#aeb71cb74b60ace9303584a3652efb58e":[5,0,0,9,3,1],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceLights.html#aeb71cb74b60ace9303584a3652efb58e":[6,0,0,9,3,1],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceLights.html#af1234c7a439e910cf23391aab90df4c6":[5,0,0,9,3,10],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceLights.html#af1234c7a439e910cf23391aab90df4c6":[6,0,0,9,3,10],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceLights.html#af6e0f7370394c0d927d68e578c909693":[5,0,0,9,3,4],
 "classBalloonParty_1_1Prediction_1_1PredictionTraceLights.html#af6e0f7370394c0d927d68e578c909693":[6,0,0,9,3,4],
 "classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html":[5,0,0,9,4],
 "classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html":[6,0,0,9,4],
@@ -243,11 +249,5 @@ var NAVTREEINDEX85 =
 "classBalloonParty_1_1Projectile_1_1Controller_1_1DeflectChainController.html#abf9b822001856e5e5d9af8aa2660ba6b":[6,0,0,10,1,4,3],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1DeflectChainController.html#ac6b4203e6bc35749935b6cb7de346690":[5,0,0,10,1,4,4],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1DeflectChainController.html#ac6b4203e6bc35749935b6cb7de346690":[6,0,0,10,1,4,4],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1DeflectChainController.html#ac8fe12ee2a30f6682b99f269adfd78a0":[5,0,0,10,1,4,5],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1DeflectChainController.html#ac8fe12ee2a30f6682b99f269adfd78a0":[6,0,0,10,1,4,5],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1DeflectChainController.html#ae79fabbd7996da4fcf71c433d4ffee09":[5,0,0,10,1,4,8],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1DeflectChainController.html#ae79fabbd7996da4fcf71c433d4ffee09":[6,0,0,10,1,4,8],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html":[5,0,0,10,1,7],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html":[6,0,0,10,1,7],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html#a2a48e9e02976398bf7325cefe6660de9":[5,0,0,10,1,7,4]
+"classBalloonParty_1_1Projectile_1_1Controller_1_1DeflectChainController.html#ac8fe12ee2a30f6682b99f269adfd78a0":[5,0,0,10,1,4,5]
 };

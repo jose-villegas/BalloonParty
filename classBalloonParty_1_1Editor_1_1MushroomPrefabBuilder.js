@@ -5,7 +5,7 @@ var classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder =
     [ "BuildPrefab", "classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder.html#af97c20fbb4dee9c90c57a7b80bb22097", null ],
     [ "BuildSpores", "classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder.html#a17326e85132712b460212edf9c32f3db", null ],
     [ "EnsureMaterial", "classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder.html#a5d48fcd73b232d8d0938c2f8755cebce", null ],
-    [ "EnsureQuad", "classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder.html#affb2ce3aa17db973c1e0efab7bd10420", null ],
+    [ "EnsureQuad", "classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder.html#a4dfe3bbd9bf54527cdfae2f33481b0d9", null ],
     [ "FindEntry", "classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder.html#a2acb0250230d8488797698e3bbb6eefb", null ],
     [ "ConfigurationCache", "classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder.html#a344582069645ec59a723aea9d72ca66c", null ],
     [ "Layer", "classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder.html#a21dd3a49c22a9a1008896ff711933aea", null ],
@@ -14,9 +14,9 @@ var classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder =
     [ "PacingCache", "classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder.html#a2fa92d5a4fe7601c3168a5e1065c1a41", null ],
     [ "PrefabFolder", "classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder.html#a707e28b3b9bff72befa7293f984f3491", null ],
     [ "PrefabPath", "classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder.html#a200e9ffc2cdb850f7f53ae17683d4934", null ],
+    [ "PulseSwellId", "classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder.html#ad628a047e085032cbb5f40a2633c73d0", null ],
     [ "QuadPath", "classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder.html#af6077facc776243fc2f481ad9f745725", null ],
     [ "ShaderName", "classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder.html#a5f92702416b7eefb6e45b976a288fb58", null ],
-    [ "ShadowReach", "classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder.html#a61d2e4f084b6da848a5d9ad5ac5aaf36", null ],
     [ "SortingLayer", "classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder.html#ac96b92be6916d5a15d4f4debc318de5f", null ],
     [ "SortingOrder", "classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder.html#a7e77ed0ccf6417cbd62bfeca9071922c", null ],
     [ "SpeckDrag", "classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder.html#acfdfe40305eacd4250e2d8224c382435", null ],
@@ -27,6 +27,5 @@ var classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder =
     [ "SporeLayer", "classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder.html#ae6d2142e708aeff1cf02c9cef028aede", null ],
     [ "SporeMaterialPath", "classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder.html#a843b03786a854c2f2eef65555786c011", null ],
     [ "SporeShaderName", "classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder.html#a00732c5a9c22bbe394513280ecf9fac0", null ],
-    [ "SporeSortingOrder", "classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder.html#a7f281d3bc075f889a7aff46bc30dc4b0", null ],
-    [ "SwellShare", "classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder.html#a88fabd249a41de58c9f15f6ddf651559", null ]
+    [ "SporeSortingOrder", "classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder.html#a7f281d3bc075f889a7aff46bc30dc4b0", null ]
 ];

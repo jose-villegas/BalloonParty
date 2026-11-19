@@ -13,7 +13,7 @@ var searchData=
   ['4_205_20persistence_10',['4.5 Persistence',['../plan_future_ideas.html#autotoc_md542',1,'']]],
   ['4_20absorber_20consume_20vfx_11',['1.4 Absorber Consume VFX',['../plan_future_ideas.html#autotoc_md522',1,'']]],
   ['4_20after_20its_20review_12',['Phase 4, after its review',['../plan_meadow_mushrooms.html#autotoc_md834',1,'']]],
-  ['4_20agi_20—_20mali_20fragment_20vs_20bandwidth_13',['4. AGI — Mali fragment vs bandwidth',['../plan_performance_recovery.html#autotoc_md879',1,'']]],
+  ['4_20agi_20—_20mali_20fragment_20vs_20bandwidth_13',['4. AGI — Mali fragment vs bandwidth',['../plan_performance_recovery.html#autotoc_md880',1,'']]],
   ['4_20architecture_14',['4 Architecture',['../plan_card_reveal.html#autotoc_md396',1,'4. Architecture'],['../plan_coins.html#autotoc_md406',1,'4. Architecture']]],
   ['4_20as_20built_15',['Phase 4 as built',['../plan_meadow_mushrooms.html#autotoc_md833',1,'']]],
   ['4_20balancer_20changes_16',['8.4 Balancer Changes',['../plan_future_ideas.html#autotoc_md563',1,'']]],
@@ -26,10 +26,10 @@ var searchData=
   ['4_20new_20message_3a_20levelupabandonedmessage_23',['6.4 New message: LevelUpAbandonedMessage',['../plan_level_up_timing.html#autotoc_md793',1,'']]],
   ['4_20passive_20modifier_20ideas_24',['13.4 Passive modifier ideas',['../plan_future_ideas.html#autotoc_md600',1,'']]],
   ['4_20phase_201_3a_20projectile_20identity_20no_20behaviour_20change_25',['4. Phase 1: projectile identity (no behaviour change)',['../plan_fast_paced.html#autotoc_md504',1,'']]],
-  ['4_20phases_26',['4. Phases',['../plan_shot_solver_accuracy.html#autotoc_md957',1,'']]],
+  ['4_20phases_26',['4. Phases',['../plan_shot_solver_accuracy.html#autotoc_md958',1,'']]],
   ['4_20rendering_27',['4. Rendering',['../plan_headsup.html#autotoc_md759',1,'']]],
-  ['4_20tap_20bilinear_20blur_20pass_201_20·_20with_20g6_28',['G3 — 4-tap bilinear blur (Pass 1) · with G6',['../plan_performance_recovery.html#autotoc_md907',1,'']]],
-  ['4_20the_20merge_29',['4. The merge',['../plan_water_scenario.html#autotoc_md1030',1,'']]],
+  ['4_20tap_20bilinear_20blur_20pass_201_20·_20with_20g6_28',['G3 — 4-tap bilinear blur (Pass 1) · with G6',['../plan_performance_recovery.html#autotoc_md908',1,'']]],
+  ['4_20the_20merge_29',['4. The merge',['../plan_water_scenario.html#autotoc_md1031',1,'']]],
   ['4_20tutorial_20ui_30',['4.4 Tutorial UI',['../plan_future_ideas.html#autotoc_md541',1,'']]],
   ['4_3a_20generated_20levels_31',['7. Phase 4: generated levels',['../plan_fast_paced.html#autotoc_md510',1,'']]]
 ];

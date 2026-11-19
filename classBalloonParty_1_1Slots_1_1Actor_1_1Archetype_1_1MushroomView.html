@@ -217,6 +217,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:ac6ea4c90da8a7aedac6ca3b649dc68db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a280083585e7b58b17487d4876efd5491" id="r_a280083585e7b58b17487d4876efd5491"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a280083585e7b58b17487d4876efd5491">Push</a> ()</td></tr>
 <tr class="separator:a280083585e7b58b17487d4876efd5491"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab795fd6bededa9bc2ab7073c9b65de82" id="r_ab795fd6bededa9bc2ab7073c9b65de82"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab795fd6bededa9bc2ab7073c9b65de82">PushWhatNeverMoves</a> ()</td></tr>
+<tr class="separator:ab795fd6bededa9bc2ab7073c9b65de82"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d9a28caf7c348f3e865d32837d19388" id="r_a4d9a28caf7c348f3e865d32837d19388"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4d9a28caf7c348f3e865d32837d19388">Rest</a> ()</td></tr>
 <tr class="separator:a4d9a28caf7c348f3e865d32837d19388"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5543b48076cf61a4acd64d39cd39ff8" id="r_ac5543b48076cf61a4acd64d39cd39ff8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac5543b48076cf61a4acd64d39cd39ff8">Roll</a> ()</td></tr>
@@ -286,6 +288,10 @@ Private Attributes</h2></td></tr>
 Static Private Attributes</h2></td></tr>
 <tr class="memitem:a6d178e3f7122776ca09ca6f26cd57813" id="r_a6d178e3f7122776ca09ca6f26cd57813"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6d178e3f7122776ca09ca6f26cd57813">_viewsMade</a></td></tr>
 <tr class="separator:a6d178e3f7122776ca09ca6f26cd57813"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2938f78e6e5f85187d0715ae83fb8413" id="r_a2938f78e6e5f85187d0715ae83fb8413"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2938f78e6e5f85187d0715ae83fb8413">BreathId</a> = Shader.PropertyToID(&quot;_Breath&quot;)</td></tr>
+<tr class="separator:a2938f78e6e5f85187d0715ae83fb8413"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d3925eaf6350017cbcc6b8e320a9410" id="r_a7d3925eaf6350017cbcc6b8e320a9410"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7d3925eaf6350017cbcc6b8e320a9410">BreathLookId</a> = Shader.PropertyToID(&quot;_BreathLook&quot;)</td></tr>
+<tr class="separator:a7d3925eaf6350017cbcc6b8e320a9410"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a86cd696f50c459d8d5774fa08d21a776" id="r_a86cd696f50c459d8d5774fa08d21a776"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a86cd696f50c459d8d5774fa08d21a776">CapGrowId</a> = Shader.PropertyToID(&quot;_CapGrow&quot;)</td></tr>
 <tr class="separator:a86cd696f50c459d8d5774fa08d21a776"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a075ed8a9d9320d72e4aea25a0bf37f3f" id="r_a075ed8a9d9320d72e4aea25a0bf37f3f"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a075ed8a9d9320d72e4aea25a0bf37f3f">CutFallId</a> = Shader.PropertyToID(&quot;_CutFall&quot;)</td></tr>
@@ -304,6 +310,8 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:a118d5304d7a3e3e38b211bdcd8ac2ba7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2343f5a48b4480308b2dd16f60cc3151" id="r_a2343f5a48b4480308b2dd16f60cc3151"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2343f5a48b4480308b2dd16f60cc3151">RadiusId</a> = Shader.PropertyToID(&quot;_Radius&quot;)</td></tr>
 <tr class="separator:a2343f5a48b4480308b2dd16f60cc3151"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc9d04bafa6d8bb7f477069b87afcec9" id="r_abc9d04bafa6d8bb7f477069b87afcec9"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abc9d04bafa6d8bb7f477069b87afcec9">RockId</a> = Shader.PropertyToID(&quot;_Rock&quot;)</td></tr>
+<tr class="separator:abc9d04bafa6d8bb7f477069b87afcec9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3881e526317a5ac88674e1f7cd87b855" id="r_a3881e526317a5ac88674e1f7cd87b855"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3881e526317a5ac88674e1f7cd87b855">SeedId</a> = Shader.PropertyToID(&quot;_Seed&quot;)</td></tr>
 <tr class="separator:a3881e526317a5ac88674e1f7cd87b855"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb97a0eeaa23cd995d3de78592533b2f" id="r_acb97a0eeaa23cd995d3de78592533b2f"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acb97a0eeaa23cd995d3de78592533b2f">SeedStep</a> = 0.61803398875f</td></tr>
@@ -783,6 +791,31 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">void BalloonParty.Slots.Actor.Archetype.MushroomView.Push </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab795fd6bededa9bc2ab7073c9b65de82" name="ab795fd6bededa9bc2ab7073c9b65de82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab795fd6bededa9bc2ab7073c9b65de82">&#9670;&#160;</a></span>PushWhatNeverMoves()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Slots.Actor.Archetype.MushroomView.PushWhatNeverMoves </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -1569,6 +1602,50 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a2938f78e6e5f85187d0715ae83fb8413" name="a2938f78e6e5f85187d0715ae83fb8413"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2938f78e6e5f85187d0715ae83fb8413">&#9670;&#160;</a></span>BreathId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Slots.Actor.Archetype.MushroomView.BreathId = Shader.PropertyToID(&quot;_Breath&quot;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7d3925eaf6350017cbcc6b8e320a9410" name="a7d3925eaf6350017cbcc6b8e320a9410"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d3925eaf6350017cbcc6b8e320a9410">&#9670;&#160;</a></span>BreathLookId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Slots.Actor.Archetype.MushroomView.BreathLookId = Shader.PropertyToID(&quot;_BreathLook&quot;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a86cd696f50c459d8d5774fa08d21a776" name="a86cd696f50c459d8d5774fa08d21a776"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a86cd696f50c459d8d5774fa08d21a776">&#9670;&#160;</a></span>CapGrowId</h2>
 
@@ -1756,6 +1833,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly int BalloonParty.Slots.Actor.Archetype.MushroomView.RadiusId = Shader.PropertyToID(&quot;_Radius&quot;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abc9d04bafa6d8bb7f477069b87afcec9" name="abc9d04bafa6d8bb7f477069b87afcec9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc9d04bafa6d8bb7f477069b87afcec9">&#9670;&#160;</a></span>RockId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Slots.Actor.Archetype.MushroomView.RockId = Shader.PropertyToID(&quot;_Rock&quot;)</td>
         </tr>
       </table>
   </td>

@@ -1,5 +1,11 @@
 var NAVTREEINDEX68 =
 {
+"classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html#a173d820332ca30e3bd769dc8e3f0c59b":[6,0,0,6,8,3,1],
+"classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html#a64448b7ba3c6951f3408ad9142c53012":[5,0,0,6,8,3,3],
+"classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html#a64448b7ba3c6951f3408ad9142c53012":[6,0,0,6,8,3,3],
+"classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html#a7ac2f221d580b3f61d554e4f165f07f4":[5,0,0,6,8,3,0],
+"classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html#a7ac2f221d580b3f61d554e4f165f07f4":[6,0,0,6,8,3,0],
+"classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html#ab5267fa391ed24f46851daaa49524516":[5,0,0,6,8,3,2],
 "classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html#ab5267fa391ed24f46851daaa49524516":[6,0,0,6,8,3,2],
 "classBalloonParty_1_1Game_1_1Run_1_1HeldCardRecord.html":[5,0,0,6,8,4],
 "classBalloonParty_1_1Game_1_1Run_1_1HeldCardRecord.html":[6,0,0,6,8,4],
@@ -243,11 +249,5 @@ var NAVTREEINDEX68 =
 "classBalloonParty_1_1Game_1_1Run_1_1RunSeed.html#a4d7fe6f77a72e42295d2c5f02417c3af":[6,0,0,6,8,27,5],
 "classBalloonParty_1_1Game_1_1Run_1_1RunSeed.html#a5cd3204fb3609883ff48a6daecb3aa6f":[5,0,0,6,8,27,2],
 "classBalloonParty_1_1Game_1_1Run_1_1RunSeed.html#a5cd3204fb3609883ff48a6daecb3aa6f":[6,0,0,6,8,27,2],
-"classBalloonParty_1_1Game_1_1Run_1_1RunSeed.html#a71845fd37772ff6e3eb71b979068f34a":[5,0,0,6,8,27,6],
-"classBalloonParty_1_1Game_1_1Run_1_1RunSeed.html#a71845fd37772ff6e3eb71b979068f34a":[6,0,0,6,8,27,6],
-"classBalloonParty_1_1Game_1_1Run_1_1RunSeed.html#a76cf228bed74e5ad01e8ad9e519ae127":[5,0,0,6,8,27,8],
-"classBalloonParty_1_1Game_1_1Run_1_1RunSeed.html#a76cf228bed74e5ad01e8ad9e519ae127":[6,0,0,6,8,27,8],
-"classBalloonParty_1_1Game_1_1Run_1_1RunSeed.html#a94de110f8386f132f13d5ffabc783081":[5,0,0,6,8,27,4],
-"classBalloonParty_1_1Game_1_1Run_1_1RunSeed.html#a94de110f8386f132f13d5ffabc783081":[6,0,0,6,8,27,4],
-"classBalloonParty_1_1Game_1_1Run_1_1RunSeed.html#aa99c2b703281af7c60a8b42149a22958":[5,0,0,6,8,27,0]
+"classBalloonParty_1_1Game_1_1Run_1_1RunSeed.html#a71845fd37772ff6e3eb71b979068f34a":[5,0,0,6,8,27,6]
 };

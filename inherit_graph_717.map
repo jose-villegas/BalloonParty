@@ -1,5 +1,17 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" title=" " alt="" coords="5,14,153,42"/>
-<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Editor_1_1Bush_1_1BushBakerState.html" title=" " alt="" coords="201,5,383,50"/>
-<area shape="poly" id="edge886_Node000000_Node000001" title=" " alt="" coords="168,25,203,27,198,28,169,30"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,222,139,250"/>
+<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteColorMaskAttribute.html" title=" " alt="" coords="189,5,430,50"/>
+<area shape="poly" id="edge863_Node000000_Node000001" title=" " alt="" coords="82,206,98,173,120,133,149,94,185,60,208,48,205,52,188,64,153,97,125,136,102,175,87,208"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteColorNameAttribute.html" title=" " alt="" coords="187,75,432,119"/>
+<area shape="poly" id="edge864_Node000000_Node000002" title=" " alt="" coords="93,209,133,168,185,129,213,118,210,122,188,134,137,172,97,212"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Shared_1_1EnumIndexedAttribute.html" title="Labels a serialized array indexed by enum ordinal with the enum value&#39;s name instead of &quot;Element N&quot;." alt="" coords="214,144,405,189"/>
+<area shape="poly" id="edge865_Node000000_Node000003" title=" " alt="" coords="133,215,186,198,229,188,225,191,187,204,136,219"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Shared_1_1MusicalNoteAttribute.html" title="Renders an int semitone field as a musical&#45;note dropdown (C, C#, D, …) instead of a raw number." alt="" coords="207,213,412,258"/>
+<area shape="poly" id="edge866_Node000000_Node000004" title=" " alt="" coords="153,233,209,234,204,237,155,238"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Shared_1_1ShowIfEnumAttribute.html" title="Hides the decorated field in the inspector unless a sibling enum field (on the same serialized object..." alt="" coords="215,283,404,327"/>
+<area shape="poly" id="edge867_Node000000_Node000005" title=" " alt="" coords="134,252,187,268,230,281,225,283,186,273,135,257"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Shared_1_1SortingLayerNameAttribute.html" title="Draws a string field as a dropdown of the project&#39;s sorting layers." alt="" coords="209,352,410,397"/>
+<area shape="poly" id="edge868_Node000000_Node000006" title=" " alt="" coords="95,259,137,300,188,337,214,351,209,352,185,342,133,304,95,264"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Shared_1_1UnitCircleAttribute.html" title="Draws a Vector2 field as a unit&#45;circle direction picker: click or drag inside the disc to aim the vec..." alt="" coords="219,421,400,466"/>
+<area shape="poly" id="edge869_Node000000_Node000007" title=" " alt="" coords="85,261,102,296,125,335,153,374,188,407,221,426,216,426,185,411,149,378,120,338,98,299,84,267"/>
 </map>

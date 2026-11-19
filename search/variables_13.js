@@ -61,7 +61,7 @@ var searchData=
   ['shadowmipspreadid_58',['ShadowMipSpreadId',['../classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#ab2256b538082344effa2afc025e57b2f',1,'BalloonParty::Display::ScreenSpaceLightService']]],
   ['shadowpad_59',['ShadowPad',['../classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder.html#a52107116490897439f33e658b7181842',1,'BalloonParty::Editor::GameOverLayoutBuilder']]],
   ['shadowperlift_60',['ShadowPerLift',['../structBalloonParty_1_1Slots_1_1Actor_1_1MushroomThrowTuning.html#a8bcdc421df8907926105462384ced1bb',1,'BalloonParty::Slots::Actor::MushroomThrowTuning']]],
-  ['shadowreach_61',['ShadowReach',['../classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder.html#a61d2e4f084b6da848a5d9ad5ac5aaf36',1,'BalloonParty::Editor::MushroomPrefabBuilder']]],
+  ['shadowreach_61',['ShadowReach',['../classBalloonParty_1_1Slots_1_1Actor_1_1MushroomQuadRoom.html#ae05ffb48a1843dd3eb436032dace906c',1,'BalloonParty::Slots::Actor::MushroomQuadRoom']]],
   ['shadowroom_62',['ShadowRoom',['../classBalloonParty_1_1UI_1_1Score_1_1ShapeInkView.html#a6cc5418fea5b2cc6b1efd20f7b0707ca',1,'BalloonParty::UI::Score::ShapeInkView']]],
   ['shadowscale_63',['ShadowScale',['../structBalloonParty_1_1Item_1_1Paint_1_1BlobFlightSnapshot.html#aeb28b417f0007ac71e6a5a2e4c3d8531',1,'BalloonParty::Item::Paint::BlobFlightSnapshot']]],
   ['shadowscaleid_64',['ShadowScaleId',['../classBalloonParty_1_1Item_1_1Paint_1_1PaintSplashView.html#adf2157e708613f7342788d288c60ef5c',1,'BalloonParty::Item::Paint::PaintSplashView']]],
@@ -266,6 +266,5 @@ var searchData=
   ['swayphase_263',['SwayPhase',['../structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html#ab27082e054a3cad697752879c5923488',1,'BalloonParty::Editor::CardRevealBuilder::Flight']]],
   ['sweepenabled_264',['SweepEnabled',['../structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#aefed61ba8e3cbe96b985e906430f1b71',1,'BalloonParty::Solver::ShotCruiseConfig']]],
   ['sweeptapthreshold_265',['SweepTapThreshold',['../structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a0e6a24ff33d96c776ac6b46c68b5163b',1,'BalloonParty::Solver::ShotCruiseConfig']]],
-  ['swellshare_266',['SwellShare',['../classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder.html#a88fabd249a41de58c9f15f6ddf651559',1,'BalloonParty::Editor::MushroomPrefabBuilder']]],
-  ['swirlangleid_267',['SwirlAngleId',['../classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#aa5369a50f8f93f4580777cdd55430dec',1,'BalloonParty::Slots::Actor::SpeckField']]]
+  ['swirlangleid_266',['SwirlAngleId',['../classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#aa5369a50f8f93f4580777cdd55430dec',1,'BalloonParty::Slots::Actor::SpeckField']]]
 ];

@@ -145,6 +145,7 @@ var searchData=
   ['props_142',['Props',['../structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafBatch.html#ab1ee633425c41395f03ee7b4ded6e0b8',1,'BalloonParty::Slots::Actor::Archetype::LeafBatch']]],
   ['providerid_143',['ProviderId',['../classBalloonParty_1_1Audio_1_1Editor_1_1AttributionRecord.html#a7a656f0e4fc118159ec27a0581a0e2e0',1,'BalloonParty.Audio.Editor.AttributionRecord.ProviderId'],['../structBalloonParty_1_1Audio_1_1Editor_1_1SfxCandidate.html#a8adc8e3111f5c4b1d27fa0d9780e0109',1,'BalloonParty.Audio.Editor.SfxCandidate.ProviderId']]],
   ['pulseid_144',['PulseId',['../classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomView.html#a118d5304d7a3e3e38b211bdcd8ac2ba7',1,'BalloonParty::Slots::Actor::Archetype::MushroomView']]],
-  ['purpleatcompletion_145',['PurpleAtCompletion',['../structBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardTuning.html#af78a10d22eab21e967c6fcb7a17b9408',1,'BalloonParty::Balloon::Reward::PlatedRewardTuning']]],
-  ['purplechances_146',['PurpleChances',['../structBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardTuning.html#ab3993cf6a939d45560bd381dc062036b',1,'BalloonParty::Balloon::Reward::PlatedRewardTuning']]]
+  ['pulseswellid_145',['PulseSwellId',['../classBalloonParty_1_1Editor_1_1MushroomPrefabBuilder.html#ad628a047e085032cbb5f40a2633c73d0',1,'BalloonParty::Editor::MushroomPrefabBuilder']]],
+  ['purpleatcompletion_146',['PurpleAtCompletion',['../structBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardTuning.html#af78a10d22eab21e967c6fcb7a17b9408',1,'BalloonParty::Balloon::Reward::PlatedRewardTuning']]],
+  ['purplechances_147',['PurpleChances',['../structBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardTuning.html#ab3993cf6a939d45560bd381dc062036b',1,'BalloonParty::Balloon::Reward::PlatedRewardTuning']]]
 ];

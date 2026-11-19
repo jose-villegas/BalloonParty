@@ -1,5 +1,13 @@
 var NAVTREEINDEX46 =
 {
+"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a345ecd47c34b9217c085c39c64c6cab5":[6,0,0,3,36,12],
+"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a4301773992fa776a651c0bceaa6d5bb3":[5,0,0,3,36,4],
+"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a4301773992fa776a651c0bceaa6d5bb3":[6,0,0,3,36,4],
+"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a4a79f918ee469d8b12abe6ce92252798":[5,0,0,3,36,11],
+"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a4a79f918ee469d8b12abe6ce92252798":[6,0,0,3,36,11],
+"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a4abdf175b2a88d0c4e53d76c10abce01":[5,0,0,3,36,9],
+"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a4abdf175b2a88d0c4e53d76c10abce01":[6,0,0,3,36,9],
+"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a50a0e99f27e2552ecaf5ceb81b691fda":[5,0,0,3,36,8],
 "classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a50a0e99f27e2552ecaf5ceb81b691fda":[6,0,0,3,36,8],
 "classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a872268b93be311dd2839b324f39774cf":[5,0,0,3,36,2],
 "classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a872268b93be311dd2839b324f39774cf":[6,0,0,3,36,2],
@@ -241,13 +249,5 @@ var NAVTREEINDEX46 =
 "classBalloonParty_1_1Display_1_1EffectsClearingStamper.html#af5742b6c211590e6eaac233bc1300195":[6,0,0,4,7,8],
 "classBalloonParty_1_1Display_1_1EffectsClearingStamps.html":[5,0,0,4,8],
 "classBalloonParty_1_1Display_1_1EffectsClearingStamps.html":[6,0,0,4,8],
-"classBalloonParty_1_1Display_1_1EffectsClearingStamps.html#a12a3bb78686b9cb178313382b3563b68":[5,0,0,4,8,0],
-"classBalloonParty_1_1Display_1_1EffectsClearingStamps.html#a12a3bb78686b9cb178313382b3563b68":[6,0,0,4,8,0],
-"classBalloonParty_1_1Display_1_1EffectsClearingStamps.html#a9d093f9c6745ab4f235afaeb9dccdfff":[5,0,0,4,8,1],
-"classBalloonParty_1_1Display_1_1EffectsClearingStamps.html#a9d093f9c6745ab4f235afaeb9dccdfff":[6,0,0,4,8,1],
-"classBalloonParty_1_1Display_1_1EffectsClearingStamps.html#ae3836bb71bb42a14c07dfe8b923473df":[5,0,0,4,8,2],
-"classBalloonParty_1_1Display_1_1EffectsClearingStamps.html#ae3836bb71bb42a14c07dfe8b923473df":[6,0,0,4,8,2],
-"classBalloonParty_1_1Display_1_1EffectsMapCompositor.html":[5,0,0,4,9],
-"classBalloonParty_1_1Display_1_1EffectsMapCompositor.html":[6,0,0,4,9],
-"classBalloonParty_1_1Display_1_1EffectsMapCompositor.html#a0bc1296b9e5ec54cc3cb433d848dfae8":[5,0,0,4,9,17]
+"classBalloonParty_1_1Display_1_1EffectsClearingStamps.html#a12a3bb78686b9cb178313382b3563b68":[5,0,0,4,8,0]
 };

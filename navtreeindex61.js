@@ -1,5 +1,11 @@
 var NAVTREEINDEX61 =
 {
+"classBalloonParty_1_1Game_1_1Assist_1_1ThreatEase.html#aebb67b81ce64c4d091bfcc4083a1d028":[6,0,0,6,0,7,2],
+"classBalloonParty_1_1Game_1_1BalloonDrift.html":[5,0,0,6,13],
+"classBalloonParty_1_1Game_1_1BalloonDrift.html":[6,0,0,6,13],
+"classBalloonParty_1_1Game_1_1BalloonDrift.html#a3916881a8c20162c3d5502ab80a7db79":[5,0,0,6,13,1],
+"classBalloonParty_1_1Game_1_1BalloonDrift.html#a3916881a8c20162c3d5502ab80a7db79":[6,0,0,6,13,1],
+"classBalloonParty_1_1Game_1_1BalloonDrift.html#a534856c158c6b6e9de6ae793f25d91b7":[5,0,0,6,13,4],
 "classBalloonParty_1_1Game_1_1BalloonDrift.html#a534856c158c6b6e9de6ae793f25d91b7":[6,0,0,6,13,4],
 "classBalloonParty_1_1Game_1_1BalloonDrift.html#a569d524b8f709999162833086a94ecb9":[5,0,0,6,13,2],
 "classBalloonParty_1_1Game_1_1BalloonDrift.html#a569d524b8f709999162833086a94ecb9":[6,0,0,6,13,2],
@@ -243,11 +249,5 @@ var NAVTREEINDEX61 =
 "classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematic.html#a0c2b47894e8d30250f7606cece94f03a":[6,0,0,6,2,2,2],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematic.html#a15f68ca3229bdab0094855b0089b7ca6":[5,0,0,6,2,2,12],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematic.html#a15f68ca3229bdab0094855b0089b7ca6":[6,0,0,6,2,2,12],
-"classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematic.html#a1a5db29fc4f9ce9f9e7af3821f276683":[5,0,0,6,2,2,5],
-"classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematic.html#a1a5db29fc4f9ce9f9e7af3821f276683":[6,0,0,6,2,2,5],
-"classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematic.html#a1d84e7b127d131d0fad342bef39d5763":[5,0,0,6,2,2,11],
-"classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematic.html#a1d84e7b127d131d0fad342bef39d5763":[6,0,0,6,2,2,11],
-"classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematic.html#a434f0a4762cd572af862acbb78389967":[5,0,0,6,2,2,17],
-"classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematic.html#a434f0a4762cd572af862acbb78389967":[6,0,0,6,2,2,17],
-"classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematic.html#a4cdac8575c5075d6ca419f5709de5ae6":[5,0,0,6,2,2,9]
+"classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematic.html#a1a5db29fc4f9ce9f9e7af3821f276683":[5,0,0,6,2,2,5]
 };

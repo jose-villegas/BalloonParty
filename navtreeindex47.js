@@ -1,5 +1,13 @@
 var NAVTREEINDEX47 =
 {
+"classBalloonParty_1_1Display_1_1EffectsClearingStamps.html#a12a3bb78686b9cb178313382b3563b68":[6,0,0,4,8,0],
+"classBalloonParty_1_1Display_1_1EffectsClearingStamps.html#a9d093f9c6745ab4f235afaeb9dccdfff":[5,0,0,4,8,1],
+"classBalloonParty_1_1Display_1_1EffectsClearingStamps.html#a9d093f9c6745ab4f235afaeb9dccdfff":[6,0,0,4,8,1],
+"classBalloonParty_1_1Display_1_1EffectsClearingStamps.html#ae3836bb71bb42a14c07dfe8b923473df":[5,0,0,4,8,2],
+"classBalloonParty_1_1Display_1_1EffectsClearingStamps.html#ae3836bb71bb42a14c07dfe8b923473df":[6,0,0,4,8,2],
+"classBalloonParty_1_1Display_1_1EffectsMapCompositor.html":[5,0,0,4,9],
+"classBalloonParty_1_1Display_1_1EffectsMapCompositor.html":[6,0,0,4,9],
+"classBalloonParty_1_1Display_1_1EffectsMapCompositor.html#a0bc1296b9e5ec54cc3cb433d848dfae8":[5,0,0,4,9,17],
 "classBalloonParty_1_1Display_1_1EffectsMapCompositor.html#a0bc1296b9e5ec54cc3cb433d848dfae8":[6,0,0,4,9,17],
 "classBalloonParty_1_1Display_1_1EffectsMapCompositor.html#a1d42498c8172ac94503b0beda28a3d24":[5,0,0,4,9,0],
 "classBalloonParty_1_1Display_1_1EffectsMapCompositor.html#a1d42498c8172ac94503b0beda28a3d24":[6,0,0,4,9,0],
@@ -241,13 +249,5 @@ var NAVTREEINDEX47 =
 "classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#abebdf85bc309273bc7892c7082d9777a":[6,0,0,4,15,2],
 "classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#ac1c709c75b3d503bf9325ab2d073dd9c":[5,0,0,4,15,42],
 "classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#ac1c709c75b3d503bf9325ab2d073dd9c":[6,0,0,4,15,42],
-"classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#accc766976f34ce17210abab70f55ade7":[5,0,0,4,15,28],
-"classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#accc766976f34ce17210abab70f55ade7":[6,0,0,4,15,28],
-"classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#ad23995f72a44ed0afbcc19b33254ad15":[5,0,0,4,15,25],
-"classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#ad23995f72a44ed0afbcc19b33254ad15":[6,0,0,4,15,25],
-"classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#ad73886ac35d54961f72f4b6991bdcb4b":[5,0,0,4,15,22],
-"classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#ad73886ac35d54961f72f4b6991bdcb4b":[6,0,0,4,15,22],
-"classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#ada4406cc7a510a0f05d2993e476d2728":[5,0,0,4,15,6],
-"classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#ada4406cc7a510a0f05d2993e476d2728":[6,0,0,4,15,6],
-"classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#ae04bc28a57e2af6746cece48af95c801":[5,0,0,4,15,26]
+"classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#accc766976f34ce17210abab70f55ade7":[5,0,0,4,15,28]
 };

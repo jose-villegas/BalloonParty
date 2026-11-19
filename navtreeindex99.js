@@ -1,5 +1,11 @@
 var NAVTREEINDEX99 =
 {
+"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteLayerCombiner.html#af918600c1a3c6b8685e70c4708d981ac":[6,0,0,12,10,16,5],
+"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html":[5,0,0,12,10,17],
+"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html":[6,0,0,12,10,17],
+"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html#a1d731d087f821dae7c0b7997d24ccc1d":[5,0,0,12,10,17,7],
+"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html#a1d731d087f821dae7c0b7997d24ccc1d":[6,0,0,12,10,17,7],
+"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html#a394037d1048e9cb48ee00d3e555512c1":[5,0,0,12,10,17,5],
 "classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html#a394037d1048e9cb48ee00d3e555512c1":[6,0,0,12,10,17,5],
 "classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html#a71e2f9917c6cf60a1cc7f860ea7065e3":[5,0,0,12,10,17,14],
 "classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html#a71e2f9917c6cf60a1cc7f860ea7065e3":[6,0,0,12,10,17,14],
@@ -243,11 +249,5 @@ var NAVTREEINDEX99 =
 "classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html#ae44574126534799e5c3dacf3ae416dea":[6,0,0,12,11,4,45],
 "classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html#ae5e460e01263acc28fa1052f11f6515d":[5,0,0,12,11,4,6],
 "classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html#ae5e460e01263acc28fa1052f11f6515d":[6,0,0,12,11,4,6],
-"classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html#ae8d208469445ec52c1ca75e9154ea156":[5,0,0,12,11,4,30],
-"classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html#ae8d208469445ec52c1ca75e9154ea156":[6,0,0,12,11,4,30],
-"classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html#aebc6520afa6a170c5eafcb041646b284":[5,0,0,12,11,4,35],
-"classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html#aebc6520afa6a170c5eafcb041646b284":[6,0,0,12,11,4,35],
-"classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html#aef4f53aa1c55a8d30f2c977818ec370c":[5,0,0,12,11,4,67],
-"classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html#aef4f53aa1c55a8d30f2c977818ec370c":[6,0,0,12,11,4,67],
-"classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html#af2a8de8bd1c19cfd5d353b52cc53fbc7":[5,0,0,12,11,4,42]
+"classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html#ae8d208469445ec52c1ca75e9154ea156":[5,0,0,12,11,4,30]
 };

@@ -1,5 +1,11 @@
 var NAVTREEINDEX67 =
 {
+"classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#ac8d7beb9f7683f54babbc0a9ac4aca1a":[6,0,0,6,7,6,29],
+"classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#ad26c6945c11dfba4d0fee34da1584983":[5,0,0,6,7,6,18],
+"classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#ad26c6945c11dfba4d0fee34da1584983":[6,0,0,6,7,6,18],
+"classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#ad918f98244e073801f63105ae04bbbc5":[5,0,0,6,7,6,56],
+"classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#ad918f98244e073801f63105ae04bbbc5":[6,0,0,6,7,6,56],
+"classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#adf8789206698ebf675a254345706251e":[5,0,0,6,7,6,12],
 "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#adf8789206698ebf675a254345706251e":[6,0,0,6,7,6,12],
 "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#ae335b745b6edbc989681dc20576b6381":[5,0,0,6,7,6,51],
 "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#ae335b745b6edbc989681dc20576b6381":[6,0,0,6,7,6,51],
@@ -243,11 +249,5 @@ var NAVTREEINDEX67 =
 "classBalloonParty_1_1Game_1_1Run_1_1FailureOffers.html#af6ab86c7b7816dc2f824770a1054637d":[6,0,0,6,8,2,1],
 "classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html":[5,0,0,6,8,3],
 "classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html":[6,0,0,6,8,3],
-"classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html#a173d820332ca30e3bd769dc8e3f0c59b":[5,0,0,6,8,3,1],
-"classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html#a173d820332ca30e3bd769dc8e3f0c59b":[6,0,0,6,8,3,1],
-"classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html#a64448b7ba3c6951f3408ad9142c53012":[5,0,0,6,8,3,3],
-"classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html#a64448b7ba3c6951f3408ad9142c53012":[6,0,0,6,8,3,3],
-"classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html#a7ac2f221d580b3f61d554e4f165f07f4":[5,0,0,6,8,3,0],
-"classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html#a7ac2f221d580b3f61d554e4f165f07f4":[6,0,0,6,8,3,0],
-"classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html#ab5267fa391ed24f46851daaa49524516":[5,0,0,6,8,3,2]
+"classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html#a173d820332ca30e3bd769dc8e3f0c59b":[5,0,0,6,8,3,1]
 };

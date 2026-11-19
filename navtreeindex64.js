@@ -1,5 +1,11 @@
 var NAVTREEINDEX64 =
 {
+"classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#ac3a7359cc08d6286d2ed221110080f58":[6,0,0,6,4,0,19],
+"classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#ac96708f68f083829f3c6fb24974fafc4":[5,0,0,6,4,0,9],
+"classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#ac96708f68f083829f3c6fb24974fafc4":[6,0,0,6,4,0,9],
+"classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#af270d97a79adb1d5bc78e6e62c47cb9a":[5,0,0,6,4,0,14],
+"classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#af270d97a79adb1d5bc78e6e62c47cb9a":[6,0,0,6,4,0,14],
+"classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#afd1f93b662f8c7065134cbcd1f98b795":[5,0,0,6,4,0,3],
 "classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#afd1f93b662f8c7065134cbcd1f98b795":[6,0,0,6,4,0,3],
 "classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService_1_1FlightRecord.html":[5,0,0,6,4,0,0],
 "classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService_1_1FlightRecord.html":[6,0,0,6,4,0,0],
@@ -243,11 +249,5 @@ var NAVTREEINDEX64 =
 "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#aad47d2018282bbed4654863cabed3a68":[6,0,0,6,5,0,0,5],
 "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#ab2a19ed7bf2a40cb5e13b82e0c872ed7":[5,0,0,6,5,0,0,3],
 "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#ab2a19ed7bf2a40cb5e13b82e0c872ed7":[6,0,0,6,5,0,0,3],
-"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#ac2f0c7ad567afcbe16a375dd73ef7d89":[5,0,0,6,5,0,0,8],
-"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#ac2f0c7ad567afcbe16a375dd73ef7d89":[6,0,0,6,5,0,0,8],
-"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#ad4e272ebfc5cb52c0804b11501601877":[5,0,0,6,5,0,0,6],
-"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#ad4e272ebfc5cb52c0804b11501601877":[6,0,0,6,5,0,0,6],
-"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#ae0f29edcc02dc9c13c66d64b3c246d4a":[5,0,0,6,5,0,0,11],
-"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#ae0f29edcc02dc9c13c66d64b3c246d4a":[6,0,0,6,5,0,0,11],
-"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#af1374ee7013ec6a69d97bb88280893f7":[5,0,0,6,5,0,0,0]
+"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#ac2f0c7ad567afcbe16a375dd73ef7d89":[5,0,0,6,5,0,0,8]
 };
