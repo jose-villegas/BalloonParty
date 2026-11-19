@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration.Balloons;
@@ -29,6 +30,7 @@ namespace BalloonParty.Tests.Balloon
         private FormationGlowField _field;
         private List<IFormationGlowSource> _sources;
         private Vector4[] _points;
+        private float[] _formations;
         private float _threshold;
         private int _count;
 
@@ -45,6 +47,7 @@ namespace BalloonParty.Tests.Balloon
             _field = new FormationGlowField();
             _sources = new List<IFormationGlowSource>();
             _points = new Vector4[FormationGlowField.MaxPoints];
+            _formations = new float[FormationGlowField.MaxPoints];
             _threshold = FormationGlowField.Threshold(RingRadius, Reach);
         }
 
@@ -253,13 +256,13 @@ namespace BalloonParty.Tests.Balloon
             var look = new FakeSource { Centre = new Vector2(Pitch, 0f), InFormation = true };
             sources.Add(new FakeSource { Centre = Vector2.zero, InFormation = true });
             var first = sources.Add(look);
-            _field.Step(sources.All, _settings, Settled, _points, out _);
+            _field.Step(sources.All, _settings, Settled, _points, _formations, out _);
 
             // Popped and spawned again from the pool before the view's next frame.
             first.Dispose();
             look.Centre = new Vector2(-Pitch, 0f);
             sources.Add(look);
-            _count = _field.Step(sources.All, _settings, Dissolve * 0.5f, _points, out _);
+            _count = _field.Step(sources.All, _settings, Dissolve * 0.5f, _points, _formations, out _);
 
             Assert.AreEqual(3, _count);
             Assert.That(Has(new Vector2(Pitch, 0f)), Is.True, "the old ring dissolves where it was");
@@ -271,7 +274,7 @@ namespace BalloonParty.Tests.Balloon
         {
             Add(1f, 2f);
             Add(1f + Pitch, 2f);
-            _field.Step(_sources, _settings, Settled, _points, out var bounds);
+            _field.Step(_sources, _settings, Settled, _points, _formations, out var bounds);
 
             var margin = Reach + RingWidth * 3f;
             Assert.AreEqual(1f - margin, bounds.xMin, 1e-5f);
@@ -332,16 +335,86 @@ namespace BalloonParty.Tests.Balloon
             Assert.That(nearlyGone, Is.LessThan(half));
         }
 
-        private FakeSource Add(float x, float y, bool inFormation = true)
+        // Two formations a slot apart, end to end. Their rings overlap where they meet (a ring is wider than half
+        // a slot), so the telling point is beside the gap, in the neck one formation's rings would fill between
+        // two members: past either end member's own ring, and inside the outline their two fields make together.
+        [Test]
+        public void TwoFormations_SideBySide_KeepAnOutlineEach()
         {
-            var source = new FakeSource { Centre = new Vector2(x, y), InFormation = inFormation };
+            Add(0f, 0f, formation: 1);
+            Add(Pitch, 0f, formation: 1);
+            Add(Pitch * 2f, 0f, formation: 2);
+            Add(Pitch * 3f, 0f, formation: 2);
+            Step(Settled);
+
+            var neck = new Vector2(Pitch * 1.5f, 0.4f);
+            Assert.That(Vector2.Distance(neck, new Vector2(Pitch, 0f)), Is.GreaterThan(RingRadius), "past a lone ring");
+            var asOne = FormationGlowField.FieldAt(_points, _count, neck, Reach, _threshold);
+            var first = FormationGlowField.FieldAt(_points, _count, neck, Reach, _threshold, _formations, 1f);
+            var second = FormationGlowField.FieldAt(_points, _count, neck, Reach, _threshold, _formations, 2f);
+
+            Assert.That(asOne, Is.GreaterThan(_threshold), "as one formation the neck would be inside the outline");
+            Assert.That(first, Is.LessThan(_threshold), "the first formation's outline does not reach into the neck");
+            Assert.That(second, Is.LessThan(_threshold), "nor does the second's");
+        }
+
+        [Test]
+        public void Rings_AreWrittenFormationByFormation_HoweverTheSourcesAreListed()
+        {
+            Add(0f, 0f, formation: 2);
+            Add(5f, 0f, formation: 1);
+            Add(Pitch, 0f, formation: 2);
+            Add(5f + Pitch, 0f, formation: 1);
+            Add(Pitch * 2f, 0f, formation: 2);
+            Step(Settled);
+
+            Assert.AreEqual(5, _count);
+            CollectionAssert.AreEqual(new[] { 1f, 1f, 2f, 2f, 2f }, new ArraySegment<float>(_formations, 0, _count));
+            for (var i = 0; i < _count; i++)
+            {
+                Assert.AreEqual(_formations[i] == 1f, _points[i].x >= 5f, $"ring {i} keeps its own centre");
+            }
+        }
+
+        // Beside another formation's member but with none of its own: nothing to draw together with.
+        [Test]
+        public void AMember_WithOnlyAnotherFormationsMemberNear_LightsNoRing()
+        {
+            Add(0f, 0f, formation: 1);
+            Add(Pitch, 0f, formation: 2);
+
+            Assert.AreEqual(0, Step(Settled));
+        }
+
+        // Its formation breaks while a neighbouring one stands: the ring it leaves dissolves as its own
+        // formation's, not into the neighbour's outline.
+        [Test]
+        public void ADissolvingRing_KeepsItsFormation()
+        {
+            var left = Add(0f, 0f, formation: 1);
+            var leftFellow = Add(-Pitch, 0f, formation: 1);
+            Add(Pitch, 0f, formation: 2);
+            Add(Pitch * 2f, 0f, formation: 2);
+            Step(Settled);
+
+            left.InFormation = false;
+            leftFellow.InFormation = false;
+            Step(Dissolve * 0.5f);
+
+            Assert.AreEqual(4, _count);
+            CollectionAssert.AreEqual(new[] { 1f, 1f, 2f, 2f }, new ArraySegment<float>(_formations, 0, _count));
+        }
+
+        private FakeSource Add(float x, float y, bool inFormation = true, int formation = 0)
+        {
+            var source = new FakeSource { Centre = new Vector2(x, y), InFormation = inFormation, Formation = formation };
             _sources.Add(source);
             return source;
         }
 
         private int Step(float seconds)
         {
-            _count = _field.Step(_sources, _settings, seconds, _points, out _);
+            _count = _field.Step(_sources, _settings, seconds, _points, _formations, out _);
             return _count;
         }
 
@@ -362,9 +435,11 @@ namespace BalloonParty.Tests.Balloon
         {
             public Vector2 Centre;
             public bool InFormation;
+            public int Formation;
 
             public Vector2 GlowCentre => Centre;
             public bool GlowsInFormation => InFormation;
+            public int GlowFormation => Formation;
         }
     }
 }

@@ -9,6 +9,8 @@ namespace BalloonParty.Tests.Balloon
     {
         private const float Join = 1f;
 
+        // All of one formation unless a test says otherwise.
+        private readonly float[] _formations = new float[FormationGlowField.MaxPoints];
         private readonly int[] _groups = new int[FormationGlowField.MaxPoints];
         private readonly FormationGlowBeam[] _beams = new FormationGlowBeam[FormationGlowBeams.MaxBeams];
 
@@ -17,7 +19,7 @@ namespace BalloonParty.Tests.Balloon
         {
             var points = new[] { Ring(0f, 0f), Ring(0.75f, 0f), Ring(1.5f, 0f), Ring(2.25f, 0f), Ring(3f, 0f) };
 
-            var count = FormationGlowBeams.Group(points, points.Length, Join, _groups, _beams);
+            var count = FormationGlowBeams.Group(points, _formations, points.Length, Join, _groups, _beams);
 
             Assert.AreEqual(1, count);
             AssertEnds(_beams[0], new Vector2(0f, 0f), new Vector2(3f, 0f));
@@ -30,7 +32,7 @@ namespace BalloonParty.Tests.Balloon
         {
             var points = new[] { Ring(3f, 0f), Ring(0f, 0f), Ring(2.25f, 0f), Ring(0.75f, 0f), Ring(1.5f, 0f) };
 
-            var count = FormationGlowBeams.Group(points, points.Length, Join, _groups, _beams);
+            var count = FormationGlowBeams.Group(points, _formations, points.Length, Join, _groups, _beams);
 
             Assert.AreEqual(1, count);
             AssertEnds(_beams[0], new Vector2(0f, 0f), new Vector2(3f, 0f));
@@ -41,7 +43,7 @@ namespace BalloonParty.Tests.Balloon
         {
             var points = new[] { Ring(0f, 0f), Ring(0.75f, 0f), Ring(0f, 4f), Ring(0.6f, 4.6f) };
 
-            var count = FormationGlowBeams.Group(points, points.Length, Join, _groups, _beams);
+            var count = FormationGlowBeams.Group(points, _formations, points.Length, Join, _groups, _beams);
 
             Assert.AreEqual(2, count);
             AssertEnds(_beams[0], new Vector2(0f, 0f), new Vector2(0.75f, 0f));
@@ -53,7 +55,7 @@ namespace BalloonParty.Tests.Balloon
         {
             var points = new[] { Ring(2f, 3f, 0.6f) };
 
-            var count = FormationGlowBeams.Group(points, 1, Join, _groups, _beams);
+            var count = FormationGlowBeams.Group(points, _formations, 1, Join, _groups, _beams);
 
             Assert.AreEqual(1, count);
             AssertEnds(_beams[0], new Vector2(2f, 3f), new Vector2(2f, 3f));
@@ -65,7 +67,7 @@ namespace BalloonParty.Tests.Balloon
         {
             var points = new[] { Ring(0f, 0f, 1f, 1f), Ring(0.75f, 0f, 0.5f, 1f), Ring(1.5f, 0f, 1f, 0.5f) };
 
-            FormationGlowBeams.Group(points, points.Length, Join, _groups, _beams);
+            FormationGlowBeams.Group(points, _formations, points.Length, Join, _groups, _beams);
 
             Assert.AreEqual((1f + 0.5f + 0.5f) / 3f, _beams[0].Level, 1e-5f);
         }
@@ -75,7 +77,7 @@ namespace BalloonParty.Tests.Balloon
         {
             var points = new[] { Ring(0f, 0f, 1f, 0f), Ring(0.75f, 0f, 0f, 1f), Ring(5f, 5f) };
 
-            var count = FormationGlowBeams.Group(points, points.Length, Join, _groups, _beams);
+            var count = FormationGlowBeams.Group(points, _formations, points.Length, Join, _groups, _beams);
 
             Assert.AreEqual(1, count);
             AssertEnds(_beams[0], new Vector2(5f, 5f), new Vector2(5f, 5f));
@@ -86,7 +88,7 @@ namespace BalloonParty.Tests.Balloon
         {
             var points = new[] { Ring(0f, 0f), Ring(0.75f, 0f), Ring(9f, 9f) };
 
-            var count = FormationGlowBeams.Group(points, 2, Join, _groups, _beams);
+            var count = FormationGlowBeams.Group(points, _formations, 2, Join, _groups, _beams);
 
             Assert.AreEqual(1, count);
         }
@@ -100,15 +102,29 @@ namespace BalloonParty.Tests.Balloon
                 points[i] = Ring(i * 5f, 0f);
             }
 
-            var count = FormationGlowBeams.Group(points, points.Length, Join, _groups, _beams);
+            var count = FormationGlowBeams.Group(points, _formations, points.Length, Join, _groups, _beams);
 
             Assert.AreEqual(FormationGlowBeams.MaxBeams, count);
+        }
+
+        // Close enough to join, were they one formation's: each formation still casts its own beam.
+        [Test]
+        public void RingsOfTwoFormations_SideBySide_CastABeamEach()
+        {
+            var points = new[] { Ring(0f, 0f), Ring(0.75f, 0f), Ring(1.5f, 0f), Ring(2.25f, 0f) };
+            var formations = new[] { 1f, 1f, 2f, 2f };
+
+            var count = FormationGlowBeams.Group(points, formations, points.Length, Join, _groups, _beams);
+
+            Assert.AreEqual(2, count);
+            AssertEnds(_beams[0], new Vector2(0f, 0f), new Vector2(0.75f, 0f));
+            AssertEnds(_beams[1], new Vector2(1.5f, 0f), new Vector2(2.25f, 0f));
         }
 
         [Test]
         public void NoRings_CastNothing()
         {
-            Assert.AreEqual(0, FormationGlowBeams.Group(new Vector4[4], 0, Join, _groups, _beams));
+            Assert.AreEqual(0, FormationGlowBeams.Group(new Vector4[4], _formations, 0, Join, _groups, _beams));
         }
 
         private static Vector4 Ring(float x, float y, float brightness = 1f, float presence = 1f)

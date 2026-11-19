@@ -12,6 +12,12 @@ namespace BalloonParty.Balloon.View
 
         /// <summary>Whether it is in a formation now, gliding to its slot or there.</summary>
         bool GlowsInFormation { get; }
+
+        /// <summary>
+        ///     Which formation it is in, or was last: rings join only with the rings of their own formation
+        ///     (<c>IFormationMember.FormationId</c>).
+        /// </summary>
+        int GlowFormation { get; }
     }
 
     /// <summary>
@@ -39,6 +45,7 @@ namespace BalloonParty.Balloon.View
 
             public Vector2 GlowCentre => _source.GlowCentre;
             public bool GlowsInFormation => _source.GlowsInFormation;
+            public int GlowFormation => _source.GlowFormation;
 
             internal Registration(IFormationGlowSource source, List<IFormationGlowSource> sources)
             {

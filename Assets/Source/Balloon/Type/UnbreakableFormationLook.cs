@@ -66,6 +66,8 @@ namespace BalloonParty.Balloon.Type
         // is what shows the members drawing together.
         bool IFormationGlowSource.GlowsInFormation => _model is IFormationMember { InFormation: { Value: true } };
 
+        int IFormationGlowSource.GlowFormation => _model is IFormationMember member ? member.FormationId : 0;
+
         private void Awake()
         {
             _block = new MaterialPropertyBlock();

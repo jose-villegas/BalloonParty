@@ -23,6 +23,7 @@ namespace BalloonParty.Balloon.View
     {
         private static readonly int PointsId = Shader.PropertyToID("_GlowPoints");
         private static readonly int CountId = Shader.PropertyToID("_GlowCount");
+        private static readonly int FormationsId = Shader.PropertyToID("_GlowFormations");
         private static readonly int FieldId = Shader.PropertyToID("_GlowField");
         private static readonly int ColorId = Shader.PropertyToID("_Color");
         private static readonly int HdrBoostId = Shader.PropertyToID("_HdrBoost");
@@ -32,6 +33,7 @@ namespace BalloonParty.Balloon.View
         private static int BalloonsLayer = -1;
 
         private readonly Vector4[] _points = new Vector4[FormationGlowField.MaxPoints];
+        private readonly float[] _formations = new float[FormationGlowField.MaxPoints];
         private readonly FormationGlowField _field = new();
         private readonly int[] _groups = new int[FormationGlowField.MaxPoints];
         private readonly FormationGlowBeam[] _beams = new FormationGlowBeam[FormationGlowBeams.MaxBeams];
@@ -56,7 +58,9 @@ namespace BalloonParty.Balloon.View
             }
 
             var bounds = default(Rect);
-            var count = _settings.Enabled ? _field.Step(_sources.All, _settings, Time.deltaTime, _points, out bounds) : 0;
+            var count = _settings.Enabled
+                ? _field.Step(_sources.All, _settings, Time.deltaTime, _points, _formations, out bounds)
+                : 0;
             CastLight(count);
             if (count == 0)
             {
@@ -67,6 +71,7 @@ namespace BalloonParty.Balloon.View
             _quad.position = new Vector3(bounds.center.x, bounds.center.y, 0f);
             _quad.localScale = new Vector3(bounds.width, bounds.height, 1f);
             _material.SetVectorArray(PointsId, _points);
+            _material.SetFloatArray(FormationsId, _formations);
             _material.SetFloat(CountId, count);
             _renderer.enabled = true;
         }
@@ -128,7 +133,7 @@ namespace BalloonParty.Balloon.View
         private void CastLight(int count)
         {
             var beams = _lightField != null && _settings.LightIntensity > 0f
-                ? FormationGlowBeams.Group(_points, count, _lightJoinDistance, _groups, _beams)
+                ? FormationGlowBeams.Group(_points, _formations, count, _lightJoinDistance, _groups, _beams)
                 : 0;
             for (var i = 0; i < _lights.Length; i++)
             {

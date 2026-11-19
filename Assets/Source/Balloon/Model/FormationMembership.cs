@@ -13,6 +13,7 @@ namespace BalloonParty.Balloon.Model
 
         internal IReadOnlyReactiveProperty<bool> InFormation => _inFormation;
         internal Vector2 Heading { get; private set; } = Vector2.right;
+        internal int FormationId { get; private set; }
         internal bool Walking { get; private set; }
 
         internal void SetInFormation(bool inFormation)
@@ -32,6 +33,11 @@ namespace BalloonParty.Balloon.Model
         internal void SetHeading(Vector2 heading)
         {
             Heading = heading;
+        }
+
+        internal void SetFormationId(int id)
+        {
+            FormationId = id;
         }
     }
 }

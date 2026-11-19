@@ -15,6 +15,13 @@ namespace BalloonParty.Balloon.Model
         Vector2 FormationHeading { get; }
 
         /// <summary>
+        ///     Which formation it is in: the same for every member of one, and unlike any other formation's. It
+        ///     keeps its last value after the formation breaks, as the heading does, so what a member leaves
+        ///     behind (its ring) still goes with its fellows'.
+        /// </summary>
+        int FormationId { get; }
+
+        /// <summary>
         ///     Its formation walks (a snake): it keeps the formation's look while it glides from slot to slot.
         ///     Cleared when it leaves its formation.
         /// </summary>

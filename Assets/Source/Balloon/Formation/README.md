@@ -299,8 +299,13 @@ each frame round the glowing members, so the shader only runs where the light ca
 member glows. Each `UnbreakableFormationLook` registers in `FormationGlowSources` from its bind to its
 despawn, each spawn its own entry, so a pooled look spawning again never takes over its old ring.
 `FormationGlowField` keeps the rings from frame to frame: which are connected, how brightly they glow and
-how far each has dissolved (at most 24 drawn, the shader's array). The shader sums a smooth falloff round every member and draws the ring where that sum crosses the
-level a lone member's would at `RingRadius`, at a constant width, with a faint fill inside. A dissolving
+how far each has dissolved (at most 24 drawn, the shader's array), and which formation each belongs to
+(`IFormationMember.FormationId`, which `UnbreakableFormationService` gives every member of a formation and
+which a ring keeps after its member has left or popped). The shader sums a smooth falloff round the members
+of one formation at a time and draws the ring where that sum crosses the
+level a lone member's would at `RingRadius`, at a constant width, with a faint fill inside. The field
+writes a formation's rings next to each other, which is how the shader knows where one formation's sum ends
+and the next begins; where two formations' light overlaps, the brighter shows. A dissolving
 ring adds less to that sum as it goes, down to only the threshold, which is what draws it back into its
 member, and the noise eats its light as far as the dissolving rings' share of the sum. The light is
 additive and HDR (`HdrBoost`, 2.5 over the palette blue), so it blooms. It sorts under the balloons
@@ -308,15 +313,18 @@ additive and HDR (`HdrBoost`, 2.5 over the palette blue), so it blooms. It sorts
 The GI capture (`Display/SceneCaptureService`) draws it too, so the rings are in the colour the GI smear
 bounces and their light spreads over the ground beside them. The shader writes colour only, so a ring
 adds no coverage to the capture and casts no shadow. The capture is 8 bits, so the ring's HDR blue clamps
-there toward cyan. Rings of neighbouring formations join too, so a stack of formations reads as one wall. The
+there toward cyan. Rings join only with the rings of their own formation: two formations standing side by
+side keep an outline each, crossing where they overlap, so each reads as the unit it moves as (the owner's
+ask, 2026-11-19; before it, every ring in reach joined and a stack of formations read as one wall). A
+member's brightness likewise follows its nearest fellow of its own formation. The
 settings are `IFormationGlowSettings`, `BalloonsConfiguration`'s "Formation Glow".
 
 The rings also cast a local light on what stands round them, in the formation blue, through the
 scene-light field (`Shared/SceneLight/SceneLightFieldService`): the bounce above only reaches the ground,
 and this one lights the balloons' sides. A light per ring would use up the field's 32 lights on one
-long formation, so `FormationGlowBeams` puts the rings that join into one outline (centres closer than
-`FormationGlowField.JoinDistance`, about 1.1) in one group, chains included, so two formations whose
-rings stay apart light apart. Each group casts one capsule light between its two members furthest
+long formation, so `FormationGlowBeams` puts the rings of one formation that join into one outline (centres
+closer than `FormationGlowField.JoinDistance`, about 1.1) in one group, chains included, so two formations
+light apart, as their outlines stay apart. Each group casts one capsule light between its two members furthest
 apart: exact for a line or a diagonal, close for a ring round an item or a bent snake. At most 8 groups
 cast one. The light's strength is `LightIntensity` (0.6) times the group's average of brightness times
 presence, so it rises as members draw close and falls away with a dissolving ring. It reaches

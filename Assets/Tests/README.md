@@ -575,9 +575,9 @@ Tests the directed pressure search (`TryResolve`) — a board-up shove propagati
 | Relocation terminals (nearest/farthest) end the chain | 3 | Relocator not vacating, or wrong gap picked |
 | Puff at entry seeds the balloon above it | 1 | Traversability seeding regression blocks relief |
 
-### `FormationGlowFieldTests` — 20 tests
+### `FormationGlowFieldTests` — 24 tests
 
-The formation glow's field (`Balloon/View/FormationGlowField`): which rings light and how brightly, how a disconnected ring dissolves instead of vanishing, and where the shader's rings join.
+The formation glow's field (`Balloon/View/FormationGlowField`): which rings light and how brightly, how a disconnected ring dissolves instead of vanishing, where the shader's rings join, and that they join only within a formation.
 
 | Area | Tests | What could break |
 |---|---|---|
@@ -589,6 +589,7 @@ The formation glow's field (`Balloon/View/FormationGlowField`): which rings ligh
 | A pooled look spawning again starts a fresh ring and leaves its old one dissolving | 1 | Respawn steals the old ring and drags it across the board |
 | Bounds cover the rings and their light; capped at the array size | 2 | Quad clips the ring, or the array overruns |
 | Neighbours' rings join, two slots apart they don't, and a dissolving neighbour eases the merge off | 3 | Reach default no longer joins a line, or a merge snaps apart |
+| Two formations side by side keep an outline each; rings are written formation by formation; a member beside only another formation's lights nothing; a dissolving ring keeps its formation | 4 | Neighbouring formations run into one outline, the shader's per-formation sum is fed out of order, or a popped member's ring dissolves into the formation next door |
 
 ### `UnbreakableBalloonModelTests` — 6 tests
 

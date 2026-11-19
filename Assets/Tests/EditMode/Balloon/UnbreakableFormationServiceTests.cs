@@ -327,6 +327,23 @@ namespace BalloonParty.Tests.Balloon
             Assert.AreEqual(6, _unbreakables.Select(u => u.SlotIndex.Value).Distinct().Count());
         }
 
+        // The formation glow joins only the rings of one formation, and tells them by this.
+        [Test]
+        public void MembersOfOneFormation_ShareItsId_AndTwoFormationsDiffer()
+        {
+            _settings.MaxMembers.Returns(3);
+            AddSixSpreadOut();
+
+            Arrange();
+
+            var first = _service.Formations[0];
+            var second = _service.Formations[1];
+            Assert.AreNotEqual(0, first.Id);
+            Assert.AreNotEqual(first.Id, second.Id);
+            Assert.IsTrue(first.Members.All(m => m.FormationId == first.Id));
+            Assert.IsTrue(second.Members.All(m => m.FormationId == second.Id));
+        }
+
         [Test]
         public void FreeUnbreakablesPastAFullFormation_FormTheirOwn()
         {

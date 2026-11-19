@@ -25,6 +25,7 @@ namespace BalloonParty.Balloon.Model
         public bool IsAnchored => _membership.InFormation.Value;
         public IReadOnlyReactiveProperty<bool> InFormation => _membership.InFormation;
         public Vector2 FormationHeading => _membership.Heading;
+        public int FormationId => _membership.FormationId;
         public bool Walking => _membership.Walking;
 
         // Always: EvaluateHit returns Deflect for every non-piercing hit, and there is no durability to
@@ -54,6 +55,11 @@ namespace BalloonParty.Balloon.Model
         public void SetFormationHeading(Vector2 heading)
         {
             _membership.SetHeading(heading);
+        }
+
+        public void SetFormationId(int id)
+        {
+            _membership.SetFormationId(id);
         }
 
         public void ResolveScoreAttribution(

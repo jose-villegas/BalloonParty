@@ -6,9 +6,11 @@ namespace BalloonParty.Balloon.View
 {
     /// <summary>
     ///     Which rings the formation glow draws (<c>FormationGlow</c> shader), how brightly, and how far each has
-    ///     dissolved. A ring is connected while its member is in a formation with a fellow member within
-    ///     <see cref="IFormationGlowSettings.FadeDistance" />: its brightness follows how close the nearest fellow is,
-    ///     full at <see cref="IFormationGlowSettings.FullDistance" />. Disconnected for any reason (out of formation,
+    ///     dissolved. A ring is connected while its member is in a formation with a fellow member of that formation
+    ///     within <see cref="IFormationGlowSettings.FadeDistance" />: its brightness follows how close the nearest
+    ///     fellow is, full at <see cref="IFormationGlowSettings.FullDistance" />. Rings join into one outline only
+    ///     with the rings of their own formation; two formations standing side by side keep an outline each.
+    ///     Disconnected for any reason (out of formation,
     ///     left alone, popped, cleared with the board), the ring stays where its member was last and dissolves over
     ///     <see cref="IFormationGlowSettings.DissolveSeconds" /> at the brightness it had, instead of vanishing. A
     ///     ring connecting dissolves in the same way, over the same time.
@@ -21,6 +23,7 @@ namespace BalloonParty.Balloon.View
         private readonly List<Ring> _rings = new();
         private readonly Stack<Ring> _spare = new();
         private readonly List<Vector2> _connected = new();
+        private readonly List<int> _connectedFormations = new();
 
         /// <summary>The field's value at a lone member's ring, so its outline sits at the ring radius.</summary>
         internal static float Threshold(float ringRadius, float reach)
@@ -49,15 +52,23 @@ namespace BalloonParty.Balloon.View
         }
 
         /// <summary>
-        ///     The field the shader sums at <paramref name="point" />. The view doesn't need it; it pins the shader's
-        ///     sum, so the tests can tell where rings join.
+        ///     The field the shader sums at <paramref name="point" /> for one formation: the rings whose entry in
+        ///     <paramref name="formations" /> is <paramref name="formation" />, or every ring when no formations are
+        ///     given. The view doesn't need it; it pins the shader's sum, so the tests can tell where rings join.
         /// </summary>
-        internal static float FieldAt(IReadOnlyList<Vector4> points, int count, Vector2 point, float reach, float threshold)
+        internal static float FieldAt(
+            IReadOnlyList<Vector4> points, int count, Vector2 point, float reach, float threshold,
+            IReadOnlyList<float> formations = null, float formation = 0f)
         {
             var reach2 = reach * reach;
             var field = 0f;
             for (var i = 0; i < count; i++)
             {
+                if (formations != null && formations[i] != formation)
+                {
+                    continue;
+                }
+
                 var r2 = ((Vector2)points[i] - point).sqrMagnitude;
                 if (r2 < reach2)
                 {
@@ -71,17 +82,19 @@ namespace BalloonParty.Balloon.View
 
         /// <summary>
         ///     Moves the rings on by <paramref name="deltaTime" /> and writes the ones to draw into
-        ///     <paramref name="points" /> (xy centre, z brightness, w presence: 1 whole, falling to 0 as it dissolves),
-        ///     returning how many; <paramref name="bounds" /> covers their light. Past <see cref="MaxPoints" />, the
-        ///     rest are left out.
+        ///     <paramref name="points" /> (xy centre, z brightness, w presence: 1 whole, falling to 0 as it dissolves)
+        ///     and each one's formation into <paramref name="formations" />, returning how many;
+        ///     <paramref name="bounds" /> covers their light. The rings of one formation are written next to each
+        ///     other, which is how the shader tells where one formation's outline ends. Past
+        ///     <see cref="MaxPoints" />, the rest are left out.
         /// </summary>
         internal int Step(
             IReadOnlyList<IFormationGlowSource> sources, IFormationGlowSettings settings, float deltaTime,
-            Vector4[] points, out Rect bounds)
+            Vector4[] points, float[] formations, out Rect bounds)
         {
             Match(sources, settings);
             Advance(deltaTime / settings.DissolveSeconds);
-            return Write(points, settings, out bounds);
+            return Write(points, formations, settings, out bounds);
         }
 
         // Pairs each source with its ring, opening one for a source that has just connected, and sets what each
@@ -89,11 +102,13 @@ namespace BalloonParty.Balloon.View
         private void Match(IReadOnlyList<IFormationGlowSource> sources, IFormationGlowSettings settings)
         {
             _connected.Clear();
+            _connectedFormations.Clear();
             for (var i = 0; i < sources.Count; i++)
             {
                 if (sources[i].GlowsInFormation)
                 {
                     _connected.Add(sources[i].GlowCentre);
+                    _connectedFormations.Add(sources[i].GlowFormation);
                 }
             }
 
@@ -121,6 +136,10 @@ namespace BalloonParty.Balloon.View
                 ring.Seen = true;
                 ring.Centre = source.GlowCentre;
                 ring.Target = target;
+
+                // Kept once the member has left or gone, so its ring dissolves with its fellows' and not into a
+                // neighbouring formation's.
+                ring.Formation = source.GlowFormation;
             }
         }
 
@@ -157,7 +176,7 @@ namespace BalloonParty.Balloon.View
             }
         }
 
-        private int Write(Vector4[] points, IFormationGlowSettings settings, out Rect bounds)
+        private int Write(Vector4[] points, float[] formations, IFormationGlowSettings settings, out Rect bounds)
         {
             var count = 0;
             var min = Vector2.positiveInfinity;
@@ -170,7 +189,18 @@ namespace BalloonParty.Balloon.View
                     continue;
                 }
 
-                points[count++] = new Vector4(ring.Centre.x, ring.Centre.y, ring.Brightness, ring.Presence);
+                // Slid in after the last ring of its own formation written so far: a handful of rings, and each
+                // formation's stay together.
+                var at = count++;
+                while (at > 0 && formations[at - 1] > ring.Formation)
+                {
+                    points[at] = points[at - 1];
+                    formations[at] = formations[at - 1];
+                    at--;
+                }
+
+                points[at] = new Vector4(ring.Centre.x, ring.Centre.y, ring.Brightness, ring.Presence);
+                formations[at] = ring.Formation;
                 min = Vector2.Min(min, ring.Centre);
                 max = Vector2.Max(max, ring.Centre);
             }
@@ -187,14 +217,16 @@ namespace BalloonParty.Balloon.View
             return count;
         }
 
-        // How close the nearest fellow member in formation is to the one at index, as a weight: 0 when alone.
+        // How close the nearest fellow member of its own formation is to the one at index, as a weight: 0 when
+        // alone.
         private float Closeness(int index, IFormationGlowSettings settings)
         {
             var nearest = float.PositiveInfinity;
             var centre = _connected[index];
+            var formation = _connectedFormations[index];
             for (var j = 0; j < _connected.Count; j++)
             {
-                if (j != index)
+                if (j != index && _connectedFormations[j] == formation)
                 {
                     nearest = Mathf.Min(nearest, (_connected[j] - centre).magnitude);
                 }
@@ -238,6 +270,7 @@ namespace BalloonParty.Balloon.View
         {
             internal IFormationGlowSource Source;
             internal Vector2 Centre;
+            internal int Formation;
             internal float Target;
             internal float Brightness;
             internal float Presence;

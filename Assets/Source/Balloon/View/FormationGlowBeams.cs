@@ -22,7 +22,7 @@ namespace BalloonParty.Balloon.View
     /// <summary>
     ///     Turns the formation glow's rings into the lights they cast on the scene (<c>FormationGlowView</c>, through
     ///     the scene-light field). A light per ring would spend the field's few lights on one long formation, so the
-    ///     rings that stand close enough to join are one group, and a group casts one beam: a capsule from its two
+    ///     rings of one formation that stand close enough to join are one group, and a group casts one beam: a capsule from its two
     ///     members furthest apart, which is exact for a line or a diagonal and close for a ring round an item or a
     ///     bent snake.
     /// </summary>
@@ -36,13 +36,15 @@ namespace BalloonParty.Balloon.View
 
         /// <summary>
         ///     Groups the first <paramref name="count" /> of <paramref name="points" /> (xy centre, z brightness, w
-        ///     presence, as <c>FormationGlowField.Step</c> writes them) and writes one beam per group into
-        ///     <paramref name="beams" />, returning how many. Two rings within <paramref name="joinDistance" /> of each
-        ///     other are in one group, and so is any chain of them. <paramref name="groups" /> is scratch, at least
-        ///     <paramref name="count" /> long.
+        ///     presence, as <c>FormationGlowField.Step</c> writes them, with each one's formation in
+        ///     <paramref name="formations" />) and writes one beam per group into <paramref name="beams" />,
+        ///     returning how many. Two rings of one formation within <paramref name="joinDistance" /> of each other
+        ///     are in one group, and so is any chain of them; rings of different formations never are, as their
+        ///     outlines never join. <paramref name="groups" /> is scratch, at least <paramref name="count" /> long.
         /// </summary>
         internal static int Group(
-            Vector4[] points, int count, float joinDistance, int[] groups, FormationGlowBeam[] beams)
+            Vector4[] points, float[] formations, int count, float joinDistance, int[] groups,
+            FormationGlowBeam[] beams)
         {
             for (var i = 0; i < count; i++)
             {
@@ -51,7 +53,7 @@ namespace BalloonParty.Balloon.View
 
             // Each ring takes the lowest group among the rings it joins, until nothing changes: a chain of
             // rings ends up with its first member's index, however it winds.
-            while (JoinOnce(points, count, joinDistance * joinDistance, groups))
+            while (JoinOnce(points, formations, count, joinDistance * joinDistance, groups))
             {
             }
 
@@ -72,14 +74,15 @@ namespace BalloonParty.Balloon.View
             return written;
         }
 
-        private static bool JoinOnce(Vector4[] points, int count, float squaredJoin, int[] groups)
+        private static bool JoinOnce(Vector4[] points, float[] formations, int count, float squaredJoin, int[] groups)
         {
             var changed = false;
             for (var i = 0; i < count; i++)
             {
                 for (var j = i + 1; j < count; j++)
                 {
-                    if (groups[i] == groups[j] || SquaredDistance(points[i], points[j]) > squaredJoin)
+                    if (groups[i] == groups[j] || formations[i] != formations[j]
+                        || SquaredDistance(points[i], points[j]) > squaredJoin)
                     {
                         continue;
                     }

@@ -1,10 +1,12 @@
 Shader "BalloonParty/Sprite/FormationGlow"
 {
     // The blue light ring round unbreakables in formation (FormationGlowView), on the ground beneath them. Each
-    // member adds a smooth bump to one field, (1 - d²/reach²)³, zero past its reach, and the ring is drawn where
-    // the field crosses a threshold: alone, that's a circle at the ring radius; as members draw close, their
-    // fields sum and the rings bulge toward each other, neck and join into one outline round the group, as
-    // metaballs do. The distance to that outline is the field's excess over its gradient, so the line keeps one
+    // member adds a smooth bump to its formation's field, (1 - d²/reach²)³, zero past its reach, and the ring is
+    // drawn where the field crosses a threshold: alone, that's a circle at the ring radius; as members draw close,
+    // their fields sum and the rings bulge toward each other, neck and join into one outline round the group, as
+    // metaballs do. Each formation has a field of its own, so two formations side by side keep an outline each
+    // and never run into one; where their light overlaps, the brighter shows.
+    // The distance to that outline is the field's excess over its gradient, so the line keeps one
     // width however the members bunch. Each member's weight (how close its nearest fellow is, and how far into
     // the formation it is) dims its part of the light, blended by the members' share of the field at each point.
     // A disconnected member's ring dissolves: its presence falls from 1 to 0, its share of the field shrinks to
@@ -54,6 +56,8 @@ Shader "BalloonParty/Sprite/FormationGlow"
             // dissolve's noise grains per world unit (x).
             float4 _GlowPoints[MAX_POINTS];
             float _GlowCount;
+            // Each member's formation. The members of one formation come next to each other.
+            float _GlowFormations[MAX_POINTS];
             float4 _GlowField;
             float4 _GlowDissolve;
 
@@ -92,21 +96,66 @@ Shader "BalloonParty/Sprite/FormationGlow"
                             lerp(Hash(i + float2(0, 1)), Hash(i + float2(1, 1)), u.x), u.y);
             }
 
+            // One formation's light at a point, from what its members summed there: its field and the field's
+            // gradient, their plain sum, and that sum weighted by brightness and by how far each has dissolved.
+            // The noise is worked out by the first formation that reaches the point (it is under 0 until then),
+            // so a point no ring reaches pays for none.
+            float FormationLight(float2 world, float field, float2 gradient, float3 sums, inout float noise)
+            {
+                float raw = sums.x;
+                if (raw <= 0.0)
+                {
+                    return 0.0;
+                }
+
+                // Signed distance to the outline, in world units: positive inside.
+                float inside = (field - _GlowField.y) / max(length(gradient), 1e-4);
+                float width = _GlowField.z;
+                float ring = exp(-(inside * inside) / (width * width));
+                float fill = _GlowField.w * smoothstep(0.0, 2.0 * width, inside);
+
+                if (noise < 0.0)
+                {
+                    float2 grain = world * _GlowDissolve.x;
+                    noise = ValueNoise(grain) * 0.65 + ValueNoise(grain * 2.3 + 17.1) * 0.35;
+                }
+
+                // Eaten where the noise is under the dissolve's reach: none of it whole, all of it gone.
+                float dissolve = sums.z / raw;
+                float cut = dissolve * (1.0 + ERODE_EDGE) - ERODE_EDGE;
+                float kept = saturate((noise - cut) / ERODE_EDGE);
+                float edge = kept * (1.0 - kept) * 4.0 * saturate(dissolve * 8.0);
+
+                return (ring + fill) * (sums.y / raw) * (kept + edge * ERODE_GLOW);
+            }
+
             half4 frag(v2f IN) : SV_Target
             {
                 float reach2 = _GlowField.x;
                 float threshold = _GlowField.y;
                 float field = 0.0;
                 float2 gradient = 0.0;
-                float raw = 0.0;
-                float weighted = 0.0;
-                float dissolving = 0.0;
+                // x = the members' plain sum, y = weighted by brightness, z = by how far each has dissolved.
+                float3 sums = 0.0;
+                float light = 0.0;
+                float noise = -1.0;
+                float formation = _GlowFormations[0];
 
                 for (int i = 0; i < MAX_POINTS; i++)
                 {
                     if (i >= (int)_GlowCount)
                     {
                         break;
+                    }
+
+                    // The next formation's members start here: the one before is done, and its light is taken.
+                    if (_GlowFormations[i] != formation)
+                    {
+                        light = max(light, FormationLight(IN.world, field, gradient, sums, noise));
+                        formation = _GlowFormations[i];
+                        field = 0.0;
+                        gradient = 0.0;
+                        sums = 0.0;
                     }
 
                     float4 member = _GlowPoints[i];
@@ -120,32 +169,11 @@ Shader "BalloonParty/Sprite/FormationGlow"
                         float shape = threshold + (1.0 - threshold) * member.w;
                         field += shape * k;
                         gradient += shape * (-6.0 * t * t / reach2) * d;
-                        raw += k;
-                        weighted += k * member.z;
-                        dissolving += k * (1.0 - member.w);
+                        sums += k * float3(1.0, member.z, 1.0 - member.w);
                     }
                 }
 
-                if (raw <= 0.0)
-                {
-                    return 0;
-                }
-
-                // Signed distance to the outline, in world units: positive inside.
-                float inside = (field - threshold) / max(length(gradient), 1e-4);
-                float width = _GlowField.z;
-                float ring = exp(-(inside * inside) / (width * width));
-                float fill = _GlowField.w * smoothstep(0.0, 2.0 * width, inside);
-
-                // Eaten where the noise is under the dissolve's reach: none of it whole, all of it gone.
-                float dissolve = dissolving / raw;
-                float2 grain = IN.world * _GlowDissolve.x;
-                float noise = ValueNoise(grain) * 0.65 + ValueNoise(grain * 2.3 + 17.1) * 0.35;
-                float cut = dissolve * (1.0 + ERODE_EDGE) - ERODE_EDGE;
-                float kept = saturate((noise - cut) / ERODE_EDGE);
-                float edge = kept * (1.0 - kept) * 4.0 * saturate(dissolve * 8.0);
-
-                float light = (ring + fill) * (weighted / raw) * (kept + edge * ERODE_GLOW);
+                light = max(light, FormationLight(IN.world, field, gradient, sums, noise));
                 return half4(_Color.rgb * (_HdrBoost * light), 0);
             }
             ENDCG

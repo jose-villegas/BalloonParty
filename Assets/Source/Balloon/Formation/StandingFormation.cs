@@ -11,6 +11,12 @@ namespace BalloonParty.Balloon.Formation
         internal IReadOnlyList<IWriteableFormationMember> Members => MemberList;
         internal FormationShape Shape { get; set; }
 
+        /// <summary>
+        ///     Which formation this is, unlike any other standing with it; each member carries it
+        ///     (<see cref="IFormationMember.FormationId" />). A new one each time the object is taken up again.
+        /// </summary>
+        internal int Id { get; set; }
+
         /// <summary>Cycles left to hold the current shape before it changes.</summary>
         internal int CyclesLeft { get; set; }
 

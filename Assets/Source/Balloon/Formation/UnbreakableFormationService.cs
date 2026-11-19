@@ -88,6 +88,8 @@ namespace BalloonParty.Balloon.Formation
         private int _arrangePass;
         // Counts wave starts, so a formation sits out the reinforcement roll of the wave it formed in.
         private int _wavePass;
+        // The last formation id handed out; each formation taken up gets the next.
+        private int _lastFormationId;
 
         public int ResetOrder => RunResetOrder.Quiesce;
 
@@ -634,6 +636,7 @@ namespace BalloonParty.Balloon.Formation
                 members.Remove(joiner);
                 snake.MemberList.Add(joiner);
                 _formationOf[joiner] = snake;
+                joiner.SetFormationId(snake.Id);
                 joiner.SetWalking(true);
                 joiner.SetFormationHeading(heading);
             }
@@ -835,6 +838,7 @@ namespace BalloonParty.Balloon.Formation
                 tough.SetFormationHeading(heading);
                 members.Add(tough);
                 _formationOf[tough] = snake;
+                tough.SetFormationId(snake.Id);
             }
 
             RebuildMemberList();
@@ -1012,6 +1016,7 @@ namespace BalloonParty.Balloon.Formation
             snake.Heading = StartHeading(head.SlotIndex.Value);
             snake.MemberList.Add(head);
             _formationOf[head] = snake;
+            head.SetFormationId(snake.Id);
             head.SetInFormation(true);
             head.SetWalking(false);
             head.SetFormationHeading(DirectionHeading(snake.Heading));
@@ -1211,6 +1216,7 @@ namespace BalloonParty.Balloon.Formation
                 member.SetWalking(false);
                 members.Add(member);
                 _formationOf[member] = formation;
+                member.SetFormationId(formation.Id);
             }
 
             _moves.Clear();
@@ -1556,14 +1562,19 @@ namespace BalloonParty.Balloon.Formation
 
         private StandingFormation TakeSpareFormation()
         {
+            StandingFormation formation;
             if (_spareFormations.Count == 0)
             {
-                return new StandingFormation();
+                formation = new StandingFormation();
+            }
+            else
+            {
+                var last = _spareFormations.Count - 1;
+                formation = _spareFormations[last];
+                _spareFormations.RemoveAt(last);
             }
 
-            var last = _spareFormations.Count - 1;
-            var formation = _spareFormations[last];
-            _spareFormations.RemoveAt(last);
+            formation.Id = ++_lastFormationId;
             return formation;
         }
 
