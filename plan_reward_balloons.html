@@ -231,10 +231,40 @@ Tuning (<code>IRewardBalloonSettings</code>)</h2>
 <h2><a class="anchor" id="autotoc_md886"></a>
 The looks</h2>
 <ul>
-<li><b>Golden:</b> a balloon, built from the tough balloon's prefab (body, knot, the shine sprites, the baked shadow), so it reads as one of the balloons and not as an unbreakable. Its body is <code>Balloon/GoldenBalloon.shader</code>: the tough balloon's sphere projection and scene light, plated in gold. The plates are even hexagons over the sphere, crowding toward the rim like tiles on a ball. They are even on purpose: irregular Voronoi plates read like the tough balloon's cracks. The plates are thick and stand apart: toward the rim each shows its side wall, each casts a shadow into the gaps, and the balloon's orange rubber shows at the bottom of the gaps, lit as one smooth sphere with its own gloss, so it reads as a balloon wearing the plates. Each plate is bevelled at its edges and held by two domed bolts, at its top and bottom corners, which gives it relief. Each is also tilted a little and wobbles slowly, so it shades, reflects the horizon and glints on its own as the light moves, and the glitter (<code>Include/Glitter.cginc</code>) is gated by the glint, so it sparkles only where the light catches. The knot is dark gold. Checked in the Editor at noon and at night.</li>
+<li><b>Golden:</b> a balloon, built from the tough balloon's prefab (body, knot, the baked shadow; its shine sprites switched off, see "The highlight is the body's own"), so it reads as one of the balloons and not as an unbreakable. Its body is <code>Balloon/GoldenBalloon.shader</code>: the tough balloon's sphere projection and scene light, plated in gold. The plates are even hexagons over the sphere, crowding toward the rim like tiles on a ball. They are even on purpose: irregular Voronoi plates read like the tough balloon's cracks. The plates are thick and stand apart: toward the rim each shows its side wall, each casts a shadow into the gaps, and the balloon's orange rubber shows at the bottom of the gaps, lit as one smooth sphere with its own gloss, so it reads as a balloon wearing the plates. Each plate is bevelled at its edges and held by two domed bolts, at its top and bottom corners, which gives it relief. Each is also tilted a little and wobbles slowly, so it shades, reflects the horizon and glints on its own as the light moves, and the glitter (<code>Include/Glitter.cginc</code>) is gated by the glint, so it sparkles only where the light catches. The knot is dark gold. Checked in the Editor at noon and at night.</li>
 <li><b>Heart:</b> a heart-shaped balloon body, drawn by <code>Tools/art/make_heart_balloon.py</code> and lit like the others (<code>SpriteDiffuse</code>), red. Its volume is baked in: the heart is inflated from a height map, so each lobe rounds off and the cleft and the tip fall into shade. Two cream cloth strips wrap across it below the lobes, slightly frayed, tied in a knot on the right lobe; they are children of the sway pivot, so they sway with the balloon. Its highlight is its own: the round balloons' shine is an arc drawn for a circle and swung round the balloon's centre, which a heart's outline doesn't follow, so <code>Balloon/HeartShine.shader</code> lights the highlight from the heart's normals (baked from the same height map) toward the scene light. It lands on each lobe at noon and follows the light round, with the round shine's night response. Checked in the Editor at noon and at night.</li>
 </ul>
 <h2><a class="anchor" id="autotoc_md887"></a>
+The highlight is the body's own</h2>
+<p>The owner, playing on his phone: "the numbers on the nuke are impossible to read when the highlight is coming from
+below", and then: "an issue i have right now with the highlights over the gift balloons (except heart) is that it
+makes the shapes seem smooth so we lose the relief and bumps we added to the balloon texture".</p>
+<p>The golden balloon, the disco ball and the nuke are variants of the plain balloon's prefab, which lays two smooth shine sprites over the body (<code>ShinePivot/Shine</code> and <code>Shine (1)</code>, <code>Sprite/LightDriven</code>, sorted above the body and swung round it by the light). Over a body whose shader draws plates, mirrors and dents they flattened it into a smooth ball, and with the light from below (dusk and night: the light's direction is the time of day) they lay over the nuke's counter. On these three prefabs the two sprites are now off (their GameObjects inactive) and out of <code>BalloonView</code>'s sprite layer list, so nothing enables, hides or sorts them; only that list ever touched them. The heart keeps its own shine (<code>HeartShine</code>), and the plain, tough and unbreakable balloons keep theirs.</p>
+<p>The highlight is each body shader's own sheen and glint, which already followed the light (its direction sampled once at the balloon's centre, in the vertex stage) and broke along the relief. They were tuned as an accent under the sprite; they now carry the whole highlight, so they are broader and stronger. No shader code changed, only numbers, so the cost is two sprites fewer a gift balloon and nothing more a pixel.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Body   </th><th class="markdownTableHeadNone">Was   </th><th class="markdownTableHeadNone">Is    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Golden   </td><td class="markdownTableBodyNone">sheen 0.5 at power 5, glint 2.4 at power 24   </td><td class="markdownTableBodyNone">sheen 1.3 at power 4.5, glint 4.5 at power 12    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Disco   </td><td class="markdownTableBodyNone">sheen 0.6 at power 6, flash 2.5 at power 40   </td><td class="markdownTableBodyNone">sheen 1.25 at power 4, flash 3.6 at power 28    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Nuke   </td><td class="markdownTableBodyNone">sheen 0.35 at power 5, glint 0.9 at power 10   </td><td class="markdownTableBodyNone">sheen 0.8 at power 4, glint 1.8 at power 9   </td></tr>
+</table>
+<p>Measured on stills of each at four light directions (the mean of a pixel's brightest channel over the half of the face toward the light; in brackets the share of the face within a tenth of white):</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Body   </th><th class="markdownTableHeadNone">With the sprites   </th><th class="markdownTableHeadNone">Sprites off, old numbers   </th><th class="markdownTableHeadNone">Now    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Golden   </td><td class="markdownTableBodyNone">0.80 to 0.87 (0.26 to 0.38)   </td><td class="markdownTableBodyNone">0.57 to 0.75 (0.14 to 0.24)   </td><td class="markdownTableBodyNone">0.66 to 0.77 (0.29 to 0.37)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Disco   </td><td class="markdownTableBodyNone">0.80 to 0.86 (0.23 to 0.30)   </td><td class="markdownTableBodyNone">0.56 to 0.75 (0.08 to 0.20)   </td><td class="markdownTableBodyNone">0.72 to 0.80 (0.22 to 0.32)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Nuke   </td><td class="markdownTableBodyNone">0.75 to 0.80 (0.24 to 0.30)   </td><td class="markdownTableBodyNone">0.39 to 0.55 (0.10 to 0.19)   </td><td class="markdownTableBodyNone">0.49 to 0.64 (0.18 to 0.27)   </td></tr>
+</table>
+<p>The bright share of the face is back where it was on the golden balloon and the disco ball; the mean stays a little under, because the gaps and the grout between the plates now show dark where the sprite laid a haze over them. The nuke is left further under on purpose: its old highlight was mostly its own green rays' light on the sprite (the sprite does not leave the balloon's own light out; the body does), and lead pushed that bright reads as chrome.</p>
+<p>Left as it is: a body leaves its own rays' light out by asking the light field which light is strongest at its centre. While that is its own, which it is unless a stronger light stands as near, the body falls back to the board's light, so a weaker neighbour's light (another gift balloon's rays beside it) neither tints it nor turns its highlight: in the stills another gift balloon stood over and under each, and the highlight stayed with the board's light. The sprite did answer those. Giving the body that back needs the field to say more than one light a place.</p>
+<h2><a class="anchor" id="autotoc_md888"></a>
 Phases</h2>
 <ol type="1">
 <li><b>Reward hook.</b> <code>LevelCompletion</code>, <code>RewardBalloonService</code>, <code>IRewardBalloonRequests</code>, the spawner's consumption and prewarm, the settings. Tests for completion, the 75% trigger once per level and only on purple, the heart chance by missing hearts and the cooldown.</li>
@@ -244,7 +274,7 @@ Phases</h2>
 <li><b>Docs and measure.</b> READMEs (Balloon, Type, Spawner, Upgrades, Health), the bots on a forced purple level and on a low-heart run, a device build.</li>
 </ol>
 <p>Each phase follows the per-phase review: implement, architect, test-everything and reviewer, then fixes, then sign-off.</p>
-<h2><a class="anchor" id="autotoc_md888"></a>
+<h2><a class="anchor" id="autotoc_md889"></a>
 Measured</h2>
 <p>The playtest bot's average player (<code>Tools/playtest/</code>, <code>--purple</code> and <code>--hearts</code>), in the Editor. It is a model of a player, not a person, so these numbers are for comparing tunings.</p>
 <table class="markdownTable">
@@ -262,7 +292,7 @@ Measured</h2>
 <li>Early on, the level-up refill heals faster than a heart balloon arrives, so a low-heart start barely sees one. That's fine: by then the help isn't needed.</li>
 <li>The golden balloon arrives on time, but the average player never broke it: only a piercing shot does, and this player doesn't seek one out. Whether that's too hard for a casual player is open (below).</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md889"></a>
+<h2><a class="anchor" id="autotoc_md890"></a>
 Open</h2>
 <ul>
 <li>Whether the golden balloon should be easier to break for a player who doesn't hunt pierces. The average bot left it standing on both purple levels it played. Since then a laser beam breaks it too, it comes at half done, and the bots aim for it.</li>

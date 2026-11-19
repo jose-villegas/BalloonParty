@@ -1,5 +1,6 @@
 var NAVTREEINDEX146 =
 {
+"structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html#adcc134f7d8299b549f22cdd93ebee44d":[6,0,0,13,1,0,4],
 "structBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttribution.html":[5,0,0,13,1,16],
 "structBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttribution.html":[6,0,0,13,1,16],
 "structBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttribution.html#a1903cfc156fcfa37354d8f45e45d39fe":[5,0,0,13,1,16,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX146 =
 "structBalloonParty_1_1Solver_1_1ShotFlightSeed.html#a647b870914ddbc6a502ea00cdd1d972a":[6,0,0,14,9,8],
 "structBalloonParty_1_1Solver_1_1ShotFlightSeed.html#aace908f81e352f5b37b84e46402ffac7":[5,0,0,14,9,12],
 "structBalloonParty_1_1Solver_1_1ShotFlightSeed.html#aace908f81e352f5b37b84e46402ffac7":[6,0,0,14,9,12],
-"structBalloonParty_1_1Solver_1_1ShotFlightSeed.html#aad0cb7219aedf70daf38dc214a336277":[5,0,0,14,9,11],
-"structBalloonParty_1_1Solver_1_1ShotFlightSeed.html#aad0cb7219aedf70daf38dc214a336277":[6,0,0,14,9,11]
+"structBalloonParty_1_1Solver_1_1ShotFlightSeed.html#aad0cb7219aedf70daf38dc214a336277":[5,0,0,14,9,11]
 };

@@ -1,5 +1,6 @@
 var NAVTREEINDEX136 =
 {
+"structBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyle.html#af520821b590bb5e8d60c37ac0f495669":[6,0,0,3,7,2,4],
 "structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html":[5,0,0,3,8,4],
 "structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html":[6,0,0,3,8,4],
 "structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html#a2a618904ba11dae2f8f47c2487ed15d9":[5,0,0,3,8,4,8],
@@ -248,6 +249,5 @@ var NAVTREEINDEX136 =
 "structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a146c08a9e0be4480f1e680885374bfab":[6,0,0,3,9,23,11],
 "structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a2f8df43167f3556571dbbb11d49b60ca":[5,0,0,3,9,23,7],
 "structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a2f8df43167f3556571dbbb11d49b60ca":[6,0,0,3,9,23,7],
-"structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a3056668ddb975767b08b012693ae1522":[5,0,0,3,9,23,0],
-"structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a3056668ddb975767b08b012693ae1522":[6,0,0,3,9,23,0]
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a3056668ddb975767b08b012693ae1522":[5,0,0,3,9,23,0]
 };

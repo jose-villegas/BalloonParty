@@ -1,5 +1,6 @@
 var NAVTREEINDEX145 =
 {
+"structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html":[6,0,0,12,7,55],
 "structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html#a410bb8864a84d2c6912168d208730fc7":[5,0,0,12,7,55,3],
 "structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html#a410bb8864a84d2c6912168d208730fc7":[6,0,0,12,7,55,3],
 "structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html#a6e65fb4de3fafca00d0042d28e403bc6":[5,0,0,12,7,55,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX145 =
 "structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html#ac1f3bc689e6b1162bd1e0e540e803a13":[6,0,0,13,1,0,3],
 "structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html#ac4c1cdcbeaff538fe1f28611da415b92":[5,0,0,13,1,0,0],
 "structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html#ac4c1cdcbeaff538fe1f28611da415b92":[6,0,0,13,1,0,0],
-"structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html#adcc134f7d8299b549f22cdd93ebee44d":[5,0,0,13,1,0,4],
-"structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html#adcc134f7d8299b549f22cdd93ebee44d":[6,0,0,13,1,0,4]
+"structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html#adcc134f7d8299b549f22cdd93ebee44d":[5,0,0,13,1,0,4]
 };

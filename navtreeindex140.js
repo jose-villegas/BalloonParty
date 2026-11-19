@@ -1,5 +1,6 @@
 var NAVTREEINDEX140 =
 {
+"structBalloonParty_1_1Game_1_1Telemetry_1_1MetricScopeState.html#ae6c9f22bc980f212c3a8c8c0c857e4cd":[6,0,0,6,10,16,5],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html":[5,0,0,6,10,21],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html":[6,0,0,6,10,21],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#a070fd17235a6007a2e8df56bb618b4bd":[5,0,0,6,10,21,13],
@@ -248,6 +249,5 @@ var NAVTREEINDEX140 =
 "structBalloonParty_1_1Item_1_1Paint_1_1PaintItemHandler_1_1PaintTarget.html#a88908ab7c7ea6bd7e6e180b4988d5b0d":[6,0,0,7,4,3,0,0],
 "structBalloonParty_1_1Item_1_1Paint_1_1PaintItemHandler_1_1PaintTarget.html#a8c5cf9216036749c67c54283a6928642":[5,0,0,7,4,3,0,1],
 "structBalloonParty_1_1Item_1_1Paint_1_1PaintItemHandler_1_1PaintTarget.html#a8c5cf9216036749c67c54283a6928642":[6,0,0,7,4,3,0,1],
-"structBalloonParty_1_1Item_1_1Paint_1_1PaintItemHandler_1_1PaintTarget.html#ac689e0d8d245ac99efd277a108716e64":[5,0,0,7,4,3,0,3],
-"structBalloonParty_1_1Item_1_1Paint_1_1PaintItemHandler_1_1PaintTarget.html#ac689e0d8d245ac99efd277a108716e64":[6,0,0,7,4,3,0,3]
+"structBalloonParty_1_1Item_1_1Paint_1_1PaintItemHandler_1_1PaintTarget.html#ac689e0d8d245ac99efd277a108716e64":[5,0,0,7,4,3,0,3]
 };
