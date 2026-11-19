@@ -70,6 +70,7 @@ var NAVTREEINDEX0 =
 "BalloonPopPresenter_8cs.html":[7,0,1,0,7],
 "BalloonPrefabEntryDrawer_8cs.html":[7,0,3,4,0],
 "BalloonPrefabEntry_8cs.html":[7,0,3,0,2],
+"BalloonReach_8cs.html":[7,0,7,13],
 "BalloonRemoverCheat_8cs.html":[7,0,2,3],
 "BalloonSpawner_8cs.html":[7,0,1,4,3],
 "BalloonSwayLoop_8cs.html":[7,0,3,0,4],
@@ -80,8 +81,8 @@ var NAVTREEINDEX0 =
 "BalloonTypeWeight_8cs.html":[7,0,3,0,5],
 "BalloonType_8cs.html":[7,0,1,5,0],
 "BalloonView_8cs.html":[7,0,1,6,1],
-"BalloonWanderSettings_8cs.html":[7,0,7,14],
-"BalloonWander_8cs.html":[7,0,7,13],
+"BalloonWanderSettings_8cs.html":[7,0,7,15],
+"BalloonWander_8cs.html":[7,0,7,14],
 "BalloonsConfiguration_8cs.html":[7,0,3,0,3],
 "BigScoreFormationGizmos_8cs.html":[7,0,7,9,0,0],
 "BigScoreTrailBehaviour_8cs.html":[7,0,7,9,0,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "EffectCadenceCoordinator_8cs.html":[7,0,14,1,0],
 "EffectPreviewContext_8cs.html":[7,0,6,1,2],
 "EffectViewPreviewPlayer_8cs.html":[7,0,6,1,3],
-"EffectView_8cs.html":[7,0,14,9,1],
-"EffectsClearingController_8cs.html":[7,0,5,5]
+"EffectView_8cs.html":[7,0,14,9,1]
 };

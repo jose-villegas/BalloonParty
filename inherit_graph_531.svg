@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Shared_1_1Messages_1_1MushroomSwayedMessage.html" target="_top" xlink:title="A bomb&#39;s blast reached a meadow mushroom without taking its cap off (Meadow Mushrooms): the mushroom ...">
+<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Shared_1_1Messages_1_1MushroomLanceMessage.html" target="_top" xlink:title="A chain of mushroom bounces armed Projectile as the Snipe lance (Meadow Mushrooms): published by Mush...">
 <polygon fill="white" stroke="#666666" points="167.5,-33.5 0,-33.5 0,0 167.5,0 167.5,-33.5"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Shared.Messages.</text>
-<text xml:space="preserve" text-anchor="middle" x="83.75" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">MushroomSwayedMessage</text>
+<text xml:space="preserve" text-anchor="middle" x="83.75" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">MushroomLanceMessage</text>
 </a>
 </g>
 </g>

@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Slots_1_1Actor_1_1MushroomThrowTuning.html" target="_top" xlink:title="How a mushroom&#39;s cap flies when a blast blows it off whole (MushroomCutTimeline): how far it is throw...">
+<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Slots_1_1Actor_1_1MushroomSporeSpecks.html" target="_top" xlink:title="The specks&#39; own numbers, for building a MushroomSporeTuning.">
 <polygon fill="white" stroke="#666666" points="133.75,-33.5 0,-33.5 0,0 133.75,0 133.75,-33.5"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Actor.</text>
-<text xml:space="preserve" text-anchor="middle" x="66.88" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">MushroomThrowTuning</text>
+<text xml:space="preserve" text-anchor="middle" x="66.88" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">MushroomSporeSpecks</text>
 </a>
 </g>
 </g>

@@ -1,35 +1,9 @@
 <map id="BalloonParty.Game.LaunchLifetimeScope" name="BalloonParty.Game.LaunchLifetimeScope">
-<area shape="rect" id="Node000001" title=" " alt="" coords="1316,252,1510,297"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="1014,231,1129,259"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1144,249,1318,266,1313,266,1144,254"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Game_1_1LaunchContinueView.html" title="The launch screen&#39;s Continue: a white balloon drifting about the screen, shown only while a run is sa..." alt="" coords="974,283,1169,327"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1184,293,1291,283,1318,283,1313,284,1292,289,1185,298"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="364,29,488,56"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="497,22,600,7,661,3,723,5,786,13,847,30,903,57,952,97,967,118,972,140,971,162,967,183,960,226,964,247,976,269,990,283,984,282,972,272,959,249,955,226,962,182,966,161,967,141,962,120,948,100,901,62,845,35,785,18,723,10,661,8,601,12,500,27"/>
-<area shape="rect" id="Node000010" href="$classBalloonParty_1_1UI_1_1ClothRibbon_1_1ClothRibbonWriting.html" title="Writes a line on both faces of a RibbonCloth&#39;s ribbon, each glyph corner carried on the cloth where i..." alt="" coords="648,93,854,138"/>
-<area shape="poly" id="edge11_Node000010_Node000004" title=" " alt="" coords="502,52,625,77,677,92,671,93,623,82,503,58"/>
-<area shape="rect" id="Node000005" href="$classBalloonParty_1_1UI_1_1ClothRibbon_1_1SpringLineGraphic.html" title="Draws a RibbonCloth&#39;s line as a thin strip through its points." alt="" coords="648,213,854,258"/>
-<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="869,259,977,284,971,284,869,264"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="359,227,492,255"/>
-<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="507,237,650,236,645,238,509,242"/>
-<area shape="rect" id="Node000007" href="$classBalloonParty_1_1UI_1_1ClothRibbon_1_1ClothRibbonGraphic.html" title="Draws a RibbonCloth&#39;s ribbon: its three rows of points as a strip, notched at both ends,..." alt="" coords="648,283,854,327"/>
-<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="507,254,650,284,645,286,508,260"/>
-<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="869,302,977,305,971,306,870,308"/>
-<area shape="rect" id="Node000008" href="$classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonCloth.html" title="A line hanging from an anchor with a ribbon of cloth tied to its end, simulated as points joined by s..." alt="" coords="323,284,529,329"/>
-<area shape="poly" id="edge19_Node000003_Node000008" title=" " alt="" coords="522,330,584,344,648,354,751,362,854,354,926,342,996,327,991,329,927,347,855,359,751,367,648,359,583,349,522,336"/>
-<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="544,303,650,305,645,306,545,309"/>
-<area shape="rect" id="Node000009" href="$classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonClothSettings.html" title="The spring line and cloth ribbon&#39;s shape and physics, in canvas units and seconds." alt="" coords="5,219,212,263"/>
-<area shape="poly" id="edge14_Node000003_Node000009" title=" " alt="" coords="226,214,356,194,514,179,599,176,685,178,771,185,855,199,906,213,952,240,964,255,976,268,998,283,992,282,973,273,960,258,949,244,904,217,854,204,770,190,685,183,599,182,514,185,357,199,228,219"/>
-<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="226,263,325,284,320,287,227,268"/>
-<area shape="poly" id="edge10_Node000003_Node000010" title=" " alt="" coords="870,115,914,129,934,141,952,155,963,170,967,184,966,213,964,241,968,255,976,269,990,283,985,282,972,272,963,257,959,242,961,213,962,185,958,172,948,159,931,145,912,134,870,121"/>
-<area shape="rect" id="Node000011" href="$classBalloonParty_1_1UI_1_1ClothRibbon_1_1ClothRibbonWriting_1_1Face.html" title=" " alt="" coords="323,93,529,138"/>
-<area shape="poly" id="edge12_Node000010_Node000011" title=" " alt="" coords="544,113,650,115,645,117,545,118"/>
-<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Game_1_1BalloonWanderSettings.html" title="How a BalloonWander drifts, in canvas units and seconds." alt="" coords="327,431,524,475"/>
-<area shape="poly" id="edge13_Node000003_Node000012" title=" " alt="" coords="539,442,630,431,734,414,843,389,949,356,1020,329,1025,327,951,361,845,394,735,419,631,436,540,447"/>
-<area shape="rect" id="Node000014" href="$classBalloonParty_1_1Game_1_1BalloonWander.html" title="A balloon drifting about an area on its own: it heads for one spot after another, picked at random am..." alt="" coords="652,483,850,527"/>
-<area shape="poly" id="edge17_Node000014_Node000012" title=" " alt="" coords="540,469,655,489,649,489,540,474"/>
-<area shape="rect" id="Node000013" href="$structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html" title="A round area to stay out of, stretched upward into a capsule: every point within Radius of the segmen..." alt="" coords="323,524,529,569"/>
-<area shape="poly" id="edge15_Node000003_Node000013" title=" " alt="" coords="544,564,615,571,694,573,775,569,854,554,906,535,948,501,986,457,1017,409,1059,329,1063,326,1022,411,990,460,952,504,908,540,855,559,775,574,694,579,615,576,544,569"/>
-<area shape="poly" id="edge18_Node000014_Node000013" title=" " alt="" coords="544,529,650,518,655,517,545,534"/>
-<area shape="poly" id="edge16_Node000003_Node000014" title=" " alt="" coords="865,498,909,487,949,468,987,436,1018,398,1042,359,1059,329,1063,326,1047,362,1022,401,991,440,952,472,910,492,866,503"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,192,200,237"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="24,91,138,118"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="89,132,101,192,96,191,85,136"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Game_1_1LaunchContinueView.html" title="The launch screen&#39;s Continue: a small white balloon shown only while a run is saved." alt="" coords="163,82,357,127"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="218,136,136,194,133,189,213,137"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="198,5,322,33"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="261,46,262,83,257,81,258,51"/>
 </map>

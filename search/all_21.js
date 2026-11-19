@@ -187,7 +187,7 @@ var searchData=
   ['which_20levels_20are_20ground_184',['Which levels are ground',['../plan_terrain_biomes.html#autotoc_md982',1,'']]],
   ['which_20window_20to_20gate_20on_185',['Which window to gate on',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/Game/Flight/README.md#autotoc_md219',1,'']]],
   ['whirlwind_186',['Sharpshooter whirlwind',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/Thrower/README.md#autotoc_md1259',1,'']]],
-  ['white_187',['White',['../classBalloonParty_1_1Editor_1_1LaunchContinueButtonBuilder.html#aa0228234ca1395b7b1c70ee477894721',1,'BalloonParty.Editor.LaunchContinueButtonBuilder.White'],['../classBalloonParty_1_1Editor_1_1TexturePreviewBox.html#a662dd72e21599cd7f7c2fa03b554be41a25a81701fbfa4a1efdf660a950c1d006',1,'BalloonParty.Editor.TexturePreviewBox.White']]],
+  ['white_187',['White',['../classBalloonParty_1_1Editor_1_1LaunchBalloonsBuilder.html#a1afd7e3b67cecb18a9c365a408b6c81d',1,'BalloonParty.Editor.LaunchBalloonsBuilder.White'],['../classBalloonParty_1_1Editor_1_1TexturePreviewBox.html#a662dd72e21599cd7f7c2fa03b554be41a25a81701fbfa4a1efdf660a950c1d006',1,'BalloonParty.Editor.TexturePreviewBox.White']]],
   ['who_20announces_20a_20card_188',['Who announces a card',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/Game/CardReveal/README.md#autotoc_md200',1,'']]],
   ['who_20shows_20what_189',['Who shows what',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/UI/Tooltip/README.md#autotoc_md1320',1,'']]],
   ['who_20uses_20it_190',['Who uses it',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/UI/HeadsUp/README.md#autotoc_md1282',1,'']]],

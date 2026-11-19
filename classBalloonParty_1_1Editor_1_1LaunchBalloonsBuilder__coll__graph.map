@@ -1,0 +1,5 @@
+<map id="BalloonParty.Editor.LaunchBalloonsBuilder" name="BalloonParty.Editor.LaunchBalloonsBuilder">
+<area shape="rect" id="Node000001" title="Builds the launch screen&#39;s two drifting balloons in the Launcher scene, replacing any built before." alt="" coords="5,132,198,177"/>
+<area shape="rect" id="Node000002" href="$structBalloonParty_1_1Editor_1_1LaunchBalloonsBuilder_1_1Ribbon.html" title=" " alt="" coords="5,5,198,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,64,104,132,99,131,99,68"/>
+</map>

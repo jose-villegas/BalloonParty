@@ -131,10 +131,13 @@ $(function(){initNavTree('classBalloonParty_1_1Game_1_1BalloonWander.html',''); 
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
 <tr class="memitem:a0f03d8967068e3635b1c617946f75d18" id="r_a0f03d8967068e3635b1c617946f75d18"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0f03d8967068e3635b1c617946f75d18">BalloonWander</a> (<a class="el" href="classBalloonParty_1_1Game_1_1BalloonWanderSettings.html">BalloonWanderSettings</a> settings, Rect bounds, <a class="el" href="structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html">KeepOut</a> keepOut, Vector2 start, int seed)</td></tr>
-<tr class="memdesc:a0f03d8967068e3635b1c617946f75d18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts at <em>start</em> , or somewhere allowed if that isn't, within <em>bounds</em>  and clear of <em>keepOut</em> .  <br /></td></tr>
+<tr class="memdesc:a0f03d8967068e3635b1c617946f75d18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts at <em>start</em> , within <em>bounds</em>  and clear of <em>keepOut</em> ; if that isn't, at the nearest spot just out of the keep-out, or failing that somewhere allowed.  <br /></td></tr>
 <tr class="separator:a0f03d8967068e3635b1c617946f75d18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a106bd473abffff421ff2c1b451cf7498" id="r_a106bd473abffff421ff2c1b451cf7498"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a106bd473abffff421ff2c1b451cf7498">Allowed</a> (Vector2 point)</td></tr>
 <tr class="separator:a106bd473abffff421ff2c1b451cf7498"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad851ee7607f2d124a75d7909034465f9" id="r_ad851ee7607f2d124a75d7909034465f9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad851ee7607f2d124a75d7909034465f9">KeepClearOf</a> (<a class="el" href="structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html">KeepOut</a> keepOut)</td></tr>
+<tr class="memdesc:ad851ee7607f2d124a75d7909034465f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves the keep-out, for one that follows something drifting itself.  <br /></td></tr>
+<tr class="separator:ad851ee7607f2d124a75d7909034465f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ec8055e5a03ddb4b441551f46f8108e" id="r_a1ec8055e5a03ddb4b441551f46f8108e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ec8055e5a03ddb4b441551f46f8108e">Step</a> (float deltaTime)</td></tr>
 <tr class="separator:a1ec8055e5a03ddb4b441551f46f8108e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -151,6 +154,8 @@ Properties</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:a56f89e948530592ae14c66b3ae9765cf" id="r_a56f89e948530592ae14c66b3ae9765cf"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a56f89e948530592ae14c66b3ae9765cf">NearestAllowed</a> (Vector2 start)</td></tr>
+<tr class="separator:a56f89e948530592ae14c66b3ae9765cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a11b8dd323d5672ab217039a0c0d0d818" id="r_a11b8dd323d5672ab217039a0c0d0d818"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a11b8dd323d5672ab217039a0c0d0d818">PickTarget</a> ()</td></tr>
 <tr class="separator:a11b8dd323d5672ab217039a0c0d0d818"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeaa4be836dc06918407426b82cd49cd0" id="r_aeaa4be836dc06918407426b82cd49cd0"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeaa4be836dc06918407426b82cd49cd0">RandomAllowed</a> (Vector2 fallback)</td></tr>
@@ -162,8 +167,8 @@ Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a08d71b2e4a2abb99dcd7030a6cba30fe" id="r_a08d71b2e4a2abb99dcd7030a6cba30fe"><td class="memItemLeft" align="right" valign="top">readonly Rect&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a08d71b2e4a2abb99dcd7030a6cba30fe">_bounds</a></td></tr>
 <tr class="separator:a08d71b2e4a2abb99dcd7030a6cba30fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a81267030918f813cb8267eceaac02fc3" id="r_a81267030918f813cb8267eceaac02fc3"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html">KeepOut</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a81267030918f813cb8267eceaac02fc3">_keepOut</a></td></tr>
-<tr class="separator:a81267030918f813cb8267eceaac02fc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a525f483e3623c71d205bcdb9acb1ff5c" id="r_a525f483e3623c71d205bcdb9acb1ff5c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html">KeepOut</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a525f483e3623c71d205bcdb9acb1ff5c">_keepOut</a></td></tr>
+<tr class="separator:a525f483e3623c71d205bcdb9acb1ff5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a86e6701e5a49e8469be96e82868cd4f9" id="r_a86e6701e5a49e8469be96e82868cd4f9"><td class="memItemLeft" align="right" valign="top">readonly System.Random&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a86e6701e5a49e8469be96e82868cd4f9">_random</a></td></tr>
 <tr class="separator:a86e6701e5a49e8469be96e82868cd4f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae18cfe050eace97ef02f39129d04f2a3" id="r_ae18cfe050eace97ef02f39129d04f2a3"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Game_1_1BalloonWanderSettings.html">BalloonWanderSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae18cfe050eace97ef02f39129d04f2a3">_settings</a></td></tr>
@@ -182,7 +187,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A balloon drifting about an area on its own: it heads for one spot after another, picked at random among those it can reach in a straight line past a keep-out it may never enter, easing in as it arrives. </p>
-<p>Should it still meet the keep-out it slides round it, and a spot it can't reach in time is given up for another. <a class="el" href="#a365f88c6ccd08d4e9bcbc8f7c4c7f4bb">Shown</a> adds a gentle bob. </p>
+<p>Should it still meet the keep-out it slides round it, and a spot it can't reach in time is given up for another. The keep-out may move (<a class="el" href="#ad851ee7607f2d124a75d7909034465f9" title="Moves the keep-out, for one that follows something drifting itself.">KeepClearOf</a>). <a class="el" href="#a365f88c6ccd08d4e9bcbc8f7c4c7f4bb">Shown</a> adds a gentle bob. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a0f03d8967068e3635b1c617946f75d18" name="a0f03d8967068e3635b1c617946f75d18"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0f03d8967068e3635b1c617946f75d18">&#9670;&#160;</a></span>BalloonWander()</h2>
@@ -226,7 +231,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Starts at <em>start</em> , or somewhere allowed if that isn't, within <em>bounds</em>  and clear of <em>keepOut</em> . </p>
+<p>Starts at <em>start</em> , within <em>bounds</em>  and clear of <em>keepOut</em> ; if that isn't, at the nearest spot just out of the keep-out, or failing that somewhere allowed. </p>
 
 </div>
 </div>
@@ -250,6 +255,59 @@ Static Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad851ee7607f2d124a75d7909034465f9" name="ad851ee7607f2d124a75d7909034465f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad851ee7607f2d124a75d7909034465f9">&#9670;&#160;</a></span>KeepClearOf()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Game.BalloonWander.KeepClearOf </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html">KeepOut</a></td>          <td class="paramname"><span class="paramname"><em>keepOut</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Moves the keep-out, for one that follows something drifting itself. </p>
+<p>A keep-out that comes over the balloon moves it out of the way on its next step. </p>
+
+</div>
+</div>
+<a id="a56f89e948530592ae14c66b3ae9765cf" name="a56f89e948530592ae14c66b3ae9765cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56f89e948530592ae14c66b3ae9765cf">&#9670;&#160;</a></span>NearestAllowed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector2 BalloonParty.Game.BalloonWander.NearestAllowed </td>
+          <td>(</td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>start</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -379,8 +437,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a81267030918f813cb8267eceaac02fc3" name="a81267030918f813cb8267eceaac02fc3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a81267030918f813cb8267eceaac02fc3">&#9670;&#160;</a></span>_keepOut</h2>
+<a id="a525f483e3623c71d205bcdb9acb1ff5c" name="a525f483e3623c71d205bcdb9acb1ff5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a525f483e3623c71d205bcdb9acb1ff5c">&#9670;&#160;</a></span>_keepOut</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -389,7 +447,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">readonly <a class="el" href="structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html">KeepOut</a> BalloonParty.Game.BalloonWander._keepOut</td>
+          <td class="memname"><a class="el" href="structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html">KeepOut</a> BalloonParty.Game.BalloonWander._keepOut</td>
         </tr>
       </table>
   </td>

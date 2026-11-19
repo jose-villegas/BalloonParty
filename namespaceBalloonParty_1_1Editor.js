@@ -25,7 +25,7 @@ var namespaceBalloonParty_1_1Editor =
     [ "GradientTextureDrawer", "classBalloonParty_1_1Editor_1_1GradientTextureDrawer.html", "classBalloonParty_1_1Editor_1_1GradientTextureDrawer" ],
     [ "HeadsUpBuilder", "classBalloonParty_1_1Editor_1_1HeadsUpBuilder.html", "classBalloonParty_1_1Editor_1_1HeadsUpBuilder" ],
     [ "LaserViewEditor", "classBalloonParty_1_1Editor_1_1LaserViewEditor.html", "classBalloonParty_1_1Editor_1_1LaserViewEditor" ],
-    [ "LaunchContinueButtonBuilder", "classBalloonParty_1_1Editor_1_1LaunchContinueButtonBuilder.html", "classBalloonParty_1_1Editor_1_1LaunchContinueButtonBuilder" ],
+    [ "LaunchBalloonsBuilder", "classBalloonParty_1_1Editor_1_1LaunchBalloonsBuilder.html", "classBalloonParty_1_1Editor_1_1LaunchBalloonsBuilder" ],
     [ "LevelGenerationPreview", "classBalloonParty_1_1Editor_1_1LevelGenerationPreview.html", "classBalloonParty_1_1Editor_1_1LevelGenerationPreview" ],
     [ "LevelPacingCurvePanel", "classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html", "classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel" ],
     [ "LevelPacingMigrationTool", "classBalloonParty_1_1Editor_1_1LevelPacingMigrationTool.html", "classBalloonParty_1_1Editor_1_1LevelPacingMigrationTool" ],

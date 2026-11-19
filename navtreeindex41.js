@@ -1,5 +1,7 @@
 var NAVTREEINDEX41 =
 {
+"classBalloonParty_1_1Configuration_1_1Items_1_1LightningSettings.html#a630029154c9c5117f899eded41a30305":[5,0,0,3,8,6,8],
+"classBalloonParty_1_1Configuration_1_1Items_1_1LightningSettings.html#a630029154c9c5117f899eded41a30305":[6,0,0,3,8,6,8],
 "classBalloonParty_1_1Configuration_1_1Items_1_1LightningSettings.html#a67513904c64266ccb75bed4187853907":[5,0,0,3,8,6,10],
 "classBalloonParty_1_1Configuration_1_1Items_1_1LightningSettings.html#a67513904c64266ccb75bed4187853907":[6,0,0,3,8,6,10],
 "classBalloonParty_1_1Configuration_1_1Items_1_1LightningSettings.html#a69ffc2db1cf22735f0bcd3e1445a709b":[5,0,0,3,8,6,9],
@@ -247,7 +249,5 @@ var NAVTREEINDEX41 =
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#affd1cf07455aa9127b9e5a55d07fddf9":[5,0,0,3,9,17,11],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#affd1cf07455aa9127b9e5a55d07fddf9":[6,0,0,3,9,17,11],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html":[5,0,0,3,9,18],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html":[6,0,0,3,9,18],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html#a0596b64672e9de76bb9deacab28d9e15":[5,0,0,3,9,18,12],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html#a0596b64672e9de76bb9deacab28d9e15":[6,0,0,3,9,18,12]
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html":[6,0,0,3,9,18]
 };

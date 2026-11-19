@@ -134,7 +134,7 @@ Files</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<p>A ribbon of cloth with writing on it, hanging from a spring line: the launch screen's Continue balloon carries one (<code>Game/LaunchContinueView</code>). The line and ribbon are simulated together as points joined by springs, so they swing, stretch a little and flutter as whatever holds the line moves.</p>
+<p>A ribbon of cloth with writing on it, hanging from a spring line: the launch screen's Play and Continue balloons each carry one (<code>Game/LaunchBalloonView</code>). The line and ribbon are simulated together as points joined by springs, so they swing, stretch a little and flutter as whatever holds the line moves.</p>
 <h1><a class="anchor" id="autotoc_md1270"></a>
 How it moves</h1>
 <p><code>RibbonCloth</code> is the simulation, plain C#. Points carry position and last position (position-based dynamics, at fixed steps of <code>Steps Per Second</code>, at most eight a frame); each step adds the forces, then a few solver passes pull every spring back toward its rest length and push points out of the obstacles.</p>

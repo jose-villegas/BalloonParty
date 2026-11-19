@@ -1,3 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCapSpring.html" title="The motion of a mushroom&#39;s cap after a hit (Meadow Mushrooms): a spring that is pushed along the ball..." alt="" coords="5,5,232,50"/>
+<area shape="rect" id="Node000000" href="$structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafBatch.html" title="A draw&#45;ready batch of leaves merged across slots (≤1023 instances)." alt="" coords="5,5,184,50"/>
 </map>

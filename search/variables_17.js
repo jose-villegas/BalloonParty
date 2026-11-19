@@ -25,7 +25,7 @@ var searchData=
   ['waveclock_22',['WaveClock',['../structBalloonParty_1_1UI_1_1Score_1_1ShapeInkFrame.html#ab9d8d5ed68ccca335a1ea934d5974a71',1,'BalloonParty::UI::Score::ShapeInkFrame']]],
   ['waves_23',['Waves',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationShape.html#a4fb79a7005a6bd074c2e4f29bb3d3eb2',1,'BalloonParty::Game::Score::Behaviours::FormationShape']]],
   ['wellcorner_24',['WellCorner',['../classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder.html#a83d726ef5e5b73783b79ef6260404c3b',1,'BalloonParty::Editor::GameOverLayoutBuilder']]],
-  ['white_25',['White',['../classBalloonParty_1_1Editor_1_1LaunchContinueButtonBuilder.html#aa0228234ca1395b7b1c70ee477894721',1,'BalloonParty::Editor::LaunchContinueButtonBuilder']]],
+  ['white_25',['White',['../classBalloonParty_1_1Editor_1_1LaunchBalloonsBuilder.html#a1afd7e3b67cecb18a9c365a408b6c81d',1,'BalloonParty::Editor::LaunchBalloonsBuilder']]],
   ['wholetonesemitones_26',['WholeToneSemitones',['../classBalloonParty_1_1Shared_1_1Extensions_1_1MusicalPitchExtensions.html#a388520a16172b79c35462a096143e62e',1,'BalloonParty::Shared::Extensions::MusicalPitchExtensions']]],
   ['widestarcdegrees_27',['WidestArcDegrees',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeInkMeshBuilder.html#adc325415277af6fa95e858ad27dd2019',1,'BalloonParty::Game::Score::Behaviours::ShapeInkMeshBuilder']]],
   ['widestwindowangles_28',['WidestWindowAngles',['../structBalloonParty_1_1Editor_1_1MushroomWallMeasure.html#af561048fa5bd2f3e7c951db64aa82d97',1,'BalloonParty::Editor::MushroomWallMeasure']]],

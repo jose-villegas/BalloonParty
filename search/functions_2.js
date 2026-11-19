@@ -251,7 +251,7 @@ var searchData=
   ['copybutton_248',['CopyButton',['../classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder.html#af029027e40ee6e3a8459310f4458248e',1,'BalloonParty::Editor::GameOverLayoutBuilder']]],
   ['copycounters_249',['CopyCounters',['../classBalloonParty_1_1Game_1_1Telemetry_1_1MetricSet.html#a17ce25fc5d9ad7467f1677ce8f43b365',1,'BalloonParty::Game::Telemetry::MetricSet']]],
   ['copyintoworkingset_250',['CopyIntoWorkingSet',['../classBalloonParty_1_1Solver_1_1ShotSimulator.html#aeff3f330e00afeaadf9f8f652798ad77',1,'BalloonParty::Solver::ShotSimulator']]],
-  ['copylitmaterials_251',['CopyLitMaterials',['../classBalloonParty_1_1Game_1_1LaunchContinueView.html#ae7a1cb7861b3463ad2597b1a844fb762',1,'BalloonParty::Game::LaunchContinueView']]],
+  ['copylitmaterials_251',['CopyLitMaterials',['../classBalloonParty_1_1Game_1_1LaunchBalloonView.html#a8f333385401c67cb6da541e9f0dd3010',1,'BalloonParty::Game::LaunchBalloonView']]],
   ['copypaths_252',['CopyPaths',['../classBalloonParty_1_1Editor_1_1UnusedAssetsWindow.html#ab514b23f8478097b8052095f27349d9a',1,'BalloonParty::Editor::UnusedAssetsWindow']]],
   ['copyrendersettings_253',['CopyRenderSettings',['../classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a706355b9e0521c37a693ef1e32632bf3',1,'BalloonParty::Prediction::PredictionTraceView']]],
   ['copyribbonsorting_254',['CopyRibbonSorting',['../classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a9c0b29cc845ab67184444966d9167642',1,'BalloonParty::UI::Score::FlyingTrail']]],

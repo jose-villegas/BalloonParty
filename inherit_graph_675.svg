@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Solver_1_1ShotSimulator.html" target="_top" xlink:title="Pure, headless, deterministic billiard simulator for one aim direction (see plan_shot_geometry).">
+<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Solver_1_1ShotScoreRules.html" target="_top" xlink:title="The board&#45;global scoring inputs ShotSimulator.ResolveBalloonContact/ ShotSimulator....">
 <polygon fill="white" stroke="#666666" points="133.75,-33.5 0,-33.5 0,0 133.75,0 133.75,-33.5"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Solver.Shot</text>
-<text xml:space="preserve" text-anchor="middle" x="66.88" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">Simulator</text>
+<text xml:space="preserve" text-anchor="middle" x="66.88" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">ScoreRules</text>
 </a>
 </g>
 </g>
