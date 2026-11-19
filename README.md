@@ -12,21 +12,41 @@ the board fights back with puff clouds, bushes, and increasingly resilient ballo
 
 Every run has **pressure**: spawn waves pack the grid tighter each turn, and overflow —
 balloons too high to fit — drains your hearts one heart-trail at a time (with slow-mo
-cinematics). Reach zero and the run ends; only your best level and score persist. Each
-new level brings tighter grids, new balloon variants, and harder trade-offs between
-defense (shields) and offense (bombs, lightning). Level-ups earn their own cinematic: the
-tipping trail is intercepted mid-flight and the camera dives after it, handing control
-back through a curve-driven restore.
+cinematics). Reach zero and the run ends: it can be retried from the level it reached, and
+a run left midway is offered as Continue at the next launch. Each new level brings tighter
+grids, new balloon variants, and harder trade-offs between defense (shields) and offense
+(bombs, lightning). Level-ups earn their own cinematic: the tipping trail is intercepted
+mid-flight and the camera dives after it, handing control back through a curve-driven
+restore. A level-up also offers a pick of upgrades for the rest of the run.
 
-The run moves through three scenarios, Sky, Meadow and Water, under a day that turns to night:
+The run moves through three scenarios, Sky, Meadow and Water, under a day that turns to
+night, and now and then a level is a bonus, drawn on a page of paper:
 
-![Sky, Meadow and Water, each at morning and at night](Docs/readme/scenarios.jpg)
+![Sky, Meadow, Water and a bonus level, each at morning and at night](Docs/readme/scenarios.jpg)
+
+The meadow grows walls of mushroom caps that work as pinball bumpers: a ball that bounces
+off three walls in one flight becomes the Snipe's lance, which cuts the caps it flies
+through. The water carries soap bubbles that rise with the lines and merge into clusters.
+
+A **bonus level** plays one colour more, purple, and takes every threat off the board: no
+armoured balloons, no clouds, no bushes. Its lines come faster and bring more items, and it
+is where the gift balloons come most.
 
 Balloons carry items that go off when popped: a bomb's blast, a laser's beam, lightning
 that jumps between balloons, paint that turns its neighbours one colour, and two that ride
 on the next ball, a shield and a piercing snipe:
 
 ![The six items, each at the moment its effect is fullest](Docs/readme/items.jpg)
+
+Four **gift balloons** belong to no level's mix: each comes rarely and is worth going for.
+The golden balloon and the disco ball are plated, so a plain shot bounces off and only a
+pierce, a blast or a beam breaks them: the golden one pays a free upgrade, and the disco
+ball's pop paints the board rainbow, and a rainbow balloon carries on a streak of any
+colour. The heart balloon pops on any hit and gives a heart back. The nuke is a rescue, likelier the
+more trouble the player is in: three hits arm it, and after a count of three its blast
+clears the board.
+
+![The four gift balloons, each at morning and at night](Docs/readme/gifts.jpg)
 
 These stills are retaken by a script (`Tools/readme_shots/`), not by hand.
 
@@ -74,7 +94,7 @@ message-based.
 
 ## Development
 
-Open with **Unity 6000.3.15f1** (see `ProjectSettings/ProjectVersion.txt`).
+Open with **Unity 6000.6.3f1** (see `ProjectSettings/ProjectVersion.txt`).
 
 The conventions in the style guide are **machine-enforced**: a pre-commit hook and CI run
 the same audit (member/method ordering, Allman braces, comment policy, banned APIs such

@@ -25,12 +25,14 @@ FONT = ROOT / "Assets" / "Fonts" / "PatrickHand-Regular.ttf"
 DONE = "done.txt"
 DRIVER = "BalloonParty.Editor.ReadmeShotCapture, BalloonParty.Editor"
 
-SCENARIOS = (("sky", "Sky"), ("meadow", "Meadow"), ("water", "Water"))
+SCENARIOS = (("sky", "Sky"), ("meadow", "Meadow"), ("water", "Water"), ("bonus", "Bonus level"))
 TIMES = (("morning", "Morning"), ("night", "Night"))
 ITEMS = (("bomb", "Bomb"), ("laser", "Laser"), ("lightning", "Lightning"),
          ("paint", "Paint"), ("shield", "Shield"), ("snipe", "Snipe"))
+GIFTS = (("golden", "Golden"), ("heart", "Heart"), ("disco", "Disco ball"), ("nuke", "Nuke"))
 
 TILE = (540, 960)
+GIFT_TILE = (540, 540)
 GAP = 12
 LABEL = 64
 BACKGROUND = (24, 28, 40)
@@ -71,9 +73,9 @@ def capture(burst):
     (RAW / DONE).unlink(missing_ok=True)
 
     unity("UnityEditor.EditorApplication.isPlaying = true; return \"on\";")
-    wait_for(lambda: str(unity("return (UnityEngine.Object.FindAnyObjectByType("
-                               "System.Type.GetType(\"BalloonParty.Game.GameLifetimeScope, BalloonParty.Runtime\"))"
-                               " != null).ToString();")) == "True", LAUNCH_SECONDS, "the game scene")
+    # The driver waits for the launch screen itself and taps Play: the game scene loads only after that.
+    wait_for(lambda: str(unity("return (UnityEditor.EditorApplication.isPlaying && UnityEngine.Time.frameCount > 30)"
+                               ".ToString();")) == "True", LAUNCH_SECONDS, "Play mode")
     raw = str(RAW).replace("\\", "/")
     started = unity(f"return System.Type.GetType(\"{DRIVER}\").GetMethod(\"Run\", "
                     "System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic)"
@@ -89,29 +91,29 @@ def capture(burst):
     print(f"{len(list(RAW.glob('*.png')))} shots in {RAW}")
 
 
-def grid(rows, columns, cell, column_labels, row_labels, out):
+def grid(rows, columns, cell, column_labels, row_labels, out, tile=TILE):
     """Tiles cell(row, column) into a grid under column labels, each row headed by its label."""
     font = ImageFont.truetype(str(FONT), 44)
     side = LABEL * 3 if row_labels else 0
     top = LABEL if column_labels else 0
-    width = side + columns * TILE[0] + (columns + 1) * GAP
-    height = top + rows * (TILE[1] + (0 if column_labels else LABEL)) + (rows + 1) * GAP
+    width = side + columns * tile[0] + (columns + 1) * GAP
+    height = top + rows * (tile[1] + (0 if column_labels else LABEL)) + (rows + 1) * GAP
     sheet = Image.new("RGB", (width, height), BACKGROUND)
     draw = ImageDraw.Draw(sheet)
     for c in range(columns):
-        x = side + GAP + c * (TILE[0] + GAP)
+        x = side + GAP + c * (tile[0] + GAP)
         if column_labels:
-            draw.text((x + TILE[0] / 2, top / 2 + GAP / 2), column_labels[c], fill=INK, font=font, anchor="mm")
+            draw.text((x + tile[0] / 2, top / 2 + GAP / 2), column_labels[c], fill=INK, font=font, anchor="mm")
     for r in range(rows):
-        y = top + GAP + r * (TILE[1] + GAP + (0 if column_labels else LABEL))
+        y = top + GAP + r * (tile[1] + GAP + (0 if column_labels else LABEL))
         if row_labels:
-            draw.text((side / 2 + GAP / 2, y + TILE[1] / 2), row_labels[r], fill=INK, font=font, anchor="mm")
+            draw.text((side / 2 + GAP / 2, y + tile[1] / 2), row_labels[r], fill=INK, font=font, anchor="mm")
         for c in range(columns):
-            x = side + GAP + c * (TILE[0] + GAP)
+            x = side + GAP + c * (tile[0] + GAP)
             path, label = cell(r, c)
-            sheet.paste(Image.open(path).convert("RGB").resize(TILE, Image.LANCZOS), (x, y))
+            sheet.paste(Image.open(path).convert("RGB").resize(tile, Image.LANCZOS), (x, y))
             if label:
-                draw.text((x + TILE[0] / 2, y + TILE[1] + LABEL / 2), label, fill=INK, font=font, anchor="mm")
+                draw.text((x + tile[0] / 2, y + tile[1] + LABEL / 2), label, fill=INK, font=font, anchor="mm")
     OUT.mkdir(parents=True, exist_ok=True)
     sheet.save(out, quality=QUALITY, optimize=True, progressive=True)
     print(f"{out.relative_to(ROOT)}: {sheet.size[0]}x{sheet.size[1]}")
@@ -120,7 +122,8 @@ def grid(rows, columns, cell, column_labels, row_labels, out):
 def compose():
     missing = [p for p in
                [RAW / f"scene_{s}_{t}.png" for s, _ in SCENARIOS for t, _ in TIMES] +
-               [RAW / f"item_{i}.png" for i, _ in ITEMS] if not p.exists()]
+               [RAW / f"item_{i}.png" for i, _ in ITEMS] +
+               [RAW / f"gift_{g}_{t}.png" for g, _ in GIFTS for t, _ in TIMES] if not p.exists()]
     if missing:
         sys.exit("Missing shots (capture first): " + ", ".join(p.name for p in missing))
 
@@ -129,6 +132,9 @@ def compose():
          [name for _, name in SCENARIOS], [name for _, name in TIMES], OUT / "scenarios.jpg")
     grid(2, 3, lambda r, c: (RAW / f"item_{ITEMS[r * 3 + c][0]}.png", ITEMS[r * 3 + c][1]),
          None, None, OUT / "items.jpg")
+    grid(len(TIMES), len(GIFTS),
+         lambda r, c: (RAW / f"gift_{GIFTS[c][0]}_{TIMES[r][0]}.png", None),
+         [name for _, name in GIFTS], [name for _, name in TIMES], OUT / "gifts.jpg", GIFT_TILE)
 
 
 def main():

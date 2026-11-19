@@ -3,10 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using BalloonParty.Balloon.Model;
+using BalloonParty.Balloon.Type;
 using BalloonParty.Cheats;
 using BalloonParty.Cheats.Autoplay;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Level;
+using BalloonParty.Editor.Staging;
 using BalloonParty.Game;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
@@ -27,10 +29,12 @@ namespace BalloonParty.Editor
 {
     /// <summary>
     ///     Takes the repository README's stills in Play mode, as a fixed script, so they can be retaken after any
-    ///     change to the game's look with nothing chosen by hand: each scenario at morning and at night, paused on
-    ///     a full board, and each item set off on a balloon in the middle of a fresh level-1 board, frozen at the
-    ///     moment its effect is fullest. PNGs at the Game view's resolution, then <see cref="DoneFile" />, holding
-    ///     "ok" or what went wrong. Run by <c>Tools/readme_shots/capture.py</c>, which composes them.
+    ///     change to the game's look with nothing chosen by hand: each scenario and the bonus level's page at
+    ///     morning and at night, paused on a full board; each item set off on a balloon in the middle of a fresh
+    ///     board, frozen at the moment its effect is fullest; and each gift balloon in the middle of such a board,
+    ///     as a square cut out round it, at morning and at night. PNGs at the Game view's resolution, then
+    ///     <see cref="DoneFile" />, holding "ok" or what went wrong. Run by <c>Tools/readme_shots/capture.py</c>,
+    ///     which composes them.
     /// </summary>
     internal static class ReadmeShotCapture
     {
@@ -58,9 +62,27 @@ namespace BalloonParty.Editor
         // scenario shots pause it just after it fills.
         private const float JumpPauseSeconds = 0.6f;
 
+        // The balloon it replaces pops as it is placed, and that pop's pieces and score are gone by then.
+        private const float GiftSettleSeconds = 2.5f;
+
+        // A gift's still is a square round the balloon, this share of the frame's width across.
+        private const float GiftCropShare = 0.42f;
+
         private static readonly (ScenarioKind Kind, string Name)[] Scenarios =
         {
-            (ScenarioKind.Sky, "sky"), (ScenarioKind.Ground, "meadow"), (ScenarioKind.Water, "water")
+            (ScenarioKind.Sky, "sky"), (ScenarioKind.Ground, "meadow"), (ScenarioKind.Water, "water"),
+            (ScenarioKind.Paper, "bonus")
+        };
+
+        private static readonly (float Angle, string Name)[] Times =
+        {
+            (MorningAngle, "morning"), (NightAngle, "night")
+        };
+
+        private static readonly (BalloonType Type, string Name)[] Gifts =
+        {
+            (BalloonType.Golden, "golden"), (BalloonType.Heart, "heart"), (BalloonType.Disco, "disco"),
+            (BalloonType.Nuke, "nuke")
         };
 
         // Each item and when its effect is fullest, in seconds of game time: after its balloon pops, or for an
@@ -80,6 +102,7 @@ namespace BalloonParty.Editor
         private static double _stepStartedAt;
         private static IWriteableSlotActor _host;
         private static Vector3 _hostPosition;
+        private static Vector2Int _giftSlot;
 
         /// <summary>
         ///     Starts the shots into <paramref name="outDir" />; Play mode must be on, at the launch screen or about to
@@ -120,12 +143,38 @@ namespace BalloonParty.Editor
                 PlanItem(item, fires, burst ? BurstSeconds : new[] { seconds });
             }
 
+            foreach (var (type, name) in Gifts)
+            {
+                PlanGift(type, name);
+            }
+
             foreach (var (kind, name) in Scenarios)
             {
                 PlanScenario(kind, name);
             }
 
             Do(Unfreeze);
+        }
+
+        private static void PlanGift(BalloonType type, string name)
+        {
+            Do(() =>
+            {
+                Unfreeze();
+                CheatState.StartLevel = ItemLevel;
+                Resolve<RunController>().RestartRun();
+            });
+            Wait(BoardSettleSeconds);
+            Do(() => PlaceGift(type));
+            Wait(GiftSettleSeconds);
+            Do(FreezeWorld);
+            foreach (var (angle, time) in Times)
+            {
+                Do(() => SetAngle(angle));
+                Wait(LightSettleSeconds);
+                Do(() => CaptureGift($"gift_{name}_{time}"));
+                Wait(FrameSeconds);
+            }
         }
 
         private static void PlanItem(ItemType item, bool fires, IReadOnlyList<float> moments)
@@ -171,7 +220,7 @@ namespace BalloonParty.Editor
             });
             Wait(JumpPauseSeconds);
             Do(FreezeWorld);
-            foreach (var (angle, time) in new[] { (MorningAngle, "morning"), (NightAngle, "night") })
+            foreach (var (angle, time) in Times)
             {
                 Do(() => SetAngle(angle));
                 Wait(LightSettleSeconds);
@@ -214,8 +263,31 @@ namespace BalloonParty.Editor
         // Puts the item on the plain balloon nearest the board's middle, so its effect has board all round it.
         private static void Arm(ItemType item)
         {
+            (_host, _hostPosition, _) = MiddlePlainBalloon();
+            ((IHasWriteableItemSlot)_host).Item.Value = item;
+        }
+
+        // Swaps the plain balloon nearest the board's middle for the gift, so the still has board all round it.
+        private static void PlaceGift(BalloonType type)
+        {
+            (_, _, _giftSlot) = MiddlePlainBalloon();
+            var placed = SceneStage.Place(type.ToString(), _giftSlot.x, _giftSlot.y, "None", true);
+            if (placed.StartsWith("error", StringComparison.Ordinal))
+            {
+                throw new InvalidOperationException(placed);
+            }
+        }
+
+        private static void CaptureGift(string name)
+        {
+            var size = Mathf.RoundToInt(Camera.main.pixelWidth * GiftCropShare);
+            SceneStage.Capture(Path.Combine(_outDir, name + ".png"), $"{_giftSlot.x},{_giftSlot.y}", size);
+        }
+
+        private static (IWriteableSlotActor Actor, Vector3 Position, Vector2Int Slot) MiddlePlainBalloon()
+        {
             var grid = Resolve<SlotGrid>();
-            var actors = new List<(IWriteableSlotActor Actor, Vector3 Position)>();
+            var actors = new List<(IWriteableSlotActor Actor, Vector3 Position, Vector2Int Slot)>();
             var middle = Vector3.zero;
             var occupied = 0;
             for (var col = 0; col < grid.Columns; col++)
@@ -235,20 +307,19 @@ namespace BalloonParty.Editor
                     if (actor is IHasWriteableItemSlot holder && holder.Item.Value == ItemType.None &&
                         !holder.Color.Value.StartsWith("__"))
                     {
-                        actors.Add((actor, position));
+                        actors.Add((actor, position, slot));
                     }
                 }
             }
 
             if (actors.Count == 0)
             {
-                throw new InvalidOperationException($"No plain balloon to put the {item} on");
+                throw new InvalidOperationException("No plain balloon in the middle of the board");
             }
 
             middle /= occupied;
             actors.Sort((a, b) => (a.Position - middle).sqrMagnitude.CompareTo((b.Position - middle).sqrMagnitude));
-            (_host, _hostPosition) = actors[0];
-            ((IHasWriteableItemSlot)_host).Item.Value = item;
+            return actors[0];
         }
 
         // A piercing hit from below, as a shot going up would make: it pops the balloon whatever it is.
@@ -277,7 +348,8 @@ namespace BalloonParty.Editor
         {
             var pacing = Resolve<ILevelPacingConfiguration>();
             var seed = Resolve<IRunSeed>().Value;
-            var level = JumpToScenarioCheat.NextStretchStart(l => pacing.ScenarioForLevel(l, seed),
+            // The backdrop, not the schedule: a bonus level inside a stretch shows its page, not the stretch.
+            var level = JumpToScenarioCheat.NextStretchStart(l => pacing.BackdropForLevel(l, seed),
                 Resolve<ILevelProgress>().Level.Value, kind, ScenarioSearchLevels);
             if (level < 1)
             {
