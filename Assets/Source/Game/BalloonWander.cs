@@ -7,7 +7,7 @@ namespace BalloonParty.Game
     ///     A balloon drifting about an area on its own: it heads for one spot after another, picked at random among
     ///     those it can reach in a straight line past a keep-out it may never enter, easing in as it arrives. Should
     ///     it still meet the keep-out it slides round it, and a spot it can't reach in time is given up for another.
-    ///     <see cref="Shown" /> adds a gentle bob.
+    ///     The keep-out may move (<see cref="KeepClearOf" />). <see cref="Shown" /> adds a gentle bob.
     /// </summary>
     internal sealed class BalloonWander
     {
@@ -15,9 +15,9 @@ namespace BalloonParty.Game
 
         private readonly BalloonWanderSettings _settings;
         private readonly Rect _bounds;
-        private readonly KeepOut _keepOut;
         private readonly System.Random _random;
 
+        private KeepOut _keepOut;
         private Vector2 _target;
         private float _sinceTarget;
         private float _time;
@@ -31,8 +31,9 @@ namespace BalloonParty.Game
         internal Vector2 Shown => Position + Vector2.up * (_settings.Bob * Mathf.Sin(2f * Mathf.PI * _settings.BobSpeed * _time));
 
         /// <summary>
-        ///     Starts at <paramref name="start" />, or somewhere allowed if that isn't, within <paramref name="bounds" />
-        ///     and clear of <paramref name="keepOut" />.
+        ///     Starts at <paramref name="start" />, within <paramref name="bounds" /> and clear of
+        ///     <paramref name="keepOut" />; if that isn't, at the nearest spot just out of the keep-out, or failing
+        ///     that somewhere allowed.
         /// </summary>
         internal BalloonWander(
             BalloonWanderSettings settings, Rect bounds, KeepOut keepOut, Vector2 start, int seed)
@@ -41,7 +42,7 @@ namespace BalloonParty.Game
             _bounds = bounds;
             _keepOut = keepOut;
             _random = new System.Random(seed);
-            Position = Allowed(start) ? start : RandomAllowed(start);
+            Position = Allowed(start) ? start : NearestAllowed(start);
             _target = Position;
             PickTarget();
         }
@@ -49,6 +50,15 @@ namespace BalloonParty.Game
         internal bool Allowed(Vector2 point)
         {
             return _bounds.Contains(point) && !_keepOut.Contains(point);
+        }
+
+        /// <summary>
+        ///     Moves the keep-out, for one that follows something drifting itself. A keep-out that comes over the
+        ///     balloon moves it out of the way on its next step.
+        /// </summary>
+        internal void KeepClearOf(KeepOut keepOut)
+        {
+            _keepOut = keepOut;
         }
 
         internal void Step(float deltaTime)
@@ -125,6 +135,14 @@ namespace BalloonParty.Game
                     return;
                 }
             }
+        }
+
+        private Vector2 NearestAllowed(Vector2 start)
+        {
+            var nearest = _keepOut.PushOut(start, out _);
+            nearest = new Vector2(
+                Mathf.Clamp(nearest.x, _bounds.xMin, _bounds.xMax), Mathf.Clamp(nearest.y, _bounds.yMin, _bounds.yMax));
+            return Allowed(nearest) ? nearest : RandomAllowed(start);
         }
 
         private Vector2 RandomAllowed(Vector2 fallback)

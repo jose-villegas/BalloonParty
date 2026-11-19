@@ -1,8 +1,8 @@
 # Cloth Ribbon
 
-A ribbon of cloth with writing on it, hanging from a spring line: the launch screen's Continue balloon
-carries one (`Game/LaunchContinueView`). The line and ribbon are simulated together as points joined by
-springs, so they swing, stretch a little and flutter as whatever holds the line moves.
+A ribbon of cloth with writing on it, hanging from a spring line: the launch screen's Play and Continue
+balloons each carry one (`Game/LaunchBalloonView`). The line and ribbon are simulated together as points joined
+by springs, so they swing, stretch a little and flutter as whatever holds the line moves.
 
 ## How it moves
 

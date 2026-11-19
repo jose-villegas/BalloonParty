@@ -18,7 +18,7 @@ namespace BalloonParty.Game
 
         [SerializeField] [Min(0.5f)] private float _retargetSeconds = 7f;
 
-        [Tooltip("Its bob up and down, in canvas units; keep it within the room kept around Play.")]
+        [Tooltip("Its bob up and down, in canvas units; keep it within the gap kept between the balloons.")]
         [SerializeField] [Min(0f)] private float _bob = 1.5f;
 
         [Tooltip("Bobs a second.")]
