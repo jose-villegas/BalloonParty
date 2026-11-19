@@ -146,6 +146,9 @@ Package Functions</h2></td></tr>
 <tr class="memitem:af30edbfc3baaaa6e899c4c4fa212a767" id="r_af30edbfc3baaaa6e899c4c4fa212a767"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Game_1_1BalloonDrift.html">BalloonDrift</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af30edbfc3baaaa6e899c4c4fa212a767">NewDrift</a> (Rect area, int seed)</td></tr>
 <tr class="memdesc:af30edbfc3baaaa6e899c4c4fa212a767"><td class="mdescLeft">&#160;</td><td class="mdescRight">This balloon's drift on a screen of <em>area</em> , from its own settings and, if the other balloon shows, the part of the screen that leaves it.  <br /></td></tr>
 <tr class="separator:af30edbfc3baaaa6e899c4c4fa212a767"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae91a9ec979f1745b851b4046806b9d53" id="r_ae91a9ec979f1745b851b4046806b9d53"><td class="memItemLeft" align="right" valign="top">Rect&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae91a9ec979f1745b851b4046806b9d53">RoomOn</a> (Rect area)</td></tr>
+<tr class="memdesc:ae91a9ec979f1745b851b4046806b9d53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where the body's centre may be on a screen of <em>area</em> : on screen with room below for what hangs from it, and in this balloon's part of the screen while the other shows.  <br /></td></tr>
+<tr class="separator:ae91a9ec979f1745b851b4046806b9d53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -163,6 +166,9 @@ Properties</h2></td></tr>
 <tr class="separator:ab2bbf80c85355f23003a4ef5adae0da2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf8318ef9e1fbe5a4c8cf5e8305068a5" id="r_adf8318ef9e1fbe5a4c8cf5e8305068a5"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adf8318ef9e1fbe5a4c8cf5e8305068a5">Scale</a><code> [get]</code></td></tr>
 <tr class="separator:adf8318ef9e1fbe5a4c8cf5e8305068a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab6a3981340e1248cef73fd18b3eabe6" id="r_aab6a3981340e1248cef73fd18b3eabe6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab6a3981340e1248cef73fd18b3eabe6">ShadowReach</a><code> [get]</code></td></tr>
+<tr class="memdesc:aab6a3981340e1248cef73fd18b3eabe6"><td class="mdescLeft">&#160;</td><td class="mdescRight">From the body's centre to as far as the shadow darkens, shifted any way, in canvas units.  <br /></td></tr>
+<tr class="separator:aab6a3981340e1248cef73fd18b3eabe6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -180,8 +186,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a882879ef5b08eef389a54aa43a6e4d59"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace69ac8d183ce9007a19767dc7820672" id="r_ace69ac8d183ce9007a19767dc7820672"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace69ac8d183ce9007a19767dc7820672">PlaceBalloon</a> ()</td></tr>
 <tr class="separator:ace69ac8d183ce9007a19767dc7820672"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af93ad5a07c66095a63175e0ddde48260" id="r_af93ad5a07c66095a63175e0ddde48260"><td class="memItemLeft" align="right" valign="top">Rect&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af93ad5a07c66095a63175e0ddde48260">Room</a> (Rect area)</td></tr>
-<tr class="separator:af93ad5a07c66095a63175e0ddde48260"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c05da7f86b2cd40a65e4f1bb0993c89" id="r_a5c05da7f86b2cd40a65e4f1bb0993c89"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5c05da7f86b2cd40a65e4f1bb0993c89">ShiftShadow</a> ()</td></tr>
+<tr class="separator:a5c05da7f86b2cd40a65e4f1bb0993c89"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af1f0acd3ba84e9c5671f8380eee16a16" id="r_af1f0acd3ba84e9c5671f8380eee16a16"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af1f0acd3ba84e9c5671f8380eee16a16">StartIn</a> (Rect room)</td></tr>
 <tr class="separator:af1f0acd3ba84e9c5671f8380eee16a16"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02314bf29134e1d5829ba1e844ddff85" id="r_a02314bf29134e1d5829ba1e844ddff85"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a02314bf29134e1d5829ba1e844ddff85">Tick</a> (float deltaTime)</td></tr>
@@ -223,6 +229,12 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a105c75e82487f79475cec4319a017d9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a260253441f939949237c65c4d8154aad" id="r_a260253441f939949237c65c4d8154aad"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1UI_1_1ClothRibbon_1_1ClothRibbonGraphic.html">ClothRibbonGraphic</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a260253441f939949237c65c4d8154aad">_ribbon</a></td></tr>
 <tr class="separator:a260253441f939949237c65c4d8154aad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c7c4d93958bfea24518d166c664293d" id="r_a3c7c4d93958bfea24518d166c664293d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3c7c4d93958bfea24518d166c664293d">_shadowRadius</a> = 85f</td></tr>
+<tr class="separator:a3c7c4d93958bfea24518d166c664293d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4848eefed4d5c074a5f0dcc92c0f7f78" id="r_a4848eefed4d5c074a5f0dcc92c0f7f78"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4848eefed4d5c074a5f0dcc92c0f7f78">_shadowScale</a> = -1f</td></tr>
+<tr class="separator:a4848eefed4d5c074a5f0dcc92c0f7f78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf89702f352ff9c4ddfc03d89c03f9c8" id="r_acf89702f352ff9c4ddfc03d89c03f9c8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acf89702f352ff9c4ddfc03d89c03f9c8">_shadowShift</a> = 24f</td></tr>
+<tr class="separator:acf89702f352ff9c4ddfc03d89c03f9c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abdb318ebf128d1ea1f0ca0e3f0234ccd" id="r_abdb318ebf128d1ea1f0ca0e3f0234ccd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abdb318ebf128d1ea1f0ca0e3f0234ccd">_sharing</a></td></tr>
 <tr class="separator:abdb318ebf128d1ea1f0ca0e3f0234ccd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00ff245b1581a6283a8cece72cd7f1c7" id="r_a00ff245b1581a6283a8cece72cd7f1c7"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a00ff245b1581a6283a8cece72cd7f1c7">_start</a> = new(0.62f, 0.16f)</td></tr>
@@ -234,6 +246,8 @@ Private Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
+<tr class="memitem:ab60c0ea95a294ec5e5b458b9bde44600" id="r_ab60c0ea95a294ec5e5b458b9bde44600"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab60c0ea95a294ec5e5b458b9bde44600">OrbitDistanceId</a> = Shader.PropertyToID(&quot;_OrbitDistance&quot;)</td></tr>
+<tr class="separator:ab60c0ea95a294ec5e5b458b9bde44600"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb324e2f31b3e219cc9fe08b9adf8a30" id="r_aeb324e2f31b3e219cc9fe08b9adf8a30"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeb324e2f31b3e219cc9fe08b9adf8a30">RotationPivotId</a> = Shader.PropertyToID(&quot;_RotationPivot&quot;)</td></tr>
 <tr class="separator:aeb324e2f31b3e219cc9fe08b9adf8a30"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -448,8 +462,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="af93ad5a07c66095a63175e0ddde48260" name="af93ad5a07c66095a63175e0ddde48260"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af93ad5a07c66095a63175e0ddde48260">&#9670;&#160;</a></span>Room()</h2>
+<a id="ae91a9ec979f1745b851b4046806b9d53" name="ae91a9ec979f1745b851b4046806b9d53"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae91a9ec979f1745b851b4046806b9d53">&#9670;&#160;</a></span>RoomOn()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -458,9 +472,36 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Rect BalloonParty.Game.LaunchBalloonView.Room </td>
+          <td class="memname">Rect BalloonParty.Game.LaunchBalloonView.RoomOn </td>
           <td>(</td>
           <td class="paramtype">Rect</td>          <td class="paramname"><span class="paramname"><em>area</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Where the body's centre may be on a screen of <em>area</em> : on screen with room below for what hangs from it, and in this balloon's part of the screen while the other shows. </p>
+
+</div>
+</div>
+<a id="a5c05da7f86b2cd40a65e4f1bb0993c89" name="a5c05da7f86b2cd40a65e4f1bb0993c89"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c05da7f86b2cd40a65e4f1bb0993c89">&#9670;&#160;</a></span>ShiftShadow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Game.LaunchBalloonView.ShiftShadow </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -901,6 +942,72 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a3c7c4d93958bfea24518d166c664293d" name="a3c7c4d93958bfea24518d166c664293d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c7c4d93958bfea24518d166c664293d">&#9670;&#160;</a></span>_shadowRadius</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Game.LaunchBalloonView._shadowRadius = 85f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4848eefed4d5c074a5f0dcc92c0f7f78" name="a4848eefed4d5c074a5f0dcc92c0f7f78"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4848eefed4d5c074a5f0dcc92c0f7f78">&#9670;&#160;</a></span>_shadowScale</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Game.LaunchBalloonView._shadowScale = -1f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acf89702f352ff9c4ddfc03d89c03f9c8" name="acf89702f352ff9c4ddfc03d89c03f9c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf89702f352ff9c4ddfc03d89c03f9c8">&#9670;&#160;</a></span>_shadowShift</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Game.LaunchBalloonView._shadowShift = 24f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="abdb318ebf128d1ea1f0ca0e3f0234ccd" name="abdb318ebf128d1ea1f0ca0e3f0234ccd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abdb318ebf128d1ea1f0ca0e3f0234ccd">&#9670;&#160;</a></span>_sharing</h2>
 
@@ -983,6 +1090,28 @@ Static Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab60c0ea95a294ec5e5b458b9bde44600" name="ab60c0ea95a294ec5e5b458b9bde44600"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab60c0ea95a294ec5e5b458b9bde44600">&#9670;&#160;</a></span>OrbitDistanceId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Game.LaunchBalloonView.OrbitDistanceId = Shader.PropertyToID(&quot;_OrbitDistance&quot;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1145,6 +1274,30 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="aab6a3981340e1248cef73fd18b3eabe6" name="aab6a3981340e1248cef73fd18b3eabe6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab6a3981340e1248cef73fd18b3eabe6">&#9670;&#160;</a></span>ShadowReach</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Game.LaunchBalloonView.ShadowReach</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>From the body's centre to as far as the shadow darkens, shifted any way, in canvas units. </p>
 
 </div>
 </div>

@@ -121,8 +121,8 @@ $(function(){initNavTree('structBalloonParty_1_1Game_1_1BalloonReach.html',''); 
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:a02befc34b2a1b1d1a4b0f2da77fc6d05" id="r_a02befc34b2a1b1d1a4b0f2da77fc6d05"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a02befc34b2a1b1d1a4b0f2da77fc6d05">BalloonReach</a> (float radius, float up, float down)</td></tr>
-<tr class="separator:a02befc34b2a1b1d1a4b0f2da77fc6d05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a081725387fe11ae47eb1af91ca983db0" id="r_a081725387fe11ae47eb1af91ca983db0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a081725387fe11ae47eb1af91ca983db0">BalloonReach</a> (float radius, float up, float down, float shadow)</td></tr>
+<tr class="separator:a081725387fe11ae47eb1af91ca983db0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8fd3f6d27bd2eca9c600c2e470c0d95c" id="r_a8fd3f6d27bd2eca9c600c2e470c0d95c"><td class="memItemLeft" align="right" valign="top">Rect&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8fd3f6d27bd2eca9c600c2e470c0d95c">RoomAbove</a> (in <a class="el" href="structBalloonParty_1_1Game_1_1BalloonReach.html">BalloonReach</a> lower, Rect area, float clearance, float gap)</td></tr>
 <tr class="memdesc:a8fd3f6d27bd2eca9c600c2e470c0d95c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where the centre may be as the upper of two balloons, above <em>lower</em> .  <br /></td></tr>
 <tr class="separator:a8fd3f6d27bd2eca9c600c2e470c0d95c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -141,6 +141,9 @@ Package Attributes</h2></td></tr>
 <tr class="memitem:a1ce01e787f3d26beef22c62f6edab91b" id="r_a1ce01e787f3d26beef22c62f6edab91b"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ce01e787f3d26beef22c62f6edab91b">Radius</a></td></tr>
 <tr class="memdesc:a1ce01e787f3d26beef22c62f6edab91b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The body's radius.  <br /></td></tr>
 <tr class="separator:a1ce01e787f3d26beef22c62f6edab91b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bee6b08b91884b2daf4e62db37c3027" id="r_a1bee6b08b91884b2daf4e62db37c3027"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1bee6b08b91884b2daf4e62db37c3027">Shadow</a></td></tr>
+<tr class="memdesc:a1bee6b08b91884b2daf4e62db37c3027"><td class="mdescLeft">&#160;</td><td class="mdescRight">From the centre to as far as its shadow darkens what is under it, whichever way the light shifts it.  <br /></td></tr>
+<tr class="separator:a1bee6b08b91884b2daf4e62db37c3027"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a742801cfcb13c0b7460f6a821db5973a" id="r_a742801cfcb13c0b7460f6a821db5973a"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a742801cfcb13c0b7460f6a821db5973a">Up</a></td></tr>
 <tr class="memdesc:a742801cfcb13c0b7460f6a821db5973a"><td class="mdescLeft">&#160;</td><td class="mdescRight">From the centre up to the top of the body at the top of its bob.  <br /></td></tr>
 <tr class="separator:a742801cfcb13c0b7460f6a821db5973a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -152,10 +155,10 @@ Static Private Member Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The room a drifting launch balloon takes up around its body's centre, and from that where the centre may be on a screen. </p>
-<p>Alone it has the whole screen. Two balloons share it one above the other (<a class="el" href="#a8fd3f6d27bd2eca9c600c2e470c0d95c" title="Where the centre may be as the upper of two balloons, above lower .">RoomAbove</a>, <a class="el" href="#a6c7a1e711701796d0109fe603011e6db" title="Where the centre may be as the lower of two balloons, below upper .">RoomBelow</a>): everything of the upper one, down to the bottom of its ribbon, stays a gap above everything of the lower one wherever each is in its room. A ribbon streams further sideways than a phone is wide enough to keep two apart, but hangs no lower than at rest, so apart in height is the one arrangement in which neither can cover the other's. </p>
+<p>Alone it has the whole screen. Two balloons share it one above the other (<a class="el" href="#a8fd3f6d27bd2eca9c600c2e470c0d95c" title="Where the centre may be as the upper of two balloons, above lower .">RoomAbove</a>, <a class="el" href="#a6c7a1e711701796d0109fe603011e6db" title="Where the centre may be as the lower of two balloons, below upper .">RoomBelow</a>): everything of the upper one, down to the bottom of its ribbon, stays a gap above everything of the lower one wherever each is in its room. A ribbon streams further sideways than a phone is wide enough to keep two apart, but hangs no lower than at rest, so apart in height is the one arrangement in which neither can cover the other's. The lower balloon's shadow is kept under the gap too, so it never darkens the upper one's ribbon. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a02befc34b2a1b1d1a4b0f2da77fc6d05" name="a02befc34b2a1b1d1a4b0f2da77fc6d05"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a02befc34b2a1b1d1a4b0f2da77fc6d05">&#9670;&#160;</a></span>BalloonReach()</h2>
+<a id="a081725387fe11ae47eb1af91ca983db0" name="a081725387fe11ae47eb1af91ca983db0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a081725387fe11ae47eb1af91ca983db0">&#9670;&#160;</a></span>BalloonReach()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -176,7 +179,12 @@ Static Private Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>down</em></span>&#160;)</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>down</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>shadow</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -392,6 +400,30 @@ Static Private Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The body's radius. </p>
+
+</div>
+</div>
+<a id="a1bee6b08b91884b2daf4e62db37c3027" name="a1bee6b08b91884b2daf4e62db37c3027"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1bee6b08b91884b2daf4e62db37c3027">&#9670;&#160;</a></span>Shadow</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly float BalloonParty.Game.BalloonReach.Shadow</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>From the centre to as far as its shadow darkens what is under it, whichever way the light shifts it. </p>
 
 </div>
 </div>

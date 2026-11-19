@@ -435,7 +435,7 @@ var searchData=
   ['listextensions_2ecs_432',['ListExtensions.cs',['../ListExtensions_8cs.html',1,'']]],
   ['listlabel_433',['ListLabel',['../classBalloonParty_1_1Editor_1_1LevelGenerationPreview.html#a446eb7d915d0ef5ffaf8df1e22b5115f',1,'BalloonParty::Editor::LevelGenerationPreview']]],
   ['litlayers_434',['LitLayers',['../classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder.html#adeefa33dfde607782ae7d24754468b17',1,'BalloonParty::Editor::GameOverLayoutBuilder']]],
-  ['litmaterial_435',['LitMaterial',['../structBalloonParty_1_1Game_1_1LaunchBalloonView_1_1LitMaterial.html',1,'BalloonParty.Game.LaunchBalloonView.LitMaterial'],['../structBalloonParty_1_1Game_1_1LaunchBalloonView_1_1LitMaterial.html#a1c67fa3df14836f6754378c7b8e2c7e2',1,'BalloonParty.Game.LaunchBalloonView.LitMaterial.LitMaterial()']]],
+  ['litmaterial_435',['LitMaterial',['../structBalloonParty_1_1Game_1_1LaunchBalloonView_1_1LitMaterial.html',1,'BalloonParty.Game.LaunchBalloonView.LitMaterial'],['../structBalloonParty_1_1Game_1_1LaunchBalloonView_1_1LitMaterial.html#aa18a1ff2eb5c7d0b95d324da347fbe7d',1,'BalloonParty.Game.LaunchBalloonView.LitMaterial.LitMaterial()']]],
   ['little_20or_20no_20new_20authoring_436',['Tier 1 — large payoff, little or no new authoring',['../plan_hdr.html#autotoc_md710',1,'']]],
   ['live_437',['Deferred / not yet live',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/Audio/README.md#autotoc_md19',1,'']]],
   ['live_20gameplay_438',['Findings — first pass, 2026-07-23 (cool device, release build, live gameplay)',['../plan_performance_recovery.html#autotoc_md881',1,'']]],

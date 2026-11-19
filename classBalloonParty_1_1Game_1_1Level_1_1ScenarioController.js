@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Game_1_1Level_1_1ScenarioController =
 [
-    [ "ScenarioController", "classBalloonParty_1_1Game_1_1Level_1_1ScenarioController.html#a78cd5f7aa137032ec037f5e258ec1f9a", null ],
+    [ "ScenarioController", "classBalloonParty_1_1Game_1_1Level_1_1ScenarioController.html#a91be9d51b203ecf062c41e222dfd813b", null ],
     [ "Dispose", "classBalloonParty_1_1Game_1_1Level_1_1ScenarioController.html#aafbbe43c156bf7ab865eecfc44165fa8", null ],
     [ "LevelScenario", "classBalloonParty_1_1Game_1_1Level_1_1ScenarioController.html#ab465f84c662891cfe273c8aabff5db4a", null ],
     [ "OnRunReset", "classBalloonParty_1_1Game_1_1Level_1_1ScenarioController.html#aeb8a8754c190b032f581e455a917c88d", null ],
@@ -8,6 +8,7 @@ var classBalloonParty_1_1Game_1_1Level_1_1ScenarioController =
     [ "_ascendStarted", "classBalloonParty_1_1Game_1_1Level_1_1ScenarioController.html#ac1b5323629b68d23045c2be933327468", null ],
     [ "_cinematics", "classBalloonParty_1_1Game_1_1Level_1_1ScenarioController.html#ae54888e0aba3da5711f724ffca7dee15", null ],
     [ "_levelProgress", "classBalloonParty_1_1Game_1_1Level_1_1ScenarioController.html#a0c85e3b9960ff3aa65b2875a18284d5e", null ],
+    [ "_navigation", "classBalloonParty_1_1Game_1_1Level_1_1ScenarioController.html#ad313450a55a9d6701222f694565c6455", null ],
     [ "_pacing", "classBalloonParty_1_1Game_1_1Level_1_1ScenarioController.html#a26c7d45cbade0e8dd48d0eaa8fa9c44c", null ],
     [ "_restartCompleted", "classBalloonParty_1_1Game_1_1Level_1_1ScenarioController.html#a5997b7e072bd049b4666de9aaa16ed93", null ],
     [ "_riseStarted", "classBalloonParty_1_1Game_1_1Level_1_1ScenarioController.html#ae39e5904b1bb1d41ab0528352b0f0815", null ],
