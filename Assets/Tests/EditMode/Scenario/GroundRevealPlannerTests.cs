@@ -76,7 +76,33 @@ namespace BalloonParty.Tests.Scenario
         public void LeavingTheLaunchScreen_CutsToTheLevelsScenario()
         {
             var decision = GroundRevealPlanner.Decide(
+                new ScenarioShift(ScenarioKind.Ground, 0f), NavigationState.Game, NavigationState.Launch,
+                ScenarioKind.Sky, canReveal: true);
+
+            Assert.AreEqual(GroundRevealAction.Cut, decision.Action);
+            Assert.AreEqual(ScenarioKind.Ground, decision.Target);
+        }
+
+        // A saved run continued on a meadow: its reveal was told on the launch screen and waits for the game.
+        [Test]
+        public void LeavingTheLaunchScreen_WithARevealWaiting_OpensTheSkyOntoTheLevel()
+        {
+            var waiting = GroundRevealPlanner.Decide(
+                RevealGround, NavigationState.Launch, NavigationState.Launch, ScenarioKind.Sky, canReveal: true);
+            var decision = GroundRevealPlanner.Decide(
                 RevealGround, NavigationState.Game, NavigationState.Launch, ScenarioKind.Sky, canReveal: true);
+
+            Assert.AreEqual(GroundRevealAction.None, waiting.Action, "the launch screen stays sky");
+            Assert.AreEqual(GroundRevealAction.Reveal, decision.Action);
+            Assert.AreEqual(ScenarioKind.Ground, decision.Target);
+            Assert.AreEqual(4f, decision.Seconds, 1e-4f);
+        }
+
+        [Test]
+        public void LeavingTheLaunchScreen_WithARevealWaiting_ButNoMist_Cuts()
+        {
+            var decision = GroundRevealPlanner.Decide(
+                RevealGround, NavigationState.Game, NavigationState.Launch, ScenarioKind.Sky, canReveal: false);
 
             Assert.AreEqual(GroundRevealAction.Cut, decision.Action);
             Assert.AreEqual(ScenarioKind.Ground, decision.Target);

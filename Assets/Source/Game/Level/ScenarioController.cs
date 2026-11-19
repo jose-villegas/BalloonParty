@@ -3,6 +3,7 @@ using BalloonParty.Configuration.Cinematics;
 using BalloonParty.Configuration.Level;
 using BalloonParty.Game.Run;
 using BalloonParty.Scenario;
+using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
 using UniRx;
@@ -16,7 +17,9 @@ namespace BalloonParty.Game.Level
     ///     the start-level cheat and a restart land on the right backdrop. Reveals through the mist over the
     ///     length of the beat on a level-up Ascent and on the restart rise after a loss. A loss's restart leaves the
     ///     scenario alone until its rise starts, since the reveal scales the content root and the new scenery is
-    ///     placed under it first.
+    ///     placed under it first. A saved run continued from the launch screen is told as a reveal too: the launch
+    ///     screen is always sky, and the backdrop opens it onto the saved level as the game shows
+    ///     (<see cref="GroundRevealPlanner" />), where a cut would snap the meadow in.
     /// </summary>
     internal sealed class ScenarioController : IStartable, IDisposable
     {
@@ -25,6 +28,7 @@ namespace BalloonParty.Game.Level
         private readonly ILevelProgress _levelProgress;
         private readonly ActiveScenario _scenario;
         private readonly ICinematicsSettings _cinematics;
+        private readonly INavigation _navigation;
         private readonly ISubscriber<LevelAscendStartedMessage> _ascendStarted;
         private readonly ISubscriber<RunResetMessage> _runReset;
         private readonly ISubscriber<RestartRiseStartedMessage> _riseStarted;
@@ -34,7 +38,7 @@ namespace BalloonParty.Game.Level
 
         internal ScenarioController(
             ILevelPacingConfiguration pacing, IRunSeed runSeed, ILevelProgress levelProgress,
-            ActiveScenario scenario, ICinematicsSettings cinematics,
+            ActiveScenario scenario, ICinematicsSettings cinematics, INavigation navigation,
             ISubscriber<LevelAscendStartedMessage> ascendStarted, ISubscriber<RunResetMessage> runReset,
             ISubscriber<RestartRiseStartedMessage> riseStarted,
             ISubscriber<LevelTransitionCompletedMessage> transitionCompleted,
@@ -45,6 +49,7 @@ namespace BalloonParty.Game.Level
             _levelProgress = levelProgress;
             _scenario = scenario;
             _cinematics = cinematics;
+            _navigation = navigation;
             _ascendStarted = ascendStarted;
             _runReset = runReset;
             _riseStarted = riseStarted;
@@ -83,10 +88,21 @@ namespace BalloonParty.Game.Level
 
         private void OnRunReset(RunResetMessage message)
         {
-            if (message.BoardReset)
+            if (!message.BoardReset)
             {
-                _scenario.Cut(LevelScenario());
+                return;
             }
+
+            // The only run reset on the launch screen is a saved run being continued. The reveal waits there for
+            // the game to show, over the same length as the rise that brings a level in after a loss.
+            if (_navigation.Current.Value == NavigationState.Launch)
+            {
+                _scenario.Cut(ScenarioKind.Sky);
+                _scenario.Reveal(LevelScenario(), _cinematics.LevelAscend.RestartRiseSeconds);
+                return;
+            }
+
+            _scenario.Cut(LevelScenario());
         }
 
         private ScenarioKind LevelScenario()

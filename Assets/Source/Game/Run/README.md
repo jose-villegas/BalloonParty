@@ -57,7 +57,8 @@ launch → save exists → the Continue balloon drifts about beside Play
        → LaunchContinueController: IRunResumeRequest.Request(), then the Play ascent
        → RunResumeController (still on Launch): IRunSave.TryLoad → RetryTracker.PrepareResume(snapshot)
                                                → RunController.ResumeRun()
-       → ascent ends → Game, the first spawn lays out level N
+       → ascent ends → Game, the first spawn lays out level N; on a meadow, water or page level the
+         launch screen's sky opens onto it through the mist (see `Scenario/README.md`)
        → saved on the game-over screen? next Tick: RunController.RestoreLoss → GameOver, same offer
 ```
 

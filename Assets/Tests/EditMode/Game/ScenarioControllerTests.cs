@@ -4,6 +4,7 @@ using BalloonParty.Configuration.Level;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
 using BalloonParty.Scenario;
+using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
 using NSubstitute;
@@ -23,6 +24,7 @@ namespace BalloonParty.Tests.Game
         private const float RiseSeconds = 5f;
 
         private ReactiveProperty<int> _level;
+        private ReactiveProperty<NavigationState> _navigationState;
         private ActiveScenario _scenario;
         private ILevelPacingConfiguration _pacing;
         private IMessageHandler<LevelAscendStartedMessage> _ascendHandler;
@@ -91,15 +93,55 @@ namespace BalloonParty.Tests.Game
                     Arg.Any<MessageHandlerFilter<RunRestartCompletedMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
+            _navigationState = new ReactiveProperty<NavigationState>(NavigationState.Game);
+            var navigation = Substitute.For<INavigation>();
+            navigation.Current.Returns(_navigationState);
+
             _controller = new ScenarioController(
-                _pacing, _runSeed, levelProgress, _scenario, cinematics, subscriber, resetSubscriber, riseSubscriber,
-                transitionCompleted, restartCompleted);
+                _pacing, _runSeed, levelProgress, _scenario, cinematics, navigation, subscriber, resetSubscriber,
+                riseSubscriber, transitionCompleted, restartCompleted);
         }
 
         [TearDown]
         public void TearDown()
         {
             _level.Dispose();
+            _navigationState.Dispose();
+        }
+
+        [Test]
+        public void ASavedRunContinuedOnTheLaunchScreen_IsToldAsARevealFromTheSky_OverTheRise()
+        {
+            _navigationState.Value = NavigationState.Launch;
+            ((IStartable)_controller).Start();
+
+            _level.Value = 20;
+            _resetHandler.Handle(new RunResetMessage(boardReset: true));
+
+            Assert.AreEqual(new ScenarioShift(ScenarioKind.Ground, RiseSeconds), _scenario.Current.Value);
+        }
+
+        [Test]
+        public void ASavedRunContinuedOnASkyLevel_StaysACutToTheSky()
+        {
+            _navigationState.Value = NavigationState.Launch;
+            ((IStartable)_controller).Start();
+
+            _level.Value = 3;
+            _resetHandler.Handle(new RunResetMessage(boardReset: true));
+
+            Assert.AreEqual(new ScenarioShift(ScenarioKind.Sky, 0f), _scenario.Current.Value);
+        }
+
+        [Test]
+        public void ARestartInTheGame_StillCuts()
+        {
+            ((IStartable)_controller).Start();
+
+            _level.Value = 20;
+            _resetHandler.Handle(new RunResetMessage(boardReset: true));
+
+            Assert.AreEqual(new ScenarioShift(ScenarioKind.Ground, 0f), _scenario.Current.Value);
         }
 
         [Test]

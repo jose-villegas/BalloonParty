@@ -59,8 +59,10 @@ Plan: `Plans/PLAN-TerrainBiomes.md`.
   Written only by `Game/Level/ScenarioController`, which cuts to the current level's scenario on run start and
   on an immediate restart, and reveals it over the beat's own length on a level-up Ascent
   (`LevelAscendSettings.AscentSeconds`) and on the restart rise after a loss (`RestartRiseSeconds`, from
-  `RestartRiseStartedMessage`, once the new scenery is placed). A reveal into the scenario already showing
-  changes nothing.
+  `RestartRiseStartedMessage`, once the new scenery is placed). A saved run continued from the launch screen
+  is a reveal too, over `RestartRiseSeconds`: it is told while the launch screen still shows and plays as the
+  game does, so the launch screen's sky opens onto the saved meadow, water or page instead of snapping to it.
+  A reveal into the scenario already showing changes nothing.
 - The mist reveal (`GroundRevealCurve`, pure): sky to ground, a mist rolls in over the sky
   (`IGroundSettings.MistInShare`, the first third), then a hole opens from the middle of the view and grows
   until the meadow fills it. Ground to sky plays the same curve backwards: the meadow closes into the mist,
@@ -90,7 +92,8 @@ Plan: `Plans/PLAN-TerrainBiomes.md`.
   them (`ScenarioContentRoot.SetDepth`: the incoming scenery with the incoming layer, the `Outgoing` holder
   with the outgoing one, so the bushes stay planted on their meadow); at the end it cuts to the target and
   every scale returns to 1. Entering or leaving the Launch
-  begin-screen cuts (it is always sky); other navigation leaves a running reveal alone, since the reveal rides
+  begin-screen cuts (it is always sky), except that leaving it with a reveal waiting, a continued run's, plays
+  that reveal; other navigation leaves a running reveal alone, since the reveal rides
   a beat of its own that navigation doesn't end. It also pushes `_GroundPatchSize` and `_GroundDirt`,
   so the floor and the blades read the same patches and dirt. The quad stays put, but the meadow scrolls with `ScenarioContentRoot`
   (the global `_GroundScroll`, the root's travel times the meadow's scale, pushed in `LateUpdate` after the

@@ -27,8 +27,10 @@ namespace BalloonParty.Scenario
 
     /// <summary>
     ///     Decides how <c>GroundView</c> answers the active scenario and the navigation state. The Launch
-    ///     begin-screen is always sky, and entering or leaving it cuts. Other navigation leaves a running reveal
-    ///     alone, since the reveal rides a beat of its own that navigation doesn't end.
+    ///     begin-screen is always sky, and entering or leaving it cuts, but for one case: leaving it with a reveal
+    ///     waiting, which is a saved run continued on a meadow, the water or a page, opens the launch screen's sky
+    ///     onto that level through the mist as the game shows. Other navigation leaves a running reveal alone,
+    ///     since the reveal rides a beat of its own that navigation doesn't end.
     /// </summary>
     internal static class GroundRevealPlanner
     {
@@ -42,8 +44,9 @@ namespace BalloonParty.Scenario
             var crossedLaunch = previousNavigation == null
                 || (previousNavigation == NavigationState.Launch) != launch;
             var target = launch ? ScenarioKind.Sky : shift.Kind;
+            var continuedRun = previousNavigation == NavigationState.Launch && !launch && !shift.IsCut;
 
-            if (crossedLaunch || shift.IsCut || !canReveal)
+            if ((crossedLaunch && !continuedRun) || shift.IsCut || !canReveal)
             {
                 return new GroundRevealDecision(GroundRevealAction.Cut, target, 0f);
             }
