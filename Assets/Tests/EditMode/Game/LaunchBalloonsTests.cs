@@ -13,6 +13,11 @@ namespace BalloonParty.Tests.Game
     ///     ribbon may ever cover the other's ribbon. They share the screen one above the other, so the measure is the
     ///     room between the lowest point of everything of Play's and the highest of everything of Continue's, its
     ///     shadow included: that shifts with the light, and Play's ribbon is what it would fall on.
+    ///     <para>
+    ///         Kept quick on purpose: the rooms are read as numbers, and the one simulation is a few seconds long.
+    ///         The fixtures that run after this one read the Editor's frame time, and a test that holds a frame for
+    ///         seconds fails them.
+    ///     </para>
     /// </summary>
     [TestFixture]
     public class LaunchBalloonsTests
@@ -20,9 +25,12 @@ namespace BalloonParty.Tests.Game
         private const string ScenePath = "Assets/Scenes/Launcher.unity";
         private const float Frame = 1f / 60f;
 
-        // The room that must be left between the two at every frame, in canvas units. The scene asks for 16; what a
-        // swinging ribbon dips below its hang at rest comes out of that.
+        // The room that must be left between the two wherever each is in its room, in canvas units. The scene asks
+        // for 16; what a swinging ribbon dips below its hang at rest comes out of that.
         private const float LeastRoom = 12f;
+
+        // How far below its hang at rest a swinging ribbon may reach. Measured over ten minutes it is under 1.
+        private const float MostDip = 2f;
 
         private Scene _scene;
         private LaunchBalloonView _play;
@@ -77,62 +85,77 @@ namespace BalloonParty.Tests.Game
         [TestCase(9f / 16f)]
         [TestCase(10f / 16f)]
         [TestCase(3f / 4f)]
-        public void OnEveryScreen_AllOfPlayStaysAboveAllOfContinue_WhereverTheyDrift(float aspect)
+        public void OnEveryScreen_PlaysRoomKeepsAllOfItAboveAllOfContinue(float aspect)
         {
             var area = CanvasOn(aspect);
-            var playRadius = _play.Reach.Radius;
-            var otherRadius = _continue.Reach.Radius;
-            var otherShadow = _continue.ShadowReach;
-            var playShadow = _play.ShadowReach;
+            var play = _play.Reach;
+            var other = _continue.Reach;
+            var playRoom = _play.RoomOn(area);
+            var otherRoom = _continue.RoomOn(area);
+
+            // Play at the bottom of its room, Continue at the top of its own: as near as the two can come.
+            var playLowest = playRoom.yMin - play.Down;
+            var otherHighest = otherRoom.yMax + Mathf.Max(other.Up, other.Shadow);
+            Assert.That(playLowest - otherHighest, Is.GreaterThanOrEqualTo(LeastRoom + MostDip),
+                "between the bottom of Play's ribbon and the top of Continue's balloon and shadow");
+
+            // Play's shadow is drawn under all of Continue's, but must fall short of Continue's line and ribbon all
+            // the same: the draw order is the scene's to change.
+            var otherLineTop = otherRoom.yMax + _continue.KnotFromCentre.y;
+            Assert.That(playRoom.yMin - play.Shadow - otherLineTop, Is.GreaterThanOrEqualTo(LeastRoom),
+                "between Play's shadow and where Continue's line is tied on");
+
+            Assert.That(playRoom.height, Is.GreaterThan(20f), "Play has travel up and down");
+            Assert.That(otherRoom.height, Is.GreaterThan(20f), "Continue has travel up and down");
+            Assert.That(playRoom.yMax + play.Up, Is.LessThanOrEqualTo(area.yMax), "Play stays on the screen");
+            Assert.That(otherRoom.yMin - other.Down, Is.GreaterThanOrEqualTo(area.yMin), "Continue's ribbon stays on it");
+        }
+
+        // The rooms count on a ribbon hanging no lower as it swings than at rest, and on nothing of a balloon's
+        // rising over its body. A few seconds of the two drifting shows a change to the cloth that breaks either.
+        [Test]
+        public void Drifting_ARibbonHangsNoLowerThanItsRoomAllowsFor_AndTheTwoStayApart()
+        {
+            var area = CanvasOn(9f / 16f);
+            var play = _play.NewDrift(area, 3);
+            var other = _continue.NewDrift(area, 53);
+            Assert.That(play.Cloth.Length, Is.GreaterThan(30f), "Play's writing was laid out on its ribbon");
+            Assert.That(other.Cloth.Length, Is.GreaterThan(30f), "Continue's writing was laid out on its ribbon");
+            var playReach = _play.Reach;
+            var otherReach = _continue.Reach;
             var playKnot = _play.KnotFromCentre;
             var otherKnot = _continue.KnotFromCentre;
-            var least = float.PositiveInfinity;
+            var playStart = play.Centre;
+            var playFurthest = 0f;
 
-            for (var seed = 0; seed < 2; seed++)
+            for (var f = 0; f < 60 * 6; f++)
             {
-                var play = _play.NewDrift(area, seed);
-                var other = _continue.NewDrift(area, seed + 50);
-                Assert.That(play.Cloth.Length, Is.GreaterThan(30f), "Play's writing was laid out on its ribbon");
-                Assert.That(other.Cloth.Length, Is.GreaterThan(30f), "Continue's writing was laid out on its ribbon");
-                var playWas = play.Centre;
-                var otherWas = other.Centre;
-                var playTravel = 0f;
-                var otherTravel = 0f;
+                play.Step(Frame, playKnot);
+                other.Step(Frame, otherKnot);
+                playFurthest = Mathf.Max(playFurthest, Vector2.Distance(play.Centre, playStart));
 
-                for (var f = 0; f < 60 * 40; f++)
+                Extent(play.Cloth, out var playBottom, out _);
+                Extent(other.Cloth, out var otherBottom, out var otherTop);
+                var worst = Mathf.Max(
+                    play.Centre.y - playBottom - playReach.Down, other.Centre.y - otherBottom - otherReach.Down);
+                if (worst > MostDip)
                 {
-                    play.Step(Frame, playKnot);
-                    other.Step(Frame, otherKnot);
-                    playTravel += Vector2.Distance(play.Centre, playWas);
-                    otherTravel += Vector2.Distance(other.Centre, otherWas);
-                    playWas = play.Centre;
-                    otherWas = other.Centre;
-
-                    var room = Lowest(play, playRadius) - Highest(other, Mathf.Max(otherRadius, otherShadow));
-                    least = Mathf.Min(least, room);
-                    if (room < LeastRoom)
-                    {
-                        Assert.Fail(
-                            $"seed {seed}, {f * Frame:0.0} s: {room:0.0} between Play's lowest point and Continue's highest");
-                    }
-
-                    // Play's shadow is drawn under all of Continue's, but must fall short of Continue's ribbon all
-                    // the same: the draw order is the scene's to change.
-                    Extent(other.Cloth, out _, out var otherRibbonTop);
-                    var shadowRoom = play.Centre.y - playShadow - otherRibbonTop;
-                    if (shadowRoom < LeastRoom)
-                    {
-                        Assert.Fail(
-                            $"seed {seed}, {f * Frame:0.0} s: {shadowRoom:0.0} between Play's shadow and Continue's line");
-                    }
+                    Assert.Fail($"{f * Frame:0.0} s: a ribbon hangs {worst:0.0} lower than its room allows for");
                 }
 
-                Assert.That(playTravel, Is.GreaterThan(100f), $"seed {seed}: Play hardly drifted");
-                Assert.That(otherTravel, Is.GreaterThan(100f), $"seed {seed}: Continue hardly drifted");
+                if (otherTop > other.Centre.y + otherReach.Radius)
+                {
+                    Assert.Fail($"{f * Frame:0.0} s: Continue's line or ribbon is over the top of its balloon");
+                }
+
+                var room = playBottom - (other.Centre.y + otherReach.Radius);
+                if (room < LeastRoom)
+                {
+                    Assert.Fail($"{f * Frame:0.0} s: {room:0.0} between Play's ribbon and Continue's balloon");
+                }
             }
 
-            TestContext.Out.WriteLine(
-                $"canvas {area.width:0.0} x {area.height:0.0}: least room between the two {least:0.0}");
+            Assert.That(playFurthest, Is.GreaterThan(10f), "Play drifted");
         }
 
         [Test]
@@ -201,20 +224,6 @@ namespace BalloonParty.Tests.Game
             var width = Mathf.Sqrt(225f * 400f * aspect);
             var height = width / aspect;
             return new Rect(-width / 2f, -height / 2f, width, height);
-        }
-
-        private static float Lowest(BalloonDrift drift, float radius)
-        {
-            var lowest = drift.Centre.y - radius;
-            Extent(drift.Cloth, out var bottom, out _);
-            return Mathf.Min(lowest, bottom);
-        }
-
-        private static float Highest(BalloonDrift drift, float radius)
-        {
-            var highest = drift.Centre.y + radius;
-            Extent(drift.Cloth, out _, out var top);
-            return Mathf.Max(highest, top);
         }
 
         private static void Extent(RibbonCloth cloth, out float bottom, out float top)

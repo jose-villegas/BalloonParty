@@ -141,7 +141,7 @@ namespace BalloonParty.Game
         {
             var cloth = new RibbonCloth(_cloth, _writing.Layout(_cloth.Height));
             cloth.SetRoom(area.xMin + _clearance, area.xMax - _clearance);
-            var room = Room(area);
+            var room = RoomOn(area);
             return new BalloonDrift(_wander, cloth, room, StartIn(room), KnotFromCentre, seed);
         }
 
@@ -166,9 +166,11 @@ namespace BalloonParty.Game
             Draw();
         }
 
-        // Where the body's centre may be: on screen with room below for what hangs from it, and in this balloon's
-        // part of the screen while the other shows.
-        private Rect Room(Rect area)
+        /// <summary>
+        ///     Where the body's centre may be on a screen of <paramref name="area" />: on screen with room below for
+        ///     what hangs from it, and in this balloon's part of the screen while the other shows.
+        /// </summary>
+        internal Rect RoomOn(Rect area)
         {
             var reach = Reach;
             if (!OtherShows)

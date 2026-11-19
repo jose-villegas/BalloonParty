@@ -736,15 +736,17 @@ The view's side of a lance cutting caps (`Plans/PLAN-MeadowMushrooms.md`, *The l
 | The pieces part and turn, then the view switches itself off on a bare stem, still cut, with the pieces' work off; a hit on a cut mushroom does nothing; a cut mid lean starts the pieces where the cap stood and leaves the stem straight; a cut as the cap pops back hands the shader the size it had, and the next mushroom's pieces are full size again | 4 | An `Update` left running on every bare stem for eight seconds; a stem that wobbles with no cap; pieces that jump at the cut |
 | A regrow of another slot is ignored, and of its own pops the cap back past its size and ends whole and asleep; a regrow of a whole mushroom leaves it asleep; back in the pool mid fall the cap is whole, and the next spawn is whole and listens for a cut again | 3 | A pooled stem dealt as the next level's mushroom |
 
-### Launch balloons (`LaunchBalloonsTests`) — 9 cases
+### Launch balloons (`LaunchBalloonsTests`) — 10 cases
 
 The launch screen's Play and Continue balloons must never cover each other's ribbons. The fixture opens the
 shipped `Launcher.unity` in a preview scene, so the numbers are the scene's own (each balloon's size, line,
-ribbon, writing and drift), shows Continue, and runs both through `LaunchBalloonView.NewDrift`.
+ribbon, writing, shadow and drift), and shows Continue. It is kept quick on purpose: the fixtures that run after
+it read the Editor's frame time (`LevelControllerTests`), and a test that holds one frame for seconds fails them.
 
 | Test | Guards |
 |---|---|
-| On every screen all of Play stays above all of Continue (9:21, 9:20, 9:16, 10:16, 3:4) | Two seeds of 40 s each: every frame, the lowest point of Play's body, line and ribbon is at least 12 canvas units above the highest of Continue's. Both must have drifted, and both ribbons must carry their writing, so it can't pass on two still balloons or two stub ribbons. Continue's highest point includes its shadow, shifted the worst way, and Play's shadow is held the same 12 units short of Continue's line and ribbon. Prints the least room found |
+| On every screen Play's room keeps all of it above all of Continue (9:21, 9:20, 9:16, 10:16, 3:4) | From `LaunchBalloonView.RoomOn` and `Reach`, no simulation: with Play at the bottom of its room and Continue at the top of its own, the bottom of Play's ribbon is at least 14 canvas units over the top of Continue's balloon and its shadow (12, and 2 for a swinging ribbon's dip), and Play's shadow stops at least 12 short of where Continue's line is tied on. Both have travel, and both stay on the screen |
+| Drifting, a ribbon hangs no lower than its room allows for | Six seconds of the scene's two balloons through `NewDrift` at 9:16: neither ribbon reaches more than 2 units below what the rooms count on, nothing of Continue's rises over its balloon, and the two stay 12 apart. Both ribbons must carry their writing, and Play must have drifted. Ten simulated minutes, done by hand when the layout was built, found a dip of under 1 |
 | The upper room and the lower room leave the gap | `BalloonReach.RoomAbove` / `RoomBelow`: the upper balloon at its lowest is exactly the gap over the lower at its highest, each keeps the edge's clearance, and the travel is split evenly |
 | The lower balloon's shadow stays the gap under the upper balloon | A shadow that reaches past the body counts in its place toward the gap, and the travel is still split evenly |
 | Alone, a balloon has the whole height | `RoomAlone` |
