@@ -129,6 +129,9 @@ Properties</h2></td></tr>
 <tr class="memitem:a2dc2484cd85cc7fcc03cf22e757986bf" id="r_a2dc2484cd85cc7fcc03cf22e757986bf"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2dc2484cd85cc7fcc03cf22e757986bf">FormationHeading</a><code> [get]</code></td></tr>
 <tr class="memdesc:a2dc2484cd85cc7fcc03cf22e757986bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">The world direction the member's formation runs, shared by every member of it.  <br /></td></tr>
 <tr class="separator:a2dc2484cd85cc7fcc03cf22e757986bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ce670557f6017a2a9f4c6b845e63361" id="r_a3ce670557f6017a2a9f4c6b845e63361"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3ce670557f6017a2a9f4c6b845e63361">FormationId</a><code> [get]</code></td></tr>
+<tr class="memdesc:a3ce670557f6017a2a9f4c6b845e63361"><td class="mdescLeft">&#160;</td><td class="mdescRight">Which formation it is in: the same for every member of one, and unlike any other formation's.  <br /></td></tr>
+<tr class="separator:a3ce670557f6017a2a9f4c6b845e63361"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae295e13669f2335dde5195f851710138" id="r_ae295e13669f2335dde5195f851710138"><td class="memItemLeft" align="right" valign="top">IReadOnlyReactiveProperty&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae295e13669f2335dde5195f851710138">InFormation</a><code> [get]</code></td></tr>
 <tr class="separator:ae295e13669f2335dde5195f851710138"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a843a3af2b56fadf7fdcd7d43859ab9d9" id="r_a843a3af2b56fadf7fdcd7d43859ab9d9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a843a3af2b56fadf7fdcd7d43859ab9d9">Walking</a><code> [get]</code></td></tr>
@@ -162,6 +165,33 @@ Properties</h2></td></tr>
 <p>It keeps its last value after the formation breaks, so the look fades out without turning. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#a11856434d656cd445cce8c7d3f1a9d6a">BalloonParty.Balloon.Model.ToughBalloonModel</a>, and <a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html#a2170e3f08288efbce0e866a4a2bfeab6">BalloonParty.Balloon.Model.UnbreakableBalloonModel</a>.</p>
+
+</div>
+</div>
+<a id="a3ce670557f6017a2a9f4c6b845e63361" name="a3ce670557f6017a2a9f4c6b845e63361"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ce670557f6017a2a9f4c6b845e63361">&#9670;&#160;</a></span>FormationId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Balloon.Model.IFormationMember.FormationId</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Which formation it is in: the same for every member of one, and unlike any other formation's. </p>
+<p>It keeps its last value after the formation breaks, as the heading does, so what a member leaves behind (its ring) still goes with its fellows'. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#a258d805bdf6cc621a27c1b743bab7a26">BalloonParty.Balloon.Model.ToughBalloonModel</a>, and <a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html#a01f789adda8b33545404d51d388af8b9">BalloonParty.Balloon.Model.UnbreakableBalloonModel</a>.</p>
 
 </div>
 </div>

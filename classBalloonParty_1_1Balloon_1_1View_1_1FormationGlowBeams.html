@@ -122,9 +122,9 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowB
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
 Static Package Functions</h2></td></tr>
-<tr class="memitem:a73d68de2585a56810a4d8ae9035b5a60" id="r_a73d68de2585a56810a4d8ae9035b5a60"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a73d68de2585a56810a4d8ae9035b5a60">Group</a> (Vector4[] points, int count, float joinDistance, int[] groups, <a class="el" href="structBalloonParty_1_1Balloon_1_1View_1_1FormationGlowBeam.html">FormationGlowBeam</a>[] beams)</td></tr>
-<tr class="memdesc:a73d68de2585a56810a4d8ae9035b5a60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Groups the first <em>count</em>  of <em>points</em>  (xy centre, z brightness, w presence, as <code><a class="el" href="classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField.html#ad705225d28e17a45a7af6c8b6204047d" title="Moves the rings on by deltaTime  and writes the ones to draw into points  (xy centre,...">FormationGlowField.Step</a></code> writes them) and writes one beam per group into <em>beams</em> , returning how many.  <br /></td></tr>
-<tr class="separator:a73d68de2585a56810a4d8ae9035b5a60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbb391bfa40e556abca2b9e9f808cedb" id="r_afbb391bfa40e556abca2b9e9f808cedb"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afbb391bfa40e556abca2b9e9f808cedb">Group</a> (Vector4[] points, float[] formations, int count, float joinDistance, int[] groups, <a class="el" href="structBalloonParty_1_1Balloon_1_1View_1_1FormationGlowBeam.html">FormationGlowBeam</a>[] beams)</td></tr>
+<tr class="memdesc:afbb391bfa40e556abca2b9e9f808cedb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Groups the first <em>count</em>  of <em>points</em>  (xy centre, z brightness, w presence, as <code><a class="el" href="classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField.html#af723805d848d8c2524d4700f7b52b2f5" title="Moves the rings on by deltaTime  and writes the ones to draw into points  (xy centre,...">FormationGlowField.Step</a></code> writes them, with each one's formation in <em>formations</em> ) and writes one beam per group into <em>beams</em> , returning how many.  <br /></td></tr>
+<tr class="separator:afbb391bfa40e556abca2b9e9f808cedb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-attribs" name="pac-static-attribs"></a>
 Static Package Attributes</h2></td></tr>
@@ -134,8 +134,8 @@ Static Package Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
-<tr class="memitem:a65dc9fa108b8afcda853fd0a66108a84" id="r_a65dc9fa108b8afcda853fd0a66108a84"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a65dc9fa108b8afcda853fd0a66108a84">JoinOnce</a> (Vector4[] points, int count, float squaredJoin, int[] groups)</td></tr>
-<tr class="separator:a65dc9fa108b8afcda853fd0a66108a84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa950ce2c63b7ccddc884482b28ab3cb5" id="r_aa950ce2c63b7ccddc884482b28ab3cb5"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa950ce2c63b7ccddc884482b28ab3cb5">JoinOnce</a> (Vector4[] points, float[] formations, int count, float squaredJoin, int[] groups)</td></tr>
+<tr class="separator:aa950ce2c63b7ccddc884482b28ab3cb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a19f4639cbc1dbd1e6b2903b4ef79edc9" id="r_a19f4639cbc1dbd1e6b2903b4ef79edc9"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a19f4639cbc1dbd1e6b2903b4ef79edc9">SquaredDistance</a> (Vector4 a, Vector4 b)</td></tr>
 <tr class="separator:a19f4639cbc1dbd1e6b2903b4ef79edc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9fc00ebe37c97869e6bacee0a29f00a3" id="r_a9fc00ebe37c97869e6bacee0a29f00a3"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9fc00ebe37c97869e6bacee0a29f00a3">TryBeam</a> (Vector4[] points, int count, int[] groups, int group, out <a class="el" href="structBalloonParty_1_1Balloon_1_1View_1_1FormationGlowBeam.html">FormationGlowBeam</a> beam)</td></tr>
@@ -148,10 +148,10 @@ Static Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Turns the formation glow's rings into the lights they cast on the scene (<code><a class="el" href="classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html" title="The blue light ring round unbreakables in formation, on the ground beneath them (FormationGlow shader...">FormationGlowView</a></code>, through the scene-light field). </p>
-<p>A light per ring would spend the field's few lights on one long formation, so the rings that stand close enough to join are one group, and a group casts one beam: a capsule from its two members furthest apart, which is exact for a line or a diagonal and close for a ring round an item or a bent snake. </p>
+<p>A light per ring would spend the field's few lights on one long formation, so the rings of one formation that stand close enough to join are one group, and a group casts one beam: a capsule from its two members furthest apart, which is exact for a line or a diagonal and close for a ring round an item or a bent snake. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a73d68de2585a56810a4d8ae9035b5a60" name="a73d68de2585a56810a4d8ae9035b5a60"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a73d68de2585a56810a4d8ae9035b5a60">&#9670;&#160;</a></span>Group()</h2>
+<a id="afbb391bfa40e556abca2b9e9f808cedb" name="afbb391bfa40e556abca2b9e9f808cedb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afbb391bfa40e556abca2b9e9f808cedb">&#9670;&#160;</a></span>Group()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -163,6 +163,11 @@ Static Private Attributes</h2></td></tr>
           <td class="memname">static int BalloonParty.Balloon.View.FormationGlowBeams.Group </td>
           <td>(</td>
           <td class="paramtype">Vector4[]</td>          <td class="paramname"><span class="paramname"><em>points</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float[]</td>          <td class="paramname"><span class="paramname"><em>formations</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -192,13 +197,13 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Groups the first <em>count</em>  of <em>points</em>  (xy centre, z brightness, w presence, as <code><a class="el" href="classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField.html#ad705225d28e17a45a7af6c8b6204047d" title="Moves the rings on by deltaTime  and writes the ones to draw into points  (xy centre,...">FormationGlowField.Step</a></code> writes them) and writes one beam per group into <em>beams</em> , returning how many. </p>
-<p>Two rings within <em>joinDistance</em>  of each other are in one group, and so is any chain of them. <em>groups</em>  is scratch, at least <em>count</em>  long. </p>
+<p>Groups the first <em>count</em>  of <em>points</em>  (xy centre, z brightness, w presence, as <code><a class="el" href="classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField.html#af723805d848d8c2524d4700f7b52b2f5" title="Moves the rings on by deltaTime  and writes the ones to draw into points  (xy centre,...">FormationGlowField.Step</a></code> writes them, with each one's formation in <em>formations</em> ) and writes one beam per group into <em>beams</em> , returning how many. </p>
+<p>Two rings of one formation within <em>joinDistance</em>  of each other are in one group, and so is any chain of them; rings of different formations never are, as their outlines never join. <em>groups</em>  is scratch, at least <em>count</em>  long. </p>
 
 </div>
 </div>
-<a id="a65dc9fa108b8afcda853fd0a66108a84" name="a65dc9fa108b8afcda853fd0a66108a84"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a65dc9fa108b8afcda853fd0a66108a84">&#9670;&#160;</a></span>JoinOnce()</h2>
+<a id="aa950ce2c63b7ccddc884482b28ab3cb5" name="aa950ce2c63b7ccddc884482b28ab3cb5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa950ce2c63b7ccddc884482b28ab3cb5">&#9670;&#160;</a></span>JoinOnce()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -210,6 +215,11 @@ Static Private Attributes</h2></td></tr>
           <td class="memname">static bool BalloonParty.Balloon.View.FormationGlowBeams.JoinOnce </td>
           <td>(</td>
           <td class="paramtype">Vector4[]</td>          <td class="paramname"><span class="paramname"><em>points</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float[]</td>          <td class="paramname"><span class="paramname"><em>formations</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>

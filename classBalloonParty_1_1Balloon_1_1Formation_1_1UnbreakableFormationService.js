@@ -79,6 +79,7 @@ var classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService =
     [ "_groupFill", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a80d87a45146fdf3150e96d71f0bf107b", null ],
     [ "_headLine", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a12577334400e9e8619de8a5ebbb07adf", null ],
     [ "_joiners", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#ac45e2576b88b55e35553191c6e5cae3d", null ],
+    [ "_lastFormationId", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a49c661def53a51f30b8cdc3fdaa2d970", null ],
     [ "_leftSlots", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#ad968b103edea992c7c8dfde411e51585", null ],
     [ "_line", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a8b307e28d9dc6f1381065d0198d9b1e8", null ],
     [ "_members", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#aff902dfb48ee06236c24887b175ade77", null ],

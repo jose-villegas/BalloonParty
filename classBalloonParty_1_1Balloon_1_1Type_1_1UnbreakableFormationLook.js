@@ -32,5 +32,6 @@ var classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook =
     [ "RimColorId", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#af452fcc8f4de879a6dcdef797f9b1d42", null ],
     [ "TrailTailWhiten", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a83abcf7976828fa036d2cff32c14c95d", null ],
     [ "GlowCentre", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a89d30d06e1d89569a1505e950dc0103d", null ],
+    [ "GlowFormation", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a7a6b7fded154a5648445430b96c27b92", null ],
     [ "GlowsInFormation", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a0ece311e12ae5395968c2340bc24d87f", null ]
 ];

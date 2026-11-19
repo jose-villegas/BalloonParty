@@ -129,15 +129,15 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:ad705225d28e17a45a7af6c8b6204047d" id="r_ad705225d28e17a45a7af6c8b6204047d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad705225d28e17a45a7af6c8b6204047d">Step</a> (IReadOnlyList&lt; <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1View_1_1IFormationGlowSource.html">IFormationGlowSource</a> &gt; sources, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html">IFormationGlowSettings</a> settings, float deltaTime, Vector4[] points, out Rect bounds)</td></tr>
-<tr class="memdesc:ad705225d28e17a45a7af6c8b6204047d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves the rings on by <em>deltaTime</em>  and writes the ones to draw into <em>points</em>  (xy centre, z brightness, w presence: 1 whole, falling to 0 as it dissolves), returning how many; <em>bounds</em>  covers their light.  <br /></td></tr>
-<tr class="separator:ad705225d28e17a45a7af6c8b6204047d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af723805d848d8c2524d4700f7b52b2f5" id="r_af723805d848d8c2524d4700f7b52b2f5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af723805d848d8c2524d4700f7b52b2f5">Step</a> (IReadOnlyList&lt; <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1View_1_1IFormationGlowSource.html">IFormationGlowSource</a> &gt; sources, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html">IFormationGlowSettings</a> settings, float deltaTime, Vector4[] points, float[] formations, out Rect bounds)</td></tr>
+<tr class="memdesc:af723805d848d8c2524d4700f7b52b2f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves the rings on by <em>deltaTime</em>  and writes the ones to draw into <em>points</em>  (xy centre, z brightness, w presence: 1 whole, falling to 0 as it dissolves) and each one's formation into <em>formations</em> , returning how many; <em>bounds</em>  covers their light.  <br /></td></tr>
+<tr class="separator:af723805d848d8c2524d4700f7b52b2f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
 Static Package Functions</h2></td></tr>
-<tr class="memitem:a64f86adfa34e275077f9840f35b8acb5" id="r_a64f86adfa34e275077f9840f35b8acb5"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a64f86adfa34e275077f9840f35b8acb5">FieldAt</a> (IReadOnlyList&lt; Vector4 &gt; points, int count, Vector2 point, float reach, float threshold)</td></tr>
-<tr class="memdesc:a64f86adfa34e275077f9840f35b8acb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The field the shader sums at <em>point</em> .  <br /></td></tr>
-<tr class="separator:a64f86adfa34e275077f9840f35b8acb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66f728f9c38268ef4e19edf1463ef3c7" id="r_a66f728f9c38268ef4e19edf1463ef3c7"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a66f728f9c38268ef4e19edf1463ef3c7">FieldAt</a> (IReadOnlyList&lt; Vector4 &gt; points, int count, Vector2 point, float reach, float threshold, IReadOnlyList&lt; float &gt; formations=null, float formation=0f)</td></tr>
+<tr class="memdesc:a66f728f9c38268ef4e19edf1463ef3c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">The field the shader sums at <em>point</em>  for one formation: the rings whose entry in <em>formations</em>  is <em>formation</em> , or every ring when no formations are given.  <br /></td></tr>
+<tr class="separator:a66f728f9c38268ef4e19edf1463ef3c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa583ff51768db75355e5beb7ee3d7a86" id="r_aa583ff51768db75355e5beb7ee3d7a86"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa583ff51768db75355e5beb7ee3d7a86">JoinDistance</a> (float ringRadius, float reach)</td></tr>
 <tr class="memdesc:aa583ff51768db75355e5beb7ee3d7a86"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far apart two whole members' rings stop joining into one outline: where their two fields, summed halfway between them, fall to the threshold.  <br /></td></tr>
 <tr class="separator:aa583ff51768db75355e5beb7ee3d7a86"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -166,13 +166,15 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a0d33fb8ec78fa2fabd8c9df48db70169"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac0be3676983b07adff2dc3cf5f6bd5d0" id="r_ac0be3676983b07adff2dc3cf5f6bd5d0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField_1_1Ring.html">Ring</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac0be3676983b07adff2dc3cf5f6bd5d0">Rent</a> (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1View_1_1IFormationGlowSource.html">IFormationGlowSource</a> source, float target)</td></tr>
 <tr class="separator:ac0be3676983b07adff2dc3cf5f6bd5d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a56c886e32f89a9a4c9c3a4cc5c472225" id="r_a56c886e32f89a9a4c9c3a4cc5c472225"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a56c886e32f89a9a4c9c3a4cc5c472225">Write</a> (Vector4[] points, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html">IFormationGlowSettings</a> settings, out Rect bounds)</td></tr>
-<tr class="separator:a56c886e32f89a9a4c9c3a4cc5c472225"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7956bdda0cb1fe9bbdaee5e88f41a2ed" id="r_a7956bdda0cb1fe9bbdaee5e88f41a2ed"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7956bdda0cb1fe9bbdaee5e88f41a2ed">Write</a> (Vector4[] points, float[] formations, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html">IFormationGlowSettings</a> settings, out Rect bounds)</td></tr>
+<tr class="separator:a7956bdda0cb1fe9bbdaee5e88f41a2ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a7a3ae09d20e1d5ecde67ca146a441de1" id="r_a7a3ae09d20e1d5ecde67ca146a441de1"><td class="memItemLeft" align="right" valign="top">readonly List&lt; Vector2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7a3ae09d20e1d5ecde67ca146a441de1">_connected</a> = new()</td></tr>
 <tr class="separator:a7a3ae09d20e1d5ecde67ca146a441de1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1b5f7d8e4d4aef96fff909e40038c15" id="r_ae1b5f7d8e4d4aef96fff909e40038c15"><td class="memItemLeft" align="right" valign="top">readonly List&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae1b5f7d8e4d4aef96fff909e40038c15">_connectedFormations</a> = new()</td></tr>
+<tr class="separator:ae1b5f7d8e4d4aef96fff909e40038c15"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5809d14029e2ef26a69fc741481820d6" id="r_a5809d14029e2ef26a69fc741481820d6"><td class="memItemLeft" align="right" valign="top">readonly List&lt; <a class="el" href="classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField_1_1Ring.html">Ring</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5809d14029e2ef26a69fc741481820d6">_rings</a> = new()</td></tr>
 <tr class="separator:a5809d14029e2ef26a69fc741481820d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:addd4258a24e0f178ca58c3111ce3b04e" id="r_addd4258a24e0f178ca58c3111ce3b04e"><td class="memItemLeft" align="right" valign="top">readonly Stack&lt; <a class="el" href="classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowField_1_1Ring.html">Ring</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#addd4258a24e0f178ca58c3111ce3b04e">_spare</a> = new()</td></tr>
@@ -180,7 +182,7 @@ Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Which rings the formation glow draws (<code>FormationGlow</code> shader), how brightly, and how far each has dissolved. </p>
-<p>A ring is connected while its member is in a formation with a fellow member within <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html#afd284355139d437f85a549f661378a98" title="A member this far from every other glows not at all.">IFormationGlowSettings.FadeDistance</a>: its brightness follows how close the nearest fellow is, full at <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html#ac912e5acfaa578540e3768cb4cfb4c61" title="A member this close to another (world units) glows fully.">IFormationGlowSettings.FullDistance</a>. Disconnected for any reason (out of formation, left alone, popped, cleared with the board), the ring stays where its member was last and dissolves over <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html#a957ef19397b8683a5c8951ca90d98ac0" title="Seconds a ring takes to dissolve once its member is disconnected (out of formation,...">IFormationGlowSettings.DissolveSeconds</a> at the brightness it had, instead of vanishing. A ring connecting dissolves in the same way, over the same time. </p>
+<p>A ring is connected while its member is in a formation with a fellow member of that formation within <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html#afd284355139d437f85a549f661378a98" title="A member this far from every other glows not at all.">IFormationGlowSettings.FadeDistance</a>: its brightness follows how close the nearest fellow is, full at <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html#ac912e5acfaa578540e3768cb4cfb4c61" title="A member this close to another (world units) glows fully.">IFormationGlowSettings.FullDistance</a>. Rings join into one outline only with the rings of their own formation; two formations standing side by side keep an outline each. Disconnected for any reason (out of formation, left alone, popped, cleared with the board), the ring stays where its member was last and dissolves over <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IFormationGlowSettings.html#a957ef19397b8683a5c8951ca90d98ac0" title="Seconds a ring takes to dissolve once its member is disconnected (out of formation,...">IFormationGlowSettings.DissolveSeconds</a> at the brightness it had, instead of vanishing. A ring connecting dissolves in the same way, over the same time. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a35ed52ad8a5dd2daa279dbdf2f087d02" name="a35ed52ad8a5dd2daa279dbdf2f087d02"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a35ed52ad8a5dd2daa279dbdf2f087d02">&#9670;&#160;</a></span>Advance()</h2>
@@ -236,8 +238,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a64f86adfa34e275077f9840f35b8acb5" name="a64f86adfa34e275077f9840f35b8acb5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a64f86adfa34e275077f9840f35b8acb5">&#9670;&#160;</a></span>FieldAt()</h2>
+<a id="a66f728f9c38268ef4e19edf1463ef3c7" name="a66f728f9c38268ef4e19edf1463ef3c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66f728f9c38268ef4e19edf1463ef3c7">&#9670;&#160;</a></span>FieldAt()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -268,7 +270,17 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>threshold</em></span>&#160;)</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>threshold</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">IReadOnlyList&lt; float &gt;</td>          <td class="paramname"><span class="paramname"><em>formations</em></span><span class="paramdefsep"> = </span><span class="paramdefval">null</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>formation</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0f</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -278,7 +290,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>The field the shader sums at <em>point</em> . </p>
+<p>The field the shader sums at <em>point</em>  for one formation: the rings whose entry in <em>formations</em>  is <em>formation</em> , or every ring when no formations are given. </p>
 <p>The view doesn't need it; it pins the shader's sum, so the tests can tell where rings join. </p>
 
 </div>
@@ -428,8 +440,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ad705225d28e17a45a7af6c8b6204047d" name="ad705225d28e17a45a7af6c8b6204047d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad705225d28e17a45a7af6c8b6204047d">&#9670;&#160;</a></span>Step()</h2>
+<a id="af723805d848d8c2524d4700f7b52b2f5" name="af723805d848d8c2524d4700f7b52b2f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af723805d848d8c2524d4700f7b52b2f5">&#9670;&#160;</a></span>Step()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -460,6 +472,11 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">float[]</td>          <td class="paramname"><span class="paramname"><em>formations</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">out Rect</td>          <td class="paramname"><span class="paramname"><em>bounds</em></span>&#160;)</td>
         </tr>
       </table>
@@ -470,8 +487,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Moves the rings on by <em>deltaTime</em>  and writes the ones to draw into <em>points</em>  (xy centre, z brightness, w presence: 1 whole, falling to 0 as it dissolves), returning how many; <em>bounds</em>  covers their light. </p>
-<p>Past <a class="el" href="#a3b651dd216dbd80e4fa32ea8ae0de038" title="The shader&#39;s fixed array size (MAX_POINTS).">MaxPoints</a>, the rest are left out. </p>
+<p>Moves the rings on by <em>deltaTime</em>  and writes the ones to draw into <em>points</em>  (xy centre, z brightness, w presence: 1 whole, falling to 0 as it dissolves) and each one's formation into <em>formations</em> , returning how many; <em>bounds</em>  covers their light. </p>
+<p>The rings of one formation are written next to each other, which is how the shader tells where one formation's outline ends. Past <a class="el" href="#a3b651dd216dbd80e4fa32ea8ae0de038" title="The shader&#39;s fixed array size (MAX_POINTS).">MaxPoints</a>, the rest are left out. </p>
 
 </div>
 </div>
@@ -506,8 +523,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a56c886e32f89a9a4c9c3a4cc5c472225" name="a56c886e32f89a9a4c9c3a4cc5c472225"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a56c886e32f89a9a4c9c3a4cc5c472225">&#9670;&#160;</a></span>Write()</h2>
+<a id="a7956bdda0cb1fe9bbdaee5e88f41a2ed" name="a7956bdda0cb1fe9bbdaee5e88f41a2ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7956bdda0cb1fe9bbdaee5e88f41a2ed">&#9670;&#160;</a></span>Write()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -519,6 +536,11 @@ Private Attributes</h2></td></tr>
           <td class="memname">int BalloonParty.Balloon.View.FormationGlowField.Write </td>
           <td>(</td>
           <td class="paramtype">Vector4[]</td>          <td class="paramname"><span class="paramname"><em>points</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float[]</td>          <td class="paramname"><span class="paramname"><em>formations</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -552,6 +574,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly List&lt;Vector2&gt; BalloonParty.Balloon.View.FormationGlowField._connected = new()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae1b5f7d8e4d4aef96fff909e40038c15" name="ae1b5f7d8e4d4aef96fff909e40038c15"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1b5f7d8e4d4aef96fff909e40038c15">&#9670;&#160;</a></span>_connectedFormations</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly List&lt;int&gt; BalloonParty.Balloon.View.FormationGlowField._connectedFormations = new()</td>
         </tr>
       </table>
   </td>

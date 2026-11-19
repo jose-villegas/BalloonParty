@@ -141,6 +141,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9a51028728bd222bb0c9c8300083cb52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad899ca3b0fe243e02cc3655171be67f1" id="r_ad899ca3b0fe243e02cc3655171be67f1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad899ca3b0fe243e02cc3655171be67f1">SetFormationHeading</a> (Vector2 heading)</td></tr>
 <tr class="separator:ad899ca3b0fe243e02cc3655171be67f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad35817f6132ee95339cce3fa09b60ce7" id="r_ad35817f6132ee95339cce3fa09b60ce7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad35817f6132ee95339cce3fa09b60ce7">SetFormationId</a> (int id)</td></tr>
+<tr class="separator:ad35817f6132ee95339cce3fa09b60ce7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d36e6bb97b32ba0491c6cb3f002dceb" id="r_a9d36e6bb97b32ba0491c6cb3f002dceb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9d36e6bb97b32ba0491c6cb3f002dceb">SetInFormation</a> (bool inFormation)</td></tr>
 <tr class="separator:a9d36e6bb97b32ba0491c6cb3f002dceb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab4490180024ea7dd5e81fff42a8743b9" id="r_ab4490180024ea7dd5e81fff42a8743b9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab4490180024ea7dd5e81fff42a8743b9">SetWalking</a> (bool walking)</td></tr>
@@ -188,6 +190,9 @@ Properties</h2></td></tr>
 <tr class="memitem:a11856434d656cd445cce8c7d3f1a9d6a" id="r_a11856434d656cd445cce8c7d3f1a9d6a"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a11856434d656cd445cce8c7d3f1a9d6a">FormationHeading</a><code> [get]</code></td></tr>
 <tr class="memdesc:a11856434d656cd445cce8c7d3f1a9d6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The world direction the member's formation runs, shared by every member of it.  <br /></td></tr>
 <tr class="separator:a11856434d656cd445cce8c7d3f1a9d6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a258d805bdf6cc621a27c1b743bab7a26" id="r_a258d805bdf6cc621a27c1b743bab7a26"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a258d805bdf6cc621a27c1b743bab7a26">FormationId</a><code> [get]</code></td></tr>
+<tr class="memdesc:a258d805bdf6cc621a27c1b743bab7a26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Which formation it is in: the same for every member of one, and unlike any other formation's.  <br /></td></tr>
+<tr class="separator:a258d805bdf6cc621a27c1b743bab7a26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae86922261682f7187590d5d69fd4a632" id="r_ae86922261682f7187590d5d69fd4a632"><td class="memItemLeft" align="right" valign="top">IReadOnlyReactiveProperty&lt; int &gt; IHasDurability.&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae86922261682f7187590d5d69fd4a632">HitsRemaining</a><code> [get]</code></td></tr>
 <tr class="separator:ae86922261682f7187590d5d69fd4a632"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f8c840483dc7613e15eb8d115cf1a18" id="r_a5f8c840483dc7613e15eb8d115cf1a18"><td class="memItemLeft" align="right" valign="top">IReadOnlyReactiveProperty&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5f8c840483dc7613e15eb8d115cf1a18">InFormation</a><code> [get]</code></td></tr>
@@ -383,6 +388,25 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html#a1b65bd96eb2870c75f6bf2ddab416aa9">BalloonParty.Balloon.Model.IWriteableFormationMember</a>.</p>
+
+</div>
+</div>
+<a id="ad35817f6132ee95339cce3fa09b60ce7" name="ad35817f6132ee95339cce3fa09b60ce7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad35817f6132ee95339cce3fa09b60ce7">&#9670;&#160;</a></span>SetFormationId()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Balloon.Model.ToughBalloonModel.SetFormationId </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>id</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html#a65c0ac4132ef902bbfd0c1201f1b52fe">BalloonParty.Balloon.Model.IWriteableFormationMember</a>.</p>
 
 </div>
 </div>
@@ -757,6 +781,33 @@ Private Attributes</h2></td></tr>
 <p>It keeps its last value after the formation breaks, so the look fades out without turning. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember.html#a2dc2484cd85cc7fcc03cf22e757986bf">BalloonParty.Balloon.Model.IFormationMember</a>.</p>
+
+</div>
+</div>
+<a id="a258d805bdf6cc621a27c1b743bab7a26" name="a258d805bdf6cc621a27c1b743bab7a26"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a258d805bdf6cc621a27c1b743bab7a26">&#9670;&#160;</a></span>FormationId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Balloon.Model.ToughBalloonModel.FormationId</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Which formation it is in: the same for every member of one, and unlike any other formation's. </p>
+<p>It keeps its last value after the formation breaks, as the heading does, so what a member leaves behind (its ring) still goes with its fellows'. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember.html#a3ce670557f6017a2a9f4c6b845e63361">BalloonParty.Balloon.Model.IFormationMember</a>.</p>
 
 </div>
 </div>

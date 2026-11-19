@@ -146,6 +146,9 @@ Properties</h2></td></tr>
 <tr class="memitem:afbb3961fe761fccb2e2435f93704a750" id="r_afbb3961fe761fccb2e2435f93704a750"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afbb3961fe761fccb2e2435f93704a750">Heading</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:afbb3961fe761fccb2e2435f93704a750"><td class="mdescLeft">&#160;</td><td class="mdescRight">A snake's walking direction (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1HexCoordinates.html#ab98ceaa27dad848be1ada5a45480c8bf" title="The neighbour one step from slot  in direction : 0 east, then clockwise on screen in 60° turns.">Slots.Grid.HexCoordinates.Step</a>); its members run head first.  <br /></td></tr>
 <tr class="separator:afbb3961fe761fccb2e2435f93704a750"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac199b85c9ed13b99be3ce3f83f0c3ef9" id="r_ac199b85c9ed13b99be3ce3f83f0c3ef9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac199b85c9ed13b99be3ce3f83f0c3ef9">Id</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:ac199b85c9ed13b99be3ce3f83f0c3ef9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Which formation this is, unlike any other standing with it; each member carries it (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember.html#a3ce670557f6017a2a9f4c6b845e63361" title="Which formation it is in: the same for every member of one, and unlike any other formation&#39;s.">IFormationMember.FormationId</a>).  <br /></td></tr>
+<tr class="separator:ac199b85c9ed13b99be3ce3f83f0c3ef9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80fb924c1010c915ef8f41254cfdbc10" id="r_a80fb924c1010c915ef8f41254cfdbc10"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html">IWriteableFormationMember</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a80fb924c1010c915ef8f41254cfdbc10">Members</a><code> [get]</code></td></tr>
 <tr class="separator:a80fb924c1010c915ef8f41254cfdbc10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8aad8dd00893057380b75d9ae12b2155" id="r_a8aad8dd00893057380b75d9ae12b2155"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Formation.html#a7d189f644fea0191bb4f5acaef4bf746">FormationShape</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8aad8dd00893057380b75d9ae12b2155">Shape</a><code> [get, set]</code></td></tr>
@@ -323,6 +326,31 @@ Properties</h2></td></tr>
 </div><div class="memdoc">
 
 <p>A snake's walking direction (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1HexCoordinates.html#ab98ceaa27dad848be1ada5a45480c8bf" title="The neighbour one step from slot  in direction : 0 east, then clockwise on screen in 60° turns.">Slots.Grid.HexCoordinates.Step</a>); its members run head first. </p>
+
+</div>
+</div>
+<a id="ac199b85c9ed13b99be3ce3f83f0c3ef9" name="ac199b85c9ed13b99be3ce3f83f0c3ef9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac199b85c9ed13b99be3ce3f83f0c3ef9">&#9670;&#160;</a></span>Id</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Balloon.Formation.StandingFormation.Id</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel set">set</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Which formation this is, unlike any other standing with it; each member carries it (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember.html#a3ce670557f6017a2a9f4c6b845e63361" title="Which formation it is in: the same for every member of one, and unlike any other formation&#39;s.">IFormationMember.FormationId</a>). </p>
+<p>A new one each time the object is taken up again. </p>
 
 </div>
 </div>

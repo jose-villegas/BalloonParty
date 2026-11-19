@@ -1,9 +1,11 @@
 var interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember =
 [
     [ "SetFormationHeading", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html#a1b65bd96eb2870c75f6bf2ddab416aa9", null ],
+    [ "SetFormationId", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html#a65c0ac4132ef902bbfd0c1201f1b52fe", null ],
     [ "SetInFormation", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html#a880154b36d9898d371ad7ae2cc5bb850", null ],
     [ "SetWalking", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html#ad4c9c118fd31a0313c49643afd51ee24", null ],
     [ "FormationHeading", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html#a2dc2484cd85cc7fcc03cf22e757986bf", null ],
+    [ "FormationId", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html#a3ce670557f6017a2a9f4c6b845e63361", null ],
     [ "InFormation", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html#ae295e13669f2335dde5195f851710138", null ],
     [ "IsStable", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html#adb6f47d0cdc46121366eff80c4a6f0ff", null ],
     [ "Kind", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html#a76294bf735ba1535932a393b29e045c4", null ],

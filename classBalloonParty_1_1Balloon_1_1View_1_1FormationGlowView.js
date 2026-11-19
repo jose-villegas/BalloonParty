@@ -6,6 +6,7 @@ var classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView =
     [ "OnDestroy", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#a8d15b0b55f8ccb08235c1fccded57dd7", null ],
     [ "_beams", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#ad00e4681e2e02fba4c3365387518a0bc", null ],
     [ "_field", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#a80a7559781ba344fb3750a9f27fa6e51", null ],
+    [ "_formations", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#a30a9d67e165a6c104b3f2cf5865108a3", null ],
     [ "_groups", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#af4bda7b129cf385a4709f34f51930480", null ],
     [ "_lightColorIndex", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#a660ef4759c592f7cca459658b3306c1a", null ],
     [ "_lightField", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#aeb867ab2337eed5ccf183880b073c364", null ],
@@ -23,6 +24,7 @@ var classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView =
     [ "CountId", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#aa061c7c4703c27920289d9c71c0f1489", null ],
     [ "DissolveId", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#a949f1b89273c89ea6b27fb2764658bd6", null ],
     [ "FieldId", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#a331a21dd555579a02830d696d133132f", null ],
+    [ "FormationsId", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#a0e00bd8d4a26fca53df419c8a15cbc32", null ],
     [ "HdrBoostId", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#a438491aaee76768e625882ad092d56da", null ],
     [ "PointsId", "classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowView.html#aadea0302cac7d6f14f43089453748523", null ]
 ];
