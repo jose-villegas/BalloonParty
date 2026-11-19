@@ -177,6 +177,40 @@ namespace BalloonParty.Tests.Configuration
             CollectionAssert.IsEmpty(LevelPacingValidator.ValidateGroundOnlyInPresets(presets, BushOnGround(), "Test"));
         }
 
+        // The mushroom is gated by the meadow stretch, not picked from the catalogue, so the catalogue has no entry
+        // to say where it belongs. A preset always plays on the sky: one listing mushrooms is reported all the same.
+        [Test]
+        public void ValidateGroundOnlyInPresets_PresetListingMushrooms_ReportsIt_ThoughTheCatalogueHasNoEntry()
+        {
+            var presets = new[] { MakePresetWithGates(-100, new GridActorTypeGate(GridActorType.Mushroom, new RangedInt(2, 4))) };
+
+            var issues = LevelPacingValidator.ValidateGroundOnlyInPresets(presets, BushOnGround(), "Test");
+
+            Assert.That(issues, Has.Exactly(1).Contains("preset -100 lists Mushroom"));
+        }
+
+        [Test]
+        public void ValidateGroundOnlyInPresets_MushroomsStayMeadowOnly_WhateverTheCatalogueSays()
+        {
+            var presets = new[] { MakePresetWithGates(-100, new GridActorTypeGate(GridActorType.Mushroom, new RangedInt(2, 4))) };
+            var allowedOnTheSky = new[]
+            {
+                new GridActorContentEntry(GridActorType.Mushroom, 1, 0, new RangedInt(1, 1), new RangedInt(1, 1), 0),
+            };
+
+            var issues = LevelPacingValidator.ValidateGroundOnlyInPresets(presets, allowedOnTheSky, "Test");
+
+            Assert.That(issues, Has.Exactly(1).Contains("preset -100 lists Mushroom"));
+        }
+
+        [Test]
+        public void ValidateGroundOnlyInPresets_MushroomsAtCountZero_AreFine()
+        {
+            var presets = new[] { MakePresetWithGates(-100, new GridActorTypeGate(GridActorType.Mushroom, new RangedInt(0, 0))) };
+
+            CollectionAssert.IsEmpty(LevelPacingValidator.ValidateGroundOnlyInPresets(presets, BushOnGround(), "Test"));
+        }
+
         private static GridActorContentEntry[] BushOnGround()
         {
             return new[]

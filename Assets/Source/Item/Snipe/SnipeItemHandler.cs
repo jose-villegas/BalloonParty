@@ -7,6 +7,7 @@ using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
+using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 using BalloonParty.Configuration.Items;
@@ -76,27 +77,9 @@ namespace BalloonParty.Item.Snipe
             // the lance arms the current ball instead of being lost, as it always armed the next shot.
             var shot = (_projectiles.ShotOrCurrent(activation.DamageContext.Projectile)
                 ?? _projectiles.ShotOrCurrent(null)) as IWriteableProjectileModel;
-            if (shot != null)
+            if (shot != null && !TryBank(shot, isRainbowHost))
             {
-                // Two pierces can't overlap, so a pickup landing on an already-armed shot is BANKED whole
-                // — pierce, speed and rainbow together — and activates at the discharge that spends the
-                // current pierce (TrySpendBankedCharge). Granting the speed buff here instead would
-                // compound it onto the ramp the running pierce already earned.
-                if (shot.IsPiercing.Value)
-                {
-                    if (isRainbowHost)
-                    {
-                        shot.Flight.BankedRainbowPierceCharges++;
-                    }
-                    else
-                    {
-                        shot.Flight.BankedPierceCharges++;
-                    }
-                }
-                else
-                {
-                    ArmFreshLance(shot, isRainbowHost);
-                }
+                ArmFreshLance(shot, isRainbowHost);
             }
 
             _effectPlayer.Play(settings, activation.WorldPosition, activation.Balloon.GetColorId());
@@ -108,6 +91,39 @@ namespace BalloonParty.Item.Snipe
         public void Arm(IWriteableProjectileModel shot)
         {
             ArmFreshLance(shot, isRainbowHost: false);
+        }
+
+        // A plain lance earned in flight with no pickup behind it (the meadow's mushroom chain): armed where the
+        // ball is, its pencil line starting at the point it was earned. The chain only arms a ball that is not
+        // piercing: a lance bounces off no mushroom.
+        public void ArmAt(IWriteableProjectileModel shot, Vector3 at)
+        {
+            ArmLance(shot, _itemConfig[ItemType.Snipe].Snipe.SpeedBuffMultiplier, isRainbowHost: false);
+            _lanceArming.OnLanceArmedAt(shot, at);
+        }
+
+        // Two pierces can't overlap, so a grant landing on an already-armed shot is BANKED whole
+        // — pierce, speed and rainbow together — and activates at the discharge that spends the
+        // current pierce (TrySpendBankedCharge). Granting the speed buff here instead would
+        // compound it onto the ramp the running pierce already earned. False, with nothing banked, for a
+        // shot that is not piercing: that one is armed. The Snipe keeps no limit on banked charges.
+        private static bool TryBank(IWriteableProjectileModel shot, bool isRainbowCharge)
+        {
+            if (!shot.IsPiercing.Value)
+            {
+                return false;
+            }
+
+            if (isRainbowCharge)
+            {
+                shot.Flight.BankedRainbowPierceCharges++;
+            }
+            else
+            {
+                shot.Flight.BankedPierceCharges++;
+            }
+
+            return true;
         }
 
         // The discharge spent the pierce but SpendPierce kept the shot armed for a banked charge (so the

@@ -67,6 +67,8 @@ namespace BalloonParty.Game.Level
 
         public ILevelParameters Current => _current;
 
+        public int Level { get; private set; }
+
         // Must resolve before GridSpawnerCoordinator respawns at Respawn (120).
         public int ResetOrder => RunResetOrder.Derived;
 
@@ -115,6 +117,7 @@ namespace BalloonParty.Game.Level
             // Seeded by the level, so a retry rolls the same counts as the first attempt did.
             var rng = new System.Random(_pacing.SeedForLevel(level) ^ ResolveSeedSalt);
             _current = _pacing.ParametersForLevel(level, _runSeed.Value).Resolve(0f, rng);
+            Level = level;
 
             var itemPickList = new List<ResolvedItemEntry>();
             var activeItems = new List<ItemSettings>();

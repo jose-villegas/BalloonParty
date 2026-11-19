@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Configuration.Balloons;
+using BalloonParty.Configuration.GridActors;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Health;
@@ -47,6 +48,9 @@ namespace BalloonParty.Cheats
         private readonly IRunConfig _runConfig;
         private readonly IWeaponStats _weapon;
         private readonly IPlayerHealth _health;
+        private readonly IBumperField _bumperField;
+        private readonly IBumperBounceRule _bounceRule;
+        private readonly IMushroomSettings _mushrooms;
         private readonly ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
 
         private IDisposable _subscription;
@@ -71,6 +75,9 @@ namespace BalloonParty.Cheats
             IRunConfig runConfig,
             IWeaponStats weapon,
             IPlayerHealth health,
+            IBumperField bumperField,
+            IBumperBounceRule bounceRule,
+            IMushroomSettings mushrooms,
             ISubscriber<ProjectileLoadedMessage> loadedSubscriber)
         {
             _grid = grid;
@@ -84,6 +91,9 @@ namespace BalloonParty.Cheats
             _runConfig = runConfig;
             _weapon = weapon;
             _health = health;
+            _bumperField = bumperField;
+            _bounceRule = bounceRule;
+            _mushrooms = mushrooms;
             _loadedSubscriber = loadedSubscriber;
         }
 
@@ -193,7 +203,8 @@ namespace BalloonParty.Cheats
                 _grid, _config, _weapon.StartingShields, _gridConfig, _balloonsConfig, _itemConfig, _cachedView, _throwerSettings, _palette,
                 _levelParams, _runConfig, pulseDelay,
                 _cachedScope.Container.Resolve<BalloonBalancer>().SecondsUntilNextPulse,
-                _cachedScope.Container.Resolve<IProjectileRegistry>().Loaded);
+                _cachedScope.Container.Resolve<IProjectileRegistry>().Loaded,
+                ShotBumperLayer.Gather(_bumperField, _bounceRule, _mushrooms, _itemConfig));
             if (context.Board.Count == 0)
             {
                 return false;

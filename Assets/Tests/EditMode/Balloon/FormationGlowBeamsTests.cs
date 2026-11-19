@@ -121,6 +121,44 @@ namespace BalloonParty.Tests.Balloon
             AssertEnds(_beams[1], new Vector2(1.5f, 0f), new Vector2(2.25f, 0f));
         }
 
+        // A closed cover: six rings a slot from the covered balloon's, which is in the group too. The two rings
+        // furthest apart are still two members across the ring, so the capsule runs through the middle as before.
+        [Test]
+        public void AClosedCoverWithTheBalloonItCovers_CastsOneBeamAcrossTheRing_ThroughTheMiddle()
+        {
+            var points = new Vector4[7];
+            for (var i = 0; i < 6; i++)
+            {
+                var angle = i * 60f * Mathf.Deg2Rad;
+                points[i] = Ring(Mathf.Cos(angle) * 0.75f, Mathf.Sin(angle) * 0.75f);
+            }
+
+            points[6] = Ring(0f, 0f);
+
+            var count = FormationGlowBeams.Group(points, _formations, points.Length, Join, _groups, _beams);
+
+            Assert.AreEqual(1, count);
+            Assert.AreEqual(1.5f, Vector2.Distance(_beams[0].Start, _beams[0].End), 1e-4f, "two members opposite each other");
+            Assert.AreEqual(0f, ((_beams[0].Start + _beams[0].End) * 0.5f).magnitude, 1e-4f, "through the covered balloon");
+            Assert.AreEqual(1f, _beams[0].Level, 1e-5f);
+        }
+
+        // Two members left either side of the covered balloon stand too far apart to join; its ring between them
+        // makes them one group, as the outline over it makes them one shape.
+        [Test]
+        public void ACoverDownToTwoMembers_IsOneGroup_ThroughTheBalloonItCovers()
+        {
+            var members = new[] { Ring(-0.75f, 0f), Ring(0.75f, 0f) };
+            var withTheBalloon = new[] { Ring(-0.75f, 0f), Ring(0.75f, 0f), Ring(0f, 0f) };
+
+            Assert.AreEqual(2, FormationGlowBeams.Group(members, _formations, members.Length, Join, _groups, _beams));
+            var count = FormationGlowBeams.Group(
+                withTheBalloon, _formations, withTheBalloon.Length, Join, _groups, _beams);
+
+            Assert.AreEqual(1, count);
+            AssertEnds(_beams[0], new Vector2(-0.75f, 0f), new Vector2(0.75f, 0f));
+        }
+
         [Test]
         public void NoRings_CastNothing()
         {

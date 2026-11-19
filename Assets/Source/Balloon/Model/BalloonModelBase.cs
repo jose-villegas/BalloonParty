@@ -11,7 +11,8 @@ using UnityEngine;
 namespace BalloonParty.Balloon.Model
 {
     internal abstract class BalloonModelBase :
-        IWriteableBalloonModel, IPressureMovable, IBalanceInfluence, IBalanceBiasSource
+        IWriteableBalloonModel, IPressureMovable, IBalanceInfluence, IBalanceBiasSource, IBalanceAnchor,
+        IWriteableCoverHost
     {
         public BalloonType TypeName { get; }
         public int RegistryHandle { get; set; } = -1;
@@ -28,6 +29,12 @@ namespace BalloonParty.Balloon.Model
         public abstract IReadOnlyList<NudgeOverride> NudgeOverrides { get; }
 
         public SlotActorKind Kind => SlotActorKind.Dynamic;
+
+        // Here, not on each model: a cover's host may be a plain balloon carrying an item or any reward balloon.
+        public bool HeldByCover { get; private set; }
+
+        // A subclass adds its own reason to hold its slot (a formation's member, an armed nuke) to the cover's.
+        public virtual bool IsAnchored => HeldByCover;
 
         // Default: a shoved balloon steps one cell to a neighbour.
         public virtual PressureResponse PushResponse => PressureResponse.ShoveNeighbour;
@@ -67,6 +74,11 @@ namespace BalloonParty.Balloon.Model
             BalancePriority = config.BalancePriority;
             DirectBalanceMotion = config.DirectBalanceMotion;
             OmnidirectionalBalance = config.OmnidirectionalBalance;
+        }
+
+        public void SetHeldByCover(bool held)
+        {
+            HeldByCover = held;
         }
 
         // Shared across every subclass: BiasKind picks the formula, BiasValue its magnitude — a

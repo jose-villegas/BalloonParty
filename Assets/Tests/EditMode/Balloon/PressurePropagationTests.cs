@@ -112,6 +112,34 @@ namespace BalloonParty.Tests.Balloon
             Assert.IsFalse(_propagation.TryResolve(0, _moves));
         }
 
+        // The same board as AnchoredUnbreakable_BlocksTheChainLikeAStatic, with a plain balloon a cover holds in
+        // the unbreakable's place: a new line can't shove it out of its cover.
+        [Test]
+        public void ABalloonACoverHolds_BlocksTheChainLikeAStatic_UntilItIsLetGo()
+        {
+            PlaceSimple(0, 2); // seed
+            var held = new BalloonModel();
+            held.SetHeldByCover(true);
+            Place(held, 0, 1);
+            PlaceBlock(1, 2);
+
+            Assert.IsFalse(_propagation.TryResolve(0, _moves));
+            Assert.AreSame(held, _grid.At(new Vector2Int(0, 1)));
+
+            held.SetHeldByCover(false);
+            Assert.IsTrue(_propagation.TryResolve(0, _moves), "control: let go, it is shoved up like any balloon");
+        }
+
+        [Test]
+        public void ABalloonACoverHolds_AsTheSeed_CannotBeShoved()
+        {
+            var held = new BalloonModel();
+            held.SetHeldByCover(true);
+            Place(held, 0, 2);
+
+            Assert.IsFalse(_propagation.TryResolve(0, _moves));
+        }
+
         [Test]
         public void Heaviness_RoutesTheChainThroughLightMovers()
         {

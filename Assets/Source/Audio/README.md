@@ -32,6 +32,7 @@ Unity audio only (`AudioSource` + `AudioMixer`), no middleware.
 | `Routing/MusicSoundRouter` | Navigation-driven music: plays `LaunchMusic` in the Launch state, stops it (fading) on the move to Game. In `Game`, crossfades a day/night gameplay-loop pair (the current time-of-day loop at full volume, the other ducked, swapping smoothly as `IsNight` flips); both loops duck while a shot is in flight — the window opens on `ProjectileFiredMessage`, not on `ProjectileLoadedMessage` — and pitch down together as danger level rises, toward a tritone at max danger |
 | `Routing/ItemSightSoundRouter` | Plays `ItemSighted` as an ascending run whenever the settled chain of item-hosting balloons the aim's prediction line crosses changes — see *The item-sighted cue* below. Detection itself lives in `Item/ItemSightTracker`, not here |
 | `Routing/NukeSoundRouter` | The nuke's fuse and wind: the armed alarm (`NukeArmed`, on `NukeArmedMessage`), a beep per count rising a step each (`NukeCountdownBeep`, on `NukeCountdownMessage`), the boom (`BalloonPopNuke`, on `NukeDetonatedMessage`) and the gust after the blast (`NukeBreatherWind`, on `NukeBreatherMessage`). The dents' clank is `CombatSoundRouter`'s |
+| `Routing/MushroomSoundRouter` | The meadow's mushrooms (`Plans/PLAN-MeadowMushrooms.md`): the mushrooms' own bump on every bounce (`MushroomBouncedMessage`: `MushroomBounce`, at 0.6 of its volume, named in `BounceSound`), a whole tone higher with each wall of caps the chain counts, up to four steps, so a chain is heard climbing toward the lance; the Snipe's own cue (`ItemSnipe`) when a chain arms the ball (`MushroomLanceMessage`); and a stroke at each cap a lance cuts (`MushroomCutMessage` whose `Cause` is `Lance`: `Strikethrough`, the heart's strikethrough stroke, at 0.8 of its volume, named in `CutSound`; a lance cuts a handful of caps a flight, each once). **The bank is heard in the cut:** every cap a flight cuts banks it a lance charge, and the stroke climbs a whole tone with each cap the flight has cut (`MushroomCutMessage.Charges`, up to `MaxCutSteps`, 6, so a board's seven caps span an octave); the Snipe's cue (`BankSound`, `ItemSnipe`) rings once a flight, on its first charge, a whole tone above the pitch the arming plays it at, which is what a banked charge rang before the bank was first dropped. It is not played for every charge: a lance through a wall of three caps banks three within a few frames. **A cap a bomb or a nuke blew off (`Cause` `Blast`) plays nothing here:** it is heard in the blast, and a bomb that takes two caps would otherwise play two strokes on top of its bang. A sway (`MushroomSwayedMessage`) is silent too. The bump is the mushrooms' own clip, the owner's pick of five made for it (*A clip made here: the mushroom's bump*, below), with an entry of its own in the bank: that entry's limits are the bump's and nobody else's (four voices, the fifth ending the oldest bump; priority 120, a little under a deflect's 128), so the router keeps no voices of its own. The cut's stroke is still a stand-in. The pierce loop that follows an arming is `CombatSoundRouter`'s, off the ball's piercing state |
 | `Routing/DiscoSoundRouter` | The disco ball's wave: a harp glissando climbing two octaves of the key over the wave's time (`DiscoWaveAdvancedMessage`), and a quiet tick for each balloon it paints, pitched by its distance from the pop (`DiscoWaveReachedMessage`). Both pass the degree as `melodicStreak` to a `ScaleWalkUp` entry, so every note is in the key; the tick's cooldown keeps a full board from stacking clips. The ball's own deflect and pop are `CombatSoundRouter`'s |
 | `Configuration/GameSoundId`, `SfxChannel`, `SfxEntry`, `ISoundBankConfiguration`, `SoundBankConfiguration` | The data side — see *Configuration* below |
 
@@ -403,6 +404,21 @@ None of this feature makes a sound until it is wired in the Unity Editor:
   cost, no per-play hitch). Very short stingers: PCM. Long music/ambience (future): Vorbis +
   Streaming. Downsample to ~22 kHz where it stays transparent. Keep clips out of
   `Resources/`.
+
+### A clip made here: the mushroom's bump
+
+`Assets/Audio/Gameplay/mushroom-bop.wav` (`GameSoundId.MushroomBounce`) was not fetched. It was made for the
+game by arithmetic alone, so it has no licence and no attribution to record. The owner asked for a short
+sound for a ball hitting a mushroom and chose this one, the "bop", of five made for him.
+
+The recipe, should it need making again or a sibling made beside it: a sine that falls from 280 Hz to 150 Hz
+with a time constant of 20 ms and dies away with one of 35 ms, a faint 3 ms noise click at its start, 130 ms
+long with a 3 ms fade at its end, normalized to a peak of 0.89, mono, 44.1 kHz, 16 bit. The script that made
+it is not in the project.
+
+It is imported as the other short one-shots are (ADPCM, decompressed on load; its own 44.1 kHz, like `bubble-pop.wav`). Its entry is the last of the bank and was written into the asset by hand: the one clip, four voices,
+priority 120, no loop, no pitch or volume range of its own (`MushroomSoundRouter` sets the note and the
+volume). `ShippedMushroomSoundsTests` pins it.
 
 ## Deferred / not yet live
 

@@ -5,6 +5,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Configuration.Balloons;
+using BalloonParty.Configuration.GridActors;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.EditorUI.Charts;
@@ -653,13 +654,14 @@ namespace BalloonParty.Editor.ShotSolver
             // ~0.5 frame of interval-crossing quantization + 1 frame of deferred-Balance yield, at
             // whatever rate the editor is actually rendering right now.
             var pulseDelay = Mathf.Clamp(1.5f * Time.smoothDeltaTime, 0f, 0.1f);
+            var itemConfig = scope.Container.Resolve<IItemConfiguration>();
             context = ShotBoardGather.Gather(
                 scope.Container.Resolve<SlotGrid>(),
                 scope.Container.Resolve<IProjectileFlightConfig>(),
                 scope.Container.Resolve<IWeaponStats>().StartingShields,
                 scope.Container.Resolve<ISlotGridConfig>(),
                 scope.Container.Resolve<IBalloonsConfiguration>(),
-                scope.Container.Resolve<IItemConfiguration>(),
+                itemConfig,
                 thrower,
                 scope.Container.Resolve<ThrowerSettings>(),
                 scope.Container.Resolve<IGamePalette>(),
@@ -667,7 +669,10 @@ namespace BalloonParty.Editor.ShotSolver
                 scope.Container.Resolve<IRunConfig>(),
                 pulseDelay,
                 scope.Container.Resolve<BalloonBalancer>().SecondsUntilNextPulse,
-                scope.Container.Resolve<IProjectileRegistry>().Loaded);
+                scope.Container.Resolve<IProjectileRegistry>().Loaded,
+                ShotBumperLayer.Gather(
+                    scope.Container.Resolve<IBumperField>(), scope.Container.Resolve<IBumperBounceRule>(),
+                    scope.Container.Resolve<IMushroomSettings>(), itemConfig));
             return true;
         }
 

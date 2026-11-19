@@ -32,7 +32,7 @@ Two options set up the first run, for measuring what only comes late or to a pla
 | Option | What it does |
 |---|---|
 | `--purple` | Once the first run is in play, restarts it on the first level its seed makes purple (one more colour, the golden balloon's level), through the Start From Level cheat with the seed kept, so the same roll holds. The run's first moments, before the restart, are on level 1 |
-| `--seed N` | With `--purple`: restarts on run seed N instead of the run's own, so every session given the same N plays the same purple level |
+| `--seed N` | Restarts the first run on run seed N, so every session given the same N meets the same levels (the same sky, meadow and water stretches, the same purple levels): from level 1, or with `--purple` on that seed's first purple level. Use it to compare two builds, or two Editors on two checkouts, level for level |
 | `--no-disco` | Places no disco ball all session: the control for measuring one. A purple level otherwise brings a sure one. PLAN-DiscoBalloon's *Measured* section pairs the two |
 | `--no-nuke` | Places no nuke all session: the control for measuring one (a nuke clears the board, so it changes hearts lost and level times). The Reward balloons table counts nukes placed and popped |
 | `--hearts N` | Once that run is in play, sets the player's hearts to N, so the session starts low on hearts (where the heart balloon comes). A later run (`--on-loss restart`) starts as configured |
@@ -99,7 +99,9 @@ press the autoplay gives the screen 6 s to leave before it presses the next answ
 
 `Logs/playtest/<stamp>[-label]/` (git-ignored) gets `ticks.jsonl` (one line per tick: level, score,
 hearts, shots so far, board fill, balls in flight, seconds left in the spawn clock's
-breather, and the reward balloons placed so far) and `report.md`:
+breather, and the reward balloons placed so far), `telemetry.jsonl` (the session's own telemetry records,
+every counter of them) and `report.md`. Two Editors on copies of the project write to one telemetry folder,
+so the records are picked by the Play's session id, not by the time alone:
 
 | Section | From | Says |
 |---|---|---|

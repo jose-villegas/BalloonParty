@@ -208,6 +208,34 @@ class Stage:
         lance first. It flies once game time runs (`advance`, `release`). Returns where it was fired from."""
         return self.call("Fire", float(degrees), bool(lance))
 
+    def cut(self, slot, degrees, offset=0.0):
+        """Cuts the cap off the mushroom in `slot` (col, row) as a lance flying at `degrees` would, through its middle
+        or `offset` world units to the left of it (a sliver near the edge). The cut a lance makes in play: a ball
+        flies through where the cap stood, and the cap grows back by itself on the board's beat."""
+        return self.call("CutCap", int(slot[0]), int(slot[1]), float(degrees), float(offset))
+
+    def regrow(self, slot):
+        """Grows the cut cap in `slot` (col, row) back now, without waiting for the board's beat."""
+        return self.call("RegrowCap", int(slot[0]), int(slot[1]))
+
+    def aim(self, degrees=None):
+        """Holds the thrower's aim at `degrees` (0 = right, 90 = straight up) and draws its aim line without firing,
+        so a capture shows the line the game predicts, its bend off a mushroom included. None lets go; so does `fire`."""
+        return self.call("AimOff") if degrees is None else self.call("Aim", float(degrees))
+
+    def chain(self):
+        """Where to aim to be paid by the meadow's mushrooms on the board as it stands: the angle to pass to `fire`
+        (the middle of the widest run of aim angles whose solved flight arms the lance, three hits from wall of
+        caps to wall of caps), or None when none does. The second value is the stage's whole answer: how many
+        angles arm, how many caps stand in how many walls, and where the cannon stands."""
+        try:
+            result = self.call("Chain")
+        except StageError as error:
+            if "none of" in str(error):
+                return None, str(error)
+            raise
+        return float(result.split()[1]), result
+
     def level_up_ready(self):
         """Readies a real level-up for the next shot: every balloon one colour, every other bar full, that one a point
         short, the level-up let through. Fire the Fire Best Shot cheat after `release` to see the cinematic."""
@@ -314,6 +342,16 @@ def main():
     fire = sub.add_parser("fire", help="fire the loaded ball for real at an angle")
     fire.add_argument("degrees", type=float, help="0 = right, 90 = straight up")
     fire.add_argument("--lance", action="store_true", help="arm it as a Snipe lance first")
+    sub.add_parser("chain", help="the angle that arms the lance off this board's mushroom walls, for fire")
+    cut = sub.add_parser("cut", help="cut the cap off a mushroom as a lance does: a ball then flies through")
+    cut.add_argument("slot", help="col,row")
+    cut.add_argument("degrees", type=float, help="the lance's way: 0 = right, 90 = straight up")
+    cut.add_argument("--offset", type=float, default=0.0,
+                     help="world units to the left of the cap's middle the lance passes (0.2 takes a sliver off)")
+    regrow = sub.add_parser("regrow", help="grow a cut mushroom's cap back now")
+    regrow.add_argument("slot", help="col,row")
+    aim = sub.add_parser("aim", help="hold the aim at an angle and draw its aim line, without firing")
+    aim.add_argument("degrees", help="0 = right, 90 = straight up; off lets go")
     ball = sub.add_parser("ball", help="put a ball in flight at a world point, held still")
     ball.add_argument("at", help="x,y")
     ball.add_argument("--from", dest="start", help="x,y: fly there from here first")
@@ -370,6 +408,14 @@ def main():
                              dict(item.split("=", 1) for item in args.set))
         elif args.command == "fire":
             stage.fire(args.degrees, args.lance)
+        elif args.command == "chain":
+            stage.call("Chain")
+        elif args.command == "cut":
+            stage.cut(pair(args.slot, int), args.degrees, args.offset)
+        elif args.command == "regrow":
+            stage.regrow(pair(args.slot, int))
+        elif args.command == "aim":
+            stage.aim(None if args.degrees == "off" else float(args.degrees))
         elif args.command == "level-up-ready":
             stage.level_up_ready()
         elif args.command == "ball":

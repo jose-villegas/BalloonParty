@@ -1,4 +1,5 @@
 using System;
+using BalloonParty.Balloon.Formation;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Shared.Diagnostics;
@@ -17,7 +18,8 @@ namespace BalloonParty.Balloon.View
     ///     fitted each frame round the members that glow, so the shader only runs where the light can be; hidden,
     ///     and costing nothing, while no member glows. The rings also light what stands round them: the quad is
     ///     only drawn, so each group of joined rings casts one capsule light through the scene-light field
-    ///     (<see cref="FormationGlowBeams" />).
+    ///     (<see cref="FormationGlowBeams" />). The balloon an item cover stands round gets a ring of that
+    ///     formation too (<see cref="FormationGlowHosts" />), so the outline closes over it.
     /// </summary>
     internal sealed class FormationGlowView : MonoBehaviour
     {
@@ -35,6 +37,7 @@ namespace BalloonParty.Balloon.View
         private readonly Vector4[] _points = new Vector4[FormationGlowField.MaxPoints];
         private readonly float[] _formations = new float[FormationGlowField.MaxPoints];
         private readonly FormationGlowField _field = new();
+        private readonly FormationGlowHosts _hosts = new();
         private readonly int[] _groups = new int[FormationGlowField.MaxPoints];
         private readonly FormationGlowBeam[] _beams = new FormationGlowBeam[FormationGlowBeams.MaxBeams];
         private readonly Light[] _lights = new Light[FormationGlowBeams.MaxBeams];
@@ -42,6 +45,7 @@ namespace BalloonParty.Balloon.View
 
         private IFormationGlowSettings _settings;
         private FormationGlowSources _sources;
+        private ICoveredHosts _coveredHosts;
         private SceneLightFieldService _lightField;
         private int _lightColorIndex;
         private float _lightJoinDistance;
@@ -58,9 +62,13 @@ namespace BalloonParty.Balloon.View
             }
 
             var bounds = default(Rect);
-            var count = _settings.Enabled
-                ? _field.Step(_sources.All, _settings, Time.deltaTime, _points, _formations, out bounds)
-                : 0;
+            var count = 0;
+            if (_settings.Enabled)
+            {
+                _hosts.Sync(_coveredHosts.CoveredHosts, _sources);
+                count = _field.Step(_sources.All, _settings, Time.deltaTime, _points, _formations, out bounds);
+            }
+
             CastLight(count);
             if (count == 0)
             {
@@ -88,10 +96,11 @@ namespace BalloonParty.Balloon.View
         [Inject]
         internal void Construct(
             IBalloonsConfiguration balloons, FormationGlowSources sources, IGamePalette palette,
-            SceneLightFieldService lightField)
+            SceneLightFieldService lightField, ICoveredHosts coveredHosts)
         {
             _settings = balloons.FormationGlow;
             _sources = sources;
+            _coveredHosts = coveredHosts;
             _lightField = lightField;
             _lightColorIndex = palette.PaletteIndexOf(GamePalette.UnbreakableFormationColorId);
             _lightJoinDistance = FormationGlowField.JoinDistance(_settings.RingRadius, _settings.Reach);

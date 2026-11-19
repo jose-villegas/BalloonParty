@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Mushroom
+  m_Shader: {fileID: 4800000, guid: 5d5f484496b8d2c4fb964f082c8e3023, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats:
+    - _AmbientDimming: 0.4
+    - _AmbientHue: 0.25
+    - _CapGrow: 1
+    - _CapOcclusion: 0.45
+    - _CrownSize: 0.52
+    - _DomeCurve: 0.82
+    - _EdgePower: 10
+    - _FleshBand: 0.1
+    - _FootShadow: 0.5
+    - _LightHeight: 0.9
+    - _LightInfluence: 1
+    - _MarginStart: 0.7
+    - _NightGlow: 1.6
+    - _NightGlowFrom: 0.25
+    - _NightGlowFull: 0.6
+    - _PleatCount: 40
+    - _Pleats: 0.6
+    - _Pulse: 0
+    - _PulseGlow: 1.2
+    - _PulseSwell: 0.22
+    - _Radius: 0.3
+    - _RootBend: 0.35
+    - _RootFork: 0.3
+    - _RootShade: 0.45
+    - _RootWidth: 0.085
+    - _Seed: 0
+    - _ShadowDistance: 0.1
+    - _ShadowReceiverRadius: 0.4
+    - _ShadowSoftness: 0.05
+    - _SheenIntensity: 0.2
+    - _SheenPower: 9
+    - _SpotLumps: 0.45
+    - _SpotSize: 0.92
+    - _StumpGrain: 0.3
+    - _TiltPerLean: 3.4
+    m_Colors:
+    - _CapEdge: {r: 0.5, g: 0.17, b: 0.04, a: 1}
+    - _CapLit: {r: 1, g: 0.55, b: 0.12, a: 1}
+    - _CapShade: {r: 0.8, g: 0.3, b: 0.05, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _CrownColor: {r: 0.74, g: 0.17, b: 0.03, a: 0.7}
+    - _CutFall: {r: 0, g: 1, b: 0, a: 0}
+    - _CutLean: {r: 0, g: 0, b: 1, a: 0}
+    - _CutLine: {r: 0, g: 0, b: 1, a: 0}
+    - _CutPieces: {r: 0, g: 0, b: 0, a: 1}
+    - _FleshColor: {r: 1, g: 0.93, b: 0.76, a: 1}
+    - _Lean: {r: 0, g: 0, b: 0, a: 0}
+    - _MarginColor: {r: 1, g: 0.74, b: 0.3, a: 0.85}
+    - _NightGlowTint: {r: 1, g: 0.95, b: 0.8, a: 1}
+    - _RootColor: {r: 0.52, g: 0.38, b: 0.23, a: 1}
+    - _ShadowColor: {r: 0.03, g: 0.06, b: 0.03, a: 0.7}
+    - _SpotColor: {r: 1, g: 0.97, b: 0.88, a: 1}
+    - _StemLit: {r: 1, g: 0.95, b: 0.84, a: 1}
+    - _StemShade: {r: 0.74, g: 0.62, b: 0.48, a: 1}
+    - _StumpColor: {r: 0.7, g: 0.6, b: 0.43, a: 1}
+    - _StumpShade: {r: 0.4, g: 0.31, b: 0.21, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

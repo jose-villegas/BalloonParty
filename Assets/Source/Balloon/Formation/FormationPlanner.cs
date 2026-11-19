@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Items;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
@@ -20,7 +21,9 @@ namespace BalloonParty.Balloon.Formation
     ///     the bottom <see cref="IUnbreakableFormationSettings.BottomClearance" /> rows (a horizontal line, the
     ///     bottom <see cref="IUnbreakableFormationSettings.HorizontalBottomClearance" />), and never where it would
     ///     link the board's unbreakables side to side (<see cref="ShotWall" />). Among the spots that fit, the
-    ///     planner picks at random among the few with the least total travel.
+    ///     planner picks at random among the few with the least total travel. A cover stands round a balloon
+    ///     carrying a bomb, a snipe or a lightning, or round a gift balloon, whose spot counts as cheaper
+    ///     (<see cref="IUnbreakableFormationSettings.GiftCoverPreference" />).
     /// </summary>
     internal sealed class FormationPlanner
     {
@@ -56,6 +59,15 @@ namespace BalloonParty.Balloon.Formation
         // The fewest a cover may be, an edge's trim included: below MinMembers it would break up at once.
         private int _coverFloor;
 
+        // Slots of travel a gift's spot counts as cheaper, for each member of the cover.
+        private float _giftPreference;
+
+        /// <summary>
+        ///     The slot of the balloon the last plan's cover stands round; null after any other shape, or a plan that
+        ///     found no spot.
+        /// </summary>
+        internal Vector2Int? CoveredHost { get; private set; }
+
         /// <summary>
         ///     Plans <paramref name="shape" /> for up to <see cref="IUnbreakableFormationSettings.MaxMembers" />
         ///     (an item cover, three to six)
@@ -69,6 +81,7 @@ namespace BalloonParty.Balloon.Formation
             List<FormationAssignment> assignmentsOut)
         {
             assignmentsOut.Clear();
+            CoveredHost = null;
             var isRow = shape is FormationShape.Horizontal or FormationShape.Snake;
             var count = MemberCount(shape, candidates.Count, settings);
             // A row across the board this close to the cannon walls the player in; a diagonal leaves lanes open.
@@ -83,6 +96,7 @@ namespace BalloonParty.Balloon.Formation
             }
 
             _coverFloor = CoverFloor(settings);
+            _giftPreference = Mathf.Max(0f, settings.GiftCoverPreference);
             _wall.Load(grid);
             _walledBefore = _wall.Spans();
             CollectSpots(grid, shape, candidates, count, lastRow);
@@ -93,10 +107,24 @@ namespace BalloonParty.Balloon.Formation
 
             _spots.Sort(SpotByCost.Instance);
             var choices = Mathf.Min(_spots.Count, Mathf.Max(1, settings.SpotChoices));
+
+            // The pick among the few cheapest is there so a formation doesn't always stand in the same place. Where
+            // a gift's spot leads, it would hand the cover to an item carrier as often as not, whatever the
+            // preference: the pick stays among the gifts' spots.
+            if (_giftPreference > 0f && _spots[0].Gift)
+            {
+                choices = LeadingGiftSpots(choices);
+            }
+
             var chosen = _spots[Mathf.Clamp(pickIndex(choices), 0, choices - 1)];
 
             BuildSlots(grid, shape, chosen.Anchor, count, lastRow, chosen.Variant);
             Assign(candidates, count, assignmentsOut);
+            if (shape == FormationShape.ItemCover)
+            {
+                CoveredHost = chosen.Anchor;
+            }
+
             return true;
         }
 
@@ -117,18 +145,29 @@ namespace BalloonParty.Balloon.Formation
                             TryAddSpot(grid, candidates, count, anchor, 0);
                         }
                     }
-                    else if (HostsCoveredItem(grid, anchor))
+                    else if (IsCoverHost(grid, anchor, out var gift))
                     {
-                        CollectCoverSpots(grid, candidates, count, lastRow, anchor);
+                        CollectCoverSpots(grid, candidates, count, lastRow, anchor, gift);
                     }
                 }
             }
         }
 
+        private int LeadingGiftSpots(int among)
+        {
+            var gifts = 0;
+            while (gifts < among && _spots[gifts].Gift)
+            {
+                gifts++;
+            }
+
+            return gifts;
+        }
+
         // One spot per cover order, unless both orders come out the same (an even cover, or one an edge trims).
         private void CollectCoverSpots(
             SlotGrid grid, IReadOnlyList<IWriteableFormationMember> candidates, int count, int lastRow,
-            Vector2Int host)
+            Vector2Int host, bool gift)
         {
             _firstCover.Clear();
             for (var variant = 0; variant < CoverOrders.Length; variant++)
@@ -147,23 +186,37 @@ namespace BalloonParty.Balloon.Formation
                     continue;
                 }
 
-                TryAddSpot(grid, candidates, count, host, variant);
+                if (TryAddSpot(grid, candidates, count, host, variant) && gift)
+                {
+                    PreferLastSpot();
+                }
             }
         }
 
-        private void TryAddSpot(
+        // The spot just added stands round a gift: it counts as cheaper by the preference for each member it takes
+        // (an edge may have trimmed it), so a bigger cover is no easier to draw away to an item carrier.
+        private void PreferLastSpot()
+        {
+            var last = _spots.Count - 1;
+            var spot = _spots[last];
+            spot.Gift = true;
+            spot.Cost -= Mathf.RoundToInt(_giftPreference * _scratch.Count);
+            _spots[last] = spot;
+        }
+
+        private bool TryAddSpot(
             SlotGrid grid, IReadOnlyList<IWriteableFormationMember> candidates, int count, Vector2Int anchor,
             int variant)
         {
             if (!AllSlotsOpen(grid, candidates, out var displaced))
             {
-                return;
+                return false;
             }
 
             var cost = Assign(candidates, count, _scratch) + displaced * DisplacedBalloonCost;
             if (ClosesWall(_scratch))
             {
-                return;
+                return false;
             }
 
             _spots.Add(new Spot
@@ -173,6 +226,7 @@ namespace BalloonParty.Balloon.Formation
                 Cost = cost,
                 Order = _spots.Count,
             });
+            return true;
         }
 
         private static bool SameSlots(IReadOnlyList<Vector2Int> a, IReadOnlyList<Vector2Int> b)
@@ -371,11 +425,31 @@ namespace BalloonParty.Balloon.Formation
             return Mathf.Max(CoverMinMembers, settings.MinMembers);
         }
 
-        // Only the items that hit hard are worth shielding: a bomb, a snipe and a lightning.
-        private static bool HostsCoveredItem(SlotGrid grid, Vector2Int slot)
+        // What a cover stands round. Of the items only those that hit hard are worth shielding: a bomb, a snipe
+        // and a lightning. A gift is any reward balloon, the nuke too: each is something the player wants to reach.
+        // Only a balloon the cover can hold in its slot, and one no other cover holds already: the members stand
+        // right beside it, and that is a cover only while it stays between them.
+        private static bool IsCoverHost(SlotGrid grid, Vector2Int slot, out bool gift)
         {
-            return !grid.IsEmpty(slot.x, slot.y)
-                   && grid.At(slot) is IHasItemSlot host
+            gift = false;
+            if (grid.IsEmpty(slot.x, slot.y))
+            {
+                return false;
+            }
+
+            var actor = grid.At(slot);
+            if (actor is not IWriteableCoverHost { HeldByCover: false })
+            {
+                return false;
+            }
+
+            if (actor is IBalloonModel { TypeName: var type } && type.IsReward())
+            {
+                gift = true;
+                return true;
+            }
+
+            return actor is IHasItemSlot host
                    && host.Item.Value is ItemType.Bomb or ItemType.Snipe or ItemType.Lightning;
         }
 
@@ -430,6 +504,9 @@ namespace BalloonParty.Balloon.Formation
             public int Variant;
             public int Cost;
             public int Order;
+
+            // A cover's spot round a gift balloon, its cost already less the preference.
+            public bool Gift;
         }
 
         private struct Pair

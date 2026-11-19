@@ -14,6 +14,10 @@ namespace BalloonParty.Configuration.Effects
         SnipeSkyLight    = 1 << 4,
         PaintSplash      = 1 << 5,
         BalloonPop       = 1 << 6,
+
+        /// <summary>A meadow mushroom's spores: a puff on a hit, more on a cut, a burst when a blast blows the
+        /// cap off (<c>MushroomSporeRouter</c>).</summary>
+        MushroomSpores   = 1 << 7,
     }
 
     /// <summary>Which field a source stamps: the smoke, everywhere, or the paper's ink, only on paper.</summary>

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BalloonParty.Balloon.Formation;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.GridActors;
@@ -37,6 +38,7 @@ namespace BalloonParty.Configuration.Level
         private readonly float _spawnIntervalScale = 1f;
         private readonly bool _isExtraColorLevel;
         private readonly float _extraItemChance;
+        private readonly FormationShapes _allowedFormationShapes = FormationShapes.All;
 
         private IReadOnlyList<ResolvedBalloonEntry> _balloonPickList = Array.Empty<ResolvedBalloonEntry>();
         private IReadOnlyList<ResolvedBalloonEntry> _simpleBalloonPickList = Array.Empty<ResolvedBalloonEntry>();
@@ -57,6 +59,7 @@ namespace BalloonParty.Configuration.Level
         public float SpawnIntervalScale => _spawnIntervalScale;
         public bool IsExtraColorLevel => _isExtraColorLevel;
         public float ExtraItemChance => _extraItemChance;
+        public FormationShapes AllowedFormationShapes => _allowedFormationShapes;
 
         // Not part of the ILevelParameters read surface consumers use — resolver-only.
         internal BalloonTypeWeight[] BalloonWeights => _balloonWeights;
@@ -71,8 +74,10 @@ namespace BalloonParty.Configuration.Level
             AnimationCurve initialItemCountWeights, AnimationCurve itemCountWeights,
             BalloonTypeWeight[] balloonWeights, ItemTypeWeight[] itemWeights,
             ResolvedGridActorGate[] gridActorGates, int allowedColorsMask, float spawnIntervalScale = 1f,
-            bool isExtraColorLevel = false, float extraItemChance = 0f)
+            bool isExtraColorLevel = false, float extraItemChance = 0f,
+            FormationShapes allowedFormationShapes = FormationShapes.All)
         {
+            _allowedFormationShapes = allowedFormationShapes;
             _isExtraColorLevel = isExtraColorLevel;
             _extraItemChance = extraItemChance;
             _spawnIntervalScale = spawnIntervalScale;

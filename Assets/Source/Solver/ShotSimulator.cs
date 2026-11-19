@@ -146,10 +146,17 @@ namespace BalloonParty.Solver
         /// <summary>The shot's colour streak when the flight ends: 0 once a cluster or a tough has broken it.</summary>
         public readonly int FinalStreak;
 
+        /// <summary>Whether the shot is piercing when the flight ends: a lance however it came by it (loaded as
+        /// one, a Snipe pickup, its own cruise, a chain of mushrooms).</summary>
+        public readonly bool FinalPiercing;
+
+        /// <summary>What the flight's mushrooms did: all zero on a board without them.</summary>
+        public readonly ShotMushroomTally Mushrooms;
+
         public ShotSimulationResult(
             int rawScore, int pops, int toughsCleared, bool boardCleared, int events, bool died, bool capped,
             bool absorbed, int goldenPops, int heartPops, int discoPops, int nukePops = 0, string finalColor = null,
-            int finalStreak = 0)
+            int finalStreak = 0, bool finalPiercing = false, in ShotMushroomTally mushrooms = default)
         {
             RawScore = rawScore;
             Pops = pops;
@@ -165,6 +172,8 @@ namespace BalloonParty.Solver
             Absorbed = absorbed;
             FinalColor = finalColor;
             FinalStreak = finalStreak;
+            FinalPiercing = finalPiercing;
+            Mushrooms = mushrooms;
         }
     }
 
@@ -178,7 +187,11 @@ namespace BalloonParty.Solver
     /// path unchanged (see <see cref="TryFindNearestBalloonEntry" />) — the fast path task 4b/4c were
     /// required to preserve; with it non-null, balloon centres become time-dependent
     /// (<see cref="ShotBoardDynamics.EvaluateCenter" />) and balance pulses/nudge impulses run for
-    /// real.</summary>
+    /// real. With <c>bumpers</c> (the meadow's mushrooms, <see cref="ShotBumperLayer" />) a fourth kind of event
+    /// joins the three: the ball's entry into a mushroom's circle, found by the live flight's own swept test
+    /// (<see cref="BumperSweep" />) and resolved by its own rules in its own order: a bounce for a ball that is
+    /// not piercing (see <see cref="BounceOffBumper" />), a cut cap and no turn for one that is (see
+    /// <see cref="TryCutCap" />). With none, no line of that runs.</summary>
     internal static class ShotSimulator
     {
         internal const int DefaultMaxEvents = 500;
@@ -237,7 +250,8 @@ namespace BalloonParty.Solver
         /// <paramref name="rippleRadius" /> is how far that ripple reaches between slot centres
         /// (<c>IRipeBubbleSettings.RippleRadius</c>, each target's <see cref="ShotBalloonSnapshot.SlotCenter" />);
         /// left at 0, a ripe cluster's burst reaches nothing, so every flight over a board with one must pass it
-        /// (<see cref="ShotBoardGather.SimulateAt" /> does, from its context).</summary>
+        /// (<see cref="ShotBoardGather.SimulateAt" /> does, from its context).
+        /// <paramref name="bumpers" /> is the board's mushrooms, or null for a board without them.</summary>
         internal static ShotSimulationResult Simulate(
             IReadOnlyList<ShotBalloonSnapshot> board,
             Vector4 wallLimitsClockwise,
@@ -260,11 +274,13 @@ namespace BalloonParty.Solver
             in ShotFlightSeed seed = default,
             ShotItemLayer items = null,
             bool streakGrantsShields = true,
-            float rippleRadius = 0f)
+            float rippleRadius = 0f,
+            ShotBumperLayer bumpers = null)
         {
             var walls = new WallLimits(wallLimitsClockwise);
             dynamics?.ResetForNewFlight();
             items?.ResetForNewFlight();
+            bumpers?.ResetForNewFlight();
             var activeCount = CopyIntoWorkingSet(board, workingSet, dynamics, radiusBias);
 
             var direction = aimDirection.sqrMagnitude > AxisEpsilon ? aimDirection.normalized : Vector2.right;
@@ -294,6 +310,8 @@ namespace BalloonParty.Solver
                     break;
                 }
 
+                // Before the next event is looked for: the bombs the last one set off, wherever it resolved them.
+                BlowCapsOff(items, bumpers, ref state);
                 var speed = Mathf.Max(CurrentSpeed(projectileSpeed, in state, cruiseConfig), MinSpeed);
 
                 var hasWallEvent = TryFindWallCrossing(
@@ -302,6 +320,14 @@ namespace BalloonParty.Solver
                 var hasBalloonEvent = TryFindNearestBalloonEntryAny(
                     workingSet, activeCount, state.Position, state.Direction, speed, state.Elapsed,
                     projectileContactRadius, dynamics, out var balloonDistance, out var balloonIndex);
+
+                if (bumpers != null
+                    && TryResolveBumperEvent(
+                        bumpers, walls, dynamics, hasWallEvent ? wallDistance : float.MaxValue,
+                        hasBalloonEvent ? balloonDistance : float.MaxValue, speed, pathOut, timestampsOut, ref state))
+                {
+                    continue;
+                }
 
                 if (!hasWallEvent && !hasBalloonEvent)
                 {
@@ -341,17 +367,248 @@ namespace BalloonParty.Solver
 
                 state.Died = HandleWallBounce(
                     wallNormal, walls, state.Position, projectileContactRadius, workingSet, activeCount,
-                    cruiseConfig, dynamics, ref state);
+                    cruiseConfig, dynamics, bumpers, ref state);
                 if (state.Died)
                 {
                     break;
                 }
             }
 
+            // A flight whose last event set a bomb off (it cleared the board, or the ball was taken) still tells
+            // of the caps that bomb blew.
+            BlowCapsOff(items, bumpers, ref state);
+
             return new ShotSimulationResult(
                 state.RawScore, state.Pops, state.ToughsCleared, activeCount == 0, state.Events, state.Died,
                 state.Capped, state.Absorbed, state.GoldenPops, state.HeartPops, state.DiscoPops,
-                state.NukePops, state.ProjectileColor, state.StreakCount);
+                state.NukePops, state.ProjectileColor, state.StreakCount, state.IsPiercing, in state.Mushrooms);
+        }
+
+        // The bombs the last event set off (the one the ball popped, and any its blast chained into)
+        // blow the caps off the mushrooms next to them, as the game's bomb handler tells MushroomBlast: gone from
+        // the layer for the rest of the flight, by the one rule both sides ask (BombBlast.Pierces, the bomb's own
+        // for what it breaks outright). The game's bomb goes off a frame after the pop that released it; here it
+        // is the same instant, as for the balloons its blast pops. So a ball that reaches a cap next to the bomb
+        // inside that frame bounces off it in the game and flies through here: an accepted limit. On a board
+        // without mushrooms the blasts are only forgotten.
+        private static void BlowCapsOff(ShotItemLayer items, ShotBumperLayer bumpers, ref ShotFlightState state)
+        {
+            if (items == null)
+            {
+                return;
+            }
+
+            while (items.TryTakeBombBlast(out var bomb, out var blast))
+            {
+                if (bumpers != null)
+                {
+                    state.Mushrooms.CapsBlown += bumpers.BlowOff(bomb.Origin, bomb.Slot, bomb.IsRainbowHost, in blast);
+                }
+            }
+        }
+
+        // The mushroom event, when it is the next one: a mushroom is met before a wall, as the live step sweeps
+        // its stretch against them before it settles its walls, and before a balloon no nearer than it. True
+        // when the loop's turn is spent, on the bounce or on a balance pulse that fell due before it.
+        private static bool TryResolveBumperEvent(
+            ShotBumperLayer bumpers, in WallLimits walls, ShotBoardDynamics dynamics, float wallDistance,
+            float balloonDistance, float speed, List<Vector2> pathOut, List<float> timestampsOut,
+            ref ShotFlightState state)
+        {
+            if (state.IsPiercing)
+            {
+                return TryCutCap(
+                    bumpers, walls, dynamics, wallDistance, balloonDistance, speed, pathOut, timestampsOut, ref state);
+            }
+
+            if (!TryFindBumperEntry(bumpers, walls, in state, wallDistance, out var index, out var distance)
+                || balloonDistance < distance)
+            {
+                return false;
+            }
+
+            // A ball found inside a circle bounces where its line came in, behind it: no time is flown getting
+            // there, so the timeline never runs backwards.
+            var flown = Mathf.Max(0f, distance);
+            if (TryHandleDuePulse(dynamics, flown, speed, pathOut, timestampsOut, ref state))
+            {
+                return true;
+            }
+
+            state.Events++;
+            state.Elapsed += flown / speed;
+            BounceOffBumper(bumpers, index, distance, pathOut, timestampsOut, ref state);
+            return true;
+        }
+
+        // A lance's event at a cap (ProjectileMotionResolver.CutCaps): the first whole cap its path enters before
+        // its next wall is cut, there and then gone from the layer for the rest of the flight, and the ball flies
+        // on unturned, so no point joins the path. The chain is not asked, spent or not, and the cap that armed
+        // the ball is left out while it still flies the direction it left along. The cut banks the flight one
+        // plain charge, as the game's does, re-armed with the Snipe's speed where a pierce is spent
+        // (SpendPierceAtDischarge). True when the loop's turn is
+        // spent, on the cut or on a balance pulse that fell due before it. Every true answer for a cut takes a
+        // cap out of the layer, so the loop cannot be handed the same cap twice: a cut the layer refuses answers
+        // false, and the flight goes on to its wall.
+        private static bool TryCutCap(
+            ShotBumperLayer bumpers, in WallLimits walls, ShotBoardDynamics dynamics, float wallDistance,
+            float balloonDistance, float speed, List<Vector2> pathOut, List<float> timestampsOut,
+            ref ShotFlightState state)
+        {
+            if (!BumperSweep.TryFindFirst(
+                    bumpers.Circles, state.Position, state.Direction, wallDistance,
+                    state.LeftBumper.IdWhileFlying(state.Direction), out var index, out var distance)
+                || !walls.Contains(state.Position + (state.Direction * distance))
+                || balloonDistance < distance)
+            {
+                return false;
+            }
+
+            var flown = Mathf.Max(0f, distance);
+            if (TryHandleDuePulse(dynamics, flown, speed, pathOut, timestampsOut, ref state))
+            {
+                return true;
+            }
+
+            if (!bumpers.Cut(index))
+            {
+                return false;
+            }
+
+            state.Elapsed += flown / speed;
+            state.Position += state.Direction * flown;
+            state.Mushrooms.CapsCut++;
+            BankCutCharge(bumpers.LanceSpeedBuffMultiplier, ref state);
+            return true;
+        }
+
+        /// <summary>
+        ///     What a cut banks (the game's <c>ProjectileMotionResolver.CutCaps</c>): one plain charge on the
+        ///     flight, and the speed it re-arms the lance with where a pierce is spent
+        ///     (<see cref="SpendPierceAtDischarge" />). That speed is the Snipe's speed buff
+        ///     (<see cref="ShotBumperLayer.LanceSpeedBuffMultiplier" />, read at the gather from the item
+        ///     configuration), the one number the game's <c>SnipeItemHandler</c> arms every lance with, a
+        ///     banked charge's included. None, 0 or less, re-arms at no more than base speed.
+        /// </summary>
+        internal static void BankCutCharge(float lanceSpeedBuffMultiplier, ref ShotFlightState state)
+        {
+            state.Mushrooms.ChargesBanked++;
+            state.BankedPierceCharges++;
+            state.BankedPierceMultiplier = lanceSpeedBuffMultiplier > 0f ? lanceSpeedBuffMultiplier : 1f;
+        }
+
+        // The first mushroom the ball bounces off before its next wall, by the live flight's own swept test and
+        // under its own conditions (ProjectileMotionResolver.BounceOffBumpers): none once the stretch has had
+        // its bounces, not the mushroom being left while the ball still flies the direction it left along, and
+        // none whose contact lies beyond the walls. The distance is zero or less for a ball found inside a
+        // circle (set down there by a deflect off a balloon beside it): its entry is behind it, and wins.
+        private static bool TryFindBumperEntry(
+            ShotBumperLayer bumpers, in WallLimits walls, in ShotFlightState state, float wallDistance,
+            out int index, out float distance)
+        {
+            index = -1;
+            distance = 0f;
+            if (MushroomChainRule.IsSpent(state.MushroomChain, bumpers.Rules))
+            {
+                return false;
+            }
+
+            return BumperSweep.TryFindFirst(
+                    bumpers.Circles, state.Position, state.Direction, wallDistance,
+                    state.LeftBumper.IdWhileFlying(state.Direction), out index, out distance)
+                && walls.Contains(state.Position + (state.Direction * distance));
+        }
+
+        /// <summary>
+        ///     One bounce off a mushroom, in the live flight's order
+        ///     (<c>ProjectileMotionResolver.BounceOffBumpers</c>, then what <c>ProjectileView</c> and
+        ///     <c>MushroomChainController</c> do with the bounce). Only a ball that is not piercing gets here.
+        ///     The bounce is counted (<see cref="MushroomChainRule.OnBounce" />), then the game's bounce
+        ///     rule is asked with the exact entry point, and the ball turns. No shield is spent and nothing is
+        ///     scored. The shot's cruise and its run of empty wall bounces end, as on a balloon contact,
+        ///     its taps kept; the Sweep rule's segment starts again at the bounce. Then the reward
+        ///     (<see cref="PayMushroomReward" />): the live ball's step ends on the mushroom that arms it and it
+        ///     is armed there, so the simulated one becomes the lance at this very point, and everything it meets
+        ///     from here on is met piercing: balloons plowed, caps cut.
+        /// </summary>
+        /// <remarks>
+        ///     Not mirrored, and not a path change: the live ball gives up what was left of the fixed step it
+        ///     was armed in (under a step's length of travel, once an arming), so it runs up to a step behind this
+        ///     timeline from there on. And the live step bounces off 8 mushrooms at most before it flies on
+        ///     untested, which no planned board can reach in one step.
+        /// </remarks>
+        private static void BounceOffBumper(
+            ShotBumperLayer bumpers, int index, float distance, List<Vector2> pathOut, List<float> timestampsOut,
+            ref ShotFlightState state)
+        {
+            var circles = bumpers.Circles;
+            var contact = new BumperContact(
+                state.Position + (state.Direction * distance), state.Direction, circles[index]);
+            var countBefore = state.MushroomChain.Count;
+            var reward = MushroomChainRule.OnBounce(ref state.MushroomChain, contact.Bumper.Wall, bumpers.Rules);
+
+            // Unreachable: a spent stretch is never searched (TryFindBumperEntry). Kept as the live flight keeps
+            // it: the ball is not turned and the rule is not asked.
+            if (reward == MushroomReward.PassThrough)
+            {
+                Log.Assert(false, "ShotSimulator", "A spent stretch was swept for mushrooms.");
+                return;
+            }
+
+            var outgoing = bumpers.Rule.Resolve(contact, circles, state.MushroomChain);
+            state.Position = contact.Point;
+            pathOut?.Add(state.Position);
+            timestampsOut?.Add(state.Elapsed);
+            state.Direction = outgoing;
+            state.LeftBumper.Leave(contact.Bumper.Id, outgoing);
+
+            // ProjectileMotionResolver.TurnAtBumper.
+            state.ConsecutiveWallBounces = 0;
+            state.IsCruising = false;
+
+            // ProjectileView.ResolveBumperBounces: the turn starts a new straight segment for the Sweep rule.
+            state.SegmentPopCount = 0;
+            state.SegmentSweepValid = true;
+            state.LastBouncePosition = contact.Point;
+
+            state.Mushrooms.Bounces++;
+            if (contact.Bumper.Id >= 0 && contact.Bumper.Id < 32)
+            {
+                state.Mushrooms.HitMask |= 1 << contact.Bumper.Id;
+            }
+
+            var target = bumpers.Rules.ChainTarget;
+            if (target > 0 && countBefore < target && state.MushroomChain.Count >= target)
+            {
+                state.Mushrooms.ChainsCompleted++;
+            }
+
+            PayMushroomReward(reward, bumpers.LanceSpeedBuffMultiplier, ref state);
+            bumpers.BounceLog?.Add(new ShotBumperBounce(
+                contact, outgoing, state.MushroomChain.Count, reward, state.IsPiercing));
+        }
+
+        /// <summary>
+        ///     What <c>MushroomChainController</c> does with the chain rule's answer, as the game's
+        ///     <c>SnipeItemHandler</c> does it. <see cref="MushroomReward.Arm" /> is <c>ISnipeArmer.ArmAt</c>: the
+        ///     ball is piercing, with the Snipe's speed buff unless one already rides it. Any other answer pays
+        ///     nothing.
+        /// </summary>
+        internal static void PayMushroomReward(
+            MushroomReward reward, float lanceSpeedBuffMultiplier, ref ShotFlightState state)
+        {
+            if (reward != MushroomReward.Arm)
+            {
+                return;
+            }
+
+            state.Mushrooms.LancesArmed++;
+            state.IsPiercing = true;
+            if (lanceSpeedBuffMultiplier > 0f && !state.HasSpeedBuff)
+            {
+                state.HasSpeedBuff = true;
+                state.SpeedBuffMultiplier = lanceSpeedBuffMultiplier;
+            }
         }
 
         private static bool TryFindNearestBalloonEntryAny(
@@ -397,7 +654,7 @@ namespace BalloonParty.Solver
         private static bool HandleWallBounce(
             Vector2 wallNormal, in WallLimits walls, Vector2 position, float projectileContactRadius,
             ShotBalloonState[] workingSet, int activeCount, in ShotCruiseConfig cruiseConfig,
-            ShotBoardDynamics dynamics, ref ShotFlightState state)
+            ShotBoardDynamics dynamics, ShotBumperLayer bumpers, ref ShotFlightState state)
         {
             state.Shields--;
             // Mirrors WallBounceEndCondition (the Shield-item grant): a wall bounce that spends a
@@ -410,6 +667,7 @@ namespace BalloonParty.Solver
                 return true;
             }
 
+            EndMushroomChainAtWall(bumpers, ref state);
             state.Direction = Vector2.Reflect(state.Direction, wallNormal.normalized);
             state.ConsecutiveWallBounces++;
 
@@ -431,7 +689,7 @@ namespace BalloonParty.Solver
                 && state.ConsecutiveWallBounces >= cruiseConfig.WallBounceThreshold
                 && IsPathClearAhead(
                     walls, position, state.Direction, cruiseConfig.WallBounceThreshold, projectileContactRadius,
-                    workingSet, activeCount, state.Elapsed, dynamics))
+                    workingSet, activeCount, state.Elapsed, dynamics, bumpers, in state))
             {
                 state.IsCruising = true;
                 enteredCruiseHere = true;
@@ -473,6 +731,16 @@ namespace BalloonParty.Solver
             state.LastBouncePosition = position;
 
             return false;
+        }
+
+        // A wall the shot survives is the one thing that ends a chain of mushroom bounces, here where the wall
+        // bounce is counted (ProjectileMotionResolver.ResolveWalls). Nothing to end on a board without them.
+        private static void EndMushroomChainAtWall(ShotBumperLayer bumpers, ref ShotFlightState state)
+        {
+            if (bumpers != null)
+            {
+                MushroomChainRule.OnWall(ref state.MushroomChain);
+            }
         }
 
         // The corridor check, and the sweep credit that comes with passing it. ConsecutiveSweeps counts every
@@ -650,9 +918,11 @@ namespace BalloonParty.Solver
         // check is one instantaneous physics query, not a projection of future balloon motion.
         // Deliberately NOT routed through PathTrace: it keeps its own determinism-tuned wall crossing
         // (TryFindWallCrossing, shared with the main flight loop) and its analytic occupancy test.
+        // A mushroom blocks a leg as a balloon does, as it does the live lookahead: the shot would bounce off it.
         private static bool IsPathClearAhead(
             in WallLimits walls, Vector2 position, Vector2 direction, int bounces, float projectileContactRadius,
-            ShotBalloonState[] workingSet, int activeCount, float tHit, ShotBoardDynamics dynamics)
+            ShotBalloonState[] workingSet, int activeCount, float tHit, ShotBoardDynamics dynamics,
+            ShotBumperLayer bumpers, in ShotFlightState state)
         {
             for (var i = 0; i < bounces; i++)
             {
@@ -668,11 +938,39 @@ namespace BalloonParty.Solver
                     return false;
                 }
 
+                if (bumpers != null && LegMeetsABumper(bumpers, in state, position, direction, wallDistance, i))
+                {
+                    return false;
+                }
+
                 position += direction * wallDistance;
                 direction = Vector2.Reflect(direction, wallNormal.normalized);
             }
 
             return true;
+        }
+
+        // BumperLookahead.TryFindAhead for the simulated flight: whether a mushroom stands in the way of a leg
+        // looked along. None stands in a lance's way. For a ball that is not one, two things about its own flight
+        // take a mushroom out of its way, and both hold only for the leg the ball is on (leg 0): a spent stretch,
+        // and the mushroom it is leaving. Past a wall every mushroom is in the way: the wall clears the chain.
+        private static bool LegMeetsABumper(
+            ShotBumperLayer bumpers, in ShotFlightState state, Vector2 from, Vector2 direction, float length, int leg)
+        {
+            if (state.IsPiercing)
+            {
+                return false;
+            }
+
+            var isTheBallsOwnLeg = leg == 0;
+            if (isTheBallsOwnLeg && MushroomChainRule.IsSpent(state.MushroomChain, bumpers.Rules))
+            {
+                return false;
+            }
+
+            var heading = direction.normalized;
+            var leaving = isTheBallsOwnLeg ? state.LeftBumper.IdWhileFlying(heading) : MushroomChainState.NoBumper;
+            return BumperSweep.TryFindFirst(bumpers.Circles, from, heading, length, leaving, out _, out _);
         }
 
         private static bool SegmentHitsAnyBalloon(

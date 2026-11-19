@@ -294,6 +294,36 @@ namespace BalloonParty.Tests.Item
             _lanceArming.DidNotReceive().OnLanceRearmed(Arg.Any<IProjectileModel>(), Arg.Any<Vector3>());
         }
 
+        // ISnipeArmer.ArmAt: a lance earned in flight with no pickup behind it (the meadow's mushroom chain).
+        [Test]
+        public void ArmAt_ArmsAPlainLance_AndStartsItsLineWhereItWasEarned()
+        {
+            var projectile = LoadProjectile();
+            var earnedAt = new Vector3(1f, 2f, 0f);
+
+            _handler.ArmAt(projectile, earnedAt);
+
+            Assert.IsTrue(projectile.IsPiercing.Value);
+            Assert.AreEqual(0, projectile.Flight.BankedPierceCharges, "armed now, nothing banked");
+            _buffs.Received(1).Apply(projectile, Arg.Is<ProjectileBuff>(
+                b => b.Id == ProjectileBuffId.Speed && Mathf.Approximately(b.Value, SpeedMultiplier)));
+            _buffs.DidNotReceive().Apply(
+                Arg.Any<IProjectileModel>(), Arg.Is<ProjectileBuff>(b => b.Id == ProjectileBuffId.RainbowShield));
+            _lanceArming.Received(1).OnLanceArmedAt(projectile, earnedAt);
+            _lanceArming.DidNotReceive().OnLanceArmed(Arg.Any<IProjectileModel>());
+        }
+
+        [Test]
+        public void ArmAt_ThenAPickup_ThePickupIsBankedOnTheLanceTheChainMade()
+        {
+            var projectile = LoadProjectile();
+            _handler.ArmAt(projectile, Vector3.one);
+
+            Activate(projectile);
+
+            Assert.AreEqual(1, projectile.Flight.BankedPierceCharges, "a lance is a lance, however it was earned");
+        }
+
         private ProjectileModel LoadProjectile()
         {
             var projectile = new ProjectileModel();

@@ -327,6 +327,27 @@ namespace BalloonParty.Tests.Game
             Assert.AreNotEqual(levelOne, resolver.Current.ItemCadence);
         }
 
+        // Level names the level Current was resolved for, so whoever needs the two to agree (the mushrooms' layout
+        // seed beside their count) reads both from here.
+        [Test]
+        public void Level_IsTheLevelCurrentWasResolvedFor()
+        {
+            var parameters = MakeRangeWithItems(1, 0, new RangedInt(1, 1), Array.Empty<ItemTypeWeight>()).Parameters;
+            _pacing.ParametersForLevel(Arg.Any<int>(), Arg.Any<int>()).Returns(parameters);
+            var retryState = Substitute.For<IRetryState>();
+
+            var resolver = BuildResolver(retryState);
+            resolver.Start();
+            Assert.AreEqual(1, resolver.Level);
+
+            _levelUpHandler.Handle(new ScoreLevelUpMessage(7));
+            Assert.AreEqual(7, resolver.Level, "the level being entered, from the level-up message on");
+
+            retryState.RetryLevel.Returns(4);
+            resolver.ResetRun(1);
+            Assert.AreEqual(4, resolver.Level, "a retry resolves the level it restarts at");
+        }
+
         [Test]
         public void ExhaustiveResolve_Levels1To50_NeverThrows()
         {

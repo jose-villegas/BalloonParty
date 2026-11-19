@@ -59,6 +59,13 @@ namespace BalloonParty.Game.Telemetry
             new(MetricId.FusesRunOut, "fuses_run_out", "count", FoldRule.Sum, MetricScopeKind.Level, NoAxes),
             new(MetricId.CoatsApplied, "coats_applied", "count", FoldRule.Sum, MetricScopeKind.Level, NoAxes),
             new(MetricId.CoatsRemoved, "coats_removed", "count", FoldRule.Sum, MetricScopeKind.Level, NoAxes),
+            new(MetricId.MushroomBounces, "mushroom_bounces", "count", FoldRule.Sum, MetricScopeKind.Level, NoAxes),
+            new(MetricId.MushroomChainsCompleted, "mushroom_chains_completed", "count", FoldRule.Sum, MetricScopeKind.Level, NoAxes),
+            new(MetricId.MushroomCapsCut, "mushroom_caps_cut", "count", FoldRule.Sum, MetricScopeKind.Level, NoAxes),
+            new(MetricId.MushroomChainsBroken, "mushroom_chains_broken", "count", FoldRule.Sum, MetricScopeKind.Level, NoAxes),
+            new(MetricId.MushroomChainsOneShort, "mushroom_chains_one_short", "count", FoldRule.Sum, MetricScopeKind.Level, NoAxes),
+            new(MetricId.MushroomCapsBlown, "mushroom_caps_blown", "count", FoldRule.Sum, MetricScopeKind.Level, NoAxes),
+            new(MetricId.MushroomChargesBanked, "mushroom_charges_banked", "count", FoldRule.Sum, MetricScopeKind.Level, NoAxes),
         };
 
         private static readonly Dictionary<MetricId, Entry> ById;

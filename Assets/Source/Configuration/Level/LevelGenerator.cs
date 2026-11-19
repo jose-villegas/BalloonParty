@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using BalloonParty.Balloon.Formation;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.GridActors;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Ranges;
+using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Actor.Archetype;
 
 namespace BalloonParty.Configuration.Level
@@ -18,6 +20,11 @@ namespace BalloonParty.Configuration.Level
     ///     buys a pick of its other unlocked pieces. Threats and aids have separate budgets so that depth
     ///     reliably means more threats, not a random mix of threats and help. Picks are weighted by cost,
     ///     so the dearer threats aren't the ones a tight budget always leaves out.
+    ///     <para>
+    ///         A piece its scenario doesn't allow (<see cref="IContentPiece.AllowedOn" />) is left out before any
+    ///         budget is spent. A meadow level also gets its mushrooms (<see cref="MushroomWallsFor" />), which no
+    ///         budget pays for, and lets its unbreakables form only the snake.
+    ///     </para>
     /// </remarks>
     internal static class LevelGenerator
     {
@@ -41,7 +48,6 @@ namespace BalloonParty.Configuration.Level
 
             var balloons = new List<BalloonTypeWeight>();
             var items = new List<ItemTypeWeight>();
-            var gates = new List<GridActorTypeGate>();
 
             // Catalogue order, not pick order, so a level's lists read the same way the catalogue does.
             for (var i = 0; i < settings.Balloons.Count; i++)
@@ -72,26 +78,7 @@ namespace BalloonParty.Configuration.Level
                 IncludeUnlockedBushes(settings, level, included);
             }
 
-            for (var i = 0; i < settings.GridActors.Count; i++)
-            {
-                if (!included.Contains(Key(GridActorKind, i))
-                    || (extraColor && settings.GridActors[i].Role == ContentRole.Threat))
-                {
-                    continue;
-                }
-
-                var gate = settings.GridActors[i].ToGate(level);
-                var share = gate.Type switch
-                {
-                    GridActorType.Puff => stretch.PuffCloudShare,
-                    GridActorType.Bush => stretch.BushShare,
-                    _ => 1f,
-                };
-                if (share > 0f)
-                {
-                    gates.Add(Scaled(gate, share));
-                }
-            }
+            var gates = GridActorGates(settings, level, stretch, included, extraColor);
 
             // The validator warns when no balloon is a staple; this keeps a misauthored catalogue playable.
             if (balloons.Count == 0)
@@ -109,11 +96,88 @@ namespace BalloonParty.Configuration.Level
                 itemCounts.ItemCountWeights,
                 balloons.ToArray(),
                 items.ToArray(),
-                gates.ToArray(),
+                gates,
                 (1 << Math.Min(settings.ColorsForLevel(level) + (extraColor ? 1 : 0), 31)) - 1,
                 extraColor ? settings.ExtraColor.SpawnIntervalScale : 1f,
                 extraColor,
-                extraColor ? settings.ExtraColor.ExtraItemChance : 0f);
+                extraColor ? settings.ExtraColor.ExtraItemChance : 0f,
+                stretch.Kind == ScenarioKind.Ground ? FormationShapes.Snake : FormationShapes.All);
+        }
+
+        /// <summary>
+        ///     How many walls of mushroom caps a level has: none off the meadow; on it, the fewest of
+        ///     <paramref name="limits" /> on the stretch's first level, growing evenly to the most on its last. A
+        ///     stretch of one level has the fewest. A wall is one to three caps; how many caps the level gets is
+        ///     the layout's, dealt when the level is (<see cref="MushroomPlacementLimits.MaxCapsFor" /> is the most).
+        /// </summary>
+        internal static int MushroomWallsFor(ScenarioStretch stretch, MushroomPlacementLimits limits)
+        {
+            if (stretch.Kind != ScenarioKind.Ground)
+            {
+                return 0;
+            }
+
+            var fewest = Math.Max(0, limits.MinCount);
+            var steps = stretch.Length - 1;
+            if (steps <= 0 || limits.MaxCount <= fewest)
+            {
+                return fewest;
+            }
+
+            // Whole numbers, a half rounding up: the count can't land a wall short on a float's rounding.
+            var position = Math.Min(Math.Max(stretch.Position, 0), steps);
+            return fewest + (2 * (limits.MaxCount - fewest) * position + steps) / (2 * steps);
+        }
+
+        // The level's grid actors in catalogue order, each at the share of its count the stretch leaves it, then the
+        // meadow's mushrooms. The mushrooms come from the stretch, not from a pick, so no budget pays for them, and
+        // the bushes get the slots the mushrooms leave.
+        private static GridActorTypeGate[] GridActorGates(LevelGenerationSettings settings, int level,
+            ScenarioStretch stretch, HashSet<int> included, bool extraColor)
+        {
+            var gates = new List<GridActorTypeGate>();
+
+            // An extra-colour level has no grid actors at all, so none of the meadow's mushrooms either. The
+            // shared limit counts caps, and the most the level's walls may hold is what the bushes go without.
+            var placement = settings.Mushrooms.Placement;
+            var walls = extraColor ? 0 : MushroomWallsFor(stretch, placement);
+            var bushRoom = settings.Mushrooms.PermanentSlotLimit - placement.MaxCapsFor(walls);
+
+            for (var i = 0; i < settings.GridActors.Count; i++)
+            {
+                if (!included.Contains(Key(GridActorKind, i))
+                    || (extraColor && settings.GridActors[i].Role == ContentRole.Threat))
+                {
+                    continue;
+                }
+
+                var gate = settings.GridActors[i].ToGate(level);
+                var share = gate.Type switch
+                {
+                    GridActorType.Puff => stretch.PuffCloudShare,
+                    GridActorType.Bush => stretch.BushShare,
+                    _ => 1f,
+                };
+                if (share <= 0f)
+                {
+                    continue;
+                }
+
+                gate = Scaled(gate, share);
+                if (gate.Type != GridActorType.Bush || TryFitBushes(ref gate, bushRoom))
+                {
+                    gates.Add(gate);
+                }
+            }
+
+            // Fixed, so resolving it rolls nothing and the level's other counts come out as they would without it.
+            // The mushroom gate counts walls: the spawner asks its strategy for that many and places their caps.
+            if (walls > 0)
+            {
+                gates.Add(new GridActorTypeGate(GridActorType.Mushroom, new RangedInt(walls, walls)));
+            }
+
+            return gates.ToArray();
         }
 
         // Every threat but the staple balloons, which are the level itself: an extra-colour level has no armour
@@ -181,10 +245,10 @@ namespace BalloonParty.Configuration.Level
         }
 
         // Puts each unlocked piece of the role straight in (a staple, or still featured) or among the optional
-        // ones. Featured pieces are paid for first, so they can leave nothing for the optional picks. A sky level
-        // leaves ground-only pieces out before any budget is spent, so a bush can't eat a sky level's budget, and a
-        // water level leaves out its clouds, bushes and shot-bouncing pieces the same way, so their budget buys other
-        // threats.
+        // ones. Featured pieces are paid for first, so they can leave nothing for the optional picks. A piece the
+        // level's scenario doesn't allow is left out before any budget is spent, so the budget buys other threats:
+        // a bush can't eat a sky level's budget, nor the clouds, bushes and shot-bouncing pieces a water level's, nor
+        // the toughs a meadow's.
         private static void Partition<T>(IReadOnlyList<T> pieces, int kind, PieceSlot slot, HashSet<int> included,
             List<(int Key, int Cost)> optional, ref float budget)
             where T : IContentPiece
@@ -197,12 +261,7 @@ namespace BalloonParty.Configuration.Level
                     continue;
                 }
 
-                if (piece.RequiresGround && slot.Scenario != ScenarioKind.Ground)
-                {
-                    continue;
-                }
-
-                if (piece.KeptOffWater && slot.Scenario == ScenarioKind.Water)
+                if (!piece.AllowedOn(slot.Scenario))
                 {
                     continue;
                 }
@@ -244,6 +303,24 @@ namespace BalloonParty.Configuration.Level
             var max = Math.Max(1, (int)Math.Round(gate.Count.Max * share, MidpointRounding.AwayFromZero));
             var min = Math.Min(max, (int)Math.Round(gate.Count.Min * share, MidpointRounding.AwayFromZero));
             return new GridActorTypeGate(gate.Type, new RangedInt(min, max, gate.Count.Mode), gate.MaxPerCluster);
+        }
+
+        // The bushes give way to the mushrooms, never the other way: room is what the mushrooms leave of the slots
+        // the two share (IMushroomSettings.PermanentSlotLimit). False when no bush fits.
+        private static bool TryFitBushes(ref GridActorTypeGate gate, int room)
+        {
+            if (room <= 0)
+            {
+                return false;
+            }
+
+            if (gate.Count.Min > room || gate.Count.Max > room)
+            {
+                var count = new RangedInt(Math.Min(gate.Count.Min, room), Math.Min(gate.Count.Max, room), gate.Count.Mode);
+                gate = new GridActorTypeGate(gate.Type, count, gate.MaxPerCluster);
+            }
+
+            return true;
         }
 
         private static int Key(int kind, int index)

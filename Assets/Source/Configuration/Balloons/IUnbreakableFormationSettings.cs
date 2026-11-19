@@ -47,7 +47,7 @@ namespace BalloonParty.Configuration.Balloons
         /// <summary>Cycles a horizontal or diagonal line holds, counting the cycle it formed on.</summary>
         int LineHoldCycles { get; }
 
-        /// <summary>Cycles an item cover holds, counting the cycle it formed on.</summary>
+        /// <summary>Cycles a cover (round an item carrier or a gift balloon) holds, counting the cycle it formed on.</summary>
         int ItemCoverHoldCycles { get; }
 
         /// <summary>
@@ -80,12 +80,25 @@ namespace BalloonParty.Configuration.Balloons
         /// <summary>A formation picks at random among this many of its least-travel spots.</summary>
         int SpotChoices { get; }
 
+        /// <summary>
+        ///     How strongly a cover prefers a gift balloon (golden, heart, disco ball, nuke) to a balloon carrying a
+        ///     bomb, a snipe or a lightning, in slots of travel for each member. A spot's cost is the slots its
+        ///     members travel to it, plus 3 for each balloon they move out of the way; a gift's spot counts as this
+        ///     many slots cheaper for each member of the cover. So the gift is covered unless covering the item
+        ///     carrier would save every member more than this many slots on average. 0: no preference, the cheaper
+        ///     spot wins.
+        /// </summary>
+        float GiftCoverPreference { get; }
+
         float HorizontalWeight { get; }
 
         /// <summary>Pick weight of each of the two diagonals.</summary>
         float DiagonalWeight { get; }
 
-        /// <summary>Pick weight of ringing an item; only in the pick while an item is on the board.</summary>
+        /// <summary>
+        ///     Pick weight of a cover. It finds a spot only while a balloon carrying a bomb, a snipe or a lightning,
+        ///     or a gift balloon, is on the board.
+        /// </summary>
         float ItemCoverWeight { get; }
 
         /// <summary>Pick weight of a snake.</summary>

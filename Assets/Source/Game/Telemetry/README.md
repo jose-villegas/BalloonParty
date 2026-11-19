@@ -269,6 +269,32 @@ hits that took a coat off (`ActorHitMessageExtensions.TookCoat`). Such a hit pas
 an absorb, but the foam caused it, not the balloon, so it is counted here and not in `absorbs`.
 A piercing or beam hit pops a coated balloon whole and counts as a pop.
 
+## Meadow mushrooms
+
+Seven level counters follow the meadow's mushrooms (`Plans/PLAN-MeadowMushrooms.md`). Like every
+level counter they count until the run ends. Two of them say the same thing in play:
+`mushroom_charges_banked` runs level with `mushroom_caps_cut`, since every cap a lance cuts in flight
+banks a charge. They differ only for a cut no flight made (a staged one), which banks nothing. There
+is no signal in the difference; the second counter is there for the day a limit on the bank is tried.
+
+| Wire name | Id | Counts |
+|---|---|---|
+| `mushroom_bounces` | 37 | Every `MushroomBouncedMessage`: each bounce off a mushroom, the ones the chain did not count (the same wall of caps twice running) included |
+| `mushroom_chains_completed` | 38 | Each bounce that brought a ball's chain to its target: counted from the bounces (`MushroomBouncedMessage`). A lance bounces off no mushroom, so each is a chain that armed a ball; one flight can complete several, armed again after a lance was spent at a wall |
+| `mushroom_caps_cut` | 39 | Each `MushroomCutMessage` whose cause is a lance: a cap a lance cut, whichever lance it was (one a chain armed, a Snipe pickup's, the card's, a cruise's pierce). A cap cut again after it grew back counts again. It took the id of `mushroom_charges_banked`, which went with the bank and was never shipped: the mushroom rows are on this branch alone, so the mushrooms' ids are still contiguous after the last id on main |
+| `mushroom_chains_broken` | 40 | A chain that ended with mushrooms counted but short of its target (1 or 2, at the shipped target of 3) |
+| `mushroom_chains_one_short` | 41 | Of those, the ones that ended a single mushroom short: the near miss the kick's cone is tuned against |
+| `mushroom_caps_blown` | 42 | Each `MushroomCutMessage` whose cause is a blast: a cap a bomb blew off (the mushrooms next to it) or a nuke (every one). Kept apart from the caps a lance cut, so that counter goes on telling how much the chain's reward is used. A blast ends no chain, so the two chain counters do not move for it. Appended after the mushrooms' other rows |
+| `mushroom_charges_banked` | 43 | Each `MushroomCutMessage` that banked its flight a lance charge (`Charges` above 0): every cap a lance cuts in flight banks one, whatever armed the lance, so in play it runs level with `mushroom_caps_cut`; it stays apart from it because a cut made outside a flight banks nothing, and so that a later limit on the bank would show. It says what was banked, not what was spent: a charge is used only at a wall where the pierce discharges. The name is the one the first bank had before it was dropped; it took a new id, appended, since that id (39) went to `mushroom_caps_cut`. 37 to 43 are contiguous after the last id on main |
+
+A chain ends at a wall the ball survives (`ShieldLostMessage`, the one place a shield is lost) or
+with the ball (`ProjectileDestroyedMessage`). A ball the game took off the board (the level-up cap, an
+emptied board: the message's `Forced`) ends no chain: its chain was cut short, not missed, and counting
+it would add the game's own clears to the misses the cone is tuned against. The service keeps the count each ball's chain last
+announced, per open flight, and reads it when either arrives. A flight sealed by the game over
+ends no chain: no wall ended it. The target is `IMushroomSettings.Rules.ChainTarget`. These count
+chains, not flights: one flight can break several, one at each wall.
+
 ## Pause handling
 
 Subscribes `PauseService.IsAnyPaused` directly (reference-counted and reset-safe) rather

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.Type;
+using BalloonParty.Configuration.GridActors;
 using BalloonParty.Shared.Diagnostics;
 using UnityEngine;
 
@@ -41,6 +42,7 @@ namespace BalloonParty.Configuration.Level
         public IReadOnlyList<LevelRangeEntry> DebugPresets => _ranges;
         public ISpawnClockSettings SpawnClock => _spawnClock;
         public IBubbleRiseSettings BubbleRise => _bubbleRise;
+        public IMushroomSettings Mushrooms => _generation.Mushrooms;
         internal LevelScoringCurve ScoringCurve => _scoringCurve;
         internal LevelGenerationSettings Generation => _generation;
 

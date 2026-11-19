@@ -5,6 +5,8 @@ using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Game.Flight;
 using BalloonParty.Game.Telemetry;
+using BalloonParty.Projectile.Model;
+using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pause;
 using BalloonParty.Slots.Capabilities;
@@ -1116,6 +1118,259 @@ namespace BalloonParty.Tests.Game
             var flights = _harness.AllOf(RecordKind.Flight);
             Assert.AreEqual(1, flights[flights.Count - 1].FlightIndex, "first flight of the new level");
             Assert.AreEqual(2, flights[flights.Count - 1].LevelIndex);
+        }
+
+        // The meadow's mushrooms: every bounce, the chains that paid, the caps the lance they paid cut, and the
+        // chains a wall ended short.
+        [Test]
+        public void Mushrooms_CountEveryBounce_TheChainsCompleted_AndTheCapsCut()
+        {
+            _harness.EnterGame();
+            var ball = GameplayMetricsHarness.Ball();
+            _harness.Fire(ball);
+
+            MushroomBounce(ball, 1);
+            MushroomBounce(ball, 2);
+            MushroomBounce(ball, 2);
+            MushroomBounce(ball, 3);
+            MushroomCut(new Vector2Int(2, 4));
+            MushroomCut(new Vector2Int(3, 6));
+            _harness.CompleteLevel(2);
+
+            var level = _harness.LastOf(RecordKind.Level);
+            Assert.AreEqual(4, level.Metrics[MetricId.MushroomBounces], "the one that did not count is a bounce too");
+            Assert.AreEqual(1, level.Metrics[MetricId.MushroomChainsCompleted]);
+            Assert.AreEqual(2, level.Metrics[MetricId.MushroomCapsCut]);
+            Assert.AreEqual(0, level.Metrics[MetricId.MushroomChainsBroken], "no wall ended a chain");
+        }
+
+        // A cap is counted whichever lance cut it: one no chain armed (a Snipe pickup's, the card's) completes no
+        // chain and bounces off nothing, and its cuts are still cuts. A cap cut again after it grew back counts
+        // again.
+        [Test]
+        public void Mushrooms_CapsCutByALanceNoChainArmed_AreCounted_WithNoBounceAndNoChain()
+        {
+            _harness.EnterGame();
+            _harness.Fire(GameplayMetricsHarness.Ball());
+
+            MushroomCut(new Vector2Int(2, 4));
+            MushroomCut(new Vector2Int(2, 4));
+            MushroomCut(new Vector2Int(1, 3));
+            _harness.CompleteLevel(2);
+
+            var level = _harness.LastOf(RecordKind.Level);
+            Assert.AreEqual(3, level.Metrics[MetricId.MushroomCapsCut]);
+            Assert.AreEqual(0, level.Metrics[MetricId.MushroomBounces]);
+            Assert.AreEqual(0, level.Metrics[MetricId.MushroomChainsCompleted]);
+            Assert.AreEqual(0, level.Metrics[MetricId.MushroomChainsBroken]);
+        }
+
+        // The level-up cap and an emptied board take the balls off through a forced destruction. A chain cut
+        // short that way is not a miss, and is not counted as one.
+        [Test]
+        public void Mushrooms_AChainCutShortByAForcedDestruction_IsNotABrokenChain()
+        {
+            _harness.EnterGame();
+            var cleared = GameplayMetricsHarness.Ball();
+            var lost = GameplayMetricsHarness.Ball();
+            _harness.Fire(cleared);
+            _harness.Fire(lost);
+            MushroomBounce(cleared, 1);
+            MushroomBounce(cleared, 2);
+            MushroomBounce(lost, 1);
+            MushroomBounce(lost, 2);
+
+            _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage(cleared, forced: true));
+            _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage(lost));
+            _harness.CompleteLevel(2);
+
+            var level = _harness.LastOf(RecordKind.Level);
+            Assert.AreEqual(1, level.Metrics[MetricId.MushroomChainsBroken], "the ball a wall killed, not the cleared one");
+            Assert.AreEqual(1, level.Metrics[MetricId.MushroomChainsOneShort]);
+        }
+
+        // A ball can complete chain after chain in one flight (a lance spent at a wall is an ordinary ball again
+        // and is armed again). Each is a chain completed once, however many bounces it runs to, and none is broken.
+        [Test]
+        public void Mushrooms_ChainAfterChainInOneFlight_AreEachCompletedOnce_AndNoneBroken()
+        {
+            _harness.EnterGame();
+            var ball = GameplayMetricsHarness.Ball();
+            _harness.Fire(ball);
+
+            for (var chain = 0; chain < 3; chain++)
+            {
+                MushroomBounce(ball, 1);
+                MushroomBounce(ball, 2);
+                MushroomBounce(ball, 3);
+                MushroomBounce(ball, 3);
+                MushroomBounce(ball, 4);
+                Wall(ball);
+            }
+
+            _harness.CompleteLevel(2);
+
+            var level = _harness.LastOf(RecordKind.Level);
+            Assert.AreEqual(3, level.Metrics[MetricId.MushroomChainsCompleted], "once a chain, however long it runs");
+            Assert.AreEqual(0, level.Metrics[MetricId.MushroomCapsCut], "a bounce is no cut");
+            Assert.AreEqual(0, level.Metrics[MetricId.MushroomChainsBroken]);
+        }
+
+        // The shipped chain target is 3: a wall with the count at 1 or 2 ends a chain short, and at 2 it was one
+        // mushroom short. A wall after a chain that reached its target, or with nothing counted, breaks nothing.
+        [Test]
+        public void Mushrooms_AWallWithTheChainShortOfItsTarget_CountsItBroken_AndOneShortAtTwo()
+        {
+            _harness.EnterGame();
+            var ball = GameplayMetricsHarness.Ball();
+            _harness.Fire(ball);
+
+            Wall(ball);
+            MushroomBounce(ball, 1);
+            Wall(ball);
+            MushroomBounce(ball, 1);
+            MushroomBounce(ball, 2);
+            Wall(ball);
+            Wall(ball);
+            MushroomBounce(ball, 1);
+            MushroomBounce(ball, 2);
+            MushroomBounce(ball, 3);
+            Wall(ball);
+            _harness.CompleteLevel(2);
+
+            var level = _harness.LastOf(RecordKind.Level);
+            Assert.AreEqual(2, level.Metrics[MetricId.MushroomChainsBroken], "at 1, and at 2");
+            Assert.AreEqual(1, level.Metrics[MetricId.MushroomChainsOneShort], "only the one at 2");
+            Assert.AreEqual(6, level.Metrics[MetricId.MushroomBounces]);
+        }
+
+        [Test]
+        public void Mushrooms_ABallThatDiesWithAChainShort_CountsItBroken_AndEachBallKeepsItsOwnChain()
+        {
+            _harness.EnterGame();
+            var dying = GameplayMetricsHarness.Ball();
+            var other = GameplayMetricsHarness.Ball();
+            _harness.Fire(dying);
+            _harness.Fire(other);
+            MushroomBounce(dying, 1);
+            MushroomBounce(dying, 2);
+            MushroomBounce(other, 1);
+
+            // The other ball's wall ends the other ball's chain, not this one's.
+            Wall(other);
+            _harness.Destroy(dying);
+            _harness.CompleteLevel(2);
+
+            var level = _harness.LastOf(RecordKind.Level);
+            Assert.AreEqual(2, level.Metrics[MetricId.MushroomChainsBroken]);
+            Assert.AreEqual(1, level.Metrics[MetricId.MushroomChainsOneShort], "the dying ball was at 2");
+        }
+
+        [Test]
+        public void Mushrooms_AFlightStillOpenAtTheGameOver_BreaksNoChain_AndANewFlightStartsAtNone()
+        {
+            _harness.EnterGame();
+            var ball = GameplayMetricsHarness.Ball();
+            _harness.Fire(ball);
+            MushroomBounce(ball, 2);
+
+            // The level-up puts the shot back in the thrower and it is fired again: its old count is gone.
+            _harness.Fire(ball);
+            Wall(ball);
+            MushroomBounce(ball, 2);
+            _harness.GameOver.Handle(new GameOverMessage(1, 100));
+
+            var level = _harness.LastOf(RecordKind.Level);
+            Assert.AreEqual(0, level.Metrics[MetricId.MushroomChainsBroken], "no wall and no death ended one");
+            Assert.AreEqual(2, level.Metrics[MetricId.MushroomBounces]);
+        }
+
+        // Like every level counter, these count until the run ends.
+        [Test]
+        public void MushroomMessages_AfterGameOver_CountNothing()
+        {
+            _harness.EnterGame();
+            var ball = GameplayMetricsHarness.Ball();
+            _harness.Fire(ball);
+            _harness.GameOver.Handle(new GameOverMessage(2, 100));
+            var written = _harness.Sink.Written.Count;
+
+            MushroomBounce(ball, 3);
+            MushroomCut(new Vector2Int(2, 4));
+            Wall(ball);
+
+            Assert.AreEqual(written, _harness.Sink.Written.Count);
+            var level = _harness.LastOf(RecordKind.Level);
+            Assert.AreEqual(0, level.Metrics[MetricId.MushroomBounces]);
+            Assert.AreEqual(0, level.Metrics[MetricId.MushroomChainsCompleted]);
+            Assert.AreEqual(0, level.Metrics[MetricId.MushroomCapsCut]);
+        }
+
+        // A cap a bomb or a nuke blew off is not a cap a lance cut: each has its own counter, so the lance's
+        // tells how much the chain's reward is used and the blast's how often a blast bares a mushroom.
+        [Test]
+        public void Mushrooms_CapsBlownOffByABlast_AreCountedApartFromTheCapsALanceCut()
+        {
+            _harness.EnterGame();
+            _harness.Fire(GameplayMetricsHarness.Ball());
+
+            MushroomCut(new Vector2Int(2, 4));
+            MushroomBlown(new Vector2Int(3, 6));
+            MushroomBlown(new Vector2Int(1, 3));
+            MushroomBlown(new Vector2Int(4, 2));
+            _harness.CompleteLevel(2);
+
+            var level = _harness.LastOf(RecordKind.Level);
+            Assert.AreEqual(1, level.Metrics[MetricId.MushroomCapsCut], "the lance's alone");
+            Assert.AreEqual(3, level.Metrics[MetricId.MushroomCapsBlown]);
+            Assert.AreEqual(0, level.Metrics[MetricId.MushroomBounces]);
+            Assert.AreEqual(0, level.Metrics[MetricId.MushroomChainsBroken], "a blast breaks no chain");
+            Assert.AreEqual(0, level.Metrics[MetricId.MushroomChainsCompleted]);
+        }
+
+        // Decision K: a cut that banked its flight a charge is counted for the charge too. A cut no flight made
+        // (none banked) and a blast are not.
+        [Test]
+        public void Mushrooms_EveryCutThatBankedACharge_IsCountedAsACharge()
+        {
+            _harness.EnterGame();
+            _harness.Fire(GameplayMetricsHarness.Ball());
+
+            MushroomCut(new Vector2Int(2, 4), charges: 1);
+            MushroomCut(new Vector2Int(3, 4), charges: 2);
+            MushroomCut(new Vector2Int(1, 6), charges: 3);
+            MushroomCut(new Vector2Int(4, 2));
+            MushroomBlown(new Vector2Int(3, 6));
+            _harness.CompleteLevel(2);
+
+            var level = _harness.LastOf(RecordKind.Level);
+            Assert.AreEqual(3, level.Metrics[MetricId.MushroomChargesBanked]);
+            Assert.AreEqual(4, level.Metrics[MetricId.MushroomCapsCut], "a cut is a cut, banked or not");
+            Assert.AreEqual(1, level.Metrics[MetricId.MushroomCapsBlown]);
+        }
+
+        private void MushroomCut(Vector2Int slot, int charges = 0)
+        {
+            _harness.MushroomCut.Handle(
+                new MushroomCutMessage(slot, Vector2.zero, Vector2.up, MushroomCutCause.Lance, charges));
+        }
+
+        private void MushroomBlown(Vector2Int slot)
+        {
+            _harness.MushroomCut.Handle(
+                new MushroomCutMessage(slot, Vector2.zero, Vector2.up, MushroomCutCause.Blast));
+        }
+
+        private void MushroomBounce(IProjectileModel ball, int count)
+        {
+            _harness.MushroomBounced.Handle(new MushroomBouncedMessage(
+                ball, new Vector2Int(2, 4), 0, Vector3.zero, Vector2.up, 9.87f, count, MushroomReward.None));
+        }
+
+        // A wall the ball survives: a shield lost, which is what the service hears of it.
+        private void Wall(IProjectileModel ball)
+        {
+            _harness.ShieldLost.Handle(new ShieldLostMessage(ball, Vector3.zero));
         }
 
         // A shot with no ball behind it: dirties the level without opening a flight.

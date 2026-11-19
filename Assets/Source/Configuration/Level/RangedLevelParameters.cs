@@ -1,4 +1,5 @@
 using System;
+using BalloonParty.Balloon.Formation;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Slots.Actor.Archetype;
 using UnityEngine;
@@ -59,6 +60,10 @@ namespace BalloonParty.Configuration.Level
                  "reinforcements either.")]
         [SerializeField] private bool _isExtraColorLevel;
 
+        // Not authored: the generator sets it for a meadow level, and a debug preset, which plays on the sky, keeps
+        // every shape.
+        private readonly FormationShapes _allowedFormationShapes = FormationShapes.All;
+
         public int BoardLines => _boardLines;
         public RangedInt ItemCadence => _itemCadence;
 
@@ -72,6 +77,7 @@ namespace BalloonParty.Configuration.Level
         public float SpawnIntervalScale => _spawnIntervalScale;
         public float ExtraItemChance => _extraItemChance;
         public bool IsExtraColorLevel => _isExtraColorLevel;
+        internal FormationShapes AllowedFormationShapes => _allowedFormationShapes;
 
         // IPaletteColorMasked: a range maps its difficulty mix to the level's allowed palette colours.
         int IPaletteColorMasked.ColorMask => _allowedColorsMask;
@@ -83,8 +89,10 @@ namespace BalloonParty.Configuration.Level
         internal RangedLevelParameters(int boardLines, RangedInt itemCadence, AnimationCurve initialItemCountWeights,
             AnimationCurve itemCountWeights, BalloonTypeWeight[] balloonWeights, ItemTypeWeight[] itemWeights,
             GridActorTypeGate[] gridActorGates, int allowedColorsMask, float spawnIntervalScale = 1f,
-            bool isExtraColorLevel = false, float extraItemChance = 0f)
+            bool isExtraColorLevel = false, float extraItemChance = 0f,
+            FormationShapes allowedFormationShapes = FormationShapes.All)
         {
+            _allowedFormationShapes = allowedFormationShapes;
             _isExtraColorLevel = isExtraColorLevel;
             _spawnIntervalScale = spawnIntervalScale;
             _extraItemChance = extraItemChance;
@@ -111,7 +119,8 @@ namespace BalloonParty.Configuration.Level
                 _allowedColorsMask,
                 _spawnIntervalScale,
                 _isExtraColorLevel,
-                _extraItemChance);
+                _extraItemChance,
+                _allowedFormationShapes);
         }
 
         private ResolvedGridActorGate[] ResolveGridActorGates(float positionInRange, System.Random rng)

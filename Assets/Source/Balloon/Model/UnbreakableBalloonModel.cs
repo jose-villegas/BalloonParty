@@ -10,7 +10,7 @@ using UnityEngine;
 namespace BalloonParty.Balloon.Model
 {
     internal class UnbreakableBalloonModel : BalloonModelBase, IHasDeflectStamp, IHasScore, IHasScoreColor,
-        IPreBalanceRelocatable, IResistsPaint, IDeflectsShots, IBalanceAnchor, IWriteableFormationMember
+        IPreBalanceRelocatable, IResistsPaint, IDeflectsShots, IWriteableFormationMember
     {
         private readonly ColorSource _colorSource;
         private readonly FormationMembership _membership = new();
@@ -22,7 +22,7 @@ namespace BalloonParty.Balloon.Model
         public override PressureResponse PushResponse => PressureResponse.RelocateFarthest;
 
         // A formation member hovers where its formation put it until the formation changes or breaks.
-        public bool IsAnchored => _membership.InFormation.Value;
+        public override bool IsAnchored => base.IsAnchored || _membership.InFormation.Value;
         public IReadOnlyReactiveProperty<bool> InFormation => _membership.InFormation;
         public Vector2 FormationHeading => _membership.Heading;
         public int FormationId => _membership.FormationId;

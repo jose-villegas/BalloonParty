@@ -424,6 +424,19 @@ if (setupStage < 2 && InPlay(game))
     try
     {
         var cheatState = asm.GetType("BalloonParty.Cheats.CheatState");
+        if (setupStage == 0 && !purple && forcedSeed != 0)
+        {
+            // A seed with no purple: the run starts over from where a run of this Play starts, on that seed, so
+            // every session given it meets the same levels.
+            cheatState.GetField("ForcedRunSeed", staticFlags).SetValue(null, forcedSeed);
+            var seededRun = game.Resolve(asm.GetType("BalloonParty.Game.Run.RunController"));
+            seededRun.GetType().GetMethod("RestartRun", flags).Invoke(seededRun, new object[] { true });
+            UnityEditor.SessionState.SetInt(setupKey, 1);
+            UnityEditor.SessionState.SetInt(setupKey + ".Level", 0);
+            UnityEditor.SessionState.SetFloat(setupKey + ".Since", UnityEngine.Time.realtimeSinceStartup);
+            return time + " SETUP seed " + forcedSeed;
+        }
+
         if (setupStage == 0 && purple)
         {
             var seedType = asm.GetType("BalloonParty.Game.Run.IRunSeed");

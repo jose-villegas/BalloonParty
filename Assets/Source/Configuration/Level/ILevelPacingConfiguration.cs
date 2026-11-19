@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BalloonParty.Balloon.Type;
+using BalloonParty.Configuration.GridActors;
 
 namespace BalloonParty.Configuration.Level
 {
@@ -17,6 +18,13 @@ namespace BalloonParty.Configuration.Level
 
         /// <summary>The bubbles that come in with the lines on water levels; read by the balloon spawner.</summary>
         IBubbleRiseSettings BubbleRise { get; }
+
+        /// <summary>
+        ///     The meadow's mushrooms (@ref plan_meadow_mushrooms): read by the level generator for a level's count
+        ///     and the slots they share with the bushes, and registered in the game scope for the bounce, the chain
+        ///     and the view.
+        /// </summary>
+        IMushroomSettings Mushrooms { get; }
 
         /// <summary>
         ///     The mix for <paramref name="level" />: generated for a positive level, the matching debug preset

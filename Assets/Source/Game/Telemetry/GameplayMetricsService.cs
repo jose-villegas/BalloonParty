@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Type;
+using BalloonParty.Configuration.GridActors;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Danger;
 using BalloonParty.Game.Flight;
 using BalloonParty.Game.Run;
 using BalloonParty.Projectile;
 using BalloonParty.Projectile.Model;
+using BalloonParty.Shared;
 using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
@@ -60,6 +62,8 @@ namespace BalloonParty.Game.Telemetry
         private readonly ISubscriber<GameOverMessage> _gameOverSubscriber;
         private readonly ISubscriber<BubbleRipenedMessage> _ripenedSubscriber;
         private readonly ISubscriber<RipeBubbleBurstMessage> _ripeBurstSubscriber;
+        private readonly ISubscriber<MushroomBouncedMessage> _mushroomBouncedSubscriber;
+        private readonly ISubscriber<MushroomCutMessage> _mushroomCutSubscriber;
 
         private readonly ITelemetrySink _sink;
         private readonly SessionTelemetryContext _sessionContext;
@@ -70,6 +74,7 @@ namespace BalloonParty.Game.Telemetry
         private readonly IDangerLevel _dangerLevel;
         private readonly INavigation _navigation;
         private readonly PauseService _pauseService;
+        private readonly IMushroomSettings _mushrooms;
 
         // All ~21 subscriptions live here and are disposed as a unit — twenty-odd individually named
         // IDisposable fields would fight the field-ordering rule and guarantee that one is eventually
@@ -160,6 +165,8 @@ namespace BalloonParty.Game.Telemetry
             ISubscriber<GameOverMessage> gameOverSubscriber,
             ISubscriber<BubbleRipenedMessage> ripenedSubscriber,
             ISubscriber<RipeBubbleBurstMessage> ripeBurstSubscriber,
+            ISubscriber<MushroomBouncedMessage> mushroomBouncedSubscriber,
+            ISubscriber<MushroomCutMessage> mushroomCutSubscriber,
             ITelemetrySink sink,
             SessionTelemetryContext sessionContext,
             IProjectileRegistry projectiles,
@@ -170,6 +177,7 @@ namespace BalloonParty.Game.Telemetry
             INavigation navigation,
             PauseService pauseService,
             IGamePalette palette,
+            IMushroomSettings mushrooms,
             Func<float> clock)
         {
             _projectileFiredSubscriber = projectileFiredSubscriber;
@@ -194,6 +202,8 @@ namespace BalloonParty.Game.Telemetry
             _gameOverSubscriber = gameOverSubscriber;
             _ripenedSubscriber = ripenedSubscriber;
             _ripeBurstSubscriber = ripeBurstSubscriber;
+            _mushroomBouncedSubscriber = mushroomBouncedSubscriber;
+            _mushroomCutSubscriber = mushroomCutSubscriber;
             _sink = sink;
             _sessionContext = sessionContext;
             _projectiles = projectiles;
@@ -203,6 +213,7 @@ namespace BalloonParty.Game.Telemetry
             _dangerLevel = dangerLevel;
             _navigation = navigation;
             _pauseService = pauseService;
+            _mushrooms = mushrooms;
 
             // Progress colours only (R12) — ColorNames also carries presentation-only tints that never
             // appear on a balloon, so indexing by it would leave permanent holes in every breakdown.
@@ -259,6 +270,8 @@ namespace BalloonParty.Game.Telemetry
             _gameOverSubscriber.Subscribe(OnGameOver).AddTo(_subscriptions);
             _ripenedSubscriber.Subscribe(OnClusterRipened).AddTo(_subscriptions);
             _ripeBurstSubscriber.Subscribe(OnRipeBurst).AddTo(_subscriptions);
+            _mushroomBouncedSubscriber.Subscribe(OnMushroomBounced).AddTo(_subscriptions);
+            _mushroomCutSubscriber.Subscribe(OnMushroomCut).AddTo(_subscriptions);
 
             _navigation.Current.Subscribe(OnNavigationChanged).AddTo(_subscriptions);
 
@@ -419,6 +432,18 @@ namespace BalloonParty.Game.Telemetry
             var flight = Find(message.Projectile);
             if (flight != null)
             {
+                // A ball's end ends the chain it was on, as a wall does. A ball the game took off the board
+                // (the level-up cap, an emptied board) broke nothing: its chain was cut short, and counting it
+                // would add the game's own clears to the misses the kick's cone is tuned against.
+                if (message.Forced)
+                {
+                    flight.MushroomCount = 0;
+                }
+                else
+                {
+                    EndMushroomChain(flight);
+                }
+
                 SealFlight(flight);
             }
         }
@@ -652,6 +677,9 @@ namespace BalloonParty.Game.Telemetry
             _levelDirty = true;
 
             _levelMetrics.Increment(MetricId.ShieldsSpent);
+
+            // A shield is lost at a wall and nowhere else, and a wall is what ends a chain of mushrooms.
+            EndMushroomChain(Find(message.Projectile));
         }
 
         private void OnItemActivated(ItemActivatedMessage message)
@@ -705,6 +733,80 @@ namespace BalloonParty.Game.Telemetry
             {
                 _levelMetrics.Increment(MetricId.FusesRunOut);
                 _levelMetrics.Add(MetricId.CoatsApplied, message.Reached);
+            }
+        }
+
+        // Every bounce off a mushroom counts, the ones the chain did not count (the same mushroom twice
+        // running) included. The chain's count is kept per ball, for whatever ends it, and a chain is completed
+        // by the bounce that brings that count to the target, whatever it paid: a lance that completes one once
+        // its flight's charges are banked is paid nothing, and has still flown the chain.
+        private void OnMushroomBounced(MushroomBouncedMessage message)
+        {
+            if (_state == LevelState.Ended)
+            {
+                return;
+            }
+
+            _levelDirty = true;
+
+            _levelMetrics.Increment(MetricId.MushroomBounces);
+            var flight = Find(message.Projectile);
+            if (flight == null)
+            {
+                return;
+            }
+
+            var target = _mushrooms.Rules.ChainTarget;
+            if (target > 0 && flight.MushroomCount < target && message.Count >= target)
+            {
+                _levelMetrics.Increment(MetricId.MushroomChainsCompleted);
+            }
+
+            flight.MushroomCount = message.Count;
+        }
+
+        // A cap that went: cut by a lance (whichever lance it was: one a chain armed, a Snipe pickup's or the
+        // card's) or blown off by a bomb or a nuke. The two are counted apart. A cut that banked its flight a
+        // charge is counted for that too: every cut a flight makes does, so the two run together in play, and
+        // a cut no flight made banks nothing.
+        private void OnMushroomCut(MushroomCutMessage message)
+        {
+            if (_state == LevelState.Ended)
+            {
+                return;
+            }
+
+            _levelDirty = true;
+            _levelMetrics.Increment(
+                message.Cause == MushroomCutCause.Blast ? MetricId.MushroomCapsBlown : MetricId.MushroomCapsCut);
+            if (message.Charges > 0)
+            {
+                _levelMetrics.Increment(MetricId.MushroomChargesBanked);
+            }
+        }
+
+        // A chain that ends with mushrooms counted but short of its target is a broken one, and one that ends
+        // a single mushroom short is the near miss the kick's cone is tuned against. One that reached the
+        // target was paid and is neither.
+        private void EndMushroomChain(BallFlight flight)
+        {
+            if (flight == null)
+            {
+                return;
+            }
+
+            var count = flight.MushroomCount;
+            flight.MushroomCount = 0;
+            var target = _mushrooms.Rules.ChainTarget;
+            if (count <= 0 || count >= target)
+            {
+                return;
+            }
+
+            _levelMetrics.Increment(MetricId.MushroomChainsBroken);
+            if (count == target - 1)
+            {
+                _levelMetrics.Increment(MetricId.MushroomChainsOneShort);
             }
         }
 
@@ -987,6 +1089,7 @@ namespace BalloonParty.Game.Telemetry
             ApplyClocks(flight.Metrics);
             flight.Metrics.Reset();
             flight.Streak = 0;
+            flight.MushroomCount = 0;
             _levelMetrics.Increment(MetricId.FlightsStarted);
         }
 
@@ -1188,12 +1291,14 @@ namespace BalloonParty.Game.Telemetry
         }
 
         // One ball's open flight. Streak is the last value that ball's streak announced, so a reset can
-        // be told apart from a break (see OnStreakChanged). Pooled: reused across shots, never freed.
+        // be told apart from a break (see OnStreakChanged). MushroomCount is the count its chain of mushroom
+        // bounces last announced, cleared by whatever ends the chain. Pooled: reused across shots, never freed.
         private sealed class BallFlight
         {
             public readonly MetricScope Metrics;
             public IProjectileModel Projectile;
             public int Streak;
+            public int MushroomCount;
 
             public BallFlight(MetricScope metrics)
             {

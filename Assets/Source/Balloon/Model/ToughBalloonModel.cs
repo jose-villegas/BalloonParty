@@ -11,7 +11,7 @@ using UnityEngine;
 namespace BalloonParty.Balloon.Model
 {
     internal class ToughBalloonModel : BalloonModelBase, IHasDeflectStamp, IHasDurability, IHasScore,
-        IHasScoreColor, IResistsPaint, IDeflectsShots, IBalanceAnchor, IArmouredFormationMember
+        IHasScoreColor, IResistsPaint, IDeflectsShots, IArmouredFormationMember
     {
         private readonly ColorSource _colorSource;
         private readonly FormationMembership _membership = new();
@@ -35,7 +35,7 @@ namespace BalloonParty.Balloon.Model
         public bool DeflectsOrdinaryHit => HitsRemaining.Value > 1;
 
         // A tough in a snake hovers where the snake walks it, until the snake breaks.
-        public bool IsAnchored => _membership.InFormation.Value;
+        public override bool IsAnchored => base.IsAnchored || _membership.InFormation.Value;
         public IReadOnlyReactiveProperty<bool> InFormation => _membership.InFormation;
         public Vector2 FormationHeading => _membership.Heading;
         public int FormationId => _membership.FormationId;

@@ -37,6 +37,12 @@ namespace BalloonParty.Thrower
 
         internal Transform SpawnPoint => _projectileSpawnPoint;
 
+        /// <summary>
+        ///     Where the cannon rests once <see cref="AnimateEntrance" /> has played: where it stands now, moved by
+        ///     the entrance's offset. Only true before the entrance starts, which is when the controller reads it.
+        /// </summary>
+        internal Vector3 PositionAfterEntrance => transform.position + _entranceOffset;
+
         public Quaternion Rotation => transform.rotation;
 
         public bool IsAiming => Input.GetMouseButton(0);

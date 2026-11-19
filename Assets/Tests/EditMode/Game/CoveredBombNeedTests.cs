@@ -1,4 +1,5 @@
 using BalloonParty.Balloon.Model;
+using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Game.Assist;
 using BalloonParty.Shared;
@@ -128,6 +129,19 @@ namespace BalloonParty.Tests.Game
         public void Need_ACoveredBalloonWithoutABomb_IsNone(ItemType item)
         {
             PlaceCarrier(item);
+            Cover(6);
+
+            _now = 60f;
+
+            Assert.AreEqual(0f, _need.Need, 1e-5f);
+        }
+
+        // A cover may stand round a gift balloon too. The need is a bomb's: a gift carries no item, and the lance
+        // this need asks for is not what the player is missing there.
+        [Test]
+        public void Need_ACoveredGiftBalloon_IsNone()
+        {
+            _grid.Place(new GoldenBalloonModel(new BalloonModelConfig(BalloonType.Golden, scoreValue: 0)), null, BombSlot);
             Cover(6);
 
             _now = 60f;

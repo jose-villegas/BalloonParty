@@ -47,7 +47,11 @@ stretches of a rolled length; the first surface after that meadow is water. The 
 out its own, and a retry keeps the same scenario. A meadow arrives under puff clouds and
 trades them for bushes as it goes: by the level's place in its stretch, the level generator thins and then
 drops the board's puff-cloud actors and grows the bushes, so the meadow's clear second half is its bushiest.
-Sky levels never have bushes: the catalogue flags them `RequiresGround`, and the generator leaves them out.
+Sky levels never have bushes: the catalogue marks them ground only, and the generator leaves out whatever a level's
+scenario doesn't allow (`IContentPiece.AllowedOn`). The same rule keeps Tough and Tougher balloons off the meadow.
+The meadow gets mushrooms in their place, 2 on a stretch's first level growing to 4 on its last, and its
+unbreakables form only the snake. Today a level only carries its mushroom count: nothing places a mushroom on the
+board yet (`Plans/PLAN-MeadowMushrooms.md`).
 Plan: `Plans/PLAN-TerrainBiomes.md`.
 
 - `IActiveScenario` / `ActiveScenario`: the model, the scenario the backdrop is on, as a
@@ -417,12 +421,17 @@ alongside Disturbance, SceneLight, and Background.
 
 **Profile-based stamping:** every stamp originates from a `PaintSource` (`ProjectileTrail`,
 `ToughPop`, `ToughBreathing`, `ToughDeflect`, `SnipeSkyLight`: the white trail of the Sharpshooter's falling
-light, see `Thrower/README.md`). The service resolves the source to a `PaintProfile`
+light, see `Thrower/README.md`; `MushroomSpores`: the pale dust a meadow mushroom lets go when its cap is hit,
+cut or blown off). The service resolves the source to a `PaintProfile`
 (via `ISmokeFieldSettings.GetProfile`) that defines radius, opacity, and how color is chosen
 (`PaintColorMode.Dynamic` — caller supplies a palette index, `Palette` — profile names a fixed
 palette entry, `Custom` — profile carries a fixed RGB color). The public API is:
 
 - `Paint(PaintSource, Vector3, int paletteIndex = -1)` — single stamp.
+- `Paint(PaintSource, Vector3 to, Vector3 from, float radius, float opacityScale)` — a capsule with a radius of
+  the caller's and the profile's opacity scaled: for a source whose stamps differ in size. `MushroomSpores` is
+  the one that uses it: a meadow mushroom's puff is a cone of three or four such capsules, each wider than the
+  last (`Slots/Actor/Archetype/MushroomSporeRouter`).
 - `PaintScatter(PaintSource, Vector3, int count, float scatterRadius, int paletteIndex = -1)` —
   multiple stamps scattered in a random ring.
 

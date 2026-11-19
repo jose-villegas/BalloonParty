@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BalloonParty.Configuration.GridActors;
 using BalloonParty.Shared;
 using UnityEngine;
 
@@ -21,18 +22,29 @@ namespace BalloonParty.Prediction
         private readonly IProjectileFlightConfig _flightConfig;
         private readonly IDeflectorField _deflectorField;
         private readonly IPierceItemField _pierceItemField;
+        private readonly IBumperField _bumperField;
+        private readonly IBumperBounceRule _bounceRule;
+        private readonly IMushroomSettings _mushrooms;
 
         private readonly List<DeflectorCircle> _deflectors = new();
         private readonly List<PierceItemCircle> _pierceItems = new();
 
+        /// <param name="bumperField">The board's bumpers (the meadow's mushrooms), with the rule the ball
+        /// leaves one by and the chain's settings: the three the live flight has
+        /// (<c>ProjectileMotionResolver</c>). Without them the line is the one it was before the meadow had
+        /// mushrooms.</param>
         public PredictionTraceCalculator(
             IPredictionTraceConfig config, IProjectileFlightConfig flightConfig, IDeflectorField deflectorField,
-            IPierceItemField pierceItemField)
+            IPierceItemField pierceItemField, IBumperField bumperField = null, IBumperBounceRule bounceRule = null,
+            IMushroomSettings mushrooms = null)
         {
             _config = config;
             _flightConfig = flightConfig;
             _deflectorField = deflectorField;
             _pierceItemField = pierceItemField;
+            _bumperField = bumperField;
+            _bounceRule = bounceRule;
+            _mushrooms = mushrooms;
         }
 
         /// <summary>
@@ -46,6 +58,15 @@ namespace BalloonParty.Prediction
         ///     wall spends a shield and a deflection does not — but the budget here is about how much
         ///     the telegraph gives away, not about what the shot can afford, and to the player both
         ///     are the same event: the line turned.
+        ///     <para>
+        ///         <b>Mushrooms</b> (@ref plan_meadow_mushrooms) bend the line the way they will bend the ball:
+        ///         the same swept test (<see cref="BumperSweep" />), the same count
+        ///         (<see cref="MushroomChainRule" />) and the same bounce rule, asked in the live flight's
+        ///         order, so the forgiving kick shows in the line. A bounce spends the one reflection budget.
+        ///         The bounce that completes a chain arms the ball, so the line is a lance's from that corner
+        ///         on (<see cref="PredictionTraceEnd.PierceStartIndex" />): through balloons and through
+        ///         mushrooms, whose caps the lance cuts. A cap already cut is not in the field and bends nothing.
+        ///     </para>
         /// </remarks>
         /// <param name="projectileContactRadius">
         ///     The shot's own contact radius. Every deflector (and pierce-item host) is inflated by it,
@@ -61,11 +82,17 @@ namespace BalloonParty.Prediction
         /// </param>
         /// <param name="startsPiercing">
         ///     The shot leaves the muzzle already piercing (a ball loaded as a Snipe lance): the whole line runs
-        ///     straight through balloons, turning only at walls, and its pierce starts at its first point.
+        ///     straight through balloons and mushrooms, turning only at walls, and its pierce starts at its
+        ///     first point.
+        /// </param>
+        /// <param name="chain">
+        ///     The ball's tally of mushroom bounces as it leaves the muzzle
+        ///     (<c>ProjectileFlightState.MushroomChain</c>): the kick depends on the count. A ball that has
+        ///     not flown has the default.
         /// </param>
         public void Calculate(
             Vector3 origin, Vector3 direction, float projectileContactRadius, List<Vector3> results,
-            out PredictionTraceEnd end, bool startsPiercing = false)
+            out PredictionTraceEnd end, bool startsPiercing = false, MushroomChainState chain = default)
         {
             results.Clear();
             results.Add(origin);
@@ -81,6 +108,11 @@ namespace BalloonParty.Prediction
             var stepsLeft = _config.MaxSegments;
             var reflectsLeft = _config.MaxReflections;
             var isPiercing = startsPiercing;
+
+            // Null on a board without mushrooms, which then costs the loop one comparison a step.
+            var bumpers = BumpersInPlay();
+            var leftBumperId = MushroomChainState.NoBumper;
+            var leftBumperDirection = Vector2.zero;
 
             while (stepsLeft > 0)
             {
@@ -119,12 +151,27 @@ namespace BalloonParty.Prediction
                     extended = origin + (direction * shift);
                 }
 
+                // A mushroom on the step, tested like the balloons against the step already clipped by any
+                // wall. Whatever the step meets before it still happens first; nothing past it is looked for.
+                // Not for a lance: it flies through.
+                var reach = shift;
+                var bumperIndex = -1;
+                var bumperEntry = 0f;
+                var meetsBumper = bumpers != null && !isPiercing && TryFindBumper(
+                    bumpers, walls, chain, stepStart, direction, shift,
+                    (Vector2)direction == leftBumperDirection ? leftBumperId : MushroomChainState.NoBumper,
+                    out bumperIndex, out bumperEntry);
+                if (meetsBumper)
+                {
+                    reach = Mathf.Max(0f, bumperEntry);
+                }
+
                 if (!isPiercing)
                 {
                     // Tested against the step already clipped by any wall above, so an event sitting
                     // beyond that wall cannot steal this iteration from the wall that reaches it first.
                     var stepEvent = ResolveStepEvent(
-                        stepStart, direction, shift, projectileContactRadius, out var contact, out var normal,
+                        stepStart, direction, reach, projectileContactRadius, out var contact, out var normal,
                         out var surface, out var pierceContact);
 
                     if (stepEvent is StepEvent.PiercedThrough or StepEvent.PiercedAndDeflected)
@@ -161,6 +208,48 @@ namespace BalloonParty.Prediction
                     }
                 }
 
+                // A line that became a lance's on this step, at a pierce item before the mushroom, is not bent
+                // by it either.
+                if (meetsBumper && !isPiercing)
+                {
+                    // The live flight's order (ProjectileMotionResolver.BounceOffBumpers): the bounce is
+                    // counted, then the rule is asked with the exact entry point and the chain as counted.
+                    Vector2 heading = direction;
+                    var bumperContact = new BumperContact(
+                        (Vector2)stepStart + (heading * bumperEntry), heading, bumpers[bumperIndex]);
+                    var reward = MushroomChainRule.OnBounce(ref chain, bumperContact.Bumper.Wall, _mushrooms.Rules);
+                    var outgoing = _bounceRule.Resolve(bumperContact, bumpers, chain);
+                    var outward = (bumperContact.Point - bumperContact.Bumper.Center).normalized;
+                    origin = new Vector3(bumperContact.Point.x, bumperContact.Point.y, stepStart.z);
+
+                    // Drawn on the mushroom's own skin, as a deflector's corner is: the ball's centre turns
+                    // its own radius short of it.
+                    var skin = bumperContact.Bumper.Center
+                        + (outward * Mathf.Max(0f, bumperContact.Bumper.Radius - projectileContactRadius));
+                    results.Add(walls.ClampInside(new Vector3(skin.x, skin.y, stepStart.z)));
+
+                    // The bounce that completes a chain arms the ball where it happens: from this corner on
+                    // the line is a lance's.
+                    if (reward == MushroomReward.Arm)
+                    {
+                        isPiercing = true;
+                        pierceStartIndex = results.Count - 1;
+                    }
+
+                    if (reflectsLeft <= 0)
+                    {
+                        end = new PredictionTraceEnd(pierceStartIndex, PredictionTraceEndKind.Bumper, outward);
+                        return;
+                    }
+
+                    direction = outgoing;
+                    leftBumperId = bumperContact.Bumper.Id;
+                    leftBumperDirection = outgoing;
+                    reflectsLeft--;
+                    stepsLeft--;
+                    continue;
+                }
+
                 origin = extended;
                 stepsLeft--;
 
@@ -177,6 +266,12 @@ namespace BalloonParty.Prediction
 
                     direction = Vector2.Reflect(direction, reflect.normalized);
                     reflectsLeft--;
+
+                    // A wall ends a chain of mushroom bounces, in the line as in the flight.
+                    if (bumpers != null)
+                    {
+                        MushroomChainRule.OnWall(ref chain);
+                    }
                 }
             }
 
@@ -191,6 +286,37 @@ namespace BalloonParty.Prediction
             // Fell out of the step budget rather than hitting anything — the line simply stops, and there
             // is no contact for a consumer to draw a bounce from.
             end = PredictionTraceEnd.OpenAir(pierceStartIndex);
+        }
+
+        // The board's bumpers, or null when it has none or the calculator was built without them.
+        private IReadOnlyList<BumperCircle> BumpersInPlay()
+        {
+            if (_bumperField == null || _bounceRule == null || _mushrooms == null)
+            {
+                return null;
+            }
+
+            var bumpers = _bumperField.Bumpers;
+            return bumpers.Count > 0 ? bumpers : null;
+        }
+
+        // The first mushroom the ball would bounce off on this step, under the live flight's own conditions:
+        // none once the stretch between two walls has had its bounces, not the one being left while the line
+        // still runs the direction it left along, and none whose contact lies beyond the walls. The entry is
+        // zero or less for a step that starts inside a circle: it lies behind the start, where the line came in.
+        private bool TryFindBumper(
+            IReadOnlyList<BumperCircle> bumpers, in WallLimits walls, in MushroomChainState chain, Vector3 stepStart,
+            Vector3 direction, float length, int leavingId, out int index, out float entry)
+        {
+            index = -1;
+            entry = 0f;
+            if (MushroomChainRule.IsSpent(chain, _mushrooms.Rules))
+            {
+                return false;
+            }
+
+            return BumperSweep.TryFindFirst(bumpers, stepStart, direction, length, leavingId, out index, out entry)
+                && walls.Contains(stepStart + (direction * entry));
         }
 
         // Decides what this iteration means for a not-yet-piercing shot, by comparing the nearest

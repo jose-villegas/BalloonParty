@@ -103,6 +103,20 @@ namespace BalloonParty.Tests.Game
             Assert.AreEqual(FoldRule.Last, MetricCatalog.FoldOf(MetricId.TotalScore));
         }
 
+        // The meadow mushrooms' counters are appended after the ripe cluster's: 37 to 43, in this order.
+        [Test]
+        public void MushroomCounters_FollowTheRipeClusters_AndKeepTheirNumbers()
+        {
+            Assert.AreEqual(37, (int)MetricId.MushroomBounces);
+            Assert.AreEqual(38, (int)MetricId.MushroomChainsCompleted);
+            Assert.AreEqual(39, (int)MetricId.MushroomCapsCut);
+            Assert.AreEqual(40, (int)MetricId.MushroomChainsBroken);
+            Assert.AreEqual(41, (int)MetricId.MushroomChainsOneShort);
+            Assert.AreEqual(42, (int)MetricId.MushroomCapsBlown);
+            Assert.AreEqual(43, (int)MetricId.MushroomChargesBanked);
+            Assert.AreEqual(36, (int)MetricId.CoatsRemoved, "nothing before them moved");
+        }
+
         // SlotOf on an undeclared (id, axis) pair used to return an AxisSlot with Index == -1, which
         // surfaced later as a bare IndexOutOfRangeException naming neither the metric nor the axis.
         [Test]
@@ -177,6 +191,13 @@ namespace BalloonParty.Tests.Game
             yield return new GoldenRow(nameof(MetricId.FusesRunOut), "fuses_run_out", "count", nameof(FoldRule.Sum), nameof(MetricScopeKind.Level));
             yield return new GoldenRow(nameof(MetricId.CoatsApplied), "coats_applied", "count", nameof(FoldRule.Sum), nameof(MetricScopeKind.Level));
             yield return new GoldenRow(nameof(MetricId.CoatsRemoved), "coats_removed", "count", nameof(FoldRule.Sum), nameof(MetricScopeKind.Level));
+            yield return new GoldenRow(nameof(MetricId.MushroomBounces), "mushroom_bounces", "count", nameof(FoldRule.Sum), nameof(MetricScopeKind.Level));
+            yield return new GoldenRow(nameof(MetricId.MushroomChainsCompleted), "mushroom_chains_completed", "count", nameof(FoldRule.Sum), nameof(MetricScopeKind.Level));
+            yield return new GoldenRow(nameof(MetricId.MushroomCapsCut), "mushroom_caps_cut", "count", nameof(FoldRule.Sum), nameof(MetricScopeKind.Level));
+            yield return new GoldenRow(nameof(MetricId.MushroomChainsBroken), "mushroom_chains_broken", "count", nameof(FoldRule.Sum), nameof(MetricScopeKind.Level));
+            yield return new GoldenRow(nameof(MetricId.MushroomChainsOneShort), "mushroom_chains_one_short", "count", nameof(FoldRule.Sum), nameof(MetricScopeKind.Level));
+            yield return new GoldenRow(nameof(MetricId.MushroomCapsBlown), "mushroom_caps_blown", "count", nameof(FoldRule.Sum), nameof(MetricScopeKind.Level));
+            yield return new GoldenRow(nameof(MetricId.MushroomChargesBanked), "mushroom_charges_banked", "count", nameof(FoldRule.Sum), nameof(MetricScopeKind.Level));
         }
 
         public readonly struct GoldenRow

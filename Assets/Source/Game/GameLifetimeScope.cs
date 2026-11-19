@@ -152,6 +152,7 @@ namespace BalloonParty.Game
             builder.RegisterInstance<IShieldFieldSettings>(_shieldFieldSettings);
             builder.RegisterInstance<IProjectileVisualConfig>(_projectileVisualConfig);
             builder.RegisterInstance<ILevelPacingConfiguration>(_levelPacingConfiguration);
+            builder.RegisterInstance<IMushroomSettings>(_levelPacingConfiguration.Mushrooms);
             builder.RegisterInstance<IBuffConfiguration>(_buffConfiguration);
 
             // An unassigned asset degrades to an empty table — the resolver then falls back to DefaultScore

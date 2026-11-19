@@ -12,6 +12,9 @@ namespace BalloonParty.Projectile.Model
         int PendingPierceHitCount { get; }
         int BankedPierceCharges { get; }
         int BankedRainbowPierceCharges { get; }
+
+        // Meadow mushroom caps the shot has cut as a lance, each of which banked it a charge.
+        int CapsCut { get; }
         int ConsecutiveWallBounces { get; }
         int TotalCruiseTaps { get; }
         SpeedTransitionKind TransitionKind { get; }

@@ -128,6 +128,11 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<ShieldLostMessage>(options);
             builder.RegisterMessageBroker<WallHitMessage>(options);
             builder.RegisterMessageBroker<DeflectChainMessage>(options);
+            builder.RegisterMessageBroker<MushroomBouncedMessage>(options);
+            builder.RegisterMessageBroker<MushroomCutMessage>(options);
+            builder.RegisterMessageBroker<MushroomRegrownMessage>(options);
+            builder.RegisterMessageBroker<MushroomSwayedMessage>(options);
+            builder.RegisterMessageBroker<MushroomLanceMessage>(options);
             builder.RegisterMessageBroker<SpeedTapMintedMessage>(options);
             builder.RegisterMessageBroker<PierceDischargedMessage>(options);
             builder.RegisterMessageBroker<PierceWallReachedMessage>(options);
@@ -201,7 +206,16 @@ namespace BalloonParty.Game
                 .As<IProjectileRegistry>().As<IProjectileRegistryWriter>();
             // Game scope, not the thrower's: ItemAssigner plans shield chains from it and cannot
             // reach into a child scope for ThrowerView.
-            builder.Register<ThrowerOriginProvider>(Lifetime.Singleton);
+            builder.Register<ThrowerOriginProvider>(Lifetime.Singleton).AsSelf().As<IShotOrigin>();
+
+            // The meadow's mushrooms as the ball meets them, read off the grid, with the caps a lance has cut,
+            // and the one rule for how a ball leaves a whole one. The rule itself falls back to the mirror
+            // reflection when the settings turn the kick off.
+            builder.Register<MushroomBoard>(Lifetime.Singleton).As<IBumperField, IMushroomRegrowth>();
+
+            // What a bomb and a nuke do to the mushrooms' caps: told by the bomb's handler and the nuke's blast.
+            builder.Register<IMushroomBlast, MushroomBlast>(Lifetime.Singleton);
+            builder.Register<IBumperBounceRule, ForgivingKickRule>(Lifetime.Singleton);
             builder.Register<PredictionTraceProvider>(Lifetime.Singleton);
             builder.Register<ProjectileFacingSource>(Lifetime.Singleton).As<IProjectileFacingSource>();
             builder.Register<NudgeOverrideResolver>(Lifetime.Singleton);
@@ -273,7 +287,7 @@ namespace BalloonParty.Game
             builder.RegisterComponentOnNewGameObject<RipeBubbleBurstView>(Lifetime.Singleton, "RipeBubbleBurst");
             builder.RegisterBuildCallback(resolver => resolver.Resolve<RipeBubbleBurstView>());
             builder.RegisterEntryPoint<UnbreakableFormationService>().AsSelf().As<IRunResettable>()
-                .As<IFormationReinforcements>().As<IToughSnakeBody>();
+                .As<IFormationReinforcements>().As<IToughSnakeBody>().As<ICoveredHosts>();
             builder.RegisterEntryPoint<NukeOdds>().As<INukeOdds>().As<IRunResettable>();
             builder.RegisterEntryPoint<RewardBalloonService>().As<IRewardBalloonRequests>().As<IRunResettable>();
             builder.RegisterEntryPoint<RewardBalloonPayout>();
@@ -294,6 +308,9 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<GridActorHitController>();
             builder.Register<NavigationReadyGate>(Lifetime.Singleton).WithParameter(NavigationState.Game);
             builder.RegisterEntryPoint<GridSpawnerCoordinator>().AsSelf().As<IRunResettable>();
+            // What the static spawner picks a meadow level's mushroom slots with: walls from the baked catalogue.
+            builder.Register<IMushroomPlacementSource, MushroomPlacementSource>(Lifetime.Singleton);
+            builder.Register<WallSlotSelectionStrategy>(Lifetime.Singleton);
             builder.RegisterEntryPoint<StaticActorSpawner>().AsSelf().As<IGridSpawner>();
             builder.RegisterEntryPoint<PuffClusterRegistry>().AsSelf();
             builder.RegisterEntryPoint<PuffCloudViewController>().As<ITransitionOutgoingContent>();
@@ -381,6 +398,12 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<GoldenSnipeGift>().As<IRunResettable>();
             builder.RegisterEntryPoint<SharpshooterSnipeGift>().As<IRunResettable>();
             builder.RegisterEntryPoint<SnipeDischargeBloom>();
+
+            // Pays the meadow's mushroom chain with the Snipe lance, through SnipeItemHandler's ISnipeArmer.
+            builder.RegisterEntryPoint<MushroomChainController>();
+
+            // Grows the caps a lance cut back on the board's beat.
+            builder.RegisterEntryPoint<MushroomRegrowController>();
             builder.RegisterEntryPoint<ItemSightTracker>().AsSelf();
 
             RegisterItemRangePreviews(builder);
@@ -517,6 +540,8 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<ItemSightSoundRouter>();
             builder.RegisterEntryPoint<DiscoSoundRouter>();
             builder.RegisterEntryPoint<NukeSoundRouter>();
+            builder.RegisterEntryPoint<MushroomSoundRouter>();
+            builder.RegisterEntryPoint<MushroomSporeRouter>().As<IRunResettable>();
         }
 
         // The dictionary is the choreography seam: the resolver maps each ScoreTrailBehaviourId to its handler.

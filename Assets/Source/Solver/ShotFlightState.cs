@@ -1,3 +1,4 @@
+using BalloonParty.Shared;
 using BalloonParty.Slots.Capabilities;
 using UnityEngine;
 
@@ -124,6 +125,73 @@ namespace BalloonParty.Solver
         }
     }
 
+    /// <summary>
+    ///     What a simulated flight's mushrooms did (@ref plan_meadow_mushrooms), for the result: all zero on a
+    ///     board without them.
+    /// </summary>
+    internal struct ShotMushroomTally
+    {
+        /// <summary>Every bounce off a mushroom, the ones the chain did not count included.</summary>
+        public int Bounces;
+
+        /// <summary>Chains flown to their target: bounces that brought the count to it, whatever they paid.</summary>
+        public int ChainsCompleted;
+
+        /// <summary>How many times the flight's mushrooms armed the ball as the lance. The chain rule arms only a
+        /// ball that is not a lance, so this passes 1 only when a lance was spent at a wall and a later chain armed
+        /// the ball again.</summary>
+        public int LancesArmed;
+
+        /// <summary>Caps the flight cut as a lance, whatever armed it.</summary>
+        public int CapsCut;
+
+        /// <summary>Caps blown off by the bombs the flight set off.</summary>
+        public int CapsBlown;
+
+        /// <summary>Lance charges the flight banked by cutting caps: one a cap.</summary>
+        public int ChargesBanked;
+
+        /// <summary>One bit for each cap bounced off, by its id; ids past 31 are
+        /// not kept.</summary>
+        public int HitMask;
+
+        /// <summary>Whether the mushroom with this id was bounced off at least once.</summary>
+        public readonly bool Hit(int bumperId)
+        {
+            return bumperId >= 0 && bumperId < 32 && (HitMask & (1 << bumperId)) != 0;
+        }
+    }
+
+    /// <summary>
+    ///     The mushroom a simulated ball bounced off last and the direction it left along, mirroring what
+    ///     <c>ProjectileFlightState</c> keeps: while the ball still flies that direction it is on its way out of
+    ///     that mushroom's circle and no swept test may read it as entered. The default is a ball that has left
+    ///     none.
+    /// </summary>
+    internal struct ShotLeftBumper
+    {
+        // Kept one above the id, so the default has no mushroom although ids start at 0.
+        private int _idPlusOne;
+        private Vector2 _direction;
+
+        internal void Leave(int bumperId, Vector2 direction)
+        {
+            _idPlusOne = bumperId + 1;
+            _direction = direction;
+        }
+
+        /// <summary>
+        ///     The id a ball flying <paramref name="direction" /> is still leaving, or
+        ///     <see cref="MushroomChainState.NoBumper" /> once it has turned since that bounce. The comparison
+        ///     is the live flight's own (<c>ProjectileFlightState.LeavingBumperId</c>), <see cref="Vector2" />'s
+        ///     equality included.
+        /// </summary>
+        internal readonly int IdWhileFlying(Vector2 direction)
+        {
+            return _idPlusOne != 0 && direction == _direction ? _idPlusOne - 1 : MushroomChainState.NoBumper;
+        }
+    }
+
     /// <summary>Mutable per-flight state threaded through <see cref="ShotSimulator.Simulate" /> — passed
     /// by <c>ref</c> to every helper that mutates it (a by-value pass would silently drop the mutation).
     /// Board/geometry inputs (working set, walls, dynamics, cruise config) and the timeline outputs
@@ -191,6 +259,13 @@ namespace BalloonParty.Solver
         public bool Capped;
         public bool Absorbed;
 
+        // The meadow's mushrooms, mirroring ProjectileFlightState: the chain's tally, which MushroomChainRule
+        // writes in place, the mushroom the ball is leaving, and what the flight's mushrooms did, for the
+        // result. All of it stays at its default on a board without mushrooms.
+        public MushroomChainState MushroomChain;
+        public ShotLeftBumper LeftBumper;
+        public ShotMushroomTally Mushrooms;
+
         public readonly bool HasRainbowBuff => RainbowBuffUntilWall || RainbowBuffUntilPierceEnd;
 
         public ShotFlightState(Vector2 position, Vector2 direction, int shields, in ShotFlightSeed seed = default)
@@ -232,6 +307,9 @@ namespace BalloonParty.Solver
             Died = false;
             Capped = false;
             Absorbed = false;
+            MushroomChain = default;
+            LeftBumper = default;
+            Mushrooms = default;
         }
     }
 }

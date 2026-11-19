@@ -107,6 +107,11 @@ namespace BalloonParty.Solver
         // NeighborBuffer/ItemHitsScratch.
         private readonly List<Vector2> _paintBlobPositions = new();
 
+        // The bombs resolved since the simulator last asked, and their blast: the meadow's mushrooms are not on
+        // the effect board, so the simulator blows their caps off from these.
+        private readonly List<ShotItemActivation> _bombBlasts = new(4);
+
+        private BombBlastParams _bombBlast;
         private int _activationCount;
 
         internal ShotItemLayer(
@@ -121,7 +126,28 @@ namespace BalloonParty.Solver
         internal void ResetForNewFlight()
         {
             _queue.Clear();
+            _bombBlasts.Clear();
             _activationCount = 0;
+        }
+
+        /// <summary>
+        ///     The next bomb that went off since this was last asked: its activation (where, in which slot, a
+        ///     rainbow one or not) and its blast. False when there is none left. <c>ShotSimulator</c> asks before
+        ///     each event it looks for, to blow the caps off the mushrooms next to the bomb
+        ///     (<c>ShotBumperLayer.BlowOff</c>).
+        /// </summary>
+        internal bool TryTakeBombBlast(out ShotItemActivation bomb, out BombBlastParams blast)
+        {
+            blast = _bombBlast;
+            if (_bombBlasts.Count == 0)
+            {
+                bomb = default;
+                return false;
+            }
+
+            bomb = _bombBlasts[^1];
+            _bombBlasts.RemoveAt(_bombBlasts.Count - 1);
+            return true;
         }
 
         /// <summary>Enqueues an activation if the per-flight budget allows it — false means the budget
@@ -243,6 +269,8 @@ namespace BalloonParty.Solver
 
             _effectBoard.Bind(workingSet, activeCount, activation.Slot);
             var blastParams = new BombBlastParams(settings.Bomb.Radius, settings.Bomb.RainbowConversionRange);
+            _bombBlast = blastParams;
+            _bombBlasts.Add(activation);
             BombBlast.Resolve(
                 _effectBoard, activation.Origin, activation.Slot, activation.IsRainbowHost, _rainbowColorId,
                 in blastParams, hitsOut);

@@ -165,5 +165,17 @@ namespace BalloonParty.Tests.Item
 
             Assert.IsFalse(_trace.TryGetRunStart(_shot, out _));
         }
+
+        // A lance a chain of mushrooms armed starts its run on the mushroom that armed it, and nothing turns the
+        // run before its wall: it cuts the caps in its way and flies on, so the line is drawn straight from there.
+        [Test]
+        public void ARunOpenedOnAMushroom_RunsStraightToItsWall()
+        {
+            var mushroom = new Vector3(2f, 6f, 0f);
+            _trace.Open(_shot, mushroom);
+
+            Assert.IsTrue(_trace.TryCloseRun(_shot, FirstWall, stillPiercing: false, discharged: true, out var from));
+            Assert.AreEqual(mushroom, from);
+        }
     }
 }

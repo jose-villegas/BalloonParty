@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.Type;
+using BalloonParty.Configuration.GridActors;
+using BalloonParty.Slots.Actor.Archetype;
 using UnityEngine;
 
 namespace BalloonParty.Configuration.Level
@@ -57,6 +59,10 @@ namespace BalloonParty.Configuration.Level
 
         [SerializeField] private ScenarioScheduleSettings _scenario = new();
 
+        [Tooltip("The meadow's mushrooms: how many a level has, the slots they share with the bushes, and the " +
+                 "bounce and the chain the later phases read.")]
+        [SerializeField] private MushroomSettings _mushrooms = new();
+
         public int ItemCadence => _itemCadence;
         public int FeaturedLevels => Mathf.Max(1, _featuredLevels);
         public IReadOnlyList<BalloonContentEntry> Balloons => _balloons;
@@ -64,6 +70,7 @@ namespace BalloonParty.Configuration.Level
         public IReadOnlyList<GridActorContentEntry> GridActors => _gridActors;
         public ScenarioScheduleSettings Scenario => _scenario;
         public ExtraColorLevelSettings ExtraColor => _extraColor;
+        public IMushroomSettings Mushrooms => _mushrooms;
 
         /// <summary>The most lines any level's initial board fill can hold.</summary>
         public int MaxBoardLines
@@ -87,9 +94,11 @@ namespace BalloonParty.Configuration.Level
         internal LevelGenerationSettings(BudgetFormula threatBudget, BudgetFormula aidBudget,
             IntLevelStep[] colors, IntLevelStep[] boardLines, ItemCountStep[] itemCounts,
             BalloonContentEntry[] balloons, ItemContentEntry[] items, GridActorContentEntry[] gridActors,
-            int itemCadence = 1, int seedSalt = 1, int featuredLevels = 2, ExtraColorLevelSettings extraColor = null)
+            int itemCadence = 1, int seedSalt = 1, int featuredLevels = 2, ExtraColorLevelSettings extraColor = null,
+            MushroomSettings mushrooms = null)
         {
             _extraColor = extraColor ?? ExtraColorLevelSettings.Off;
+            _mushrooms = mushrooms ?? new MushroomSettings();
             _threatBudget = threatBudget;
             _aidBudget = aidBudget;
             _featuredLevels = featuredLevels;
@@ -157,6 +166,11 @@ namespace BalloonParty.Configuration.Level
             foreach (var entry in _gridActors)
             {
                 CheckUnlock(entry.Type.ToString(), entry.UnlockLevel, configName, issues);
+                if (entry.Type == GridActorType.Mushroom)
+                {
+                    issues.Add($"LevelPacingConfiguration ({configName}): catalogue entry Mushroom is never used. " +
+                               "The meadow places its mushrooms itself, from the mushroom settings; remove the entry.");
+                }
             }
 
             if (!hasStapleBalloon)
@@ -174,6 +188,7 @@ namespace BalloonParty.Configuration.Level
                            "shortest above its longest; the longest is raised to match.");
             }
 
+            _mushrooms.Validate(configName, issues);
             return issues;
         }
 

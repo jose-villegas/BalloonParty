@@ -203,6 +203,20 @@ namespace BalloonParty.Scenario
             }
         }
 
+        /// <summary>Paints a capsule from <paramref name="prevWorldPosition"/> to <paramref name="worldPosition"/>
+        /// in the source's colour, with a radius of the caller's and the profile's opacity scaled by
+        /// <paramref name="opacityScale"/>: for a source whose stamps differ in size, as a cone built of
+        /// capsules does.</summary>
+        internal void Paint(PaintSource source, Vector3 worldPosition, Vector3 prevWorldPosition, float radius,
+            float opacityScale)
+        {
+            if (radius > 0f && opacityScale > 0f && TryResolveStamp(source, -1, out var profile, out var color))
+            {
+                color.w *= Mathf.Clamp01(opacityScale);
+                QueueStamp(profile, worldPosition, prevWorldPosition, radius, color);
+            }
+        }
+
         /// <summary>Drags the source's stroke back from <paramref name="worldPosition"/>, against
         /// <paramref name="direction"/>, for its profile's <see cref="PaintProfile.Smear"/>, thinning toward the
         /// tail: a flung blob of wet paint smearing where it lands. A zero direction leaves a round blot.</summary>

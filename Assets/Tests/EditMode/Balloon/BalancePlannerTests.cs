@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
+using BalloonParty.Balloon.Type;
 using BalloonParty.Shared;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
@@ -222,6 +223,40 @@ namespace BalloonParty.Tests.Balloon
             Assert.AreEqual(0, free.SlotIndex.Value.y, "the control case rises, so the anchor is what held it");
         }
 
+        // A cover's host is no unbreakable: it is a plain balloon carrying an item, or any reward balloon. Each
+        // holds its slot over a gap while a cover holds it (the flag is the base model's).
+        [TestCase(BalloonType.Simple)]
+        [TestCase(BalloonType.Golden)]
+        [TestCase(BalloonType.Heart)]
+        [TestCase(BalloonType.Disco)]
+        [TestCase(BalloonType.Nuke)]
+        public void Plan_ABalloonACoverHolds_HoldsItsUnsupportedSlot_WhateverItsKind(BalloonType type)
+        {
+            BuildGrid(3, 2);
+            var held = CoverHost(type);
+            held.SetHeldByCover(true);
+            _grid.Place(held, null, new Vector2Int(1, 1));
+
+            _planner.Plan(_turnSteps, _moves);
+
+            Assert.AreEqual(0, _moves.Count);
+            Assert.AreSame(held, _grid.At(new Vector2Int(1, 1)));
+        }
+
+        [Test]
+        public void Plan_TheSameBalloonLetGoByItsCover_FloatsUp()
+        {
+            BuildGrid(3, 2);
+            var balloon = CoverHost(BalloonType.Simple);
+            balloon.SetHeldByCover(true);
+            balloon.SetHeldByCover(false);
+            _grid.Place(balloon, null, new Vector2Int(1, 1));
+
+            _planner.Plan(_turnSteps, _moves);
+
+            Assert.AreEqual(0, balloon.SlotIndex.Value.y, "the control case rises, so the hold is what kept it");
+        }
+
         [Test]
         public void Plan_BalloonBelowAnAnchoredActor_RestsAgainstIt()
         {
@@ -241,6 +276,19 @@ namespace BalloonParty.Tests.Balloon
 
             Assert.AreSame(anchored, _grid.At(new Vector2Int(1, 1)));
             Assert.AreEqual(new Vector2Int(1, 2), balloon.SlotIndex.Value);
+        }
+
+        private static BalloonModelBase CoverHost(BalloonType type)
+        {
+            var config = new BalloonModelConfig(type, scoreValue: 0, hitsToPop: type == BalloonType.Nuke ? 3 : 1);
+            return type switch
+            {
+                BalloonType.Golden => new GoldenBalloonModel(config),
+                BalloonType.Heart => new HeartBalloonModel(config),
+                BalloonType.Disco => new DiscoBalloonModel(config),
+                BalloonType.Nuke => new NukeBalloonModel(config),
+                _ => new BalloonModel(config),
+            };
         }
 
         private void BuildGrid(int columns, int rows)

@@ -63,13 +63,18 @@ namespace BalloonParty.Solver
         /// <summary>How far that ripple reaches between slot centres, in world units (<c>IRipeBubbleSettings.RippleRadius</c>).</summary>
         public readonly float RippleRadius;
 
+        /// <summary>The meadow's mushrooms (<see cref="ShotBumperLayer.Gather" />), a peer of
+        /// <see cref="Dynamics" /> and <see cref="Items" />; null on a board without them.</summary>
+        public readonly ShotBumperLayer Bumpers;
+
         public ShotSolveContext(
             IReadOnlyList<ShotBalloonSnapshot> board, Vector4 wallLimitsClockwise, Vector2 throwerPivot,
             Vector3 spawnLocalOffset, int startingShields, bool streakGrantsShields,
             float projectileContactRadius,
             float projectileSpeed, ShotCruiseConfig cruiseConfig, ShotBoardDynamics dynamics,
             float nudgeAmplitude, IReadOnlyList<string> allowedColors, string rainbowColorId, ShotItemLayer items,
-            int rippleDamage, float rippleRadius, in ShotFlightSeed loadedSeed = default)
+            int rippleDamage, float rippleRadius, in ShotFlightSeed loadedSeed = default,
+            ShotBumperLayer bumpers = null)
         {
             Board = board;
             WallLimitsClockwise = wallLimitsClockwise;
@@ -88,6 +93,7 @@ namespace BalloonParty.Solver
             LoadedSeed = loadedSeed;
             RippleDamage = rippleDamage;
             RippleRadius = rippleRadius;
+            Bumpers = bumpers;
         }
     }
 
@@ -98,13 +104,16 @@ namespace BalloonParty.Solver
         /// <summary>Snapshots the live game. <paramref name="pulseExecutionDelay" /> models the
         /// balancer's render-frame lag (callers estimate ~1.5 × frame time); <paramref name="firstPulseIn" />
         /// is the live balancer's <c>SecondsUntilNextPulse</c>. <paramref name="loaded" /> is the ball in the
-        /// thrower (<c>IProjectileRegistry.Loaded</c>): one already armed there plans as a lance.</summary>
+        /// thrower (<c>IProjectileRegistry.Loaded</c>): one already armed there plans as a lance.
+        /// <paramref name="bumpers" /> is the board's mushrooms (<see cref="ShotBumperLayer.Gather" />), null on
+        /// a board without them. It has no default: a caller that left it out would aim through the mushrooms
+        /// and never see a chain.</summary>
         internal static ShotSolveContext Gather(
             SlotGrid grid, IProjectileFlightConfig config, int startingShields, ISlotGridConfig gridConfig,
             IBalloonsConfiguration balloonsConfig, IItemConfiguration itemConfig, ThrowerView thrower,
             ThrowerSettings throwerSettings, IGamePalette palette, IActiveLevelParameters levelParams,
             IRunConfig runConfig, float pulseExecutionDelay, float firstPulseIn,
-            IProjectileModel loaded = null)
+            IProjectileModel loaded, ShotBumperLayer bumpers)
         {
             var targets = new List<ShotBalloonSnapshot>();
             var otherDynamicActors = new List<ShotDynamicActorSnapshot>();
@@ -148,7 +157,8 @@ namespace BalloonParty.Solver
                 items,
                 RippleDamageOf(balloonsConfig),
                 RippleRadiusOf(balloonsConfig),
-                SeedFor(loaded));
+                SeedFor(loaded),
+                bumpers);
         }
 
         /// <summary>The hit a ripe cluster's ripple deals each balloon it reaches, as the game's <c>RipeBubbleBurst</c>
@@ -178,7 +188,7 @@ namespace BalloonParty.Solver
                 targetColorId: targetColorId, radiusBias: radiusBias, allowedColors: context.AllowedColors,
                 rainbowColorId: context.RainbowColorId, seed: context.LoadedSeed, items: context.Items,
                 streakGrantsShields: context.StreakGrantsShields, rippleDamage: context.RippleDamage,
-                rippleRadius: context.RippleRadius);
+                rippleRadius: context.RippleRadius, bumpers: context.Bumpers);
         }
 
         /// <summary>

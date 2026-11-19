@@ -11,6 +11,7 @@ using BalloonParty.Balloon.Type;
 using BalloonParty.Balloon.View;
 using BalloonParty.Cheats;
 using BalloonParty.Configuration.Balloons;
+using BalloonParty.Configuration.GridActors;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Level;
 using BalloonParty.Configuration.Palette;
@@ -19,9 +20,12 @@ using BalloonParty.Game;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
 using BalloonParty.Game.Score;
+using BalloonParty.Game.Upgrades;
 using BalloonParty.Item.Snipe;
 using BalloonParty.Projectile;
+using BalloonParty.Projectile.Controller;
 using BalloonParty.Projectile.Model;
+using BalloonParty.Shared;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pause;
@@ -592,7 +596,9 @@ namespace BalloonParty.Editor.Staging
 
             var from = Object.FindAnyObjectByType<ThrowerView>().SpawnPointPosition;
             var inFlight = registry.InFlightCount;
-            scope.Container.Resolve<ThrowerController>().FireAt(ShotBoardGather.DirectionFromDegrees(degrees));
+            var thrower = scope.Container.Resolve<ThrowerController>();
+            thrower.AimHold = null;
+            thrower.FireAt(ShotBoardGather.DirectionFromDegrees(degrees));
             if (registry.InFlightCount <= inFlight)
             {
                 return "error: the thrower would not fire";
@@ -600,6 +606,222 @@ namespace BalloonParty.Editor.Staging
 
             return string.Format(CultureInfo.InvariantCulture, "fired {0} at {1:0.##} degrees from {2:0.##},{3:0.##}",
                 lance ? "a lance" : "a ball", degrees, from.x, from.y);
+        }
+
+        /// <summary>
+        ///     Cuts the cap off the mushroom in a slot, as a lance flying at <paramref name="degrees" /> (0 = right,
+        ///     90 = straight up) would: through the cap's middle, or <paramref name="offset" /> world units to the
+        ///     left of it, which takes a sliver off near the edge. It is the cut a lance makes in play: the board
+        ///     takes the cap out of its bumpers (<see cref="IBumperField.Cut" />), so a ball flies through where it
+        ///     stood, and the message the flight publishes is published, so the view, the sound and the counters
+        ///     answer as they do in play. The cap grows back by itself on the board's beat, as in play, or at once
+        ///     with <see cref="RegrowCap" />. An error when the slot holds no mushroom or its cap is already cut.
+        /// </summary>
+        public static string CutCap(int col, int row, float degrees, float offset = 0f)
+        {
+            var slot = new Vector2Int(col, row);
+            var grid = Resolve<SlotGrid>();
+            if (!grid.InBounds(slot) || grid.ViewAt(slot) is not MushroomView)
+            {
+                return $"error: no mushroom at {col},{row}";
+            }
+
+            var field = Resolve<IBumperField>();
+            var index = -1;
+            for (var i = 0; i < field.Bumpers.Count; i++)
+            {
+                if (field.SlotAt(i) == slot)
+                {
+                    index = i;
+                }
+            }
+
+            if (index < 0)
+            {
+                return $"error: the cap at {col},{row} is already cut";
+            }
+
+            // The same record the flight makes of a cut, from a point a unit back along the lance's line.
+            var cap = field.Bumpers[index];
+            Vector2 way = ShotBoardGather.DirectionFromDegrees(degrees);
+            var from = cap.Center + (new Vector2(-way.y, way.x) * offset) - way;
+            var cut = new CapCut(cap, slot, from, way, Resolve<IMushroomSettings>().Radius);
+            field.Cut(index);
+            Publish(cut.ToMessage());
+            return FormattableString.Invariant(
+                $"cut the cap at {col},{row} along {degrees:0.##} degrees, {offset:0.##} to the left of its middle");
+        }
+
+        /// <summary>
+        ///     Grows the cut cap in a slot back now, without waiting for the board's beat: the board puts it back
+        ///     among its bumpers (<see cref="IMushroomRegrowth.Regrow" />) and the message is published, as
+        ///     <c>MushroomRegrowController</c> does. An error when the slot holds no mushroom or its cap is whole.
+        /// </summary>
+        public static string RegrowCap(int col, int row)
+        {
+            var slot = new Vector2Int(col, row);
+            var grid = Resolve<SlotGrid>();
+            if (!grid.InBounds(slot) || grid.ViewAt(slot) is not MushroomView)
+            {
+                return $"error: no mushroom at {col},{row}";
+            }
+
+            var caps = Resolve<IMushroomRegrowth>();
+            for (var i = 0; i < caps.CutCount; i++)
+            {
+                if (caps.CutSlotAt(i) != slot)
+                {
+                    continue;
+                }
+
+                caps.Regrow(i);
+                Publish(new MushroomRegrownMessage(slot));
+                return $"regrowing the cap at {col},{row}";
+            }
+
+            return $"error: the cap at {col},{row} is not cut";
+        }
+
+        /// <summary>
+        ///     Holds the thrower's aim at <paramref name="degrees" /> (0 = right, 90 = straight up) and draws its aim
+        ///     line, as a player holding the aim there would see it, without firing: the line as the game predicts
+        ///     it, its bend off a mushroom included. <see cref="AimOff" /> or <see cref="Fire" /> lets go.
+        /// </summary>
+        public static string Aim(float degrees)
+        {
+            var scope = Object.FindAnyObjectByType<ThrowerLifetimeScope>();
+            if (scope == null)
+            {
+                return "error: no thrower in the scene";
+            }
+
+            scope.Container.Resolve<ThrowerController>().AimHold = ShotBoardGather.DirectionFromDegrees(degrees);
+            return FormattableString.Invariant($"aiming at {degrees:0.##} degrees");
+        }
+
+        /// <summary>Lets go of the aim <see cref="Aim" /> holds, and takes its line down.</summary>
+        public static string AimOff()
+        {
+            var scope = Object.FindAnyObjectByType<ThrowerLifetimeScope>();
+            if (scope != null)
+            {
+                scope.Container.Resolve<ThrowerController>().AimHold = null;
+            }
+
+            return "aim let go";
+        }
+
+        /// <summary>
+        ///     Where to aim to be paid by the meadow's mushrooms on the board as it stands: the shot solver flies
+        ///     every angle the thrower can aim at, and the answer is the middle of the widest run of angles whose
+        ///     flight is armed as the lance by the walls of caps (three hits, wall to wall), for
+        ///     <see cref="Fire" />. A flight need not touch every cap, nor every wall: the rule counts crossings
+        ///     between walls. It also says how many angles arm, how many whole caps stand in how many walls (a cap
+        ///     a lance cut is not counted until it has grown back), and where the cannon stands: the layouts were
+        ///     baked for the cannon at rest, so ask once it has entered (<see cref="Advance" /> a second). An error
+        ///     with no thrower, no whole cap, no angle that arms, or a ball loaded as a lance: a lance bounces off
+        ///     no mushroom, it cuts their caps, so no chain is counted for it.
+        /// </summary>
+        public static string Chain()
+        {
+            var scope = Object.FindAnyObjectByType<ThrowerLifetimeScope>();
+            var thrower = Object.FindAnyObjectByType<ThrowerView>();
+            if (scope == null || thrower == null)
+            {
+                return "error: no thrower in the scene";
+            }
+
+            var container = scope.Container;
+            var field = container.Resolve<IBumperField>();
+
+            // The whole caps only: a cut cap is no bumper, and no chain is flown off it.
+            var mushrooms = field.Bumpers.Count;
+            var cutCaps = container.Resolve<IMushroomRegrowth>().CutCount;
+            if (mushrooms == 0)
+            {
+                return "error: no whole mushroom cap on the board";
+            }
+
+            var config = container.Resolve<IProjectileFlightConfig>();
+            var itemConfig = container.Resolve<IItemConfiguration>();
+            var context = ShotBoardGather.Gather(
+                container.Resolve<SlotGrid>(), config, container.Resolve<IWeaponStats>().StartingShields,
+                container.Resolve<ISlotGridConfig>(), container.Resolve<IBalloonsConfiguration>(), itemConfig, thrower,
+                container.Resolve<ThrowerSettings>(), container.Resolve<IGamePalette>(),
+                container.Resolve<IActiveLevelParameters>(), container.Resolve<IRunConfig>(), 0f,
+                container.Resolve<BalloonBalancer>().SecondsUntilNextPulse,
+                container.Resolve<IProjectileRegistry>().Loaded,
+                ShotBumperLayer.Gather(
+                    field, container.Resolve<IBumperBounceRule>(), container.Resolve<IMushroomSettings>(), itemConfig));
+            // The solver flies a shot only while something is left to pop, and a stage starts with nothing on it:
+            // an empty board gets one target far outside the walls, and none of the layers that follow balloons.
+            var board = context.Board;
+            var emptyBoard = board.Count == 0;
+            if (emptyBoard)
+            {
+                board = new[] { ShotBalloonSnapshot.ForToughTarget(new Vector2(1000f, 1000f), 0.1f, 0, int.MaxValue) };
+            }
+
+            if (context.LoadedSeed.IsPiercing)
+            {
+                return "error: the loaded ball is a lance already, and a lance cuts the caps and counts no chain: " +
+                    "fire it away first";
+            }
+
+            var workingSet = new ShotBalloonState[board.Count];
+
+            // An aim that is not on the thrower's grid cannot be fired, so only the grid is flown.
+            const int continuousSamples = 1024;
+            var samples = AimAngleGrid.ResolveSweepSampleCount(
+                config.AimAngleMinDegrees, config.AimAngleMaxDegrees, config.AimAngleStepDegrees, continuousSamples);
+            var flying = 0;
+            var run = 0;
+            var widestRun = 0;
+            var widestEnd = -1;
+            for (var i = 0; i < samples; i++)
+            {
+                var angle = AimAngleGrid.ResolveSweepAngle(
+                    i, config.AimAngleMinDegrees, config.AimAngleMaxDegrees, config.AimAngleStepDegrees,
+                    continuousSamples);
+                var tally = ShotSimulator.Simulate(
+                    board, context.WallLimitsClockwise, ShotBoardGather.OriginForAngle(angle, context),
+                    ShotBoardGather.DirectionFromDegrees(angle), context.StartingShields,
+                    context.ProjectileContactRadius, workingSet, context.RippleDamage,
+                    projectileSpeed: context.ProjectileSpeed, cruiseConfig: context.CruiseConfig,
+                    dynamics: emptyBoard ? null : context.Dynamics, allowedColors: context.AllowedColors,
+                    rainbowColorId: context.RainbowColorId, seed: context.LoadedSeed,
+                    items: emptyBoard ? null : context.Items, streakGrantsShields: context.StreakGrantsShields,
+                    rippleRadius: context.RippleRadius, bumpers: context.Bumpers).Mushrooms;
+                var flies = tally.LancesArmed > 0;
+                run = flies ? run + 1 : 0;
+                flying += flies ? 1 : 0;
+                if (run > widestRun)
+                {
+                    widestRun = run;
+                    widestEnd = i;
+                }
+            }
+
+            var walls = new HashSet<int>();
+            for (var i = 0; i < mushrooms; i++)
+            {
+                walls.Add(field.Bumpers[i].Wall);
+            }
+
+            var cannon = thrower.Position;
+            var where = FormattableString.Invariant(
+                $"{mushrooms} whole caps in {walls.Count} walls, {cutCaps} cut, the cannon at {cannon.x:0.###},{cannon.y:0.###}");
+            if (widestEnd < 0)
+            {
+                return $"error: none of {samples} angles arms the lance ({where})";
+            }
+
+            var best = AimAngleGrid.ResolveSweepAngle(
+                widestEnd - (widestRun / 2), config.AimAngleMinDegrees, config.AimAngleMaxDegrees,
+                config.AimAngleStepDegrees, continuousSamples);
+            var arming = $"{flying} of {samples} angles arm the lance";
+            return FormattableString.Invariant(
+                $"angle {best:0.###} (the middle of {widestRun} in a row; {arming}; {where})");
         }
 
         /// <summary>
@@ -791,6 +1013,11 @@ namespace BalloonParty.Editor.Staging
             CheatState.EmptyBoard = false;
             CheatState.BlockLevelUp = false;
             CheatState.TimeOfDaySpeedScale = 1f;
+
+            // What a dealt board left behind: the level its run began at and the mark that a cheat was used. Play
+            // mode resets both on its way in, but edit-mode tests run in this same domain and read them as they are.
+            CheatState.StartLevel = 1;
+            CheatState.AnyCheatUsed = false;
         }
 
         private static void AdvanceTick()
@@ -1154,6 +1381,15 @@ namespace BalloonParty.Editor.Staging
         private static T Resolve<T>()
         {
             return Object.FindAnyObjectByType<GameLifetimeScope>().Container.Resolve<T>();
+        }
+
+        // Publishes a message as the game does. This assembly does not reference MessagePipe, so the game's
+        // publisher of the message is found and called by name.
+        private static void Publish<T>(T message)
+        {
+            var publisherType = Type.GetType("MessagePipe.IPublisher`1, MessagePipe", true).MakeGenericType(typeof(T));
+            var publisher = Object.FindAnyObjectByType<GameLifetimeScope>().Container.Resolve(publisherType);
+            publisherType.GetMethod("Publish").Invoke(publisher, new object[] { message });
         }
     }
 }

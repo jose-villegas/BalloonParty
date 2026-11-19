@@ -8,10 +8,12 @@ using BalloonParty.Configuration.Balloons;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
 using BalloonParty.Nudge;
+using BalloonParty.Shared;
 using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Actor;
+using BalloonParty.Slots.Actor.Archetype;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
 using MessagePipe;
@@ -28,10 +30,12 @@ namespace BalloonParty.Balloon.Reward
     ///     outward just before the edge arrives (<see cref="INukeBlastSettings.NudgeLead" />). Each balloon the edge
     ///     reaches pops through <see cref="IBalloonPopper" />: its pop VFX play and its slot is freed, but no hit is
     ///     published, so nothing scores, no streak moves and no item fires. The other reward balloons and the grid
-    ///     actors stay. When the time is up a last sweep pops anything left, a line that landed meanwhile included,
-    ///     and the spawn clock gets the breather a big clear earns (<see cref="IBreatherGrant" />). A run reset, a level
-    ///     change or game over stops the blast where it is, with no breather. It runs on scaled time, so a pause holds
-    ///     it. The light, the push and the cloud are the views'.
+    ///     actors stay; a meadow mushroom stays too, but the edge blows its cap off as it reaches it
+    ///     (<see cref="IMushroomBlast" />), and the cap grows back as a cut one does. When the time is up a last
+    ///     sweep pops anything left, a line that landed meanwhile included, and blows off any cap the edge had not
+    ///     reached, and the spawn clock gets the breather a big clear earns (<see cref="IBreatherGrant" />). A run
+    ///     reset, a level change or game over stops the blast where it is, with no breather. It runs on scaled
+    ///     time, so a pause holds it. The light, the push and the cloud are the views'.
     /// </summary>
     internal sealed class NukeBlast : INukeDetonator, IStartable, ITickable, IRunResettable, IDisposable
     {
@@ -47,6 +51,7 @@ namespace BalloonParty.Balloon.Reward
         private readonly IBreatherGrant _breather;
         private readonly INukeBlastView _view;
         private readonly INukeCloudView _cloud;
+        private readonly IMushroomBlast _mushrooms;
         private readonly HashSet<ISlotActor> _spared = new();
         private readonly HashSet<ISlotActor> _nudged = new();
         private readonly List<Vector2Int> _slots = new();
@@ -73,8 +78,10 @@ namespace BalloonParty.Balloon.Reward
             IBalloonPopper popper,
             IBreatherGrant breather,
             INukeBlastView view,
-            INukeCloudView cloud)
+            INukeCloudView cloud,
+            IMushroomBlast mushrooms)
         {
+            _mushrooms = mushrooms;
             _gameOverSubscriber = gameOverSubscriber;
             _levelProgress = levelProgress;
             _grid = grid;
@@ -213,9 +220,15 @@ namespace BalloonParty.Balloon.Reward
             }
         }
 
-        // A balloon that isn't a reward pops; the other rewards and the grid actors stay.
+        // A balloon that isn't a reward pops; the other rewards and the grid actors stay. A mushroom stays and
+        // loses its cap: reached once, like everything the edge spares.
         private void Reach(ISlotActor actor)
         {
+            if (actor is MushroomBumperModel mushroom)
+            {
+                _mushrooms.BlowOff(mushroom.SlotIndex, _center);
+            }
+
             if (actor is not IBalloonModel balloon || balloon.TypeName.IsReward())
             {
                 _spared.Add(actor);

@@ -149,6 +149,20 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void HasPossibleMove_ABalloonACoverHoldsOverAGap_False_UntilItIsLetGo()
+        {
+            var balloon = new BalloonModel();
+            balloon.SetHeldByCover(true);
+            _grid.Place(balloon, null, new Vector2Int(1, 1));
+
+            Assert.IsFalse(_balancer.HasPossibleMove(), "a covered balloon holds its slot, so it is no move");
+            Assert.IsFalse(_balancer.TickFlightRebalance(5f), "and the flight pulse does not fire for it");
+
+            balloon.SetHeldByCover(false);
+            Assert.IsTrue(_balancer.HasPossibleMove());
+        }
+
+        [Test]
         public void HasPossibleMove_AnchoredUnbreakableAndAFreeBalloon_True()
         {
             PlaceUnbreakable(new Vector2Int(0, 1), anchored: true);

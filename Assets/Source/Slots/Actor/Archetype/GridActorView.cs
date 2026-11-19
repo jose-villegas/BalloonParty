@@ -22,12 +22,12 @@ namespace BalloonParty.Slots.Actor.Archetype
 
         public bool HasActiveCollider => _collider != null && _collider.enabled;
 
-        public void OnSpawned()
+        public virtual void OnSpawned()
         {
             transform.localScale = Vector3.one;
         }
 
-        public void OnDespawned()
+        public virtual void OnDespawned()
         {
             _tweenTracker?.Kill();
         }

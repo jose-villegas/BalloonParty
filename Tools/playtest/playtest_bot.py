@@ -81,6 +81,10 @@ def find_unity():
     sys.exit("The Unity CLI ('unity') wasn't found. Install it, or put it on PATH.")
 
 
+READY_CODE = ("return !UnityEditor.EditorApplication.isCompiling && !UnityEditor.EditorApplication.isUpdating "
+              "&& UnityEditor.EditorApplication.isPlaying == UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode;")
+
+
 class Editor:
     def __init__(self, unity, project):
         self.unity = unity
@@ -104,8 +108,21 @@ class Editor:
             raise RuntimeError(errors[0].get("message", "eval failed"))
         return reply["data"]["result"]["result"]
 
-    def wait_ready(self):
-        self.run("status", "--until-ready", "--timeout", "180", timeout=200)
+    def wait_ready(self, timeout=180, playing=None):
+        """Waits until the Editor answers and is neither compiling, importing nor changing Play mode; with
+        `playing` given, also until it is (True) or is not (False) in Play mode, for a wait that follows the
+        command to enter or leave it. Asked of the Editor itself: `unity status --until-ready` can lose sight
+        of a running Editor (it then reports no Pipeline server though commands still go through) and waits out
+        its whole timeout."""
+        deadline = time.time() + timeout
+        while time.time() < deadline:
+            try:
+                if self.eval(READY_CODE, timeout=30) is True and (
+                        playing is None or self.eval("return UnityEditor.EditorApplication.isPlaying;") is playing):
+                    return
+            except (RuntimeError, KeyError, TypeError, subprocess.TimeoutExpired):
+                pass
+            time.sleep(1)
 
 
 def read_tuning(project):
@@ -181,7 +198,24 @@ def percentile(values, fraction):
     return ordered[min(len(ordered) - 1, int(fraction * len(ordered)))]
 
 
-def telemetry_since(directory, started_utc):
+SESSION_ID_CODE = (
+    'var t = typeof(BalloonParty.Cheats.ICheat).Assembly.GetType("BalloonParty.Game.Telemetry.SessionTelemetryContext"); '
+    'foreach (var scope in UnityEngine.Object.FindObjectsByType<VContainer.Unity.LifetimeScope>()) '
+    '{ if (scope.Container != null && scope.Container.TryResolve(t, out var context)) '
+    '{ return (string)t.GetProperty("SessionId").GetValue(context); } } return "";')
+
+
+def telemetry_session(editor):
+    """The telemetry session id of the Play this Editor is in, or '' when it can't be read. Two Editors on
+    copies of the project write to the same telemetry folder, so the time alone doesn't tell their records
+    apart."""
+    try:
+        return editor.eval(SESSION_ID_CODE) or ""
+    except (RuntimeError, KeyError, TypeError, subprocess.TimeoutExpired):
+        return ""
+
+
+def telemetry_since(directory, started_utc, session_id=""):
     records = []
     for path in glob.glob(os.path.join(directory, "telemetry_*.jsonl")):
         if os.path.getmtime(path) < started_utc.timestamp() - 5:
@@ -190,6 +224,8 @@ def telemetry_since(directory, started_utc):
             if not line.strip():
                 continue
             record = json.loads(line)
+            if session_id and record.get("session_id") != session_id:
+                continue
             stamp = record.get("timestamp_utc", "")[:19]
             if stamp and datetime.datetime.fromisoformat(stamp) >= started_utc.replace(tzinfo=None):
                 records.append(record)
@@ -550,8 +586,8 @@ def main():
     parser.add_argument("--purple", action="store_true",
                         help="restart the first run on the first purple (extra colour) level its seed rolls")
     parser.add_argument("--seed", type=int, default=0,
-                        help="with --purple: restart on this run seed instead of the run's own, so sessions compare "
-                             "on the same level")
+                        help="restart the first run on this run seed, so sessions compare on the same levels: from "
+                             "level 1, or with --purple on that seed's first purple level")
     parser.add_argument("--no-disco", action="store_true",
                         help="place no disco ball: the control for measuring one")
     parser.add_argument("--no-nuke", action="store_true",
@@ -559,8 +595,6 @@ def main():
     parser.add_argument("--hearts", type=int, default=0,
                         help="start the first run with this many hearts (default: as configured)")
     args = parser.parse_args()
-    if args.seed and not args.purple:
-        parser.error("--seed only applies with --purple")
     if args.restart and args.on_loss == "stop":
         args.on_loss = "restart"
     for knob, value in SKILLS[args.skill].items():
@@ -604,20 +638,26 @@ def main():
     telemetry_dir = os.path.join(editor.eval("return UnityEngine.Application.persistentDataPath;"), "telemetry")
     if editor.eval("return UnityEditor.EditorApplication.isPlaying;") is not True:
         editor.command("editor.playmode", "start")
-        editor.wait_ready()
+        editor.wait_ready(playing=True)
 
     started = datetime.datetime.now(datetime.timezone.utc)
     print(f"Playing for {args.seconds} s; ticks go to {out_dir}", flush=True)
     samples = play(editor, args.seconds, tick_code, os.path.join(out_dir, "ticks.jsonl"))
     played = (datetime.datetime.now(datetime.timezone.utc) - started).total_seconds()
 
+    session_id = telemetry_session(editor)
     if not args.keep_playing:
         # Leaving Play mode ends the session, which flushes the telemetry still buffered.
         editor.command("editor.playmode", "stop")
-        editor.wait_ready()
+        editor.wait_ready(playing=False)
 
+    records = telemetry_since(telemetry_dir, started, session_id)
+    # The session's own records, kept beside its ticks: the report tabulates only some of their counters.
+    with open(os.path.join(out_dir, "telemetry.jsonl"), "w", encoding="utf-8") as out:
+        for record in records:
+            out.write(json.dumps(record) + "\n")
     report = build_report(args.label, played, player, read_tuning(editor.project), settle_retries(samples),
-                          telemetry_since(telemetry_dir, started), setup, args.on_loss)
+                          records, setup, args.on_loss)
     with open(os.path.join(out_dir, "report.md"), "w", encoding="utf-8") as out:
         out.write(report + "\n")
     print(report)

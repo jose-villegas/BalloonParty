@@ -6,6 +6,7 @@ using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Shared;
+using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
 using NSubstitute;
 using NUnit.Framework;
@@ -528,6 +529,169 @@ namespace BalloonParty.Tests.Balloon
             Assert.AreEqual(0, _assignments.Count);
         }
 
+        [TestCase(BalloonType.Golden)]
+        [TestCase(BalloonType.Heart)]
+        [TestCase(BalloonType.Disco)]
+        [TestCase(BalloonType.Nuke)]
+        public void ItemCover_CoversAGiftBalloon(BalloonType type)
+        {
+            BuildGrid(7, 8);
+            var gift = new Vector2Int(3, 2);
+            PlaceGift(gift, type);
+            AddSixMembers();
+
+            Assert.IsTrue(Plan(FormationShape.ItemCover));
+
+            CollectionAssert.AreEquivalent(Around(gift, 0, 1, 2, 3, 4, 5), Targets());
+            Assert.AreEqual(gift, _planner.CoveredHost);
+        }
+
+        // The item carrier and the gift mirror each other across the board's middle column, and so do the members,
+        // so the two covers cost the same. With no preference the first spot found wins, the item carrier's;
+        // any preference gives it to the gift.
+        [TestCase(0f, false)]
+        [TestCase(2f, true)]
+        public void ItemCover_BetweenAGiftAndAnItemCarrierAtEqualCost_ThePreferenceDecides(
+            float preference, bool coversTheGift)
+        {
+            _settings.GiftCoverPreference.Returns(preference);
+            BuildGrid(7, 8);
+            var item = new Vector2Int(1, 2);
+            var gift = new Vector2Int(5, 2);
+            PlaceItem(item);
+            PlaceGift(gift);
+            AddMembers(new Vector2Int(0, 4), new Vector2Int(3, 4), new Vector2Int(6, 4));
+
+            Assert.IsTrue(Plan(FormationShape.ItemCover));
+
+            Assert.AreEqual(coversTheGift ? gift : item, _planner.CoveredHost);
+        }
+
+        // The three already stand as a cover round the bomb (no travel); the gift three columns along would take 7
+        // slots of travel between them. The preference is for each member: at 2 the gift counts 6 cheaper, which is
+        // not enough, and at 3 it counts 9 cheaper, which is.
+        [TestCase(2f, false)]
+        [TestCase(3f, true)]
+        public void ItemCover_AMuchCheaperItemSpot_StillWins_UntilThePreferenceForEachMemberOutweighsIt(
+            float preference, bool coversTheGift)
+        {
+            _settings.GiftCoverPreference.Returns(preference);
+            BuildGrid(7, 8);
+            var item = new Vector2Int(1, 2);
+            var gift = new Vector2Int(4, 2);
+            PlaceItem(item);
+            PlaceGift(gift);
+            AddMembers(HexCoordinates.Step(item, 1), HexCoordinates.Step(item, 2), HexCoordinates.Step(item, 0));
+
+            Assert.IsTrue(Plan(FormationShape.ItemCover));
+
+            Assert.AreEqual(coversTheGift ? gift : item, _planner.CoveredHost);
+        }
+
+        // The planner picks at random among its few cheapest spots, and here those are the gift's two (an odd
+        // cover leans east or west) and then the item carrier's. The pick must not undo the preference.
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        public void ItemCover_WithAGiftsSpotCheapest_ThePickAmongTheFewCheapestStaysOnTheGift(int pick)
+        {
+            _settings.GiftCoverPreference.Returns(2f);
+            _settings.SpotChoices.Returns(3);
+            BuildGrid(7, 8);
+            var gift = new Vector2Int(5, 2);
+            PlaceItem(new Vector2Int(1, 2));
+            PlaceGift(gift);
+            AddMembers(new Vector2Int(0, 4), new Vector2Int(3, 4), new Vector2Int(6, 4));
+
+            Assert.IsTrue(_planner.TryPlan(
+                _grid, FormationShape.ItemCover, _candidates, _settings, choices => Mathf.Min(pick, choices - 1),
+                _assignments));
+
+            Assert.AreEqual(gift, _planner.CoveredHost);
+        }
+
+        // With no preference set, the pick among the few cheapest is as it always was: any of them, a gift's or not.
+        // The board mirrors itself again, so the gift's cheaper spot and the item carrier's cost the same; the
+        // gift's is found first and the item carrier's is the second of the few.
+        [Test]
+        public void ItemCover_WithNoPreference_ThePickAmongTheFewCheapestMayLandOnTheItemCarrier()
+        {
+            _settings.SpotChoices.Returns(3);
+            BuildGrid(7, 8);
+            var item = new Vector2Int(5, 2);
+            PlaceGift(new Vector2Int(1, 2));
+            PlaceItem(item);
+            AddMembers(new Vector2Int(0, 4), new Vector2Int(3, 4), new Vector2Int(6, 4));
+
+            Assert.IsTrue(_planner.TryPlan(
+                _grid, FormationShape.ItemCover, _candidates, _settings, _ => 1, _assignments));
+
+            Assert.AreEqual(item, _planner.CoveredHost);
+        }
+
+        [Test]
+        public void ItemCover_ReportsTheSlotOfTheBalloonItStandsRound_AndALineReportsNone()
+        {
+            BuildGrid(7, 8);
+            var item = new Vector2Int(3, 2);
+            PlaceItem(item);
+            AddMembers(new Vector2Int(0, 5), new Vector2Int(3, 5), new Vector2Int(6, 5));
+
+            Assert.IsTrue(Plan(FormationShape.ItemCover));
+            Assert.AreEqual(item, _planner.CoveredHost);
+
+            Assert.IsTrue(Plan(FormationShape.Horizontal));
+            Assert.IsNull(_planner.CoveredHost, "a line stands round nothing");
+        }
+
+        [Test]
+        public void ItemCover_WithNoSpot_ReportsNoBalloon_WhateverTheLastPlanCovered()
+        {
+            BuildGrid(7, 8);
+            PlaceItem(new Vector2Int(3, 2));
+            AddMembers(new Vector2Int(0, 5), new Vector2Int(3, 5), new Vector2Int(6, 5));
+            Assert.IsTrue(Plan(FormationShape.ItemCover));
+
+            _candidates.RemoveAt(0);
+
+            Assert.IsFalse(Plan(FormationShape.ItemCover));
+            Assert.IsNull(_planner.CoveredHost);
+        }
+
+        // One cover at most holds a balloon, so one letting go never frees a balloon another still stands round.
+        [Test]
+        public void ItemCover_NeverStandsRoundABalloonAnotherCoverHolds()
+        {
+            BuildGrid(7, 8);
+            var host = new BalloonModel();
+            host.Item.Value = ItemType.Bomb;
+            _grid.Place(host, null, new Vector2Int(3, 2));
+            AddSixMembers();
+
+            host.SetHeldByCover(true);
+            Assert.IsFalse(Plan(FormationShape.ItemCover));
+
+            host.SetHeldByCover(false);
+            Assert.IsTrue(Plan(FormationShape.ItemCover), "control: let go, it is a balloon to cover again");
+        }
+
+        // A full board, and the nearest row a line may take (3) is all balloons that covers hold, as are rows 0
+        // and 1: the line trades out row 2's free balloons, further off, sooner than move a held one.
+        [Test]
+        public void ALine_NeverPlansOverABalloonACoverHolds()
+        {
+            BuildGrid(5, 6);
+            FillRow(0, heldByACover: true);
+            FillRow(1, heldByACover: true);
+            FillRow(2);
+            FillRow(3, heldByACover: true);
+            AddMembers(new Vector2Int(0, 4), new Vector2Int(2, 4), new Vector2Int(4, 5));
+
+            Assert.IsTrue(Plan(FormationShape.Horizontal));
+
+            Assert.IsTrue(Targets().All(t => t.y == 2));
+        }
+
         [Test]
         public void NoSpotWideEnough_ReturnsFalse()
         {
@@ -559,6 +723,23 @@ namespace BalloonParty.Tests.Balloon
             _grid.Place(host, null, slot);
         }
 
+        private void PlaceGift(Vector2Int slot, BalloonType type = BalloonType.Golden)
+        {
+            _grid.Place(Gift(type), null, slot);
+        }
+
+        private static IWriteableSlotActor Gift(BalloonType type)
+        {
+            var config = new BalloonModelConfig(type, scoreValue: 0, hitsToPop: type == BalloonType.Nuke ? 3 : 1);
+            return type switch
+            {
+                BalloonType.Heart => new HeartBalloonModel(config),
+                BalloonType.Disco => new DiscoBalloonModel(config),
+                BalloonType.Nuke => new NukeBalloonModel(config),
+                _ => new GoldenBalloonModel(config),
+            };
+        }
+
         private static List<Vector2Int> Around(Vector2Int slot, params int[] directions)
         {
             return directions.Select(d => HexCoordinates.Step(slot, d)).ToList();
@@ -586,11 +767,13 @@ namespace BalloonParty.Tests.Balloon
             return member;
         }
 
-        private void FillRow(int row)
+        private void FillRow(int row, bool heldByACover = false)
         {
             for (var col = 0; col < _grid.Columns; col++)
             {
-                _grid.Place(new BalloonModel(), null, new Vector2Int(col, row));
+                var balloon = new BalloonModel();
+                balloon.SetHeldByCover(heldByACover);
+                _grid.Place(balloon, null, new Vector2Int(col, row));
             }
         }
 

@@ -22,6 +22,7 @@ unit-testable outside the editor.
 | `ShotSimBoardActor` | `Solver/` | The stub actors (`ShotSimDynamicActor`/`ShotSimStaticActor`) the dynamics grid is populated with, plus the per-flight snapshot structs for non-target actors |
 | `ShotMotionMath` | `Solver/` | Pure math: the nudge `Reach` envelope (mirrors `BalloonMotionTicker` exactly) and the moving-circle entry solve (relative-velocity quadratic, reduces to the exact static solve at zero velocity) |
 | `ShotItemLayer` | `Solver/` | Item-carrier layer (plan Phase C) — resolves a popped host's `ItemType` into a `ShotItemOutcome` (shield/pierce/speed-buff grants) plus a list of `EffectHit`s against a bound `ShotSimEffectBoard`, draining chained activations breadth-first up to `MaxActivationsPerFlight` |
+| `ShotBumperLayer` | `Solver/` | The meadow's mushrooms for the simulator (`Plans/PLAN-MeadowMushrooms.md`): the bumper circles copied at gather, each whole cap with its id and its wall (a cap a lance has cut is not in the field), with the game's own bounce rule, chain rules and the Snipe's speed buff for the lance a chain pays. A simulated lance cuts caps out of it for the rest of its flight (`Cut`), a bomb the flight sets off blows off the caps next to it (`BlowOff`, by the caps' slots, which the gather takes with them), and the next flight starts from the board as gathered. A nullable peer of `ShotBoardDynamics` and `ShotItemLayer`: `ShotBumperLayer.Gather` answers null on a board without mushrooms, and `Simulate` then runs the loop it always had. It holds no geometry of its own |
 | `ShotSimEffectBoard` | `Solver/` | The sim's `IEffectBoard` adapter (`Item/Effects/`) — rebuilds `EffectOccupant`s from the active working set (statics and the popped host excluded) over a `ShotSlotLattice` (`HexCoordinates` math only, no live grid/dynamics reference), so an item core selects identically whether or not a dynamic board is present |
 
 ## Rule mirroring
@@ -164,6 +165,36 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
   AoE pop too, matching the live code, which has none). An armed lance is barred from later
   entering cruise (`ProjectileView.TryEnterCruise`'s own bar, mirrored by `HandleWallBounce`'s
   `!state.IsPiercing` guard), so it can never layer cruise's per-shield speed tap on top.
+- **Mushrooms** (`PLAN-MeadowMushrooms`) — on a meadow board the flight has a fourth kind of event beside
+  the wall, the balloon and the balance pulse: the ball's entry into a mushroom's circle. Nothing about it
+  is re-implemented here. The entry is found by the live flight's own swept test (`Shared/BumperSweep`),
+  under its conditions: none once the stretch between two walls has had its bounces
+  (`MushroomChainRule.IsSpent`), not the mushroom being left while the ball still flies the direction it
+  left along, none whose contact lies beyond the walls, and for a ball found inside a circle (a deflect off
+  a balloon beside a mushroom can set it there) the point its line came in, behind it. A mushroom is met
+  before a wall, as the live step sweeps its stretch before it settles its walls, and before a balloon no
+  nearer than it. At the bounce (`ShotSimulator.BounceOffBumper`) the calls are the live resolver's, in its
+  order: `MushroomChainRule.OnBounce`, then the game's `IBumperBounceRule`
+  with the exact entry point and the chain as counted (the forgiving kick, blind to balloons), then the
+  turn. No shield is spent and nothing scores. The shot's cruise and its run of empty wall bounces
+  end, its taps kept; the Sweep rule's segment starts again at the bounce. A wall the shot survives clears
+  the chain (`MushroomChainRule.OnWall`), and the cruise lookahead counts a mushroom as in the way as the
+  live one does (`BumperLookahead`: the ball's own leg excuses a spent stretch and the mushroom being left;
+  every leg past a wall excuses nothing; a lance has none in its way). **The reward:** the live ball's fixed
+  step ends on the mushroom that arms it and it is armed there, so the simulated ball becomes the lance at
+  that bounce's contact point: `Arm` arms it with the Snipe's speed buff, as the game's `ISnipeArmer.ArmAt`
+  does, and nothing else pays (`ShotSimulator.PayMushroomReward`). From there the flight is a lance's in
+  every way the simulator has for one. **A lance cuts caps:** a simulated ball that is piercing bounces off
+  no mushroom. The first whole cap its path enters before its next wall is cut and the ball flies on unturned
+  (`ShotSimulator.TryCutCap`, the live `ProjectileMotionResolver.CutCaps`): the cap leaves the layer for the
+  rest of the flight, the chain is not asked, and the cap that armed the ball is left alone while it flies
+  the direction it left along. The
+  result carries what the mushrooms did (`ShotSimulationResult.Mushrooms`: bounces, chains completed, the
+  lance armed, caps cut, which mushrooms were hit) and `FinalPiercing`. `MushroomMirrorTests` flies
+  the same shots through the game's resolver, chain controller and Snipe handler and through `Simulate`
+  and holds them turn for turn; `MushroomAimGridTests` flies every layout of the baked wall catalogue from
+  every angle of the aim grid and holds what it measures inside the settings' band (the catalogue is baked
+  with this simulator: `Editor/MushroomWallBaker`).
 - **Ripe clusters** (`PLAN-RipeBubbleCluster`) — `ForBubbleClusterTarget` carries the cluster's `Ripe`
   flag at gather. A ripe cluster bursts whole on any damaging hit (the shot's contact, an item's hit, a
   ripple), mirroring `BubbleClusterModel.EvaluateHit`: it scores the bubbles it held through the
@@ -212,6 +243,25 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
   `ShotSolverWindow` will rank those chains above what live actually pays out. Needs `RecordColor`
   threading `cause.Flags.HasFlag(DamageFlags.DirectHit)` the same way live threads it into
   `ColorStreakTracker.Record`'s `canIncrement`.
+- **Mushrooms.** A lance a chain pays is a Snipe's lance, so what is said below of a Snipe grant holds
+  for it: it rides for the rest of the simulated flight where the live one ends at the wall that discharges
+  it. So past that wall the live ball is an ordinary one and bounces off the caps that are whole, while the
+  simulated one goes on cutting them. Every cap a simulated lance cuts banks it a charge, as in the game, but
+  for the same reason the charges are never spent here: live they keep the lance a lance at that wall.
+  Nothing grows back within a simulated flight: the game regrows a cut
+  cap on the board's beat, seconds later, which no flight here models. Nor does a flight see a cap another
+  ball cuts after the board was gathered: the layer is the board as it stood at the gather. A bomb the
+  flight sets off takes the caps next to it on both sides, but at once here and a frame after the pop in the
+  game (the item stagger below), so a ball that reaches such a cap inside that frame bounces live and flies
+  through simulated; a bomb's sway and a nuke's blast, which takes every cap, are not modelled at all. The
+  live ball gives up what was left of the fixed step it was paid in (under a step's length, once a
+  reward), which the timeline does not: from there the game runs up to one step behind it. The live step
+  bounces off 8 mushrooms at most before flying on untested, which no dealt board reaches in one step.
+  A ball found inside a circle bounces where its line came in, behind it, and the timeline counts no time
+  for the way back (live carries that distance forward instead: the same path, a few milliseconds apart).
+  And two things older than the mushrooms that their mirror tests had to step round: a fixed step that
+  crosses two walls spends one shield live and two here, and a deflect whose carried stretch reaches a
+  wall is clamped there live and reflected here.
 - `ShotItemLayer.MaxActivationsPerFlight` (32) is a sim-only safety valve — live's `ItemActivator`
   has no cap, so a flight that would chain past it in-game keeps granting effects the sim silently
   drops from that point. Related edge: chained activations enqueue in the chain's hit order, and

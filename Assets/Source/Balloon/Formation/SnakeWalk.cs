@@ -55,7 +55,8 @@ namespace BalloonParty.Balloon.Formation
         /// <summary>
         ///     Whether a snake may walk into <paramref name="occupant" />'s slot, sending it to the slot its tail
         ///     leaves: a balloon that moves, held by nothing. A formation member (a tough or an unbreakable,
-        ///     free or not), an anchored actor and anything static stand in its way.
+        ///     free or not), an anchored actor (the balloon a cover stands round, an armed nuke) and anything
+        ///     static stand in its way.
         /// </summary>
         internal static bool CanPassThrough(IWriteableSlotActor occupant)
         {

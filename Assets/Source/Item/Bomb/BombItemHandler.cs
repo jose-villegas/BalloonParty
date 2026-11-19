@@ -33,6 +33,7 @@ namespace BalloonParty.Item.Bomb
         private readonly Vector2Int[] _neighborBuffer = new Vector2Int[6];
         private readonly DisturbanceFieldService _disturbanceField;
         private readonly SceneLightFieldService _lightField;
+        private readonly IMushroomBlast _mushrooms;
 
         public ItemType Type => ItemType.Bomb;
 
@@ -45,8 +46,10 @@ namespace BalloonParty.Item.Bomb
             ItemEffectPlayer effectPlayer,
             BalloonOverlapQuery overlap,
             DisturbanceFieldService disturbanceField,
-            SceneLightFieldService lightField)
+            SceneLightFieldService lightField,
+            IMushroomBlast mushrooms)
         {
+            _mushrooms = mushrooms;
             _itemConfig = itemConfig;
             _hitDispatcher = hitDispatcher;
             _nudgePublisher = nudgePublisher;
@@ -85,6 +88,10 @@ namespace BalloonParty.Item.Bomb
             {
                 BlastBalloons(balloon, worldPosition, settings.Bomb.Radius, context);
             }
+
+            // The meadow's mushrooms: the caps in the slots next to the bomb are blown off, where an unbreakable
+            // would be broken, and the others the blast reaches sway.
+            _mushrooms.Bomb(worldPosition, balloon.SlotIndex.Value, isRainbow, settings.Bomb.Radius);
 
             // A rainbow bomb only scales the effect visually — the kill radius is unchanged.
             var effectDuration = _effectPlayer.Play(settings,

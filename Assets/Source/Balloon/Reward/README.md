@@ -22,7 +22,7 @@ ball's pop paints the board rainbow (see The disco ball's wave).
 | `NukeSchedule` | When the nuke is due, and whether one is on the board: its gates (`FromLevel`, `PerLevel`, `CooldownLines`), the sure level (`SureLevel`) and the roll against `INukeOdds.Chance`. The service asks it first on a line |
 | `INukeOdds`, `NukeOdds` | The nuke's chance on a line: a tiny base raised by the trouble the player is in (board fill, spawn-clock pressure, low hearts, hearts lost in succession, read from `WaveDamageMessage` and fading each line). Registered as an entry point and `IRunResettable` |
 | `NukeFuse` | The armed nuke's fuse: a second while the counter's heart flashes (`HeartSeconds`), then the three-second countdown. Publishes `NukeArmedMessage` at the arming hit and a `NukeCountdownMessage` each second of the count, pulls the nearby balloons in, then calls `INukeDetonator.Detonate`. Stops with no blast on a level change, game over or run reset. Registered as an entry point and `IRunResettable` |
-| `INukeDetonator`, `NukeBlast` | `Detonate` is the blast itself: pops the nuke, kills the shots in flight, then grows a disc from it that pops every balloon it reaches but the other rewards, scoring nothing, and finally asks the spawn clock for a breather. `NukeBlast` implements it, as an entry point and `IRunResettable`; drawn by `Balloon/View/NukeBlastView` and `NukeCloudView` |
+| `INukeDetonator`, `NukeBlast` | `Detonate` is the blast itself: pops the nuke, kills the shots in flight, then grows a disc from it that pops every balloon it reaches but the other rewards, scoring nothing, blows the cap off every meadow mushroom it reaches (`IMushroomBlast.BlowOff`; the mushroom stays), and finally asks the spawn clock for a breather. `NukeBlast` implements it, as an entry point and `IRunResettable`; drawn by `Balloon/View/NukeBlastView` and `NukeCloudView` |
 | `BoardDisc` | The disc's shape and the last sweep, shared by `DiscoWave` and `NukeBlast`: the radius at a share of the time, which slots the edge has reached |
 | `PlatedRewardSchedule` | When one plated balloon (the golden one, the disco ball) is due, and whether one is on the board: the purple rolls, the ordinary level's single roll, the sure level. The service runs one for each; `RollPurple` is shared with the heart |
 | `PlatedRewardTuning` | One plated balloon's numbers, read from `IRewardBalloonSettings` each line (`Golden(settings)`, `Disco(settings)`), so the two share the rules and differ only in these |
@@ -63,6 +63,26 @@ heart body and bandages drawn by `Tools/art/make_heart_balloon.py`, and its own 
 (`Shaders/BalloonParty/Balloon/HeartShine.shader`, lit from the heart's baked normals), because the
 round balloons' shine is drawn for a circle. Fainter god rays than the golden's turn behind it, white and
 shorter (`GodRaysLook` again, on the `HeartRays` material and palette entry). Its pop is a beat: its catalogue entry's `PopPulse` swells it to 1.25 and shrinks it away, while `PSVFX_HeartPop` throws a burst of hearts on along the shot, drawn with the HUD heart's own sprite (`HeartTrail_Combined`: its shine and its soft baked shadow), spinning only in the board's plane so the shadow keeps falling to the lower right (the override's `AlongHit`; a board clear throws them up). Its pop cue is `BalloonPopHeart`, a harp pluck (`harp005` by t1mp, CC BY) the sound bank pitches to the board's key.
+
+## Under a formation's cover
+
+The unbreakables' cover formation (`FormationShape.ItemCover`, `Balloon/Formation/README.md`) stands round a
+reward balloon as it does round a bomb, and prefers one to an item carrier
+(`IUnbreakableFormationSettings.GiftCoverPreference`). It takes three to six unbreakables: the two slots below
+the balloon first, toward the cannon, then its sides, then above, and it holds `ItemCoverHoldCycles` (3 cycles,
+about 10 s) before it changes shape. The cover holds the balloon in its slot all that time
+(`IWriteableCoverHost`, on `BalloonModelBase`): it is anchored as the members are, so it stays between them and
+can drift neither into reach nor out of it. The formation's light ring closes over it. Not on the meadow, whose
+unbreakables form only the snake.
+
+What it costs the player differs by balloon. The heart pops on any hit, so a cover takes the straight shot away
+and leaves a bank off the walls into the open side; six leave only a pierce or an item's damage. The golden
+balloon and the disco ball already need piercing damage, and a lance plows through the cover as it does through
+them; a full cover takes every slot beside them, so no bomb stands there. The nuke keeps its dents: each
+ordinary hit that reaches it still counts toward its three, from above while the cover is open. Under six no
+ordinary shot reaches it until the cover changes, and only piercing damage or a beam arms it, at a moment when
+the player it came for is in trouble. Under a cover it is anchored whether it is armed or not. An armed nuke's
+blast pops its cover with the rest of the board.
 
 ## When each one is due
 
@@ -215,7 +235,10 @@ bare sand, its water piled against the sides of the board, and lets it flood bac
 billowing cap that starts as fire and cools to lit smoke, its shadow on the board, and a dust ring racing out). Every balloon and grid actor gets an outward nudge `NudgeLead` ahead of the edge, and
 every balloon the edge reaches pops through `IBalloonPopper` (`BalloonControllerRegistry.TryPopSingle`): its pop
 effects play and its slot is freed, but no hit is published, so nothing scores, no streak moves, no goal advances
-and no item fires. Other reward balloons and grid actors are spared. A last sweep at the end pops what is left,
+and no item fires. Other reward balloons and grid actors are spared. A meadow mushroom is spared too, but
+it loses its cap as the edge reaches it: `NukeBlast` tells `IMushroomBlast.BlowOff` (`Item/Bomb/MushroomBlast`)
+the mushroom's slot and the blast's centre, once a mushroom, and the cap is blown away from the nuke and grows
+back as a cut one does (`Plans/PLAN-MeadowMushrooms.md`, *Blasts take caps off: the rule as built*). A last sweep at the end pops what is left and takes the caps the edge had not reached,
 and then `IBreatherGrant.Grant` (`SpawnClock`) starts the breather a big clear earns, even inside the cooldown of an
 earlier one, and `NukeBreatherMessage` has `NukeSoundRouter` play a gust of wind. A level change, a game over or a
 run reset stops the blast where it is, with no breather.

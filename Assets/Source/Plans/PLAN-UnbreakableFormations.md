@@ -256,8 +256,15 @@ Changes from the design above, made during implementation and review:
   `UnbreakableFormationLook` turns it back off when `OnSpawned` re-enables it.
 - **Spawns already stop under a formation.** `BalloonPlacementResolver` treats every balloon as a
   ceiling, members included.
-- **The covered item isn't anchored.** If it pops or rises away during the hold, the cover stays where
-  it is until the next change.
+- **The covered item was not anchored at first, and is now (2026-11-19, the owner's ask).** It used to rise
+  away out of an open cover on the next balance, leaving the cover round nothing. The cover now holds the
+  balloon it stands round in its slot for as long as it stands (`IWriteableCoverHost`). If the balloon pops
+  during the hold, the cover stays where it is until the next change.
+- **Covers and gifts (2026-11-19, the owner's asks).** A cover also stands round a reward balloon (golden,
+  heart, disco ball, nuke) and prefers one to an item carrier: a gift's spot counts as cheaper by
+  `GiftCoverPreference` (2) slots of travel for each member. The covered balloon is the cover's host
+  (`ICoveredHosts`), and the formation's light ring closes over it. The shape keeps the name `ItemCover`.
+  Both are described in `Balloon/Formation/README.md`.
 
 ### Second pass: several formations and reinforcements (2026-11-13)
 

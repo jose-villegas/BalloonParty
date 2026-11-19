@@ -4,6 +4,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Projectile;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Game.Assist;
+using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
@@ -21,14 +22,18 @@ namespace BalloonParty.Balloon.Formation
     ///     to arrange: each formation holds for its shape's hold cycles, then plans a different shape, and the
     ///     unbreakables left free form new ones. It hands the balancer the moves and anchors the members. A
     ///     formation that loses members below the minimum breaks at once. One that stands untouched may call
-    ///     in another unbreakable (<see cref="IFormationReinforcements" />). The board's toughs are one snake of
+    ///     in another unbreakable (<see cref="IFormationReinforcements" />). A level may allow only some shapes
+    ///     (<c>ILevelParameters.AllowedFormationShapes</c>, the snake alone on the meadow): a shape it doesn't allow
+    ///     is never planned, so with none left to plan the unbreakables stay loose. The board's toughs are one snake of
     ///     their own (<see cref="IUnbreakableFormationSettings.ToughSnakes" />): it starts from the deepest with
     ///     every other tough lined up behind it at once, even while they are still gliding in, each tough that
     ///     arrives later falls in behind its tail as soon as it appears, and it walks through the balloons in its way, keeping its order and its shape, until
-    ///     its last member pops.
+    ///     its last member pops. The balloon an item cover stands round is its host
+    ///     (<see cref="ICoveredHosts" />) for as long as the cover holds that shape, and the service holds it in
+    ///     its slot meanwhile (<see cref="IWriteableCoverHost" />), anchored as the members are, so it stays inside.
     /// </summary>
     internal sealed class UnbreakableFormationService : IStartable, IRunResettable, IDisposable,
-        IFormationReinforcements, IToughSnakeBody
+        IFormationReinforcements, IToughSnakeBody, ICoveredHosts
     {
         private static readonly FormationShape[] Shapes =
         {
@@ -50,6 +55,7 @@ namespace BalloonParty.Balloon.Formation
         private readonly IUnbreakableFormationSettings _settings;
         private readonly ThreatEase _threatEase;
         private readonly IProjectileRegistry _projectiles;
+        private readonly IActiveLevelParameters _level;
         private readonly FormationPlanner _planner = new();
         private readonly ShotWall _wall = new();
         private readonly List<IWriteableFormationMember> _candidates = new();
@@ -69,6 +75,7 @@ namespace BalloonParty.Balloon.Formation
         private readonly List<IWriteableFormationMember> _gathered = new();
         private readonly List<IWriteableFormationMember> _joiners = new();
         private readonly List<FormationShape> _shapePool = new();
+        private readonly List<CoveredHost> _coveredHosts = new();
         private readonly CompositeDisposable _subscriptions = new();
         private readonly Func<int, int> _pickIndex;
 
@@ -77,6 +84,8 @@ namespace BalloonParty.Balloon.Formation
         private int _unbreakablesOnBoard;
         // Set at the start of each shape plan: MaxUnbreakableSnakes already walk, so the plan picks no snake.
         private bool _snakesAtCap;
+        // Set at the start of each shape plan: the shapes the level in play allows.
+        private FormationShapes _allowedShapes = FormationShapes.All;
         private int _reinforcementCalls;
 
         // Set when free toughs had nowhere to fall in; cleared by the next change on the board.
@@ -107,6 +116,8 @@ namespace BalloonParty.Balloon.Formation
         public IReadOnlyList<ISlotActor> ToughSnakeMembers =>
             ToughSnake() is { } snake ? snake.MemberList : Array.Empty<ISlotActor>();
 
+        public IReadOnlyList<CoveredHost> CoveredHosts => _coveredHosts;
+
         // The unbreakables' beat and the tough snake's step interval (IUnbreakableFormationSettings); the balancer
         // keeps the clocks.
         internal float ToughSnakeStepSeconds => _settings?.ToughSnakeStepSeconds ?? 0f;
@@ -119,12 +130,13 @@ namespace BalloonParty.Balloon.Formation
         [Inject]
         internal UnbreakableFormationService(
             SlotGrid grid, IBalloonsConfiguration balloonsConfig, ThreatEase threatEase,
-            IProjectileRegistry projectiles = null)
+            IProjectileRegistry projectiles = null, IActiveLevelParameters level = null)
         {
             _grid = grid;
             _settings = balloonsConfig.UnbreakableFormation;
             _threatEase = threatEase;
             _projectiles = projectiles;
+            _level = level;
             _pickIndex = PickIndex;
         }
 
@@ -577,6 +589,9 @@ namespace BalloonParty.Balloon.Formation
                     continue;
                 }
 
+                // The hold is over, so the cover's balloon is free before the next shape is planned: a line may
+                // trade it out, and a cover planned again (round it or another) holds whichever it chose.
+                LetHostGo(formation);
                 JoinASnakesTail(formation, relocate);
                 CollectCandidates(formation, armoured: false);
                 if (_candidates.Count < _settings.MinMembers
@@ -1193,6 +1208,10 @@ namespace BalloonParty.Balloon.Formation
         {
             var heading = HeadingFor(shape);
 
+            // Before any member sets off: the balance that follows this arrangement must already find the
+            // cover's balloon held, or it floats up out of an open cover while the members are on their way.
+            HoldHost(formation, shape);
+
             // Only members the new shape drops go back to red; a member that stays never dips out of it.
             var members = formation.MemberList;
             for (var i = 0; i < members.Count; i++)
@@ -1236,6 +1255,72 @@ namespace BalloonParty.Balloon.Formation
             if (shape == FormationShape.Snake)
             {
                 LineUpSnake(formation);
+            }
+        }
+
+        // Only a cover has a host: the balloon the plan just made stands round, held in its slot from now until the
+        // cover lets it go. A cover planned again round the same balloon holds it again at once, so whatever a
+        // view hangs on it (its ring) carries on.
+        private void HoldHost(StandingFormation formation, FormationShape shape)
+        {
+            LetHostGo(formation);
+            if (shape == FormationShape.ItemCover && _planner.CoveredHost is { } hostSlot
+                && !_grid.IsEmpty(hostSlot.x, hostSlot.y) && _grid.At(hostSlot) is IWriteableCoverHost host)
+            {
+                host.SetHeldByCover(true);
+                formation.Host = _grid.At(hostSlot);
+                formation.HostSlot = hostSlot;
+                RebuildCoveredHosts();
+            }
+        }
+
+        // Every way a cover ends for its balloon comes through here, so none leaves a balloon held for good, and
+        // the list the views read follows here and nowhere else: whatever the caller does next (plan again,
+        // release, nothing), no balloon stays listed that no cover holds.
+        private void LetHostGo(StandingFormation formation)
+        {
+            if (formation.Host == null)
+            {
+                return;
+            }
+
+            if (formation.Host is IWriteableCoverHost host)
+            {
+                host.SetHeldByCover(false);
+            }
+
+            formation.Host = null;
+            RebuildCoveredHosts();
+        }
+
+        // Held, a covered balloon leaves its slot only by what takes anchored balloons off the board on purpose:
+        // a pop (a hit, an item, a nuke's blast), the level's ascent, a run's clearing. It is gone from its
+        // cover then, which stands round nothing until it changes.
+        private void DropHostsThatLeft()
+        {
+            for (var i = 0; i < _formations.Count; i++)
+            {
+                var formation = _formations[i];
+                if (formation.Host != null && _grid.At(formation.HostSlot) != formation.Host)
+                {
+                    LetHostGo(formation);
+                }
+            }
+        }
+
+        // The covered balloons are whatever the standing formations hold. Only HoldHost and LetHostGo write a
+        // standing formation's host, and each rebuilds this.
+        private void RebuildCoveredHosts()
+        {
+            _coveredHosts.Clear();
+            for (var i = 0; i < _formations.Count; i++)
+            {
+                var formation = _formations[i];
+                if (formation.Host != null)
+                {
+                    _coveredHosts.Add(new CoveredHost(
+                        formation.Host, formation.Id, _grid.IndexToWorldPosition(formation.HostSlot)));
+                }
             }
         }
 
@@ -1355,6 +1440,7 @@ namespace BalloonParty.Balloon.Formation
         {
             _unbreakablesOnBoard = CountUnbreakables();
             _snakesAtCap = _settings.MaxUnbreakableSnakes > 0 && CountUnbreakableSnakes(own) >= _settings.MaxUnbreakableSnakes;
+            _allowedShapes = _level?.Current?.AllowedFormationShapes ?? FormationShapes.All;
             _shapePool.Clear();
             foreach (var candidate in Shapes)
             {
@@ -1407,8 +1493,14 @@ namespace BalloonParty.Balloon.Formation
             return _shapePool.Count - 1;
         }
 
+        // A shape the level doesn't allow weighs nothing: it is never picked, nor kept as the last resort.
         private float WeightOf(FormationShape shape)
         {
+            if (!_allowedShapes.Allows(shape))
+            {
+                return 0f;
+            }
+
             return shape switch
             {
                 FormationShape.Horizontal => _settings.HorizontalWeight,
@@ -1502,6 +1594,9 @@ namespace BalloonParty.Balloon.Formation
         // line's balance, or the timed pulse, floats the released ones up.
         private void OnGridChanged(SlotGridChangedEvent change)
         {
+            // Before the arranging guard, so a covered balloon that goes while the service is moving its own members
+            // is let go all the same.
+            DropHostsThatLeft();
             if (_arranging)
             {
                 return;
@@ -1589,6 +1684,7 @@ namespace BalloonParty.Balloon.Formation
                 _formationOf.Remove(members[i]);
             }
 
+            LetHostGo(formation);
             formation.Reset();
             _spareFormations.Add(formation);
         }

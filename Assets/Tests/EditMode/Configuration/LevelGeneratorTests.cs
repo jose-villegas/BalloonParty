@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BalloonParty.Balloon.Formation;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration.Balloons;
+using BalloonParty.Configuration.GridActors;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Level;
 using BalloonParty.Configuration.Ranges;
+using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Actor.Archetype;
 using NUnit.Framework;
 using UnityEngine;
@@ -158,7 +161,8 @@ namespace BalloonParty.Tests.Configuration
                     Assert.LessOrEqual(settings.Items.First(i => i.Type == weight.Type).UnlockLevel, level);
                 }
 
-                foreach (var gate in result.GridActorGates)
+                // The meadow's mushrooms are no catalogue piece: they unlock with the meadow.
+                foreach (var gate in result.GridActorGates.Where(g => g.Type != GridActorType.Mushroom))
                 {
                     Assert.LessOrEqual(settings.GridActors.First(a => a.Type == gate.Type).UnlockLevel, level);
                 }
@@ -166,17 +170,24 @@ namespace BalloonParty.Tests.Configuration
         }
 
         [Test]
-        public void Generate_EveryCataloguePiece_IsInOnItsUnlockLevel_WhateverTheSeed()
+        public void Generate_EveryCataloguePiece_IsInOnItsUnlockLevel_WhateverTheSeed_WhereItsScenarioAllowsIt()
         {
             var settings = ShippedLevelCatalogue.Build();
+
+            // The fixture's Tougher unlocks on level 6, the first meadow level, where no tough is placed.
+            var heldBack = settings.Balloons
+                .Where(b => !b.AllowedOn(ScenarioSchedule.ForLevel(settings.Scenario, b.UnlockLevel)))
+                .Select(b => b.Type);
+            CollectionAssert.AreEqual(new[] { BalloonType.Tougher }, heldBack);
 
             for (var seed = 0; seed < SeedCount; seed++)
             {
                 foreach (var entry in settings.Balloons)
                 {
+                    var allowed = entry.AllowedOn(ScenarioSchedule.ForLevel(settings.Scenario, entry.UnlockLevel));
                     var result = LevelGenerator.Generate(settings, entry.UnlockLevel, seed);
-                    Assert.IsTrue(result.BalloonWeights.Any(w => w.Type == entry.Type),
-                        $"balloon {entry.Type} missing on its unlock level {entry.UnlockLevel}, seed {seed}");
+                    Assert.AreEqual(allowed, result.BalloonWeights.Any(w => w.Type == entry.Type),
+                        $"balloon {entry.Type} on its unlock level {entry.UnlockLevel}, seed {seed}");
                 }
 
                 foreach (var entry in settings.Items)
@@ -755,11 +766,14 @@ namespace BalloonParty.Tests.Configuration
         [Test]
         public void Generate_TheFirstMeadow_GrowsItsBushesAsTheCloudsGo([Values(0, 1, 7)] int seed)
         {
-            var settings = Settings(gridActors: new[]
-            {
-                new GridActorContentEntry(GridActorType.Puff, 1, 0, new RangedInt(8, 8), new RangedInt(8, 8), 0),
-                new GridActorContentEntry(GridActorType.Bush, 1, 0, new RangedInt(4, 8), new RangedInt(4, 8), 0, 3),
-            });
+            // The shared limit with the mushrooms is out of reach here, so only the cloud trade moves the count.
+            var settings = Settings(
+                gridActors: new[]
+                {
+                    new GridActorContentEntry(GridActorType.Puff, 1, 0, new RangedInt(8, 8), new RangedInt(8, 8), 0),
+                    new GridActorContentEntry(GridActorType.Bush, 1, 0, new RangedInt(4, 8), new RangedInt(4, 8), 0, 3),
+                },
+                mushrooms: Mushrooms(2, 4, 100));
 
             var bushes = new (int, int)[6];
             for (var i = 0; i < bushes.Length; i++)
@@ -804,7 +818,7 @@ namespace BalloonParty.Tests.Configuration
                 balloons: new[]
                 {
                     Balloon(BalloonType.Simple, ContentRole.Threat, 1, 0),
-                    Balloon(BalloonType.Tough, ContentRole.Threat, 1, 1),
+                    Balloon(BalloonType.Unbreakable, ContentRole.Threat, 1, 1),
                     Balloon(BalloonType.Rainbow, ContentRole.Threat, 1, 2),
                 },
                 gridActors: new[]
@@ -835,7 +849,7 @@ namespace BalloonParty.Tests.Configuration
                 new GridActorContentEntry(GridActorType.Puff, 1, 0, new RangedInt(1, 1), new RangedInt(1, 1), 0),
             });
 
-            var gate = LevelGenerator.Generate(settings, 17, 0).GridActorGates.Single();
+            var gate = LevelGenerator.Generate(settings, 17, 0).GridActorGates.Single(g => g.Type == GridActorType.Puff);
 
             Assert.AreEqual((1, 1), (gate.Count.Min, gate.Count.Max));
         }
@@ -995,6 +1009,379 @@ namespace BalloonParty.Tests.Configuration
             Assert.IsEmpty(water.GridActorGates);
         }
 
+        [Test]
+        public void Generate_NoMeadowLevel_HasToughs_TheSkyKeepsThem_AndTheWaterStillHasNone(
+            [Values(0, 3, 98765)] int runSeed)
+        {
+            // All staples: everywhere they are allowed they are in, so only the scenario can keep them out.
+            var settings = Settings(
+                balloons: new[]
+                {
+                    Balloon(BalloonType.Simple, ContentRole.Threat, 1, 0),
+                    Balloon(BalloonType.Tough, ContentRole.Threat, 1, 0),
+                    Balloon(BalloonType.Tougher, ContentRole.Threat, 1, 0),
+                    Balloon(BalloonType.Unbreakable, ContentRole.Threat, 1, 0),
+                },
+                water: 0.5f);
+
+            var levels = new Dictionary<ScenarioKind, int>();
+            for (var level = 1; level < 300; level++)
+            {
+                var scenario = ScenarioSchedule.ForLevel(settings.Scenario, level, runSeed);
+                levels[scenario] = levels.GetValueOrDefault(scenario) + 1;
+                var result = LevelGenerator.Generate(settings, level, level, runSeed);
+
+                var toughs = scenario == ScenarioKind.Sky;
+                Assert.AreEqual(toughs, Has(result, BalloonType.Tough), $"{scenario} level {level}");
+                Assert.AreEqual(toughs, Has(result, BalloonType.Tougher), $"{scenario} level {level}");
+                Assert.IsTrue(Has(result, BalloonType.Unbreakable), $"{scenario} level {level} keeps the unbreakable");
+            }
+
+            Assert.Greater(levels.GetValueOrDefault(ScenarioKind.Sky), 20, "too little sky to check");
+            Assert.Greater(levels.GetValueOrDefault(ScenarioKind.Ground), 20, "too little meadow to check");
+            Assert.Greater(levels.GetValueOrDefault(ScenarioKind.Water), 20, "too little water to check");
+        }
+
+        [Test]
+        public void Generate_OnTheMeadow_TheToughsBudgetBuysAnotherThreat([Values(0, 1, 7, 42)] int seed)
+        {
+            // Each optional piece costs the whole budget. On the meadow the tough may not be a pick that comes out
+            // empty, and the mushrooms may not cost anything: the budget always goes to the unbreakable.
+            var settings = Settings(
+                threat: new BudgetFormula(2f, 0f, 2f),
+                balloons: new[]
+                {
+                    Balloon(BalloonType.Simple, ContentRole.Threat, 1, 0),
+                    Balloon(BalloonType.Tough, ContentRole.Threat, 1, 2),
+                    Balloon(BalloonType.Unbreakable, ContentRole.Threat, 1, 2),
+                });
+
+            for (var level = 16; level <= 19; level++)
+            {
+                var meadow = LevelGenerator.Generate(settings, level, seed);
+
+                Assert.IsTrue(Has(meadow, BalloonType.Unbreakable), $"level {level}");
+                Assert.IsFalse(Has(meadow, BalloonType.Tough), $"level {level}");
+                Assert.IsTrue(meadow.GridActorGates.Any(g => g.Type == GridActorType.Mushroom), $"level {level}");
+            }
+        }
+
+        [Test]
+        public void Generate_InTheSky_TheToughStillWinsTheBudgetSometimes()
+        {
+            var settings = Settings(
+                threat: new BudgetFormula(2f, 0f, 2f),
+                balloons: new[]
+                {
+                    Balloon(BalloonType.Simple, ContentRole.Threat, 1, 0),
+                    Balloon(BalloonType.Tough, ContentRole.Threat, 1, 2),
+                    Balloon(BalloonType.Unbreakable, ContentRole.Threat, 1, 2),
+                });
+
+            var toughs = 0;
+            for (var seed = 0; seed < 100; seed++)
+            {
+                toughs += Has(LevelGenerator.Generate(settings, 15, seed), BalloonType.Tough) ? 1 : 0;
+            }
+
+            Assert.That(toughs, Is.InRange(20, 80), "an even pick between two pieces of the same cost");
+        }
+
+        // The shipped range, 2 to 4. A half rounds up, so a stretch of five has its third mushroom from its
+        // second level.
+        [TestCase(1, new[] { 2 })]
+        [TestCase(2, new[] { 2, 4 })]
+        [TestCase(3, new[] { 2, 3, 4 })]
+        [TestCase(4, new[] { 2, 3, 3, 4 })]
+        [TestCase(5, new[] { 2, 3, 3, 4, 4 })]
+        [TestCase(6, new[] { 2, 2, 3, 3, 4, 4 })]
+        public void MushroomWallsFor_GrowsFromTheFewestOnTheFirstLevelToTheMostOnTheLast(int length, int[] expected)
+        {
+            var limits = new MushroomSettings().Placement;
+
+            var counts = Enumerable.Range(0, length)
+                .Select(position => LevelGenerator.MushroomWallsFor(
+                    new ScenarioStretch(ScenarioKind.Ground, position, length), limits))
+                .ToArray();
+
+            CollectionAssert.AreEqual(expected, counts);
+        }
+
+        [Test]
+        public void MushroomWallsFor_AnyStretchLength_StaysInRange_NeverShrinks_AndEndsOnTheMost()
+        {
+            var limits = new MushroomSettings().Placement;
+
+            for (var length = 1; length <= 40; length++)
+            {
+                var previous = limits.MinCount;
+                for (var position = 0; position < length; position++)
+                {
+                    var count = LevelGenerator.MushroomWallsFor(
+                        new ScenarioStretch(ScenarioKind.Ground, position, length), limits);
+
+                    Assert.That(count, Is.InRange(limits.MinCount, limits.MaxCount), $"{position} of {length}");
+                    Assert.GreaterOrEqual(count, previous, $"{position} of {length}");
+                    previous = count;
+                }
+
+                Assert.AreEqual(length > 1 ? limits.MaxCount : limits.MinCount, previous, $"the last of {length}");
+            }
+        }
+
+        [Test]
+        public void MushroomWallsFor_OffTheMeadow_IsNone()
+        {
+            var limits = new MushroomSettings().Placement;
+
+            foreach (var kind in new[] { ScenarioKind.Sky, ScenarioKind.Water, ScenarioKind.Paper })
+            {
+                for (var position = 0; position < 4; position++)
+                {
+                    Assert.AreEqual(0,
+                        LevelGenerator.MushroomWallsFor(new ScenarioStretch(kind, position, 4), limits), $"{kind}");
+                }
+            }
+        }
+
+        [TestCase(1, 5, new[] { 1, 2, 3, 4, 5 })]
+        [TestCase(3, 3, new[] { 3, 3, 3, 3, 3 })]
+        [TestCase(3, 1, new[] { 3, 3, 3, 3, 3 })]
+        [TestCase(0, 0, new[] { 0, 0, 0, 0, 0 })]
+        public void MushroomWallsFor_ReadsItsRangeFromTheSettings(int fewest, int most, int[] expected)
+        {
+            var limits = Mushrooms(fewest, most, 9).Placement;
+
+            var counts = Enumerable.Range(0, 5)
+                .Select(position => LevelGenerator.MushroomWallsFor(
+                    new ScenarioStretch(ScenarioKind.Ground, position, 5), limits))
+                .ToArray();
+
+            CollectionAssert.AreEqual(expected, counts);
+        }
+
+        [Test]
+        public void Generate_TheFirstMeadow_HasItsMushrooms_AndTheSkyEitherSideHasNone([Values(0, 1, 7)] int seed)
+        {
+            // The pinned schedule: sky 15, the meadow 16-19, sky 20. No budget and no catalogue actor: the mushrooms
+            // are in all the same.
+            var settings = Settings();
+
+            var mushrooms = new int[6];
+            for (var i = 0; i < mushrooms.Length; i++)
+            {
+                var result = LevelGenerator.Generate(settings, 15 + i, seed);
+                var gates = result.GridActorGates.Where(g => g.Type == GridActorType.Mushroom).ToArray();
+                Assert.LessOrEqual(gates.Length, 1, $"level {15 + i}");
+                Assert.IsTrue(gates.All(g => g.Count.Min == g.Count.Max), "the count is settled, not rolled");
+                mushrooms[i] = gates.Sum(g => g.Count.Max);
+
+                var resolved = result.Resolve(0f, new System.Random(seed));
+                Assert.AreEqual(mushrooms[i] > 0, resolved.TryGetGridActorGate(GridActorType.Mushroom, out var gate));
+                Assert.AreEqual(mushrooms[i], gate.Count, $"level {15 + i} carries its count once resolved");
+            }
+
+            CollectionAssert.AreEqual(new[] { 0, 2, 3, 3, 4, 0 }, mushrooms);
+        }
+
+        [Test]
+        public void Generate_EveryLevel_HasMushroomsOnlyOnTheMeadow_FromTwoOnAStretchsFirstLevelToFourOnItsLast(
+            [Values(0, 3, 98765)] int runSeed)
+        {
+            var settings = ShippedLevelCatalogue.Build();
+
+            var stretches = 0;
+            var offTheMeadow = 0;
+            for (var level = 1; level <= 200; level++)
+            {
+                var stretch = ScenarioSchedule.StretchAt(settings.Scenario, level, runSeed);
+                var result = LevelGenerator.Generate(settings, level, settings.SeedForLevel(level), runSeed);
+                var count = result.GridActorGates.Where(g => g.Type == GridActorType.Mushroom).Sum(g => g.Count.Max);
+
+                if (stretch.Kind != ScenarioKind.Ground)
+                {
+                    offTheMeadow++;
+                    Assert.AreEqual(0, count, $"{stretch.Kind} level {level}");
+                    continue;
+                }
+
+                Assert.That(count, Is.InRange(2, 4), $"meadow level {level}");
+                if (stretch.Position == 0)
+                {
+                    stretches++;
+                    Assert.AreEqual(2, count, $"meadow level {level} opens its stretch");
+                }
+                else
+                {
+                    var before = LevelGenerator.Generate(settings, level - 1, settings.SeedForLevel(level - 1), runSeed)
+                        .GridActorGates.Where(g => g.Type == GridActorType.Mushroom).Sum(g => g.Count.Max);
+                    Assert.GreaterOrEqual(count, before, $"meadow level {level} has no fewer than the one before");
+                }
+
+                if (stretch.Position == stretch.Length - 1 && stretch.Length > 1)
+                {
+                    Assert.AreEqual(4, count, $"meadow level {level} closes its stretch");
+                }
+            }
+
+            Assert.Greater(stretches, 3, "the schedule laid out too few meadows to check");
+            Assert.Greater(offTheMeadow, 20);
+        }
+
+        [Test]
+        public void Generate_AMeadowOfOneLevel_HasTheFewestMushrooms()
+        {
+            // Every meadow stretch lasts one level.
+            var settings = Settings();
+            SetScenario(settings, new ScenarioScheduleSettings(16, 1, 1, 1, 2, 4, 7919));
+
+            var meadows = 0;
+            for (var level = 1; level < 120; level++)
+            {
+                var stretch = ScenarioSchedule.StretchAt(settings.Scenario, level);
+                if (stretch.Kind != ScenarioKind.Ground)
+                {
+                    continue;
+                }
+
+                meadows++;
+                Assert.AreEqual(1, stretch.Length);
+                var gate = LevelGenerator.Generate(settings, level, level).GridActorGates
+                    .Single(g => g.Type == GridActorType.Mushroom);
+                Assert.AreEqual((2, 2), (gate.Count.Min, gate.Count.Max), $"level {level}");
+            }
+
+            Assert.Greater(meadows, 5, "the schedule laid out too few meadows to check");
+        }
+
+        [Test]
+        public void Generate_AnExtraColourLevelOnTheMeadow_HasNoMushrooms_ItsNeighboursDo()
+        {
+            // A chance of 1 from level 1: odd levels play an extra colour. The meadow is 16-19.
+            var settings = Settings(extraColor: new ExtraColorLevelSettings(1, 1f, 0.5f));
+
+            foreach (var level in new[] { 17, 19 })
+            {
+                var result = LevelGenerator.Generate(settings, level, level);
+                Assert.IsTrue(result.IsExtraColorLevel, $"level {level}");
+                Assert.IsEmpty(result.GridActorGates, $"level {level}");
+            }
+
+            foreach (var level in new[] { 16, 18 })
+            {
+                var result = LevelGenerator.Generate(settings, level, level);
+                Assert.IsFalse(result.IsExtraColorLevel, $"level {level}");
+                Assert.IsTrue(result.GridActorGates.Any(g => g.Type == GridActorType.Mushroom), $"level {level}");
+            }
+        }
+
+        [Test]
+        public void Generate_Bushes_AreCappedAtTheSharedLimitLessTheMostCapsTheWallsMayHold([Values(0, 1, 7)] int seed)
+        {
+            // Bushes of 8 to 12 at their full count, against a shared limit of 9. The meadow 16-19 has 2, 3, 3 and 4
+            // walls, which may hold 6, 7, 7 and 7 caps (a wall is up to three, a level up to seven), and bushes at
+            // half, three quarters, full and full: 4-6, 6-9, 8-12 and 8-12 are cut to the 3, 2, 2 and 2 slots the
+            // caps leave.
+            var settings = Settings(
+                gridActors: new[]
+                {
+                    new GridActorContentEntry(GridActorType.Bush, 1, 0, new RangedInt(8, 12), new RangedInt(8, 12), 0, 3,
+                        requiresGround: true),
+                },
+                mushrooms: Mushrooms(2, 4, 9));
+            var limits = settings.Mushrooms.Placement;
+
+            var bushes = new (int, int)[4];
+            for (var i = 0; i < bushes.Length; i++)
+            {
+                var gates = LevelGenerator.Generate(settings, 16 + i, seed).GridActorGates;
+                var bush = gates.Single(g => g.Type == GridActorType.Bush);
+                var mushroom = gates.Single(g => g.Type == GridActorType.Mushroom);
+                bushes[i] = (bush.Count.Min, bush.Count.Max);
+
+                Assert.LessOrEqual(bush.Count.Max + limits.MaxCapsFor(mushroom.Count.Max), 9, $"level {16 + i}");
+                Assert.GreaterOrEqual(bush.Count.Max, 2, $"level {16 + i}: the bushes keep two slots");
+                Assert.AreEqual(3, bush.MaxPerCluster, "the cap leaves the rest of the gate alone");
+            }
+
+            CollectionAssert.AreEqual(new[] { (3, 3), (2, 2), (2, 2), (2, 2) }, bushes);
+        }
+
+        [Test]
+        public void Generate_Bushes_GiveWayToTheMushrooms_DownToNone_NeverBelow([Values(6, 7, 9, 12)] int limit)
+        {
+            var settings = Settings(
+                gridActors: new[]
+                {
+                    new GridActorContentEntry(GridActorType.Bush, 1, 0, new RangedInt(4, 8), new RangedInt(4, 8), 0, 3,
+                        requiresGround: true),
+                },
+                mushrooms: Mushrooms(2, 4, limit));
+            var expectedWalls = new[] { 2, 3, 3, 4 };
+
+            for (var i = 0; i < expectedWalls.Length; i++)
+            {
+                var gates = LevelGenerator.Generate(settings, 16 + i, 0).GridActorGates;
+                var mushroom = gates.Single(g => g.Type == GridActorType.Mushroom);
+                var room = limit - settings.Mushrooms.Placement.MaxCapsFor(expectedWalls[i]);
+
+                Assert.AreEqual(expectedWalls[i], mushroom.Count.Max, "the mushrooms never give way");
+                var bush = gates.Where(g => g.Type == GridActorType.Bush).ToArray();
+                Assert.AreEqual(room > 0 ? 1 : 0, bush.Length, $"level {16 + i}: no gate when no bush fits");
+                foreach (var gate in bush)
+                {
+                    Assert.That(gate.Count.Max, Is.InRange(1, room), $"level {16 + i}");
+                    Assert.That(gate.Count.Min, Is.InRange(0, gate.Count.Max), $"level {16 + i}");
+                }
+            }
+        }
+
+        [Test]
+        public void Generate_OnlyTheMeadow_LimitsItsUnbreakablesToTheSnake([Values(0, 3, 98765)] int runSeed)
+        {
+            var settings = ShippedLevelCatalogue.Build();
+
+            for (var level = 1; level <= 150; level++)
+            {
+                var onTheMeadow = ScenarioSchedule.ForLevel(settings.Scenario, level, runSeed) == ScenarioKind.Ground;
+                var result = LevelGenerator.Generate(settings, level, settings.SeedForLevel(level), runSeed);
+                var expected = onTheMeadow ? FormationShapes.Snake : FormationShapes.All;
+
+                Assert.AreEqual(expected, result.AllowedFormationShapes, $"level {level}");
+                Assert.AreEqual(expected, result.Resolve(0f, new System.Random(1)).AllowedFormationShapes,
+                    $"level {level}, resolved");
+            }
+        }
+
+        [Test]
+        public void ADebugPreset_AndTheFallbackLevel_AllowEveryShape()
+        {
+            Assert.AreEqual(FormationShapes.All, new RangedLevelParameters().AllowedFormationShapes);
+            Assert.AreEqual(FormationShapes.All,
+                new RangedLevelParameters().Resolve(0f, new System.Random(1)).AllowedFormationShapes);
+            Assert.AreEqual(FormationShapes.All, new LevelParameters().AllowedFormationShapes);
+        }
+
+        [Test]
+        public void Generate_AMushroomInTheCatalogue_IsNeverPicked_AndSpendsNoBudget([Values(0, 1, 7)] int seed)
+        {
+            // A staple entry, which anything else would be in on every level. The meadow's own gate is the only one.
+            var settings = Settings(
+                threat: new BudgetFormula(2f, 0f, 2f),
+                balloons: new[]
+                {
+                    Balloon(BalloonType.Simple, ContentRole.Threat, 1, 0),
+                    Balloon(BalloonType.Unbreakable, ContentRole.Threat, 1, 2),
+                },
+                gridActors: new[] { Actor(GridActorType.Mushroom, 1, 0), Actor(GridActorType.Mushroom, 1, 2) });
+
+            Assert.IsEmpty(LevelGenerator.Generate(settings, 15, seed).GridActorGates, "sky");
+            var meadow = LevelGenerator.Generate(settings, 16, seed);
+            var gate = meadow.GridActorGates.Single();
+            Assert.AreEqual((GridActorType.Mushroom, 2, 2), (gate.Type, gate.Count.Min, gate.Count.Max));
+            Assert.IsTrue(Has(meadow, BalloonType.Unbreakable), "the budget went to a threat that is allowed");
+        }
+
         private static bool IsKept(LevelGenerationSettings settings, BalloonType type)
         {
             var entry = settings.Balloons.First(b => b.Type == type);
@@ -1054,14 +1441,35 @@ namespace BalloonParty.Tests.Configuration
             return new GridActorContentEntry(type, unlock, cost, new RangedInt(1, 1), new RangedInt(1, 1), 0);
         }
 
+        // The shipped mushroom settings with their own range of walls and shared slot limit.
+        private static MushroomSettings Mushrooms(int fewest, int most, int permanentSlotLimit)
+        {
+            var settings = new MushroomSettings();
+            var shipped = settings.Placement;
+            SetMushroomField(settings, "_placement", new MushroomPlacementLimits(
+                new Vector2Int(fewest, most), new Vector2Int(shipped.MinCaps, shipped.MaxCaps), shipped.MinSpacing,
+                new Vector3Int(shipped.EdgeColumnsKeptClear, shipped.TopRowsKeptClear, shipped.BottomRowsKeptClear),
+                shipped.Band, shipped.Cannon));
+            SetMushroomField(settings, "_permanentSlotLimit", permanentSlotLimit);
+            return settings;
+        }
+
+        private static void SetMushroomField(MushroomSettings settings, string name, object value)
+        {
+            typeof(MushroomSettings)
+                .GetField(name, System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!
+                .SetValue(settings, value);
+        }
+
         // Featured defaults to 1 (the unlock level only) and both budgets to 0 unless a test sets them. The first
-        // meadow is pinned to levels 16-19, so the scenario tests don't follow the shipped roll.
+        // meadow is pinned to levels 16-19, so the scenario tests don't follow the shipped roll. The mushrooms are
+        // the shipped ones unless a test brings its own.
         private static LevelGenerationSettings Settings(
             BudgetFormula? threat = null, BudgetFormula? aid = null,
             IntLevelStep[] colors = null, IntLevelStep[] boardLines = null, ItemCountStep[] itemCounts = null,
             BalloonContentEntry[] balloons = null, ItemContentEntry[] items = null,
             GridActorContentEntry[] gridActors = null, int itemCadence = 1, int featuredLevels = 1,
-            float water = 0f)
+            float water = 0f, ExtraColorLevelSettings extraColor = null, MushroomSettings mushrooms = null)
         {
             var settings = new LevelGenerationSettings(
                 threat ?? new BudgetFormula(0f, 0f, 0f),
@@ -1073,7 +1481,9 @@ namespace BalloonParty.Tests.Configuration
                 items ?? Array.Empty<ItemContentEntry>(),
                 gridActors ?? Array.Empty<GridActorContentEntry>(),
                 itemCadence,
-                featuredLevels: featuredLevels);
+                featuredLevels: featuredLevels,
+                extraColor: extraColor,
+                mushrooms: mushrooms);
             SetScenario(settings, new ScenarioScheduleSettings(16, 4, 3, 5, 2, 4, 7919, waterShare: water));
             return settings;
         }

@@ -408,6 +408,17 @@ namespace BalloonParty.Tests.Configuration
         }
 
         [Test]
+        public void Validate_AMushroomInTheCatalogue_ReportsItAsNeverUsed()
+        {
+            var settings = Settings(gridActors: new[] { Actor(GridActorType.Puff, 1, 1), Actor(GridActorType.Mushroom, 1, 1) });
+
+            var issues = settings.Validate("Test");
+
+            Assert.That(issues, Has.Some.Matches<string>(m => m.Contains("Mushroom") && m.Contains("never used")));
+            Assert.That(issues, Has.None.Contains("Puff"));
+        }
+
+        [Test]
         public void Validate_ScenarioMinStretchAboveMax_ReportsIssue([Values(true, false)] bool ground)
         {
             var settings = Settings();

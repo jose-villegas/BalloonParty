@@ -82,3 +82,11 @@ MonoBehaviour:
     CustomColor: {r: 1, g: 1, b: 1, a: 1}
     Layer: 1
     Smear: 0.35
+  - Sources: 128
+    Radius: 0.15
+    Opacity: 1
+    ColorMode: 2
+    PaletteColorName:
+    CustomColor: {r: 0.62, g: 0.97, b: 0.86, a: 1}
+    Layer: 0
+    Smear: 0

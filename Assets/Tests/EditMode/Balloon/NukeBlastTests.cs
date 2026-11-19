@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Reward;
@@ -6,10 +7,15 @@ using BalloonParty.Balloon.Spawner;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration.Balloons;
+using BalloonParty.Configuration.GridActors;
 using BalloonParty.Game.Level;
+using BalloonParty.Item.Bomb;
+using BalloonParty.Item.Snipe;
 using BalloonParty.Nudge;
+using BalloonParty.Projectile;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Slots.Actor.Archetype;
 using BalloonParty.Slots.Grid;
 using MessagePipe;
 using NSubstitute;
@@ -23,7 +29,8 @@ namespace BalloonParty.Tests.Balloon
     ///     The nuke's blast (PLAN-NukeBalloon phase 7): <see cref="NukeBlast.Detonate" /> pops the nuke, kills the shots
     ///     in flight and grows a disc that pops every non-reward balloon its edge reaches, spares and nudges the other
     ///     rewards, sweeps up late arrivals at its end and then grants the spawn clock's breather. A level change, game
-    ///     over or run reset stops it with no breather.
+    ///     over or run reset stops it with no breather. A meadow mushroom stays where it is and the edge blows its cap
+    ///     off as it reaches it.
     /// </summary>
     [TestFixture]
     public class NukeBlastTests
@@ -45,6 +52,7 @@ namespace BalloonParty.Tests.Balloon
         private IBreatherGrant _breather;
         private INukeBlastView _view;
         private INukeCloudView _cloud;
+        private IMushroomBlast _mushrooms;
         private ReactiveProperty<int> _level;
         private IMessageHandler<GameOverMessage> _gameOverHandler;
         private NukeBlast _blast;
@@ -75,6 +83,7 @@ namespace BalloonParty.Tests.Balloon
             _breather = Substitute.For<IBreatherGrant>();
             _view = Substitute.For<INukeBlastView>();
             _cloud = Substitute.For<INukeCloudView>();
+            _mushrooms = Substitute.For<IMushroomBlast>();
             _level = new ReactiveProperty<int>(1);
             var levelProgress = Substitute.For<ILevelProgress>();
             levelProgress.Level.Returns(_level);
@@ -90,7 +99,7 @@ namespace BalloonParty.Tests.Balloon
 
             _blast = new NukeBlast(
                 gameOver, levelProgress, _grid, balloons, _nudgePublisher, _shotsPublisher, _detonatedPublisher,
-                _breatherPublisher, _popper, _breather, _view, _cloud);
+                _breatherPublisher, _popper, _breather, _view, _cloud, _mushrooms);
             _blast.Start();
         }
 
@@ -327,6 +336,118 @@ namespace BalloonParty.Tests.Balloon
             _breather.Received(2).Grant();
         }
 
+        // The meadow's mushrooms: the nuke spares none. A cap goes as the edge reaches its mushroom, near before
+        // far, each told once with the blast's centre, and the mushroom itself stays on the grid.
+        [Test]
+        public void TheEdge_BlowsTheCapOffNearMushroomsBeforeFarOnes_EachOnce_FromTheNukesCentre()
+        {
+            var center = (Vector2)_grid.IndexToWorldPosition(NukeSlot);
+            _grid.Place(new MushroomBumperModel(0), null, NearSlot);
+            _grid.Place(new MushroomBumperModel(1), null, FarSlot);
+
+            Detonate(PlaceNuke());
+            _blast.Advance(EarlyStep);
+
+            _mushrooms.Received(1).BlowOff(NearSlot, center);
+            _mushrooms.DidNotReceive().BlowOff(FarSlot, Arg.Any<Vector2>());
+
+            _blast.Advance(EarlyStep);
+            _blast.Advance(WholeBlast);
+
+            _mushrooms.Received(1).BlowOff(NearSlot, center);
+            _mushrooms.Received(1).BlowOff(FarSlot, center);
+            _mushrooms.DidNotReceiveWithAnyArgs().Bomb(default, default, default, default);
+            Assert.IsFalse(_grid.IsEmpty(NearSlot.x, NearSlot.y), "the mushroom stands, a bare stem");
+            Assert.IsFalse(_grid.IsEmpty(FarSlot.x, FarSlot.y));
+            _popper.Received(1).TryPopSingle(Arg.Any<IBalloonModel>(), Arg.Any<bool>());
+        }
+
+        // A blast that a level change stops has blown the caps it reached and no others: the far mushroom is
+        // never told, and the new level's board is placed whole.
+        [Test]
+        public void ALevelChange_StopsTheCapsGoing_WhereTheEdgeStood()
+        {
+            _grid.Place(new MushroomBumperModel(0), null, NearSlot);
+            _grid.Place(new MushroomBumperModel(1), null, FarSlot);
+            Detonate(PlaceNuke());
+            _blast.Advance(EarlyStep);
+
+            _level.Value = 2;
+            _blast.Advance(WholeBlast);
+
+            _mushrooms.Received(1).BlowOff(NearSlot, Arg.Any<Vector2>());
+            _mushrooms.DidNotReceive().BlowOff(FarSlot, Arg.Any<Vector2>());
+        }
+
+        // The same with nothing stood in for: the real MushroomBlast over the real board. A nuke that a level
+        // change stops has blown the near cap and no other; the next level's mushrooms are placed whole, the
+        // blast blows none of them, nothing of the old board is cut on the new one, and no regrow follows.
+        [Test]
+        public void ANukeStoppedByALevelChange_LeavesNothingBlownOrCutOnTheNextLevel()
+        {
+            var settings = new MushroomSettings();
+            var origin = Substitute.For<IShotOrigin>();
+            origin.ProjectileContactRadius.Returns(0.125f);
+            var board = new MushroomBoard(_grid, settings, origin);
+            var blown = new List<Vector2Int>();
+            var cutPublisher = Substitute.For<IPublisher<MushroomCutMessage>>();
+            cutPublisher.Publish(Arg.Do<MushroomCutMessage>(message => blown.Add(message.Slot)));
+            var real = new MushroomBlast(
+                board, _grid, settings, cutPublisher, Substitute.For<IPublisher<MushroomSwayedMessage>>());
+            _mushrooms
+                .When(mushrooms => mushrooms.BlowOff(Arg.Any<Vector2Int>(), Arg.Any<Vector2>()))
+                .Do(call => real.BlowOff(call.Arg<Vector2Int>(), call.Arg<Vector2>()));
+            var beat = new Beat();
+            var regrown = 0;
+            var regrownPublisher = Substitute.For<IPublisher<MushroomRegrownMessage>>();
+            regrownPublisher.Publish(Arg.Do<MushroomRegrownMessage>(_ => regrown++));
+            var balls = Substitute.For<IProjectileRegistry>();
+            var regrow = new MushroomRegrowController(board, beat, balls, regrownPublisher);
+            _grid.Place(new MushroomBumperModel(0), null, NearSlot);
+            _grid.Place(new MushroomBumperModel(1), null, FarSlot);
+
+            Detonate(PlaceNuke());
+            _blast.Advance(EarlyStep);
+            regrow.Tick();
+
+            CollectionAssert.AreEqual(new[] { NearSlot }, blown, "the near cap, before the level changed");
+            Assert.AreEqual(1, board.Bumpers.Count);
+            Assert.AreEqual(1, board.CutCount);
+
+            // The level changes: the blast stops, the old mushrooms leave and the next level's are placed.
+            _level.Value = 2;
+            _grid.Remove(NearSlot);
+            _grid.Remove(FarSlot);
+            var nextNear = new Vector2Int(2, 1);
+            _grid.Place(new MushroomBumperModel(0), null, nextNear);
+            _grid.Place(new MushroomBumperModel(1), null, FarSlot);
+            _blast.Advance(WholeBlast);
+            for (var i = 0; i < 8; i++)
+            {
+                beat.Count++;
+                regrow.Tick();
+            }
+
+            Assert.IsFalse(_blast.IsRunning);
+            Assert.AreEqual(1, blown.Count, "nothing blown on the new level");
+            Assert.AreEqual(2, board.Bumpers.Count, "its caps are whole");
+            Assert.AreEqual(0, board.CutCount, "and nothing of the old board is cut on it");
+            Assert.AreEqual(0, regrown, "so nothing grows back onto it");
+        }
+
+        // The other grid actors are spared as before, and told nothing.
+        [Test]
+        public void AGridActorThatIsNoMushroom_IsNotBlown()
+        {
+            _grid.Place(new BushObstacleModel(), null, NearSlot);
+
+            Detonate(PlaceNuke());
+            _blast.Advance(WholeBlast);
+
+            _mushrooms.DidNotReceiveWithAnyArgs().BlowOff(default, default);
+            Assert.IsFalse(_grid.IsEmpty(NearSlot.x, NearSlot.y));
+        }
+
         private void Detonate(NukeBalloonModel nuke)
         {
             _blast.Detonate(nuke, _grid.IndexToWorldPosition(nuke.SlotIndex.Value));
@@ -337,6 +458,16 @@ namespace BalloonParty.Tests.Balloon
             var nuke = new NukeBalloonModel(new BalloonModelConfig(BalloonType.Nuke, hitsToPop: 3));
             _grid.Place(nuke, null, NukeSlot);
             return nuke;
+        }
+
+        private sealed class Beat : IBoardBeat
+        {
+            internal int Count;
+
+            public int OffBeats(float share)
+            {
+                return Count;
+            }
         }
 
         private BalloonModel PlaceBalloon(Vector2Int slot)

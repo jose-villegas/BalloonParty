@@ -9,8 +9,9 @@ namespace BalloonParty.Item.Snipe
     ///     it carries the lance past. Pure bookkeeping, so the pencil line's segmenting is tested headless.
     /// </summary>
     /// <remarks>
-    ///     Assumes a piercing shot only turns at walls: every balloon a pierce meets pops or is plowed, none
-    ///     deflects it. A deflector that bent a piercing shot mid-run would need to close the run there too.
+    ///     A piercing shot turns at walls and nowhere else: every balloon a pierce meets pops or is plowed,
+    ///     none deflects it, and it cuts through the meadow's mushrooms. A deflector that bent a piercing shot
+    ///     mid-run would need to turn the run there too.
     /// </remarks>
     internal sealed class SnipeLanceTrace
     {

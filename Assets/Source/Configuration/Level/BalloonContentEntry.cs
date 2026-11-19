@@ -44,8 +44,6 @@ namespace BalloonParty.Configuration.Level
         public int UnlockLevel => _unlockLevel;
         public bool Withheld => _withheld;
         public int Cost => _cost;
-        public bool RequiresGround => false;
-        public bool KeptOffWater => _type is BalloonType.Tough or BalloonType.Tougher;
         public ContentWeightRamp Weight => _weight;
 
         /// <summary>The type's board cap, read the way the level's own weight entry reads it. 0 = uncapped.</summary>
@@ -66,6 +64,14 @@ namespace BalloonParty.Configuration.Level
             _waveCountWeights = waveCountWeights;
             _introGuaranteedCount = introGuaranteedCount;
             _guaranteedInitialCount = guaranteedInitialCount;
+        }
+
+        // Tough and Tougher stay off two surfaces: nothing on the water bounces shots but the unbreakable, and the
+        // meadow gives their room to its mushrooms (@ref plan_meadow_mushrooms).
+        public bool AllowedOn(ScenarioKind scenario)
+        {
+            return _type is not (BalloonType.Tough or BalloonType.Tougher)
+                   || scenario is not (ScenarioKind.Ground or ScenarioKind.Water);
         }
 
         internal BalloonTypeWeight ToWeight(int level, System.Random rng)

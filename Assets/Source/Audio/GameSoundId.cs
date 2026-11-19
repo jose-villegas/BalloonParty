@@ -134,6 +134,10 @@ namespace BalloonParty.Audio
         // each count (a step higher each time), and a long gust of wind as the breather after its blast starts.
         NukeArmed,
         NukeCountdownBeep,
-        NukeBreatherWind
+        NukeBreatherWind,
+
+        // A ball bouncing off a meadow mushroom (PLAN-MeadowMushrooms): a short, soft rubbery bump of its own,
+        // which MushroomSoundRouter steps up a whole tone with each wall of caps the chain counts.
+        MushroomBounce
     }
 }

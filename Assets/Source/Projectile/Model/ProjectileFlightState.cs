@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
+using BalloonParty.Shared;
 using UnityEngine;
 
 namespace BalloonParty.Projectile.Model
@@ -35,6 +36,18 @@ namespace BalloonParty.Projectile.Model
     // status/intent surface of IWriteableProjectileModel.
     public class ProjectileFlightState : IProjectileFlightState
     {
+        // The flight's tally of mushroom bounces (@ref plan_meadow_mushrooms): the motion resolver counts each
+        // bounce into it and clears it at a wall, where it counts the wall bounce. A field, because
+        // MushroomChainRule writes it in place.
+        internal MushroomChainState MushroomChain;
+
+        // The mushroom the ball bounced off last and the direction it left along. While the ball still flies
+        // that direction it is on its way out of that mushroom and cannot meet it again, so nothing tests it:
+        // starting on its circle, a line leaving close to the tangent would be read as entering it. Any turn
+        // (a wall, a balloon, another mushroom) changes the direction and ends that.
+        private int _leftBumperId = MushroomChainState.NoBumper;
+        private Vector2 _leftBumperDirection;
+
         // hits>1 balloons the piercing shot has plowed through (not yet popped), and their strike
         // positions — shattered together at the wall-discharge. Count doubles as the rainbow charge.
         public List<PendingPierceHit> PendingPierceHits { get; } = new();
@@ -58,6 +71,11 @@ namespace BalloonParty.Projectile.Model
         public int BankedPierceCharges { get; set; }
 
         public int BankedRainbowPierceCharges { get; set; }
+
+        // Meadow mushroom caps this shot has cut as a lance. Each banked it a plain charge above
+        // (ProjectileMotionResolver.CutCaps), so this is also how many charges its cuts have earned it; it only
+        // grows, where the charges are spent.
+        public int CapsCut { get; set; }
 
         // Wall bounces since the last balloon contact — the cruise detector's counter.
         public int ConsecutiveWallBounces { get; set; }
@@ -125,6 +143,26 @@ namespace BalloonParty.Projectile.Model
             }
 
             return false;
+        }
+
+        /// <summary>Notes that the ball has just bounced off bumper <paramref name="bumperId" /> and leaves it
+        /// along <paramref name="direction" />.</summary>
+        internal void LeaveBumper(int bumperId, Vector2 direction)
+        {
+            _leftBumperId = bumperId;
+            _leftBumperDirection = direction;
+        }
+
+        /// <summary>
+        ///     The id of the bumper a ball flying <paramref name="direction" /> is still on its way out of, which
+        ///     a swept test must leave out, or <see cref="MushroomChainState.NoBumper" /> once the ball has turned
+        ///     since that bounce.
+        /// </summary>
+        internal int LeavingBumperId(Vector2 direction)
+        {
+            return _leftBumperId != MushroomChainState.NoBumper && direction == _leftBumperDirection
+                ? _leftBumperId
+                : MushroomChainState.NoBumper;
         }
     }
 }

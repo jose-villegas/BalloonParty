@@ -50,6 +50,14 @@ namespace BalloonParty.Configuration.Balloons
                  "always form in the same place. 1 = always the least travel.")]
         [SerializeField] [Min(1)] private int _spotChoices = 3;
 
+        [Tooltip("How strongly a cover prefers a gift balloon (golden, heart, disco ball, nuke) to a balloon " +
+                 "carrying a bomb, a snipe or a lightning. In slots of travel for each member: a spot costs the " +
+                 "slots its members travel to it, plus 3 for each balloon they move out of the way, and a gift's " +
+                 "spot counts as this many slots cheaper for each member. At 2, three unbreakables cover the " +
+                 "gift unless covering the item carrier would cost over 6 slots less. 0 = no preference: the " +
+                 "cheaper spot wins.")]
+        [SerializeField] [Min(0f)] private float _giftCoverPreference = 2f;
+
         [Header("Clock")]
         [Tooltip("Seconds of play between the unbreakables' beats. An unbreakable snake steps Snake Steps Per " +
                  "Beat times a beat, and bubble clusters merge on its off-beat. A pause holds the clock; a doomed shot " +
@@ -72,7 +80,8 @@ namespace BalloonParty.Configuration.Balloons
                  "shape.")]
         [SerializeField] [Min(1)] private int _lineHoldCycles = 3;
 
-        [Tooltip("Cycles an item cover holds, counting the cycle it formed on, before it changes shape.")]
+        [Tooltip("Cycles a cover (round an item carrier or a gift balloon) holds, counting the cycle it formed " +
+                 "on, before it changes shape.")]
         [SerializeField] [Min(1)] private int _itemCoverHoldCycles = 3;
 
         [Tooltip("Cycles a lone unbreakable, in no formation, stays where it is before it may move again. One " +
@@ -94,7 +103,8 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("Weight of each of the two diagonals.")]
         [SerializeField] [Min(0f)] private float _diagonalWeight = 1f;
 
-        [Tooltip("Weight of ringing an item. Only in the pick while a balloon on the board carries an item.")]
+        [Tooltip("Weight of a cover. It finds a spot only while a balloon carrying a bomb, a snipe or a " +
+                 "lightning, or a gift balloon (golden, heart, disco ball, nuke), is on the board.")]
         [SerializeField] [Min(0f)] private float _itemCoverWeight = 2f;
 
         [Tooltip("Weight of a snake, the line that walks the board.")]
@@ -130,6 +140,7 @@ namespace BalloonParty.Configuration.Balloons
         public float ToughSnakeStepSeconds => Mathf.Max(0.1f, _toughSnakeStepSeconds);
         public int ToughSnakeMinMembers => Mathf.Max(1, _toughSnakeMinMembers);
         public int SpotChoices => _spotChoices;
+        public float GiftCoverPreference => Mathf.Max(0f, _giftCoverPreference);
         public float HorizontalWeight => _horizontalWeight;
         public float DiagonalWeight => _diagonalWeight;
         public float ItemCoverWeight => _itemCoverWeight;

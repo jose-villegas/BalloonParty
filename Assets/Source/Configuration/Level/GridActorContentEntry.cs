@@ -42,9 +42,6 @@ namespace BalloonParty.Configuration.Level
         public int UnlockLevel => _unlockLevel;
         public bool Withheld => _withheld;
         public int Cost => _cost;
-        public bool RequiresGround => _requiresGround;
-        public bool KeptOffWater =>
-            _requiresGround || _type is GridActorType.Puff or GridActorType.Deflector or GridActorType.Gatekeeper;
 
         internal GridActorContentEntry(GridActorType type, int unlockLevel, int cost, RangedInt count,
             RangedInt lateCount, int rampLevels, int maxPerCluster = 0, bool withheld = false,
@@ -59,6 +56,25 @@ namespace BalloonParty.Configuration.Level
             _rampLevels = rampLevels;
             _maxPerCluster = maxPerCluster;
             _requiresGround = requiresGround;
+        }
+
+        // A ground-only actor (bushes) is on the meadow alone. The water has no clouds, and nothing on it bounces
+        // shots but the unbreakable balloon. Mushrooms are never a catalogue pick: the meadow's own gate places them
+        // (LevelGenerator), so an entry for them is left out everywhere.
+        public bool AllowedOn(ScenarioKind scenario)
+        {
+            if (_type == GridActorType.Mushroom)
+            {
+                return false;
+            }
+
+            if (_requiresGround)
+            {
+                return scenario == ScenarioKind.Ground;
+            }
+
+            return scenario != ScenarioKind.Water
+                   || _type is not (GridActorType.Puff or GridActorType.Deflector or GridActorType.Gatekeeper);
         }
 
         // The level's count range, rolled when the level resolves.

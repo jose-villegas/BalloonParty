@@ -23,11 +23,17 @@ namespace BalloonParty.Projectile.Controller
         ///     began and <paramref name="stillPiercing" /> once the wall it reached (if any) has been resolved: the
         ///     way to a wall is the lance's it flew in as, the way on from it only a lance's still armed.
         /// </summary>
+        /// <remarks>
+        ///     A lance is not turned by a mushroom (it cuts the cap and flies on), so its wake turns at walls
+        ///     alone. The one step that both bounces off a mushroom and ends piercing is the one whose bounce armed
+        ///     the ball: it ends on the mushroom, the caller passes the bounce point as <paramref name="from" />,
+        ///     and there is no stretch to report.
+        /// </remarks>
         internal static void Report(
             DisturbanceFieldService field, IProjectileFlightConfig config, Vector3 from, in ProjectileStep step,
             bool wasPiercing, bool stillPiercing, float stepSeconds)
         {
-            if (step.Outcome == ProjectileStepOutcome.Moved)
+            if (step.Outcome == ProjectileStepOutcome.Moved || step.Outcome == ProjectileStepOutcome.BumperBounced)
             {
                 if (stillPiercing)
                 {
@@ -42,10 +48,12 @@ namespace BalloonParty.Projectile.Controller
                 ReportStretch(field, config, from, step.WallContact, stepSeconds);
             }
 
-            if (step.Outcome == ProjectileStepOutcome.Bounced && stillPiercing)
+            if (step.Outcome != ProjectileStepOutcome.Bounced || !stillPiercing)
             {
-                ReportStretch(field, config, step.WallContact, step.Position, stepSeconds);
+                return;
             }
+
+            ReportStretch(field, config, step.WallContact, step.Position, stepSeconds);
         }
 
         /// <summary>
@@ -59,7 +67,9 @@ namespace BalloonParty.Projectile.Controller
             IProjectileFlightConfig config, ProjectileStepOutcome outcome, bool wasPiercing, bool stillPiercing,
             int pendingPlows)
         {
-            if (!wasPiercing || outcome == ProjectileStepOutcome.Moved)
+            // A mushroom is not a wall: no charge ends at one.
+            if (!wasPiercing || outcome == ProjectileStepOutcome.Moved
+                || outcome == ProjectileStepOutcome.BumperBounced)
             {
                 return default;
             }
@@ -71,8 +81,11 @@ namespace BalloonParty.Projectile.Controller
                 : default;
         }
 
-        // A stretch of no length reports nothing: a shot held still parts no water.
-        private static void ReportStretch(
+        /// <summary>
+        ///     Reports the wake of one straight stretch a lance flew, in <paramref name="seconds" />. A stretch of
+        ///     no length reports nothing: a shot held still parts no water.
+        /// </summary>
+        internal static void ReportStretch(
             DisturbanceFieldService field, IProjectileFlightConfig config, Vector3 from, Vector3 to, float seconds)
         {
             Vector2 stretch = to - from;

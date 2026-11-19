@@ -22,11 +22,13 @@ namespace BalloonParty.Slots.Actor
     {
         private readonly Dictionary<SlotPlacementMode, ISlotSelectionStrategy> _strategyCache = new();
 
-        // Add a type by adding the model + an entry here, never a switch.
-        private readonly Dictionary<GridActorType, System.Func<IWriteableSlotActor>> _modelFactories = new()
+        // Add a type by adding the model + an entry here, never a switch. The number handed in is the actor's
+        // place in its entry's selection, which a mushroom keeps as its cap's id; its wall is asked of the
+        // strategy that picked the slots, so that entry is added where the strategy is known (the constructors).
+        private readonly Dictionary<GridActorType, System.Func<int, IWriteableSlotActor>> _modelFactories = new()
         {
-            { GridActorType.Puff, () => new PuffObstacleModel() },
-            { GridActorType.Bush, () => new BushObstacleModel() }
+            { GridActorType.Puff, _ => new PuffObstacleModel() },
+            { GridActorType.Bush, _ => new BushObstacleModel() }
         };
 
         private readonly ISubscriber<BoardClearMessage> _boardClearSubscriber;
@@ -36,6 +38,8 @@ namespace BalloonParty.Slots.Actor
         private readonly IGridActorConfiguration _gridActorConfig;
         private readonly IActiveLevelParameters _levelParams;
         private readonly ScenarioContentRoot _scenarioRoot;
+        private readonly WallSlotSelectionStrategy _wallStrategy;
+        private readonly List<Vector2Int> _clearOfCaps = new();
         private bool _poolsRegistered;
         private IDisposable _subscription;
 
@@ -49,7 +53,8 @@ namespace BalloonParty.Slots.Actor
             IGridActorConfiguration gridActorConfig,
             IActiveLevelParameters levelParams,
             ISubscriber<BoardClearMessage> boardClearSubscriber,
-            ScenarioContentRoot scenarioRoot)
+            ScenarioContentRoot scenarioRoot,
+            WallSlotSelectionStrategy wallStrategy)
         {
             _grid = grid;
             _poolManager = poolManager;
@@ -58,14 +63,21 @@ namespace BalloonParty.Slots.Actor
             _levelParams = levelParams;
             _boardClearSubscriber = boardClearSubscriber;
             _scenarioRoot = scenarioRoot;
+            _wallStrategy = wallStrategy;
+            AddMushroomFactory();
         }
 
-        // Test-only: bypasses pool and MonoBehaviour infrastructure.
-        internal StaticActorSpawner(SlotGrid grid, IGridActorConfiguration gridActorConfig, IActiveLevelParameters levelParams)
+        // Test-only: bypasses pool and MonoBehaviour infrastructure. With no wall strategy a Mushroom entry
+        // places nothing.
+        internal StaticActorSpawner(
+            SlotGrid grid, IGridActorConfiguration gridActorConfig, IActiveLevelParameters levelParams,
+            WallSlotSelectionStrategy wallStrategy = null)
         {
             _grid = grid;
             _gridActorConfig = gridActorConfig;
             _levelParams = levelParams;
+            _wallStrategy = wallStrategy;
+            AddMushroomFactory();
         }
 
         public void Start()
@@ -85,42 +97,91 @@ namespace BalloonParty.Slots.Actor
             return UniTask.CompletedTask;
         }
 
+        // The mushrooms first, then the clouds, then everything else, each group in the configuration's own
+        // order. The walls are picked by the level's seed for the slots that are free, and the clouds and the
+        // bushes are placed with the engine's own random numbers, which a retry does not replay: placed first,
+        // on a board with nothing on it, the walls stand where they stood on every retry. What is placed after
+        // them keeps off the slots next to a cap. On a level with no mushrooms the order is the one it always
+        // was, the shipped configuration listing its clouds first.
         internal void SpawnStaticActors()
         {
             var emptySlots = new List<Vector2Int>(_grid.AllEmptySlots());
+            var wallsPlaced = false;
 
-            foreach (var entry in _gridActorConfig.Entries)
+            for (var stage = PlacementStage.Walls; stage <= PlacementStage.Rest; stage++)
             {
-                if (emptySlots.Count == 0)
+                foreach (var entry in _gridActorConfig.Entries)
                 {
-                    break;
-                }
+                    if (StageOf(entry.ActorType) != stage)
+                    {
+                        continue;
+                    }
 
-                if (!_levelParams.Current.TryGetGridActorGate(entry.ActorType, out var gate))
-                {
-                    // Absent from this level's range.
-                    continue;
-                }
+                    if (emptySlots.Count == 0)
+                    {
+                        return;
+                    }
 
-                var count = Mathf.Min(gate.Count, emptySlots.Count);
-                if (count <= 0)
-                {
-                    continue;
-                }
-
-                var strategy = GetStrategy(entry.PlacementMode);
-                var selected = strategy.SelectSlots(emptySlots, count, gate.MaxPerCluster);
-
-                foreach (var slot in selected)
-                {
-                    PlaceActor(entry, slot, emptySlots);
+                    wallsPlaced |= PlaceEntry(entry, emptySlots, wallsPlaced);
                 }
             }
         }
 
-        private void PlaceActor(GridActorPrefabEntry entry, Vector2Int slot, List<Vector2Int> emptySlots)
+        // True when the entry placed the mushrooms' walls.
+        private bool PlaceEntry(GridActorPrefabEntry entry, List<Vector2Int> emptySlots, bool wallsPlaced)
         {
-            var model = CreateModel(entry.ActorType);
+            if (!_levelParams.Current.TryGetGridActorGate(entry.ActorType, out var gate))
+            {
+                // Absent from this level's range.
+                return false;
+            }
+
+            var isWalls = entry.ActorType == GridActorType.Mushroom;
+            if (isWalls && _wallStrategy == null)
+            {
+                return false;
+            }
+
+            // A mushroom gate counts walls, and a wall is up to three caps: the strategy answers with the caps.
+            // Whatever comes after the walls, clouds and bushes alike, is not offered a slot next to a cap.
+            var candidates = wallsPlaced && !isWalls ? ClearOfCaps(emptySlots) : emptySlots;
+            var count = Mathf.Min(gate.Count, candidates.Count);
+            if (count <= 0)
+            {
+                return false;
+            }
+
+            var strategy = isWalls ? _wallStrategy : GetStrategy(entry.PlacementMode);
+            var selected = strategy.SelectSlots(candidates, count, gate.MaxPerCluster);
+
+            for (var i = 0; i < selected.Count; i++)
+            {
+                PlaceActor(entry, selected[i], emptySlots, i);
+            }
+
+            return isWalls && selected.Count > 0;
+        }
+
+        // The empty slots a permanent thing may still take once the mushrooms stand: the ones that are not next
+        // to a cap.
+        private List<Vector2Int> ClearOfCaps(List<Vector2Int> emptySlots)
+        {
+            _clearOfCaps.Clear();
+            foreach (var slot in emptySlots)
+            {
+                if (!_wallStrategy.IsBesideACap(slot))
+                {
+                    _clearOfCaps.Add(slot);
+                }
+            }
+
+            return _clearOfCaps;
+        }
+
+        private void PlaceActor(
+            GridActorPrefabEntry entry, Vector2Int slot, List<Vector2Int> emptySlots, int placeInSelection)
+        {
+            var model = CreateModel(entry.ActorType, placeInSelection);
             GridActorView view = null;
 
             if (_poolsRegistered)
@@ -241,11 +302,17 @@ namespace BalloonParty.Slots.Actor
             return strategy;
         }
 
-        private IWriteableSlotActor CreateModel(GridActorType actorType)
+        private void AddMushroomFactory()
+        {
+            _modelFactories[GridActorType.Mushroom] = placeInSelection => new MushroomBumperModel(
+                placeInSelection, _wallStrategy?.WallOf(placeInSelection) ?? placeInSelection);
+        }
+
+        private IWriteableSlotActor CreateModel(GridActorType actorType, int placeInSelection)
         {
             if (_modelFactories.TryGetValue(actorType, out var factory))
             {
-                return factory();
+                return factory(placeInSelection);
             }
 
             throw new System.Exception("Unknown actor type: " + actorType);
@@ -254,6 +321,24 @@ namespace BalloonParty.Slots.Actor
         private static bool ModelMatches(IWriteableSlotActor model, GridActorType actorType)
         {
             return model is IGridActorModel actor && actor.ActorType == actorType;
+        }
+
+        private static PlacementStage StageOf(GridActorType actorType)
+        {
+            return actorType switch
+            {
+                GridActorType.Puff => PlacementStage.Clouds,
+                GridActorType.Mushroom => PlacementStage.Walls,
+                _ => PlacementStage.Rest
+            };
+        }
+
+        // The order a level's static actors are placed in, whatever order the configuration lists them in.
+        private enum PlacementStage
+        {
+            Walls,
+            Clouds,
+            Rest
         }
     }
 }

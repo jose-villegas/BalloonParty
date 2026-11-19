@@ -171,6 +171,51 @@ namespace BalloonParty.Tests.Projectile
             Assert.IsFalse(_bus.Pending[1].Blast.IsBlast, "an ordinary ball's wall stamp is what it always was");
         }
 
+        // A lance is not turned by a mushroom. The one step that both bounces off one and ends piercing is the
+        // step whose bounce armed the ball: the view hands the bounce point as the start, the way on from there is
+        // a stretch like any other, and a mushroom is not the wall a charge ends at.
+        [Test]
+        public void TheStepThatArmedTheBallOnAMushroom_ReportsTheWayOnFromIt()
+        {
+            var bounced = ProjectileStep.Moved(To, Vector2.up, 20f).WithBumperBounces(1, From);
+            Assert.AreEqual(ProjectileStepOutcome.BumperBounced, bounced.Outcome);
+
+            Report(bounced, wasPiercing: false, stillPiercing: true);
+
+            Assert.AreEqual(2, _bus.Pending.Count, "one stretch: its wave and its heart");
+            Assert.That(Vector2.Distance(To - From, _bus.Pending[0].Blast.Line), Is.LessThan(1e-5f));
+            Assert.IsFalse(PierceWake.WallBlast(_config, ProjectileStepOutcome.BumperBounced, true, true, 2).IsBlast);
+            Assert.IsFalse(PierceWake.WallBlast(_config, ProjectileStepOutcome.BumperBounced, true, false, 0).IsBlast);
+        }
+
+        [Test]
+        public void TheStretchIntoAMushroom_IsReportedLikeAnyOther_AndAnOrdinaryBallsIsNot()
+        {
+            PierceWake.ReportStretch(_field, _config, From, To, StepSeconds);
+
+            Assert.AreEqual(2, _bus.Pending.Count);
+            Assert.That(Vector3.Distance((From + To) * 0.5f, _bus.Pending[0].Position), Is.LessThan(1e-5f));
+
+            var bounced = ProjectileStep.Moved(To, Vector2.up, 20f).WithBumperBounces(1, From);
+            Report(bounced, wasPiercing: false, stillPiercing: false);
+
+            Assert.AreEqual(2, _bus.Pending.Count, "an ordinary ball off a mushroom adds nothing");
+        }
+
+        // A lance that cut caps on a step was turned by none of them: its wake runs to the wall and straight on
+        // from it to where the step ended, as on a board with no mushrooms.
+        [Test]
+        public void ALancePastAWall_ThroughWhateverCapsItCut_LeavesAWakeOfTwoStraightStretches()
+        {
+            var step = ProjectileStep.Bounced(Past, Wall, Vector2.down, 20f);
+
+            Report(step, wasPiercing: true, stillPiercing: true);
+
+            Assert.AreEqual(4, _bus.Pending.Count, "two stretches, a wave and a heart each");
+            Assert.That(Vector2.Distance(Wall - From, _bus.Pending[0].Blast.Line), Is.LessThan(1e-5f), "to the wall");
+            Assert.That(Vector2.Distance(Past - Wall, _bus.Pending[2].Blast.Line), Is.LessThan(1e-5f), "and on from it");
+        }
+
         private void Report(in ProjectileStep step, bool wasPiercing, bool stillPiercing)
         {
             PierceWake.Report(_field, _config, From, step, wasPiercing, stillPiercing, StepSeconds);

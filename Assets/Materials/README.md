@@ -8,6 +8,7 @@ All materials live under `Assets/Materials/`, organized by feature.
 |---|---|
 | `Balloon/` | Main balloon sprite, specular blur overlays, tough balloon, balloon pop/smoke particles |
 | `Projectile/` | Projectile sprite, trail, prediction trail, shield trail |
+| `Grid/` | Grid actors: the puff cloud, the bush's leaves, and `Mushroom`, the meadow mushroom and its shadow, with `MushroomSpore`, the specks it lets go (both made by `Tools > BalloonParty > Meadow > Build Mushroom Prefab`) |
 | `Items/Bomb/` | Bomb explosion particles and spark trails |
 | `Items/Lightning/` | Lightning line renderers and spark particles |
 | `Items/Paint/` | Paint blob sprites and splash trail particles |
@@ -23,11 +24,12 @@ All materials live under `Assets/Materials/`, organized by feature.
 | Materials with per-instance `MaterialPropertyBlock` properties | ❌ Disabled | Instancing batching discards MPB values not in the instancing buffer |
 | Particle/trail materials using **custom** shaders | ❌ Disabled | ParticleSystem/TrailRenderer don't populate `unity_SpriteRendererColorArray` |
 
-### Materials with instancing disabled (11)
+### Materials with instancing disabled (12)
 
 | Material | Shader | Per-instance MPB properties |
 |---|---|---|
 | `ToughBalloonMaterial` | ToughBalloon | `_DamageProgress`, `_VoronoiSeed` |
+| `Mushroom` | Grid/Mushroom | `_Radius`, `_Lean`, `_Pulse`, `_Seed`, `_CapGrow`, `_CutLine`, `_CutLean`, `_CutPieces`, `_CutFall` |
 | `PaintBlob` | PaintBlob | `_TimeOffset` |
 | `PaintFlyingBlob` | PaintBlob | `_TimeOffset` |
 | `PSMaterial_BalloonPop` | SpriteShadow | _(particle on custom shader)_ |

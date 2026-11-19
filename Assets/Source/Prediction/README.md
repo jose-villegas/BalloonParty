@@ -28,6 +28,38 @@ Within a step the nearest deflector wins, and the test runs against the step *al
 
 Within one step, the nearer of the two — the deflector or the pierce-item host — governs: a *different*, farther deflector is skipped outright once the nearer pierce point arms (`ResolveStepEvent`'s `PiercedThrough`), while the *same* host (a Tough that itself carries Snipe) still deflects at that exact contact (`PiercedAndDeflected`) — live, the item's activation lands a frame after the bounce it was hit on, so only what the shot meets *after* this contact is piercing, not this contact itself. `Calculate`'s `out PredictionTraceEnd end` carries a `PierceStartIndex` reporting which point in the polyline this happened at (-1 if it never does), inserted into the line even when nothing bends there (a normal 1-hit balloon hosting Snipe just gets a vertex on an otherwise-straight run) — so a view can style the trailing "piercing" run differently without recomputing anything.
 
+**Mushrooms bend the line the way they will bend the ball** (`Plans/PLAN-MeadowMushrooms.md`, decisions C
+and J). The calculator takes the board's bumpers (`IBumperField`), the bounce rule (`IBumperBounceRule`)
+and the chain's settings, the three the live flight has, and on each step looks for a mushroom with the
+flight's own swept test (`Shared/BumperSweep`), against the step already clipped by any wall. Whatever
+the step meets before the mushroom still happens first, and nothing past it is looked for. At the mushroom
+it does what `ProjectileMotionResolver` does, in its order: `MushroomChainRule.OnBounce` counts the bounce,
+then the bounce rule is asked with the exact entry point and the chain as counted, so the forgiving kick
+shows in the line. The corner is drawn on the mushroom's skin, like a deflector's. A wall clears the chain;
+a stretch that has had its bounces runs through the mushrooms to its wall; the mushroom being left is not
+tested while the line still runs the direction it left along.
+
+- **A lance's line runs through.** A lance bounces off no mushroom: it cuts the cap and flies on. So a line
+  that is piercing (loaded as a lance, or past a pierce-item host) ignores every mushroom as it ignores every
+  balloon, and turns at walls alone.
+- **The chain arms the line.** The bounce that completes a chain (the third) makes the ball a lance where it
+  happens, so `PierceStartIndex` is that corner and the line runs through balloons and mushrooms from there.
+- **A cut cap bends nothing.** The field lists whole caps only, so a cap a lance has cut is not looked for
+  until it has grown back, and the line over it is the line of a board it never stood on.
+- **The count comes from the ball.** `Calculate` takes the chain the ball carries
+  (`ProjectileFlightState.MushroomChain`); a ball in the thrower has not flown, so it starts at none.
+- **One budget.** A mushroom bounce spends `MaxReflections` like a wall or a deflection. At the shipped 1 the
+  line turns at the first mushroom and ends where that leg meets the second: the player sees the kick, not
+  the whole chain. A line that ends on a mushroom reports `PredictionTraceEndKind.Bumper`, whose normal is
+  the surface's: the ball does not leave along its mirror when the kick takes hold.
+- **No mushrooms, no change.** On a board without them the loop costs one comparison a step and draws the
+  line it drew before (`MushroomAimLineTests` holds the two to the bit). `MushroomAimLineTests` also holds
+  the line's corners to the simulated flight's turns, which `MushroomMirrorTests` holds to the game.
+
+The Snipe's pierce corridor (`Item/Preview/SnipeRangePreview`) is a lance's run from the host to its first
+wall. A lance cuts through the mushrooms, so the corridor is the straight segment it was before the meadow had
+them, and the preview knows nothing of the bumper field.
+
 ```mermaid
 sequenceDiagram
     participant Ctl as ThrowerController Tick

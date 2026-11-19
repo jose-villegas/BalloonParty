@@ -9,9 +9,17 @@ namespace BalloonParty.Shared.Messages
     {
         public readonly IProjectileModel Projectile;
 
-        public ProjectileDestroyedMessage(IProjectileModel projectile)
+        /// <summary>
+        ///     True when the game took the shot off the board (the level-up cap, an emptied board, a clear of
+        ///     the shots in flight) and not a wall: the flight was cut short, not lost. What counts how flights
+        ///     end (a chain of mushrooms broken short of its target) leaves these out.
+        /// </summary>
+        public readonly bool Forced;
+
+        public ProjectileDestroyedMessage(IProjectileModel projectile, bool forced = false)
         {
             Projectile = projectile;
+            Forced = forced;
         }
     }
 }

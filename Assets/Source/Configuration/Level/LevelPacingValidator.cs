@@ -25,8 +25,9 @@ namespace BalloonParty.Configuration.Level
 
         /// <summary>
         ///     Debug presets skip <see cref="LevelGenerator" /> and always play on the sky, so a preset that lists a
-        ///     ground-only actor (<paramref name="gridActorCatalogue" />'s <c>RequiresGround</c>) would float it
-        ///     over the sky backdrop. One issue per such preset and actor; a gate whose count is 0 is fine.
+        ///     ground-only actor (one <paramref name="gridActorCatalogue" /> doesn't allow on the sky,
+        ///     <see cref="IContentPiece.AllowedOn" />) would float it over the sky backdrop. One issue per such preset
+        ///     and actor; a gate whose count is 0 is fine.
         /// </summary>
         internal static IReadOnlyList<string> ValidateGroundOnlyInPresets(
             IReadOnlyList<LevelRangeEntry> presets, IReadOnlyList<GridActorContentEntry> gridActorCatalogue,
@@ -43,7 +44,7 @@ namespace BalloonParty.Configuration.Level
 
                 foreach (var gate in gates)
                 {
-                    if (Mathf.Max(gate.Count.Min, gate.Count.Max) > 0 && RequiresGround(gate.Type, gridActorCatalogue))
+                    if (Mathf.Max(gate.Count.Min, gate.Count.Max) > 0 && IsKeptOffTheSky(gate.Type, gridActorCatalogue))
                     {
                         issues.Add(
                             $"LevelPacingConfiguration ({configName}): preset {presets[i].FromLevel} lists {gate.Type}, " +
@@ -108,12 +109,19 @@ namespace BalloonParty.Configuration.Level
             }
         }
 
-        private static bool RequiresGround(
+        private static bool IsKeptOffTheSky(
             GridActorType type, IReadOnlyList<GridActorContentEntry> gridActorCatalogue)
         {
+            // The mushroom is no catalogue piece (the level generator gates it by the meadow stretch), so the
+            // catalogue has nothing to say about it: it belongs to the meadow whatever is listed there.
+            if (type == GridActorType.Mushroom)
+            {
+                return true;
+            }
+
             for (var i = 0; i < gridActorCatalogue.Count; i++)
             {
-                if (gridActorCatalogue[i].Type == type && gridActorCatalogue[i].RequiresGround)
+                if (gridActorCatalogue[i].Type == type && !gridActorCatalogue[i].AllowedOn(ScenarioKind.Sky))
                 {
                     return true;
                 }

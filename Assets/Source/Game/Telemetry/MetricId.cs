@@ -43,6 +43,15 @@ namespace BalloonParty.Game.Telemetry
         RippleNeighboursHit,
         FusesRunOut,
         CoatsApplied,
-        CoatsRemoved
+        CoatsRemoved,
+
+        // The meadow's mushrooms (37 to 43): see MetricCatalog and the README's "Meadow mushrooms".
+        MushroomBounces,
+        MushroomChainsCompleted,
+        MushroomCapsCut,
+        MushroomChainsBroken,
+        MushroomChainsOneShort,
+        MushroomCapsBlown,
+        MushroomChargesBanked
     }
 }

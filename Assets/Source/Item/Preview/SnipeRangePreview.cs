@@ -19,6 +19,10 @@ namespace BalloonParty.Item.Preview
     ///     deflecting at exactly this host), but the polyline stops at <c>MaxSegments</c>/<c>MaxReflections</c>
     ///     — telegraph budget, not flight — so reading it would cut the corridor short of the wall the shot
     ///     really reaches.
+    ///     <para>
+    ///         The meadow's mushrooms do not bend it (@ref plan_meadow_mushrooms): a lance flies through them and
+    ///         cuts their caps, so its reach is still the straight run to the wall.
+    ///     </para>
     /// </remarks>
     internal sealed class SnipeRangePreview : IItemRangePreview
     {

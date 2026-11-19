@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
+using BalloonParty.Slots.Actor;
+using UnityEngine;
 
 namespace BalloonParty.Balloon.Formation
 {
@@ -42,9 +44,20 @@ namespace BalloonParty.Balloon.Formation
         /// </summary>
         internal bool Armoured { get; set; }
 
+        /// <summary>
+        ///     The balloon an item cover stands round, held on <see cref="HostSlot" /> for as long as it is the host
+        ///     (<see cref="IWriteableCoverHost" />); null for any other shape, and once that balloon has popped or
+        ///     been taken off the board (the cover then stands round nothing until it changes).
+        /// </summary>
+        internal IWriteableSlotActor Host { get; set; }
+
+        /// <summary>Where <see cref="Host" /> stood when the cover was planned.</summary>
+        internal Vector2Int HostSlot { get; set; }
+
         internal void Reset()
         {
             MemberList.Clear();
+            Host = null;
             Armoured = false;
             CyclesLeft = 0;
             FormedOnWave = 0;

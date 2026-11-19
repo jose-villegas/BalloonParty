@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BalloonParty.Configuration.GridActors;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Upgrades;
@@ -38,6 +39,9 @@ namespace BalloonParty.Thrower
 
         private readonly IPredictionTraceConfig _traceConfig;
         private readonly IDeflectorField _deflectorField;
+        private readonly IBumperField _bumperField;
+        private readonly IBumperBounceRule _bounceRule;
+        private readonly IMushroomSettings _mushroomSettings;
         private readonly IPierceItemField _pierceItemField;
         private readonly IProjectileFlightConfig _flightConfig;
         private readonly IPublisher<ProjectileLoadedMessage> _loadedPublisher;
@@ -111,6 +115,13 @@ namespace BalloonParty.Thrower
         // here — see FireAt, which both this and the cheat's one-shot path route through.
         internal Vector3? DirectionOverride { get; set; }
 
+#if UNITY_EDITOR
+        // Editor-tooling entry (the scene stage): holds the aim at a direction and draws its line, as a player
+        // holding the aim there would, without firing. Null leaves the aim to the player. Not range-clamped, like
+        // FireAt. Compiled out of a build, so nothing there can hold the aim.
+        internal Vector3? AimHold { get; set; }
+#endif
+
         [Inject]
         internal ThrowerController(
             ThrowerView view,
@@ -118,6 +129,9 @@ namespace BalloonParty.Thrower
             IProjectileFlightConfig flightConfig,
             IDeflectorField deflectorField,
             IPierceItemField pierceItemField,
+            IBumperField bumperField,
+            IBumperBounceRule bounceRule,
+            IMushroomSettings mushroomSettings,
             PoolManager poolManager,
             IObjectResolver resolver,
             ThrowerSettings settings,
@@ -149,6 +163,9 @@ namespace BalloonParty.Thrower
             _flightConfig = flightConfig;
             _deflectorField = deflectorField;
             _pierceItemField = pierceItemField;
+            _bumperField = bumperField;
+            _bounceRule = bounceRule;
+            _mushroomSettings = mushroomSettings;
             _poolManager = poolManager;
             _resolver = resolver;
             _settings = settings;
@@ -181,7 +198,8 @@ namespace BalloonParty.Thrower
         public void Start()
         {
             _traceCalculator = new PredictionTraceCalculator(
-                _traceConfig, _flightConfig, _deflectorField, _pierceItemField);
+                _traceConfig, _flightConfig, _deflectorField, _pierceItemField, _bumperField, _bounceRule,
+                _mushroomSettings);
             // Off by default (IPredictionTraceConfig.LightingEnabled) — a prior attempt at this made the
             // actors the line crosses read as noise, kept togglable rather than deleted. Constructed
             // unconditionally since every call is a no-op while the toggle is off.
@@ -196,7 +214,10 @@ namespace BalloonParty.Thrower
                 _view.transform,
                 ContactRadius.FromCollider(
                     projectilePrefab != null ? projectilePrefab.GetComponent<Collider2D>() : null,
-                    projectilePrefab != null ? projectilePrefab.transform.lossyScale.x : 1f));
+                    projectilePrefab != null ? projectilePrefab.transform.lossyScale.x : 1f),
+                // Read here, before the entrance is ever played (it is subscribed at the end of this method):
+                // the one moment the view still stands where the scene put it.
+                _view.PositionAfterEntrance);
 
             _poolManager.Register(_projectilePoolKey,
                 new ProjectilePoolChannel(_resolver, _settings.ProjectilePrefab));
@@ -696,6 +717,14 @@ namespace BalloonParty.Thrower
 
         private void UpdateDirection()
         {
+#if UNITY_EDITOR
+            if (AimHold.HasValue)
+            {
+                _direction = AimHold.Value.normalized;
+                return;
+            }
+#endif
+
             if (!_view.IsAiming)
             {
                 return;
@@ -726,7 +755,11 @@ namespace BalloonParty.Thrower
 
         private void UpdatePredictionTrace()
         {
-            if (_loadedProjectile == null || !_view.IsAiming)
+            var aiming = _view.IsAiming;
+#if UNITY_EDITOR
+            aiming |= AimHold.HasValue;
+#endif
+            if (_loadedProjectile == null || !aiming)
             {
                 ClearPredictionTrace();
                 return;
@@ -734,10 +767,12 @@ namespace BalloonParty.Thrower
 
             // From the contact circle, not the transform: the collider leads the origin, so a trace
             // started at the transform begins behind where the shot really is. A ball loaded as a Snipe lance
-            // plows through balloons, so its line does too instead of bouncing off the first tough.
+            // plows through balloons and cuts through the meadow's mushrooms, so its line runs through both
+            // instead of bouncing off the first. An ordinary ball's line bends off the mushrooms, by the count the
+            // ball itself carries (none: it has not flown).
             _traceCalculator.Calculate(
                 _loadedView.ContactCenter, _direction, _loadedView.ContactRadius, _tracePoints,
-                out var traceEnd, _loadedProjectile.IsPiercing.Value);
+                out var traceEnd, _loadedProjectile.IsPiercing.Value, _loadedProjectile.Flight.MushroomChain);
             _view.SetTrace(_tracePoints);
             _traceProvider.SetTrace(_tracePoints, traceEnd);
             _traceLights.SetTrace(_tracePoints);

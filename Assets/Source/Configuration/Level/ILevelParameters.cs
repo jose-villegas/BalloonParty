@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BalloonParty.Balloon.Formation;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.GridActors;
 using BalloonParty.Configuration.Items;
@@ -38,6 +39,12 @@ namespace BalloonParty.Configuration.Level
         ///     extra-colour level, 0 otherwise.
         /// </summary>
         float ExtraItemChance { get; }
+
+        /// <summary>
+        ///     The shapes the level's unbreakables may form: the snake alone on the meadow, every shape elsewhere.
+        ///     A shape left out is never picked, so unbreakables with no allowed shape to join stay loose.
+        /// </summary>
+        FormationShapes AllowedFormationShapes { get; }
 
         /// <param name="waveQuotas">Remaining per-wave allowance by pool key; entries at 0 are excluded, absent keys are unlimited.</param>
         /// <param name="need">The player's need, 0 to 1: favours the balloons that help (<see cref="BalloonPrefabEntry.NeedWeightBoost" />).</param>

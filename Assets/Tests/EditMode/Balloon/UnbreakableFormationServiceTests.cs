@@ -1,11 +1,16 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Formation;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Type;
+using BalloonParty.Balloon.View;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Items;
+using BalloonParty.Configuration.Level;
 using BalloonParty.Game.Assist;
+using BalloonParty.Game.Level;
 using BalloonParty.Projectile;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
@@ -24,6 +29,7 @@ namespace BalloonParty.Tests.Balloon
         private IUnbreakableFormationSettings _settings;
         private UnbreakableFormationService _service;
         private ProjectileRegistry _projectiles;
+        private ILevelParameters _levelParameters;
         private List<UnbreakableBalloonModel> _unbreakables;
         private int _relocations;
 
@@ -51,9 +57,15 @@ namespace BalloonParty.Tests.Balloon
             var balloonsConfig = Substitute.For<IBalloonsConfiguration>();
             balloonsConfig.UnbreakableFormation.Returns(_settings);
 
+            _levelParameters = Substitute.For<ILevelParameters>();
+            var level = Substitute.For<IActiveLevelParameters>();
+            level.Current.Returns(_levelParameters);
+            Allow(FormationShapes.All);
+
             _projectiles = new ProjectileRegistry();
             _service = new UnbreakableFormationService(_grid, balloonsConfig,
-                new ThreatEase(Substitute.For<IPlayerNeed>(), Substitute.For<IAssistSettings>()), _projectiles)
+                new ThreatEase(Substitute.For<IPlayerNeed>(), Substitute.For<IAssistSettings>()), _projectiles,
+                level)
             {
                 Random01 = () => 0f,
             };
@@ -580,6 +592,381 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void AnItemCover_RecordsTheBalloonItStandsRound_WithItsFormationAndItsSlotsCentre()
+        {
+            CoverOnly();
+            var slot = new Vector2Int(3, 2);
+            var host = PlaceHost(slot);
+            AddUnbreakables(new Vector2Int(0, 5), new Vector2Int(3, 5), new Vector2Int(6, 5));
+
+            Arrange();
+
+            Assert.AreEqual(1, _service.CoveredHosts.Count);
+            var covered = _service.CoveredHosts[0];
+            Assert.AreSame(host, covered.Actor);
+            Assert.AreEqual(_service.Formations[0].Id, covered.FormationId);
+            Assert.AreEqual(_unbreakables[0].FormationId, covered.FormationId, "the id its members carry");
+            Assert.AreEqual((Vector2)_grid.IndexToWorldPosition(slot), covered.Centre);
+        }
+
+        [Test]
+        public void ItemCoverOnly_WithAGiftBalloonOnTheBoard_CoversIt_AndItIsTheHost()
+        {
+            CoverOnly();
+            var slot = new Vector2Int(3, 2);
+            var gift = new GoldenBalloonModel(new BalloonModelConfig(BalloonType.Golden, scoreValue: 0));
+            _grid.Place(gift, null, slot);
+            AddUnbreakables(new Vector2Int(0, 5), new Vector2Int(3, 5), new Vector2Int(6, 5));
+
+            Arrange();
+
+            Assert.AreEqual(FormationShape.ItemCover, _service.CurrentShape);
+            Assert.IsTrue(_unbreakables.All(u => HexCoordinates.Distance(u.SlotIndex.Value, slot) == 1));
+            Assert.AreEqual(1, _service.CoveredHosts.Count);
+            Assert.AreSame(gift, _service.CoveredHosts[0].Actor);
+        }
+
+        // The meadow's rule stands: its unbreakables form the snake alone, a gift on the board or not.
+        [Test]
+        public void OnASnakeOnlyLevel_AGiftBalloonIsNotCovered()
+        {
+            _settings.SnakeWeight.Returns(1f);
+            _settings.SnakeMaxMembers.Returns(5);
+            _settings.GiftCoverPreference.Returns(2f);
+            Allow(FormationShapes.Snake);
+            _grid.Place(new HeartBalloonModel(new BalloonModelConfig(BalloonType.Heart, scoreValue: 0)), null,
+                new Vector2Int(3, 2));
+            AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(6, 4), new Vector2Int(3, 5));
+
+            Arrange();
+
+            Assert.AreEqual(FormationShape.Snake, _service.CurrentShape);
+            Assert.AreEqual(0, _service.CoveredHosts.Count);
+        }
+
+        [Test]
+        public void AFormationOfAnotherShape_CoversNoBalloon()
+        {
+            _settings.ItemCoverWeight.Returns(0f);
+            PlaceHost(new Vector2Int(3, 2));
+            AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(6, 4), new Vector2Int(3, 5));
+
+            Arrange();
+
+            Assert.IsNotNull(_service.CurrentShape);
+            Assert.AreEqual(0, _service.CoveredHosts.Count);
+        }
+
+        [Test]
+        public void ACover_HoldsItsBalloonThroughItsHold_AndFreesItWhenItChangesShape()
+        {
+            CoverOnly();
+            var host = PlaceHost(new Vector2Int(3, 2));
+            AddUnbreakables(new Vector2Int(0, 5), new Vector2Int(3, 5), new Vector2Int(6, 5));
+            Arrange();
+            Assert.IsTrue(host.IsAnchored, "held from the cycle the cover is planned");
+            _settings.HorizontalWeight.Returns(1f);
+
+            Arrange();
+            Arrange();
+            Assert.AreEqual(1, _service.CoveredHosts.Count, "still covered while the cover holds");
+            Assert.IsTrue(host.IsAnchored);
+
+            Arrange();
+
+            Assert.AreEqual(FormationShape.Horizontal, _service.CurrentShape);
+            Assert.AreEqual(0, _service.CoveredHosts.Count);
+            Assert.IsFalse(host.IsAnchored, "a line holds no balloon");
+        }
+
+        // The balance runs right after the arrangement, while the members are still on their way: a balloon held
+        // only once they had landed would have floated up out of an open cover by then.
+        [Test]
+        public void TheCoveredBalloon_IsHeldBeforeAnyMemberSetsOff()
+        {
+            CoverOnly();
+            var host = PlaceHost(new Vector2Int(3, 2));
+            AddUnbreakables(new Vector2Int(0, 5), new Vector2Int(3, 5), new Vector2Int(6, 5));
+            var heldWhenTheMembersMoved = false;
+
+            _service.ArrangeOnCycle(moves =>
+            {
+                heldWhenTheMembersMoved = host.IsAnchored;
+                Relocate(moves);
+            });
+
+            Assert.AreEqual(3, _relocations, "the three had to travel");
+            Assert.IsTrue(heldWhenTheMembersMoved);
+        }
+
+        // The picture the owner asked for: the members stand in the slots right beside the balloon and it stays
+        // between them. Three leave both slots above it open, which is where the balance would send it.
+        [Test]
+        public void AThreeMemberCover_KeepsItsBalloonBetweenItsMembers_ThroughABalancePass()
+        {
+            CoverOnly();
+            var slot = new Vector2Int(3, 2);
+            var host = PlaceHost(slot);
+            AddUnbreakables(new Vector2Int(0, 5), new Vector2Int(3, 5), new Vector2Int(6, 5));
+            Arrange();
+            var query = new GridBalanceQuery(_grid);
+            Assert.IsTrue(query.IsUnbalanced(slot.x, slot.y), "it has room above to rise into");
+            var moves = new List<BalanceMove>();
+
+            new BalancePlanner(_grid, query).Plan(new Dictionary<IWriteableDynamicSlotActor, int>(), moves);
+
+            Assert.AreEqual(0, moves.Count);
+            Assert.AreSame(host, _grid.At(slot));
+            Assert.IsTrue(_unbreakables.All(u => HexCoordinates.Distance(u.SlotIndex.Value, slot) == 1),
+                "all three touch it");
+            Assert.AreEqual(1, _service.CoveredHosts.Count);
+        }
+
+        // With no other shape to change to, the cover is planned again where it stands: the same balloon, the same
+        // formation, so the ring a view keeps over it carries on, and it is held again at once.
+        [Test]
+        public void ACoverPlannedAgainRoundTheSameBalloon_KeepsIt_AndKeepsHoldingIt()
+        {
+            CoverOnly();
+            var host = PlaceHost(new Vector2Int(3, 2));
+            AddUnbreakables(new Vector2Int(0, 5), new Vector2Int(3, 5), new Vector2Int(6, 5));
+            Arrange();
+            var formation = _service.CoveredHosts[0].FormationId;
+
+            Arrange();
+            Arrange();
+            Arrange();
+
+            Assert.AreEqual(FormationShape.ItemCover, _service.CurrentShape);
+            Assert.AreEqual(1, _service.CoveredHosts.Count);
+            Assert.AreSame(host, _service.CoveredHosts[0].Actor);
+            Assert.AreEqual(formation, _service.CoveredHosts[0].FormationId);
+            Assert.IsTrue(host.IsAnchored);
+        }
+
+        // The hold runs out and nothing can be planned next (the level in play allows no shape): the balloon is
+        // let go before the plan is tried, and the formation is set loose after it failed. The list the glow reads
+        // must not keep the balloon between the two, or its ring stays over a balloon nothing covers.
+        [Test]
+        public void ACoverWhoseHoldRunsOutWithNoShapeToChangeTo_ListsNoBalloon_AndLeavesNoRing()
+        {
+            CoverOnly();
+            var slot = new Vector2Int(3, 2);
+            var host = PlaceHost(slot);
+            AddUnbreakables(new Vector2Int(0, 5), new Vector2Int(3, 5), new Vector2Int(6, 5));
+            Arrange();
+            var sources = new FormationGlowSources();
+            var rings = new FormationGlowHosts();
+            rings.Sync(_service.CoveredHosts, sources);
+            Assert.AreEqual(1, sources.All.Count, "the covered balloon has its ring source");
+            Allow(FormationShapes.None);
+
+            Arrange();
+            Arrange();
+            Arrange();
+            rings.Sync(_service.CoveredHosts, sources);
+
+            Assert.IsNull(_service.CurrentShape, "the cover is set loose");
+            Assert.AreEqual(0, _service.CoveredHosts.Count);
+            Assert.AreEqual(0, sources.All.Count, "no ring source is left over the balloon");
+            Assert.AreSame(host, _grid.At(slot));
+            Assert.IsFalse(host.IsAnchored);
+        }
+
+        // The balloon outlives its cover here: it is still on the board, and must be free to move again.
+        [Test]
+        public void ACoverBreaking_FreesItsBalloon()
+        {
+            CoverOnly();
+            var slot = new Vector2Int(3, 2);
+            var host = PlaceHost(slot);
+            AddUnbreakables(new Vector2Int(0, 5), new Vector2Int(3, 5), new Vector2Int(6, 5));
+            Arrange();
+
+            _grid.Remove(_unbreakables[0].SlotIndex.Value);
+
+            Assert.IsNull(_service.CurrentShape, "below the minimum the cover breaks");
+            Assert.AreEqual(0, _service.CoveredHosts.Count);
+            Assert.AreSame(host, _grid.At(slot));
+            Assert.IsFalse(host.IsAnchored);
+        }
+
+        [Test]
+        public void ACoverLosingAMember_ButStillStanding_KeepsHoldingItsBalloon()
+        {
+            CoverOnly();
+            var host = PlaceHost(new Vector2Int(3, 2));
+            AddUnbreakables(new Vector2Int(0, 5), new Vector2Int(1, 5), new Vector2Int(2, 5), new Vector2Int(4, 5),
+                new Vector2Int(5, 5), new Vector2Int(6, 5));
+            Arrange();
+
+            _grid.Remove(_unbreakables[0].SlotIndex.Value);
+
+            Assert.AreEqual(FormationShape.ItemCover, _service.CurrentShape);
+            Assert.AreEqual(1, _service.CoveredHosts.Count);
+            Assert.AreSame(host, _service.CoveredHosts[0].Actor);
+            Assert.IsTrue(host.IsAnchored);
+        }
+
+        [Test]
+        public void TheCoveredBalloonPopped_IsLetGo_AndTheCoverStandsOn()
+        {
+            CoverOnly();
+            var slot = new Vector2Int(3, 2);
+            var host = PlaceHost(slot);
+            AddUnbreakables(new Vector2Int(0, 5), new Vector2Int(3, 5), new Vector2Int(6, 5));
+            Arrange();
+
+            _grid.Remove(slot);
+
+            Assert.AreEqual(0, _service.CoveredHosts.Count);
+            Assert.IsFalse(host.HeldByCover);
+            Assert.AreEqual(FormationShape.ItemCover, _service.CurrentShape, "the cover stays until its next change");
+            Assert.IsTrue(_unbreakables.All(u => u.IsAnchored));
+        }
+
+        // Nothing that balances the board moves a held balloon, but something may still take it off its slot on
+        // purpose. It is then out of its cover and free, and whatever lands on the slot is not what was covered.
+        [Test]
+        public void TheCoveredBalloonTakenOffItsSlot_IsLetGoAndFree_AndTheBalloonTakingItsPlaceIsNotCovered()
+        {
+            CoverOnly();
+            var slot = new Vector2Int(3, 2);
+            var host = PlaceHost(slot);
+            AddUnbreakables(new Vector2Int(0, 5), new Vector2Int(3, 5), new Vector2Int(6, 5));
+            Arrange();
+            var above = HexCoordinates.Step(slot, 5);
+            Assert.IsTrue(_grid.IsEmpty(above.x, above.y), "three leave the slots above open");
+
+            _grid.Remove(slot);
+            _grid.Place(host, null, above);
+            Assert.AreEqual(0, _service.CoveredHosts.Count);
+            Assert.IsFalse(host.IsAnchored);
+
+            var newcomer = new BalloonModel();
+            _grid.Place(newcomer, null, slot);
+            Assert.AreEqual(0, _service.CoveredHosts.Count);
+            Assert.IsFalse(newcomer.IsAnchored);
+            Assert.AreEqual(FormationShape.ItemCover, _service.CurrentShape);
+        }
+
+        // The level's ascent, a nuke's blast and a run's clearing take every balloon off the board, held or not,
+        // in whatever order they come to them.
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TheBoardCleared_LeavesNoBalloonHeld_WhicheverGoesFirst(bool theCoveredBalloonFirst)
+        {
+            CoverOnly();
+            var slot = new Vector2Int(3, 2);
+            var host = PlaceHost(slot);
+            AddUnbreakables(new Vector2Int(0, 5), new Vector2Int(3, 5), new Vector2Int(6, 5));
+            Arrange();
+            var members = _unbreakables.Select(u => u.SlotIndex.Value).ToList();
+
+            if (theCoveredBalloonFirst)
+            {
+                _grid.Remove(slot);
+            }
+
+            foreach (var member in members)
+            {
+                _grid.Remove(member);
+            }
+
+            if (!theCoveredBalloonFirst)
+            {
+                _grid.Remove(slot);
+            }
+
+            Assert.IsFalse(host.HeldByCover);
+            Assert.AreEqual(0, _service.CoveredHosts.Count);
+            Assert.AreEqual(0, _service.Formations.Count);
+        }
+
+        // The snake would trade places with any other balloon ahead of it. The covered one is held, so the snake
+        // turns as it does at a formation's member: right is the cover's own member, left is open.
+        [Test]
+        public void ASnake_TurnsAsideFromTheCoveredBalloon_RatherThanWalkThroughIt()
+        {
+            var snake = FormSnake();
+            var head = snake.Members[0].SlotIndex.Value;
+            var slot = HexCoordinates.Step(head, 0);
+            var host = PlaceHost(slot);
+            _settings.SnakeWeight.Returns(0f);
+            AddUnbreakables(new Vector2Int(0, 5), new Vector2Int(3, 5), new Vector2Int(6, 5));
+            Arrange();
+            Assert.AreEqual(1, _service.CoveredHosts.Count, "the free three cover the bomb ahead of the snake");
+
+            _service.StepSnakes(Relocate);
+
+            Assert.AreSame(host, _grid.At(slot), "the covered balloon stays where it is");
+            Assert.AreEqual(1, _service.CoveredHosts.Count);
+            Assert.AreEqual(5, snake.Heading, "east is held and south-east is the cover's member: it turns north-east");
+            Assert.AreEqual(HexCoordinates.Step(head, 5), snake.Members[0].SlotIndex.Value);
+        }
+
+        // Every move the service makes through another balloon asks this one question: a snake's step, a joiner's
+        // line on from a tail, a gap closing, the toughs falling in, a formation's slot.
+        [Test]
+        public void ABalloonACoverHolds_IsNoBalloonToTradePlacesWith_UntilItIsLetGo()
+        {
+            var balloon = new BalloonModel();
+            Assert.IsTrue(SnakeWalk.CanPassThrough(balloon), "control: a free balloon trades places");
+
+            balloon.SetHeldByCover(true);
+            Assert.IsFalse(SnakeWalk.CanPassThrough(balloon));
+
+            balloon.SetHeldByCover(false);
+            Assert.IsTrue(SnakeWalk.CanPassThrough(balloon));
+        }
+
+        [Test]
+        public void ResetRun_FreesTheCoveredBalloon()
+        {
+            CoverOnly();
+            var host = PlaceHost(new Vector2Int(3, 2));
+            AddUnbreakables(new Vector2Int(0, 5), new Vector2Int(3, 5), new Vector2Int(6, 5));
+            Arrange();
+
+            _service.ResetRun(1);
+
+            Assert.AreEqual(0, _service.CoveredHosts.Count);
+            Assert.IsFalse(host.IsAnchored);
+        }
+
+        [Test]
+        public void FormationsSwitchedOff_FreeTheCoveredBalloon()
+        {
+            CoverOnly();
+            var host = PlaceHost(new Vector2Int(3, 2));
+            AddUnbreakables(new Vector2Int(0, 5), new Vector2Int(3, 5), new Vector2Int(6, 5));
+            Arrange();
+            _settings.Enabled.Returns(false);
+
+            Arrange();
+
+            Assert.AreEqual(0, _service.CoveredHosts.Count);
+            Assert.IsFalse(host.IsAnchored);
+        }
+
+        // Covered as a gift is, a nuke is held before anyone has armed it.
+        [Test]
+        public void ACoveredNuke_IsHeldUnarmed_AndFreeAgainWhenItsCoverBreaks()
+        {
+            CoverOnly();
+            var nuke = new NukeBalloonModel(new BalloonModelConfig(BalloonType.Nuke, scoreValue: 0, hitsToPop: 3));
+            _grid.Place(nuke, null, new Vector2Int(3, 2));
+            AddUnbreakables(new Vector2Int(0, 5), new Vector2Int(3, 5), new Vector2Int(6, 5));
+
+            Arrange();
+            Assert.IsFalse(nuke.Armed.Value);
+            Assert.IsTrue(nuke.IsAnchored);
+
+            _grid.Remove(_unbreakables[0].SlotIndex.Value);
+            Assert.IsFalse(nuke.IsAnchored);
+        }
+
+        [Test]
         public void NoShapeFits_NobodyIsAnchored()
         {
             _settings.HorizontalWeight.Returns(0f);
@@ -976,6 +1363,164 @@ namespace BalloonParty.Tests.Balloon
             Assert.AreEqual(snake ? FormationShape.Snake : FormationShape.Horizontal, _service.CurrentShape);
         }
 
+        [TestCase(0f)]
+        [TestCase(0.3f)]
+        [TestCase(0.6f)]
+        [TestCase(0.999f)]
+        public void ALevelAllowingOnlyTheSnake_FormsOnlySnakes_WhateverTheRoll(float roll)
+        {
+            // Every shape weighs something, so only the level keeps the others out.
+            _settings.SnakeWeight.Returns(1f);
+            _settings.SnakeMaxMembers.Returns(5);
+            Allow(FormationShapes.Snake);
+            _service.Random01 = () => roll;
+            AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(6, 4), new Vector2Int(3, 5));
+
+            Arrange();
+
+            Assert.AreEqual(FormationShape.Snake, _service.CurrentShape);
+            Assert.IsTrue(_unbreakables.All(u => u.InFormation.Value));
+        }
+
+        // With every line weighing 1 (and the cover 2, which has no item to cover here), a roll of 0 lands on the
+        // horizontal, 0.2 on the first diagonal, 0.4 on the second and the top of the range on the snake.
+        [TestCase(0f, nameof(FormationShape.Horizontal))]
+        [TestCase(0.2f, nameof(FormationShape.DiagonalDownRight))]
+        [TestCase(0.4f, nameof(FormationShape.DiagonalDownLeft))]
+        [TestCase(0.999f, nameof(FormationShape.Snake))]
+        public void ALevelAllowingEveryShape_PicksAmongThemAll(float roll, string expected)
+        {
+            _settings.SnakeWeight.Returns(1f);
+            _settings.SnakeMaxMembers.Returns(5);
+            Allow(FormationShapes.All);
+            _service.Random01 = () => roll;
+            AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(6, 4), new Vector2Int(3, 5));
+
+            Arrange();
+
+            Assert.AreEqual(Enum.Parse<FormationShape>(expected), _service.CurrentShape);
+        }
+
+        [TestCase(nameof(FormationShape.Horizontal))]
+        [TestCase(nameof(FormationShape.DiagonalDownRight))]
+        [TestCase(nameof(FormationShape.DiagonalDownLeft))]
+        public void ALevelAllowingOneShape_FormsThatShape_ThoughTheRollPicksTheSnake(string shape)
+        {
+            // The set's names are the shapes' own.
+            var expected = Enum.Parse<FormationShape>(shape);
+            _settings.SnakeWeight.Returns(100f);
+            _settings.SnakeMaxMembers.Returns(5);
+            Allow(Enum.Parse<FormationShapes>(shape));
+            _service.Random01 = () => 0.999f;
+            AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(6, 4), new Vector2Int(3, 5));
+
+            Arrange();
+
+            Assert.AreEqual(expected, _service.CurrentShape);
+        }
+
+        [Test]
+        public void ALevelAllowingNoShape_LeavesTheUnbreakablesLoose_OnTheCycleAndOnTheBeat()
+        {
+            _settings.SnakeWeight.Returns(1f);
+            Allow(FormationShapes.None);
+            AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(6, 4), new Vector2Int(3, 5), new Vector2Int(1, 1));
+            var slots = _unbreakables.Select(u => u.SlotIndex.Value).ToList();
+
+            Assert.DoesNotThrow(Arrange);
+            Assert.DoesNotThrow(() => _service.FormOnBeat(Relocate));
+            Assert.DoesNotThrow(() => _service.StepSnakes(Relocate));
+
+            Assert.IsNull(_service.CurrentShape);
+            Assert.AreEqual(0, _service.Members.Count);
+            Assert.AreEqual(0, _relocations, "nothing moved");
+            Assert.IsFalse(_unbreakables.Any(u => u.InFormation.Value || u.IsAnchored));
+            CollectionAssert.AreEqual(slots, _unbreakables.Select(u => u.SlotIndex.Value).ToList());
+        }
+
+        [Test]
+        public void OnASnakeOnlyLevel_UnbreakablesPastTheSnakeCap_StayLoose()
+        {
+            // As NoMoreUnbreakableSnakes_ThanTheCap_TheThirdPicksAnotherShape, but the level allows no other shape.
+            _service.Random01 = () => 0.999f;
+            _settings.MinMembers.Returns(2);
+            _settings.MaxUnbreakableSnakes.Returns(2);
+            _settings.SnakeWeight.Returns(100f);
+            _settings.SnakeMaxMembers.Returns(2);
+            Allow(FormationShapes.Snake);
+            AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(1, 0), new Vector2Int(5, 0), new Vector2Int(6, 0),
+                new Vector2Int(0, 5), new Vector2Int(1, 5));
+
+            Arrange();
+
+            Assert.AreEqual(2, _service.Formations.Count, "the cap holds: no third formation");
+            Assert.IsTrue(_service.Formations.All(f => f.Shape == FormationShape.Snake));
+            Assert.AreEqual(4, _service.Members.Count);
+            Assert.AreEqual(2, _unbreakables.Count(u => !u.InFormation.Value), "the two no snake can take stay loose");
+        }
+
+        [Test]
+        public void OnASnakeOnlyLevel_ASnakeDoneHolding_StaysASnake_AndTakesInALooseUnbreakable()
+        {
+            var snake = FormSnake();
+            _settings.HorizontalWeight.Returns(1f);
+            _settings.DiagonalWeight.Returns(1f);
+            Allow(FormationShapes.Snake);
+            AddUnbreakable(new Vector2Int(5, 5));
+
+            for (var cycle = 0; cycle < 3; cycle++)
+            {
+                Arrange();
+            }
+
+            Assert.AreEqual(1, _service.Formations.Count);
+            Assert.AreEqual(FormationShape.Snake, snake.Shape, "it has no other shape to change to");
+            Assert.AreEqual(4, _service.Members.Count, "planning again, it took the loose one in");
+            Assert.IsTrue(_unbreakables.All(u => u.InFormation.Value));
+        }
+
+        [Test]
+        public void ALineLeftFromALevelThatAllowedIt_TurnsIntoASnake_WhenItsHoldEnds()
+        {
+            _settings.SnakeWeight.Returns(1f);
+            _settings.SnakeMaxMembers.Returns(5);
+            AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(6, 4), new Vector2Int(3, 5));
+            Arrange();
+            Assert.AreEqual(FormationShape.Horizontal, _service.CurrentShape, "the level allows every shape");
+
+            Allow(FormationShapes.Snake);
+            Arrange();
+            Arrange();
+            Assert.AreEqual(FormationShape.Horizontal, _service.CurrentShape, "a standing line holds its cycles out");
+
+            Arrange();
+
+            Assert.AreEqual(FormationShape.Snake, _service.CurrentShape);
+        }
+
+        [Test]
+        public void ALineLeftFromALevelThatAllowedIt_IsSetLoose_WhenNoShapeIsAllowedAtTheEndOfItsHold()
+        {
+            AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(6, 4), new Vector2Int(3, 5));
+            Arrange();
+            Assert.AreEqual(FormationShape.Horizontal, _service.CurrentShape);
+
+            Allow(FormationShapes.None);
+            for (var cycle = 0; cycle < 3; cycle++)
+            {
+                Arrange();
+            }
+
+            Assert.AreEqual(0, _service.Formations.Count, "the line is not planned again as the last resort");
+            Assert.IsFalse(_unbreakables.Any(u => u.InFormation.Value));
+        }
+
+        // The shapes the level in play lets the unbreakables form.
+        private void Allow(FormationShapes shapes)
+        {
+            _levelParameters.AllowedFormationShapes.Returns(shapes);
+        }
+
         // A shot in flight that plowed through member and holds it for its discharge.
         private ProjectileModel Plow(object member)
         {
@@ -1050,6 +1595,22 @@ namespace BalloonParty.Tests.Balloon
             {
                 _grid.Place(move.Actor, null, move.Target);
             }
+        }
+
+        // Leaves the item cover the only shape in the pick.
+        private void CoverOnly()
+        {
+            _settings.HorizontalWeight.Returns(0f);
+            _settings.DiagonalWeight.Returns(0f);
+        }
+
+        // A balloon carrying an item a cover shields.
+        private BalloonModel PlaceHost(Vector2Int slot, ItemType item = ItemType.Bomb)
+        {
+            var host = new BalloonModel();
+            host.Item.Value = item;
+            _grid.Place(host, null, slot);
+            return host;
         }
 
         private void AddUnbreakables(params Vector2Int[] slots)

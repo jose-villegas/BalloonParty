@@ -22,6 +22,7 @@ using UniRx;
 using UnityEngine;
 using VContainer;
 using BalloonParty.Configuration.Effects;
+using BalloonParty.Configuration.GridActors;
 using BalloonParty.Configuration.Palette;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -68,6 +69,10 @@ namespace BalloonParty.Projectile.View
         [Inject] private SceneLightFieldService _lightField;
         [Inject] private ISceneLightSettings _sceneLightSettings;
         [Inject] private IShieldFieldSettings _shieldSettings;
+        [Inject] private IPublisher<MushroomBouncedMessage> _mushroomBouncedPublisher;
+        [Inject] private IPublisher<MushroomCutMessage> _mushroomCutPublisher;
+        [Inject] private IBumperField _bumperField;
+        [Inject] private IMushroomSettings _mushroomSettings;
 
         private readonly List<RaycastHit2D> _telegraphHits = new(16);
         private readonly List<PierceCastCandidate> _telegraphCandidates = new(16);
@@ -105,6 +110,15 @@ namespace BalloonParty.Projectile.View
         private float _pierceAlpha;
         private PathTrace.SegmentBlocked _segmentBlocked;
         private PathTrace.SegmentBlocked _corridorBlocked;
+
+        // The bounces of the step being presented, copied out of the motion resolver's shared list before the
+        // first of them is announced. Made on the first step that has any.
+        private List<BumperBounce> _stepBumperBounces;
+        private List<CapCut> _stepCapCuts;
+
+        // Which leg of a lookahead the segment test is on: 0 from the ball to its first wall, then one more for
+        // each wall the traced path reflects off.
+        private int _lookaheadLeg;
         private Vector3 _lastPaintPos;
         private float _stampScale = 1f;
 
@@ -393,7 +407,7 @@ namespace BalloonParty.Projectile.View
                 .Subscribe(OnDoomedChanged);
         }
 
-        private void DestroyProjectile()
+        private void DestroyProjectile(bool forced = false)
         {
             if (_destroyed)
             {
@@ -446,7 +460,7 @@ namespace BalloonParty.Projectile.View
             var model = _model;
             _registry.Land(model);
             _balancePublisher.Publish(default);
-            _destroyedPublisher.Publish(new ProjectileDestroyedMessage(model));
+            _destroyedPublisher.Publish(new ProjectileDestroyedMessage(model, forced));
             _registry.Retire(model);
         }
 
@@ -459,7 +473,7 @@ namespace BalloonParty.Projectile.View
                 return;
             }
 
-            DestroyProjectile();
+            DestroyProjectile(forced: true);
         }
 
         /// <summary>Scales the projectile to zero then invokes <paramref name="onComplete" />; runs in unscaled time so it still plays while the world is frozen.</summary>
@@ -521,7 +535,16 @@ namespace BalloonParty.Projectile.View
             var stepFrom = transform.position;
             var step = _motionResolver.Step(_model, stepFrom, Time.fixedDeltaTime);
 
-            if (step.Outcome != ProjectileStepOutcome.Moved)
+            // A step can bounce the ball off a mushroom before it reaches a wall, or with no wall at all. Those
+            // bounces are told first: each moves where the straight leg began that the wall's own bookkeeping
+            // below measures from.
+            ResolveBumperBounces(step, afterWall: false, ref segmentOrigin, ref stepFrom, ref travelDirection);
+
+            // And the caps a lance cut on its way, which turned nothing: the step is the walls' own.
+            AnnounceCapCuts();
+
+            // The wall's own effect: a mushroom bounce is not a wall hit and plays none.
+            if (step.Outcome is ProjectileStepOutcome.Bounced or ProjectileStepOutcome.Destroyed)
             {
                 PlayBounceEffect(step.WallContact);
             }
@@ -551,7 +574,9 @@ namespace BalloonParty.Projectile.View
 
             if (step.Outcome == ProjectileStepOutcome.Bounced)
             {
-                _shieldView?.OnBounce((Vector2)travelDirection, (Vector2)step.Direction, step.Speed);
+                // The wall's own bounce: a mushroom met on the way back off it turned the ball again, and squashes
+                // the shield for itself.
+                _shieldView?.OnBounce((Vector2)travelDirection, step.WallDirection, step.Speed);
                 _shieldLostPublisher.Publish(new ShieldLostMessage(_model, step.WallContact));
                 // Count before publishing, so every subscriber sees a total including this bounce.
                 _flightStats.RecordWallHit(_model);
@@ -612,6 +637,9 @@ namespace BalloonParty.Projectile.View
                 _pierceWallReachedPublisher.Publish(
                     new PierceWallReachedMessage(_model, step.WallContact, discharged));
             }
+
+            // And the mushrooms met on the way back off the wall, now that the wall itself is settled.
+            ResolveBumperBounces(step, afterWall: true, ref segmentOrigin, ref stepFrom, ref travelDirection);
 
             transform.position = step.Position;
             transform.up = step.Direction;
@@ -700,6 +728,74 @@ namespace BalloonParty.Projectile.View
             }
 
             return false;
+        }
+
+        // Everything a bounce off a mushroom owes the rest of the game. Run twice on a step that has any: for
+        // the bounces on the way to the step's wall (or with no wall at all), then for those on the way back off
+        // it. A bounce spends no shield and plays no wall effect; it is announced, and it moves where the current
+        // straight leg began. Only a ball that is not piercing bounces, so no lance's run or wake turns here.
+        private void ResolveBumperBounces(
+            in ProjectileStep step, bool afterWall, ref Vector3 segmentOrigin, ref Vector3 stepFrom,
+            ref Vector3 travelDirection)
+        {
+            // Every step asks, and on a board without mushrooms that is all it costs.
+            if (step.BumperBounces == 0)
+            {
+                return;
+            }
+
+            // The resolver's list is one for every ball and is refilled by the next step of any of them. Copied
+            // once, before the first bounce is announced, so nothing a subscriber does can change it under us.
+            if (!afterWall)
+            {
+                _stepBumperBounces ??= new List<BumperBounce>(step.BumperBounces);
+                _stepBumperBounces.Clear();
+                _stepBumperBounces.AddRange(_motionResolver.StepBumperBounces);
+            }
+
+            var bounces = _stepBumperBounces;
+            for (var i = 0; i < bounces.Count; i++)
+            {
+                var bounce = bounces[i];
+                if (bounce.AfterWall != afterWall)
+                {
+                    continue;
+                }
+
+                _shieldView?.OnBounce(bounce.Incoming, bounce.Outgoing, step.Speed);
+
+                // The turn starts a new straight segment for the Sweep rule, as a deflect does: the back-trace
+                // from the next wall runs to here, over the pops made since.
+                _model.Flight.SegmentPopCount = 0;
+                _model.Flight.SegmentSweepValid = true;
+                _model.Flight.LastBouncePosition = bounce.Point;
+
+                segmentOrigin = bounce.Point;
+                stepFrom = bounce.Point;
+                travelDirection = bounce.Outgoing;
+
+                _mushroomBouncedPublisher.Publish(bounce.ToMessage(_model, step.Speed));
+            }
+        }
+
+        // The caps a lance cut during the step, each announced once: the cap has already left the bumper field,
+        // so the next sweep, of this ball or another, does not find it. Copied before the first is announced,
+        // as the bounces are, since the resolver's list is one for every ball.
+        private void AnnounceCapCuts()
+        {
+            var cuts = _motionResolver.StepCapCuts;
+            if (cuts.Count == 0)
+            {
+                return;
+            }
+
+            _stepCapCuts ??= new List<CapCut>(cuts.Count);
+            _stepCapCuts.Clear();
+            _stepCapCuts.AddRange(cuts);
+            for (var i = 0; i < _stepCapCuts.Count; i++)
+            {
+                _mushroomCutPublisher.Publish(_stepCapCuts[i].ToMessage());
+            }
         }
 
         private void OnBalloonDeflected(BalloonDeflectedMessage msg)
@@ -807,10 +903,26 @@ namespace BalloonParty.Projectile.View
         {
             // Cached once (this runs every fixed step) so the closure over the collider query isn't
             // re-allocated per call. The solver mirrors this trace analytically — see PathTrace.
+            // A mushroom blocks the run as a balloon does: the shot would bounce off it, so the wall behind it is
+            // neither certain death nor the end of an empty corridor. Not a lance's run: it cuts the cap and flies
+            // on. The trace asks leg by leg, in order, and stops at the first one blocked, so counting the asks
+            // counts the walls the path has reflected off.
             _segmentBlocked ??= (from, dir, length) =>
-                Physics2D.CircleCast(from, _contactRadius, dir, length, 1 << BalloonsLayer).collider != null;
+                Physics2D.CircleCast(from, _contactRadius, dir, length, 1 << BalloonsLayer).collider != null
+                || TryFindBumperAhead(from, dir, length, _lookaheadLeg++, out _);
 
+            _lookaheadLeg = 0;
             return PathTrace.IsClearAhead(_motionResolver.Walls, position, direction, bounces, _segmentBlocked);
+        }
+
+        // The first mushroom the shot would bounce off on a straight run, and how far along the run it is: see
+        // BumperLookahead for what is and is not in its way. leg is 0 for a run from the ball itself.
+        private bool TryFindBumperAhead(Vector2 from, Vector2 direction, float length, int leg, out float distance)
+        {
+            return BumperLookahead.TryFindAhead(
+                _bumperField.Bumpers, _model.Flight, _mushroomSettings.Rules,
+                new BumperLookahead.Run(from, direction, length, leg), _model.IsPiercing.Value,
+                out distance);
         }
 
         // The earned-piercing aura eases in rather than popping on — the buff lands mid-flight at a
@@ -980,6 +1092,7 @@ namespace BalloonParty.Projectile.View
 
             var direction = ((Vector2)_model.Direction).normalized;
             var length = Vector2.Distance(origin, crossing);
+
             Physics2D.CircleCast(origin, _contactRadius, direction, _balloonCastFilter, _telegraphHits, length);
 
             _telegraphCandidates.Clear();

@@ -21,16 +21,18 @@ biggest group, every other tough falls in behind its tail, and it walks through 
 
 | File | What it does |
 |---|---|
-| `FormationShape` | The five shapes: `Horizontal`, `DiagonalDownRight`, `DiagonalDownLeft`, `ItemCover` (three to six around a balloon carrying a bomb, a snipe or a lightning, shielding it from the cannon: below it first, then its sides, then above), and `Snake` (a line that walks the board) |
+| `FormationShape` | The five shapes: `Horizontal`, `DiagonalDownRight`, `DiagonalDownLeft`, `ItemCover` (three to six around a balloon carrying a bomb, a snipe or a lightning, or around a gift balloon, shielding it from the cannon: below it first, then its sides, then above), and `Snake` (a line that walks the board) |
+| `FormationShapes` | A set of those shapes, one bit each: what a level lets its unbreakables form (`ILevelParameters.AllowedFormationShapes`). `Allows(shape)` asks it |
 | `SnakeWalk` | Where a snake's head steps next: straight on if it can, else the gentlest open turn |
 | `SnakeBody` | Where free toughs fall in behind the tough snake's tail: a line on from it that they take in one batch, the balloons on it moving out to the slots they left |
 | `SlotMove` | One actor and the slot it moves to. The service hands the balancer each arrangement and each snake step as a batch of these, and every actor in a batch leaves its slot before any lands |
 | `FormationPlanner` | Pure planning. For one shape it lists every spot on the board where the shape fits, works out how far the members would travel to fill it, and picks at random among the few cheapest spots. It then says which member goes to which slot. It reads the grid but never changes it |
 | `FormationAssignment` | One member and the slot it goes to |
-| `StandingFormation` | One standing formation: its members, its shape, the waves it has left to hold, whether a member was pierced since it formed, and whether it is a tough snake (`Armoured`) |
+| `StandingFormation` | One standing formation: its members, its shape, the waves it has left to hold, whether a member was pierced since it formed, whether it is a tough snake (`Armoured`), and the balloon a cover stands round (`Host`) |
 | `UnbreakableFormationService` | The controller. It decides when each formation forms, holds, changes and breaks up, marks members as in formation, rolls for reinforcements, and keeps the toughs' snake: starts it, takes each free tough in at its tail, and walks it through the board |
 | `IFormationReinforcements` | The reinforcements the formations have called in. `BalloonSpawner` takes them at each wave's first line |
 | `IToughSnakeBody` | The tough snake's members, head first, for the view that draws its springs (`Balloon/View/ToughSnakeSpringView`) |
+| `ICoveredHosts`, `CoveredHost` | The balloons item covers stand round now, each with its formation's id and the world centre of its slot, for the view that draws a ring over them (`Balloon/View/FormationGlowHosts`). The service holds each in its slot meanwhile, through `Balloon/Model/IWriteableCoverHost` |
 
 ## The clock
 
@@ -65,8 +67,9 @@ bubbles' merging as well as the unbreakables.
    shape for them. The pick is weighted at random from the shape weights. The snake's weight grows by
    `SnakeWeightPerExtraUnbreakable` of itself for each unbreakable on the board beyond `MinMembers`, so a
    crowded board snakes more often, up to `MaxUnbreakableSnakes` (2) snakes at once: with that many
-   walking, the pick leaves the snake out. It leaves out the shape just held, and `ItemCover` finds no spot
-   unless a bomb, a snipe or a lightning is on the board. If the picked shape fits nowhere, the service tries the next one. If nothing fits, nothing forms and the unbreakables roam as usual. A
+   walking, the pick leaves the snake out. It leaves out every shape the level doesn't allow (see "Shapes a
+   level allows" below). It leaves out the shape just held, and `ItemCover` finds no spot
+   unless a bomb, a snipe, a lightning or a gift balloon is on the board. If the picked shape fits nowhere, the service tries the next one. If nothing fits, nothing forms and the unbreakables roam as usual. A
    formation takes at most `MaxMembers` (a horizontal line, `HorizontalMaxMembers`); an item cover takes
    three to six. While `MinMembers` or more are still free after it, they form another one.
 3. **Moving in.** The service hands each member's move to the balancer's relocate routine. That is the
@@ -90,6 +93,26 @@ bubbles' merging as well as the unbreakables.
    in that formation, the rest are released at once. The other formations stand. The next line's balance,
    or the timed pulse, floats the released ones up. The service never moves a lone one itself; the
    balancer does, one a cycle. `ResetRun` releases everything.
+
+## Shapes a level allows
+
+A level says which shapes its unbreakables may form: `IActiveLevelParameters.Current.AllowedFormationShapes`
+(`Configuration/Level/`). The level generator allows the snake alone on the meadow and every shape in the sky
+and on the water (`Plans/PLAN-MeadowMushrooms.md`). The service reads it at the start of each shape plan, and a
+shape that is not allowed weighs 0 (`WeightOf`): it is never picked, and never kept as the last resort.
+
+What follows on a snake-only level, with no other change to the rules:
+
+- Free unbreakables form snakes, up to `MaxUnbreakableSnakes`. Past that cap they have no shape to form, so
+  they stay loose and roam. No cap is lifted for them.
+- A snake done holding has no other shape to change to. It is planned again as a snake, the last resort: it
+  lines up as a row once more and takes in free unbreakables up to `SnakeMaxMembers`.
+- A line or an item cover left standing from the level before holds its cycles out. Then it turns into a snake,
+  or, with the snakes at their cap, breaks up.
+- With no shape allowed at all, nothing forms and a formation done holding breaks up.
+
+The toughs' snake is not a pick, so the level's set does not touch it: toughs carried over from a sky level
+still gather. A meadow level brings no toughs of its own.
 
 ## Snakes
 
@@ -248,19 +271,61 @@ unbreakables: they roam, and once two are free they form a formation of their ow
   board is shielded by the edge, so the cover skips it; a corner with fewer than three neighbours on the
   board gets none. A slot it takes in `BottomClearance` rules the spot out. Its place is the item's, so it
   never looks for a spot of its own.
+- **A cover prefers a gift.** A cover also stands round a gift balloon: any of the four reward balloons
+  (`BalloonType.IsReward`: golden, heart, disco ball, nuke; `Balloon/Reward/README.md`), filled in the same
+  order. The shape and its settings keep their names (`ItemCover`, `ItemCoverWeight`,
+  `ItemCoverHoldCycles`), which tests, plans and the levels' allowed shapes already use. When both a gift
+  and an item carrier could be covered, the gift's spot counts as cheaper by `GiftCoverPreference` (2)
+  slots of travel for each member the cover takes (the owner's ask, 2026-11-19). A spot's cost is the slots
+  its members travel to it plus `DisplacedBalloonCost` (3) for each balloon they move, so the number reads
+  as: the gift is covered unless covering the item carrier would save every member more than 2 slots on
+  average. Three unbreakables that would travel 10 slots to cover a heart balloon and 5 to cover a bomb
+  cover the heart (10 less 6 is 4, under 5); standing beside the bomb already (2 against 10), they cover
+  the bomb. Where a gift's spot comes out cheapest, the pick among the `SpotChoices` cheapest stays among
+  gifts' spots, or the dice would hand the cover to the item carrier as often as not. At 0 there is no
+  preference and the pick is as it was. With gifts as hosts a cover finds a spot on more boards, so covers
+  form more often than when only items drew them.
 - **Members keep their slot.** A member already standing on a formation slot keeps it: assignment
   takes the nearest pairs first, so its distance-0 pair always wins. As a result, no member ever has to
   move into a slot another member still holds.
-- **A full ring holds the item.** Six leave the item's balloon nowhere to move. A smaller cover leaves
-  the side above it open, so the item can float up out of it. If the item moves or pops, the cover stays
-  where it is until the next change.
+- **A cover has a host, and holds it.** The balloon a cover is planned round is its host
+  (`StandingFormation.Host`; `FormationPlanner.CoveredHost` says which slot the plan chose). The service lists
+  the hosts in `ICoveredHosts.CoveredHosts`, each with its formation's id and the world centre of its slot.
+  Covered means enclosed: the members stand in the slots right beside the host and it stays between them (the
+  owner's ask, 2026-11-19; before it, a host floated up out of an open cover on the next balance and the cover
+  stood round nothing). So for as long as a balloon is a host the service holds it in its slot
+  (`IWriteableCoverHost.SetHeldByCover`, on `BalloonModelBase`, so a plain balloon carrying an item and every
+  reward balloon has it), and a held balloon is anchored exactly as a member is (see "Anchoring"). It is held
+  from the plan, before the first member has set off, and while the cover holds that shape, lost members or
+  not. A cover never plans round a balloon another cover holds, so one cover at most holds a balloon.
+- **When a host is let go.** When the cover's hold runs out (before its next shape is planned, so a line may
+  trade the balloon out, and a cover planned again round it holds it again at once), when the cover breaks,
+  when formations are switched off, and on a run reset. A host that outlives its cover is free again at that
+  moment. A formation's host is written in two places only (`HoldHost`, `LetHostGo`), and each rebuilds
+  `CoveredHosts`, so the list never names a balloon no cover holds, whatever the caller does next (a cover
+  let go at the end of its hold may then find no shape to change to and be set loose). Nothing that balances the board moves a held host, and the service's own moves ask the same
+  question (`SnakeWalk.CanPassThrough`): a snake turns aside from it, a joiner's line and a closing gap go
+  round it, and no formation plans over its slot. What still takes one off its slot does so on purpose: a pop
+  (the shot, an item, a nuke's blast, which spares only reward balloons), the level's ascent, and the
+  clearing of a run. The service checks on every change of the grid, its own moves included, and lets a host
+  that is no longer on its slot go, so none stays held; the cover then stands round nothing until it changes.
+  Nothing takes a balloon off the grid without such a change: `SlotGrid.Place` and `SlotGrid.Remove` are the
+  only writers of its slots and both publish `OnChanged`, and the cheats and the staging tool go through them.
+  A balloon that later lands on the empty slot is not the host.
+- **What a held host changes on the board.** One more slot stays fixed while a cover stands, for new lines to
+  route round. A host is always a row above its cover's two lower members (the planner refuses a cover whose
+  lower slots fall in `BottomClearance`), so it blocks no column from below that they did not block already,
+  but a line's shove can no longer pass sideways through its slot. A covered gift cannot drift
+  into reach, or out of it. A nuke is anchored under a cover whether it is armed or not.
 - **A cover's slots take the balloons' places.** A balloon is no shield, since a shot pops it, so a
   neighbour holding one trades it out to a slot a member left, as for every shape.
 
 ## Anchoring
 
-A member in formation reports `IBalanceAnchor.IsAnchored` (from `Slots/Actor`). Everything that moves
-balloons leaves an anchored actor in its slot:
+A member in formation reports `IBalanceAnchor.IsAnchored` (from `Slots/Actor`), and so does the balloon a
+cover holds (`BalloonModelBase.IsAnchored`: held by a cover, or the model's own reason, which is a formation
+for an unbreakable or a tough and an armed fuse for the nuke). Everything that moves balloons leaves an
+anchored actor in its slot:
 - the balance race (`BalancePlanner`) and `BalloonBalancer.HasPossibleMove`,
 - the lone move, and the model's own `TryPickRelocation`,
 - `PressurePropagation`, where an anchored actor blocks the shove the way a static actor does,
@@ -319,6 +384,28 @@ ask, 2026-11-19; before it, every ring in reach joined and a stack of formations
 member's brightness likewise follows its nearest fellow of its own formation. The
 settings are `IFormationGlowSettings`, `BalloonsConfiguration`'s "Formation Glow".
 
+The balloon an item cover stands round gets a ring of that formation too, so the outline closes over it
+(the owner's ask, 2026-11-19). The members' rings alone do not reach the middle: the covered balloon showed
+as a hole in a full cover and as a notch in an open one. `Balloon/View/FormationGlowHosts` reads
+`ICoveredHosts.CoveredHosts` each frame and keeps one ring source in `FormationGlowSources` for each host,
+at the centre of its slot and with its formation's id. The covered balloon's own view knows nothing of it.
+To the field it is one more ring of that formation: it lights as the members draw close, dissolves in as
+theirs do, and counts toward the 24 the shader draws. The host is listed, and held in its slot, from the plan,
+with every member still on its way; its ring follows the nearest member, so it comes in as they arrive and
+stays for as long as the cover stands. When the service lets the host go, its source is taken
+out and the ring dissolves where it was, as a popped member's does; the members' rings stay if the cover
+still stands. The field knows a ring by its source, so a host keeps the same source for as long as the same
+formation covers it; the same balloon under another formation gets a new one. A frame with the covers
+standing as they did changes nothing and allocates nothing.
+
+Past the shader's 24 rings the field leaves out the rings that lit last, and a host's ring lights after its
+members' (they are listed first), so a host's would be the first of its cover to go, which puts the notch
+back. This is left as it is: the board does not get there. A generated level caps its own unbreakables at 4
+(the catalogue's count curve) and `ReinforcementCeiling` adds 4 at most, so 8 unbreakables stand at once, in
+at most two covers: 10 rings, and a few more for the 0.6 s a popped member's ring takes to dissolve. Reaching
+24 would take, say, 21 unbreakables in formation and three hosts. If the caps are ever raised that far, give
+the hosts' rings precedence in `FormationGlowField.Write`.
+
 The rings also cast a local light on what stands round them, in the formation blue, through the
 scene-light field (`Shared/SceneLight/SceneLightFieldService`): the bounce above only reaches the ground,
 and this one lights the balloons' sides. A light per ring would use up the field's 32 lights on one
@@ -326,7 +413,8 @@ long formation, so `FormationGlowBeams` puts the rings of one formation that joi
 closer than `FormationGlowField.JoinDistance`, about 1.1) in one group, chains included, so two formations
 light apart, as their outlines stay apart. Each group casts one capsule light between its two members furthest
 apart: exact for a line or a diagonal, close for a ring round an item or a bent snake. At most 8 groups
-cast one. The light's strength is `LightIntensity` (0.6) times the group's average of brightness times
+cast one. A covered balloon's ring is in its cover's group: it stands in the middle, so the capsule's ends
+are still two members, and a cover down to two members either side of it stays one group through it. The light's strength is `LightIntensity` (0.6) times the group's average of brightness times
 presence, so it rises as members draw close and falls away with a dissolving ring. It reaches
 `LightRadius` (1.43) from that line and falls off by `LightFalloffPower` (2). A light is registered only
 while its group glows, and a formation standing still changes none of its values, so the field does not
@@ -351,8 +439,11 @@ The settings are `IUnbreakableFormationSettings`, nested in `BalloonsConfigurati
 - `SnakeMaxMembers` (4)
 - `ToughSnakeStepSeconds` (1.5: seconds of play between the tough snake's steps, its own clock apart from the beat)
 - `SpotChoices` (3)
+- `GiftCoverPreference` (2: slots of travel, for each member, that a cover's spot round a gift balloon counts
+  as cheaper than one round an item carrier; 0 for no preference)
 - `ReinforcementChance` (0.35, eased in need by `Game/Assist/ThreatEase`) and `ReinforcementCeiling` (4)
-- the shape weights: horizontal 1, each diagonal 1, item cover 2, snake 0.25 (so a snake is the rarest pick)
+- the shape weights: horizontal 1, each diagonal 1, item cover 2 (round an item carrier or a gift), snake 0.25
+  (so a snake is the rarest pick)
 - `MaxUnbreakableSnakes` (2: a formation that would make a third picks another shape; 0 sets no cap)
 - `JoinSnakeChance` (0.35: each member of a formation changing shape flies to a snake's tail instead)
 - `SnakeWeightPerExtraUnbreakable` (0.25: the snake's weight 1.25x with one unbreakable past `MinMembers`, 1.5x

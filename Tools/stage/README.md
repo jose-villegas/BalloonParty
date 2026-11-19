@@ -40,6 +40,9 @@ and only `advance`, `clear`, `pop --settle` and dealing a board let game time ru
 | `freeze-pop TARGET SECONDS [...]` | The balloon's pop effect stopped `SECONDS` in, from a fixed seed so runs match. `--hide` hides the balloon; `--dx`/`--dy` move the effect off it; `--seed`; `--texture PNG` swaps the shards' sheet and `--start-frame F` their first-frame range (0..1 of the sheet); `--shader NAME` or `--shader-file PATH` (compiled on the spot, so a worktree's shader can be tried before it's merged) and `--set _Name=value` change their material. Swaps go on copies; no asset changes |
 | `level-up-ready` | Readies a real level-up for the next shot: every balloon on the board turns the level's first colour, every other colour's bar fills, that one is left a point short, and the level-up is let through. `release`, then fire the Fire Best Shot cheat, and the level-up cinematic plays out for real, zoom and all |
 | `fire DEGREES [--lance]` | Fires the ball loaded in the thrower for real, at an angle (0 = right, 90 = straight up), as the Fire Best Shot cheat does: it flies, bounces, hits and scores once game time runs (`advance`). Its answer says where it was fired from, to aim by. With `--lance` it is armed as a Snipe lance first, so it plows the toughs in its way and shatters them at the next wall |
+| `cut COL,ROW DEGREES [--offset F]` / `regrow COL,ROW` | Cuts the cap off the mushroom in a slot as a lance flying at `DEGREES` would (0 = right, 90 = straight up), through the cap's middle or `F` world units to the left of it, which takes a sliver off near the edge; `regrow` grows it back now. It is the cut a lance makes in play: a ball flies through where the cap stood, and the cap grows back by itself on the fifth of the board's beats (between 6.8 and 8.5 seconds of game time), so film a bare stem within that. Let game time run (`advance`) to see the pieces fall. For a blast, set a real bomb off beside the mushrooms: `place Simple COL,ROW --item Bomb`, then `pop COL,ROW`; the caps next to it are blown off and the ones further out sway, as in play (the bomb's cloud covers them for the first 0.4 seconds) |
+| `aim DEGREES` / `aim off` | Holds the thrower's aim at an angle and draws its aim line, without firing: a capture then shows the line the game predicts, its bend off a mushroom included. `fire` lets go too |
+| `chain` | On a meadow board with mushrooms: the angle to pass to `fire` so the ball crosses between the walls of caps three times and earns the lance, found by flying every aim angle through the shot solver on the board as it stands; it is the middle of the widest run of angles that do. Its answer also says how many angles arm the lance, how many whole caps stand in how many walls, and where the cannon stands. A ball that is loaded as a lance already (a Sharpshooter roll) is an error: a lance bounces off no mushroom and cuts their caps, so fire it away first to film the arming |
 | `ball x,y [--from x,y] [--seconds S] [--shields N]` | A ball in flight at a world point, held still, with the effects above the board cleared around it, as wide as its `N` shields (default 1) make the clearing. With `--from`, it flies there over `S` seconds of game time first (default 0.5), so the clearing it leaves behind has closed up as it would in a shot |
 | `clear-effects` | Removes the frozen pops and the staged balls, and shows the balloons the pops hid |
 | `capture PATH [--around TARGET] [--size N]` | Renders the camera to a PNG: the whole frame, or an `N`-pixel square around a balloon or a world point `x;y` |
@@ -72,6 +75,17 @@ stage.end()
 
 ```bash
 python3 Tools/stage/contact_sheet.py out.png --cols dawn day dusk night --row "hand-made" 'Logs/stage/old-{}.png' --row baked 'Logs/stage/new-{}.png'
+```
+
+A mushroom chain, filmed: deal a meadow level (the stretch starts with 2 walls of caps and grows to 4), ask for the
+angle, show the aim line, fire, and capture as game time advances:
+
+```bash
+python3 Tools/stage/stage.py begin --scenario meadow --level 7 --seed 7 --strip enemies
+python3 Tools/stage/stage.py chain                  # angle 79.333 (the middle of 8 in a row; ...)
+python3 Tools/stage/stage.py aim 79.333 && python3 Tools/stage/stage.py capture Logs/stage/chain-00.png
+python3 Tools/stage/stage.py fire 79.333
+python3 Tools/stage/stage.py advance 0.05 && python3 Tools/stage/stage.py capture Logs/stage/chain-01.png
 ```
 
 To see what a look is made of, `maps` writes the render maps behind a staged frame. Take it once per state

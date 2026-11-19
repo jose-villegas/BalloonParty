@@ -11,9 +11,10 @@ namespace BalloonParty.Balloon.Model
     ///     ordinary hit dents it: it bounces off and costs one of the catalogue entry's hits, and the last one arms it.
     ///     It is a rescue, and the player who needs one rarely has a pierce. Piercing damage or a beam arms it at once.
     ///     Armed, it is a lead casing with a fuse running: it deflects every ball, piercing or not, takes no more
-    ///     damage and is anchored where it stands, so the counter is read where it is.
+    ///     damage and is anchored where it stands, so the counter is read where it is. Under a cover formation it
+    ///     is anchored before it is armed too, as every covered balloon is.
     /// </summary>
-    internal sealed class NukeBalloonModel : PlatedBalloonModel, IHasDurability, IBalanceAnchor
+    internal sealed class NukeBalloonModel : PlatedBalloonModel, IHasDurability
     {
         private readonly ReactiveProperty<bool> _armed = new(false);
         private readonly ReactiveProperty<int> _fuseSecondsLeft = new(0);
@@ -25,7 +26,7 @@ namespace BalloonParty.Balloon.Model
         // Armed, its hits are 0, so a pierce meets it on contact and bounces off.
         public override bool DeflectsOrdinaryHit => HitsRemaining.Value > 1;
 
-        public bool IsAnchored => _armed.Value;
+        public override bool IsAnchored => base.IsAnchored || _armed.Value;
 
         internal IReadOnlyReactiveProperty<bool> Armed => _armed;
 

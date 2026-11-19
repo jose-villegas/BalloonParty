@@ -125,6 +125,21 @@ namespace BalloonParty.Tests.Balloon
             Assert.IsTrue(model.IsAnchored);
         }
 
+        // Two reasons to hold its slot, and neither undoes the other.
+        [Test]
+        public void HeldByACover_ItIsAnchoredUnarmed_AndArmedItStaysAnchoredOnceLetGo()
+        {
+            var model = Nuke(3);
+            Assert.IsFalse(model.IsAnchored);
+
+            model.SetHeldByCover(true);
+            Assert.IsTrue(model.IsAnchored, "held under a cover, unarmed");
+
+            model.EvaluateHit(new DamageContext(1, DamageFlags.Piercing | DamageFlags.DirectHit));
+            model.SetHeldByCover(false);
+            Assert.IsTrue(model.IsAnchored, "armed, it holds its slot with no cover");
+        }
+
         [TestCase(DamageFlags.DirectHit, TestName = "AnArmedNuke_DeflectsAnOrdinaryHit")]
         [TestCase(DamageFlags.Piercing | DamageFlags.DirectHit, TestName = "AnArmedNuke_DeflectsAPiercingHit")]
         public void AnArmedNuke_DeflectsEveryDirectHit_AndTakesNoDamage(DamageFlags flags)

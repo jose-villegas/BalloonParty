@@ -69,6 +69,13 @@ namespace BalloonParty.Item.Snipe
             _trace.OpenAtLaunch(shot);
         }
 
+        // Armed at a mushroom bounce: the run starts on the mushroom, not at the ball's position, which is still
+        // where the step that bounced it began.
+        public void OnLanceArmedAt(IProjectileModel shot, Vector3 point)
+        {
+            _trace.Open(shot, point);
+        }
+
         public void OnLanceRearmed(IProjectileModel shot, Vector3 wall)
         {
             _trace.Open(shot, wall);

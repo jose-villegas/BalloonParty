@@ -9,7 +9,11 @@ namespace BalloonParty.Prediction
         OpenAir,
 
         Wall,
-        Deflector
+        Deflector,
+
+        /// <summary>A bumper (a meadow mushroom). The ball does not leave one along the mirror of
+        /// <see cref="PredictionTraceEnd.Normal" />: the bounce rule may kick it toward the next mushroom.</summary>
+        Bumper
     }
 
     /// <summary>
