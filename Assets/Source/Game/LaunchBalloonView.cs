@@ -6,13 +6,14 @@ using UnityEngine.UI;
 namespace BalloonParty.Game
 {
     /// <summary>
-    ///     A launch screen balloon drifting about the screen (<see cref="BalloonWander" />), carrying a ribbon that
-    ///     says what it does on a spring line (<see cref="RibbonCloth" />). Play and Continue each have one; each
-    ///     keeps clear of the other while it shows, with room for what hangs from either
-    ///     (<see cref="BalloonReach" />), and each one's line and ribbon are pushed off the other's balloon if they
-    ///     swing into it. Sits stretched over the launch canvas, centred on it, so its own space is the canvas's and
-    ///     the two balloons share it; the line, ribbon and writing sit at its centre. The balloon it moves is a child
-    ///     or a sibling: Play's is the Play button itself, where the launch canvas has it.
+    ///     A launch screen balloon drifting about the screen, carrying a ribbon that says what it does on a spring
+    ///     line (<see cref="BalloonDrift" />). Play and Continue each have one. Alone, a balloon has the whole
+    ///     screen; while both show they share it one above the other (<see cref="BalloonReach" />), a gap between
+    ///     everything of the upper one and everything of the lower, so neither balloon nor its ribbon can cover the
+    ///     other's ribbon wherever the two drift and however their ribbons swing. Sits stretched over the launch
+    ///     canvas, centred on it, so its own space is the canvas's and the two balloons share it; the line, ribbon
+    ///     and writing sit at its centre. The balloon it moves is a child or a sibling: Play's is the Play button
+    ///     itself, where the launch canvas has it.
     /// </summary>
     public class LaunchBalloonView : MonoBehaviour
     {
@@ -21,8 +22,12 @@ namespace BalloonParty.Game
         [Tooltip("The balloon this moves: a child, or a sibling under the same parent.")]
         [SerializeField] private RectTransform _balloon;
 
-        [Tooltip("The launch screen's other balloon, which this one keeps clear of while it shows. Optional.")]
+        [Tooltip("The launch screen's other balloon, which this one shares the screen with while it shows. Optional.")]
         [SerializeField] private LaunchBalloonView _other;
+
+        [Tooltip("Sharing the screen, one balloon keeps to its upper part and the other to its lower: whether this " +
+                 "is the upper one. One of the two must be.")]
+        [SerializeField] private bool _above;
 
         [SerializeField] private SpringLineGraphic _line;
         [SerializeField] private ClothRibbonGraphic _ribbon;
@@ -40,35 +45,42 @@ namespace BalloonParty.Game
         [Tooltip("Room kept from the screen's edges, in canvas units.")]
         [SerializeField] [Min(0f)] private float _clearance = 4f;
 
-        [Tooltip("Room kept between this balloon's body and the other's, in canvas units. The larger of the two " +
+        [Tooltip("Sharing the screen, the room kept between the bottom of the upper balloon's ribbon and the top " +
+                 "of the lower balloon, in canvas units, however far each has drifted. The larger of the two " +
                  "balloons' gaps is the one kept.")]
         [SerializeField] [Min(0f)] private float _gap = 16f;
 
         [Tooltip("Where the balloon starts, as shares of the room it drifts in: x from the left edge, y from the " +
-                 "lowest it can hang. If the other balloon is in the way it starts at the nearest spot clear of it.")]
+                 "lowest it can hang.")]
         [SerializeField] private Vector2 _start = new(0.62f, 0.16f);
 
         [SerializeField] private BalloonWanderSettings _wander = new();
         [SerializeField] private RibbonClothSettings _cloth = new();
 
         private readonly List<LitMaterial> _lit = new();
-        private readonly KeepOut[] _obstacles = new KeepOut[1];
 
-        private BalloonWander _wanderer;
-        private RibbonCloth _ribbonCloth;
+        private BalloonDrift _drift;
         private Transform _canvas;
         private Rect _area;
+        private bool _sharing;
         private Vector2 _balloonAt;
 
-        /// <summary>The room this balloon takes up now, in the launch canvas's space; where it will start, before it has.</summary>
-        internal BalloonReach Reach => new(_wanderer != null ? _wanderer.Position : StartIn(Room()), Radius, Hang);
+        /// <summary>The room this balloon takes up around its body's centre, in canvas units.</summary>
+        internal BalloonReach Reach => new(Radius, Radius + _wander.Bob, Hang + _wander.Bob);
+
+        /// <summary>From the body's centre to where the line is tied on, in canvas units.</summary>
+        internal Vector2 KnotFromCentre => (_knot - _bodyCentre) * Scale;
 
         private float Scale => _balloon.localScale.x;
 
         private float Radius => _bodyRadius * Scale;
 
-        // From the body's centre down to the bottom of the ribbon hanging still below it.
+        // From the body's centre down to the bottom of the ribbon hanging below it. Swinging, the ribbon reaches no
+        // lower than hanging still: the breeze and its wave lift it.
         private float Hang => (_bodyCentre.y - _knot.y) * Scale + _cloth.LineLength + _cloth.Height * 0.5f;
+
+        // Read from the objects, not from this component's own callbacks, so it holds before the other has begun.
+        private bool OtherShows => _other != null && _other.enabled && _other.gameObject.activeInHierarchy;
 
         private void Awake()
         {
@@ -84,9 +96,10 @@ namespace BalloonParty.Game
 
         private void Update()
         {
-            // The room is the canvas's, which can take its size after this is enabled and change it later: start
-            // over in the new room.
-            if (((RectTransform)transform).rect != _area)
+            // The room is the canvas's, which can take its size after this is enabled and change it later, less the
+            // other balloon's part once that shows: start over in the new room. A balloon that has given up part of
+            // the screen keeps to its own after the other goes.
+            if (((RectTransform)transform).rect != _area || (OtherShows && !_sharing))
             {
                 Begin();
             }
@@ -102,41 +115,55 @@ namespace BalloonParty.Game
             }
         }
 
+        /// <summary>
+        ///     This balloon's drift on a screen of <paramref name="area" />, from its own settings and, if the other
+        ///     balloon shows, the part of the screen that leaves it. What <see cref="Begin" /> starts; tests run the
+        ///     launch screen's own numbers through it at any screen shape.
+        /// </summary>
+        internal BalloonDrift NewDrift(Rect area, int seed)
+        {
+            var cloth = new RibbonCloth(_cloth, _writing.Layout(_cloth.Height));
+            cloth.SetRoom(area.xMin + _clearance, area.xMax - _clearance);
+            var room = Room(area);
+            return new BalloonDrift(_wander, cloth, room, StartIn(room), KnotFromCentre, seed);
+        }
+
         private void Begin()
         {
             _area = ((RectTransform)transform).rect;
-            _ribbonCloth = new RibbonCloth(_cloth, _writing.Layout(_cloth.Height));
-            var room = Room();
-            _wanderer = new BalloonWander(
-                _wander, room, KeepOutOfOther(), StartIn(room), Random.Range(int.MinValue, int.MaxValue));
-            _ribbonCloth.SetRoom(_area.xMin + _clearance, _area.xMax - _clearance);
+            _sharing = OtherShows;
+            _drift = NewDrift(_area, Random.Range(int.MinValue, int.MaxValue));
             PlaceBalloon();
-            _ribbonCloth.Place(Knot());
             Draw();
         }
 
         private void Tick(float deltaTime)
         {
-            if (_wanderer == null)
+            if (_drift == null)
             {
                 return;
             }
 
-            _wanderer.KeepClearOf(KeepOutOfOther());
-            _wanderer.Step(deltaTime);
+            _drift.Step(deltaTime, KnotFromCentre);
             PlaceBalloon();
-            _obstacles[0] = TryGetOther(out var other) ? new KeepOut(other.Centre, other.Centre, other.Radius) : default;
-            _ribbonCloth.Step(Knot(), deltaTime, _obstacles);
             Draw();
         }
 
-        // Where the body's centre may be: on screen, with room below for what hangs from it.
-        private Rect Room()
+        // Where the body's centre may be: on screen with room below for what hangs from it, and in this balloon's
+        // part of the screen while the other shows.
+        private Rect Room(Rect area)
         {
-            var area = ((RectTransform)transform).rect;
-            var edge = Radius + _clearance;
-            return Rect.MinMaxRect(
-                area.xMin + edge, area.yMin + Hang + _clearance, area.xMax - edge, area.yMax - edge);
+            var reach = Reach;
+            if (!OtherShows)
+            {
+                return reach.RoomAlone(area, _clearance);
+            }
+
+            var clearance = Mathf.Max(_clearance, _other._clearance);
+            var gap = Mathf.Max(_gap, _other._gap);
+            return _above
+                ? reach.RoomAbove(_other.Reach, area, clearance, gap)
+                : reach.RoomBelow(_other.Reach, area, clearance, gap);
         }
 
         private Vector2 StartIn(Rect room)
@@ -145,24 +172,9 @@ namespace BalloonParty.Game
                 Mathf.Lerp(room.xMin, room.xMax, _start.x), Mathf.Lerp(room.yMin, room.yMax, _start.y));
         }
 
-        private bool TryGetOther(out BalloonReach reach)
-        {
-            var showing = _other != null && _other.isActiveAndEnabled;
-            reach = showing ? _other.Reach : default;
-            return showing;
-        }
-
-        // No other balloon showing leaves an empty keep-out, which holds nothing out.
-        private KeepOut KeepOutOfOther()
-        {
-            return TryGetOther(out var other)
-                ? other.KeepOutFor(new BalloonReach(default, Radius, Hang), Mathf.Max(_gap, _other._gap))
-                : default;
-        }
-
         private void PlaceBalloon()
         {
-            _balloonAt = _wanderer.Shown - _bodyCentre * Scale;
+            _balloonAt = _drift.Centre - _bodyCentre * Scale;
             _balloon.position = transform.TransformPoint(_balloonAt);
             foreach (var lit in _lit)
             {
@@ -171,16 +183,11 @@ namespace BalloonParty.Game
             }
         }
 
-        private Vector3 Knot()
-        {
-            return _balloonAt + _knot * Scale;
-        }
-
         private void Draw()
         {
-            _line.Draw(_ribbonCloth);
-            _ribbon.Draw(_ribbonCloth);
-            _writing.Bend(_ribbonCloth);
+            _line.Draw(_drift.Cloth);
+            _ribbon.Draw(_drift.Cloth);
+            _writing.Bend(_drift.Cloth);
         }
 
         // The balloon art's light-driven materials turn their highlights about a pivot in the canvas's space, authored

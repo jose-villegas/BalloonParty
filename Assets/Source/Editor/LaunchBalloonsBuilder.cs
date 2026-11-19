@@ -30,7 +30,8 @@ namespace BalloonParty.Editor
     ///         ascent itself once the resume is requested; its hide hides the whole Continue, and its scene
     ///         activation is Play's own. Starts inactive: the controller shows it only while a run is saved.
     ///     </para>
-    ///     Each balloon is handed the other to keep clear of.
+    ///     Each balloon is handed the other, to share the screen with while both show: Play its upper part,
+    ///     Continue its lower.
     /// </summary>
     internal static class LaunchBalloonsBuilder
     {
@@ -49,7 +50,7 @@ namespace BalloonParty.Editor
         private static readonly Ribbon PlayRibbon = new("play", 14f);
         private static readonly Ribbon ContinueRibbon = new("continue", 9.5f);
 
-        // A little above the middle of the screen, the ribbon hanging about the middle.
+        // A little above the middle of the room it drifts in: alone, the ribbon hangs about the middle of the screen.
         private static readonly Vector2 PlayStart = new(0.5f, 0.57f);
 
         private static readonly Color White = new(0.97f, 0.97f, 0.98f, 1f);
@@ -124,6 +125,7 @@ namespace BalloonParty.Editor
             var root = NewRoot("PlayRibbon", source.parent, source.GetSiblingIndex());
             var view = AddView(root, (RectTransform)source, PlayRibbon);
             var viewObject = new SerializedObject(view);
+            viewObject.FindProperty("_above").boolValue = true;
             viewObject.FindProperty("_start").vector2Value = PlayStart;
             viewObject.FindProperty("_wander._speed").floatValue = PlaySpeed;
             viewObject.FindProperty("_wander._acceleration").floatValue = PlayAcceleration;
