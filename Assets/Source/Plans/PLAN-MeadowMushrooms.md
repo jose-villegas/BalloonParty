@@ -2785,6 +2785,107 @@ The smoke is one more stamp a puff. Films: `scratchpad/mushroom/puff2/` (before 
 **Not checked.** Nothing ran on a device and nobody played it: whether a real rally with the ball's own trail in
 the same smoke field reads as well as the staged one is the owner's to say.
 
+### An idle cap
+
+The owner (2026-11-19): "Two things I believe the mushrooms might need an idle animation, the are bit hidden in
+between all what is happening so might be worth making something that puts focus on then, I think a breather
+animation on the cap might be enough and for them to react to the disturbance field".
+
+So a cap nothing has touched is never still. Both are looks: the circle the ball bounces off, the kick, the aim
+line, the solver, the bot and the telemetry know nothing of them.
+
+**The breath.** The cap swells and settles, 0.08 of its radius at the top of a breath, every 2.6 seconds, resting
+a moment at each end. It only ever swells: the cap is never drawn smaller than its collider, and at the top it is
+0.024 world units past it, about five pixels on a phone, so a ball bouncing off still looks like it touches. From
+above a swell reads as the cap rising toward the eye, so three things ride it and it is not a flat scale of the
+picture: the shadow lies up to 0.8 further off, the warts spread over the dome (0.08), and at night their glow
+swings 0.4 either side of its own strength, from 0.6 of it breathed out to 1.4 breathed in. That last is the
+strongest of all: by day the breath is a slow swell, at night it is a board of caps lighting up in turn.
+
+**Whose breath.** Two ways were filmed. With every cap at its own point of the breath by its seed, the board
+twinkles and no cap belongs to another. With a breath that runs across the board (0.2 of a breath a unit
+along the diagonal, so next caps of a wall are 0.05 to 0.2 of a breath apart, and a tenth of a breath of the
+seed's own on top), the caps of a wall swell nearly together, one after the next, and walls apart from each other
+are at different points. The second is what ships: a wall is the thing the player aims between, and a wall that
+breathes as one reads as one thing among balloons that each sway their own way.
+
+A cap's place in that wave is the point of the ground it stands on (`Ground.cginc`'s `GroundPointAt`, the
+ground's own scroll and scale taken out of its world position), not its place in the world. The mushrooms hang
+under the scenario root, which a level's ascent carries up and a mist reveal scales, and a place in the world
+would have run every breath fast or slow by 0.2 of a breath for each unit travelled: a breath of 2.6 seconds
+on a board carried three units in a second would have gone at two and a half times its pace, or backward. Read
+in the Editor with the root carried 1.5, 3 and -2 units: every cap's world position moved with it and its
+ground point did not. Under a reveal's scale the same holds by the root's own arithmetic (content at p shows
+at scale times travel plus p, and the ground scrolls by scale times travel); that was reasoned, not driven.
+
+**The rocking.** The shader reads the disturbance field (`Shared/Disturbance`, the one the grass and the bush
+leaves answer) once a vertex, at the mushroom's centre, and leans the cap the way the field is pushed, by the path
+a hit's lean takes, so the cap tips and the stem shows. The field holds a push for a second or more, as the grass
+stays bent, so a lean alone would be a cap left standing crooked: the lean swings instead (0.6 of it, every 0.45
+seconds, the rest held away from what passed) and dies as the field lets go. It goes by the displacement's
+square, so what the field always holds moves nothing.
+
+| What happens | What the field holds at the cap | How far the cap rocks (world units) |
+| --- | --- | --- |
+| Nothing | 0.02 to 0.06 | under 0.001 |
+| The ball flies close past (not touching) | 0.86 to 0.89, 0.67 after 0.7 s | 0.062, the most being 0.065 |
+| A balloon pops in the next slot | 0.6, 0.45 after 0.8 s | 0.045 |
+| A bomb goes off 2 to 3 units away, outside its own sway | 0.36 to 0.58, about 0.3 after 1.4 s | 0.02 to 0.04 |
+| The ball bounces off the cap itself | 0.20 to 0.25 | 0.01, under the hit's own lean of 0.14 |
+
+The last row is why the hit and the rocking do not fight: the ball's stamp at the centre of a cap it bounces off
+is small, so the rocking adds a fourteenth to the hit's lean and the hit stays the strong read. A blast's sway
+(up to 0.15) and the regrow's pop play over it the same way. A bare stem neither breathes nor rocks, and its
+shadow does not breathe either; a cap growing back picks both up with its size, with no step.
+
+**The cut's frozen pose** is left as it was. The pieces of a cut cap start from the cap's resting size and from
+the hit's lean alone, so a cap cut at the top of a breath loses 8% of its radius, about five pixels a side
+on a phone, and whatever the field was rocking it by, in the frame it is cut. Filmed frame by frame with a real
+lance through a cap at the top of its breath: in that frame the lance's flash lies over the cap and its halves
+are already parting (0.16 each way in all), and no step shows. Carrying the breath into the pose would be a
+few lines in the view; the rocking is only on the GPU, and carrying it would rock the falling pieces. Neither
+was done.
+
+**Where the field is.** `DisturbanceFieldService` is registered in the app's own scope, for every scenario and every
+quality tier, and no setting switches it off. The shader reads it only once the game has pushed the field's bounds and
+the view the rocking's numbers, both 0 before, so an unplaced prefab and a preview stand still.
+
+**Where the work is.** In the shader's vertex stage, four vertices a mushroom: a cosine for the breath, one read
+of the field, a square root, a hyperbolic tangent and a sine for the rocking. A pixel pays nothing new: the one
+change in the fragment program is that the warts' place on the dome is scaled by a value from the vertex stage
+where it was a constant, and no interpolator was added (the tilt's grew from three numbers to four). What does
+grow is the cap's own area, 8% on average and 17% at the top of a breath, and with it the pixels that pay for the
+warts; the quad's box at rest is the dark under the overhang, which is wider than the swollen cap, so the box
+does not grow. `MushroomView` hands the shader three vectors (`_Breath`, `_BreathLook`, `_Rock`) once, when it
+is spawned, with the radius and the seed, which never change either, and is switched off while its cap is at
+rest, as before: an idle mushroom costs the CPU nothing a frame, and a moving one pushes only what moves. The
+quad grew by the rocking's most (its half from 2.084 to 2.149) and the prefab was rebuilt.
+
+**The quad's room** is worked out in one place, `MushroomQuadRoom.Half`, from the material's own swell at a full
+pulse, the breath, the furthest lean, the rocking's most, a cut cap's flight, and the further of the two things
+that carry the shadow off: a blown cap's lift and the breath's (never both: a cap in the air has left its stem,
+and a bare stem's shadow does not breathe). The builder sizes the quad by it and a test holds the built quad to
+it, so a number raised without the prefab rebuilt fails the suite before a cap's edge is cut off square. As
+shipped the cut's flight is what sets the size (1.19 past the radius against a swollen cap's 0.09), so the
+breath has room to spare; it was the formula that was wrong, with the swell a constant that the pulse and the
+breath happened to add up to.
+
+**How far a cap may go.** `MushroomSettings.Validate` counts the rocking with the lean: the two together may not
+pass three quarters of the radius (shipped 0.15 and 0.065, 0.72 of it), past which the cap stands beside its
+stem and not on it. It was half the radius for the lean alone, and its reason, the quad's room, has not been
+true since the quad took its size from the numbers.
+
+**The numbers** are `IMushroomSettings.Idle` (`MushroomIdleTuning`): breath 0.08 over 2.6 s, phase spread 0.1,
+wave 0.2 a unit, shadow lift 0.8, glow swing 0.4, wart spread 0.08; rock 0.16 a unit of displacement squared,
+0.065 at the most, 0.45 s a swing, 0.6 of it swinging. Tests hold the breath to what a bounce allows, the
+rocking under half a cannon shot's lean, and the built quad to the room the numbers ask for.
+
+**Not checked.** Nothing was played by a person and nothing ran on a device: stills say the breath and the
+night's glow are plain to see and that the rocking is there, not whether the motion is pleasant or too busy in
+play, which is the owner's to say. The before stills of the idle board were taken while its balloons were still
+rising, the after ones once they had settled, so only the caps compare. The glow's swing was not looked at
+through the device's own bloom. Films: `scratchpad/mushroom/idle/`.
+
 ### The view, after its cost and correctness reviews
 
 Two reviews of the cut's, the blast's and the spores' view found nothing blocking and asked for these.

@@ -90,13 +90,25 @@ namespace BalloonParty.Tests.Configuration
         }
 
         [Test]
-        public void Validate_ALeanThatCarriesTheCapOffItsQuad_SaysSo()
+        public void Validate_ALeanThatStandsTheCapBesideItsStem_SaysSo()
         {
             var settings = With("_lean", new MushroomLeanTuning(
                 leanPerSpeed: 0.011f, maxLean: 0.2f, frequency: 3.6f, damping: 0.16f, rewardPulse: 1f,
                 restLean: 0.0015f, swayLean: 0.13f));
 
-            Assert.That(Issues(settings), Has.Some.Contains("past the edge of what is drawn"));
+            Assert.That(Issues(settings), Has.Some.Contains("stands the cap beside its stem"));
+        }
+
+        [Test]
+        public void Validate_ARockingThatCarriesTheShippedLeanTooFar_SaysSo()
+        {
+            // The shipped lean alone is half the radius; the rocking comes on top of it.
+            var settings = With("_idle", new MushroomIdleTuning(
+                breath: 0.08f, breathSeconds: 2.6f, phaseSpread: 0.1f, waveAcross: 0.2f, shadowLift: 0.8f,
+                glowSwing: 0.4f, wartSpread: 0.08f, rockPerDisplacement: 0.16f, rockMost: 0.1f, rockSeconds: 0.45f,
+                rockSwing: 0.6f));
+
+            Assert.That(Issues(settings), Has.Some.Contains("stands the cap beside its stem"));
         }
 
         [Test]

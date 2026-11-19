@@ -61,6 +61,8 @@ Material:
     - _StumpGrain: 0.3
     - _TiltPerLean: 3.4
     m_Colors:
+    - _Breath: {r: 0, g: 0, b: 0, a: 0}
+    - _BreathLook: {r: 0, g: 0, b: 0, a: 0}
     - _CapEdge: {r: 0.5, g: 0.17, b: 0.04, a: 1}
     - _CapLit: {r: 1, g: 0.55, b: 0.12, a: 1}
     - _CapShade: {r: 0.8, g: 0.3, b: 0.05, a: 1}
@@ -74,6 +76,7 @@ Material:
     - _Lean: {r: 0, g: 0, b: 0, a: 0}
     - _MarginColor: {r: 1, g: 0.74, b: 0.3, a: 0.85}
     - _NightGlowTint: {r: 1, g: 0.95, b: 0.8, a: 1}
+    - _Rock: {r: 0, g: 0, b: 0, a: 0}
     - _RootColor: {r: 0.52, g: 0.38, b: 0.23, a: 1}
     - _ShadowColor: {r: 0.03, g: 0.06, b: 0.03, a: 0.7}
     - _SpotColor: {r: 1, g: 0.97, b: 0.88, a: 1}

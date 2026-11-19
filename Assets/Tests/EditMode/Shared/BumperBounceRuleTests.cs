@@ -982,6 +982,7 @@ namespace BalloonParty.Tests.Shared
             public MushroomPlacementLimits Placement { get; set; }
             public int PermanentSlotLimit { get; set; }
             public MushroomLeanTuning Lean { get; set; }
+            public MushroomIdleTuning Idle { get; set; }
             public MushroomSporeTuning Spores { get; set; }
             public MushroomCutTuning Cut { get; set; }
             public int RegrowBeats { get; set; }

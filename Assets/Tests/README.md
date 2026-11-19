@@ -687,7 +687,7 @@ Decision K of `Plans/PLAN-MeadowMushrooms.md` (*The bank, as built*): every cap 
 | The speed a banked charge re-arms with is one number on both sides: a layer gathered from an item configuration banks a cut's charge at that configuration's Snipe speed buff (`ShotSimulator.BankCutCharge`), and the game's lance, re-armed by a charge under the same number, flies at it; with no speed buff a charge is banked at base speed; and, in the Editor, the shipped item configuration's Snipe speed is what the layer and the banked charge carry | 3 | A simulated lance re-armed at another speed than the game's |
 | The mirror: wherever the caps cut are held equal the charges banked are too, one a cap, on every flight the mirror flies (`MushroomMirror.Difference`); a chain's lance and a loaded one each bank two for the two caps they cut, on both sides | in the mirror's cases | A simulator that banks on other cuts than the game |
 
-### Meadow mushrooms, the cap's reaction (`MushroomCapSpringTests`, `MushroomViewTests`, and a case in `MushroomSettingsTests`) — 27 cases
+### Meadow mushrooms, the cap's reaction (`MushroomCapSpringTests`, `MushroomViewTests`, and two cases in `MushroomSettingsTests`) — 28 cases
 
 Phase 6 of `Plans/PLAN-MeadowMushrooms.md`. The spring is a plain struct and needs no engine. The view's tests build a `GameObject` with a renderer and a `MushroomView`, hand it a real `SlotGrid`, the shipped settings and a subscriber that captures the handler, and call the frame themselves (`Tick`), since edit mode runs no `Update`. What the shader draws is read back off the renderer's property block. The look itself has no test: it is judged from staged captures (`Tools/stage`).
 
@@ -698,7 +698,7 @@ Phase 6 of `Plans/PLAN-MeadowMushrooms.md`. The spring is a plain struct and nee
 | The cap comes to rest and is then exactly at rest; it takes the same time at 120 and at 20 frames a second; a two-second hitch throws nothing off; a hit with no direction does nothing; `Reset` stops it; the shipped tuning is underdamped, fits its quad, and a shot off the cannon knocks the cap far enough to uncover the stem (over four tenths of the radius) with room left for a faster one | 6 | A spring that never sleeps, wobbles longer on a slow device, or blows up on a long frame |
 | A spawned view is off and drawn at rest with the settings' radius; a bounce off its own slot switches it on and leans the cap the way the ball was going, from the left and from below, and the shader is handed what the spring holds; a bounce off another mushroom leaves it asleep; a bounce that armed swells the cap | 5 | A view answering another mushroom's bounce, or drawing something other than its spring |
 | Once the cap is still the view switches itself off and is drawn at rest; a second hit wakes it; back in the pool it is off, unsubscribed, at rest and drawn so; spawned again it listens again from rest | 4 | An `Update` left running on every mushroom, a subscription leaked into the pool, a pooled mushroom drawn mid wobble on the next level |
-| `MushroomSettings.Validate` says so when the furthest lean is over half the radius | 1 | A lean authored past the edge of the quad the mushroom is drawn on |
+| `MushroomSettings.Validate` says so when the furthest lean and the rocking's most together pass three quarters of the radius, by the lean alone or by the rocking on top of the shipped lean | 2 | A cap carried so far off its foot that it stands beside its stem |
 
 ### Meadow mushrooms, the spores (`MushroomSporePlannerTests`, `MushroomSporeRouterTests`, and cases in `MushroomViewTests`) — 26 cases
 
@@ -711,6 +711,17 @@ What a mushroom lets go (`Plans/PLAN-MeadowMushrooms.md`, *A puff of spores*). T
 | A cut puffs a little more than a hit, along the lance's way from the cut; a blast is the biggest, wide, from where the cap sat, and waits; a blast centred on the cap goes straight up; seven caps blown at once share the budget, the first whole, the last small and none nothing; a spent board lets no hit go until its budget is back; the shipped tuning is a small cone and three steps | 6 | A nuke fogging the board; a blast that shows nothing; the three not reading as steps |
 | The router: a hit's and a lance's cut's specks go at once, and only from the mushroom they are for; a blast's burst waits its delay and is let go once; it is dropped when its mushroom has left the board, and is not let go to another mushroom that took the slot; a ninth burst goes at once when eight are waiting; a run reset drops what is waiting, and so does a new level (the level the scope came up on does not); a bounce or a blast where no mushroom stands is nothing | 9 | A burst landing on the mushroom a new board put where the old one stood; a burst lost or let go twice |
 | The view's specks leave from the burst's origin, inside its fan, greenish to bluish, as many as asked, and go with the mushroom into the pool; of sixty specks most are under the size the settings name and a few well over it; a mushroom with no particle system lets none go and does not throw | 3 | Specks left in the air on the next level's mushroom |
+
+### Meadow mushrooms, an idle cap (`MushroomIdleTuningTests`, and a case in `MushroomViewTests`) — 8 cases
+
+An idle cap's breath and its rocking are the shader's work (`Plans/PLAN-MeadowMushrooms.md`, *An idle cap*), so what is held here is the arithmetic of the vectors the shader is handed and the shipped numbers against what they must not break. How it looks is judged on film, not here.
+
+| Area | Cases | What could break |
+|---|---|---|
+| The breath's vector is the swell, the pace in radians a second and the two phases in radians; a negative breath is none and a breath of no seconds still has a pace; the rock's vector is in radii, with its pace and the share that swings, and nothing for a cap with no size | 3 | A cap drawn smaller than its collider, a breath that never ends, a divide by a radius of 0 |
+| The shipped breath puts the cap at most 0.03 world units past the circle the ball bounces off; the shipped rocking is under half a cannon shot's lean and under a blast's sway, and what the field holds at rest moves the cap under a quarter of a pixel | 2 | A bounce that looks as if it missed the cap, an idle motion that outdoes a hit, caps that never stand still |
+| `MushroomQuadRoom` adds up the cap swollen and breathed in, its lean, its rocking and its shadow at the top of a breath, and grows by exactly what a deeper breath, a further rocking or a further shadow adds; the shipped quad is at least what the shipped numbers ask for, and the same sum with the rocking 0.05 further is more than the quad has | 2 | A number raised without the prefab rebuilt, and the cap's edge cut off square |
+| A spawned mushroom is handed its breath, what rides it and its rocking from the settings, and its view is off | 1 | A mushroom that does not breathe, or a view ticking for a look the shader makes |
 
 ### Meadow mushrooms, a blast's view (cases in `MushroomCutTimelineTests` and `MushroomViewTests`) — 17 cases
 

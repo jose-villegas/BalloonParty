@@ -59,6 +59,9 @@ namespace BalloonParty.Slots.Actor.Archetype
         private static readonly int CutLeanId = Shader.PropertyToID("_CutLean");
         private static readonly int CutPiecesId = Shader.PropertyToID("_CutPieces");
         private static readonly int CutFallId = Shader.PropertyToID("_CutFall");
+        private static readonly int BreathId = Shader.PropertyToID("_Breath");
+        private static readonly int BreathLookId = Shader.PropertyToID("_BreathLook");
+        private static readonly int RockId = Shader.PropertyToID("_Rock");
 
         [SerializeField] private Renderer _body;
 
@@ -424,7 +427,36 @@ namespace BalloonParty.Slots.Actor.Archetype
             }
 
             enabled = false;
+            PushWhatNeverMoves();
             Push();
+        }
+
+        // What a mushroom is drawn with for as long as it stands: handed over when it is spawned, and not
+        // again on every frame its cap moves. The idle breath and the rocking are the shader's, from these:
+        // nothing here ticks for them, and a cap at rest keeps this view switched off.
+        private void PushWhatNeverMoves()
+        {
+            if (_body == null)
+            {
+                return;
+            }
+
+            _block ??= new MaterialPropertyBlock();
+            _body.GetPropertyBlock(_block);
+
+            // Different on every mushroom, so no two are spotted alike. Each is its own draw anyway: the shader
+            // draws from the quad's own space, which a batch would not keep.
+            _block.SetFloat(SeedId, _seed);
+            if (_settings != null)
+            {
+                var idle = _settings.Idle;
+                _block.SetFloat(RadiusId, _settings.Radius);
+                _block.SetVector(BreathId, idle.BreathVector);
+                _block.SetVector(BreathLookId, idle.LookVector);
+                _block.SetVector(RockId, idle.RockVector(_settings.Radius));
+            }
+
+            _body.SetPropertyBlock(_block);
         }
 
         private void Push()
@@ -436,19 +468,10 @@ namespace BalloonParty.Slots.Actor.Archetype
 
             _block ??= new MaterialPropertyBlock();
             _body.GetPropertyBlock(_block);
-            var tuning = default(MushroomCutTuning);
-            if (_settings != null)
-            {
-                _block.SetFloat(RadiusId, _settings.Radius);
-                tuning = _settings.Cut;
-            }
+            var tuning = _settings != null ? _settings.Cut : default;
 
             _block.SetVector(LeanId, _spring.Lean);
             _block.SetFloat(PulseId, _spring.Pulse);
-
-            // Different on every mushroom, so no two are spotted alike. Each is its own draw anyway: the shader
-            // draws from the quad's own space, which a batch would not keep.
-            _block.SetFloat(SeedId, _seed);
 
             // With no pieces showing the shader skips all of the cut's work, so a whole cap costs what it did.
             _block.SetFloat(CapGrowId, _cut.CapGrow);

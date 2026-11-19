@@ -40,12 +40,6 @@ namespace BalloonParty.Editor
         private const string SortingLayer = "Balloons";
         private const int SortingOrder = -10;
 
-        // What the quad must hold beyond the mushroom's own radius. The cap's swell at a full pulse, as a share
-        // of the radius (the material's Pulse Swell, with room to spare), and in world units the shadow's reach
-        // down-light with its soft edge (the material's Down-Light Offset and Softness, with room to spare).
-        private const float SwellShare = 0.3f;
-        private const float ShadowReach = 0.2f;
-
         // The spores are in the air: with the other effects, off the layer the GI reads the mushroom on as an
         // occluder, and drawn over the balloons, as a pop's own particles are.
         private const string SporeLayer = "Effects";
@@ -63,6 +57,9 @@ namespace BalloonParty.Editor
         private const float SpeckFadeIn = 0.08f;
         private const float SpeckFadeFrom = 0.55f;
         private const float SpeckEndSize = 0.5f;
+
+        // The material's swell at a full pulse, as a share of the radius: the quad is sized from it.
+        private static readonly int PulseSwellId = Shader.PropertyToID("_PulseSwell");
 
         private static readonly EditorAssetCache<GridActorConfiguration> ConfigurationCache = new();
         private static readonly EditorAssetCache<LevelPacingConfiguration> PacingCache = new();
@@ -94,7 +91,7 @@ namespace BalloonParty.Editor
                 return;
             }
 
-            var view = BuildPrefab(material, EnsureQuad(settings), sporeMaterial);
+            var view = BuildPrefab(material, EnsureQuad(settings, material), sporeMaterial);
             if (view == null)
             {
                 return;
@@ -133,14 +130,12 @@ namespace BalloonParty.Editor
         // The shader draws the mushroom and its shadow from the quad's own position and reads no texture, so the
         // quad is all the geometry there is: a square about the slot's centre, with room for the cap to lean and
         // swell and for the shadow to fall beside it.
-        private static Mesh EnsureQuad(IMushroomSettings settings)
+        private static Mesh EnsureQuad(IMushroomSettings settings, Material material)
         {
-            // The larger of a whole cap swollen and a cut cap's pieces flown, by the bound the shader boxes them
-            // with. A cap cut mid lean sends its pieces off from where it leaned to, so the lean adds to either.
-            var radius = settings.Radius;
-            var body = Mathf.Max(radius * (1f + SwellShare), radius + settings.Cut.RoomBeyond(radius));
-            // A cap a blast has lifted throws its shadow further off than one on its stem.
-            var half = body + settings.Lean.MaxLean + (ShadowReach * settings.Cut.ShadowLift);
+            // The most the mushroom can need at once, from the settings and the material's own swell
+            // (MushroomQuadRoom, which a test holds the built quad to).
+            var half = MushroomQuadRoom.Half(
+                settings.Radius, material.GetFloat(PulseSwellId), settings.Lean, settings.Idle, settings.Cut);
             var mesh = AssetDatabase.LoadAssetAtPath<Mesh>(QuadPath);
             var isNew = mesh == null;
             if (isNew)
@@ -189,6 +184,10 @@ namespace BalloonParty.Editor
 
                 var tweenTracker = root.AddComponent<TweenTracker>();
                 var view = root.AddComponent<MushroomView>();
+
+                // Off until its cap moves: the view switches itself on for a hit, a cut or a regrow and off
+                // again at rest, and the prefab says so too, so one in a scene does not tick.
+                view.enabled = false;
                 var serialized = new SerializedObject(view);
                 serialized.FindProperty("_tweenTracker").objectReferenceValue = tweenTracker;
                 serialized.FindProperty("_body").objectReferenceValue = body;

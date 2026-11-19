@@ -38,6 +38,10 @@ namespace BalloonParty.Configuration.GridActors
         /// <summary>How a cap leans away from a hit and wobbles back, as <c>MushroomCapSpring</c> takes it.</summary>
         MushroomLeanTuning Lean { get; }
 
+        /// <summary>What a cap does while nothing touches it: it breathes, and it rocks in the disturbance
+        /// field. The look only, and the shader's work: the cap the ball bounces off does not move.</summary>
+        MushroomIdleTuning Idle { get; }
+
         /// <summary>The spores a mushroom lets go: a puff of smoke and a few specks on a hit, more on a cut, a
         /// burst when a blast blows the cap off (<c>MushroomSporePlanner</c>).</summary>
         MushroomSporeTuning Spores { get; }

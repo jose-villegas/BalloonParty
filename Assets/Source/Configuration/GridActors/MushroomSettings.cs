@@ -23,6 +23,9 @@ namespace BalloonParty.Configuration.GridActors
         // The slots the bushes are never left without, of the ones they share with the mushrooms.
         private const int BushSlotsKept = 2;
 
+        // The furthest a cap's middle may be carried off its foot, as a share of its radius.
+        private const float FurthestLeanShare = 0.75f;
+
         [Header("Chain")]
         [SerializeField] private MushroomChainRules _rules = new(chainTarget: 3);
 
@@ -95,6 +98,20 @@ namespace BalloonParty.Configuration.GridActors
         [Header("A blast")]
         [SerializeField] private MushroomBlastTuning _blast = new(swayShare: 2.4f);
 
+        [Header("An idle cap")]
+        [SerializeField] private MushroomIdleTuning _idle = new(
+            breath: 0.08f,
+            breathSeconds: 2.6f,
+            phaseSpread: 0.1f,
+            waveAcross: 0.2f,
+            shadowLift: 0.8f,
+            glowSwing: 0.4f,
+            wartSpread: 0.08f,
+            rockPerDisplacement: 0.16f,
+            rockMost: 0.065f,
+            rockSeconds: 0.45f,
+            rockSwing: 0.6f);
+
         public MushroomChainRules Rules => _rules;
         public bool ForgivingKick => _forgivingKick;
         public BumperKickTuning Kick => _kick;
@@ -102,6 +119,7 @@ namespace BalloonParty.Configuration.GridActors
         public MushroomPlacementLimits Placement => _placement;
         public int PermanentSlotLimit => _permanentSlotLimit;
         public MushroomLeanTuning Lean => _lean;
+        public MushroomIdleTuning Idle => _idle;
         public MushroomSporeTuning Spores => _spores;
         public MushroomCutTuning Cut => _cut;
         public int RegrowBeats => Mathf.Max(1, _regrowBeats);
@@ -135,12 +153,15 @@ namespace BalloonParty.Configuration.GridActors
                     "the ball back to each other.");
             }
 
-            // The quad the mushroom is drawn on has room for half a radius of lean beyond the swollen cap and its
-            // shadow (MushroomPrefabBuilder sizes it); a lean past that carries the cap off it.
-            if (_lean.MaxLean > _radius * 0.5f)
+            // The furthest the cap's middle is ever carried off its foot: a hit's lean with the field's rocking on
+            // top of it. Past three quarters of the radius the cap stands beside its stem and not on it. (The
+            // quad it is drawn on is sized from the same numbers, MushroomQuadRoom, so room is not the limit.)
+            var furthest = _lean.MaxLean + _idle.RockMost;
+            if (furthest > _radius * FurthestLeanShare)
             {
-                issues.Add(prefix + $"the furthest lean ({_lean.MaxLean}) is over half the radius ({_radius}), " +
-                    "which carries the cap past the edge of what is drawn.");
+                issues.Add(prefix + $"the furthest lean ({_lean.MaxLean}) with the rocking's most ({_idle.RockMost}) " +
+                    $"on top is over three quarters of the radius ({_radius}), which stands the cap beside its " +
+                    "stem.");
             }
 
             ValidatePlacement(prefix, issues);

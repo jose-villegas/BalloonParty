@@ -195,6 +195,17 @@ namespace BalloonParty.Tests.Slots
         }
 
         [Test]
+        public void AnIdleCap_IsHandedItsBreathAndItsRocking_AndTheViewStaysOff()
+        {
+            var idle = _settings.Idle;
+
+            Assert.IsFalse(_view.enabled, "the breath and the rocking are the shader's: nothing ticks for them");
+            Assert.AreEqual(idle.BreathVector, Pushed(Shader.PropertyToID("_Breath")));
+            Assert.AreEqual(idle.LookVector, Pushed(Shader.PropertyToID("_BreathLook")));
+            Assert.AreEqual(idle.RockVector(_settings.Radius), Pushed(Shader.PropertyToID("_Rock")));
+        }
+
+        [Test]
         public void ASecondHit_WakesItAgain()
         {
             _bounced.Handle(Bounce(Slot, Vector2.right, MushroomReward.None));

@@ -318,6 +318,7 @@ namespace BalloonParty.Tests.ShotSolver
             public MushroomCutTuning Cut => _shipped.Cut;
             public int RegrowBeats => _shipped.RegrowBeats;
             public MushroomBlastTuning Blast => _shipped.Blast;
+            public MushroomIdleTuning Idle => _shipped.Idle;
 
             public Unkicked(MushroomSettings shipped)
             {

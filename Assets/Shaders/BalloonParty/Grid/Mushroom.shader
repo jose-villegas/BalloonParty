@@ -33,6 +33,15 @@ Shader "BalloonParty/Grid/Mushroom"
     // on its far side is the whole cap, moved off the line (thrown), turned, larger while it is lifted and smaller
     // as it lands (_CutPieces), its shadow further off it while it is up (_CutFall.y over 1). _CutFall.z set says
     // there is one piece, and the other is not worked out.
+    //
+    // A cap that nothing has touched is not still ("An idle cap"). It breathes: it swells and settles by
+    // itself (_Breath), on the time the grass and the bushes move on, each mushroom at its own point of the
+    // breath. The cap is never drawn smaller than the circle the ball bounces off, only larger. Its shadow lies
+    // further off at the top of a breath, its warts spread a little and at night their glow rises and falls with
+    // it (_BreathLook). And it rocks in the disturbance field the grass and the bush leaves answer (_Rock): the
+    // field's displacement at the mushroom's centre leans the cap, by the same path a hit's lean takes, so the
+    // stem shows. All of it is worked out a vertex, from uniforms and one read of the field; a pixel pays
+    // nothing for it, and neither does MushroomView, which stays switched off while its cap is at rest.
 
     Properties
     {
@@ -136,6 +145,18 @@ Shader "BalloonParty/Grid/Mushroom"
         [HideInInspector] _Lean  ("Lean", Vector) = (0, 0, 0, 0)
         [HideInInspector] _Pulse ("Pulse", Float) = 0
         [HideInInspector] _Seed  ("Seed", Float) = 0
+        // The idle breath, pushed by MushroomView from the settings (0 here: an unplaced prefab is still). x how
+        // much the cap swells at the top of a breath, as a share of its radius; y the breath's pace, in radians
+        // a second; z how far apart two mushrooms' seeds put their breaths (radians for a seed of 1); w how far
+        // apart a unit of the ground they stand on puts them (radians).
+        [HideInInspector] _Breath ("Breath", Vector) = (0, 0, 0, 0)
+        // What rides the breath: x how much further off the shadow lies at its top (a share of its distance), y
+        // how far the warts' night glow swings either side of its own strength, z how much the warts spread.
+        [HideInInspector] _BreathLook ("Breath Look", Vector) = (0, 0, 0, 0)
+        // The rocking in the disturbance field: x radii of lean for a unit of the field's displacement squared,
+        // y the most it leans the cap, in radii, z the rocking's pace in radians a second, w the share of the
+        // lean that swings (the rest is held, away from what passed).
+        [HideInInspector] _Rock ("Rock", Vector) = (0, 0, 0, 0)
         // The whole cap's size: 1 whole, 0 cut away.
         [HideInInspector] _CapGrow   ("Cap Grow", Float) = 1
         // The cut, in the quad's own units: xy a point of the lance's line, zw its way (a unit direction).
@@ -236,8 +257,9 @@ Shader "BalloonParty/Grid/Mushroom"
                 float4 position  : TEXCOORD0;
                 // xy = the cap's middle, in radii; zw = the way it leans, a unit direction.
                 float4 cap       : TEXCOORD1;
-                // xy = cos and sin of the cap's tilt, z = the cap's radius with its swell.
-                float3 tilt      : TEXCOORD2;
+                // xy = cos and sin of the cap's tilt, z = the cap's radius with its swell, w = how far round the
+                // dome the cap's rim is for placing the spots (SPOT_CURVE, less as the cap breathes in).
+                float4 tilt      : TEXCOORD2;
                 // The light is sampled once, at the mushroom's centre, so these are the same at every vertex.
                 float3 toLight   : TEXCOORD3;
                 // w = how far past white the warts shine, which is by how dark the time of day is.
@@ -314,6 +336,15 @@ Shader "BalloonParty/Grid/Mushroom"
             float4 _CutLean;
             float4 _CutPieces;
             float4 _CutFall;
+            float4 _Breath;
+            float4 _BreathLook;
+            float4 _Rock;
+
+            // The disturbance field (Shared/Disturbance): the game's globals, as BushLeaf reads them. Displacement
+            // in G and B, 0.5 for none.
+            sampler2D _DisturbanceTex;
+            float2 _FieldBoundsMin;
+            float2 _FieldBoundsSize;
 
             // The spots, a toadstool's warts: where each sits on the cap's dome (a unit direction, z toward the
             // viewer) and the cosine of its angular radius. One on the crown and three uneven rings round it, of
@@ -457,9 +488,39 @@ Shader "BalloonParty/Grid/Mushroom"
             {
                 v2f OUT;
                 float radius = max(_Radius, 1e-4);
-                float2 lean  = _Lean.xy / radius;
-                float  capRadius = CAP_RADIUS * (1.0 + _Pulse * _PulseSwell) * _CapGrow;
-                CapFrame(lean, capRadius, OUT.cap, OUT.tilt);
+                float2 worldCenter = mul(unity_ObjectToWorld, float4(0, 0, 0, 1)).xy;
+
+                // The breath, 0 breathed out and 1 breathed in: a slow wave that rests a moment at each end. Each
+                // mushroom is at its own point of it, by its seed and by where it stands: on the ground, not in
+                // the world, since the board travels and scales with the ground through an ascent and a mist
+                // reveal, and a place in the world would run every breath fast or slow while it does.
+                float2 standing = GroundPointAt(worldCenter);
+                float beat   = _Time.y * _Breath.y + _Seed * _Breath.z + (standing.x + standing.y) * _Breath.w;
+                float swing  = 0.5 - 0.5 * cos(beat);
+                float breath = swing * swing * (3.0 - 2.0 * swing);
+
+                // The rocking: the field's displacement at the mushroom's centre leans the cap the way it points,
+                // eased toward its most as the tilt is, and the lean swings while the field holds it: the field
+                // lets go over a second or so, as the grass straightens, and the rocking dies with it. By the
+                // displacement's square, so what little the field always holds moves nothing. Both uniforms are
+                // 0 until the game has pushed them, and then nothing is read. A bare stem does not rock.
+                float2 rock = float2(0.0, 0.0);
+                if (_Rock.x > 0.0 && _FieldBoundsSize.x > 1e-3)
+                {
+                    float2 fieldUV = (worldCenter - _FieldBoundsMin) / _FieldBoundsSize;
+                    float2 pushed  = (tex2Dlod(_DisturbanceTex, float4(fieldUV, 0.0, 0.0)).gb - 0.5) * 2.0;
+                    float  shove   = dot(pushed, pushed);
+                    float  most    = max(_Rock.y, 1e-4);
+                    float  reach   = most * tanh(shove * _Rock.x / most);
+                    float  sway    = 1.0 - _Rock.w + _Rock.w * sin(_Time.y * _Rock.z + _Seed * 40.0);
+                    rock = pushed * (reach * sway * saturate(_CapGrow) / max(sqrt(shove), 1e-4));
+                }
+
+                float2 lean  = _Lean.xy / radius + rock;
+                float  capRadius = CAP_RADIUS * (1.0 + _Pulse * _PulseSwell + _Breath.x * breath) * _CapGrow;
+                float3 capTilt;
+                CapFrame(lean, capRadius, OUT.cap, capTilt);
+                OUT.tilt = float4(capTilt, SPOT_CURVE * (1.0 - _BreathLook.z * breath));
                 float2 cutLean = _CutLean.xy / radius;
                 // The cap that was cut, as it stood: where it leaned to, and its size (z: under 1 only for one cut
                 // as it popped back).
@@ -467,14 +528,14 @@ Shader "BalloonParty/Grid/Mushroom"
 
                 float turn = _Seed * BP_TAU;
 
-                float2 worldCenter = mul(unity_ObjectToWorld, float4(0, 0, 0, 1)).xy;
                 OUT.toLight = normalize(float3(SceneLightDirectionAtLOD(worldCenter), _LightHeight));
                 // The game's own measure of night: how dark the time of day's light is (as SceneLightDesaturate
                 // reads it), with no light of the board's in it, so a blast beside a mushroom does not put its
                 // glow out. A uniform's worth of work here, and nothing more a pixel.
                 float dark = 1.0 - saturate(dot(SceneLightTint(), float3(0.2126, 0.7152, 0.0722)));
                 OUT.halfway = float4(normalize(OUT.toLight + float3(0, 0, 1)),
-                                     _NightGlow * smoothstep(_NightGlowFrom, _NightGlowFull, dark));
+                                     _NightGlow * smoothstep(_NightGlowFrom, _NightGlowFull, dark)
+                                     * (1.0 + _BreathLook.y * (2.0 * breath - 1.0)));
                 float3 tint = SceneLightTintAtLOD(worldCenter);
                 OUT.groundTint = tint;
                 OUT.lightTint  = tint + SceneLightAmbientRegrade(_AmbientHue, _AmbientDimming);
@@ -482,7 +543,10 @@ Shader "BalloonParty/Grid/Mushroom"
                 // The flow is not normalised: where a local light cancels the day's, the shadow shrinks under the
                 // mushroom and grows out the other side instead of jumping across (SpriteLightDriven's orbit).
                 float2 downLight = -SceneLightFlowAtLOD(worldCenter, _ShadowReceiverRadius);
-                OUT.shadow = float3(downLight * (_ShadowDistance / radius),
+                // A cap breathed in stands nearer the eye, and its shadow lies further off it. A bare stem's
+                // does not: it has no cap to breathe.
+                float lifted = 1.0 + _BreathLook.x * breath * saturate(_CapGrow);
+                OUT.shadow = float3(downLight * (_ShadowDistance / radius * lifted),
                                     _ShadowColor.a * ShadowLightFadeAtLOD(worldCenter));
 
                 OUT.color = half4(_Color.rgb, _Color.a * GroundSceneryAt(worldCenter));
@@ -536,9 +600,9 @@ Shader "BalloonParty/Grid/Mushroom"
                 float2 disc;
                 float2 stemAcross;
                 float2 unused;
-                float  capEdge  = CapAt(p, IN.cap, IN.tilt, disc);
+                float  capEdge  = CapAt(p, IN.cap, IN.tilt.xyz, disc);
                 float  stemEdge = StemAt(p, IN.cap.xy, bare, stemAcross);
-                float  capCast  = lerp(1e3, CapAt(p - IN.shadow.xy, IN.cap, IN.tilt, unused), capThere);
+                float  capCast  = lerp(1e3, CapAt(p - IN.shadow.xy, IN.cap, IN.tilt.xyz, unused), capThere);
                 float  stemCast = StemAt(p - IN.shadow.xy * lerp(1.0, STUMP_SHADOW, bare), IN.cap.xy, bare, unused);
 
                 // About the foot, by angle and distance: the roots on the ground, and the stalk's torn edge. Only
@@ -701,7 +765,7 @@ Shader "BalloonParty/Grid/Mushroom"
 
                     // The spots lie on the dome and tip with it, so they are found in the cap's own frame, turned
                     // back from the lean's and about the crown by the seed. They narrow toward the rim.
-                    float2 level  = (way * onDisc.x + across * onDisc.y) * SPOT_CURVE;
+                    float2 level  = (way * onDisc.x + across * onDisc.y) * IN.tilt.w;
                     float  crown  = sqrt(1.0 - dot(level, level));
                     float3 turned = float3(level.x * IN.position.z + level.y * IN.position.w,
                                            level.y * IN.position.z - level.x * IN.position.w, crown);
