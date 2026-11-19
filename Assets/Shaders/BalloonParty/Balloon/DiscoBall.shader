@@ -7,8 +7,11 @@ Shader "BalloonParty/Balloon/DiscoBall"
     // makes it read as a mosaic and not as chrome: it reflects its own piece of the board from the shared scene
     // capture (_SceneCaptureTex, SceneCaptureService), and the pieces jump from tile to tile. The base silver is
     // lit by the scene light at the ball, so it is bright at noon and dim at night; a tile whose normal turns
-    // through the light's angle flashes, and the glitter sparkles only on those flashes. Three cues give it depth
-    // under the reflection: the whole ball, mirrors and all, is shaded as one sphere (a lit side and a shadow side);
+    // through the light's angle flashes, and the glitter sparkles only on those flashes. The flashes and the broad
+    // sheen under them are the ball's whole highlight: the prefab switches the base balloon's smooth shine sprites
+    // off, which lay over the mirrors and hid them, so a patch of tiles toward the light lights up, tile by tile.
+    // Three cues give it depth under the reflection: the whole ball, mirrors and all, is shaded as one sphere (a lit
+    // side and a shadow side);
     // each tile also mirrors a fixed sky and floor (bright above the horizon, dark below), so the tiles darken
     // toward the bottom and the limb; and each tile is bevelled, its edges catching or losing the light.
     // DiscoBallLook pushes the per-instance spin phase and holds the capture while a ball is on screen.
@@ -61,10 +64,10 @@ Shader "BalloonParty/Balloon/DiscoBall"
 
         [Header(Flash)]
         _FlashColor     ("Colour", Color) = (1.00, 1.00, 1.00, 1)
-        _FlashPower     ("Sharpness", Range(8, 400)) = 40
-        _FlashIntensity ("Intensity", Range(0, 4)) = 2.5
-        _SheenPower     ("Sheen Sharpness", Range(1, 32)) = 6
-        _SheenIntensity ("Sheen Intensity", Range(0, 2)) = 0.6
+        _FlashPower     ("Sharpness", Range(8, 400)) = 28
+        _FlashIntensity ("Intensity", Range(0, 4)) = 3.6
+        _SheenPower     ("Sheen Sharpness", Range(1, 32)) = 4
+        _SheenIntensity ("Sheen Intensity", Range(0, 2)) = 1.25
 
         [Header(Glitter)]
         _GlitterColor     ("Colour", Color) = (1.00, 1.00, 1.00, 1)

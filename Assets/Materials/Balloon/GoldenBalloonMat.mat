@@ -44,8 +44,8 @@ Material:
     - _ExcludeLightPaletteMask: 1024
     - _GapShadow: 0.3
     - _GapWidth: 0.11
-    - _GlintIntensity: 2.4
-    - _GlintPower: 24
+    - _GlintIntensity: 4.5
+    - _GlintPower: 12
     - _GlitterChance: 0.45
     - _GlitterIntensity: 4.5
     - _GlitterReach: 6
@@ -65,8 +65,8 @@ Material:
     - _RimWidth: 0.12
     - _RubberGloss: 1.2
     - _RubberGlossPower: 24
-    - _SheenIntensity: 0.5
-    - _SheenPower: 5
+    - _SheenIntensity: 1.3
+    - _SheenPower: 4.5
     - _SpriteScale: 1
     - _WallShade: 0.5
     m_Colors:

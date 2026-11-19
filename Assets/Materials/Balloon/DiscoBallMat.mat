@@ -38,8 +38,8 @@ Material:
     - _EnvHorizon: -0.1
     - _EnvStrength: 0.35
     - _ExcludeLightPaletteMask: 4096
-    - _FlashIntensity: 2.5
-    - _FlashPower: 40
+    - _FlashIntensity: 3.6
+    - _FlashPower: 28
     - _FormShade: 0.45
     - _FormWrap: 0.35
     - _GlitterChance: 0.5
@@ -57,8 +57,8 @@ Material:
     - _ReflectionStrength: 0.75
     - _RimBlend: 0.3
     - _RimWidth: 0.1
-    - _SheenIntensity: 0.6
-    - _SheenPower: 6
+    - _SheenIntensity: 1.25
+    - _SheenPower: 4
     - _SpinPhase: 0
     - _SpinSpeed: 1.2
     - _SpriteScale: 1

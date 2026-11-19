@@ -39,7 +39,10 @@ tough, so the pierce plows it and it shatters at the next wall), a bomb's blast 
 damage (lightning, paint) has no `DirectHit`, and its hit is `HitOutcome.None`. It is
 colourless and scoreless, resists paint, and carries no item. Its prefab (`Prefabs/Balloon/Golden`) is
 built from the tough balloon's, so it looks like a balloon, with a gold-plated body
-(`Shaders/BalloonParty/Balloon/GoldenBalloon.shader`) and a dark gold knot. Faint god rays turn and breathe
+(`Shaders/BalloonParty/Balloon/GoldenBalloon.shader`) and a dark gold knot. The base balloon's two smooth shine
+sprites are switched off on it, and on the disco ball and the nuke, whose prefabs are built from it: laid over the
+body they hid the plates, the mirrors and the dents, so each body's shader draws the highlight itself, where it
+breaks along the relief and still shows where the light comes from. Faint god rays turn and breathe
 behind it (`Balloon/Type/GodRaysLook`, the `Shaders/BalloonParty/Sprite/GodRays.shader` fan on the `GoldenRays`
 material), so it stands out on a busy board: they sort below every balloon, so they show in the gaps around it.
 Their colour and strength are the palette's `GoldenRays` entry; their shape and motion are the material's. The prefab keeps the tough

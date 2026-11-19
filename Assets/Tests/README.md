@@ -876,6 +876,16 @@ Pins the baked idle sway (`BalloonsConfiguration`'s Idle Sway block) to the Anim
 | Every prefab the ticker sways has the clips' child as its sway pivot, level in the prefab | 1 | The ticker turns a different child than the Animator did |
 | Every prefab that keeps its Animator plays a controller the baker refuses | 1 | A variant pays for an Animator that only sways |
 
+### `ShippedGiftBalloonShineTests` — 10 tests
+
+Reads the shipped balloon prefabs for the base balloon's two smooth shine sprites. The golden balloon, the disco ball and the nuke draw their highlight in the body's shader, where it breaks along the plates, the mirrors and the dents; they are variants of the plain balloon's prefab, so a re-saved variant could bring the sprites back.
+
+| Area | Tests | What could break |
+|---|---|---|
+| On `Golden`, `Disco` and `Nuke` every child of `ShinePivot` is inactive | 3 | A smooth shine lies over the body again: the relief flattens, and on the nuke the counter is hidden when the light comes from below |
+| On the same three, `BalloonView`'s sprite layer list holds no renderer under `ShinePivot` | 3 | The view enables, hides and sorts a renderer that never draws |
+| `Balloon`, `ToughBalloon` and `Unbreakable` keep their shine sprites on; the heart keeps its own `Shine` child drawing | 4 | The change spreads to a balloon whose body has no highlight of its own |
+
 ### `BalloonSwayAnimatorParityTests` — 3 tests
 
 Steps a real Animator on the baked controller by hand beside a `BalloonSwayPlayback` and compares the pivot's angle at every step. The EditMode twin of `BalloonSwayAnimatorParityPlayModeTests`, at 70 steps a second (so no crossfade ends exactly on a step); these report inconclusive if the Animator stays inert when stepped by hand outside Play mode. A failure lists the steps after every spawn and flip, the steps around each change in the Animator's state or transition, and the steps apart, each with the Animator's own account of its states.

@@ -3,7 +3,9 @@ Shader "BalloonParty/Balloon/NukeBalloon"
     // The nuke reward balloon's body (PLAN-NukeBalloon): the golden balloon's plated sphere in dull lead, its
     // hexagonal plates bolted at the corners over a dark rubber skin, with a round danger placard riveted to the
     // face: a black radiation trefoil on yellow inside a black ring. The plates take the scene light as the golden
-    // ones do, but rough: a broad weak sheen, no glitter. Each ordinary hit the nuke takes dents more of its plates
+    // ones do, but rough: a broad sheen and a soft glint, no glitter (the material's values; the defaults below are
+    // the golden balloon's). They are the balloon's whole highlight: the prefab switches the base balloon's smooth
+    // shine sprites off, which lay over the body and, with the light from below, over the counter. Each ordinary hit the nuke takes dents more of its plates
     // (_DamageProgress, pushed by the prefab's ToughBalloonVariant as on the tough balloon): a dented plate sinks
     // darker and tips the other way. Below the placard sits an LED counter, one seven-segment digit behind dark
     // glass, and above it a domed lamp; NukeFuseView pushes the fuse they show (_FuseArmed, _FuseHeart, _FuseDigit,

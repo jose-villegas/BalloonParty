@@ -6,8 +6,10 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
     // tough balloon's cracks. The plates are thick and stand apart, so the balloon's rubber shows
     // between them, deeper down, with the plates' side walls and shadows around it. Each plate is bevelled at its edges and held by two
     // bolts, and tilted a little and wobbling slowly, so it shades and glints on its own as the scene
-    // light moves, and glitter sparkles only where a plate's glint lands. The shadow comes from the prefab's baked
-    // shadow child, as on the tough balloon.
+    // light moves, and glitter sparkles only where a plate's glint lands. That sheen and glint are the balloon's
+    // whole highlight: the prefab switches the base balloon's smooth shine sprites off, which lay over the plates
+    // and hid their relief, so the highlight is broad and strong here and breaks plate by plate. The shadow comes
+    // from the prefab's baked shadow child, as on the tough balloon.
 
     Properties
     {
@@ -69,11 +71,11 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
 
         [Header(Glint)]
         _GlintColor     ("Color", Color) = (1.00, 0.96, 0.80, 1)
-        _GlintPower     ("Sharpness", Range(4, 200)) = 24
-        _GlintIntensity ("Intensity", Range(0, 4)) = 2.4
+        _GlintPower     ("Sharpness", Range(4, 200)) = 12
+        _GlintIntensity ("Intensity", Range(0, 6)) = 4.5
         // The broad metallic sheen under the glint, per plate too.
-        _SheenPower     ("Sheen Sharpness", Range(1, 32)) = 5
-        _SheenIntensity ("Sheen Intensity", Range(0, 2)) = 0.5
+        _SheenPower     ("Sheen Sharpness", Range(1, 32)) = 4.5
+        _SheenIntensity ("Sheen Intensity", Range(0, 2)) = 1.3
 
         [Header(Glitter)]
         _GlitterColor     ("Color", Color) = (1.00, 0.98, 0.88, 1)

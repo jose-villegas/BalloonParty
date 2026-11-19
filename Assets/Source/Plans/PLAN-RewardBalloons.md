@@ -112,8 +112,8 @@ with the board, like any balloon.
 
 ## The looks
 
-- **Golden:** a balloon, built from the tough balloon's prefab (body, knot, the shine sprites, the
-  baked shadow), so it reads as one of the balloons and not as an unbreakable. Its body is
+- **Golden:** a balloon, built from the tough balloon's prefab (body, knot, the baked shadow; its shine
+  sprites switched off, see "The highlight is the body's own"), so it reads as one of the balloons and not as an unbreakable. Its body is
   `Balloon/GoldenBalloon.shader`: the tough balloon's sphere projection and scene light, plated in
   gold. The plates are even hexagons over the sphere, crowding toward the rim like tiles on a ball.
   They are even on purpose: irregular Voronoi plates read like the tough balloon's cracks. The plates
@@ -133,6 +133,51 @@ with the board, like any balloon.
   so `Balloon/HeartShine.shader` lights the highlight from the heart's normals (baked from the same
   height map) toward the scene light. It lands on each lobe at noon and follows the light round,
   with the round shine's night response. Checked in the Editor at noon and at night.
+
+## The highlight is the body's own
+
+The owner, playing on his phone: "the numbers on the nuke are impossible to read when the highlight is coming from
+below", and then: "an issue i have right now with the highlights over the gift balloons (except heart) is that it
+makes the shapes seem smooth so we lose the relief and bumps we added to the balloon texture".
+
+The golden balloon, the disco ball and the nuke are variants of the plain balloon's prefab, which lays two smooth
+shine sprites over the body (`ShinePivot/Shine` and `Shine (1)`, `Sprite/LightDriven`, sorted above the body and
+swung round it by the light). Over a body whose shader draws plates, mirrors and dents they flattened it into a
+smooth ball, and with the light from below (dusk and night: the light's direction is the time of day) they lay over
+the nuke's counter. On these three prefabs the two sprites are now off (their GameObjects inactive) and out of
+`BalloonView`'s sprite layer list, so nothing enables, hides or sorts them; only that list ever touched them. The
+heart keeps its own shine (`HeartShine`), and the plain, tough and unbreakable balloons keep theirs.
+
+The highlight is each body shader's own sheen and glint, which already followed the light (its direction sampled
+once at the balloon's centre, in the vertex stage) and broke along the relief. They were tuned as an accent under
+the sprite; they now carry the whole highlight, so they are broader and stronger. No shader code changed, only
+numbers, so the cost is two sprites fewer a gift balloon and nothing more a pixel.
+
+| Body | Was | Is |
+| --- | --- | --- |
+| Golden | sheen 0.5 at power 5, glint 2.4 at power 24 | sheen 1.3 at power 4.5, glint 4.5 at power 12 |
+| Disco | sheen 0.6 at power 6, flash 2.5 at power 40 | sheen 1.25 at power 4, flash 3.6 at power 28 |
+| Nuke | sheen 0.35 at power 5, glint 0.9 at power 10 | sheen 0.8 at power 4, glint 1.8 at power 9 |
+
+Measured on stills of each at four light directions (the mean of a pixel's brightest channel over the half of the
+face toward the light; in brackets the share of the face within a tenth of white):
+
+| Body | With the sprites | Sprites off, old numbers | Now |
+| --- | --- | --- | --- |
+| Golden | 0.80 to 0.87 (0.26 to 0.38) | 0.57 to 0.75 (0.14 to 0.24) | 0.66 to 0.77 (0.29 to 0.37) |
+| Disco | 0.80 to 0.86 (0.23 to 0.30) | 0.56 to 0.75 (0.08 to 0.20) | 0.72 to 0.80 (0.22 to 0.32) |
+| Nuke | 0.75 to 0.80 (0.24 to 0.30) | 0.39 to 0.55 (0.10 to 0.19) | 0.49 to 0.64 (0.18 to 0.27) |
+
+The bright share of the face is back where it was on the golden balloon and the disco ball; the mean stays a little
+under, because the gaps and the grout between the plates now show dark where the sprite laid a haze over them. The
+nuke is left further under on purpose: its old highlight was mostly its own green rays' light on the sprite (the
+sprite does not leave the balloon's own light out; the body does), and lead pushed that bright reads as chrome.
+
+Left as it is: a body leaves its own rays' light out by asking the light field which light is strongest at its
+centre. While that is its own, which it is unless a stronger light stands as near, the body falls back to the
+board's light, so a weaker neighbour's light (another gift balloon's rays beside it) neither tints it nor turns its
+highlight: in the stills another gift balloon stood over and under each, and the highlight stayed with the board's
+light. The sprite did answer those. Giving the body that back needs the field to say more than one light a place.
 
 ## Phases
 
