@@ -11,7 +11,8 @@ namespace BalloonParty.Tests.Game
     /// <summary>
     ///     The launch screen's Play and Continue balloons, as the Launcher scene ships them: neither balloon nor its
     ///     ribbon may ever cover the other's ribbon. They share the screen one above the other, so the measure is the
-    ///     room between the lowest point of everything of Play's and the highest of everything of Continue's.
+    ///     room between the lowest point of everything of Play's and the highest of everything of Continue's, its
+    ///     shadow included: that shifts with the light, and Play's ribbon is what it would fall on.
     /// </summary>
     [TestFixture]
     public class LaunchBalloonsTests
@@ -81,6 +82,8 @@ namespace BalloonParty.Tests.Game
             var area = CanvasOn(aspect);
             var playRadius = _play.Reach.Radius;
             var otherRadius = _continue.Reach.Radius;
+            var otherShadow = _continue.ShadowReach;
+            var playShadow = _play.ShadowReach;
             var playKnot = _play.KnotFromCentre;
             var otherKnot = _continue.KnotFromCentre;
             var least = float.PositiveInfinity;
@@ -105,12 +108,22 @@ namespace BalloonParty.Tests.Game
                     playWas = play.Centre;
                     otherWas = other.Centre;
 
-                    var room = Lowest(play, playRadius) - Highest(other, otherRadius);
+                    var room = Lowest(play, playRadius) - Highest(other, Mathf.Max(otherRadius, otherShadow));
                     least = Mathf.Min(least, room);
                     if (room < LeastRoom)
                     {
                         Assert.Fail(
                             $"seed {seed}, {f * Frame:0.0} s: {room:0.0} between Play's lowest point and Continue's highest");
+                    }
+
+                    // Play's shadow is drawn under all of Continue's, but must fall short of Continue's ribbon all
+                    // the same: the draw order is the scene's to change.
+                    Extent(other.Cloth, out _, out var otherRibbonTop);
+                    var shadowRoom = play.Centre.y - playShadow - otherRibbonTop;
+                    if (shadowRoom < LeastRoom)
+                    {
+                        Assert.Fail(
+                            $"seed {seed}, {f * Frame:0.0} s: {shadowRoom:0.0} between Play's shadow and Continue's line");
                     }
                 }
 
@@ -125,8 +138,8 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void SharingAScreen_TheUpperRoomAndTheLowerRoom_LeaveTheGapBetweenTheTwoBalloons()
         {
-            var upper = new BalloonReach(53f, 54.5f, 91.5f);
-            var lower = new BalloonReach(19f, 20.5f, 60f);
+            var upper = new BalloonReach(53f, 54.5f, 91.5f, 110f);
+            var lower = new BalloonReach(19f, 20.5f, 60f, 20f);
 
             foreach (var height in new[] { 346f, 380f, 400f, 447f, 458f })
             {
@@ -145,9 +158,23 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void SharingAScreen_TheLowerBalloonsShadow_StaysTheGapUnderTheUpperBalloon()
+        {
+            var upper = new BalloonReach(53f, 54.5f, 91.5f, 110f);
+            var lower = new BalloonReach(19f, 20.5f, 60f, 40f);
+            var area = new Rect(-110f, -200f, 220f, 400f);
+
+            var above = upper.RoomAbove(lower, area, 4f, 16f);
+            var below = lower.RoomBelow(upper, area, 4f, 16f);
+
+            Assert.That(above.yMin - upper.Down - (below.yMax + lower.Shadow), Is.EqualTo(16f).Within(0.01f));
+            Assert.That(below.height, Is.EqualTo(above.height).Within(0.01f), "the travel is still split evenly");
+        }
+
+        [Test]
         public void AloneOnTheScreen_ABalloonHasItsWholeHeight()
         {
-            var reach = new BalloonReach(53f, 54.5f, 91.5f);
+            var reach = new BalloonReach(53f, 54.5f, 91.5f, 110f);
             var area = new Rect(-110f, -200f, 220f, 400f);
 
             var room = reach.RoomAlone(area, 4f);
@@ -159,8 +186,8 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void OnAScreenTooShortForBoth_NeitherRoomHasTravel()
         {
-            var upper = new BalloonReach(53f, 54.5f, 91.5f);
-            var lower = new BalloonReach(19f, 20.5f, 60f);
+            var upper = new BalloonReach(53f, 54.5f, 91.5f, 110f);
+            var lower = new BalloonReach(19f, 20.5f, 60f, 20f);
             var area = new Rect(-200f, -100f, 400f, 200f);
 
             Assert.That(upper.RoomAbove(lower, area, 4f, 16f).height, Is.EqualTo(0f));

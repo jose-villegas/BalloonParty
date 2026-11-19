@@ -18,6 +18,7 @@ namespace BalloonParty.Game
     public class LaunchBalloonView : MonoBehaviour
     {
         private static readonly int RotationPivotId = Shader.PropertyToID("_RotationPivot");
+        private static readonly int OrbitDistanceId = Shader.PropertyToID("_OrbitDistance");
 
         [Tooltip("The balloon this moves: a child, or a sibling under the same parent.")]
         [SerializeField] private RectTransform _balloon;
@@ -50,6 +51,17 @@ namespace BalloonParty.Game
                  "balloons' gaps is the one kept.")]
         [SerializeField] [Min(0f)] private float _gap = 16f;
 
+        [Tooltip("How far the balloon's shadow sits down-light of it, in the balloon's own units. The shadow's own " +
+                 "material places it (Sprite/LightDriven's Down-Light Offset), following the scene light as the " +
+                 "game's balloons' shadows do; the material's offset is in world units, next to nothing on a " +
+                 "canvas, so this replaces it.")]
+        [SerializeField] [Min(0f)] private float _shadowShift = 24f;
+
+        [Tooltip("How far from the body's centre the shadow art still darkens what is under it, before its shift, " +
+                 "in the balloon's own units. Sharing the screen, the lower balloon keeps its shadow off the upper " +
+                 "one's ribbon by this and the shift.")]
+        [SerializeField] [Min(0f)] private float _shadowRadius = 85f;
+
         [Tooltip("Where the balloon starts, as shares of the room it drifts in: x from the left edge, y from the " +
                  "lowest it can hang.")]
         [SerializeField] private Vector2 _start = new(0.62f, 0.16f);
@@ -64,9 +76,14 @@ namespace BalloonParty.Game
         private Rect _area;
         private bool _sharing;
         private Vector2 _balloonAt;
+        private float _shadowScale = -1f;
 
         /// <summary>The room this balloon takes up around its body's centre, in canvas units.</summary>
-        internal BalloonReach Reach => new(Radius, Radius + _wander.Bob, Hang + _wander.Bob);
+        internal BalloonReach Reach =>
+            new(Radius, Radius + _wander.Bob, Hang + _wander.Bob, ShadowReach + _wander.Bob);
+
+        /// <summary>From the body's centre to as far as the shadow darkens, shifted any way, in canvas units.</summary>
+        internal float ShadowReach => (_shadowRadius + _shadowShift) * Scale;
 
         /// <summary>From the body's centre to where the line is tied on, in canvas units.</summary>
         internal Vector2 KnotFromCentre => (_knot - _bodyCentre) * Scale;
@@ -181,6 +198,29 @@ namespace BalloonParty.Game
                 var pivot = _canvas.InverseTransformPoint(_balloon.TransformPoint(lit.Pivot));
                 lit.Material.SetVector(RotationPivotId, new Vector4(pivot.x, pivot.y, 0f, 0f));
             }
+
+            ShiftShadow();
+        }
+
+        // The shader lays a down-light sprite off by its material's distance times the scale of the space its
+        // vertices are in, which for a canvas is the canvas's: the balloon's own scale isn't in it. So the shift is
+        // given at the balloon's scale, again only when that changes (on a press, as it shrinks).
+        private void ShiftShadow()
+        {
+            var scale = Scale;
+            if (Mathf.Approximately(scale, _shadowScale))
+            {
+                return;
+            }
+
+            _shadowScale = scale;
+            foreach (var lit in _lit)
+            {
+                if (lit.DownLight)
+                {
+                    lit.Material.SetFloat(OrbitDistanceId, _shadowShift * scale);
+                }
+            }
         }
 
         private void Draw()
@@ -192,7 +232,8 @@ namespace BalloonParty.Game
 
         // The balloon art's light-driven materials turn their highlights about a pivot in the canvas's space, authored
         // for a balloon at the canvas's centre. This balloon moves, so it gets its own copies whose pivot follows it;
-        // the authored pivot is kept as a point in the balloon's own units.
+        // the authored pivot is kept as a point in the balloon's own units. The copy of one the shader places
+        // down-light (the shadow's) also takes this balloon's shift.
         private void CopyLitMaterials()
         {
             foreach (var graphic in _balloon.GetComponentsInChildren<Graphic>(true))
@@ -205,7 +246,8 @@ namespace BalloonParty.Game
 
                 var copy = new Material(shared) { name = $"{shared.name} ({name})" };
                 graphic.material = copy;
-                _lit.Add(new LitMaterial(copy, shared.GetVector(RotationPivotId)));
+                var downLight = shared.HasProperty(OrbitDistanceId) && shared.GetFloat(OrbitDistanceId) > 0f;
+                _lit.Add(new LitMaterial(copy, shared.GetVector(RotationPivotId), downLight));
             }
         }
 
@@ -213,11 +255,13 @@ namespace BalloonParty.Game
         {
             internal readonly Material Material;
             internal readonly Vector2 Pivot;
+            internal readonly bool DownLight;
 
-            internal LitMaterial(Material material, Vector2 pivot)
+            internal LitMaterial(Material material, Vector2 pivot, bool downLight)
             {
                 Material = material;
                 Pivot = pivot;
+                DownLight = downLight;
             }
         }
     }

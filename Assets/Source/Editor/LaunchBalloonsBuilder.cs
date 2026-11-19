@@ -18,7 +18,7 @@ namespace BalloonParty.Editor
     ///     Builds the launch screen's two drifting balloons in the Launcher scene, replacing any built before.
     ///     <para>
     ///         Play keeps its own balloon, the Play button where the launch canvas has it. Its label comes off the
-    ///         button's prefab, and a root stretched over the launch canvas, drawn under the button, holds its
+    ///         button's prefab, and a root stretched over the launch canvas, drawn over the button, holds its
     ///         <see cref="LaunchBalloonView" />, spring line and cloth ribbon with "play" on both faces. A press
     ///         hides that root along with the button.
     ///     </para>
@@ -31,7 +31,8 @@ namespace BalloonParty.Editor
     ///         activation is Play's own. Starts inactive: the controller shows it only while a run is saved.
     ///     </para>
     ///     Each balloon is handed the other, to share the screen with while both show: Play its upper part,
-    ///     Continue its lower.
+    ///     Continue its lower. A balloon's line and ribbon are drawn after the balloon, whose first child is its
+    ///     shadow: the shadow shifts with the light and must never darken the ribbon hanging under it.
     /// </summary>
     internal static class LaunchBalloonsBuilder
     {
@@ -120,9 +121,9 @@ namespace BalloonParty.Editor
         {
             var source = button.transform;
 
-            // At the button's place among its siblings, which moves the button after it: the line is drawn under
-            // the balloon it is tied to.
-            var root = NewRoot("PlayRibbon", source.parent, source.GetSiblingIndex());
+            // Right after the button among its siblings: the line and ribbon are drawn over the balloon, and so
+            // over its shadow.
+            var root = NewRoot("PlayRibbon", source.parent, source.GetSiblingIndex() + 1);
             var view = AddView(root, (RectTransform)source, PlayRibbon);
             var viewObject = new SerializedObject(view);
             viewObject.FindProperty("_above").boolValue = true;
@@ -146,7 +147,7 @@ namespace BalloonParty.Editor
 
         private static LaunchBalloonView BuildContinue(GameObject source, LaunchPlayTrigger play, LaunchLifetimeScope scope)
         {
-            var root = NewRoot("Continue", source.transform.parent, source.transform.GetSiblingIndex() + 1);
+            var root = NewRoot("Continue", source.transform.parent, source.transform.GetSiblingIndex() + 2);
             var balloon = Object.Instantiate(source, root.transform);
             balloon.name = "Balloon";
             var balloonRect = (RectTransform)balloon.transform;
@@ -156,7 +157,6 @@ namespace BalloonParty.Editor
             Recolor(balloon);
 
             var view = AddView(root, balloonRect, ContinueRibbon);
-            balloonRect.SetAsLastSibling();
             var press = root.AddComponent<LaunchContinueView>();
             RewirePress(balloon.GetComponent<ScaleDownButton>(), play, press, source.GetComponent<SceneTransition>());
 
