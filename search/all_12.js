@@ -31,7 +31,7 @@ var searchData=
   ['handwritten_20heads_20ups_28',['Handwritten Heads Ups',['../plan_headsup.html',1,'Handwritten Heads-Ups'],['../plan_headsup.html#autotoc_md754',1,'Handwritten Heads-Ups']]],
   ['handwrittenheadsup_29',['HandwrittenHeadsUp',['../classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html',1,'BalloonParty::UI::HeadsUp']]],
   ['handwrittenheadsup_2ecs_30',['HandwrittenHeadsUp.cs',['../HandwrittenHeadsUp_8cs.html',1,'']]],
-  ['hang_31',['Hang',['../structBalloonParty_1_1Game_1_1BalloonReach.html#acc4790f9ab35d265166005188b7eaccc',1,'BalloonParty.Game.BalloonReach.Hang'],['../classBalloonParty_1_1Game_1_1LaunchBalloonView.html#a028d7b5b725b01dbb3d2961ee76b1c01',1,'BalloonParty.Game.LaunchBalloonView.Hang']]],
+  ['hang_31',['Hang',['../classBalloonParty_1_1Game_1_1LaunchBalloonView.html#a028d7b5b725b01dbb3d2961ee76b1c01',1,'BalloonParty::Game::LaunchBalloonView']]],
   ['happens_20to_20the_20scenario_20grade_32',['What happens to the scenario grade',['../plan_hdr.html#autotoc_md721',1,'']]],
   ['hard_20failure_33',['14.3 Escalate &lt;tt&gt;LevelDifficultyResolver.FallbackParameters&lt;/tt&gt; to a hard failure',['../plan_future_ideas.html#autotoc_md609',1,'']]],
   ['has_34',['Has',['../classBalloonParty_1_1Shared_1_1GameState_1_1CinematicStateService.html#a243c40e49b227bd01f150652dedfc775',1,'BalloonParty.Shared.GameState.CinematicStateService.Has()'],['../interfaceBalloonParty_1_1Shared_1_1GameState_1_1ICinematicState.html#ace31081b2e6fb4632d79179a52f015ad',1,'BalloonParty.Shared.GameState.ICinematicState.Has()']]],

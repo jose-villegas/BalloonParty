@@ -1,0 +1,9 @@
+<map id="BalloonParty.Game.BalloonDrift" name="BalloonParty.Game.BalloonDrift">
+<area shape="rect" id="Node000001" title="One launch balloon&#39;s motion, with nothing of the engine&#39;s in it: its body&#39;s centre wandering a room (..." alt="" coords="117,225,315,269"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1BalloonWander.html" title="A balloon drifting about an area on its own: it heads for one spot after another, picked at random am..." alt="" coords="117,115,315,160"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="218,174,218,225,214,223,214,177"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Game_1_1BalloonWanderSettings.html" title="How a BalloonWander drifts, in canvas units and seconds." alt="" coords="5,5,203,50"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="138,58,196,114,191,115,137,63"/>
+<area shape="rect" id="Node000004" href="$structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html" title="A round area to stay out of, stretched upward into a capsule: every point within Radius of the segmen..." alt="" coords="226,5,432,50"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="298,59,241,116,237,112,293,62"/>
+</map>

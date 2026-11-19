@@ -27,6 +27,7 @@ var hierarchy =
     [ "BalloonParty.Balloon.Controller.BalloonController", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html", null ],
     [ "BalloonParty.Balloon.Controller.BalloonControllerContext", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerContext.html", null ],
     [ "BalloonParty.Shared.Messages.BalloonDeflectedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1BalloonDeflectedMessage.html", null ],
+    [ "BalloonParty.Game.BalloonDrift", "classBalloonParty_1_1Game_1_1BalloonDrift.html", null ],
     [ "BalloonParty.Balloon.Spawner.BalloonFactory", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonFactory.html", null ],
     [ "BalloonParty.Editor.BalloonIdleSwayBaker", "classBalloonParty_1_1Editor_1_1BalloonIdleSwayBaker.html", null ],
     [ "BalloonParty.Balloon.Model.BalloonModelConfig", "structBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelConfig.html", null ],

@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"EffectView_8cs.html":[7,0,14,9,1],
 "EffectsClearingController_8cs.html":[7,0,5,5],
 "EffectsClearingMaskView_8cs.html":[7,0,5,6],
 "EffectsClearingSettings_8cs.html":[7,0,3,5,4],
@@ -49,7 +50,7 @@ var NAVTREEINDEX1 =
 "FreesoundTokenSource_8cs.html":[7,0,0,1,5],
 "GameDisplayConfigurationDrawer_8cs.html":[7,0,3,4,1],
 "GameDisplayConfiguration_8cs.html":[7,0,3,13],
-"GameLifetimeScope_8cs.html":[7,0,7,16],
+"GameLifetimeScope_8cs.html":[7,0,7,17],
 "GameOverDismissedMessage_8cs.html":[7,0,14,7,14],
 "GameOverLayoutBuilder_8cs.html":[7,0,6,22],
 "GameOverLifetimeScope_8cs.html":[7,0,18,4,0],
@@ -61,7 +62,7 @@ var NAVTREEINDEX1 =
 "GamePaletteExtensions_8cs.html":[7,0,3,10,1],
 "GamePalette_8cs.html":[7,0,3,10,0],
 "GameRenderMapsWindow_8cs.html":[7,0,6,3,0],
-"GameScopeRegistration_8cs.html":[7,0,7,17],
+"GameScopeRegistration_8cs.html":[7,0,7,18],
 "GameSoundId_8cs.html":[7,0,0,7],
 "GameplayMetricsService_8cs.html":[7,0,7,10,8],
 "GatekeeperActorModel_8cs.html":[7,0,15,0,0,11],
@@ -116,7 +117,7 @@ var NAVTREEINDEX1 =
 "HexCoordinates_8cs.html":[7,0,15,2,2],
 "HighlightTrail_8cs.html":[7,0,8,5,1],
 "HitOutcome_8cs.html":[7,0,15,1,2],
-"HitPipeline_8cs.html":[7,0,7,18],
+"HitPipeline_8cs.html":[7,0,7,19],
 "HitVfxOverrideDrawer_8cs.html":[7,0,3,4,2],
 "HitVfxOverride_8cs.html":[7,0,3,0,9],
 "HudCamera_8cs.html":[7,0,5,10],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "IPaintable_8cs.html":[7,0,15,1,13],
 "IPaletteColorMasked_8cs.html":[7,0,3,10,3],
 "IPassThrough_8cs.html":[7,0,15,1,14],
-"IPierceItemField_8cs.html":[7,0,14,30],
-"IPitySettings_8cs.html":[7,0,14,31]
+"IPierceItemField_8cs.html":[7,0,14,30]
 };

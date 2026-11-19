@@ -1,43 +1,41 @@
 <map id="BalloonParty.Game.LaunchBalloonView" name="BalloonParty.Game.LaunchBalloonView">
-<area shape="rect" id="Node000001" title="A launch screen balloon drifting about the screen (BalloonWander), carrying a ribbon that says what i..." alt="" coords="1276,335,1470,380"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="364,38,488,66"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="501,35,633,17,803,4,897,3,994,7,1090,18,1183,37,1222,49,1237,59,1254,74,1279,106,1301,141,1335,214,1357,282,1370,336,1365,333,1352,284,1330,216,1296,143,1275,109,1250,78,1234,63,1220,54,1182,43,1089,24,993,13,897,8,804,10,633,22,504,40"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Game_1_1LaunchBalloonView.html" title="A launch screen balloon drifting about the screen (BalloonWander), carrying a ribbon that says what i..." alt="" coords="988,419,1183,464"/>
-<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="502,66,625,102,745,145,795,169,856,206,880,227,904,241,926,248,946,258,966,277,978,302,980,324,981,346,991,369,1014,396,1044,419,1038,418,1011,400,986,372,976,347,974,324,973,303,962,280,943,262,924,253,902,245,877,232,853,210,792,174,742,150,623,107,503,71"/>
-<area shape="rect" id="Node000009" href="$classBalloonParty_1_1UI_1_1ClothRibbon_1_1ClothRibbonWriting.html" title="Writes a line on both faces of a RibbonCloth&#39;s ribbon, each glyph corner carried on the cloth where i..." alt="" coords="648,44,854,89"/>
-<area shape="poly" id="edge12_Node000009_Node000002" title=" " alt="" coords="502,53,650,61,645,63,504,58"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1178,412,1296,380,1291,381,1180,417"/>
-<area shape="poly" id="edge4_Node000003_Node000003" title=" " alt="" coords="1060,401,1070,395,1085,392,1100,394,1110,400,1115,409,1113,420,1109,417,1110,410,1106,404,1098,399,1086,398,1072,400,1063,406"/>
-<area shape="rect" id="Node000004" href="$classBalloonParty_1_1UI_1_1ClothRibbon_1_1SpringLineGraphic.html" title="Draws a RibbonCloth&#39;s line as a thin strip through its points." alt="" coords="648,360,854,405"/>
-<area shape="poly" id="edge21_Node000001_Node000004" title=" " alt="" coords="869,370,988,363,1278,357,1272,359,988,368,870,375"/>
-<area shape="poly" id="edge5_Node000003_Node000004" title=" " alt="" coords="869,401,991,424,985,425,870,406"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="359,318,492,346"/>
-<area shape="poly" id="edge6_Node000004_Node000005" title=" " alt="" coords="507,342,650,366,645,368,508,347"/>
-<area shape="rect" id="Node000006" href="$classBalloonParty_1_1UI_1_1ClothRibbon_1_1ClothRibbonGraphic.html" title="Draws a RibbonCloth&#39;s ribbon: its three rows of points as a strip, notched at both ends,..." alt="" coords="648,220,854,265"/>
-<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="493,311,669,264,665,267,495,316"/>
-<area shape="poly" id="edge22_Node000001_Node000006" title=" " alt="" coords="821,211,853,196,865,189,878,183,921,176,965,183,1073,213,1176,253,1266,296,1335,335,1330,334,1264,301,1174,258,1071,218,964,188,921,182,879,188,867,194,856,201,824,216"/>
-<area shape="poly" id="edge7_Node000003_Node000006" title=" " alt="" coords="817,269,855,287,912,312,966,342,1018,380,1062,419,1057,418,1015,384,963,346,909,317,853,292,817,275"/>
-<area shape="rect" id="Node000007" href="$classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonCloth.html" title="A line hanging from an anchor with a ribbon of cloth tied to its end, simulated as points joined by s..." alt="" coords="323,224,529,269"/>
-<area shape="poly" id="edge28_Node000001_Node000007" title=" " alt="" coords="494,216,626,172,710,151,801,134,897,124,995,124,1091,138,1138,150,1184,167,1214,182,1242,202,1292,247,1332,294,1360,335,1355,334,1328,298,1288,251,1239,206,1211,187,1182,172,1137,155,1090,143,995,130,898,129,802,139,711,156,628,177,497,221"/>
-<area shape="poly" id="edge20_Node000003_Node000007" title=" " alt="" coords="544,269,693,304,855,345,911,361,965,380,1044,419,1039,419,963,385,909,366,854,351,692,309,545,275"/>
-<area shape="poly" id="edge9_Node000006_Node000007" title=" " alt="" coords="544,243,650,243,645,245,545,248"/>
-<area shape="rect" id="Node000008" href="$classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonClothSettings.html" title="The spring line and cloth ribbon&#39;s shape and physics, in canvas units and seconds." alt="" coords="5,420,212,465"/>
-<area shape="poly" id="edge25_Node000001_Node000008" title=" " alt="" coords="123,477,162,567,190,620,225,672,265,720,312,760,338,775,365,786,394,794,425,796,1087,796,1122,792,1155,782,1185,766,1212,744,1236,718,1258,688,1295,622,1324,551,1344,483,1366,382,1370,378,1349,484,1329,553,1300,624,1263,691,1241,721,1216,748,1188,770,1157,787,1124,798,1087,801,424,801,393,799,364,791,336,779,309,764,262,724,220,675,186,622,157,569,122,482"/>
-<area shape="poly" id="edge15_Node000003_Node000008" title=" " alt="" coords="227,440,989,439,987,444,227,445"/>
-<area shape="poly" id="edge10_Node000007_Node000008" title=" " alt="" coords="155,410,321,304,387,268,383,271,324,309,159,414"/>
-<area shape="poly" id="edge23_Node000001_Node000009" title=" " alt="" coords="869,60,975,59,1087,64,1185,77,1224,88,1253,102,1281,126,1305,155,1324,187,1340,220,1361,284,1371,336,1366,333,1355,285,1335,222,1319,189,1300,158,1278,130,1250,106,1222,93,1184,82,1086,69,975,65,871,65"/>
-<area shape="poly" id="edge11_Node000003_Node000009" title=" " alt="" coords="840,95,856,108,867,123,870,138,873,152,880,167,902,187,924,198,946,209,967,232,975,250,979,266,980,296,979,325,983,340,991,357,1017,391,1050,419,1045,418,1014,394,986,360,978,342,974,325,974,296,974,267,970,251,962,235,943,214,922,203,899,192,876,171,868,154,865,139,862,125,852,111,840,100"/>
-<area shape="rect" id="Node000010" href="$classBalloonParty_1_1UI_1_1ClothRibbon_1_1ClothRibbonWriting_1_1Face.html" title=" " alt="" coords="323,118,529,162"/>
-<area shape="poly" id="edge13_Node000009_Node000010" title=" " alt="" coords="543,115,623,97,666,88,661,91,625,102,546,119"/>
-<area shape="rect" id="Node000011" href="$classBalloonParty_1_1Game_1_1BalloonWanderSettings.html" title="How a BalloonWander drifts, in canvas units and seconds." alt="" coords="327,676,524,721"/>
-<area shape="poly" id="edge24_Node000001_Node000011" title=" " alt="" coords="540,722,676,743,755,749,840,752,927,748,1015,737,1100,716,1181,686,1224,659,1261,623,1291,581,1315,535,1334,490,1348,447,1366,382,1369,378,1353,448,1339,492,1320,538,1295,583,1265,626,1228,663,1184,690,1102,722,1016,742,928,753,840,757,755,755,675,748,539,727"/>
-<area shape="poly" id="edge14_Node000003_Node000011" title=" " alt="" coords="478,666,552,630,635,599,702,581,769,564,853,537,950,499,1033,465,1038,463,952,504,855,542,771,569,704,586,637,604,554,634,480,671"/>
-<area shape="rect" id="Node000013" href="$classBalloonParty_1_1Game_1_1BalloonWander.html" title="A balloon drifting about an area on its own: it heads for one spot after another, picked at random am..." alt="" coords="652,662,850,706"/>
-<area shape="poly" id="edge18_Node000013_Node000011" title=" " alt="" coords="540,697,624,694,655,695,649,695,624,700,540,702"/>
-<area shape="rect" id="Node000012" href="$structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html" title="A round area to stay out of, stretched upward into a capsule: every point within Radius of the segmen..." alt="" coords="323,536,529,581"/>
-<area shape="poly" id="edge26_Node000001_Node000012" title=" " alt="" coords="545,560,678,559,840,547,926,536,1013,520,1099,500,1182,474,1228,453,1272,427,1342,381,1346,379,1275,432,1231,458,1184,479,1100,505,1014,526,927,541,840,552,679,564,545,566"/>
-<area shape="poly" id="edge16_Node000003_Node000012" title=" " alt="" coords="544,535,990,457,986,460,545,540"/>
-<area shape="poly" id="edge19_Node000013_Node000012" title=" " alt="" coords="501,585,694,661,688,662,500,590"/>
-<area shape="poly" id="edge27_Node000001_Node000013" title=" " alt="" coords="865,687,956,683,1058,668,1109,655,1159,637,1207,614,1250,585,1274,562,1295,537,1328,479,1351,424,1364,382,1368,378,1356,425,1333,482,1299,540,1278,566,1253,589,1209,618,1161,642,1111,660,1059,673,957,689,866,693"/>
-<area shape="poly" id="edge17_Node000003_Node000013" title=" " alt="" coords="864,659,915,640,963,612,1000,577,1031,536,1055,496,1072,466,1076,462,1060,499,1036,539,1004,581,966,617,917,645,865,664"/>
+<area shape="rect" id="Node000001" title="A launch screen balloon drifting about the screen, carrying a ribbon that says what it does on a spri..." alt="" coords="1248,337,1442,382"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="366,402,490,430"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="505,424,629,438,791,449,973,450,1065,445,1154,434,1195,425,1234,412,1301,383,1306,382,1236,417,1196,430,1155,440,1065,450,973,455,791,454,629,443,505,429"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Game_1_1LaunchBalloonView.html" title="A launch screen balloon drifting about the screen, carrying a ribbon that says what it does on a spri..." alt="" coords="960,269,1155,314"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="504,413,668,405,762,393,856,374,940,345,1011,315,1016,314,942,350,857,380,763,398,668,410,505,419"/>
+<area shape="rect" id="Node000009" href="$classBalloonParty_1_1UI_1_1ClothRibbon_1_1ClothRibbonWriting.html" title="Writes a line on both faces of a RibbonCloth&#39;s ribbon, each glyph corner carried on the cloth where i..." alt="" coords="650,320,856,365"/>
+<area shape="poly" id="edge12_Node000009_Node000002" title=" " alt="" coords="504,396,653,364,648,366,505,401"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1170,315,1250,337,1245,337,1170,321"/>
+<area shape="poly" id="edge4_Node000003_Node000003" title=" " alt="" coords="1033,251,1042,245,1057,243,1072,245,1082,251,1087,259,1085,270,1081,267,1082,260,1078,254,1070,250,1058,248,1044,250,1035,256"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1UI_1_1ClothRibbon_1_1SpringLineGraphic.html" title="Draws a RibbonCloth&#39;s line as a thin strip through its points." alt="" coords="650,71,856,115"/>
+<area shape="poly" id="edge20_Node000001_Node000004" title=" " alt="" coords="872,85,939,88,1012,98,1086,116,1156,144,1187,163,1216,187,1267,240,1307,293,1333,338,1329,336,1302,296,1263,243,1213,191,1184,168,1153,149,1085,121,1011,103,939,94,873,90"/>
+<area shape="poly" id="edge5_Node000003_Node000004" title=" " alt="" coords="843,119,858,125,912,158,963,196,1038,269,1033,268,959,200,909,162,855,130,844,124"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="361,83,494,111"/>
+<area shape="poly" id="edge6_Node000004_Node000005" title=" " alt="" coords="509,93,652,93,647,95,511,99"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1UI_1_1ClothRibbon_1_1ClothRibbonGraphic.html" title="Draws a RibbonCloth&#39;s ribbon: its three rows of points as a strip, notched at both ends,..." alt="" coords="650,140,856,185"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="509,111,652,141,647,143,510,116"/>
+<area shape="poly" id="edge21_Node000001_Node000006" title=" " alt="" coords="871,159,938,163,1011,173,1085,189,1156,213,1206,240,1253,273,1324,337,1319,336,1250,277,1203,245,1154,218,1083,194,1010,178,938,169,872,164"/>
+<area shape="poly" id="edge7_Node000003_Node000006" title=" " alt="" coords="845,187,937,223,1022,269,1017,269,935,227,845,193"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonCloth.html" title="A line hanging from an anchor with a ribbon of cloth tied to its end, simulated as points joined by s..." alt="" coords="325,140,531,185"/>
+<area shape="poly" id="edge9_Node000006_Node000007" title=" " alt="" coords="546,160,652,161,647,163,547,165"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonClothSettings.html" title="The spring line and cloth ribbon&#39;s shape and physics, in canvas units and seconds." alt="" coords="5,140,212,185"/>
+<area shape="poly" id="edge24_Node000001_Node000008" title=" " alt="" coords="149,129,202,94,270,59,346,31,386,23,426,20,1059,20,1089,22,1118,30,1145,43,1170,59,1215,100,1253,150,1284,203,1309,255,1339,338,1334,336,1304,257,1279,205,1249,153,1211,104,1167,63,1142,47,1116,35,1088,28,1059,25,427,25,387,28,347,36,272,63,205,99,153,132"/>
+<area shape="poly" id="edge15_Node000003_Node000008" title=" " alt="" coords="226,180,325,194,497,212,632,219,766,230,937,256,984,269,979,269,936,261,765,235,631,225,497,217,324,200,227,185"/>
+<area shape="poly" id="edge10_Node000007_Node000008" title=" " alt="" coords="226,160,327,161,322,164,228,165"/>
+<area shape="poly" id="edge22_Node000001_Node000009" title=" " alt="" coords="796,371,836,396,881,414,934,425,989,429,1044,428,1099,423,1199,403,1278,383,1283,382,1200,408,1099,428,1045,433,989,435,934,430,880,420,834,401,795,377"/>
+<area shape="poly" id="edge11_Node000003_Node000009" title=" " alt="" coords="871,320,962,307,957,308,872,325"/>
+<area shape="rect" id="Node000010" href="$classBalloonParty_1_1UI_1_1ClothRibbon_1_1ClothRibbonWriting_1_1Face.html" title=" " alt="" coords="325,316,531,361"/>
+<area shape="poly" id="edge13_Node000009_Node000010" title=" " alt="" coords="546,337,652,340,647,342,547,342"/>
+<area shape="rect" id="Node000011" href="$classBalloonParty_1_1Game_1_1BalloonWanderSettings.html" title="How a BalloonWander drifts, in canvas units and seconds." alt="" coords="10,467,207,511"/>
+<area shape="poly" id="edge23_Node000001_Node000011" title=" " alt="" coords="168,516,222,539,286,561,356,577,427,584,1059,584,1109,580,1147,567,1182,545,1222,512,1255,480,1285,444,1328,384,1332,381,1289,447,1259,484,1225,516,1185,550,1150,572,1110,585,1059,589,426,589,355,582,285,566,220,544,168,521"/>
+<area shape="poly" id="edge14_Node000003_Node000011" title=" " alt="" coords="134,453,168,415,212,372,265,332,324,301,377,287,447,278,620,272,804,275,962,285,957,286,804,280,620,277,448,284,378,293,326,306,268,336,216,376,172,419,138,457"/>
+<area shape="rect" id="Node000013" href="$classBalloonParty_1_1Game_1_1BalloonWander.html" title="A balloon drifting about an area on its own: it heads for one spot after another, picked at random am..." alt="" coords="329,467,526,511"/>
+<area shape="poly" id="edge18_Node000013_Node000011" title=" " alt="" coords="222,486,331,488,326,490,223,492"/>
+<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Game_1_1BalloonDrift.html" title="One launch balloon&#39;s motion, with nothing of the engine&#39;s in it: its body&#39;s centre wandering a room (..." alt="" coords="654,500,852,545"/>
+<area shape="poly" id="edge25_Node000001_Node000012" title=" " alt="" coords="867,538,950,543,1042,539,1089,532,1136,522,1180,506,1222,485,1255,462,1284,434,1326,384,1331,381,1288,438,1258,466,1225,490,1182,511,1137,527,1090,538,1043,544,950,548,867,543"/>
+<area shape="poly" id="edge16_Node000003_Node000012" title=" " alt="" coords="798,488,935,388,1027,315,1032,313,938,392,801,493"/>
+<area shape="poly" id="edge17_Node000012_Node000013" title=" " alt="" coords="542,498,657,512,651,512,542,503"/>
+<area shape="rect" id="Node000014" href="$structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html" title="A round area to stay out of, stretched upward into a capsule: every point within Radius of the segmen..." alt="" coords="5,237,212,282"/>
+<area shape="poly" id="edge19_Node000013_Node000014" title=" " alt="" coords="144,290,225,363,274,402,326,439,374,466,369,466,323,443,271,407,221,367,143,295"/>
 </map>

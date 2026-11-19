@@ -13,6 +13,7 @@ var namespaceBalloonParty_1_1Game =
     [ "Telemetry", "namespaceBalloonParty_1_1Game_1_1Telemetry.html", "namespaceBalloonParty_1_1Game_1_1Telemetry" ],
     [ "Upgrades", "namespaceBalloonParty_1_1Game_1_1Upgrades.html", "namespaceBalloonParty_1_1Game_1_1Upgrades" ],
     [ "AppLifetimeScope", "classBalloonParty_1_1Game_1_1AppLifetimeScope.html", "classBalloonParty_1_1Game_1_1AppLifetimeScope" ],
+    [ "BalloonDrift", "classBalloonParty_1_1Game_1_1BalloonDrift.html", "classBalloonParty_1_1Game_1_1BalloonDrift" ],
     [ "BalloonReach", "structBalloonParty_1_1Game_1_1BalloonReach.html", "structBalloonParty_1_1Game_1_1BalloonReach" ],
     [ "BalloonWander", "classBalloonParty_1_1Game_1_1BalloonWander.html", "classBalloonParty_1_1Game_1_1BalloonWander" ],
     [ "BalloonWanderSettings", "classBalloonParty_1_1Game_1_1BalloonWanderSettings.html", "classBalloonParty_1_1Game_1_1BalloonWanderSettings" ],

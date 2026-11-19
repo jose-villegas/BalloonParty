@@ -1,5 +1,6 @@
 var NAVTREEINDEX44 =
 {
+"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a56633d10adabd807d96626b1d565ff82":[6,0,0,3,10,0,24],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a599e71a7812782a6743b3047658b9521":[5,0,0,3,10,0,9],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a599e71a7812782a6743b3047658b9521":[6,0,0,3,10,0,9],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a66a515a3b35b5f0e94459112dd8c9bca":[5,0,0,3,10,0,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX44 =
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ab779baf137ca780db50ada2f7235b6fc":[6,0,0,3,27,17],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#abaaafe05a0f98b57cc6d71206210271b":[5,0,0,3,27,23],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#abaaafe05a0f98b57cc6d71206210271b":[6,0,0,3,27,23],
-"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ac2f59d9bb0ae0d60b22f038eb1eeb0b4":[5,0,0,3,27,49],
-"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ac2f59d9bb0ae0d60b22f038eb1eeb0b4":[6,0,0,3,27,49]
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ac2f59d9bb0ae0d60b22f038eb1eeb0b4":[5,0,0,3,27,49]
 };

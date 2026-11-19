@@ -110,36 +110,52 @@ $(function(){initNavTree('structBalloonParty_1_1Game_1_1BalloonReach.html',''); 
   <div class="summary">
 <a href="#pac-methods">Package Functions</a> &#124;
 <a href="#pac-attribs">Package Attributes</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="structBalloonParty_1_1Game_1_1BalloonReach-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Game.BalloonReach Struct Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>The room a drifting launch balloon takes up: its round body, and how far below the body's centre what hangs from it reaches when it hangs still.  
+<p>The room a drifting launch balloon takes up around its body's centre, and from that where the centre may be on a screen.  
  <a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:a661c233ea5b3796ff70dca13f5e8b4d2" id="r_a661c233ea5b3796ff70dca13f5e8b4d2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a661c233ea5b3796ff70dca13f5e8b4d2">BalloonReach</a> (Vector2 centre, float radius, float hang)</td></tr>
-<tr class="separator:a661c233ea5b3796ff70dca13f5e8b4d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac20c3c851f2fb4e4e992a745e5932d7d" id="r_ac20c3c851f2fb4e4e992a745e5932d7d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html">KeepOut</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac20c3c851f2fb4e4e992a745e5932d7d">KeepOutFor</a> (in <a class="el" href="structBalloonParty_1_1Game_1_1BalloonReach.html">BalloonReach</a> other, float gap)</td></tr>
-<tr class="memdesc:ac20c3c851f2fb4e4e992a745e5932d7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where the centre of <em>other</em>  may not be, to keep <em>gap</em>  between the two bodies with neither hanging its line and ribbon onto the other: below this one by less than this one's hang, or above it by less than its own.  <br /></td></tr>
-<tr class="separator:ac20c3c851f2fb4e4e992a745e5932d7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02befc34b2a1b1d1a4b0f2da77fc6d05" id="r_a02befc34b2a1b1d1a4b0f2da77fc6d05"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a02befc34b2a1b1d1a4b0f2da77fc6d05">BalloonReach</a> (float radius, float up, float down)</td></tr>
+<tr class="separator:a02befc34b2a1b1d1a4b0f2da77fc6d05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8fd3f6d27bd2eca9c600c2e470c0d95c" id="r_a8fd3f6d27bd2eca9c600c2e470c0d95c"><td class="memItemLeft" align="right" valign="top">Rect&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8fd3f6d27bd2eca9c600c2e470c0d95c">RoomAbove</a> (in <a class="el" href="structBalloonParty_1_1Game_1_1BalloonReach.html">BalloonReach</a> lower, Rect area, float clearance, float gap)</td></tr>
+<tr class="memdesc:a8fd3f6d27bd2eca9c600c2e470c0d95c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where the centre may be as the upper of two balloons, above <em>lower</em> .  <br /></td></tr>
+<tr class="separator:a8fd3f6d27bd2eca9c600c2e470c0d95c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8854b3fdbc11150e98ff1150e5cf283b" id="r_a8854b3fdbc11150e98ff1150e5cf283b"><td class="memItemLeft" align="right" valign="top">Rect&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8854b3fdbc11150e98ff1150e5cf283b">RoomAlone</a> (Rect area, float clearance)</td></tr>
+<tr class="memdesc:a8854b3fdbc11150e98ff1150e5cf283b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where the centre may be with the screen to itself, <em>clearance</em>  from its edges.  <br /></td></tr>
+<tr class="separator:a8854b3fdbc11150e98ff1150e5cf283b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c7a1e711701796d0109fe603011e6db" id="r_a6c7a1e711701796d0109fe603011e6db"><td class="memItemLeft" align="right" valign="top">Rect&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6c7a1e711701796d0109fe603011e6db">RoomBelow</a> (in <a class="el" href="structBalloonParty_1_1Game_1_1BalloonReach.html">BalloonReach</a> upper, Rect area, float clearance, float gap)</td></tr>
+<tr class="memdesc:a6c7a1e711701796d0109fe603011e6db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where the centre may be as the lower of two balloons, below <em>upper</em> .  <br /></td></tr>
+<tr class="separator:a6c7a1e711701796d0109fe603011e6db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-attribs" name="pac-attribs"></a>
 Package Attributes</h2></td></tr>
-<tr class="memitem:ac17e2a442e56287a829c5575baa1ecca" id="r_ac17e2a442e56287a829c5575baa1ecca"><td class="memItemLeft" align="right" valign="top">readonly Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac17e2a442e56287a829c5575baa1ecca">Centre</a></td></tr>
-<tr class="separator:ac17e2a442e56287a829c5575baa1ecca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc4790f9ab35d265166005188b7eaccc" id="r_acc4790f9ab35d265166005188b7eaccc"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acc4790f9ab35d265166005188b7eaccc">Hang</a></td></tr>
-<tr class="separator:acc4790f9ab35d265166005188b7eaccc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad850e2e6b122155c4daaf33247a056d4" id="r_ad850e2e6b122155c4daaf33247a056d4"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad850e2e6b122155c4daaf33247a056d4">Down</a></td></tr>
+<tr class="memdesc:ad850e2e6b122155c4daaf33247a056d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">From the centre down to the bottom of the ribbon hanging below it, at the bottom of its bob.  <br /></td></tr>
+<tr class="separator:ad850e2e6b122155c4daaf33247a056d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ce01e787f3d26beef22c62f6edab91b" id="r_a1ce01e787f3d26beef22c62f6edab91b"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ce01e787f3d26beef22c62f6edab91b">Radius</a></td></tr>
+<tr class="memdesc:a1ce01e787f3d26beef22c62f6edab91b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The body's radius.  <br /></td></tr>
 <tr class="separator:a1ce01e787f3d26beef22c62f6edab91b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a742801cfcb13c0b7460f6a821db5973a" id="r_a742801cfcb13c0b7460f6a821db5973a"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a742801cfcb13c0b7460f6a821db5973a">Up</a></td></tr>
+<tr class="memdesc:a742801cfcb13c0b7460f6a821db5973a"><td class="mdescLeft">&#160;</td><td class="mdescRight">From the centre up to the top of the body at the top of its bob.  <br /></td></tr>
+<tr class="separator:a742801cfcb13c0b7460f6a821db5973a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:a6e79be95ab3bb89e583f161e272363b1" id="r_a6e79be95ab3bb89e583f161e272363b1"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6e79be95ab3bb89e583f161e272363b1">Travel</a> (in <a class="el" href="structBalloonParty_1_1Game_1_1BalloonReach.html">BalloonReach</a> upper, in <a class="el" href="structBalloonParty_1_1Game_1_1BalloonReach.html">BalloonReach</a> lower, Rect area, float clearance, float gap)</td></tr>
+<tr class="separator:a6e79be95ab3bb89e583f161e272363b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The room a drifting launch balloon takes up: its round body, and how far below the body's centre what hangs from it reaches when it hangs still. </p>
+<div class="textblock"><p>The room a drifting launch balloon takes up around its body's centre, and from that where the centre may be on a screen. </p>
+<p>Alone it has the whole screen. Two balloons share it one above the other (<a class="el" href="#a8fd3f6d27bd2eca9c600c2e470c0d95c" title="Where the centre may be as the upper of two balloons, above lower .">RoomAbove</a>, <a class="el" href="#a6c7a1e711701796d0109fe603011e6db" title="Where the centre may be as the lower of two balloons, below upper .">RoomBelow</a>): everything of the upper one, down to the bottom of its ribbon, stays a gap above everything of the lower one wherever each is in its room. A ribbon streams further sideways than a phone is wide enough to keep two apart, but hangs no lower than at rest, so apart in height is the one arrangement in which neither can cover the other's. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a661c233ea5b3796ff70dca13f5e8b4d2" name="a661c233ea5b3796ff70dca13f5e8b4d2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a661c233ea5b3796ff70dca13f5e8b4d2">&#9670;&#160;</a></span>BalloonReach()</h2>
+<a id="a02befc34b2a1b1d1a4b0f2da77fc6d05" name="a02befc34b2a1b1d1a4b0f2da77fc6d05"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02befc34b2a1b1d1a4b0f2da77fc6d05">&#9670;&#160;</a></span>BalloonReach()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -150,17 +166,17 @@ Package Attributes</h2></td></tr>
         <tr>
           <td class="memname">BalloonParty.Game.BalloonReach.BalloonReach </td>
           <td>(</td>
-          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>centre</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>radius</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>hang</em></span>&#160;)</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>up</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>down</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -173,8 +189,8 @@ Package Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ac20c3c851f2fb4e4e992a745e5932d7d" name="ac20c3c851f2fb4e4e992a745e5932d7d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac20c3c851f2fb4e4e992a745e5932d7d">&#9670;&#160;</a></span>KeepOutFor()</h2>
+<a id="a8fd3f6d27bd2eca9c600c2e470c0d95c" name="a8fd3f6d27bd2eca9c600c2e470c0d95c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8fd3f6d27bd2eca9c600c2e470c0d95c">&#9670;&#160;</a></span>RoomAbove()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -183,9 +199,19 @@ Package Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html">KeepOut</a> BalloonParty.Game.BalloonReach.KeepOutFor </td>
+          <td class="memname">Rect BalloonParty.Game.BalloonReach.RoomAbove </td>
           <td>(</td>
-          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Game_1_1BalloonReach.html">BalloonReach</a></td>          <td class="paramname"><span class="paramname"><em>other</em></span>, </td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Game_1_1BalloonReach.html">BalloonReach</a></td>          <td class="paramname"><span class="paramname"><em>lower</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rect</td>          <td class="paramname"><span class="paramname"><em>area</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>clearance</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -200,14 +226,129 @@ Package Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Where the centre of <em>other</em>  may not be, to keep <em>gap</em>  between the two bodies with neither hanging its line and ribbon onto the other: below this one by less than this one's hang, or above it by less than its own. </p>
-<p>The two balloons' keep-outs of each other say the same thing, so neither can push the other about. </p>
+<p>Where the centre may be as the upper of two balloons, above <em>lower</em> . </p>
+
+</div>
+</div>
+<a id="a8854b3fdbc11150e98ff1150e5cf283b" name="a8854b3fdbc11150e98ff1150e5cf283b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8854b3fdbc11150e98ff1150e5cf283b">&#9670;&#160;</a></span>RoomAlone()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Rect BalloonParty.Game.BalloonReach.RoomAlone </td>
+          <td>(</td>
+          <td class="paramtype">Rect</td>          <td class="paramname"><span class="paramname"><em>area</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>clearance</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Where the centre may be with the screen to itself, <em>clearance</em>  from its edges. </p>
+
+</div>
+</div>
+<a id="a6c7a1e711701796d0109fe603011e6db" name="a6c7a1e711701796d0109fe603011e6db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c7a1e711701796d0109fe603011e6db">&#9670;&#160;</a></span>RoomBelow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Rect BalloonParty.Game.BalloonReach.RoomBelow </td>
+          <td>(</td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Game_1_1BalloonReach.html">BalloonReach</a></td>          <td class="paramname"><span class="paramname"><em>upper</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rect</td>          <td class="paramname"><span class="paramname"><em>area</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>clearance</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>gap</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Where the centre may be as the lower of two balloons, below <em>upper</em> . </p>
+
+</div>
+</div>
+<a id="a6e79be95ab3bb89e583f161e272363b1" name="a6e79be95ab3bb89e583f161e272363b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e79be95ab3bb89e583f161e272363b1">&#9670;&#160;</a></span>Travel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static float BalloonParty.Game.BalloonReach.Travel </td>
+          <td>(</td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Game_1_1BalloonReach.html">BalloonReach</a></td>          <td class="paramname"><span class="paramname"><em>upper</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Game_1_1BalloonReach.html">BalloonReach</a></td>          <td class="paramname"><span class="paramname"><em>lower</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rect</td>          <td class="paramname"><span class="paramname"><em>area</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>clearance</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>gap</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="ac17e2a442e56287a829c5575baa1ecca" name="ac17e2a442e56287a829c5575baa1ecca"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac17e2a442e56287a829c5575baa1ecca">&#9670;&#160;</a></span>Centre</h2>
+<a id="ad850e2e6b122155c4daaf33247a056d4" name="ad850e2e6b122155c4daaf33247a056d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad850e2e6b122155c4daaf33247a056d4">&#9670;&#160;</a></span>Down</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -216,7 +357,7 @@ Package Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">readonly Vector2 BalloonParty.Game.BalloonReach.Centre</td>
+          <td class="memname">readonly float BalloonParty.Game.BalloonReach.Down</td>
         </tr>
       </table>
   </td>
@@ -226,27 +367,7 @@ Package Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-</div>
-</div>
-<a id="acc4790f9ab35d265166005188b7eaccc" name="acc4790f9ab35d265166005188b7eaccc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acc4790f9ab35d265166005188b7eaccc">&#9670;&#160;</a></span>Hang</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">readonly float BalloonParty.Game.BalloonReach.Hang</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
+<p>From the centre down to the bottom of the ribbon hanging below it, at the bottom of its bob. </p>
 
 </div>
 </div>
@@ -269,6 +390,32 @@ Package Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>The body's radius. </p>
+
+</div>
+</div>
+<a id="a742801cfcb13c0b7460f6a821db5973a" name="a742801cfcb13c0b7460f6a821db5973a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a742801cfcb13c0b7460f6a821db5973a">&#9670;&#160;</a></span>Up</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly float BalloonParty.Game.BalloonReach.Up</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>From the centre up to the top of the body at the top of its bob. </p>
 
 </div>
 </div>

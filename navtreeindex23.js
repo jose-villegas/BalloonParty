@@ -1,5 +1,6 @@
 var NAVTREEINDEX23 =
 {
+"classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#ac2c4b70e49fe2800d4f1206eb552fc6e":[6,0,0,1,5,7,67],
 "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#ac546560e3b920f842e1bf48485321b51":[5,0,0,1,5,7,3],
 "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#ac546560e3b920f842e1bf48485321b51":[6,0,0,1,5,7,3],
 "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#ac731d1d785edd73df7b2ab526373dfc2":[5,0,0,1,5,7,16],
@@ -248,6 +249,5 @@ var NAVTREEINDEX23 =
 "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a40a19dd2ca860138eb7032210f4337a2":[6,0,0,1,5,11,26],
 "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a44f865cb2d3208cf82a263ff85848564":[5,0,0,1,5,11,15],
 "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a44f865cb2d3208cf82a263ff85848564":[6,0,0,1,5,11,15],
-"classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a4cfa7309409d4295a7298f69ed2f6cee":[5,0,0,1,5,11,11],
-"classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a4cfa7309409d4295a7298f69ed2f6cee":[6,0,0,1,5,11,11]
+"classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a4cfa7309409d4295a7298f69ed2f6cee":[5,0,0,1,5,11,11]
 };

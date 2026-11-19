@@ -22,7 +22,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="A launch screen balloon drifting about the screen (BalloonWander), carrying a ribbon that says what i...">
+<g id="a_Node000001"><a xlink:title="A launch screen balloon drifting about the screen, carrying a ribbon that says what it does on a spri...">
 <polygon fill="#999999" stroke="#666666" points="145.75,-33.5 0,-33.5 0,0 145.75,0 145.75,-33.5"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Game.Launch</text>
 <text xml:space="preserve" text-anchor="middle" x="72.88" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonView</text>

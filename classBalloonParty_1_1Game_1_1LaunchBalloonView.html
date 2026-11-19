@@ -109,6 +109,7 @@ $(function(){initNavTree('classBalloonParty_1_1Game_1_1LaunchBalloonView.html','
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
+<a href="#pac-methods">Package Functions</a> &#124;
 <a href="#properties">Properties</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
@@ -118,7 +119,7 @@ $(function(){initNavTree('classBalloonParty_1_1Game_1_1LaunchBalloonView.html','
 </div><!--header-->
 <div class="contents">
 
-<p>A launch screen balloon drifting about the screen (<a class="el" href="classBalloonParty_1_1Game_1_1BalloonWander.html" title="A balloon drifting about an area on its own: it heads for one spot after another, picked at random am...">BalloonWander</a>), carrying a ribbon that says what it does on a spring line (<a class="el" href="classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonCloth.html" title="A line hanging from an anchor with a ribbon of cloth tied to its end, simulated as points joined by s...">RibbonCloth</a>).  
+<p>A launch screen balloon drifting about the screen, carrying a ribbon that says what it does on a spring line (<a class="el" href="classBalloonParty_1_1Game_1_1BalloonDrift.html" title="One launch balloon&#39;s motion, with nothing of the engine&#39;s in it: its body&#39;s centre wandering a room (...">BalloonDrift</a>).  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Game.LaunchBalloonView:</div>
@@ -140,14 +141,25 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Game_1_1LaunchBalloonView_1_1LitMaterial.html">LitMaterial</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
+Package Functions</h2></td></tr>
+<tr class="memitem:af30edbfc3baaaa6e899c4c4fa212a767" id="r_af30edbfc3baaaa6e899c4c4fa212a767"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Game_1_1BalloonDrift.html">BalloonDrift</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af30edbfc3baaaa6e899c4c4fa212a767">NewDrift</a> (Rect area, int seed)</td></tr>
+<tr class="memdesc:af30edbfc3baaaa6e899c4c4fa212a767"><td class="mdescLeft">&#160;</td><td class="mdescRight">This balloon's drift on a screen of <em>area</em> , from its own settings and, if the other balloon shows, the part of the screen that leaves it.  <br /></td></tr>
+<tr class="separator:af30edbfc3baaaa6e899c4c4fa212a767"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
 <tr class="memitem:a028d7b5b725b01dbb3d2961ee76b1c01" id="r_a028d7b5b725b01dbb3d2961ee76b1c01"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a028d7b5b725b01dbb3d2961ee76b1c01">Hang</a><code> [get]</code></td></tr>
 <tr class="separator:a028d7b5b725b01dbb3d2961ee76b1c01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abce06f9b47c5e804e19d874ede7e6fed" id="r_abce06f9b47c5e804e19d874ede7e6fed"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abce06f9b47c5e804e19d874ede7e6fed">KnotFromCentre</a><code> [get]</code></td></tr>
+<tr class="memdesc:abce06f9b47c5e804e19d874ede7e6fed"><td class="mdescLeft">&#160;</td><td class="mdescRight">From the body's centre to where the line is tied on, in canvas units.  <br /></td></tr>
+<tr class="separator:abce06f9b47c5e804e19d874ede7e6fed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a425bdf43999b5995ccf437110bab1cf7" id="r_a425bdf43999b5995ccf437110bab1cf7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a425bdf43999b5995ccf437110bab1cf7">OtherShows</a><code> [get]</code></td></tr>
+<tr class="separator:a425bdf43999b5995ccf437110bab1cf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb25c40e8e38c0984e8c19c22c8c5e5e" id="r_aeb25c40e8e38c0984e8c19c22c8c5e5e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeb25c40e8e38c0984e8c19c22c8c5e5e">Radius</a><code> [get]</code></td></tr>
 <tr class="separator:aeb25c40e8e38c0984e8c19c22c8c5e5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2bbf80c85355f23003a4ef5adae0da2" id="r_ab2bbf80c85355f23003a4ef5adae0da2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1Game_1_1BalloonReach.html">BalloonReach</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab2bbf80c85355f23003a4ef5adae0da2">Reach</a><code> [get]</code></td></tr>
-<tr class="memdesc:ab2bbf80c85355f23003a4ef5adae0da2"><td class="mdescLeft">&#160;</td><td class="mdescRight">The room this balloon takes up now, in the launch canvas's space; where it will start, before it has.  <br /></td></tr>
+<tr class="memdesc:ab2bbf80c85355f23003a4ef5adae0da2"><td class="mdescLeft">&#160;</td><td class="mdescRight">The room this balloon takes up around its body's centre, in canvas units.  <br /></td></tr>
 <tr class="separator:ab2bbf80c85355f23003a4ef5adae0da2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf8318ef9e1fbe5a4c8cf5e8305068a5" id="r_adf8318ef9e1fbe5a4c8cf5e8305068a5"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adf8318ef9e1fbe5a4c8cf5e8305068a5">Scale</a><code> [get]</code></td></tr>
 <tr class="separator:adf8318ef9e1fbe5a4c8cf5e8305068a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -162,29 +174,25 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a8f333385401c67cb6da541e9f0dd3010"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3fbd1d20bccac1a29c5a69009fa689dd" id="r_a3fbd1d20bccac1a29c5a69009fa689dd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3fbd1d20bccac1a29c5a69009fa689dd">Draw</a> ()</td></tr>
 <tr class="separator:a3fbd1d20bccac1a29c5a69009fa689dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af49e5a29144d8e3eb94dff48b27df9dc" id="r_af49e5a29144d8e3eb94dff48b27df9dc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html">KeepOut</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af49e5a29144d8e3eb94dff48b27df9dc">KeepOutOfOther</a> ()</td></tr>
-<tr class="separator:af49e5a29144d8e3eb94dff48b27df9dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7af13dc737d51d287065c94b6a192a3c" id="r_a7af13dc737d51d287065c94b6a192a3c"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7af13dc737d51d287065c94b6a192a3c">Knot</a> ()</td></tr>
-<tr class="separator:a7af13dc737d51d287065c94b6a192a3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac27f9f1692b03795af1f08d03950a25e" id="r_ac27f9f1692b03795af1f08d03950a25e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac27f9f1692b03795af1f08d03950a25e">OnDestroy</a> ()</td></tr>
 <tr class="separator:ac27f9f1692b03795af1f08d03950a25e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a882879ef5b08eef389a54aa43a6e4d59" id="r_a882879ef5b08eef389a54aa43a6e4d59"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a882879ef5b08eef389a54aa43a6e4d59">OnEnable</a> ()</td></tr>
 <tr class="separator:a882879ef5b08eef389a54aa43a6e4d59"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace69ac8d183ce9007a19767dc7820672" id="r_ace69ac8d183ce9007a19767dc7820672"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace69ac8d183ce9007a19767dc7820672">PlaceBalloon</a> ()</td></tr>
 <tr class="separator:ace69ac8d183ce9007a19767dc7820672"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab33c15108e71392ca14cede1104d62cc" id="r_ab33c15108e71392ca14cede1104d62cc"><td class="memItemLeft" align="right" valign="top">Rect&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab33c15108e71392ca14cede1104d62cc">Room</a> ()</td></tr>
-<tr class="separator:ab33c15108e71392ca14cede1104d62cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af93ad5a07c66095a63175e0ddde48260" id="r_af93ad5a07c66095a63175e0ddde48260"><td class="memItemLeft" align="right" valign="top">Rect&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af93ad5a07c66095a63175e0ddde48260">Room</a> (Rect area)</td></tr>
+<tr class="separator:af93ad5a07c66095a63175e0ddde48260"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af1f0acd3ba84e9c5671f8380eee16a16" id="r_af1f0acd3ba84e9c5671f8380eee16a16"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af1f0acd3ba84e9c5671f8380eee16a16">StartIn</a> (Rect room)</td></tr>
 <tr class="separator:af1f0acd3ba84e9c5671f8380eee16a16"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02314bf29134e1d5829ba1e844ddff85" id="r_a02314bf29134e1d5829ba1e844ddff85"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a02314bf29134e1d5829ba1e844ddff85">Tick</a> (float deltaTime)</td></tr>
 <tr class="separator:a02314bf29134e1d5829ba1e844ddff85"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0abde86d4706de931ea4ed05f14c5ec8" id="r_a0abde86d4706de931ea4ed05f14c5ec8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0abde86d4706de931ea4ed05f14c5ec8">TryGetOther</a> (out <a class="el" href="structBalloonParty_1_1Game_1_1BalloonReach.html">BalloonReach</a> reach)</td></tr>
-<tr class="separator:a0abde86d4706de931ea4ed05f14c5ec8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa10c38510482d07eb357ffddf0b42bf3" id="r_aa10c38510482d07eb357ffddf0b42bf3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa10c38510482d07eb357ffddf0b42bf3">Update</a> ()</td></tr>
 <tr class="separator:aa10c38510482d07eb357ffddf0b42bf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:aa6b6001c8550609993880cd08b06f91d" id="r_aa6b6001c8550609993880cd08b06f91d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa6b6001c8550609993880cd08b06f91d">_above</a></td></tr>
+<tr class="separator:aa6b6001c8550609993880cd08b06f91d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a529a2f51daaef43aee66b2eb32699de4" id="r_a529a2f51daaef43aee66b2eb32699de4"><td class="memItemLeft" align="right" valign="top">Rect&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a529a2f51daaef43aee66b2eb32699de4">_area</a></td></tr>
 <tr class="separator:a529a2f51daaef43aee66b2eb32699de4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d80aa88ae025067568b9ab98bbe5ea0" id="r_a4d80aa88ae025067568b9ab98bbe5ea0"><td class="memItemLeft" align="right" valign="top">RectTransform&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4d80aa88ae025067568b9ab98bbe5ea0">_balloon</a></td></tr>
@@ -201,6 +209,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a07bce01e85ca4b24c26c6be6b80edc43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6406dd1608171b3b8380a42d334b7cb0" id="r_a6406dd1608171b3b8380a42d334b7cb0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonClothSettings.html">RibbonClothSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6406dd1608171b3b8380a42d334b7cb0">_cloth</a> = new()</td></tr>
 <tr class="separator:a6406dd1608171b3b8380a42d334b7cb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa262afa494e57b012695157c2b4bc4f8" id="r_aa262afa494e57b012695157c2b4bc4f8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Game_1_1BalloonDrift.html">BalloonDrift</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa262afa494e57b012695157c2b4bc4f8">_drift</a></td></tr>
+<tr class="separator:aa262afa494e57b012695157c2b4bc4f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acbb52b794f1df8d3d73d97f9103bab0f" id="r_acbb52b794f1df8d3d73d97f9103bab0f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acbb52b794f1df8d3d73d97f9103bab0f">_gap</a> = 16f</td></tr>
 <tr class="separator:acbb52b794f1df8d3d73d97f9103bab0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a24fd02d16aa0e0a546b32581b619a201" id="r_a24fd02d16aa0e0a546b32581b619a201"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a24fd02d16aa0e0a546b32581b619a201">_knot</a> = new(0f, -56f)</td></tr>
@@ -209,20 +219,16 @@ Private Attributes</h2></td></tr>
 <tr class="separator:aae6d9ca107febc962e2d97cda89444f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abefd06edd5e2ea177a4dde0b32e80cb4" id="r_abefd06edd5e2ea177a4dde0b32e80cb4"><td class="memItemLeft" align="right" valign="top">readonly List&lt; <a class="el" href="structBalloonParty_1_1Game_1_1LaunchBalloonView_1_1LitMaterial.html">LitMaterial</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abefd06edd5e2ea177a4dde0b32e80cb4">_lit</a> = new()</td></tr>
 <tr class="separator:abefd06edd5e2ea177a4dde0b32e80cb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4b989ac30e5db4c3ba42d9467d9e7c05" id="r_a4b989ac30e5db4c3ba42d9467d9e7c05"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html">KeepOut</a>[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4b989ac30e5db4c3ba42d9467d9e7c05">_obstacles</a> = new <a class="el" href="structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html">KeepOut</a>[1]</td></tr>
-<tr class="separator:a4b989ac30e5db4c3ba42d9467d9e7c05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a105c75e82487f79475cec4319a017d9b" id="r_a105c75e82487f79475cec4319a017d9b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Game_1_1LaunchBalloonView.html">LaunchBalloonView</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a105c75e82487f79475cec4319a017d9b">_other</a></td></tr>
 <tr class="separator:a105c75e82487f79475cec4319a017d9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a260253441f939949237c65c4d8154aad" id="r_a260253441f939949237c65c4d8154aad"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1UI_1_1ClothRibbon_1_1ClothRibbonGraphic.html">ClothRibbonGraphic</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a260253441f939949237c65c4d8154aad">_ribbon</a></td></tr>
 <tr class="separator:a260253441f939949237c65c4d8154aad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a86bc900bd2529c1b695fff3c4439cd7d" id="r_a86bc900bd2529c1b695fff3c4439cd7d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonCloth.html">RibbonCloth</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a86bc900bd2529c1b695fff3c4439cd7d">_ribbonCloth</a></td></tr>
-<tr class="separator:a86bc900bd2529c1b695fff3c4439cd7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abdb318ebf128d1ea1f0ca0e3f0234ccd" id="r_abdb318ebf128d1ea1f0ca0e3f0234ccd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abdb318ebf128d1ea1f0ca0e3f0234ccd">_sharing</a></td></tr>
+<tr class="separator:abdb318ebf128d1ea1f0ca0e3f0234ccd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00ff245b1581a6283a8cece72cd7f1c7" id="r_a00ff245b1581a6283a8cece72cd7f1c7"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a00ff245b1581a6283a8cece72cd7f1c7">_start</a> = new(0.62f, 0.16f)</td></tr>
 <tr class="separator:a00ff245b1581a6283a8cece72cd7f1c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a368f20bcfa50f11c63ed157aad66a4ac" id="r_a368f20bcfa50f11c63ed157aad66a4ac"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Game_1_1BalloonWanderSettings.html">BalloonWanderSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a368f20bcfa50f11c63ed157aad66a4ac">_wander</a> = new()</td></tr>
 <tr class="separator:a368f20bcfa50f11c63ed157aad66a4ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6a81098040e8d8ded59c61aac5fbc6e9" id="r_a6a81098040e8d8ded59c61aac5fbc6e9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Game_1_1BalloonWander.html">BalloonWander</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6a81098040e8d8ded59c61aac5fbc6e9">_wanderer</a></td></tr>
-<tr class="separator:a6a81098040e8d8ded59c61aac5fbc6e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a54d338f1e1aac5925f612d1cfb9edd1c" id="r_a54d338f1e1aac5925f612d1cfb9edd1c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1UI_1_1ClothRibbon_1_1ClothRibbonWriting.html">ClothRibbonWriting</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a54d338f1e1aac5925f612d1cfb9edd1c">_writing</a></td></tr>
 <tr class="separator:a54d338f1e1aac5925f612d1cfb9edd1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -232,8 +238,8 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:aeb324e2f31b3e219cc9fe08b9adf8a30"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>A launch screen balloon drifting about the screen (<a class="el" href="classBalloonParty_1_1Game_1_1BalloonWander.html" title="A balloon drifting about an area on its own: it heads for one spot after another, picked at random am...">BalloonWander</a>), carrying a ribbon that says what it does on a spring line (<a class="el" href="classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonCloth.html" title="A line hanging from an anchor with a ribbon of cloth tied to its end, simulated as points joined by s...">RibbonCloth</a>). </p>
-<p>Play and Continue each have one; each keeps clear of the other while it shows, with room for what hangs from either (<a class="el" href="structBalloonParty_1_1Game_1_1BalloonReach.html" title="The room a drifting launch balloon takes up: its round body, and how far below the body&#39;s centre what...">BalloonReach</a>), and each one's line and ribbon are pushed off the other's balloon if they swing into it. Sits stretched over the launch canvas, centred on it, so its own space is the canvas's and the two balloons share it; the line, ribbon and writing sit at its centre. The balloon it moves is a child or a sibling: Play's is the Play button itself, where the launch canvas has it. </p>
+<div class="textblock"><p>A launch screen balloon drifting about the screen, carrying a ribbon that says what it does on a spring line (<a class="el" href="classBalloonParty_1_1Game_1_1BalloonDrift.html" title="One launch balloon&#39;s motion, with nothing of the engine&#39;s in it: its body&#39;s centre wandering a room (...">BalloonDrift</a>). </p>
+<p>Play and Continue each have one. Alone, a balloon has the whole screen; while both show they share it one above the other (<a class="el" href="structBalloonParty_1_1Game_1_1BalloonReach.html" title="The room a drifting launch balloon takes up around its body&#39;s centre, and from that where the centre ...">BalloonReach</a>), a gap between everything of the upper one and everything of the lower, so neither balloon nor its ribbon can cover the other's ribbon wherever the two drift and however their ribbons swing. Sits stretched over the launch canvas, centred on it, so its own space is the canvas's and the two balloons share it; the line, ribbon and writing sit at its centre. The balloon it moves is a child or a sibling: Play's is the Play button itself, where the launch canvas has it. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a2f0d8ff51bbc99ad6040c179820f24b5" name="a2f0d8ff51bbc99ad6040c179820f24b5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2f0d8ff51bbc99ad6040c179820f24b5">&#9670;&#160;</a></span>Awake()</h2>
@@ -335,8 +341,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="af49e5a29144d8e3eb94dff48b27df9dc" name="af49e5a29144d8e3eb94dff48b27df9dc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af49e5a29144d8e3eb94dff48b27df9dc">&#9670;&#160;</a></span>KeepOutOfOther()</h2>
+<a id="af30edbfc3baaaa6e899c4c4fa212a767" name="af30edbfc3baaaa6e899c4c4fa212a767"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af30edbfc3baaaa6e899c4c4fa212a767">&#9670;&#160;</a></span>NewDrift()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -345,43 +351,25 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html">KeepOut</a> BalloonParty.Game.LaunchBalloonView.KeepOutOfOther </td>
+          <td class="memname"><a class="el" href="classBalloonParty_1_1Game_1_1BalloonDrift.html">BalloonDrift</a> BalloonParty.Game.LaunchBalloonView.NewDrift </td>
           <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
+          <td class="paramtype">Rect</td>          <td class="paramname"><span class="paramname"><em>area</em></span>, </td>
         </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a7af13dc737d51d287065c94b6a192a3c" name="a7af13dc737d51d287065c94b6a192a3c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7af13dc737d51d287065c94b6a192a3c">&#9670;&#160;</a></span>Knot()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
         <tr>
-          <td class="memname">Vector3 BalloonParty.Game.LaunchBalloonView.Knot </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>seed</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>This balloon's drift on a screen of <em>area</em> , from its own settings and, if the other balloon shows, the part of the screen that leaves it. </p>
+<p>What <a class="el" href="#a6c51652ca08f09d8455822e6fc10d6d5">Begin</a> starts; tests run the launch screen's own numbers through it at any screen shape. </p>
 
 </div>
 </div>
@@ -460,8 +448,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ab33c15108e71392ca14cede1104d62cc" name="ab33c15108e71392ca14cede1104d62cc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab33c15108e71392ca14cede1104d62cc">&#9670;&#160;</a></span>Room()</h2>
+<a id="af93ad5a07c66095a63175e0ddde48260" name="af93ad5a07c66095a63175e0ddde48260"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af93ad5a07c66095a63175e0ddde48260">&#9670;&#160;</a></span>Room()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -472,7 +460,7 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">Rect BalloonParty.Game.LaunchBalloonView.Room </td>
           <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td class="paramtype">Rect</td>          <td class="paramname"><span class="paramname"><em>area</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -535,31 +523,6 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a0abde86d4706de931ea4ed05f14c5ec8" name="a0abde86d4706de931ea4ed05f14c5ec8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0abde86d4706de931ea4ed05f14c5ec8">&#9670;&#160;</a></span>TryGetOther()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool BalloonParty.Game.LaunchBalloonView.TryGetOther </td>
-          <td>(</td>
-          <td class="paramtype">out <a class="el" href="structBalloonParty_1_1Game_1_1BalloonReach.html">BalloonReach</a></td>          <td class="paramname"><span class="paramname"><em>reach</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="aa10c38510482d07eb357ffddf0b42bf3" name="aa10c38510482d07eb357ffddf0b42bf3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa10c38510482d07eb357ffddf0b42bf3">&#9670;&#160;</a></span>Update()</h2>
 
@@ -586,6 +549,28 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="aa6b6001c8550609993880cd08b06f91d" name="aa6b6001c8550609993880cd08b06f91d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6b6001c8550609993880cd08b06f91d">&#9670;&#160;</a></span>_above</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Game.LaunchBalloonView._above</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a529a2f51daaef43aee66b2eb32699de4" name="a529a2f51daaef43aee66b2eb32699de4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a529a2f51daaef43aee66b2eb32699de4">&#9670;&#160;</a></span>_area</h2>
 
@@ -762,6 +747,28 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="aa262afa494e57b012695157c2b4bc4f8" name="aa262afa494e57b012695157c2b4bc4f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa262afa494e57b012695157c2b4bc4f8">&#9670;&#160;</a></span>_drift</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classBalloonParty_1_1Game_1_1BalloonDrift.html">BalloonDrift</a> BalloonParty.Game.LaunchBalloonView._drift</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="acbb52b794f1df8d3d73d97f9103bab0f" name="acbb52b794f1df8d3d73d97f9103bab0f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acbb52b794f1df8d3d73d97f9103bab0f">&#9670;&#160;</a></span>_gap</h2>
 
@@ -850,28 +857,6 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a4b989ac30e5db4c3ba42d9467d9e7c05" name="a4b989ac30e5db4c3ba42d9467d9e7c05"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4b989ac30e5db4c3ba42d9467d9e7c05">&#9670;&#160;</a></span>_obstacles</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">readonly <a class="el" href="structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html">KeepOut</a> [] BalloonParty.Game.LaunchBalloonView._obstacles = new <a class="el" href="structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html">KeepOut</a>[1]</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a105c75e82487f79475cec4319a017d9b" name="a105c75e82487f79475cec4319a017d9b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a105c75e82487f79475cec4319a017d9b">&#9670;&#160;</a></span>_other</h2>
 
@@ -916,8 +901,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a86bc900bd2529c1b695fff3c4439cd7d" name="a86bc900bd2529c1b695fff3c4439cd7d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a86bc900bd2529c1b695fff3c4439cd7d">&#9670;&#160;</a></span>_ribbonCloth</h2>
+<a id="abdb318ebf128d1ea1f0ca0e3f0234ccd" name="abdb318ebf128d1ea1f0ca0e3f0234ccd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abdb318ebf128d1ea1f0ca0e3f0234ccd">&#9670;&#160;</a></span>_sharing</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -926,7 +911,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonCloth.html">RibbonCloth</a> BalloonParty.Game.LaunchBalloonView._ribbonCloth</td>
+          <td class="memname">bool BalloonParty.Game.LaunchBalloonView._sharing</td>
         </tr>
       </table>
   </td>
@@ -971,28 +956,6 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classBalloonParty_1_1Game_1_1BalloonWanderSettings.html">BalloonWanderSettings</a> BalloonParty.Game.LaunchBalloonView._wander = new()</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a6a81098040e8d8ded59c61aac5fbc6e9" name="a6a81098040e8d8ded59c61aac5fbc6e9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6a81098040e8d8ded59c61aac5fbc6e9">&#9670;&#160;</a></span>_wanderer</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classBalloonParty_1_1Game_1_1BalloonWander.html">BalloonWander</a> BalloonParty.Game.LaunchBalloonView._wanderer</td>
         </tr>
       </table>
   </td>
@@ -1071,6 +1034,52 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="abce06f9b47c5e804e19d874ede7e6fed" name="abce06f9b47c5e804e19d874ede7e6fed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abce06f9b47c5e804e19d874ede7e6fed">&#9670;&#160;</a></span>KnotFromCentre</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector2 BalloonParty.Game.LaunchBalloonView.KnotFromCentre</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>From the body's centre to where the line is tied on, in canvas units. </p>
+
+</div>
+</div>
+<a id="a425bdf43999b5995ccf437110bab1cf7" name="a425bdf43999b5995ccf437110bab1cf7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a425bdf43999b5995ccf437110bab1cf7">&#9670;&#160;</a></span>OtherShows</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Game.LaunchBalloonView.OtherShows</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aeb25c40e8e38c0984e8c19c22c8c5e5e" name="aeb25c40e8e38c0984e8c19c22c8c5e5e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aeb25c40e8e38c0984e8c19c22c8c5e5e">&#9670;&#160;</a></span>Radius</h2>
 
@@ -1113,7 +1122,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>The room this balloon takes up now, in the launch canvas's space; where it will start, before it has. </p>
+<p>The room this balloon takes up around its body's centre, in canvas units. </p>
 
 </div>
 </div>

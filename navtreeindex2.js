@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"IPitySettings_8cs.html":[7,0,14,31],
 "IPlayerHealing_8cs.html":[7,0,7,6,2],
 "IPlayerHealth_8cs.html":[7,0,7,6,3],
 "IPlayerNeed_8cs.html":[7,0,7,0,4],
@@ -146,13 +147,13 @@ var NAVTREEINDEX2 =
 "LaserViewEditor_8cs.html":[7,0,6,26],
 "LaserView_8cs.html":[7,0,8,2,2],
 "LaunchAscend_8cs.html":[7,0,14,5,8],
-"LaunchBalloonView_8cs.html":[7,0,7,19],
+"LaunchBalloonView_8cs.html":[7,0,7,20],
 "LaunchBalloonsBuilder_8cs.html":[7,0,6,27],
-"LaunchContinueController_8cs.html":[7,0,7,20],
-"LaunchContinueView_8cs.html":[7,0,7,21],
-"LaunchDisturbanceStamp_8cs.html":[7,0,7,22],
-"LaunchLifetimeScope_8cs.html":[7,0,7,23],
-"LaunchPlayTrigger_8cs.html":[7,0,7,24],
+"LaunchContinueController_8cs.html":[7,0,7,21],
+"LaunchContinueView_8cs.html":[7,0,7,22],
+"LaunchDisturbanceStamp_8cs.html":[7,0,7,23],
+"LaunchLifetimeScope_8cs.html":[7,0,7,24],
+"LaunchPlayTrigger_8cs.html":[7,0,7,25],
 "LayerPresenceTag_8cs.html":[7,0,14,10,9],
 "LayerPresence_8cs.html":[7,0,14,10,8],
 "LeafAtlasPacker_8cs.html":[7,0,6,0,9],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "MushroomSporeTuning_8cs.html":[7,0,15,0,22],
 "MushroomSwayedMessage_8cs.html":[7,0,14,7,30],
 "MushroomThrowTuning_8cs.html":[7,0,15,0,23],
-"MushroomView_8cs.html":[7,0,15,0,0,22],
-"MushroomWallBaker_8cs.html":[7,0,6,35]
+"MushroomView_8cs.html":[7,0,15,0,0,22]
 };

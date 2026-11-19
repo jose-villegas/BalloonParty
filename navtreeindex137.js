@@ -1,5 +1,14 @@
 var NAVTREEINDEX137 =
 {
+"plan_future_ideas.html#autotoc_md593":[3,5,0,12,3],
+"plan_future_ideas.html#autotoc_md594":[3,5,0,12,4],
+"plan_future_ideas.html#autotoc_md596":[3,5,0,13],
+"plan_future_ideas.html#autotoc_md597":[3,5,0,13,0],
+"plan_future_ideas.html#autotoc_md598":[3,5,0,13,1],
+"plan_future_ideas.html#autotoc_md599":[3,5,0,13,2],
+"plan_future_ideas.html#autotoc_md600":[3,5,0,13,3],
+"plan_future_ideas.html#autotoc_md601":[3,5,0,13,4],
+"plan_future_ideas.html#autotoc_md602":[3,5,0,13,5],
 "plan_future_ideas.html#autotoc_md603":[3,5,0,13,6],
 "plan_future_ideas.html#autotoc_md604":[3,5,0,13,7],
 "plan_future_ideas.html#autotoc_md606":[3,5,0,14],
@@ -240,14 +249,5 @@ var NAVTREEINDEX137 =
 "plan_performance_recovery.html#autotoc_md874":[3,14,0,2],
 "plan_performance_recovery.html#autotoc_md875":[3,14,0,2,0],
 "plan_performance_recovery.html#autotoc_md876":[3,14,0,2,1],
-"plan_performance_recovery.html#autotoc_md877":[3,14,0,2,2],
-"plan_performance_recovery.html#autotoc_md878":[3,14,0,2,3],
-"plan_performance_recovery.html#autotoc_md879":[3,14,0,2,4],
-"plan_performance_recovery.html#autotoc_md880":[3,14,0,2,5],
-"plan_performance_recovery.html#autotoc_md881":[3,14,0,2,6],
-"plan_performance_recovery.html#autotoc_md882":[3,14,0,2,7],
-"plan_performance_recovery.html#autotoc_md883":[3,14,0,2,8],
-"plan_performance_recovery.html#autotoc_md884":[3,14,0,2,9],
-"plan_performance_recovery.html#autotoc_md885":[3,14,0,2,10],
-"plan_performance_recovery.html#autotoc_md887":[3,14,0,3]
+"plan_performance_recovery.html#autotoc_md877":[3,14,0,2,2]
 };
