@@ -1,4 +1,4 @@
-"""Retakes the README's stills: drives the open Unity Editor through the Unity CLI to play a fixed script
+"""Retakes the README's pictures: drives the open Unity Editor through the Unity CLI to play a fixed script
 (Assets/Source/Editor/ReadmeShotCapture.cs) and composes the shots into the grids the README shows.
 
     python3 Tools/readme_shots/capture.py            # capture, then compose into Docs/readme/
@@ -8,6 +8,10 @@
 The Editor must be open on this project (the main checkout: it only sees committed, merged code) and not
 in Play mode; the script enters Play mode itself and leaves it when done. The raw shots land in
 Logs/readme_shots/ (git-ignored), the grids in Docs/readme/.
+
+A scenario's still is the best moment of a level a bot plays, the one with the most balloons popping at
+once; the driver lists the moments it took in moments.txt, beside the raw shots. The gift balloons are
+filmed for a few seconds and composed into one looping GIF.
 """
 import argparse
 import json
@@ -23,6 +27,7 @@ RAW = ROOT / "Logs" / "readme_shots"
 OUT = ROOT / "Docs" / "readme"
 FONT = ROOT / "Assets" / "Fonts" / "PatrickHand-Regular.ttf"
 DONE = "done.txt"
+MOMENTS = "moments.txt"
 DRIVER = "BalloonParty.Editor.ReadmeShotCapture, BalloonParty.Editor"
 
 SCENARIOS = (("sky", "Sky"), ("meadow", "Meadow"), ("water", "Water"), ("bonus", "Bonus level"))
@@ -32,14 +37,20 @@ ITEMS = (("bomb", "Bomb"), ("laser", "Laser"), ("lightning", "Lightning"),
 GIFTS = (("golden", "Golden"), ("heart", "Heart"), ("disco", "Disco ball"), ("nuke", "Nuke"))
 
 TILE = (540, 960)
-GIFT_TILE = (540, 540)
 GAP = 12
 LABEL = 64
 BACKGROUND = (24, 28, 40)
 INK = (240, 236, 226)
 QUALITY = 88
 LAUNCH_SECONDS = 180
-CAPTURE_SECONDS = 900
+CAPTURE_SECONDS = 1800
+
+# The gifts' GIF: the driver films a picture every 0.06 s of game time (3 physics steps), and the last
+# GIFT_FADE of them melt into the first ones, so the loop has no jump.
+GIFT_TILE = (240, 240)
+GIFT_FRAME_MS = 60
+GIFT_FADE = 8
+GIFT_COLOURS = 256
 
 
 def unity(code):
@@ -71,11 +82,14 @@ def capture(burst):
     for old in RAW.glob("*.png"):
         old.unlink()
     (RAW / DONE).unlink(missing_ok=True)
+    (RAW / MOMENTS).unlink(missing_ok=True)
 
     unity("UnityEditor.EditorApplication.isPlaying = true; return \"on\";")
-    # The driver waits for the launch screen itself and taps Play: the game scene loads only after that.
-    wait_for(lambda: str(unity("return (UnityEditor.EditorApplication.isPlaying && UnityEngine.Time.frameCount > 30)"
-                               ".ToString();")) == "True", LAUNCH_SECONDS, "Play mode")
+    # The driver waits for the launch screen itself and taps Play: the game scene loads only after that. In the
+    # background an Editor plays no frames until told to, so no frame count can be waited on here.
+    wait_for(lambda: str(unity("UnityEngine.Application.runInBackground = true; "
+                               "return UnityEditor.EditorApplication.isPlaying.ToString();")) == "True",
+             LAUNCH_SECONDS, "Play mode")
     raw = str(RAW).replace("\\", "/")
     started = unity(f"return System.Type.GetType(\"{DRIVER}\").GetMethod(\"Run\", "
                     "System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic)"
@@ -89,10 +103,13 @@ def capture(burst):
     if outcome != "ok":
         sys.exit(f"The capture stopped: {outcome}")
     print(f"{len(list(RAW.glob('*.png')))} shots in {RAW}")
+    if (RAW / MOMENTS).exists():
+        print("The stills the bot's play gave, the last of each level kept:")
+        print((RAW / MOMENTS).read_text().rstrip())
 
 
-def grid(rows, columns, cell, column_labels, row_labels, out, tile=TILE):
-    """Tiles cell(row, column) into a grid under column labels, each row headed by its label."""
+def sheet_of(rows, columns, cell, column_labels, row_labels, tile):
+    """Tiles the pictures cell(row, column) gives into a grid under column labels, each row headed by its label."""
     font = ImageFont.truetype(str(FONT), 44)
     side = LABEL * 3 if row_labels else 0
     top = LABEL if column_labels else 0
@@ -110,20 +127,58 @@ def grid(rows, columns, cell, column_labels, row_labels, out, tile=TILE):
             draw.text((side / 2 + GAP / 2, y + tile[1] / 2), row_labels[r], fill=INK, font=font, anchor="mm")
         for c in range(columns):
             x = side + GAP + c * (tile[0] + GAP)
-            path, label = cell(r, c)
-            sheet.paste(Image.open(path).convert("RGB").resize(tile, Image.LANCZOS), (x, y))
+            picture, label = cell(r, c)
+            sheet.paste(picture.convert("RGB").resize(tile, Image.LANCZOS), (x, y))
             if label:
                 draw.text((x + tile[0] / 2, y + tile[1] + LABEL / 2), label, fill=INK, font=font, anchor="mm")
+    return sheet
+
+
+def grid(rows, columns, cell, column_labels, row_labels, out):
+    """A grid of the shots whose paths cell(row, column) gives, as a JPEG."""
+    sheet = sheet_of(rows, columns, lambda r, c: (Image.open(cell(r, c)[0]), cell(r, c)[1]),
+                     column_labels, row_labels, TILE)
     OUT.mkdir(parents=True, exist_ok=True)
     sheet.save(out, quality=QUALITY, optimize=True, progressive=True)
     print(f"{out.relative_to(ROOT)}: {sheet.size[0]}x{sheet.size[1]}")
 
 
+def gift_film(gift, time_of_day):
+    """One gift's pictures at one time of day, the loop closed: its last few melted into its first."""
+    paths = sorted(RAW.glob(f"gift_{gift}_{time_of_day}_*.png"))
+    if len(paths) <= GIFT_FADE * 2:
+        sys.exit(f"Missing shots (capture first): gift_{gift}_{time_of_day}_NN.png")
+    pictures = [Image.open(path).convert("RGB").resize(GIFT_TILE, Image.LANCZOS) for path in paths]
+    kept = len(pictures) - GIFT_FADE
+    return [Image.blend(pictures[kept + i], pictures[i], (i + 1) / (GIFT_FADE + 1)) if i < GIFT_FADE
+            else pictures[i] for i in range(kept)]
+
+
+def gifts_gif(out):
+    """The four gift balloons across, morning above night, as one looping GIF."""
+    films = {(g, t): gift_film(g, t) for g, _ in GIFTS for t, _ in TIMES}
+    length = min(len(film) for film in films.values())
+    sheets = [sheet_of(len(TIMES), len(GIFTS), lambda r, c: (films[(GIFTS[c][0], TIMES[r][0])][i], None),
+                       [name for _, name in GIFTS], [name for _, name in TIMES], GIFT_TILE)
+              for i in range(length)]
+
+    # One palette for every frame, from a few of them side by side: a palette per frame flickers.
+    sample = Image.new("RGB", (sheets[0].width * 3, sheets[0].height))
+    for i, index in enumerate((0, length // 3, 2 * length // 3)):
+        sample.paste(sheets[index], (i * sheets[0].width, 0))
+    palette = sample.quantize(GIFT_COLOURS, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE)
+    # No dithering: its grain changes from frame to frame, which reads as noise and triples the file.
+    frames = [sheet.quantize(palette=palette, dither=Image.Dither.NONE) for sheet in sheets]
+    OUT.mkdir(parents=True, exist_ok=True)
+    frames[0].save(out, save_all=True, append_images=frames[1:], duration=GIFT_FRAME_MS, loop=0)
+    megabytes = out.stat().st_size / (1024 * 1024)
+    print(f"{out.relative_to(ROOT)}: {sheets[0].size[0]}x{sheets[0].size[1]}, {length} frames, {megabytes:.1f} MB")
+
+
 def compose():
     missing = [p for p in
                [RAW / f"scene_{s}_{t}.png" for s, _ in SCENARIOS for t, _ in TIMES] +
-               [RAW / f"item_{i}.png" for i, _ in ITEMS] +
-               [RAW / f"gift_{g}_{t}.png" for g, _ in GIFTS for t, _ in TIMES] if not p.exists()]
+               [RAW / f"item_{i}.png" for i, _ in ITEMS] if not p.exists()]
     if missing:
         sys.exit("Missing shots (capture first): " + ", ".join(p.name for p in missing))
 
@@ -132,9 +187,7 @@ def compose():
          [name for _, name in SCENARIOS], [name for _, name in TIMES], OUT / "scenarios.jpg")
     grid(2, 3, lambda r, c: (RAW / f"item_{ITEMS[r * 3 + c][0]}.png", ITEMS[r * 3 + c][1]),
          None, None, OUT / "items.jpg")
-    grid(len(TIMES), len(GIFTS),
-         lambda r, c: (RAW / f"gift_{GIFTS[c][0]}_{TIMES[r][0]}.png", None),
-         [name for _, name in GIFTS], [name for _, name in TIMES], OUT / "gifts.jpg", GIFT_TILE)
+    gifts_gif(OUT / "gifts.gif")
 
 
 def main():

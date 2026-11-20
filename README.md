@@ -46,9 +46,10 @@ colour. The heart balloon pops on any hit and gives a heart back. The nuke is a 
 more trouble the player is in: three hits arm it, and after a count of three its blast
 clears the board.
 
-![The four gift balloons, each at morning and at night](Docs/readme/gifts.jpg)
+![The four gift balloons, each at morning and at night](Docs/readme/gifts.gif)
 
-These stills are retaken by a script (`Tools/readme_shots/`), not by hand.
+These pictures are retaken by a script (`Tools/readme_shots/`), not by hand: a bot plays each scenario, and
+its still is the moment with the most balloons popping at once.
 
 ## Releases
 
