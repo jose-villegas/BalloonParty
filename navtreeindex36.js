@@ -1,5 +1,17 @@
 var NAVTREEINDEX36 =
 {
+"classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a1facbe4276258bd11dd395a7ab205fee":[5,0,0,3,5,4,34],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a1facbe4276258bd11dd395a7ab205fee":[6,0,0,3,5,4,34],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a2764fe9344c4b17c3a026572caeb7047":[5,0,0,3,5,4,22],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a2764fe9344c4b17c3a026572caeb7047":[6,0,0,3,5,4,22],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a2fcf6e66dd6b2f49f0fd311e35f2a122":[5,0,0,3,5,4,8],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a2fcf6e66dd6b2f49f0fd311e35f2a122":[6,0,0,3,5,4,8],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a3e92957232457da3ce8d1b33dc960582":[5,0,0,3,5,4,9],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a3e92957232457da3ce8d1b33dc960582":[6,0,0,3,5,4,9],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a4095d9aaa31d9031352dbaf666ca043e":[5,0,0,3,5,4,17],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a4095d9aaa31d9031352dbaf666ca043e":[6,0,0,3,5,4,17],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a475d847adea2c1f3e7965cd4692d1b61":[5,0,0,3,5,4,21],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a475d847adea2c1f3e7965cd4692d1b61":[6,0,0,3,5,4,21],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a48088ed918785136e6f0847e0929dde5":[5,0,0,3,5,4,35],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a48088ed918785136e6f0847e0929dde5":[6,0,0,3,5,4,35],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1EffectsClearingSettings.html#a52aed2196ec6ffb3dbc4745f8d85cc0a":[5,0,0,3,5,4,20],
@@ -237,17 +249,5 @@ var NAVTREEINDEX36 =
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a96c29ce43b191182578cddf3e2c37e34":[5,0,0,3,5,27,17],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a96c29ce43b191182578cddf3e2c37e34":[6,0,0,3,5,27,17],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a9966a83f407bff45ddce528d6eac9885":[5,0,0,3,5,27,20],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a9966a83f407bff45ddce528d6eac9885":[6,0,0,3,5,27,20],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a99d123e976664a2ba085585e5e48033a":[5,0,0,3,5,27,26],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a99d123e976664a2ba085585e5e48033a":[6,0,0,3,5,27,26],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a9cbd8a5ba9ff38a3b07a71df0324e636":[5,0,0,3,5,27,16],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a9cbd8a5ba9ff38a3b07a71df0324e636":[6,0,0,3,5,27,16],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a9e734984c1a3c5f8d1faf46f2fd5cc95":[5,0,0,3,5,27,35],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a9e734984c1a3c5f8d1faf46f2fd5cc95":[6,0,0,3,5,27,35],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a9ebb663cd7ec2715220e473b536d12a9":[5,0,0,3,5,27,29],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a9ebb663cd7ec2715220e473b536d12a9":[6,0,0,3,5,27,29],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#ab24ca38e484934c6143ad2d0bc67d7fe":[5,0,0,3,5,27,18],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#ab24ca38e484934c6143ad2d0bc67d7fe":[6,0,0,3,5,27,18],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#ab391239fa1795f139576fe1ecbfd06ed":[5,0,0,3,5,27,28],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#ab391239fa1795f139576fe1ecbfd06ed":[6,0,0,3,5,27,28]
+"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a9966a83f407bff45ddce528d6eac9885":[6,0,0,3,5,27,20]
 };

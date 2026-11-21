@@ -1,5 +1,17 @@
 var NAVTREEINDEX64 =
 {
+"classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#a8245f3a80974cfe5aa004cdc3f0f401b":[5,0,0,6,4,0,8],
+"classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#a8245f3a80974cfe5aa004cdc3f0f401b":[6,0,0,6,4,0,8],
+"classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#a910966b66f3c648f6ab6f558bd58fa10":[5,0,0,6,4,0,23],
+"classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#a910966b66f3c648f6ab6f558bd58fa10":[6,0,0,6,4,0,23],
+"classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#a9406d4b644b107c740fa65352611222b":[5,0,0,6,4,0,17],
+"classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#a9406d4b644b107c740fa65352611222b":[6,0,0,6,4,0,17],
+"classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#ab78f13f65a3476e23d4a32fe04489c41":[5,0,0,6,4,0,6],
+"classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#ab78f13f65a3476e23d4a32fe04489c41":[6,0,0,6,4,0,6],
+"classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#abd8ed3a8bf82f9912d3a0c8470a61e81":[5,0,0,6,4,0,21],
+"classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#abd8ed3a8bf82f9912d3a0c8470a61e81":[6,0,0,6,4,0,21],
+"classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#ac1726491e451cb4236df21ec8cb3f127":[5,0,0,6,4,0,20],
+"classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#ac1726491e451cb4236df21ec8cb3f127":[6,0,0,6,4,0,20],
 "classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#ac3a7359cc08d6286d2ed221110080f58":[5,0,0,6,4,0,19],
 "classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#ac3a7359cc08d6286d2ed221110080f58":[6,0,0,6,4,0,19],
 "classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#ac96708f68f083829f3c6fb24974fafc4":[5,0,0,6,4,0,9],
@@ -237,17 +249,5 @@ var NAVTREEINDEX64 =
 "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#a77ce70ee5eb83f35a15b38db48a18386":[5,0,0,6,5,0,0,13],
 "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#a77ce70ee5eb83f35a15b38db48a18386":[6,0,0,6,5,0,0,13],
 "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#a7962b70fca9df142ce592ee905a7ac2c":[5,0,0,6,5,0,0,7],
-"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#a7962b70fca9df142ce592ee905a7ac2c":[6,0,0,6,5,0,0,7],
-"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#a8df3bd42af1853d77392bd86f54a15d6":[5,0,0,6,5,0,0,12],
-"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#a8df3bd42af1853d77392bd86f54a15d6":[6,0,0,6,5,0,0,12],
-"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#a965ca1b49aefac34480322dfe85195ce":[5,0,0,6,5,0,0,1],
-"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#a965ca1b49aefac34480322dfe85195ce":[6,0,0,6,5,0,0,1],
-"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#a982e43c2949ed5f3d2a4f43fd199d24a":[5,0,0,6,5,0,0,2],
-"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#a982e43c2949ed5f3d2a4f43fd199d24a":[6,0,0,6,5,0,0,2],
-"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#aa5b72e3b8e80b1a9aa3eaca1b3573a2a":[5,0,0,6,5,0,0,14],
-"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#aa5b72e3b8e80b1a9aa3eaca1b3573a2a":[6,0,0,6,5,0,0,14],
-"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#aad47d2018282bbed4654863cabed3a68":[5,0,0,6,5,0,0,5],
-"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#aad47d2018282bbed4654863cabed3a68":[6,0,0,6,5,0,0,5],
-"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#ab2a19ed7bf2a40cb5e13b82e0c872ed7":[5,0,0,6,5,0,0,3],
-"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#ab2a19ed7bf2a40cb5e13b82e0c872ed7":[6,0,0,6,5,0,0,3]
+"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#a7962b70fca9df142ce592ee905a7ac2c":[6,0,0,6,5,0,0,7]
 };

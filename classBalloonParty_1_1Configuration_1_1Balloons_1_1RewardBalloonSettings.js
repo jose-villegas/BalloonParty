@@ -1,6 +1,8 @@
 var classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings =
 [
     [ "_discoAtCompletion", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a4b0b17eed38f22fd97826036558f5760", null ],
+    [ "_discoPityChancePerStep", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a4fe9a7fb08cabc89093c8e7cc10d080f", null ],
+    [ "_discoPityEveryCompletion", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a5bd36631012a3f0cd2001d29dffdcd45", null ],
     [ "_goldenAtCompletion", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#ae333ba6706d3162ede733ecadd84525d", null ],
     [ "_heartChanceHalvedAfterLevels", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a5ddcd3aa4a3f5036aefa6989bf38b690", null ],
     [ "_heartChanceMissingOne", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#aee182b990bdb0719923937622c47c623", null ],
@@ -23,6 +25,8 @@ var classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings =
     [ "_sureGoldenAtCompletion", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a560dcae54c2af16b3c560b61cc13fda2", null ],
     [ "_sureGoldenLevel", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a9744ae49c574a2270aadcd55c0a95596", null ],
     [ "DiscoAtCompletion", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#af81ed83af26431f8d145f99dd9241631", null ],
+    [ "DiscoPityChancePerStep", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#aff77a935d3114f85dd672e57602e508c", null ],
+    [ "DiscoPityEveryCompletion", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#ad1348e11970a8213fa3cec8ba38f0418", null ],
     [ "GoldenAtCompletion", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a367fc8cf38e0ae27a48dbb948c5afcb9", null ],
     [ "HeartChanceHalvedAfterLevels", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a1cb16d67811b21d2594580dbc7c41dfe", null ],
     [ "HeartChanceMissingOne", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a5fd348ccdbc2e7ec4856366d25b50dd0", null ],

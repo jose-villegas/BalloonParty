@@ -1,6 +1,8 @@
 var interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings =
 [
     [ "DiscoAtCompletion", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#a67e1c837d5f0ea9211b29d32c26cb91b", null ],
+    [ "DiscoPityChancePerStep", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#a258a355963f9ccc90aa51921dbe19a5e", null ],
+    [ "DiscoPityEveryCompletion", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#aad1ce105fcae8cc86577f0ad236b9616", null ],
     [ "GoldenAtCompletion", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#ad81a3e19697759c3c484d8036213de15", null ],
     [ "HeartChanceHalvedAfterLevels", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#a969305f2e103e9051694cb86b817b34c", null ],
     [ "HeartChanceMissingOne", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#a58c12265db08ed1f781ec0c850fd0959", null ],

@@ -1,5 +1,17 @@
 var NAVTREEINDEX43 =
 {
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ad952277316e8e36bc285a76d4413017a":[5,0,0,3,9,26,24],
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ad952277316e8e36bc285a76d4413017a":[6,0,0,3,9,26,24],
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#adbea8c1eb12cf7454e7075ecbfbebbe3":[5,0,0,3,9,26,16],
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#adbea8c1eb12cf7454e7075ecbfbebbe3":[6,0,0,3,9,26,16],
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ade93678d434e8698681361eeea195248":[5,0,0,3,9,26,25],
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ade93678d434e8698681361eeea195248":[6,0,0,3,9,26,25],
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ae6b2f97066105dfba6ca65ce8838ab5f":[5,0,0,3,9,26,18],
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ae6b2f97066105dfba6ca65ce8838ab5f":[6,0,0,3,9,26,18],
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ae99552ceaf009581d1154c6add61e67f":[5,0,0,3,9,26,11],
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ae99552ceaf009581d1154c6add61e67f":[6,0,0,3,9,26,11],
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#af7cff732bdd8b626c26f3b7c71211ad4":[5,0,0,3,9,26,10],
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#af7cff732bdd8b626c26f3b7c71211ad4":[6,0,0,3,9,26,10],
 "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#af9256810e80458f4ca4872ddfe907260":[5,0,0,3,9,26,28],
 "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#af9256810e80458f4ca4872ddfe907260":[6,0,0,3,9,26,28],
 "classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry.html":[5,0,0,3,9,27],
@@ -237,17 +249,5 @@ var NAVTREEINDEX43 =
 "classBalloonParty_1_1Configuration_1_1OverflowSettings.html#abfdf456568b064ff5a8417957b0ca29a":[5,0,0,3,24,17],
 "classBalloonParty_1_1Configuration_1_1OverflowSettings.html#abfdf456568b064ff5a8417957b0ca29a":[6,0,0,3,24,17],
 "classBalloonParty_1_1Configuration_1_1OverflowSettings.html#ac5d604d66f41b22e0dbac8b0b62b72f2":[5,0,0,3,24,12],
-"classBalloonParty_1_1Configuration_1_1OverflowSettings.html#ac5d604d66f41b22e0dbac8b0b62b72f2":[6,0,0,3,24,12],
-"classBalloonParty_1_1Configuration_1_1OverflowSettings.html#ac9b49e48e95ac58b552081bff5e89c02":[5,0,0,3,24,8],
-"classBalloonParty_1_1Configuration_1_1OverflowSettings.html#ac9b49e48e95ac58b552081bff5e89c02":[6,0,0,3,24,8],
-"classBalloonParty_1_1Configuration_1_1OverflowSettings.html#acb7fe77d48689658add78d82d1eaa0ad":[5,0,0,3,24,15],
-"classBalloonParty_1_1Configuration_1_1OverflowSettings.html#acb7fe77d48689658add78d82d1eaa0ad":[6,0,0,3,24,15],
-"classBalloonParty_1_1Configuration_1_1OverflowSettings.html#af225d8810d9f472630eb9792d5338d4c":[5,0,0,3,24,4],
-"classBalloonParty_1_1Configuration_1_1OverflowSettings.html#af225d8810d9f472630eb9792d5338d4c":[6,0,0,3,24,4],
-"classBalloonParty_1_1Configuration_1_1OverflowSettings.html#afcce13bd080986cd198c61d4c5f48eb8":[5,0,0,3,24,9],
-"classBalloonParty_1_1Configuration_1_1OverflowSettings.html#afcce13bd080986cd198c61d4c5f48eb8":[6,0,0,3,24,9],
-"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html":[5,0,0,3,10,0],
-"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html":[6,0,0,3,10,0],
-"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a130895b754a403c50873b2fb8ed9b9cf":[5,0,0,3,10,0,5],
-"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a130895b754a403c50873b2fb8ed9b9cf":[6,0,0,3,10,0,5]
+"classBalloonParty_1_1Configuration_1_1OverflowSettings.html#ac5d604d66f41b22e0dbac8b0b62b72f2":[6,0,0,3,24,12]
 };

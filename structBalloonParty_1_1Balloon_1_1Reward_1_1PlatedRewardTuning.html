@@ -131,6 +131,10 @@ Public Attributes</h2></td></tr>
 <tr class="separator:addd3a3d6705a45e8b431e9ca6bdc861a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad99c1e0362b290a8577c96ffe74a363d" id="r_ad99c1e0362b290a8577c96ffe74a363d"><td class="memItemLeft" align="right" valign="top">readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad99c1e0362b290a8577c96ffe74a363d">OrdinaryEveryLevels</a></td></tr>
 <tr class="separator:ad99c1e0362b290a8577c96ffe74a363d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99f0ff7e36745ab7664a125fcac98368" id="r_a99f0ff7e36745ab7664a125fcac98368"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a99f0ff7e36745ab7664a125fcac98368">PityChancePerStep</a></td></tr>
+<tr class="separator:a99f0ff7e36745ab7664a125fcac98368"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a413914f0ba36a5294bd6f6fe59c450ef" id="r_a413914f0ba36a5294bd6f6fe59c450ef"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a413914f0ba36a5294bd6f6fe59c450ef">PityEveryCompletion</a></td></tr>
+<tr class="separator:a413914f0ba36a5294bd6f6fe59c450ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af78a10d22eab21e967c6fcb7a17b9408" id="r_af78a10d22eab21e967c6fcb7a17b9408"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af78a10d22eab21e967c6fcb7a17b9408">PurpleAtCompletion</a></td></tr>
 <tr class="separator:af78a10d22eab21e967c6fcb7a17b9408"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab3993cf6a939d45560bd381dc062036b" id="r_ab3993cf6a939d45560bd381dc062036b"><td class="memItemLeft" align="right" valign="top">readonly IReadOnlyList&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab3993cf6a939d45560bd381dc062036b">PurpleChances</a></td></tr>
@@ -142,8 +146,8 @@ Public Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:afdb5ebd088b826bf867c24102a76b5ca" id="r_afdb5ebd088b826bf867c24102a76b5ca"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afdb5ebd088b826bf867c24102a76b5ca">PlatedRewardTuning</a> (int ordinaryEveryLevels, float ordinaryChance, float atCompletion, int sureLevel, float sureAtCompletion, float purpleAtCompletion, IReadOnlyList&lt; float &gt; purpleChances, int chanceHalvedAfterLevels=0, float chanceGrowthPerLevel=0f)</td></tr>
-<tr class="separator:afdb5ebd088b826bf867c24102a76b5ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9965f22afcbac2a4e64f188bbb91f18" id="r_ab9965f22afcbac2a4e64f188bbb91f18"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab9965f22afcbac2a4e64f188bbb91f18">PlatedRewardTuning</a> (int ordinaryEveryLevels, float ordinaryChance, float atCompletion, int sureLevel, float sureAtCompletion, float purpleAtCompletion, IReadOnlyList&lt; float &gt; purpleChances, int chanceHalvedAfterLevels=0, float chanceGrowthPerLevel=0f, float pityEveryCompletion=0f, float pityChancePerStep=0f)</td></tr>
+<tr class="separator:ab9965f22afcbac2a4e64f188bbb91f18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
 Static Package Functions</h2></td></tr>
@@ -156,8 +160,8 @@ Static Package Functions</h2></td></tr>
 <div class="textblock"><p>One plated reward balloon's schedule, read from <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html" title="When the reward balloons come (PLAN-RewardBalloons): on a purple level, both rolled every few lines w...">IRewardBalloonSettings</a> each time it is asked, so a value tuned in the inspector applies on the next line. </p>
 <p>The golden balloon and the disco ball share the rules (<a class="el" href="classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html" title="When one plated reward balloon (the golden balloon, the disco ball) is due, and whether one is on the...">PlatedRewardSchedule</a>) and differ only in these numbers. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="afdb5ebd088b826bf867c24102a76b5ca" name="afdb5ebd088b826bf867c24102a76b5ca"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afdb5ebd088b826bf867c24102a76b5ca">&#9670;&#160;</a></span>PlatedRewardTuning()</h2>
+<a id="ab9965f22afcbac2a4e64f188bbb91f18" name="ab9965f22afcbac2a4e64f188bbb91f18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9965f22afcbac2a4e64f188bbb91f18">&#9670;&#160;</a></span>PlatedRewardTuning()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -208,7 +212,17 @@ Static Package Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>chanceGrowthPerLevel</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0f</span>&#160;)</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>chanceGrowthPerLevel</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>pityEveryCompletion</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>pityChancePerStep</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0f</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -336,6 +350,34 @@ Static Package Functions</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly int BalloonParty.Balloon.Reward.PlatedRewardTuning.OrdinaryEveryLevels</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a99f0ff7e36745ab7664a125fcac98368" name="a99f0ff7e36745ab7664a125fcac98368"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99f0ff7e36745ab7664a125fcac98368">&#9670;&#160;</a></span>PityChancePerStep</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly float BalloonParty.Balloon.Reward.PlatedRewardTuning.PityChancePerStep</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a413914f0ba36a5294bd6f6fe59c450ef" name="a413914f0ba36a5294bd6f6fe59c450ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a413914f0ba36a5294bd6f6fe59c450ef">&#9670;&#160;</a></span>PityEveryCompletion</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly float BalloonParty.Balloon.Reward.PlatedRewardTuning.PityEveryCompletion</td>
         </tr>
       </table>
 </div><div class="memdoc">

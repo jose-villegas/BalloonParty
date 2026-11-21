@@ -129,6 +129,12 @@ Properties</h2></td></tr>
 <tr class="memitem:a67e1c837d5f0ea9211b29d32c26cb91b" id="r_a67e1c837d5f0ea9211b29d32c26cb91b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a67e1c837d5f0ea9211b29d32c26cb91b">DiscoAtCompletion</a><code> [get]</code></td></tr>
 <tr class="memdesc:a67e1c837d5f0ea9211b29d32c26cb91b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The disco ball's completion, 0 to 1, from which an ordinary level that won it brings it (<a class="el" href="#a6247442c27e12ddc1639d3776ebc23dc" title="Off a purple level, every this many levels, from SureDiscoLevel on, rolls once (OrdinaryDiscoChance) ...">OrdinaryDiscoEveryLevels</a>).  <br /></td></tr>
 <tr class="separator:a67e1c837d5f0ea9211b29d32c26cb91b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a258a355963f9ccc90aa51921dbe19a5e" id="r_a258a355963f9ccc90aa51921dbe19a5e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a258a355963f9ccc90aa51921dbe19a5e">DiscoPityChancePerStep</a><code> [get]</code></td></tr>
+<tr class="memdesc:a258a355963f9ccc90aa51921dbe19a5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The chance of the first of those rolls; the second has twice it, the third three times, so a level near its end is likelier to get its disco ball than one just begun.  <br /></td></tr>
+<tr class="separator:a258a355963f9ccc90aa51921dbe19a5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad1ce105fcae8cc86577f0ad236b9616" id="r_aad1ce105fcae8cc86577f0ad236b9616"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aad1ce105fcae8cc86577f0ad236b9616">DiscoPityEveryCompletion</a><code> [get]</code></td></tr>
+<tr class="memdesc:aad1ce105fcae8cc86577f0ad236b9616"><td class="mdescLeft">&#160;</td><td class="mdescRight">The disco ball's soft pity inside an ordinary level that lost its roll: each time this much more of the level is done, it rolls again (<a class="el" href="#a258a355963f9ccc90aa51921dbe19a5e" title="The chance of the first of those rolls; the second has twice it, the third three times,...">DiscoPityChancePerStep</a>).  <br /></td></tr>
+<tr class="separator:aad1ce105fcae8cc86577f0ad236b9616"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad81a3e19697759c3c484d8036213de15" id="r_ad81a3e19697759c3c484d8036213de15"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad81a3e19697759c3c484d8036213de15">GoldenAtCompletion</a><code> [get]</code></td></tr>
 <tr class="memdesc:ad81a3e19697759c3c484d8036213de15"><td class="mdescLeft">&#160;</td><td class="mdescRight">The level's completion, 0 to 1, from which an ordinary level that won its golden balloon brings it (<a class="el" href="#acb82f6a9feb081f72dc8fb1138df44e3" title="Off a purple level, every this many levels from SureGoldenLevel on rolls once (OrdinaryGoldenChance) ...">OrdinaryGoldenEveryLevels</a>).  <br /></td></tr>
 <tr class="separator:ad81a3e19697759c3c484d8036213de15"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -219,6 +225,59 @@ Properties</h2></td></tr>
 <p>The golden balloon's rules, its own numbers (PLAN-DiscoBalloon). </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#af81ed83af26431f8d145f99dd9241631">BalloonParty.Configuration.Balloons.RewardBalloonSettings</a>.</p>
+
+</div>
+</div>
+<a id="a258a355963f9ccc90aa51921dbe19a5e" name="a258a355963f9ccc90aa51921dbe19a5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a258a355963f9ccc90aa51921dbe19a5e">&#9670;&#160;</a></span>DiscoPityChancePerStep</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.IRewardBalloonSettings.DiscoPityChancePerStep</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The chance of the first of those rolls; the second has twice it, the third three times, so a level near its end is likelier to get its disco ball than one just begun. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#aff77a935d3114f85dd672e57602e508c">BalloonParty.Configuration.Balloons.RewardBalloonSettings</a>.</p>
+
+</div>
+</div>
+<a id="aad1ce105fcae8cc86577f0ad236b9616" name="aad1ce105fcae8cc86577f0ad236b9616"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad1ce105fcae8cc86577f0ad236b9616">&#9670;&#160;</a></span>DiscoPityEveryCompletion</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.IRewardBalloonSettings.DiscoPityEveryCompletion</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The disco ball's soft pity inside an ordinary level that lost its roll: each time this much more of the level is done, it rolls again (<a class="el" href="#a258a355963f9ccc90aa51921dbe19a5e" title="The chance of the first of those rolls; the second has twice it, the third three times,...">DiscoPityChancePerStep</a>). </p>
+<p>0 turns it off. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#ad1348e11970a8213fa3cec8ba38f0418">BalloonParty.Configuration.Balloons.RewardBalloonSettings</a>.</p>
 
 </div>
 </div>

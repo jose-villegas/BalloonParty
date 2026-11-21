@@ -1,6 +1,6 @@
 var structBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardTuning =
 [
-    [ "PlatedRewardTuning", "structBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardTuning.html#afdb5ebd088b826bf867c24102a76b5ca", null ],
+    [ "PlatedRewardTuning", "structBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardTuning.html#ab9965f22afcbac2a4e64f188bbb91f18", null ],
     [ "Disco", "structBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardTuning.html#a4a5b4ace5b729d800e1ff2fc04afe611", null ],
     [ "Golden", "structBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardTuning.html#aff14631bc786c52ac92e00d9d78ba8d7", null ],
     [ "AtCompletion", "structBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardTuning.html#a10be3f48a2988c9fae37920484c79946", null ],
@@ -8,6 +8,8 @@ var structBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardTuning =
     [ "ChanceHalvedAfterLevels", "structBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardTuning.html#ad9d6cf23b93cc99e544a24d8f0aad5a1", null ],
     [ "OrdinaryChance", "structBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardTuning.html#addd3a3d6705a45e8b431e9ca6bdc861a", null ],
     [ "OrdinaryEveryLevels", "structBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardTuning.html#ad99c1e0362b290a8577c96ffe74a363d", null ],
+    [ "PityChancePerStep", "structBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardTuning.html#a99f0ff7e36745ab7664a125fcac98368", null ],
+    [ "PityEveryCompletion", "structBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardTuning.html#a413914f0ba36a5294bd6f6fe59c450ef", null ],
     [ "PurpleAtCompletion", "structBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardTuning.html#af78a10d22eab21e967c6fcb7a17b9408", null ],
     [ "PurpleChances", "structBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardTuning.html#ab3993cf6a939d45560bd381dc062036b", null ],
     [ "SureAtCompletion", "structBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardTuning.html#a955cddf45b1d4e41bca65c735ff677a4", null ],
