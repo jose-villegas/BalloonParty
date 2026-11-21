@@ -85,6 +85,15 @@ namespace BalloonParty.Configuration.Balloons
                  "each comes on average every 3.4 levels, a little more often early in the run than late.")]
         [SerializeField] [Range(0f, 1f)] private float _ordinaryChanceGrowthPerLevel = 0.11f;
 
+        [Tooltip("The disco ball's soft pity inside a level: an ordinary level that lost its roll rolls again each " +
+                 "time this much more of it is done (0.15 = at 15%, 30%, ... 90%). A level takes longer the deeper " +
+                 "the run, so the ball that speeds it up gets likelier the longer the level lasts. 0 = off.")]
+        [SerializeField] [Range(0f, 1f)] private float _discoPityEveryCompletion = 0.15f;
+
+        [Tooltip("The chance of the first of those rolls, 0 to 1. Each later one adds it again: at 0.02 they are " +
+                 "2%, 4%, ... 12%, about one level in three that lost its first roll.")]
+        [SerializeField] [Range(0f, 1f)] private float _discoPityChancePerStep = 0.02f;
+
         [Tooltip("Chance per spawn line of a heart balloon while one heart is missing, off a purple level. Full " +
                  "hearts never roll one.")]
         [SerializeField] [Range(0f, 1f)] private float _heartChanceMissingOne = 0.04f;
@@ -113,6 +122,8 @@ namespace BalloonParty.Configuration.Balloons
         public float OrdinaryDiscoChance => _ordinaryDiscoChance;
         public int OrdinaryChanceHalvedAfterLevels => _ordinaryChanceHalvedAfterLevels;
         public float OrdinaryChanceGrowthPerLevel => _ordinaryChanceGrowthPerLevel;
+        public float DiscoPityEveryCompletion => _discoPityEveryCompletion;
+        public float DiscoPityChancePerStep => _discoPityChancePerStep;
         public int SureDiscoLevel => _sureDiscoLevel;
         public float SureDiscoAtCompletion => _sureDiscoAtCompletion;
         public float PurpleDiscoAtCompletion => _purpleDiscoAtCompletion;

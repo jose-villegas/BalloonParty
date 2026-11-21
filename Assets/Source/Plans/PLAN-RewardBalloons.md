@@ -100,8 +100,10 @@ sequenceDiagram
 | `OrdinaryChanceGrowthPerLevel` | 0.11 | Soft pity: each level since the last golden balloon adds this to the roll (shared with the disco ball) |
 | `SureGoldenLevel` | 5 | A level that always brings a single golden balloon, with no roll (0 for none) |
 | `SureGoldenAtCompletion` | 0.1 | The completion that level's golden balloon comes at |
-| `HeartChanceMissingOne` | 0.04 | Chance per line of a heart balloon while one heart is missing |
-| `HeartChanceMissingTwo` | 0.12 | The same with two missing (one heart left) |
+| `HeartChanceMissingOne` | 0.03 | Chance per line of a heart balloon while one heart is missing |
+| `HeartChanceMissingTwo` | 0.09 | The same with two missing (one heart left) |
+| `DiscoPityEveryCompletion` | 0.15 | An ordinary level that lost its disco roll rolls again each time this much more of it is done |
+| `DiscoPityChancePerStep` | 0.02 | The chance of the first of those rolls; the second has twice it, the third three times |
 | `HeartCooldownLines` | 12 | Lines after a heart balloon before another can come |
 | `HeartChanceHalvedAfterLevels` | 12 | Every heart roll, a purple level's too, eases off over the run: halved this many levels in, a third at twice that |
 | At most one of each on the board | | A second one waits until the first is gone |

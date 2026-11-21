@@ -1209,9 +1209,102 @@ MonoBehaviour:
     - _level: 9
       _cumulativeScore: 4300
       _segmentMode: 0
+    - _level: 10
+      _cumulativeScore: 5300
+      _segmentMode: 0
+    - _level: 11
+      _cumulativeScore: 6650
+      _segmentMode: 0
+    - _level: 12
+      _cumulativeScore: 8550
+      _segmentMode: 0
+    - _level: 13
+      _cumulativeScore: 10850
+      _segmentMode: 0
+    - _level: 14
+      _cumulativeScore: 13400
+      _segmentMode: 0
+    - _level: 15
+      _cumulativeScore: 16000
+      _segmentMode: 0
+    - _level: 16
+      _cumulativeScore: 18600
+      _segmentMode: 0
+    - _level: 17
+      _cumulativeScore: 21200
+      _segmentMode: 0
+    - _level: 18
+      _cumulativeScore: 23800
+      _segmentMode: 0
+    - _level: 19
+      _cumulativeScore: 27050
+      _segmentMode: 0
+    - _level: 20
+      _cumulativeScore: 30900
+      _segmentMode: 0
+    - _level: 21
+      _cumulativeScore: 35300
+      _segmentMode: 0
+    - _level: 22
+      _cumulativeScore: 40100
+      _segmentMode: 0
+    - _level: 23
+      _cumulativeScore: 45400
+      _segmentMode: 0
+    - _level: 24
+      _cumulativeScore: 50900
+      _segmentMode: 0
+    - _level: 25
+      _cumulativeScore: 56550
+      _segmentMode: 0
+    - _level: 26
+      _cumulativeScore: 62800
+      _segmentMode: 0
+    - _level: 27
+      _cumulativeScore: 69850
+      _segmentMode: 0
+    - _level: 28
+      _cumulativeScore: 77300
+      _segmentMode: 0
+    - _level: 29
+      _cumulativeScore: 85250
+      _segmentMode: 0
+    - _level: 30
+      _cumulativeScore: 93800
+      _segmentMode: 0
+    - _level: 31
+      _cumulativeScore: 102550
+      _segmentMode: 0
+    - _level: 32
+      _cumulativeScore: 111700
+      _segmentMode: 0
+    - _level: 33
+      _cumulativeScore: 121500
+      _segmentMode: 0
+    - _level: 34
+      _cumulativeScore: 132450
+      _segmentMode: 0
+    - _level: 35
+      _cumulativeScore: 144150
+      _segmentMode: 0
+    - _level: 36
+      _cumulativeScore: 156600
+      _segmentMode: 0
+    - _level: 37
+      _cumulativeScore: 169900
+      _segmentMode: 0
+    - _level: 38
+      _cumulativeScore: 184050
+      _segmentMode: 0
+    - _level: 39
+      _cumulativeScore: 199100
+      _segmentMode: 0
+    - _level: 40
+      _cumulativeScore: 215100
+      _segmentMode: 0
     _tailGrowth:
       _mode: 0
-      _rate: 1.15
+      _rate: 1.057
   _generation:
     _seedSalt: 1
     _threatBudget:

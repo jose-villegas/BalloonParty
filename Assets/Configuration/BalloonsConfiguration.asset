@@ -397,8 +397,8 @@ MonoBehaviour:
     - 0.3
     - 0.15
     - 0.06
-    _heartChanceMissingOne: 0.04
-    _heartChanceMissingTwo: 0.12
+    _heartChanceMissingOne: 0.03
+    _heartChanceMissingTwo: 0.09
     _heartCooldownLines: 12
     _heartChanceHalvedAfterLevels: 12
   _discoWave:

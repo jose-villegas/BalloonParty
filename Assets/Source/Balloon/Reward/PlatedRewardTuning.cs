@@ -19,11 +19,13 @@ namespace BalloonParty.Balloon.Reward
         public readonly IReadOnlyList<float> PurpleChances;
         public readonly int ChanceHalvedAfterLevels;
         public readonly float ChanceGrowthPerLevel;
+        public readonly float PityEveryCompletion;
+        public readonly float PityChancePerStep;
 
         internal PlatedRewardTuning(
             int ordinaryEveryLevels, float ordinaryChance, float atCompletion, int sureLevel, float sureAtCompletion,
             float purpleAtCompletion, IReadOnlyList<float> purpleChances, int chanceHalvedAfterLevels = 0,
-            float chanceGrowthPerLevel = 0f)
+            float chanceGrowthPerLevel = 0f, float pityEveryCompletion = 0f, float pityChancePerStep = 0f)
         {
             OrdinaryEveryLevels = ordinaryEveryLevels;
             OrdinaryChance = ordinaryChance;
@@ -34,6 +36,8 @@ namespace BalloonParty.Balloon.Reward
             PurpleChances = purpleChances;
             ChanceHalvedAfterLevels = chanceHalvedAfterLevels;
             ChanceGrowthPerLevel = chanceGrowthPerLevel;
+            PityEveryCompletion = pityEveryCompletion;
+            PityChancePerStep = pityChancePerStep;
         }
 
         internal static PlatedRewardTuning Golden(IRewardBalloonSettings settings)
@@ -51,7 +55,8 @@ namespace BalloonParty.Balloon.Reward
                 settings.OrdinaryDiscoEveryLevels, settings.OrdinaryDiscoChance, settings.DiscoAtCompletion,
                 settings.SureDiscoLevel, settings.SureDiscoAtCompletion, settings.PurpleDiscoAtCompletion,
                 settings.PurpleDiscoChances, settings.OrdinaryChanceHalvedAfterLevels,
-                settings.OrdinaryChanceGrowthPerLevel);
+                settings.OrdinaryChanceGrowthPerLevel, settings.DiscoPityEveryCompletion,
+                settings.DiscoPityChancePerStep);
         }
     }
 }

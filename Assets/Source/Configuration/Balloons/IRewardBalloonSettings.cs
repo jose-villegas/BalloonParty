@@ -87,6 +87,18 @@ namespace BalloonParty.Configuration.Balloons
         /// </summary>
         float OrdinaryChanceGrowthPerLevel { get; }
 
+        /// <summary>
+        ///     The disco ball's soft pity inside an ordinary level that lost its roll: each time this much more of the
+        ///     level is done, it rolls again (<see cref="DiscoPityChancePerStep" />). 0 turns it off.
+        /// </summary>
+        float DiscoPityEveryCompletion { get; }
+
+        /// <summary>
+        ///     The chance of the first of those rolls; the second has twice it, the third three times, so a level
+        ///     near its end is likelier to get its disco ball than one just begun.
+        /// </summary>
+        float DiscoPityChancePerStep { get; }
+
         /// <summary>A level that always brings a single disco ball, with no roll; 0 for none.</summary>
         int SureDiscoLevel { get; }
 

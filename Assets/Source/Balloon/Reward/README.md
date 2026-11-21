@@ -117,10 +117,15 @@ has an entry for.
   `OrdinaryDiscoEveryLevels` (1) level from `SureDiscoLevel` (8) on, against `OrdinaryDiscoChance` (17%,
   eased and grown by the same rules, on its own count), placed at `DiscoAtCompletion` (0.35). Level 8 always
   places its one, at `SureDiscoAtCompletion` (15% done).
+- **Disco ball, as a level goes on.** A level that lost that roll can still win one: each
+  `DiscoPityEveryCompletion` (15%) more of the level done rolls again, the first at `DiscoPityChancePerStep`
+  (2%), the second at twice that, the third at three times, eased over the run like the level's own roll. A
+  won one comes on the next line. So a long level is likelier to get its disco ball the nearer its end. The
+  golden balloon has no such roll.
 - **Heart, elsewhere.** A roll per line while a heart is missing: `HeartChanceMissingOne`, or
   `HeartChanceMissingTwo` with two or more missing. After one is placed, `HeartCooldownLines` lines pass
   before the next roll. Each line rolled without one while the player is in need raises the next line's
-  chance (`IAssistSettings.HeartPity`, a `Game/Assist/PityRoll`: on the last heart 12%, 18%, 24%…). A heart
+  chance (`IAssistSettings.HeartPity`, a `Game/Assist/PityRoll`: on the last heart 9%, 13.5%, 18%…). A heart
   rolled for a line with no room for it is owed to the next line, unless the player has healed to full in
   between. Extra hearts past the maximum count as full.
 - **Hearts grow rarer over a run.** Every heart roll, a purple level's too, is multiplied by

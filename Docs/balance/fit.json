@@ -1,0 +1,564 @@
+{
+ "anchors": [
+  [
+   10,
+   55.0
+  ],
+  [
+   25,
+   160.0
+  ]
+ ],
+ "data": [
+  "runs-58201666.csv",
+  "runs-7756c77e.csv"
+ ],
+ "growth_average": 0.0486,
+ "growth_expert": 0.0485,
+ "read_up_to": {
+  "average": 33,
+  "expert": 46
+ },
+ "tail_rate": 1.057,
+ "control_points": {
+  "1": 250,
+  "2": 450,
+  "3": 650,
+  "4": 950,
+  "5": 1350,
+  "6": 1850,
+  "7": 2500,
+  "8": 3300,
+  "9": 4300,
+  "10": 5300,
+  "11": 6650,
+  "12": 8550,
+  "13": 10850,
+  "14": 13400,
+  "15": 16000,
+  "16": 18600,
+  "17": 21200,
+  "18": 23800,
+  "19": 27050,
+  "20": 30900,
+  "21": 35300,
+  "22": 40100,
+  "23": 45400,
+  "24": 50900,
+  "25": 56550,
+  "26": 62800,
+  "27": 69850,
+  "28": 77300,
+  "29": 85250,
+  "30": 93800,
+  "31": 102550,
+  "32": 111700,
+  "33": 121500,
+  "34": 132450,
+  "35": 144150,
+  "36": 156600,
+  "37": 169900,
+  "38": 184050,
+  "39": 199100,
+  "40": 215100
+ },
+ "levels": [
+  {
+   "level": 10,
+   "target": 55.0,
+   "asked": 1000,
+   "average_rate": 15.7,
+   "expert_rate": 17.6
+  },
+  {
+   "level": 11,
+   "target": 65.9,
+   "asked": 1350,
+   "average_rate": 20.6,
+   "expert_rate": 22.5
+  },
+  {
+   "level": 12,
+   "target": 75.9,
+   "asked": 1900,
+   "average_rate": 25.0,
+   "expert_rate": 29.3
+  },
+  {
+   "level": 13,
+   "target": 85.1,
+   "asked": 2300,
+   "average_rate": 26.9,
+   "expert_rate": 34.3
+  },
+  {
+   "level": 14,
+   "target": 93.6,
+   "asked": 2550,
+   "average_rate": 27.1,
+   "expert_rate": 37.3
+  },
+  {
+   "level": 15,
+   "target": 101.5,
+   "asked": 2600,
+   "average_rate": 25.4,
+   "expert_rate": 40.8
+  },
+  {
+   "level": 16,
+   "target": 108.9,
+   "asked": 2600,
+   "average_rate": 21.9,
+   "expert_rate": 42.6
+  },
+  {
+   "level": 17,
+   "target": 115.8,
+   "asked": 2600,
+   "average_rate": 19.3,
+   "expert_rate": 37.7
+  },
+  {
+   "level": 18,
+   "target": 122.4,
+   "asked": 2600,
+   "average_rate": 19.9,
+   "expert_rate": 30.8
+  },
+  {
+   "level": 19,
+   "target": 128.6,
+   "asked": 3250,
+   "average_rate": 25.3,
+   "expert_rate": 31.1
+  },
+  {
+   "level": 20,
+   "target": 134.4,
+   "asked": 3850,
+   "average_rate": 28.7,
+   "expert_rate": 32.6
+  },
+  {
+   "level": 21,
+   "target": 140.0,
+   "asked": 4400,
+   "average_rate": 31.5,
+   "expert_rate": 34.7
+  },
+  {
+   "level": 22,
+   "target": 145.4,
+   "asked": 4800,
+   "average_rate": 33.1,
+   "expert_rate": 36.9
+  },
+  {
+   "level": 23,
+   "target": 150.4,
+   "asked": 5300,
+   "average_rate": 35.1,
+   "expert_rate": 41.1
+  },
+  {
+   "level": 24,
+   "target": 155.3,
+   "asked": 5500,
+   "average_rate": 35.4,
+   "expert_rate": 47.2
+  },
+  {
+   "level": 25,
+   "target": 160.0,
+   "asked": 5650,
+   "average_rate": 35.3,
+   "expert_rate": 50.5
+  },
+  {
+   "level": 26,
+   "target": 164.5,
+   "asked": 6250,
+   "average_rate": 38.1,
+   "expert_rate": 50.1
+  },
+  {
+   "level": 27,
+   "target": 168.8,
+   "asked": 7050,
+   "average_rate": 41.9,
+   "expert_rate": 49.8
+  },
+  {
+   "level": 28,
+   "target": 173.0,
+   "asked": 7450,
+   "average_rate": 43.2,
+   "expert_rate": 52.2
+  },
+  {
+   "level": 29,
+   "target": 177.0,
+   "asked": 7950,
+   "average_rate": 45.0,
+   "expert_rate": 58.1
+  },
+  {
+   "level": 30,
+   "target": 180.9,
+   "asked": 8550,
+   "average_rate": 47.4,
+   "expert_rate": 64.6
+  },
+  {
+   "level": 31,
+   "target": 184.7,
+   "asked": 8750,
+   "average_rate": 47.5,
+   "expert_rate": 65.2
+  },
+  {
+   "level": 32,
+   "target": 188.3,
+   "asked": 9150,
+   "average_rate": 48.6,
+   "expert_rate": 60.9
+  },
+  {
+   "level": 33,
+   "target": 191.8,
+   "asked": 9800,
+   "average_rate": 51.0,
+   "expert_rate": 60.4
+  },
+  {
+   "level": 34,
+   "target": 195.2,
+   "asked": 10950,
+   "average_rate": 56.2,
+   "expert_rate": 63.5
+  },
+  {
+   "level": 35,
+   "target": 198.6,
+   "asked": 11700,
+   "average_rate": 58.9,
+   "expert_rate": 65.4
+  },
+  {
+   "level": 36,
+   "target": 201.8,
+   "asked": 12450,
+   "average_rate": 61.8,
+   "expert_rate": 69.0
+  },
+  {
+   "level": 37,
+   "target": 204.9,
+   "asked": 13300,
+   "average_rate": 64.8,
+   "expert_rate": 74.0
+  },
+  {
+   "level": 38,
+   "target": 208.0,
+   "asked": 14150,
+   "average_rate": 67.9,
+   "expert_rate": 79.4
+  },
+  {
+   "level": 39,
+   "target": 211.0,
+   "asked": 15050,
+   "average_rate": 71.2,
+   "expert_rate": 85.8
+  },
+  {
+   "level": 40,
+   "target": 213.9,
+   "asked": 16000,
+   "average_rate": 74.7,
+   "expert_rate": 88.9
+  },
+  {
+   "level": 41,
+   "target": 216.7,
+   "asked": 17000,
+   "average_rate": 78.3,
+   "expert_rate": 90.3
+  },
+  {
+   "level": 42,
+   "target": 219.4,
+   "asked": 18050,
+   "average_rate": 82.1,
+   "expert_rate": 97.0
+  },
+  {
+   "level": 43,
+   "target": 222.1,
+   "asked": 19150,
+   "average_rate": 86.1,
+   "expert_rate": 105.4
+  },
+  {
+   "level": 44,
+   "target": 224.8,
+   "asked": 20300,
+   "average_rate": 90.3,
+   "expert_rate": 112.5
+  },
+  {
+   "level": 45,
+   "target": 227.4,
+   "asked": 21550,
+   "average_rate": 94.7,
+   "expert_rate": 120.3
+  },
+  {
+   "level": 46,
+   "target": 229.9,
+   "asked": 22850,
+   "average_rate": 99.3,
+   "expert_rate": 125.1
+  },
+  {
+   "level": 47,
+   "target": 232.3,
+   "asked": 24200,
+   "average_rate": 104.2,
+   "expert_rate": 126.4
+  },
+  {
+   "level": 48,
+   "target": 234.8,
+   "asked": 25650,
+   "average_rate": 109.2,
+   "expert_rate": 132.5
+  },
+  {
+   "level": 49,
+   "target": 237.1,
+   "asked": 27150,
+   "average_rate": 114.6,
+   "expert_rate": 138.9
+  },
+  {
+   "level": 50,
+   "target": 239.4,
+   "asked": 28750,
+   "average_rate": 120.1,
+   "expert_rate": 145.7
+  },
+  {
+   "level": 51,
+   "target": 241.7,
+   "asked": 30450,
+   "average_rate": 126.0,
+   "expert_rate": 152.7
+  },
+  {
+   "level": 52,
+   "target": 243.9,
+   "asked": 32200,
+   "average_rate": 132.1,
+   "expert_rate": 160.2
+  },
+  {
+   "level": 53,
+   "target": 246.1,
+   "asked": 34100,
+   "average_rate": 138.5,
+   "expert_rate": 167.9
+  },
+  {
+   "level": 54,
+   "target": 248.2,
+   "asked": 36050,
+   "average_rate": 145.3,
+   "expert_rate": 176.1
+  },
+  {
+   "level": 55,
+   "target": 250.4,
+   "asked": 38150,
+   "average_rate": 152.3,
+   "expert_rate": 184.6
+  },
+  {
+   "level": 56,
+   "target": 252.4,
+   "asked": 40300,
+   "average_rate": 159.7,
+   "expert_rate": 193.6
+  },
+  {
+   "level": 57,
+   "target": 254.4,
+   "asked": 42600,
+   "average_rate": 167.5,
+   "expert_rate": 203.0
+  },
+  {
+   "level": 58,
+   "target": 256.4,
+   "asked": 45050,
+   "average_rate": 175.7,
+   "expert_rate": 212.8
+  },
+  {
+   "level": 59,
+   "target": 258.4,
+   "asked": 47600,
+   "average_rate": 184.2,
+   "expert_rate": 223.1
+  },
+  {
+   "level": 60,
+   "target": 260.3,
+   "asked": 50300,
+   "average_rate": 193.2,
+   "expert_rate": 234.0
+  },
+  {
+   "level": 61,
+   "target": 262.2,
+   "asked": 53100,
+   "average_rate": 202.6,
+   "expert_rate": 245.3
+  },
+  {
+   "level": 62,
+   "target": 264.1,
+   "asked": 56100,
+   "average_rate": 212.4,
+   "expert_rate": 257.2
+  },
+  {
+   "level": 63,
+   "target": 265.9,
+   "asked": 59250,
+   "average_rate": 222.7,
+   "expert_rate": 269.7
+  },
+  {
+   "level": 64,
+   "target": 267.7,
+   "asked": 62550,
+   "average_rate": 233.6,
+   "expert_rate": 282.8
+  },
+  {
+   "level": 65,
+   "target": 269.5,
+   "asked": 66000,
+   "average_rate": 244.9,
+   "expert_rate": 296.5
+  },
+  {
+   "level": 66,
+   "target": 271.2,
+   "asked": 69650,
+   "average_rate": 256.9,
+   "expert_rate": 310.9
+  },
+  {
+   "level": 67,
+   "target": 273.0,
+   "asked": 73500,
+   "average_rate": 269.3,
+   "expert_rate": 326.0
+  },
+  {
+   "level": 68,
+   "target": 274.7,
+   "asked": 77600,
+   "average_rate": 282.5,
+   "expert_rate": 341.8
+  },
+  {
+   "level": 69,
+   "target": 276.3,
+   "asked": 81850,
+   "average_rate": 296.2,
+   "expert_rate": 358.4
+  },
+  {
+   "level": 70,
+   "target": 278.0,
+   "asked": 86350,
+   "average_rate": 310.6,
+   "expert_rate": 375.8
+  },
+  {
+   "level": 71,
+   "target": 279.6,
+   "asked": 91050,
+   "average_rate": 325.7,
+   "expert_rate": 394.0
+  },
+  {
+   "level": 72,
+   "target": 281.2,
+   "asked": 96050,
+   "average_rate": 341.6,
+   "expert_rate": 413.1
+  },
+  {
+   "level": 73,
+   "target": 282.8,
+   "asked": 101300,
+   "average_rate": 358.2,
+   "expert_rate": 433.2
+  },
+  {
+   "level": 74,
+   "target": 284.4,
+   "asked": 106800,
+   "average_rate": 375.6,
+   "expert_rate": 454.2
+  },
+  {
+   "level": 75,
+   "target": 285.9,
+   "asked": 112600,
+   "average_rate": 393.9,
+   "expert_rate": 476.2
+  },
+  {
+   "level": 76,
+   "target": 287.4,
+   "asked": 118700,
+   "average_rate": 413.0,
+   "expert_rate": 499.3
+  },
+  {
+   "level": 77,
+   "target": 288.9,
+   "asked": 125150,
+   "average_rate": 433.1,
+   "expert_rate": 523.5
+  },
+  {
+   "level": 78,
+   "target": 290.4,
+   "asked": 131900,
+   "average_rate": 454.2,
+   "expert_rate": 548.9
+  },
+  {
+   "level": 79,
+   "target": 291.8,
+   "asked": 139000,
+   "average_rate": 476.3,
+   "expert_rate": 575.6
+  },
+  {
+   "level": 80,
+   "target": 293.3,
+   "asked": 146500,
+   "average_rate": 499.4,
+   "expert_rate": 603.5
+  }
+ ]
+}

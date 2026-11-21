@@ -22,6 +22,12 @@ namespace BalloonParty.Balloon.Reward
     ///         its one early (<see cref="PlatedRewardTuning.SureAtCompletion" />), the player's first sight of the
     ///         balloon.
     ///     </para>
+    ///     <para>
+    ///         A level that lost that roll can still win one as it goes: each
+    ///         <see cref="PlatedRewardTuning.PityEveryCompletion" /> more of it done rolls again, the first at
+    ///         <see cref="PlatedRewardTuning.PityChancePerStep" />, each later one that much likelier, and a won one
+    ///         comes at once. Only the disco ball's tuning sets it.
+    ///     </para>
     ///     A won roll stays due until the balloon is placed: a line with no room for it passes it on.
     /// </summary>
     internal sealed class PlatedRewardSchedule
@@ -34,6 +40,8 @@ namespace BalloonParty.Balloon.Reward
         private bool _ordinaryRolled;
         private bool _ordinaryWon;
         private float _ordinaryAt;
+        // How many of the level's completion steps have rolled their pity.
+        private int _pitySteps;
         // A purple level's lines counted towards the next roll.
         private int _rollLines;
         private bool _alive;
@@ -145,6 +153,7 @@ namespace BalloonParty.Balloon.Reward
             _owed = false;
             _ordinaryRolled = false;
             _ordinaryWon = false;
+            _pitySteps = 0;
             // Primed so the first line on a purple level rolls.
             _rollLines = rollEveryLines - 1;
         }
@@ -173,8 +182,35 @@ namespace BalloonParty.Balloon.Reward
                 _ordinaryAt = sureLevel ? tuning.SureAtCompletion : tuning.AtCompletion;
             }
 
-            return _ordinaryWon && _placedThisLevel == 0
-                                && LevelCompletion.Of(progress, level.AllowedColors) >= _ordinaryAt;
+            var completion = LevelCompletion.Of(progress, level.AllowedColors);
+            if (!_ordinaryWon)
+            {
+                RollCompletionPity(in tuning, levelNumber, completion, odds);
+            }
+
+            return _ordinaryWon && _placedThisLevel == 0 && completion >= _ordinaryAt;
+        }
+
+        // One roll for each step of completion reached since the last line, so a line that crosses two rolls both.
+        private void RollCompletionPity(in PlatedRewardTuning tuning, int levelNumber, float completion, float odds)
+        {
+            if (tuning.PityEveryCompletion <= 0f || tuning.PityChancePerStep <= 0f
+                || !IsOrdinaryLevel(in tuning, levelNumber))
+            {
+                return;
+            }
+
+            // The epsilon keeps a completion that is exactly a step (0.3 of 0.15) from rounding below it.
+            var reached = (int)(completion / tuning.PityEveryCompletion + 0.0001f);
+            while (_pitySteps < reached && !_ordinaryWon)
+            {
+                _pitySteps++;
+                if (_random01() < Math.Min(1f, tuning.PityChancePerStep * _pitySteps * odds))
+                {
+                    _ordinaryWon = true;
+                    _ordinaryAt = 0f;
+                }
+            }
         }
 
         private void Left(int placement)

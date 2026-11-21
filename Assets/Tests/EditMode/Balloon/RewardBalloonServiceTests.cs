@@ -1398,6 +1398,251 @@ namespace BalloonParty.Tests.Balloon
             Assert.AreEqual(0, _draws);
         }
 
+        // The completion pity: on level 12 (a check level) the first roll is lost; then every 20% done rolls again,
+        // 10% at the first step, 20% at the second, 30% at the third.
+        [Test]
+        public void DiscoPity_BelowTheFirstStep_RollsNothing()
+        {
+            UseDiscoPity(every: 0.2f, perStep: 0.1f);
+            Rolls(0.99f, 0f);
+            SetCompletion(0.19f);
+
+            Assert.IsFalse(_service.TryTakeDue(out _));
+            Assert.AreEqual(1, _draws, "only the level's first roll");
+        }
+
+        [TestCase(0.09f, true)]
+        [TestCase(0.11f, false)]
+        public void DiscoPity_FirstStep_RollsItsChance_AndAWinIsDueAtOnceBelowTheThreshold(float draw, bool due)
+        {
+            UseDiscoPity(every: 0.2f, perStep: 0.1f);
+            Rolls(0.99f, draw);
+            SetCompletion(0.2f);
+
+            Assert.AreEqual(due, _service.TryTakeDue(out var type), "10% at the first step, 35% needed otherwise");
+            if (due)
+            {
+                Assert.AreEqual(BalloonType.Disco, type);
+            }
+
+            Assert.AreEqual(2, _draws);
+        }
+
+        [TestCase(0.19f, true)]
+        [TestCase(0.21f, false)]
+        public void DiscoPity_SecondStep_RollsAChanceTwiceTheFirsts(float draw, bool due)
+        {
+            UseDiscoPity(every: 0.2f, perStep: 0.1f);
+            Rolls(0.99f, 0.5f, draw);
+            SetCompletion(0.2f);
+            Assert.IsFalse(_service.TryTakeDue(out _), "the first step lost");
+
+            SetCompletion(0.4f);
+
+            Assert.AreEqual(due, _service.TryTakeDue(out _), "20% at the second step");
+            Assert.AreEqual(3, _draws);
+        }
+
+        [Test]
+        public void DiscoPity_AWonRoll_StaysDueWithoutRollingAgain()
+        {
+            UseDiscoPity(every: 0.2f, perStep: 0.1f);
+            Rolls(0.99f, 0.05f, 0f);
+            SetCompletion(0.2f);
+            Assert.IsTrue(_service.TryTakeDue(out _));
+
+            SetCompletion(0.6f);
+
+            Assert.IsTrue(_service.TryTakeDue(out var type), "still due, not placed");
+            Assert.AreEqual(BalloonType.Disco, type);
+            Assert.AreEqual(2, _draws);
+        }
+
+        [TestCase(0.19f, true, 3)]
+        [TestCase(0.5f, false, 3)]
+        public void DiscoPity_OneLineCrossingTwoSteps_RollsBoth(float secondDraw, bool due, int draws)
+        {
+            UseDiscoPity(every: 0.2f, perStep: 0.1f);
+            Rolls(0.99f, 0.5f, secondDraw);
+            SetCompletion(0.4f);
+
+            Assert.AreEqual(due, _service.TryTakeDue(out _));
+            Assert.AreEqual(draws, _draws);
+        }
+
+        [Test]
+        public void DiscoPity_OneLineCrossingTwoSteps_StopsRollingOnceWon()
+        {
+            UseDiscoPity(every: 0.2f, perStep: 0.1f);
+            Rolls(0.99f, 0.05f, 0f);
+            SetCompletion(0.4f);
+
+            Assert.IsTrue(_service.TryTakeDue(out _));
+            Assert.AreEqual(2, _draws, "the second step is not rolled once the first won");
+        }
+
+        [Test]
+        public void DiscoPity_AStepAlreadyRolled_IsNotRolledOnLaterLines()
+        {
+            UseDiscoPity(every: 0.2f, perStep: 0.1f);
+            Rolls(0.99f, 0.5f, 0.5f);
+            SetCompletion(0.2f);
+            Assert.IsFalse(_service.TryTakeDue(out _));
+            Assert.AreEqual(2, _draws);
+
+            SetCompletion(0.25f);
+            Assert.IsFalse(_service.TryTakeDue(out _));
+            SetCompletion(0.39f);
+            Assert.IsFalse(_service.TryTakeDue(out _));
+
+            Assert.AreEqual(2, _draws, "no new step reached");
+        }
+
+        [Test]
+        public void DiscoPity_ExactlyAStepOfCompletion_Rolls()
+        {
+            UseDiscoPity(every: 0.15f, perStep: 0.1f);
+            Rolls(0.99f, 0.5f, 0.5f);
+            SetCompletion(0.3f);
+
+            Assert.IsFalse(_service.TryTakeDue(out _));
+            Assert.AreEqual(3, _draws, "0.3 of 0.15 is two whole steps, whatever the float rounding");
+        }
+
+        [Test]
+        public void DiscoPity_NextLevel_StartsItsStepsOver()
+        {
+            UseDiscoPity(every: 0.2f, perStep: 0.1f);
+            Rolls(0.99f, 0.5f);
+            SetCompletion(0.2f);
+            Assert.IsFalse(_service.TryTakeDue(out _));
+
+            _levelNumber.Value = 16;
+            Rolls(0.99f, 0.05f);
+
+            Assert.IsTrue(_service.TryTakeDue(out var type), "the first step rolls again on the new level");
+            Assert.AreEqual(BalloonType.Disco, type);
+            Assert.AreEqual(2, _draws);
+        }
+
+        [TestCase(0f, 0.1f)]
+        [TestCase(0.2f, 0f)]
+        public void DiscoPity_EitherSettingZero_IsOff(float every, float perStep)
+        {
+            UseDiscoPity(every, perStep);
+            Rolls(0.99f, 0f, 0f);
+            SetCompletion(0.8f);
+
+            Assert.AreEqual(0, FirstDueLine(BalloonType.Disco, 5));
+            Assert.AreEqual(1, _draws, "only the level's first roll");
+        }
+
+        [TestCase(4)]
+        [TestCase(10)]
+        public void DiscoPity_ALevelThatIsNotARollLevel_RollsNothing(int level)
+        {
+            UseDiscoPity(every: 0.2f, perStep: 0.1f);
+            UseOrdinaryLevel(level, roll: 0f);
+            Rolls(0f, 0f);
+            SetCompletion(0.9f);
+
+            Assert.AreEqual(0, FirstDueLine(BalloonType.Disco, 5), "4 is before the sure level, 10 off the cadence");
+            Assert.AreEqual(0, _draws);
+        }
+
+        [Test]
+        public void DiscoPity_APurpleLevel_RollsNothing()
+        {
+            UseDiscoPity(every: 0.2f, perStep: 0.1f);
+            _level.IsExtraColorLevel.Returns(true);
+            Rolls(0f, 0f);
+            SetCompletion(0.2f);
+
+            Assert.IsFalse(_service.TryTakeDue(out _), "below the purple threshold, and no pity here");
+            Assert.AreEqual(0, _draws);
+        }
+
+        [Test]
+        public void DiscoPity_TheSureLevel_RollsNothing()
+        {
+            UseDiscoPity(every: 0.2f, perStep: 0.1f);
+            UseOrdinaryLevel(level: 8, roll: 0f);
+            Rolls(0f, 0f);
+            SetCompletion(0.2f);
+
+            Assert.IsTrue(_service.TryTakeDue(out var type), "the sure level's own early timing");
+            Assert.AreEqual(BalloonType.Disco, type);
+            Assert.AreEqual(0, _draws);
+        }
+
+        [Test]
+        public void DiscoPity_AWonFirstRoll_RollsNoPity()
+        {
+            UseDiscoPity(every: 0.2f, perStep: 0.1f);
+            Rolls(0f, 0f, 0f);
+            SetCompletion(0.2f);
+            Assert.IsFalse(_service.TryTakeDue(out _), "won, but the normal timing is 35%");
+
+            SetCompletion(0.6f);
+
+            Assert.IsTrue(_service.TryTakeDue(out _));
+            Assert.AreEqual(1, _draws);
+        }
+
+        [Test]
+        public void DiscoPity_APlacedOne_RollsNoMore()
+        {
+            UseDiscoPity(every: 0.2f, perStep: 0.1f);
+            Rolls(0.99f, 0f, 0f, 0f, 0f);
+            SetCompletion(0.2f);
+            Assert.IsTrue(_service.TryTakeDue(out _));
+            _service.Placed(BalloonType.Disco)();
+
+            SetCompletion(0.8f);
+
+            Assert.AreEqual(0, FirstDueLine(BalloonType.Disco, 5));
+            Assert.AreEqual(2, _draws);
+        }
+
+        [Test]
+        public void DiscoPity_PartyFavorsOdds_RaiseEachStepsChance()
+        {
+            UseDiscoPity(every: 0.2f, perStep: 0.1f);
+            _weapon.RewardBalloonOdds.Returns(0.5f);
+            Rolls(0.99f, 0.14f);
+            SetCompletion(0.2f);
+
+            Assert.IsTrue(_service.TryTakeDue(out _), "10% x 1.5 = 15%");
+        }
+
+        [Test]
+        public void DiscoPity_WithoutPartyFavors_TheSameDrawMisses()
+        {
+            UseDiscoPity(every: 0.2f, perStep: 0.1f);
+            Rolls(0.99f, 0.14f);
+            SetCompletion(0.2f);
+
+            Assert.IsFalse(_service.TryTakeDue(out _));
+        }
+
+        // The golden balloon's tuning leaves the pity at 0 whatever the disco's is set to.
+        [Test]
+        public void GoldenBalloon_NeverGetsThePity()
+        {
+            _settings.DiscoPityEveryCompletion.Returns(0.2f);
+            _settings.DiscoPityChancePerStep.Returns(0.9f);
+            UseOrdinaryGolden(level: 10, roll: 0.99f);
+            Rolls(0.99f, 0f, 0f);
+
+            foreach (var completion in new[] { 0.2f, 0.4f, 0.6f, 0.7f })
+            {
+                SetCompletion(completion);
+                Assert.IsFalse(LinesUntilDue(1), $"at {completion}");
+            }
+
+            Assert.AreEqual(1, _draws, "only the golden's first roll");
+        }
+
         // Soft pity: each level without a golden balloon adds the growth to the next roll, 10% then 15%, 20%, 25%.
         [Test]
         public void GoldenSoftPity_EachLevelWithoutOne_RaisesTheNextRoll()
@@ -1653,6 +1898,28 @@ namespace BalloonParty.Tests.Balloon
             _settings.SureDiscoAtCompletion.Returns(0.15f);
             _service.Dispose();
             _service = CreateService(BalloonType.Golden, BalloonType.Disco, BalloonType.Heart);
+        }
+
+        // The disco ball with its completion pity, on the ordinary check level 12 whose first roll (45%) is lost by
+        // the draw Rolls then gives. Level 12 is set first, so the level's own start has already passed.
+        private void UseDiscoPity(float every, float perStep)
+        {
+            UseDisco();
+            _settings.DiscoPityEveryCompletion.Returns(every);
+            _settings.DiscoPityChancePerStep.Returns(perStep);
+            UseOrdinaryLevel(level: 12, roll: 0.99f);
+        }
+
+        // The next draws in order, then 1 (a loss); counts them from zero.
+        private void Rolls(params float[] values)
+        {
+            var next = 0;
+            _draws = 0;
+            _service.Random01 = () =>
+            {
+                _draws++;
+                return next < values.Length ? values[next++] : 1f;
+            };
         }
 
         // A catalogue with the nuke balloon, its odds a sure thing.
