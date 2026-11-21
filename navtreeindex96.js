@@ -1,5 +1,6 @@
 var NAVTREEINDEX96 =
 {
+"classBalloonParty_1_1Shared_1_1GameState_1_1EditorNavigationBootstrap.html":[5,0,0,12,5,3],
 "classBalloonParty_1_1Shared_1_1GameState_1_1EditorNavigationBootstrap.html":[6,0,0,12,5,3],
 "classBalloonParty_1_1Shared_1_1GameState_1_1LaunchAscend.html":[5,0,0,12,5,6],
 "classBalloonParty_1_1Shared_1_1GameState_1_1LaunchAscend.html":[6,0,0,12,5,6],
@@ -248,6 +249,5 @@ var NAVTREEINDEX96 =
 "classBalloonParty_1_1Shared_1_1Pool_1_1EffectView.html#a6a4793ebc87e9d5b8ee755d6298eac6f":[5,0,0,12,9,1,9],
 "classBalloonParty_1_1Shared_1_1Pool_1_1EffectView.html#a6a4793ebc87e9d5b8ee755d6298eac6f":[6,0,0,12,9,1,9],
 "classBalloonParty_1_1Shared_1_1Pool_1_1EffectView.html#a6b0c22f0d88afb7d6a6bc52109e48cea":[5,0,0,12,9,1,11],
-"classBalloonParty_1_1Shared_1_1Pool_1_1EffectView.html#a6b0c22f0d88afb7d6a6bc52109e48cea":[6,0,0,12,9,1,11],
-"classBalloonParty_1_1Shared_1_1Pool_1_1EffectView.html#a8c5b0c24457039a62209a7da894852fc":[5,0,0,12,9,1,4]
+"classBalloonParty_1_1Shared_1_1Pool_1_1EffectView.html#a6b0c22f0d88afb7d6a6bc52109e48cea":[6,0,0,12,9,1,11]
 };

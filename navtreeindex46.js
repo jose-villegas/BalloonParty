@@ -1,5 +1,6 @@
 var NAVTREEINDEX46 =
 {
+"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a345ecd47c34b9217c085c39c64c6cab5":[5,0,0,3,36,12],
 "classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a345ecd47c34b9217c085c39c64c6cab5":[6,0,0,3,36,12],
 "classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a4301773992fa776a651c0bceaa6d5bb3":[5,0,0,3,36,4],
 "classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a4301773992fa776a651c0bceaa6d5bb3":[6,0,0,3,36,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX46 =
 "classBalloonParty_1_1Display_1_1EffectsClearingStamper.html#af5742b6c211590e6eaac233bc1300195":[5,0,0,4,7,8],
 "classBalloonParty_1_1Display_1_1EffectsClearingStamper.html#af5742b6c211590e6eaac233bc1300195":[6,0,0,4,7,8],
 "classBalloonParty_1_1Display_1_1EffectsClearingStamps.html":[5,0,0,4,8],
-"classBalloonParty_1_1Display_1_1EffectsClearingStamps.html":[6,0,0,4,8],
-"classBalloonParty_1_1Display_1_1EffectsClearingStamps.html#a12a3bb78686b9cb178313382b3563b68":[5,0,0,4,8,0]
+"classBalloonParty_1_1Display_1_1EffectsClearingStamps.html":[6,0,0,4,8]
 };

@@ -1,5 +1,6 @@
 var NAVTREEINDEX18 =
 {
+"classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#a170da329269b17b2ef38e848d176c544":[5,0,0,1,3,1,8],
 "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#a170da329269b17b2ef38e848d176c544":[6,0,0,1,3,1,8],
 "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#a1826ad5a297a5901aae8879e297cee7c":[5,0,0,1,3,1,22],
 "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#a1826ad5a297a5901aae8879e297cee7c":[6,0,0,1,3,1,22],
@@ -248,6 +249,5 @@ var NAVTREEINDEX18 =
 "classBalloonParty_1_1Balloon_1_1Reward_1_1NukeOdds.html#acfb083a4c0c0dac83128c8daae5f5ec3":[5,0,0,1,3,8,6],
 "classBalloonParty_1_1Balloon_1_1Reward_1_1NukeOdds.html#acfb083a4c0c0dac83128c8daae5f5ec3":[6,0,0,1,3,8,6],
 "classBalloonParty_1_1Balloon_1_1Reward_1_1NukeOdds.html#adcf7b57440e76b7d10c2be49354502e3":[5,0,0,1,3,8,7],
-"classBalloonParty_1_1Balloon_1_1Reward_1_1NukeOdds.html#adcf7b57440e76b7d10c2be49354502e3":[6,0,0,1,3,8,7],
-"classBalloonParty_1_1Balloon_1_1Reward_1_1NukeOdds.html#af6dd1a604e95a001810283cb6a86eb1b":[5,0,0,1,3,8,12]
+"classBalloonParty_1_1Balloon_1_1Reward_1_1NukeOdds.html#adcf7b57440e76b7d10c2be49354502e3":[6,0,0,1,3,8,7]
 };

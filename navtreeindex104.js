@@ -1,5 +1,6 @@
 var NAVTREEINDEX104 =
 {
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudView.html#ac0c75ea6aa4457b5a406de20340b8274":[5,0,0,13,0,0,24,19],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudView.html#ac0c75ea6aa4457b5a406de20340b8274":[6,0,0,13,0,0,24,19],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudView.html#ac4701cac3a5fc574b73b96da3a86e2b8":[5,0,0,13,0,0,24,20],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudView.html#ac4701cac3a5fc574b73b96da3a86e2b8":[6,0,0,13,0,0,24,20],
@@ -248,6 +249,5 @@ var NAVTREEINDEX104 =
 "classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterViewController-3-g.html#a7ac1ac3b0acd64cd97f163800a351232":[5,0,0,13,0,1,1,16],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterViewController-3-g.html#a7ac1ac3b0acd64cd97f163800a351232":[6,0,0,13,0,1,1,16],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterViewController-3-g.html#a84571c8bd097a39f24d08151ada6f1d8":[5,0,0,13,0,1,1,15],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterViewController-3-g.html#a84571c8bd097a39f24d08151ada6f1d8":[6,0,0,13,0,1,1,15],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterViewController-3-g.html#aa5248f7f283e6a77696802ed2bb8f3af":[5,0,0,13,0,1,1,7]
+"classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterViewController-3-g.html#a84571c8bd097a39f24d08151ada6f1d8":[6,0,0,13,0,1,1,15]
 };

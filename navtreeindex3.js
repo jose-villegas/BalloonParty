@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"MushroomSwayedMessage_8cs.html":[7,0,14,7,30],
 "MushroomThrowTuning_8cs.html":[7,0,15,0,25],
 "MushroomView_8cs.html":[7,0,15,0,0,22],
 "MushroomWallBaker_8cs.html":[7,0,6,35],
@@ -233,7 +234,7 @@ var NAVTREEINDEX3 =
 "SceneLightFieldService_8cs.html":[7,0,14,11,4],
 "SceneLightFieldSettings_8cs.html":[7,0,3,5,26],
 "SceneLightMode_8cs.html":[7,0,14,11,5],
-"SceneStage_8cs.html":[7,0,6,9,0],
+"SceneStage_8cs.html":[7,0,6,9,1],
 "SceneTransition_8cs.html":[7,0,14,5,14],
 "ScoreAttribution_8cs.html":[7,0,15,1,19],
 "ScoreAttributions_8cs.html":[7,0,15,1,20],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "ScoreTrailBehaviourResolver_8cs.html":[7,0,7,9,0,8],
 "ScoreTrailContext_8cs.html":[7,0,7,9,0,9],
 "ScoreTrailService_8cs.html":[7,0,7,9,5],
-"ScoreUILifetimeScope_8cs.html":[7,0,18,8,7],
-"ScoringControlPoint_8cs.html":[7,0,3,9,32]
+"ScoreUILifetimeScope_8cs.html":[7,0,18,8,7]
 };

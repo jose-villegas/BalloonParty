@@ -1,5 +1,8 @@
 var NAVTREEINDEX151 =
 {
+"structBalloonParty_1_1Shared_1_1Messages_1_1OverflowHeartRequestedMessage.html#a2de39e5c2a4498765c711c8057dc4c0d":[6,0,0,12,7,35,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1OverflowHeartRequestedMessage.html#a672b49a0f2f31d6bc43e2ed4fa69b2bd":[5,0,0,12,7,35,1],
+"structBalloonParty_1_1Shared_1_1Messages_1_1OverflowHeartRequestedMessage.html#a672b49a0f2f31d6bc43e2ed4fa69b2bd":[6,0,0,12,7,35,1],
 "structBalloonParty_1_1Shared_1_1Messages_1_1OverflowHeartRequestedMessage.html#a7e67a901c557cfb0a4bfffbe5f82f74e":[5,0,0,12,7,35,2],
 "structBalloonParty_1_1Shared_1_1Messages_1_1OverflowHeartRequestedMessage.html#a7e67a901c557cfb0a4bfffbe5f82f74e":[6,0,0,12,7,35,2],
 "structBalloonParty_1_1Shared_1_1Messages_1_1PierceDischargedMessage.html":[5,0,0,12,7,36],
@@ -246,8 +249,5 @@ var NAVTREEINDEX151 =
 "structBalloonParty_1_1Shared_1_1Messages_1_1SpeckSpawnRequestMessage.html#ae703c66e261993934d8bf9bf8bf646ce":[6,0,0,12,7,58,2],
 "structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html":[5,0,0,12,7,59],
 "structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html":[6,0,0,12,7,59],
-"structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html#a20df3af33d145e471ab1b67786360d34":[5,0,0,12,7,59,0],
-"structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html#a20df3af33d145e471ab1b67786360d34":[6,0,0,12,7,59,0],
-"structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html#a566089b3a1618a7881e6b572dcb1b118":[5,0,0,12,7,59,3],
-"structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html#a566089b3a1618a7881e6b572dcb1b118":[6,0,0,12,7,59,3]
+"structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html#a20df3af33d145e471ab1b67786360d34":[5,0,0,12,7,59,0]
 };

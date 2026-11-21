@@ -1,5 +1,8 @@
 var NAVTREEINDEX157 =
 {
+"structBalloonParty_1_1Solver_1_1ShotItemOutcome.html#a543290066b9270bf7e81e21c92844d28":[6,0,0,14,15,1],
+"structBalloonParty_1_1Solver_1_1ShotItemOutcome.html#a695fbb7e5bcc57d1bb60a425f9401daa":[5,0,0,14,15,7],
+"structBalloonParty_1_1Solver_1_1ShotItemOutcome.html#a695fbb7e5bcc57d1bb60a425f9401daa":[6,0,0,14,15,7],
 "structBalloonParty_1_1Solver_1_1ShotItemOutcome.html#a6c0ff45aed7b39fa18d71bb8b656ecda":[5,0,0,14,15,2],
 "structBalloonParty_1_1Solver_1_1ShotItemOutcome.html#a6c0ff45aed7b39fa18d71bb8b656ecda":[6,0,0,14,15,2],
 "structBalloonParty_1_1Solver_1_1ShotItemOutcome.html#a8ee08ed7e6bac2ef15f63d1cce592038":[5,0,0,14,15,5],
@@ -246,8 +249,5 @@ var NAVTREEINDEX157 =
 "structBalloonParty_1_1UI_1_1Score_1_1ShapeInkFrame.html#a08ef019cb7384eb16f0e2bb7a9e3eeaf":[6,0,0,16,8,8,6],
 "structBalloonParty_1_1UI_1_1Score_1_1ShapeInkFrame.html#a2f5e98a7f0112ea606f91e61e04d9660":[5,0,0,16,8,8,2],
 "structBalloonParty_1_1UI_1_1Score_1_1ShapeInkFrame.html#a2f5e98a7f0112ea606f91e61e04d9660":[6,0,0,16,8,8,2],
-"structBalloonParty_1_1UI_1_1Score_1_1ShapeInkFrame.html#a34f6aab192dd7f7c6ae1a6bbdef18ae4":[5,0,0,16,8,8,4],
-"structBalloonParty_1_1UI_1_1Score_1_1ShapeInkFrame.html#a34f6aab192dd7f7c6ae1a6bbdef18ae4":[6,0,0,16,8,8,4],
-"structBalloonParty_1_1UI_1_1Score_1_1ShapeInkFrame.html#a6118777b764b20a8d4e4224d3c331da0":[5,0,0,16,8,8,1],
-"structBalloonParty_1_1UI_1_1Score_1_1ShapeInkFrame.html#a6118777b764b20a8d4e4224d3c331da0":[6,0,0,16,8,8,1]
+"structBalloonParty_1_1UI_1_1Score_1_1ShapeInkFrame.html#a34f6aab192dd7f7c6ae1a6bbdef18ae4":[5,0,0,16,8,8,4]
 };

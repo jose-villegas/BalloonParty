@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"ScoringControlPoint_8cs.html":[7,0,3,9,32],
 "ScreenSpaceLightServiceEditor_8cs.html":[7,0,6,47],
 "ScreenSpaceLightService_8cs.html":[7,0,5,15],
 "ScriptReferenceRemap_8cs.html":[7,0,6,48],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "WorldPolylineGizmo_8cs.html":[7,0,14,10,17],
 "WriteOnMath_8cs.html":[7,0,18,5,3],
 "WriteOnText_8cs.html":[7,0,18,5,4],
-"XorShift32_8cs.html":[7,0,14,54],
-"annotated.html":[6,0]
+"XorShift32_8cs.html":[7,0,14,54]
 };

@@ -1,5 +1,8 @@
 var NAVTREEINDEX153 =
 {
+"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCapSpring.html#a8b99d25bcbf0312e64f8689963a995cb":[6,0,0,13,0,0,18,10],
+"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCapSpring.html#a9523cfb1584011242a2cda998237ed32":[5,0,0,13,0,0,18,7],
+"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCapSpring.html#a9523cfb1584011242a2cda998237ed32":[6,0,0,13,0,0,18,7],
 "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCapSpring.html#aadffd3b2acfc7019f037faa7591ac68a":[5,0,0,13,0,0,18,14],
 "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCapSpring.html#aadffd3b2acfc7019f037faa7591ac68a":[6,0,0,13,0,0,18,14],
 "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCapSpring.html#ab740b1769bbb77f27a1256668617fd7a":[5,0,0,13,0,0,18,12],
@@ -246,8 +249,5 @@ var NAVTREEINDEX153 =
 "structBalloonParty_1_1Slots_1_1Actor_1_1MushroomIdleTuning.html#ab31cfa3a4d8e81d9bf627f979f0cd432":[6,0,0,13,0,19,25],
 "structBalloonParty_1_1Slots_1_1Actor_1_1MushroomIdleTuning.html#ab88cb382bd9fe840870b72b00962a363":[5,0,0,13,0,19,5],
 "structBalloonParty_1_1Slots_1_1Actor_1_1MushroomIdleTuning.html#ab88cb382bd9fe840870b72b00962a363":[6,0,0,13,0,19,5],
-"structBalloonParty_1_1Slots_1_1Actor_1_1MushroomIdleTuning.html#ac070a6c42669d773c512d6c0756b3b2f":[5,0,0,13,0,19,10],
-"structBalloonParty_1_1Slots_1_1Actor_1_1MushroomIdleTuning.html#ac070a6c42669d773c512d6c0756b3b2f":[6,0,0,13,0,19,10],
-"structBalloonParty_1_1Slots_1_1Actor_1_1MushroomIdleTuning.html#ac5d633b59bc549784ed22b3a1beaa65c":[5,0,0,13,0,19,27],
-"structBalloonParty_1_1Slots_1_1Actor_1_1MushroomIdleTuning.html#ac5d633b59bc549784ed22b3a1beaa65c":[6,0,0,13,0,19,27]
+"structBalloonParty_1_1Slots_1_1Actor_1_1MushroomIdleTuning.html#ac070a6c42669d773c512d6c0756b3b2f":[5,0,0,13,0,19,10]
 };

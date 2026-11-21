@@ -1,5 +1,6 @@
 var NAVTREEINDEX67 =
 {
+"classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#ac8d7beb9f7683f54babbc0a9ac4aca1a":[5,0,0,6,7,6,29],
 "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#ac8d7beb9f7683f54babbc0a9ac4aca1a":[6,0,0,6,7,6,29],
 "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#ad26c6945c11dfba4d0fee34da1584983":[5,0,0,6,7,6,18],
 "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#ad26c6945c11dfba4d0fee34da1584983":[6,0,0,6,7,6,18],
@@ -248,6 +249,5 @@ var NAVTREEINDEX67 =
 "classBalloonParty_1_1Game_1_1Run_1_1FailureOffers.html#af6ab86c7b7816dc2f824770a1054637d":[5,0,0,6,8,2,1],
 "classBalloonParty_1_1Game_1_1Run_1_1FailureOffers.html#af6ab86c7b7816dc2f824770a1054637d":[6,0,0,6,8,2,1],
 "classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html":[5,0,0,6,8,3],
-"classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html":[6,0,0,6,8,3],
-"classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html#a173d820332ca30e3bd769dc8e3f0c59b":[5,0,0,6,8,3,1]
+"classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html":[6,0,0,6,8,3]
 };

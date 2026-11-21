@@ -1,5 +1,8 @@
 var NAVTREEINDEX135 =
 {
+"namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba5f4d398f48fb16bda12a8899f185cd87":[5,0,0,6,10,28,34],
+"namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba6efee8c832118d69a327c3138b23bcca":[5,0,0,6,10,28,40],
+"namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba747efc07e00c79414f876f3509a3d5d1":[5,0,0,6,10,28,10],
 "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba7e750ef9b33a4918fe9cac04d2e496ed":[5,0,0,6,10,28,23],
 "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba839308aa1482ca4ed4328809fed2ae8e":[5,0,0,6,10,28,0],
 "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba88a335b863201ab2a8cb1ed89a3eab70":[5,0,0,6,10,28,36],
@@ -246,8 +249,5 @@ var NAVTREEINDEX135 =
 "namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473ab93c3d9029fa42815abf0551db0cec98":[5,0,0,13,0,0,29,5],
 "namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473ac7174dc75237a0361780548a1af6872b":[5,0,0,13,0,0,29,1],
 "namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473aecb135155dc653bbc220d4448490d15e":[5,0,0,13,0,0,29,4],
-"namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a8fd7dde02f60c4a136d518281f0406a8":[5,0,0,13,0,0,30],
-"namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a8fd7dde02f60c4a136d518281f0406a8aaf67fdbf7db7b0248cb8f15ecc5675a3":[5,0,0,13,0,0,30,2],
-"namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a8fd7dde02f60c4a136d518281f0406a8aeb334dca00e390e0d3ebf52d205807d7":[5,0,0,13,0,0,30,1],
-"namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a8fd7dde02f60c4a136d518281f0406a8aebfe5e1791db03c4cd6ab95801e0977d":[5,0,0,13,0,0,30,0]
+"namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a8fd7dde02f60c4a136d518281f0406a8":[5,0,0,13,0,0,30]
 };

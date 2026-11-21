@@ -1,5 +1,6 @@
 var NAVTREEINDEX78 =
 {
+"classBalloonParty_1_1Item_1_1Lightning_1_1LightningItemHandler.html":[5,0,0,7,3,4],
 "classBalloonParty_1_1Item_1_1Lightning_1_1LightningItemHandler.html":[6,0,0,7,3,4],
 "classBalloonParty_1_1Item_1_1Lightning_1_1LightningItemHandler.html#a0204b4a98216936ffbca1fd10037156c":[5,0,0,7,3,4,5],
 "classBalloonParty_1_1Item_1_1Lightning_1_1LightningItemHandler.html#a0204b4a98216936ffbca1fd10037156c":[6,0,0,7,3,4,5],
@@ -248,6 +249,5 @@ var NAVTREEINDEX78 =
 "classBalloonParty_1_1Item_1_1Preview_1_1HighlightTrail.html#a8b679c47ef770246563f7c3c42794d5b":[5,0,0,7,5,1,0],
 "classBalloonParty_1_1Item_1_1Preview_1_1HighlightTrail.html#a8b679c47ef770246563f7c3c42794d5b":[6,0,0,7,5,1,0],
 "classBalloonParty_1_1Item_1_1Preview_1_1HighlightTrail.html#ac030f19d8ff8a20df1ea9ed1b33022bc":[5,0,0,7,5,1,3],
-"classBalloonParty_1_1Item_1_1Preview_1_1HighlightTrail.html#ac030f19d8ff8a20df1ea9ed1b33022bc":[6,0,0,7,5,1,3],
-"classBalloonParty_1_1Item_1_1Preview_1_1HighlightTrail.html#ac769c0875538119d3d5dd6f0048bc965":[5,0,0,7,5,1,7]
+"classBalloonParty_1_1Item_1_1Preview_1_1HighlightTrail.html#ac030f19d8ff8a20df1ea9ed1b33022bc":[6,0,0,7,5,1,3]
 };

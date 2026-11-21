@@ -1,5 +1,8 @@
 var NAVTREEINDEX158 =
 {
+"structBalloonParty_1_1UI_1_1Score_1_1ShapeInkFrame.html#a34f6aab192dd7f7c6ae1a6bbdef18ae4":[6,0,0,16,8,8,4],
+"structBalloonParty_1_1UI_1_1Score_1_1ShapeInkFrame.html#a6118777b764b20a8d4e4224d3c331da0":[5,0,0,16,8,8,1],
+"structBalloonParty_1_1UI_1_1Score_1_1ShapeInkFrame.html#a6118777b764b20a8d4e4224d3c331da0":[6,0,0,16,8,8,1],
 "structBalloonParty_1_1UI_1_1Score_1_1ShapeInkFrame.html#a99ad6c61fda6a39f614a164655719672":[5,0,0,16,8,8,3],
 "structBalloonParty_1_1UI_1_1Score_1_1ShapeInkFrame.html#a99ad6c61fda6a39f614a164655719672":[6,0,0,16,8,8,3],
 "structBalloonParty_1_1UI_1_1Score_1_1ShapeInkFrame.html#ab9d8d5ed68ccca335a1ea934d5974a71":[5,0,0,16,8,8,8],

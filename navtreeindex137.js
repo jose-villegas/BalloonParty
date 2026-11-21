@@ -1,5 +1,8 @@
 var NAVTREEINDEX137 =
 {
+"plan_future_ideas.html#autotoc_md546":[3,5,0,4,1],
+"plan_future_ideas.html#autotoc_md547":[3,5,0,4,2],
+"plan_future_ideas.html#autotoc_md548":[3,5,0,4,3],
 "plan_future_ideas.html#autotoc_md549":[3,5,0,4,4],
 "plan_future_ideas.html#autotoc_md550":[3,5,0,4,5],
 "plan_future_ideas.html#autotoc_md552":[3,5,0,5],
@@ -246,8 +249,5 @@ var NAVTREEINDEX137 =
 "plan_meadow_mushrooms.html#autotoc_md833":[3,12,0,6,4],
 "plan_meadow_mushrooms.html#autotoc_md834":[3,12,0,6,5],
 "plan_meadow_mushrooms.html#autotoc_md835":[3,12,0,6,6],
-"plan_meadow_mushrooms.html#autotoc_md836":[3,12,0,6,7],
-"plan_meadow_mushrooms.html#autotoc_md837":[3,12,0,6,8],
-"plan_meadow_mushrooms.html#autotoc_md838":[3,12,0,6,9],
-"plan_meadow_mushrooms.html#autotoc_md839":[3,12,0,6,10]
+"plan_meadow_mushrooms.html#autotoc_md836":[3,12,0,6,7]
 };

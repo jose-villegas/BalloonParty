@@ -23,6 +23,7 @@ var classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField =
     [ "SampleMotionDelta", "classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#acbf010466e4f99cf6c25a8be9e8fe51c", null ],
     [ "SeedSpecks", "classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a86080a586805a737d56e87fac732862f", null ],
     [ "Start", "classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#ace67278edd425387bda9b979c9b323a1", null ],
+    [ "SwitchOff", "classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a900c36eeb620fc77e17689762c4e924d", null ],
     [ "UpdateReduction", "classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#ad290e6ea7eef8fd2cf348dd3820ba640", null ],
     [ "_activeCount", "classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a8247c503851fee73d442071f8d8168ca", null ],
     [ "_burst", "classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a78b67498542e62041c06516312bafe26", null ],

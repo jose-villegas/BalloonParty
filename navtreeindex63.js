@@ -1,5 +1,6 @@
 var NAVTREEINDEX63 =
 {
+"classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#acc4885d840baf38f518b5161f04e9fb4":[5,0,0,6,2,9,9],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#acc4885d840baf38f518b5161f04e9fb4":[6,0,0,6,2,9,9],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#ad173e7b6652eaadb0046cd307b421a8e":[5,0,0,6,2,9,1],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#ad173e7b6652eaadb0046cd307b421a8e":[6,0,0,6,2,9,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX63 =
 "classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#abd8ed3a8bf82f9912d3a0c8470a61e81":[5,0,0,6,4,0,21],
 "classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#abd8ed3a8bf82f9912d3a0c8470a61e81":[6,0,0,6,4,0,21],
 "classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#ac1726491e451cb4236df21ec8cb3f127":[5,0,0,6,4,0,20],
-"classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#ac1726491e451cb4236df21ec8cb3f127":[6,0,0,6,4,0,20],
-"classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#ac3a7359cc08d6286d2ed221110080f58":[5,0,0,6,4,0,19]
+"classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#ac1726491e451cb4236df21ec8cb3f127":[6,0,0,6,4,0,20]
 };

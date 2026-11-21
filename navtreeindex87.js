@@ -1,5 +1,6 @@
 var NAVTREEINDEX87 =
 {
+"classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState.html#a34ce193e3bb0c8ed239a2a3140160402":[5,0,0,10,2,6,14],
 "classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState.html#a34ce193e3bb0c8ed239a2a3140160402":[6,0,0,10,2,6,14],
 "classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState.html#a382e328a3bfb6dc47107913e82c01b23":[5,0,0,10,2,6,15],
 "classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState.html#a382e328a3bfb6dc47107913e82c01b23":[6,0,0,10,2,6,15],
@@ -248,6 +249,5 @@ var NAVTREEINDEX87 =
 "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileShieldView.html#a2094cf86bf2d54d8d1bed52dedffd59f":[5,0,0,10,3,0,23],
 "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileShieldView.html#a2094cf86bf2d54d8d1bed52dedffd59f":[6,0,0,10,3,0,23],
 "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileShieldView.html#a2ebf24e16d71af1da126e2caec3d5f93":[5,0,0,10,3,0,53],
-"classBalloonParty_1_1Projectile_1_1View_1_1ProjectileShieldView.html#a2ebf24e16d71af1da126e2caec3d5f93":[6,0,0,10,3,0,53],
-"classBalloonParty_1_1Projectile_1_1View_1_1ProjectileShieldView.html#a30418e08725d70d2a96900c752b61c7d":[5,0,0,10,3,0,42]
+"classBalloonParty_1_1Projectile_1_1View_1_1ProjectileShieldView.html#a2ebf24e16d71af1da126e2caec3d5f93":[6,0,0,10,3,0,53]
 };

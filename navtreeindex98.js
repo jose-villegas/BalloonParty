@@ -1,5 +1,6 @@
 var NAVTREEINDEX98 =
 {
+"classBalloonParty_1_1Shared_1_1Pool_1_1SimplePoolChannel-1-g.html#af9947fb47bbcf9ff54006a64d90c2131":[5,0,0,12,9,11,3],
 "classBalloonParty_1_1Shared_1_1Pool_1_1SimplePoolChannel-1-g.html#af9947fb47bbcf9ff54006a64d90c2131":[6,0,0,12,9,11,3],
 "classBalloonParty_1_1Shared_1_1Pool_1_1TrailEndpointKeys.html":[5,0,0,12,9,12],
 "classBalloonParty_1_1Shared_1_1Pool_1_1TrailEndpointKeys.html":[6,0,0,12,9,12],
@@ -248,6 +249,5 @@ var NAVTREEINDEX98 =
 "classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteLayerCombiner.html#ab86cc580ac33545b96e55e71716e3464":[5,0,0,12,10,16,0],
 "classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteLayerCombiner.html#ab86cc580ac33545b96e55e71716e3464":[6,0,0,12,10,16,0],
 "classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteLayerCombiner.html#abb8a05036673dfabea076155ed3a0730":[5,0,0,12,10,16,6],
-"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteLayerCombiner.html#abb8a05036673dfabea076155ed3a0730":[6,0,0,12,10,16,6],
-"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteLayerCombiner.html#af918600c1a3c6b8685e70c4708d981ac":[5,0,0,12,10,16,5]
+"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteLayerCombiner.html#abb8a05036673dfabea076155ed3a0730":[6,0,0,12,10,16,6]
 };

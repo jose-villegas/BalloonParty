@@ -1,5 +1,6 @@
 var NAVTREEINDEX77 =
 {
+"classBalloonParty_1_1Item_1_1LaserItemRotation.html#af0820e9a76cb48619c535c998c47c40b":[5,0,0,7,24,27],
 "classBalloonParty_1_1Item_1_1LaserItemRotation.html#af0820e9a76cb48619c535c998c47c40b":[6,0,0,7,24,27],
 "classBalloonParty_1_1Item_1_1LaserItemRotation.html#af72c3459d36e6709ac11694dac2bd592":[5,0,0,7,24,18],
 "classBalloonParty_1_1Item_1_1LaserItemRotation.html#af72c3459d36e6709ac11694dac2bd592":[6,0,0,7,24,18],
@@ -248,6 +249,5 @@ var NAVTREEINDEX77 =
 "classBalloonParty_1_1Item_1_1Lightning_1_1LightningChain.html#ab42b032fb79a7fd88ae67b1cc5dfa8d7":[5,0,0,7,3,3,1],
 "classBalloonParty_1_1Item_1_1Lightning_1_1LightningChain.html#ab42b032fb79a7fd88ae67b1cc5dfa8d7":[6,0,0,7,3,3,1],
 "classBalloonParty_1_1Item_1_1Lightning_1_1LightningChain.html#ad10796778d9676dadf898e86171b8631":[5,0,0,7,3,3,3],
-"classBalloonParty_1_1Item_1_1Lightning_1_1LightningChain.html#ad10796778d9676dadf898e86171b8631":[6,0,0,7,3,3,3],
-"classBalloonParty_1_1Item_1_1Lightning_1_1LightningItemHandler.html":[5,0,0,7,3,4]
+"classBalloonParty_1_1Item_1_1Lightning_1_1LightningChain.html#ad10796778d9676dadf898e86171b8631":[6,0,0,7,3,3,3]
 };

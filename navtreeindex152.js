@@ -1,5 +1,8 @@
 var NAVTREEINDEX152 =
 {
+"structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html#a20df3af33d145e471ab1b67786360d34":[6,0,0,12,7,59,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html#a566089b3a1618a7881e6b572dcb1b118":[5,0,0,12,7,59,3],
+"structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html#a566089b3a1618a7881e6b572dcb1b118":[6,0,0,12,7,59,3],
 "structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html#a9624e3c2ceed5a8f72e3a2370eeb7965":[5,0,0,12,7,59,2],
 "structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html#a9624e3c2ceed5a8f72e3a2370eeb7965":[6,0,0,12,7,59,2],
 "structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html#abfd8e1122abbd0bd1906a64e0c8b024a":[5,0,0,12,7,59,1],
@@ -246,8 +249,5 @@ var NAVTREEINDEX152 =
 "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCapSpring.html#a7f90a630fbfb0d1023d8705426d8da7d":[6,0,0,13,0,0,18,9],
 "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCapSpring.html#a881a9e8bb7815f6f22846b96dbc68260":[5,0,0,13,0,0,18,2],
 "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCapSpring.html#a881a9e8bb7815f6f22846b96dbc68260":[6,0,0,13,0,0,18,2],
-"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCapSpring.html#a8b99d25bcbf0312e64f8689963a995cb":[5,0,0,13,0,0,18,10],
-"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCapSpring.html#a8b99d25bcbf0312e64f8689963a995cb":[6,0,0,13,0,0,18,10],
-"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCapSpring.html#a9523cfb1584011242a2cda998237ed32":[5,0,0,13,0,0,18,7],
-"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCapSpring.html#a9523cfb1584011242a2cda998237ed32":[6,0,0,13,0,0,18,7]
+"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCapSpring.html#a8b99d25bcbf0312e64f8689963a995cb":[5,0,0,13,0,0,18,10]
 };

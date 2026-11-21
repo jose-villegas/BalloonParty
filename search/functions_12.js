@@ -454,7 +454,8 @@ var searchData=
   ['sweeppiercemisses_451',['SweepPierceMisses',['../classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a1ba2b209955044b8c63dd50548779d37',1,'BalloonParty::Projectile::View::ProjectileView']]],
   ['sweeptogamestart_452',['SweepToGameStart',['../classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#a5d69dd40d103e82cf41c2d7ec4929762',1,'BalloonParty::Shared::SceneLight::TimeOfDayClock']]],
   ['swellto_453',['SwellTo',['../classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#a28ae2e436d3a715576cacf9875ceb52f',1,'BalloonParty::Balloon::Type::SoapBubbleClusterVariant']]],
-  ['sync_454',['Sync',['../classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowHosts.html#a7f46b15d2da49c1325af5149ac682b1d',1,'BalloonParty::Balloon::View::FormationGlowHosts']]],
-  ['syncpathgizmo_455',['SyncPathGizmo',['../classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#ad43193f95ea1397af3ca178405ec32b0',1,'BalloonParty::Editor::ShotSolver::ShotSolverWindow']]],
-  ['synctelegraphtosettings_456',['SyncTelegraphToSettings',['../classBalloonParty_1_1Item_1_1LaserItemRotation.html#acd6b0d6e5e6c5abc0a60b5348b3c9b03',1,'BalloonParty::Item::LaserItemRotation']]]
+  ['switchoff_454',['SwitchOff',['../classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a900c36eeb620fc77e17689762c4e924d',1,'BalloonParty::Slots::Actor::SpeckField']]],
+  ['sync_455',['Sync',['../classBalloonParty_1_1Balloon_1_1View_1_1FormationGlowHosts.html#a7f46b15d2da49c1325af5149ac682b1d',1,'BalloonParty::Balloon::View::FormationGlowHosts']]],
+  ['syncpathgizmo_456',['SyncPathGizmo',['../classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#ad43193f95ea1397af3ca178405ec32b0',1,'BalloonParty::Editor::ShotSolver::ShotSolverWindow']]],
+  ['synctelegraphtosettings_457',['SyncTelegraphToSettings',['../classBalloonParty_1_1Item_1_1LaserItemRotation.html#acd6b0d6e5e6c5abc0a60b5348b3c9b03',1,'BalloonParty::Item::LaserItemRotation']]]
 ];

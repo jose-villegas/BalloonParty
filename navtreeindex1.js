@@ -39,6 +39,7 @@ var NAVTREEINDEX1 =
 "FormationShape_8cs.html":[7,0,1,1,2],
 "FormationShapes_8cs.html":[7,0,1,1,3],
 "FormattedLabel_8cs.html":[7,0,18,16],
+"FrameBreakdown_8cs.html":[7,0,6,9,0],
 "FrameDebuggerDumper_8cs.html":[7,0,6,2,0],
 "FrameDebuggerEventReader_8cs.html":[7,0,6,2,1],
 "FrameDebuggerEventWalker_8cs.html":[7,0,6,2,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "IPaintReactive_8cs.html":[7,0,15,0,10],
 "IPaintable_8cs.html":[7,0,15,1,13],
 "IPaletteColorMasked_8cs.html":[7,0,3,10,3],
-"IPassThrough_8cs.html":[7,0,15,1,14],
-"IPierceItemField_8cs.html":[7,0,14,30]
+"IPassThrough_8cs.html":[7,0,15,1,14]
 };

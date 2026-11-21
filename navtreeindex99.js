@@ -1,5 +1,6 @@
 var NAVTREEINDEX99 =
 {
+"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteLayerCombiner.html#af918600c1a3c6b8685e70c4708d981ac":[5,0,0,12,10,16,5],
 "classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteLayerCombiner.html#af918600c1a3c6b8685e70c4708d981ac":[6,0,0,12,10,16,5],
 "classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html":[5,0,0,12,10,17],
 "classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html":[6,0,0,12,10,17],
@@ -248,6 +249,5 @@ var NAVTREEINDEX99 =
 "classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html#ae44574126534799e5c3dacf3ae416dea":[5,0,0,12,11,4,45],
 "classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html#ae44574126534799e5c3dacf3ae416dea":[6,0,0,12,11,4,45],
 "classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html#ae5e460e01263acc28fa1052f11f6515d":[5,0,0,12,11,4,6],
-"classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html#ae5e460e01263acc28fa1052f11f6515d":[6,0,0,12,11,4,6],
-"classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html#ae8d208469445ec52c1ca75e9154ea156":[5,0,0,12,11,4,30]
+"classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html#ae5e460e01263acc28fa1052f11f6515d":[6,0,0,12,11,4,6]
 };

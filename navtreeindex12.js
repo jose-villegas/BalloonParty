@@ -1,5 +1,6 @@
 var NAVTREEINDEX12 =
 {
+"classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeService.html#a8e61ac1ce4e83830bba356b5bf5b3be5":[5,0,0,1,0,13,22],
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeService.html#a8e61ac1ce4e83830bba356b5bf5b3be5":[6,0,0,1,0,13,22],
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeService.html#a9673c8463b89fa3a4199cf4f80f5bd0c":[5,0,0,1,0,13,20],
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeService.html#a9673c8463b89fa3a4199cf4f80f5bd0c":[6,0,0,1,0,13,20],
@@ -248,6 +249,5 @@ var NAVTREEINDEX12 =
 "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleService.html#afbb31704f108f328b768e6727044235c":[5,0,0,1,0,19,9],
 "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeBubbleService.html#afbb31704f108f328b768e6727044235c":[6,0,0,1,0,19,9],
 "classBalloonParty_1_1Balloon_1_1Controller_1_1RipeRoom.html":[5,0,0,1,0,20],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1RipeRoom.html":[6,0,0,1,0,20],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1RipeRoom.html#a058dfc77d8a024baf118fee7708238e9":[5,0,0,1,0,20,7]
+"classBalloonParty_1_1Balloon_1_1Controller_1_1RipeRoom.html":[6,0,0,1,0,20]
 };
