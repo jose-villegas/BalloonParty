@@ -283,6 +283,7 @@ def run(args):
 
 
 def main():
+    global PACKAGE
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--serial", required=True, help="adb serial (ip:port over Wi-Fi)")
     parser.add_argument("--seconds", type=int, default=180, help="seconds measured, after the warm-up")
@@ -294,7 +295,12 @@ def main():
     parser.add_argument("--off", default="", help="parts switched off for the session, joined by '+': lens, hudmap, "
                                                   "capture, animators, post, hud (CheatState.PerfOff)")
     parser.add_argument("--label", default="run")
-    return run(parser.parse_args())
+    parser.add_argument("--package", default=PACKAGE,
+                        help="the installed copy to measure: two builds under different app ids stay installed side "
+                             "by side, so they can be measured in turn with no reinstall")
+    args = parser.parse_args()
+    PACKAGE = args.package
+    return run(args)
 
 
 if __name__ == "__main__":

@@ -1,13 +1,15 @@
 # README shots
 
 Retakes the pictures on the front page (`README.md`): each scenario and the bonus level in play, at morning
-and at night; each item at the moment its effect is fullest; and the gift balloons as a looping GIF. Nothing
-is chosen by hand on a run; the script plays the same steps every time, so after a visual change you rerun it
-and commit the new pictures.
+and at night; each item at the moment its effect is fullest; and each gift balloon at night, as a looping GIF.
+Every picture is a file of its own with no label in it: the README lays them out in Markdown tables, so each
+opens at its full size. Nothing is chosen by hand on a run; the script plays the same steps every time, so
+after a visual change you rerun it and commit the new pictures.
 
 ```bash
 python3 Tools/readme_shots/capture.py            # capture, then compose into Docs/readme/
 python3 Tools/readme_shots/capture.py --compose  # compose the last capture again, no Editor needed
+python3 Tools/readme_shots/capture.py --compose --raw DIR  # the same, from raw shots in another folder
 python3 Tools/readme_shots/capture.py --burst    # each item at a run of moments, to retune its timing
 ```
 
@@ -25,7 +27,7 @@ What the driver takes:
 | Pictures | How |
 |---|---|
 | Items | For each item it restarts at level 3 (a mixed board) with the level locked, pops a balloon carrying the item in the middle of the board (Shield and Snipe arm the ball, which is then fired), and holds the world still to take the shot at the item's moment |
-| Gift balloons | For each gift it restarts at level 2, swaps the middle balloon for the gift (`SceneStage.Place`) and films it at morning and then at night: 48 squares cut out round it from a camera render (`SceneStage.Capture`, so with no HUD), one every 0.06 s of game time |
+| Gift balloons | For each gift it restarts at level 2, swaps the middle balloon for the gift (`SceneStage.Place`) and films it at night, when its rays and its own light show best: 48 squares cut out round it from a camera render (`SceneStage.Capture`, so with no HUD), one every 0.06 s of game time |
 | Scenarios | See Glory shots |
 
 ## Glory shots
@@ -53,12 +55,12 @@ fixed, two runs still came out different (measured 2026-11-20), so each retake p
 
 | Where | What |
 |---|---|
-| `Logs/readme_shots/` (git-ignored) | The raw shots: `scene_<sky\|meadow\|water\|bonus>_<morning\|night>.png` and `item_<name>.png` (`item_<name>_<seconds>.png` with `--burst`) at the Game view's size, `gift_<golden\|heart\|disco\|nuke>_<morning\|night>_<NN>.png`, and `moments.txt`: each still taken, with its glory and when in the level |
-| `Docs/readme/scenarios.jpg` | Sky, Meadow, Water and the bonus level across, morning above night |
-| `Docs/readme/items.jpg` | The six items, three across, each labelled |
-| `Docs/readme/gifts.gif` | The four gift balloons across, morning above night, 2.4 s on a loop: the film's last pictures melt into its first, so the loop has no jump. One palette for all frames and no dithering, which keeps it near 7 MB |
+| `Logs/readme_shots/` (git-ignored) | The raw shots: `scene_<sky\|meadow\|water\|bonus>_<morning\|night>.png` and `item_<name>.png` (`item_<name>_<seconds>.png` with `--burst`) at the Game view's size, `gift_<golden\|heart\|disco\|nuke>_night_<NN>.png`, and `moments.txt`: each still taken, with its glory and when in the level |
+| `Docs/readme/scene_<scenario>_<morning\|night>.jpg` | A scenario's still at the Game view's size |
+| `Docs/readme/item_<name>.jpg` | An item's still at the Game view's size |
+| `Docs/readme/gift_<name>.gif` | A gift balloon, 280 pixels square, 2.4 s on a loop: the film's last pictures melt into its first, so the loop has no jump. One palette for its frames and no dithering, which keeps each near 1.4 MB |
 
 To retune an item, run `--burst`, look at its shots in `Logs/readme_shots/`, and set its moment in the
 driver's `Items` table. The other numbers (how long the bot plays, what counts as glory, how long the light
-takes to change, the gift film's length) are constants at the top of the driver; the GIF's tile size and
+takes to change, the gift film's length) are constants at the top of the driver; the GIFs' size and
 frame time are at the top of `capture.py`.

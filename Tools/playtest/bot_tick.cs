@@ -37,9 +37,11 @@ var botId = "__BOT_ID__";
 var onLoss = "__ON_LOSS__";
 var purple = __PURPLE__;
 var forcedSeed = __SEED__;
+var startLevel = __LEVEL__;
 var noDisco = __NO_DISCO__;
 var noNuke = __NO_NUKE__;
 var startHearts = __HEARTS__;
+var freeCards = __FREE_CARDS__;
 const string IdKey = "BalloonPartyBot.Id";
 const string ShooterKey = "BalloonPartyBot.Shooter";
 const string SetupKey = "BalloonPartyBot.Setup.";
@@ -424,6 +426,25 @@ if (setupStage < 2 && InPlay(game))
     try
     {
         var cheatState = asm.GetType("BalloonParty.Cheats.CheatState");
+        if (setupStage == 0 && !purple && startLevel > 1)
+        {
+            // A late level without playing up to it: the run starts over there, holding the cards a run that
+            // reached it would (Start From Level), on the forced seed if one was given.
+            UnityEditor.SessionState.SetInt(setupKey + ".PreviousStart", (int)cheatState.GetField("StartLevel", staticFlags).GetValue(null));
+            cheatState.GetField("StartLevel", staticFlags).SetValue(null, startLevel);
+            if (forcedSeed != 0)
+            {
+                cheatState.GetField("ForcedRunSeed", staticFlags).SetValue(null, forcedSeed);
+            }
+
+            var levelRun = game.Resolve(asm.GetType("BalloonParty.Game.Run.RunController"));
+            levelRun.GetType().GetMethod("RestartRun", flags).Invoke(levelRun, new object[] { true });
+            UnityEditor.SessionState.SetInt(setupKey, 1);
+            UnityEditor.SessionState.SetInt(setupKey + ".Level", startLevel);
+            UnityEditor.SessionState.SetFloat(setupKey + ".Since", UnityEngine.Time.realtimeSinceStartup);
+            return time + " SETUP level " + startLevel;
+        }
+
         if (setupStage == 0 && !purple && forcedSeed != 0)
         {
             // A seed with no purple: the run starts over from where a run of this Play starts, on that seed, so
@@ -500,6 +521,17 @@ if (setupStage < 2 && InPlay(game))
         {
             // Put back the start level the bot changed, so a --restart run starts where a run of this Play would.
             cheatState.GetField("StartLevel", staticFlags).SetValue(null, UnityEditor.SessionState.GetInt(setupKey + ".PreviousStart", 1));
+        }
+
+        if (freeCards > 0 && (wanted <= 0 || levelNow == wanted))
+        {
+            // The golden balloon's cards a run this deep would also hold, dealt as a golden pop deals them.
+            var grantType = asm.GetType("BalloonParty.Game.Upgrades.IFreeCardGrant");
+            var grant = game.Resolve(grantType);
+            for (var card = 0; card < freeCards; card++)
+            {
+                grantType.GetMethod("GrantFreeCard").Invoke(grant, new object[] { (System.Action)(() => { }) });
+            }
         }
 
         if (startHearts > 0)

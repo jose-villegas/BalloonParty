@@ -27,12 +27,14 @@ a tuning changes is how often each one loses and what leads to it, so run the sk
 build and compare. Change one knob at a time, and compare against a `best` session to see how much of
 a level's difficulty is aim and how much is pace.
 
-Two options set up the first run, for measuring what only comes late or to a player in trouble:
+These options set up the first run, for measuring what only comes late or to a player in trouble:
 
 | Option | What it does |
 |---|---|
 | `--purple` | Once the first run is in play, restarts it on the first level its seed makes purple (one more colour, the golden balloon's level), through the Start From Level cheat with the seed kept, so the same roll holds. The run's first moments, before the restart, are on level 1 |
 | `--seed N` | Restarts the first run on run seed N, so every session given the same N meets the same levels (the same sky, meadow and water stretches, the same purple levels): from level 1, or with `--purple` on that seed's first purple level. Use it to compare two builds, or two Editors on two checkouts, level for level |
+| `--level N` | Restarts the first run on level N, through the Start From Level cheat, so a late level can be measured without playing up to it. The run holds the cards its level-ups would have dealt on the way (`RunUpgrades.TakeCardsOnTheWayTo`), on the session's seed if `--seed` is given. Ignored with `--purple` |
+| `--free-cards N` | Deals the first run N free cards once it is in play, as golden balloon pops would have on the way to `--level`: a run started deep holds only its level-up cards otherwise. The bots win about one golden card every 8 levels (measured 2026-11-20), so `--level 22 --free-cards 3` |
 | `--no-disco` | Places no disco ball all session: the control for measuring one. A purple level otherwise brings a sure one. PLAN-DiscoBalloon's *Measured* section pairs the two |
 | `--no-nuke` | Places no nuke all session: the control for measuring one (a nuke clears the board, so it changes hearts lost and level times). The Reward balloons table counts nukes placed and popped |
 | `--hearts N` | Once that run is in play, sets the player's hearts to N, so the session starts low on hearts (where the heart balloon comes). A later run (`--on-loss restart`) starts as configured |
@@ -146,10 +148,43 @@ python3 Tools/playtest/device_bot.py --boot 3 --apk Builds/local/BalloonParty-au
 - An emulator renders on the host GPU, but slower than a phone: a slow frame stretches game time against
   wall time. Compare emulator sessions with each other, not with the Editor's.
 
+## Several copies on one tablet
+
+`device_copies.py` plays several copies of the game side by side on one device, each its own run, so a sweep of
+many runs takes one tablet and no PC time. It was written for the Legion tablet, which shows apps in freeform
+windows (2026-11-20: six copies, each at about 0.9 game seconds per wall second, thermal status 0).
+
+```bash
+python3 Tools/playtest/device_copies.py 192.168.0.8:38359 3000 \
+    "com.DefaultCompany.BalloonParty.t1|today|8,222,505,1262|" \
+    "com.DefaultCompany.BalloonParty.n1|newcurve|513,222,1010,1262|" -- average high average high
+```
+
+- **A copy is a build with its own app id**, so the copies install next to each other, built to keep playing
+  while another window has the focus (`PlayerSettings.Android.runWithoutFocus`); without that a copy pauses the
+  moment another is tapped or launched. `build_copy.cs` builds one: replace its `@SUFFIX@` (`.t1`) and `@OUT@`
+  (the APK's path) and send it to the Editor with `unity command script eval --file`. The Editor needs the
+  keystore passwords, and it puts every setting it changes back. Install each APK with `adb install -r`.
+- **Each copy plays the skills in order**, one run after another (`average`, `high`, `low`, `best`), every run
+  from level 1 for the given seconds, pressing Retry on a game over. The label (`today`, `newcurve`) only names
+  the run's folder: `Logs/playtest/<stamp>-<label>-<skill>-rN/ticks.jsonl`.
+- **The four numbers place the copy's window** (left, top, right, bottom, in pixels, through `am task resize`).
+  Keep the windows from covering each other: a window that is fully covered stops playing.
+- **It survives a dropped connection.** Wi-Fi debugging drops now and then; the runner reconnects and keeps
+  waiting, and never wipes a run from the device before its ticks are on the PC. `device_bot.py` gives up on
+  the run instead.
+- **Ticks only.** A release build writes no telemetry, so there is no report: level, score, hearts, shots and
+  board fill per tick, which is enough for time per level and where a run is lost. Progress goes to
+  `Logs/playtest/device_copies.log`.
+- The tablet must be unlocked and should be plugged in. Remove the copies afterwards
+  (`adb uninstall <package>`): they all show under the game's own name.
+
 ## Files
 
 | File | What it is |
 |---|---|
 | `playtest_bot.py` | The runner: Editor setup, the tick loop, the report |
 | `device_bot.py` | The device runner: emulators, adb, one session per device in parallel, the same report |
+| `device_copies.py` | Several copies of the game on one tablet, side by side, each playing run after run; pulls each run's ticks |
+| `build_copy.cs` | Builds one such copy in the Editor: its own app id, plays without the focus |
 | `bot_tick.cs` | One tick, compiled by the Pipeline package on each call, with the `__PLACEHOLDERS__` filled in by the runner. Outside `Assets/`, so not part of the Unity project; it reaches the game's internal types by reflection. The shooter's state between ticks lives in `SessionState` (`BalloonPartyBot.*`) |

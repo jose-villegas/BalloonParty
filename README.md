@@ -3,53 +3,71 @@
 [![Style Audit](https://github.com/jose-villegas/BalloonParty/actions/workflows/style-audit.yml/badge.svg)](https://github.com/jose-villegas/BalloonParty/actions/workflows/style-audit.yml)
 [![Docs](https://github.com/jose-villegas/BalloonParty/actions/workflows/doxygen.yml/badge.svg)](https://jose-villegas.github.io/BalloonParty/)
 
-A colorful, rhythmic arcade balloon-popper built with **Unity 6**. Fire bouncing
-projectiles into a hex grid, build color streaks for score multipliers, and chain
-mechanics — wall bounces earn speed taps, cascading clears trigger sweep bonuses — while
-the board fights back with puff clouds, bushes, and increasingly resilient balloons.
+A colorful arcade balloon-popper built with **Unity 6**. Fire bouncing balls into a hex grid, pop
+streaks of one colour for multipliers, and keep the board from filling up.
 
 <video src="https://github.com/jose-villegas/BalloonParty/raw/main/video.mp4" controls width="100%"></video>
 
-Every run has **pressure**: spawn waves pack the grid tighter each turn, and overflow —
-balloons too high to fit — drains your hearts one heart-trail at a time (with slow-mo
-cinematics). Reach zero and the run ends: it can be retried from the level it reached, and
-a run left midway is offered as Continue at the next launch. Each new level brings tighter
-grids, new balloon variants, and harder trade-offs between defense (shields) and offense
-(bombs, lightning). Level-ups earn their own cinematic: the tipping trail is intercepted
-mid-flight and the camera dives after it, handing control back through a curve-driven
-restore. A level-up also offers a pick of upgrades for the rest of the run.
+- **Pressure.** Each turn packs the grid tighter. Balloons that no longer fit drain your hearts, and at
+  zero the run ends.
+- **Levels.** Each level brings new balloons and threats: puff clouds, bushes, armour. A level-up offers a
+  pick of upgrades for the rest of the run.
+- **Runs.** A lost run can be retried from the level it reached, and one left midway is offered as Continue
+  at the next launch.
 
-The run moves through three scenarios, Sky, Meadow and Water, under a day that turns to
-night, and now and then a level is a bonus, drawn on a page of paper:
+## Scenarios
 
-![Sky, Meadow, Water and a bonus level, each at morning and at night](Docs/readme/scenarios.jpg)
+The run moves through Sky, Meadow and Water under a day that turns to night, and now and then a level is a
+bonus, drawn on a page of paper. Top row: morning. Bottom row: night.
 
-The meadow grows walls of mushroom caps that work as pinball bumpers: a ball that bounces
-off three walls in one flight becomes the Snipe's lance, which cuts the caps it flies
-through. The water carries soap bubbles that rise with the lines and merge into clusters.
+| Sky | Meadow | Water | Bonus level |
+|---|---|---|---|
+| <img src="Docs/readme/scene_sky_morning.jpg" width="180" alt="Sky at morning"> | <img src="Docs/readme/scene_meadow_morning.jpg" width="180" alt="Meadow at morning"> | <img src="Docs/readme/scene_water_morning.jpg" width="180" alt="Water at morning"> | <img src="Docs/readme/scene_bonus_morning.jpg" width="180" alt="Bonus level at morning"> |
+| <img src="Docs/readme/scene_sky_night.jpg" width="180" alt="Sky at night"> | <img src="Docs/readme/scene_meadow_night.jpg" width="180" alt="Meadow at night"> | <img src="Docs/readme/scene_water_night.jpg" width="180" alt="Water at night"> | <img src="Docs/readme/scene_bonus_night.jpg" width="180" alt="Bonus level at night"> |
 
-A **bonus level** plays one colour more, purple, and takes every threat off the board: no
-armoured balloons, no clouds, no bushes. Its lines come faster and bring more items, and it
-is where the gift balloons come most.
+- **Meadow.** Walls of mushroom caps work as pinball bumpers. A ball that bounces off three walls in one
+  flight becomes the Snipe's lance, which cuts the caps it flies through.
+- **Water.** Soap bubbles rise with the lines and merge into clusters.
+- **Bonus level.** One colour more, purple, and no threats. Its lines come faster and bring more items and
+  gift balloons.
 
-Balloons carry items that go off when popped: a bomb's blast, a laser's beam, lightning
-that jumps between balloons, paint that turns its neighbours one colour, and two that ride
-on the next ball, a shield and a piercing snipe:
+## Items
 
-![The six items, each at the moment its effect is fullest](Docs/readme/items.jpg)
+Balloons carry items that go off when popped.
 
-Four **gift balloons** belong to no level's mix: each comes rarely and is worth going for.
-The golden balloon and the disco ball are plated, so a plain shot bounces off and only a
-pierce, a blast or a beam breaks them: the golden one pays a free upgrade, and the disco
-ball's pop paints the board rainbow, and a rainbow balloon carries on a streak of any
-colour. The heart balloon pops on any hit and gives a heart back. The nuke is a rescue, likelier the
-more trouble the player is in: three hits arm it, and after a count of three its blast
-clears the board.
+| Bomb | Laser | Lightning |
+|---|---|---|
+| <img src="Docs/readme/item_bomb.jpg" width="240" alt="Bomb"> | <img src="Docs/readme/item_laser.jpg" width="240" alt="Laser"> | <img src="Docs/readme/item_lightning.jpg" width="240" alt="Lightning"> |
+| A blast around it | A beam across the board | Jumps from balloon to balloon |
+| **Paint** | **Shield** | **Snipe** |
+| <img src="Docs/readme/item_paint.jpg" width="240" alt="Paint"> | <img src="Docs/readme/item_shield.jpg" width="240" alt="Shield"> | <img src="Docs/readme/item_snipe.jpg" width="240" alt="Snipe"> |
+| Turns its neighbours one colour | Arms the next ball with a shield | Arms the next ball to pierce |
 
-![The four gift balloons, each at morning and at night](Docs/readme/gifts.gif)
+## Gift balloons
 
-These pictures are retaken by a script (`Tools/readme_shots/`), not by hand: a bot plays each scenario, and
-its still is the moment with the most balloons popping at once.
+Four balloons belong to no level's mix: each comes rarely and is worth going for.
+
+| Golden | Heart | Disco ball | Nuke |
+|---|---|---|---|
+| <img src="Docs/readme/gift_golden.gif" width="180" alt="Golden"> | <img src="Docs/readme/gift_heart.gif" width="180" alt="Heart"> | <img src="Docs/readme/gift_disco.gif" width="180" alt="Disco ball"> | <img src="Docs/readme/gift_nuke.gif" width="180" alt="Nuke"> |
+| Pays a free upgrade | Gives a heart back | Paints the board rainbow | Clears the board |
+
+- **Golden** and **disco** are plated: a plain shot bounces off, and only a pierce, a blast or a beam breaks
+  them. A rainbow balloon carries on a streak of any colour.
+- **The nuke** is a rescue, likelier the more trouble you are in: three hits arm it, and after a count of
+  three it goes off.
+
+These pictures are retaken by a script ([`Tools/readme_shots/`](Tools/readme_shots)): a bot plays each
+scenario, and its still is the moment with the most balloons popping at once.
+
+## How a frame is made
+
+**[How a frame is made](Docs/frame-composition.md)** takes one frame apart: the maps the game fills in
+before it draws, the order it draws in, and how a balloon gets its highlight and its shadow from the light.
+
+| The shot | The backdrop | + the balloons | + effects and light |
+|---|---|---|---|
+| <img src="Docs/frame/frame.webp" width="180" alt="The whole shot"> | <img src="Docs/frame/step-backdrop.jpg" width="180" alt="The backdrop"> | <img src="Docs/frame/step-shines.jpg" width="180" alt="The balloons"> | <img src="Docs/frame/step-light.jpg" width="180" alt="Effects and light"> |
 
 ## Releases
 
@@ -58,12 +76,10 @@ Play the most recent stable build.
 
 ## Documentation
 
-📚 **[Full documentation & API reference](https://jose-villegas.github.io/BalloonParty/)** —
-generated by Doxygen from the sources on every push to `main`.
-
 | Where | What |
 |---|---|
-| [Docs site](https://jose-villegas.github.io/BalloonParty/) | Code style guide, architecture diagrams (Graphviz system maps), design plans, API reference |
+| [Docs site](https://jose-villegas.github.io/BalloonParty/) | Code style guide, architecture diagrams, design plans and the API reference, generated by Doxygen on every push to `main` |
+| [`Docs/frame-composition.md`](Docs/frame-composition.md) | How a frame is made |
 | [`Assets/Source/README.md`](Assets/Source/README.md) | The authoritative code style & architecture guide |
 | [`Assets/Source/ARCHITECTURE.md`](Assets/Source/ARCHITECTURE.md) | Index of the architecture diagram pages |
 | Per-folder `README.md` | Every feature folder documents its own mechanics and contracts |

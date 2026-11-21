@@ -38,7 +38,9 @@ status 1, which a charging phone already reports), and a frame at 60 does more w
 fixed-step physics runs more steps in it, and the 60 Hz scene capture lands on every frame.
 
 The big and little cores do different amounts of work per cycle, and the scheduler moves threads between
-them, so expect a few percent of noise. Run each build twice, in turn (A, B, A, B).
+them, so expect a few percent of noise. Run each build twice, in turn (A, B, A, B). Two builds under
+different app ids stay installed side by side (`Tools/playtest/build_copy.cs` builds such a copy), and
+`--package` says which one a run measures, so the turns need no reinstall.
 
 ## What a part of the game costs
 

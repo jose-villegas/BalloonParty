@@ -588,6 +588,12 @@ def main():
     parser.add_argument("--seed", type=int, default=0,
                         help="restart the first run on this run seed, so sessions compare on the same levels: from "
                              "level 1, or with --purple on that seed's first purple level")
+    parser.add_argument("--level", type=int, default=0,
+                        help="restart the first run on this level, holding the cards a run that reached it would "
+                             "(Start From Level); ignored with --purple")
+    parser.add_argument("--free-cards", type=int, default=0,
+                        help="deal the first run this many free cards once it is in play, as golden balloon pops "
+                             "would have on the way to --level")
     parser.add_argument("--no-disco", action="store_true",
                         help="place no disco ball: the control for measuring one")
     parser.add_argument("--no-nuke", action="store_true",
@@ -615,10 +621,16 @@ def main():
                  .replace("__ON_LOSS__", args.on_loss)
                  .replace("__PURPLE__", "true" if args.purple else "false")
                  .replace("__SEED__", str(args.seed))
+                 .replace("__LEVEL__", str(0 if args.purple else args.level))
                  .replace("__NO_DISCO__", "true" if args.no_disco else "false")
                  .replace("__NO_NUKE__", "true" if args.no_nuke else "false")
-                 .replace("__HEARTS__", str(args.hearts)))
+                 .replace("__HEARTS__", str(args.hearts))
+                 .replace("__FREE_CARDS__", str(args.free_cards)))
     setup = ", ".join(([("started on the run's first purple level, through Start From Level")] if args.purple else [])
+                      + ([f"started on level {args.level}, through Start From Level"]
+                         if args.level > 1 and not args.purple else [])
+                      + ([f"dealt {args.free_cards} free card{'s' if args.free_cards != 1 else ''}"]
+                         if args.free_cards > 0 else [])
                       + ([f"on run seed {args.seed}"] if args.seed else [])
                       + (["no disco ball placed"] if args.no_disco else [])
                       + (["no nuke placed"] if args.no_nuke else [])

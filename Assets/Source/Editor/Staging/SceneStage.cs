@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Controller;
+using BalloonParty.Balloon.Reward;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Balloon.View;
 using BalloonParty.Cheats;
@@ -26,6 +27,7 @@ using BalloonParty.Projectile;
 using BalloonParty.Projectile.Controller;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pause;
@@ -61,6 +63,10 @@ namespace BalloonParty.Editor.Staging
         private const int ScenarioSearchLevels = 500;
         private const string ProjectilePrefabPath = "Assets/Prefabs/Projectile/Projectile.prefab";
 
+        // How many Editor updates a step waits for the Editor's pause before giving up.
+        private const int StepPauseTicks = 2000;
+
+        private static readonly string[] ChainRewards = { "nuke", "golden", "disco", "heart" };
         private static readonly Regex RelativeInclude = new("#include\\s+\"((?:\\.\\./|\\./)[^\"]+)\"");
 
         private static readonly List<GameObject> Effects = new();
@@ -69,6 +75,11 @@ namespace BalloonParty.Editor.Staging
         private static readonly List<(ProjectileModel Model, GameObject Look)> Balls = new();
 
         private static float _advanceUntil = -1f;
+        private static int _stepsLeft = -1;
+        private static int _stepAskedAtFrame = -1;
+        private static int _stepWaitTicks;
+        private static bool _stepPauseSeen;
+        private static string _stepScreenshot = "";
         private static Transform _flyingBall;
         private static Vector3 _flightFrom;
         private static Vector3 _flightTo;
@@ -97,7 +108,7 @@ namespace BalloonParty.Editor.Staging
                 return "loading";
             }
 
-            var state = _advanceUntil >= 0f ? "advancing" : IsHeld() ? "held" : "running";
+            var state = _advanceUntil >= 0f || _stepsLeft >= 0 ? "advancing" : IsHeld() ? "held" : "running";
             return $"game L{Resolve<ILevelProgress>().Level.Value} {state} angle " +
                    $"{Resolve<TimeOfDayClock>().CurrentAngleDegrees.ToString("0", CultureInfo.InvariantCulture)}";
         }
@@ -126,6 +137,15 @@ namespace BalloonParty.Editor.Staging
             CheatState.TimeOfDaySpeedScale = 0f;
             CheatState.BlockLevelUp = true;
             CheatState.EmptyBoard = true;
+
+            // A staged scene is for pictures, and the frame-rate readout would be in every one taken of the Game
+            // view. It comes back with the next Play mode.
+            var frameRate = Object.FindAnyObjectByType<FPSCounter>();
+            if (frameRate != null)
+            {
+                frameRate.enabled = false;
+            }
+
             EditorApplication.playModeStateChanged -= OnPlayModeChanged;
             EditorApplication.playModeStateChanged += OnPlayModeChanged;
             Hold();
@@ -161,10 +181,15 @@ namespace BalloonParty.Editor.Staging
             return "off";
         }
 
-        /// <summary>Stops game time (time scale 0) until <see cref="Release" /> or <see cref="Advance" />.</summary>
+        /// <summary>
+        ///     Stops game time (time scale 0) until <see cref="Release" /> or <see cref="Advance" />. What the game
+        ///     runs on real time (an item's idle spin, the shaders' clock, a score trail) goes on; only
+        ///     <see cref="Step" /> holds that too.
+        /// </summary>
         public static string Hold()
         {
             Resolve<ITimeScaleClaims>().ClaimExclusive(TimeScaleSource.Capture, 0f);
+            EndStepping();
             return "held";
         }
 
@@ -172,7 +197,17 @@ namespace BalloonParty.Editor.Staging
         public static string Release()
         {
             Resolve<ITimeScaleClaims>().ReleaseExclusive(TimeScaleSource.Capture);
+            EndStepping();
             return "running";
+        }
+
+        /// <summary>
+        ///     The game's real-time clock (<c>Time.unscaledTime</c>), in seconds: two readings a step apart tell how
+        ///     long a stepped frame is.
+        /// </summary>
+        public static string Clock()
+        {
+            return Time.unscaledTime.ToString("0.000000", CultureInfo.InvariantCulture);
         }
 
         /// <summary>
@@ -186,6 +221,65 @@ namespace BalloonParty.Editor.Staging
             EditorApplication.update -= AdvanceTick;
             EditorApplication.update += AdvanceTick;
             return $"advancing {seconds:0.##} s";
+        }
+
+        /// <summary>
+        ///     Where the nuke stands: <c>idle</c>, <c>armed</c> (a hit lit its fuse and the countdown runs) or
+        ///     <c>blast</c> (its disc is sweeping the board), for timing a capture by.
+        /// </summary>
+        public static string Nuke()
+        {
+            if (Resolve<INukeDetonator>() is NukeBlast { IsRunning: true })
+            {
+                return "blast";
+            }
+
+            foreach (var part in Resolve<IEnumerable<IRunResettable>>())
+            {
+                if (part is NukeFuse { IsRunning: true })
+                {
+                    return "armed";
+                }
+            }
+
+            return "idle";
+        }
+
+        /// <summary>
+        ///     Lets the game run exactly <paramref name="frames" /> frames and stops it again, for a run of captures
+        ///     a fixed step apart. The Editor is paused and stepped a frame at a time: its pause holds every clock
+        ///     between frames, the real-time one too, which a time scale of 0 does not, so what the game animates
+        ///     on real time moves a frame's worth per frame and not by however long a capture took. A stepped
+        ///     frame is the Editor's own fixed length (see <see cref="Clock" />), in game time and real time alike,
+        ///     unless something slows game time (a level-up's slow motion would). With
+        ///     <paramref name="screenshot" />, the Game view of the last frame is written there: a paused Editor
+        ///     draws no frame of its own to take one from. Returns at once; <see cref="Status" /> says
+        ///     <c>advancing</c> until it's done. <see cref="Hold" />, <see cref="Release" />,
+        ///     <see cref="Advance" /> and <see cref="End" /> take the pause off again.
+        /// </summary>
+        public static string Step(int frames, string screenshot = "")
+        {
+            if (frames < 1)
+            {
+                return "error: step at least one frame";
+            }
+
+            if (!EditorApplication.isPlaying || Object.FindAnyObjectByType<GameLifetimeScope>() == null)
+            {
+                return "error: no game to step";
+            }
+
+            // The pause first, with game time still held if it was: it takes a moment to take hold, and a frame
+            // that slips through before it must not move the game. StepTick gives game time back once it has.
+            EditorApplication.isPaused = true;
+            _stepsLeft = frames;
+            _stepAskedAtFrame = -1;
+            _stepWaitTicks = 0;
+            _stepPauseSeen = false;
+            _stepScreenshot = screenshot ?? "";
+            EditorApplication.update -= StepTick;
+            EditorApplication.update += StepTick;
+            return $"stepping {frames} frame(s)";
         }
 
         /// <summary>
@@ -342,8 +436,10 @@ namespace BalloonParty.Editor.Staging
         ///     Spawn Balloon cheat, optionally holding <paramref name="item" /> (an <see cref="ItemType" /> name). A taken
         ///     slot is an error unless <paramref name="replace" />, which pops what's there and spawns into the slot in
         ///     the same frame: given any game time first, a balloon below would float up into it.
+        ///     <paramref name="color" /> (a palette colour name) paints it, where its type takes paint.
         /// </summary>
-        public static string Place(string type, int col, int row, string item = "None", bool replace = false)
+        public static string Place(
+            string type, int col, int row, string item = "None", bool replace = false, string color = "")
         {
             var grid = Resolve<SlotGrid>();
             var slot = new Vector2Int(col, row);
@@ -371,6 +467,18 @@ namespace BalloonParty.Editor.Staging
             }
 
             spawner.SpawnAt(slot, entry, (ItemType)Enum.Parse(typeof(ItemType), item, true));
+            if (!string.IsNullOrEmpty(color))
+            {
+                if (grid.At(slot) is not IPaintable paintable)
+                {
+                    // Not left standing behind an error: the caller is told nothing was placed.
+                    PopSlot(grid, slot);
+                    return $"error: a {balloonType} balloon takes no colour; nothing placed";
+                }
+
+                paintable.Color.Value = PaletteColor(color);
+            }
+
             Settle(grid.ViewAt(slot) as BalloonView);
             return FormattableString.Invariant($"placed {balloonType} at {col},{row} ({grid.IndexToWorldPosition(slot).x:0.00},{grid.IndexToWorldPosition(slot).y:0.00})");
         }
@@ -720,10 +828,20 @@ namespace BalloonParty.Editor.Staging
         ///     a lance cut is not counted until it has grown back), and where the cannon stands: the layouts were
         ///     baked for the cannon at rest, so ask once it has entered (<see cref="Advance" /> a second). An error
         ///     with no thrower, no whole cap, no angle that arms, or a ball loaded as a lance: a lance bounces off
-        ///     no mushroom, it cuts their caps, so no chain is counted for it.
+        ///     no mushroom, it cuts their caps, so no chain is counted for it. With <paramref name="then" />
+        ///     (<c>nuke</c>, <c>golden</c>, <c>disco</c> or <c>heart</c>) only the angles count whose flight also
+        ///     pops a balloon of that kind: the shot that earns the lance and spends it on the nuke. Of those the
+        ///     answer is then the run of angles that pops the fewest balloons on its way, so most of the board is
+        ///     still standing when the lance lands.
         /// </summary>
-        public static string Chain()
+        public static string Chain(string then = "")
         {
+            // Asked up front: a mistyped kind would otherwise only be noticed once some angle arms the lance.
+            if (!string.IsNullOrEmpty(then) && Array.IndexOf(ChainRewards, then.ToLowerInvariant()) < 0)
+            {
+                return $"error: no such reward balloon to chain into: {then}";
+            }
+
             var scope = Object.FindAnyObjectByType<ThrowerLifetimeScope>();
             var thrower = Object.FindAnyObjectByType<ThrowerView>();
             if (scope == null || thrower == null)
@@ -778,12 +896,16 @@ namespace BalloonParty.Editor.Staging
             var run = 0;
             var widestRun = 0;
             var widestEnd = -1;
+            var runPops = 0;
+            var sparingRun = 0;
+            var sparingEnd = -1;
+            var sparingPops = float.MaxValue;
             for (var i = 0; i < samples; i++)
             {
                 var angle = AimAngleGrid.ResolveSweepAngle(
                     i, config.AimAngleMinDegrees, config.AimAngleMaxDegrees, config.AimAngleStepDegrees,
                     continuousSamples);
-                var tally = ShotSimulator.Simulate(
+                var flight = ShotSimulator.Simulate(
                     board, context.WallLimitsClockwise, ShotBoardGather.OriginForAngle(angle, context),
                     ShotBoardGather.DirectionFromDegrees(angle), context.StartingShields,
                     context.ProjectileContactRadius, workingSet, context.RippleDamage,
@@ -791,14 +913,23 @@ namespace BalloonParty.Editor.Staging
                     dynamics: emptyBoard ? null : context.Dynamics, allowedColors: context.AllowedColors,
                     rainbowColorId: context.RainbowColorId, seed: context.LoadedSeed,
                     items: emptyBoard ? null : context.Items, streakGrantsShields: context.StreakGrantsShields,
-                    rippleRadius: context.RippleRadius, bumpers: context.Bumpers).Mushrooms;
-                var flies = tally.LancesArmed > 0;
+                    rippleRadius: context.RippleRadius, bumpers: context.Bumpers);
+                var flies = flight.Mushrooms.LancesArmed > 0 && Pops(flight, then);
                 run = flies ? run + 1 : 0;
+                runPops = flies ? runPops + flight.Pops : 0;
                 flying += flies ? 1 : 0;
                 if (run > widestRun)
                 {
                     widestRun = run;
                     widestEnd = i;
+                }
+
+                // Two angles in a row at least: a lone angle is the likeliest for the real flight to part from.
+                if (run >= 2 && runPops / (float)run < sparingPops)
+                {
+                    sparingPops = runPops / (float)run;
+                    sparingRun = run;
+                    sparingEnd = i;
                 }
             }
 
@@ -816,10 +947,19 @@ namespace BalloonParty.Editor.Staging
                 return $"error: none of {samples} angles arms the lance ({where})";
             }
 
+            var arming = $"{flying} of {samples} angles arm the lance";
+            if (!string.IsNullOrEmpty(then) && sparingEnd >= 0)
+            {
+                var sparing = AimAngleGrid.ResolveSweepAngle(
+                    sparingEnd - (sparingRun / 2), config.AimAngleMinDegrees, config.AimAngleMaxDegrees,
+                    config.AimAngleStepDegrees, continuousSamples);
+                return FormattableString.Invariant(
+                    $"angle {sparing:0.###} (the middle of {sparingRun} in a row, popping {sparingPops:0.#} on the way; {arming}; {where})");
+            }
+
             var best = AimAngleGrid.ResolveSweepAngle(
                 widestEnd - (widestRun / 2), config.AimAngleMinDegrees, config.AimAngleMaxDegrees,
                 config.AimAngleStepDegrees, continuousSamples);
-            var arming = $"{flying} of {samples} angles arm the lance";
             return FormattableString.Invariant(
                 $"angle {best:0.###} (the middle of {widestRun} in a row; {arming}; {where})");
         }
@@ -827,9 +967,11 @@ namespace BalloonParty.Editor.Staging
         /// <summary>
         ///     Renders the main camera (straight to a texture, so it's fresh even while the Editor is unfocused) and
         ///     writes it to <paramref name="path" />: the whole frame, or with <paramref name="around" /> (a balloon type,
-        ///     "col,row", or a world point "x;y") a <paramref name="size" />-pixel square centred there.
+        ///     "col,row", or a world point "x;y") a <paramref name="size" />-pixel square centred there. A whole
+        ///     frame can be written smaller (<paramref name="scale" /> below 1): a run of hundreds of them is
+        ///     quicker to write and to read back that way.
         /// </summary>
-        public static string Capture(string path, string around = "", int size = 480)
+        public static string Capture(string path, string around = "", int size = 480, float scale = 1f)
         {
             var camera = Camera.main;
             var width = camera.pixelWidth;
@@ -840,8 +982,14 @@ namespace BalloonParty.Editor.Staging
             var target = RenderTexture.GetTemporary(width, height, 24, RenderTextureFormat.ARGBHalf);
             var previous = camera.targetTexture;
             camera.targetTexture = target;
-            camera.Render();
-            camera.targetTexture = previous;
+            try
+            {
+                camera.Render();
+            }
+            finally
+            {
+                camera.targetTexture = previous;
+            }
 
             var x0 = 0;
             var y0 = 0;
@@ -855,17 +1003,42 @@ namespace BalloonParty.Editor.Staging
                 y0 = Mathf.Clamp(Mathf.RoundToInt(centre.y) - cropHeight / 2, 0, height - cropHeight);
             }
 
+            // A run of captures is some thousands of these: whatever fails, the textures go back.
+            var source = target;
             var active = RenderTexture.active;
-            RenderTexture.active = target;
-            var pixels = new Texture2D(cropWidth, cropHeight, TextureFormat.RGB24, false);
-            pixels.ReadPixels(new Rect(x0, y0, cropWidth, cropHeight), 0, 0);
-            pixels.Apply();
-            RenderTexture.active = active;
-            RenderTexture.ReleaseTemporary(target);
-            Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(path)) ?? ".");
-            File.WriteAllBytes(path, pixels.EncodeToPNG());
-            Object.DestroyImmediate(pixels);
-            return $"wrote {cropWidth}x{cropHeight} to {path}";
+            Texture2D pixels = null;
+            try
+            {
+                if (string.IsNullOrEmpty(around) && scale > 0f && scale < 1f)
+                {
+                    cropWidth = Mathf.Max(1, Mathf.RoundToInt(width * scale));
+                    cropHeight = Mathf.Max(1, Mathf.RoundToInt(height * scale));
+                    source = RenderTexture.GetTemporary(cropWidth, cropHeight, 0, RenderTextureFormat.ARGBHalf);
+                    Graphics.Blit(target, source);
+                }
+
+                RenderTexture.active = source;
+                pixels = new Texture2D(cropWidth, cropHeight, TextureFormat.RGB24, false);
+                pixels.ReadPixels(new Rect(x0, y0, cropWidth, cropHeight), 0, 0);
+                pixels.Apply();
+                Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(path)) ?? ".");
+                File.WriteAllBytes(path, pixels.EncodeToPNG());
+                return $"wrote {cropWidth}x{cropHeight} to {path}";
+            }
+            finally
+            {
+                RenderTexture.active = active;
+                if (source != target)
+                {
+                    RenderTexture.ReleaseTemporary(source);
+                }
+
+                RenderTexture.ReleaseTemporary(target);
+                if (pixels != null)
+                {
+                    Object.DestroyImmediate(pixels);
+                }
+            }
         }
 
         /// <summary>
@@ -1010,6 +1183,7 @@ namespace BalloonParty.Editor.Staging
             EditorApplication.playModeStateChanged -= OnPlayModeChanged;
             EditorApplication.update -= AdvanceTick;
             _advanceUntil = -1f;
+            EndStepping();
             CheatState.EmptyBoard = false;
             CheatState.BlockLevelUp = false;
             CheatState.TimeOfDaySpeedScale = 1f;
@@ -1037,6 +1211,120 @@ namespace BalloonParty.Editor.Staging
             EditorApplication.update -= AdvanceTick;
             _advanceUntil = -1f;
             Hold();
+        }
+
+        private static bool Pops(in ShotSimulationResult flight, string kind)
+        {
+            return kind.ToLowerInvariant() switch
+            {
+                "" => true,
+                "nuke" => flight.NukePops > 0,
+                "golden" => flight.GoldenPops > 0,
+                "disco" => flight.DiscoPops > 0,
+                "heart" => flight.HeartPops > 0,
+                _ => throw new ArgumentException($"no such reward balloon to chain into: {kind}")
+            };
+        }
+
+        // The Editor's own updates go on while it is paused. Each one here asks for the next frame once the last
+        // one asked for has run, so exactly as many run as were asked for, and the Editor is left paused.
+        private static void StepTick()
+        {
+            if (!EditorApplication.isPlaying || Object.FindAnyObjectByType<GameLifetimeScope>() == null)
+            {
+                EndStepping();
+                return;
+            }
+
+            if (!_stepPauseSeen)
+            {
+                // The pause holds once two updates in a row see the same frame.
+                if (!EditorApplication.isPaused || _stepAskedAtFrame != Time.frameCount)
+                {
+                    _stepAskedAtFrame = Time.frameCount;
+                    if (++_stepWaitTicks > StepPauseTicks)
+                    {
+                        GiveUpStepping("the Editor's pause never took hold");
+                    }
+
+                    return;
+                }
+
+                _stepPauseSeen = true;
+                _stepAskedAtFrame = -1;
+                Resolve<ITimeScaleClaims>().ReleaseExclusive(TimeScaleSource.Capture);
+            }
+
+            // Unpaused by hand, the game runs on by itself and these updates no longer count its frames.
+            if (!EditorApplication.isPaused)
+            {
+                GiveUpStepping("the Editor was unpaused while stepping");
+                return;
+            }
+
+            if (_stepAskedAtFrame == Time.frameCount)
+            {
+                return;
+            }
+
+            if (_stepsLeft == 0)
+            {
+                EditorApplication.update -= StepTick;
+                _stepsLeft = -1;
+                _stepScreenshot = "";
+                return;
+            }
+
+            if (_stepsLeft == 1 && _stepScreenshot.Length > 0)
+            {
+                try
+                {
+                    FrameBreakdown.Screenshot(_stepScreenshot);
+                }
+                catch (Exception error)
+                {
+                    // Thrown from an Editor update it would be thrown again on every one, the Editor paused.
+                    GiveUpStepping($"no screenshot at {_stepScreenshot}: {error.Message}");
+                    return;
+                }
+            }
+
+            _stepsLeft--;
+            _stepAskedAtFrame = Time.frameCount;
+            EditorApplication.Step();
+        }
+
+        // A step that cannot go on: the game is held as before it, the pause off, and the Editor's log says why.
+        private static void GiveUpStepping(string why)
+        {
+            Log.Error("SceneStage", $"Step stopped: {why}");
+            Hold();
+        }
+
+        // Stepping over, by its own count or because something else took the clock: the Editor's pause comes off.
+        private static void EndStepping()
+        {
+            EditorApplication.update -= StepTick;
+            _stepsLeft = -1;
+            _stepScreenshot = "";
+            if (EditorApplication.isPaused)
+            {
+                EditorApplication.isPaused = false;
+            }
+        }
+
+        // The palette's own spelling of a colour name, so "red" paints as "Red" does.
+        private static string PaletteColor(string name)
+        {
+            foreach (var known in Resolve<IGamePalette>().ProgressColorNames)
+            {
+                if (string.Equals(known, name, StringComparison.OrdinalIgnoreCase))
+                {
+                    return known;
+                }
+            }
+
+            return name;
         }
 
         // Moves the staged ball along its line by game time, so the clearing decays behind it as it would in a shot.
@@ -1105,7 +1393,7 @@ namespace BalloonParty.Editor.Staging
 
         private static bool IsHeld()
         {
-            return Mathf.Approximately(Time.timeScale, 0f);
+            return EditorApplication.isPaused || Mathf.Approximately(Time.timeScale, 0f);
         }
 
         // Seeds one system of a frozen pop and applies the options' swaps; the sheet's only to a system drawing one.
@@ -1185,7 +1473,7 @@ namespace BalloonParty.Editor.Staging
             return null;
         }
 
-        private static Vector3 WorldPoint(string around)
+        internal static Vector3 WorldPoint(string around)
         {
             var parts = around.Split(';');
             if (parts.Length == 2)

@@ -1,0 +1,35 @@
+{
+  "name": "glory",
+  "scene": {"scenario": "meadow", "level": 7, "seed": 7, "time": 225},
+  "legend": {
+    "r": {"type": "Simple", "color": "Red"},
+    "g": {"type": "Simple", "color": "Green"},
+    "b": {"type": "Simple", "color": "Blue"},
+    "S": {"type": "Simple", "color": "Green", "item": "Shield"},
+    "Z": {"type": "Simple", "color": "Red", "item": "Laser"},
+    "L": {"type": "Simple", "color": "Blue", "item": "Lightning"},
+    "B": {"type": "Simple", "color": "Blue", "item": "Bomb"},
+    "T": {"type": "Tough"},
+    "U": {"type": "Unbreakable"},
+    "$": {"type": "Golden"},
+    "H": {"type": "Heart"},
+    "D": {"type": "Disco"},
+    "N": {"type": "Nuke"}
+  },
+  "board": [
+    "gSrZbb",
+    "ggrrbL",
+    "ggrr$b",
+    "grNbTb",
+    "UUDbbH",
+    "ggrrbB",
+    "g.rr.b"
+  ],
+  "settle": 1.5,
+  "warm": 0.5,
+  "shot": {"chain": true, "then": "nuke"},
+  "moment": {"after": "blast", "frames": 9},
+  "timeline": {"detail": 1, "flight_every": 4, "flight_after": 40, "fuse_every": 30, "blast_every": 3, "blast_frames": 48, "after_every": 8, "after_frames": 72},
+  "closeup": {"around": "Heart", "size": 360},
+  "light_study": {"around": "0,0", "size": 360, "step": 15}
+}

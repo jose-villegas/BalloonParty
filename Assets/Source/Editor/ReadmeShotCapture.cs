@@ -37,9 +37,9 @@ namespace BalloonParty.Editor
     ///     plays the level and the still is its best moment, the one with the most balloons popping at once, taken
     ///     at morning and at night. Each item: set off on a balloon in the middle of a fresh board, frozen at the
     ///     moment its effect is fullest. Each gift balloon: a few seconds of it in the middle of such a board, as a
-    ///     run of squares cut out round it, at morning and at night, for an animation. PNGs, then
-    ///     <see cref="DoneFile" />, holding "ok" or what went wrong. Run by <c>Tools/readme_shots/capture.py</c>,
-    ///     which composes them.
+    ///     run of squares cut out round it, at night (its own light shows best in the dark), for an animation.
+    ///     PNGs, then <see cref="DoneFile" />, holding "ok" or what went wrong. Run by
+    ///     <c>Tools/readme_shots/capture.py</c>, which composes them.
     ///     <para>
     ///         While the bot plays, and while a gift is filmed, every frame lasts one physics step whatever the
     ///         real frame took (<c>Time.captureDeltaTime</c>), so the game runs at its own pace however long a
@@ -117,9 +117,10 @@ namespace BalloonParty.Editor
             (ScenarioKind.Paper, "bonus")
         };
 
-        private static readonly (float Angle, string Name)[] Times =
+        // A gift is filmed at night only: its rays and its own light show best in the dark.
+        private static readonly (float Angle, string Name)[] GiftTimes =
         {
-            (MorningAngle, "morning"), (NightAngle, "night")
+            (NightAngle, "night")
         };
 
         private static readonly (BalloonType Type, string Name)[] Gifts =
@@ -239,7 +240,7 @@ namespace BalloonParty.Editor
 
             // Held while the light changes, so the board fills no further than its few filmed seconds need.
             Do(FreezeWorld);
-            foreach (var (angle, time) in Times)
+            foreach (var (angle, time) in GiftTimes)
             {
                 Do(() => SetAngle(angle));
                 Wait(LightSettleSeconds);

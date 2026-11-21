@@ -120,6 +120,43 @@ class Stage:
         while "advancing" in self._quiet("Status"):
             time.sleep(POLL_SECONDS)
 
+    def step(self, frames=1, screenshot=None, timeout=20.0):
+        """Lets the game run exactly `frames` frames, then stops it again; returns once it has. The Editor is
+        paused and stepped, so every clock stands still between frames, the real-time one too (hold() stops only
+        game time): what the game animates on real time moves a frame's worth per frame. With `screenshot`, the
+        Game view of the last frame is written there (screenshot() can't take one from a paused Editor).
+        frame_seconds() tells how long a stepped frame is."""
+        if screenshot:
+            screenshot = os.path.abspath(screenshot).replace("\\", "/")
+            os.makedirs(os.path.dirname(screenshot), exist_ok=True)
+        self.call("Step", int(frames), screenshot or "")
+        while "advancing" in self._quiet("Status"):
+            time.sleep(0.05)
+        if screenshot:
+            deadline = time.time() + timeout
+            while not os.path.exists(screenshot) or os.path.getsize(screenshot) == 0:
+                if time.time() > deadline:
+                    raise StageError(f"no screenshot at {screenshot}")
+                time.sleep(0.05)
+
+    def clock(self):
+        """The game's real-time clock, in seconds."""
+        return float(self._quiet("Clock"))
+
+    def frame_seconds(self, screenshot=None):
+        """How long a stepped frame is, measured over one step (it steps the game two frames, and leaves the Editor
+        paused as step() does)."""
+        # A step before the measured one: from a held game, the first also spans the moment the pause took to
+        # take hold.
+        self.step(1)
+        before = self.clock()
+        self.step(1, screenshot)
+        return round(self.clock() - before, 4)
+
+    def nuke(self):
+        """Where the nuke stands: idle, armed (its fuse is lit) or blast (its disc is sweeping the board)."""
+        return self._quiet("Nuke")
+
     def deal(self, scenario=None, level=None, seed=None, settle=1.5):
         """A fresh board: the run restarted at `level` (default the current one) or the first level from there in
         `scenario`, on run `seed` (default the current one), and `settle` seconds of game time for its obstacles and the thrower to come up."""
@@ -158,12 +195,12 @@ class Stage:
             self.call("ClearAround", float(around[0]), float(around[1]), float(radius))
         self.advance(settle)
 
-    def place(self, kind, slot, item="None", replace=True, settle=1.5):
-        """Puts a `kind` balloon at slot (col, row); with `replace`, pops what's there in the same frame (and lets
-        that pop play out for `settle`)."""
+    def place(self, kind, slot, item="None", replace=True, settle=1.5, color=""):
+        """Puts a `kind` balloon at slot (col, row), painted `color` (a palette name: Red, Green, Blue, Purple) if
+        given; with `replace`, pops what's there in the same frame (and lets that pop play out for `settle`)."""
         col, row = slot
         taken = any(s == (col, row) for _, s, _ in self.list()[0])
-        result = self.call("Place", kind, int(col), int(row), item, bool(replace))
+        result = self.call("Place", kind, int(col), int(row), item, bool(replace), color)
         if taken and settle:
             self.advance(settle)
         return result
@@ -223,13 +260,13 @@ class Stage:
         so a capture shows the line the game predicts, its bend off a mushroom included. None lets go; so does `fire`."""
         return self.call("AimOff") if degrees is None else self.call("Aim", float(degrees))
 
-    def chain(self):
+    def chain(self, then=""):
         """Where to aim to be paid by the meadow's mushrooms on the board as it stands: the angle to pass to `fire`
         (the middle of the widest run of aim angles whose solved flight arms the lance, three hits from wall of
         caps to wall of caps), or None when none does. The second value is the stage's whole answer: how many
         angles arm, how many caps stand in how many walls, and where the cannon stands."""
         try:
-            result = self.call("Chain")
+            result = self.call("Chain", then)
         except StageError as error:
             if "none of" in str(error):
                 return None, str(error)
@@ -251,7 +288,7 @@ class Stage:
             around = f"{around[0]};{around[1]}"
         return self.call("Capture", os.path.abspath(path).replace("\\", "/"), around, int(size))
 
-    def maps(self, directory, sheet=True, title=""):
+    def maps(self, directory, sheet=True, title="", frame=True):
         """Writes every render map (the ones the Game Render Maps window lists) into `directory` as it stands
         this frame: <map>-rgb.png and <map>-a.png at the map's own resolution, the frame itself as frame.png,
         and with `sheet` all of them side by side as sheet.png. Returns {map: (width, height, max colour, max
@@ -266,11 +303,44 @@ class Stage:
             size, top, top_alpha = value.split(",")
             width, height = size.split("x")
             found[name] = (int(width), int(height), float(top), float(top_alpha))
-        self.capture(os.path.join(directory, "frame.png"))
+        if frame or sheet:
+            self.capture(os.path.join(directory, "frame.png"))
         if sheet:
             import map_sheet
             map_sheet.compose(directory, found, title)
         return found
+
+    def breakdown(self, directory, around="", size=480, scale=1.0, flat=True):
+        """Redraws the held frame one draw group at a time into `directory`: backdrop.png, specks.png, shadows.png,
+        bodies.png, shines.png, board.png, effects.png and light.png (each with the groups before it), post.png
+        (post-processing on) and flat.png (the art under white light, the local lights off; not with `flat`
+        off). `scale` below 1 writes whole frames that much smaller, for a run of every frame of a shot. With
+        `around`, `size`-pixel squares centred on a balloon or a world point. Returns {group: renderers in it}."""
+        if isinstance(around, (tuple, list)):
+            around = f"{around[0]};{around[1]}"
+        directory = os.path.abspath(directory).replace("\\", "/")
+        answer = self.editor.eval(f"return BalloonParty.Editor.Staging.FrameBreakdown.Write("
+                                  f"{cs(directory)}, {cs(around)}, {int(size)}, {cs(float(scale))}, {cs(bool(flat))});")
+        if self.verbose:
+            print(f"Breakdown: {answer}", flush=True)
+        if str(answer).startswith("error"):
+            raise StageError(answer)
+        counts = {name: int(count) for name, _, count in (entry.partition("=") for entry in str(answer).split("|"))}
+        if not counts.get("backdrop"):
+            # Groups go by sorting layer, layer, shader and prefab names: an empty backdrop means one was renamed.
+            print("Breakdown: no renderer counted as backdrop; FrameBreakdown.GroupOf may be out of date", flush=True)
+        return counts
+
+    def screenshot(self, path, timeout=20.0):
+        """The Game view as the player sees it, HUD and all, written to `path` (the Game view must be showing)."""
+        path = os.path.abspath(path).replace("\\", "/")
+        self.editor.eval(f"return BalloonParty.Editor.Staging.FrameBreakdown.Screenshot({cs(path)});")
+        deadline = time.time() + timeout
+        while not os.path.exists(path) or os.path.getsize(path) == 0:
+            if time.time() > deadline:
+                raise StageError(f"no screenshot at {path}")
+            time.sleep(0.2)
+        return path
 
     def end(self):
         """Clears frozen effects, gives the game back its clock, level-ups and balloons, and leaves Play mode."""
@@ -311,6 +381,8 @@ def main():
     sub.add_parser("release", help="let game time run")
     advance = sub.add_parser("advance", help="let game time run a while, then hold again")
     advance.add_argument("seconds", type=float)
+    step = sub.add_parser("step", help="let the game run an exact number of frames, then stop it again, every clock held")
+    step.add_argument("frames", type=int, nargs="?", default=1)
     when = sub.add_parser("time", help="set the time of day: dawn, day, dusk, night, or an angle")
     when.add_argument("when")
     sub.add_parser("list", help="the balloons on the board")
@@ -322,6 +394,7 @@ def main():
     place.add_argument("kind", help="a BalloonType: Ordinary, Unbreakable, Golden, Heart, ...")
     place.add_argument("slot", help="col,row")
     place.add_argument("--item", default="None")
+    place.add_argument("--color", default="", help="a palette colour: Red, Green, Blue, Purple")
     pop = sub.add_parser("pop", help="pop a balloon for real")
     pop.add_argument("target", help="a balloon type or col,row")
     pop.add_argument("--settle", type=float, help="then let this much game time run")
@@ -342,7 +415,9 @@ def main():
     fire = sub.add_parser("fire", help="fire the loaded ball for real at an angle")
     fire.add_argument("degrees", type=float, help="0 = right, 90 = straight up")
     fire.add_argument("--lance", action="store_true", help="arm it as a Snipe lance first")
-    sub.add_parser("chain", help="the angle that arms the lance off this board's mushroom walls, for fire")
+    chain = sub.add_parser("chain", help="the angle that arms the lance off this board's mushroom walls, for fire")
+    chain.add_argument("--then", default="", choices=("", "nuke", "golden", "disco", "heart"),
+                       help="only angles whose flight also pops a balloon of this kind")
     cut = sub.add_parser("cut", help="cut the cap off a mushroom as a lance does: a ball then flies through")
     cut.add_argument("slot", help="col,row")
     cut.add_argument("degrees", type=float, help="the lance's way: 0 = right, 90 = straight up")
@@ -366,6 +441,10 @@ def main():
     maps.add_argument("directory")
     maps.add_argument("--title", default="", help="a heading for the sheet")
     maps.add_argument("--no-sheet", action="store_true", help="only the PNGs, no sheet.png (which needs Pillow)")
+    breakdown = sub.add_parser("breakdown", help="redraw the held frame one draw group at a time, into a folder")
+    breakdown.add_argument("directory")
+    breakdown.add_argument("--around", default="", help="a balloon type, col,row or a world point x;y")
+    breakdown.add_argument("--size", type=int, default=480)
     sub.add_parser("end", help="clear frozen pops, let the game run and leave Play mode")
     args = parser.parse_args()
 
@@ -383,6 +462,10 @@ def main():
                         "clear-effects": "ClearEffects"}[args.command])
         elif args.command == "advance":
             stage.advance(args.seconds)
+        elif args.command == "step":
+            stage.step(args.frames)
+        elif args.command == "breakdown":
+            stage.breakdown(args.directory, args.around, args.size)
         elif args.command == "time":
             stage.time_of_day(args.when)
         elif args.command == "list":
@@ -399,7 +482,7 @@ def main():
             else:
                 parser.error("clear needs --slots or --around")
         elif args.command == "place":
-            stage.place(args.kind, pair(args.slot, int), args.item)
+            stage.place(args.kind, pair(args.slot, int), args.item, color=args.color)
         elif args.command == "pop":
             stage.pop(args.target, args.settle)
         elif args.command == "freeze-pop":
@@ -409,7 +492,7 @@ def main():
         elif args.command == "fire":
             stage.fire(args.degrees, args.lance)
         elif args.command == "chain":
-            stage.call("Chain")
+            stage.call("Chain", args.then)
         elif args.command == "cut":
             stage.cut(pair(args.slot, int), args.degrees, args.offset)
         elif args.command == "regrow":
