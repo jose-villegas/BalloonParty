@@ -104,6 +104,29 @@ namespace BalloonParty.Configuration.Balloons
         /// <summary>Pick weight of a snake.</summary>
         float SnakeWeight { get; }
 
+        /// <summary>Pick weight of a ring. It forms only from <see cref="RingMinMembers" /> unbreakables or more.</summary>
+        float RingWeight { get; }
+
+        /// <summary>
+        ///     How many times likelier a ring is for a snake done walking: the snake coils into it, its head
+        ///     leading. 1: no likelier than for any other formation.
+        /// </summary>
+        float RingWeightAfterSnake { get; }
+
+        /// <summary>Fewest unbreakables a ring forms from.</summary>
+        int RingMinMembers { get; }
+
+        /// <summary>
+        ///     Most unbreakables in a ring, five at most: of the six slots round its centre, one always stays open.
+        /// </summary>
+        int RingMaxMembers { get; }
+
+        /// <summary>Cycles a ring holds, counting the cycle it formed on, before it changes shape.</summary>
+        int RingHoldCycles { get; }
+
+        /// <summary>Cycles a ring turns one way before it turns the other. 0: it never turns back by itself.</summary>
+        int RingReverseEveryCycles { get; }
+
         /// <summary>
         ///     Added to the snake's weight, as a share of <see cref="SnakeWeight" />, for each unbreakable on the
         ///     board beyond <see cref="MinMembers" />: the more unbreakables, the likelier a snake.

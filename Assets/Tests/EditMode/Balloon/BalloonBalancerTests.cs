@@ -427,6 +427,44 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void ARing_FallsDueOnTheBeat_NotOnTheOffBeatStep()
+        {
+            var balancer = BalancerWithARing(out var formations, out _);
+
+            Assert.IsFalse(balancer.TickFlightRebalance(0.5f), "half a beat in: a snake would step, a ring does not turn");
+            Assert.IsTrue(balancer.TickFlightRebalance(0.5f), "the beat turns it");
+            Assert.IsFalse(balancer.TickFlightRebalance(0.5f), "the off-beat step again");
+            formations.Dispose();
+            balancer.ResetRun(balancer.Generation + 1);
+        }
+
+        [Test]
+        public void ARing_TurnsOneSlotOnTheBeat_ThroughADoomedGlide()
+        {
+            var balancer = BalancerWithARing(out var formations, out var ring);
+            var before = ring.MemberList.Select(m => m.SlotIndex.Value).ToList();
+            var shot = LoadFreeProjectile();
+            shot.IsLastShieldApproach.Value = true;
+
+            Assert.IsFalse(balancer.TickFlightRebalance(0.5f), "the doomed glide holds the board");
+            CollectionAssert.AreEqual(before, ring.MemberList.Select(m => m.SlotIndex.Value).ToList(), "off the beat");
+
+            Assert.IsFalse(balancer.TickFlightRebalance(0.5f));
+
+            var centre = ring.RingCentre;
+            for (var i = 0; i < before.Count; i++)
+            {
+                var direction = HexCoordinates.DirectionBetween(centre, before[i]);
+                Assert.AreEqual(
+                    HexCoordinates.Step(centre, direction + 1), ring.MemberList[i].SlotIndex.Value,
+                    "each member a slot clockwise on the beat");
+            }
+
+            formations.Dispose();
+            balancer.ResetRun(balancer.Generation + 1);
+        }
+
+        [Test]
         public void AnUnbreakableSnake_StepsOnItsTick_ThroughADoomedGlide()
         {
             // The rhythm comes first: the glide holds the rest of the board, not the snake.
@@ -611,6 +649,41 @@ namespace BalloonParty.Tests.Balloon
             return new BalloonBalancer(
                 _grid, new GridBalanceQuery(_grid), _balloonsConfig, new BalancePathHolder(), CaptureBalanceRequests(),
                 _registry, _pauseService, null, new BalloonMotionTicker(), formations: formations);
+        }
+
+        // A ring of four unbreakables round the middle slot of the 3 by 3 board (on its slots 4, 5, 0 and 1, which
+        // stand clear of the west side so the ring never walls the board), turning clockwise twice a beat.
+        private BalloonBalancer BalancerWithARing(out UnbreakableFormationService formations, out StandingFormation ring)
+        {
+            var balancer = BalancerWithAToughSnake(out formations, toughStepSeconds: 100f, formAtOnce: false);
+            var settings = _balloonsConfig.UnbreakableFormation;
+            settings.ToughSnakes.Returns(false);
+            settings.BeatSeconds.Returns(1f);
+            settings.SnakeStepsPerBeat.Returns(2);
+            settings.RingWeight.Returns(1f);
+            settings.RingMinMembers.Returns(4);
+            settings.RingMaxMembers.Returns(5);
+            settings.RingHoldCycles.Returns(8);
+            _balloonsConfig.FlightRebalanceInterval.Returns(100f);
+            formations.Random01 = () => 0f;
+            for (var col = 0; col < 3; col++)
+            {
+                _grid.Remove(new Vector2Int(col, 0));
+            }
+
+            var centre = new Vector2Int(1, 1);
+            foreach (var direction in new[] { 4, 5, 0, 1 })
+            {
+                _grid.Place(
+                    new UnbreakableBalloonModel(new BalloonModelConfig(typeName: BalloonType.Unbreakable)),
+                    ViewObject(), HexCoordinates.Step(centre, direction));
+            }
+
+            formations.ArrangeOnCycle(_ => { });
+            ring = formations.Formations.Single(f => f.Shape == FormationShape.Ring);
+            Assert.AreEqual(centre, ring.RingCentre);
+            Assert.IsTrue(ring.Clockwise);
+            return balancer;
         }
 
         // Three toughs on row 0 of the 3 by 3 board: the wave start makes a snake of them, unless formAtOnce is

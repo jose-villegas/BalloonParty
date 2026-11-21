@@ -28,7 +28,7 @@ namespace BalloonParty.Balloon.Formation
     internal sealed class FormationPlanner
     {
         // A cover is a shield between the cannon and the item: the two slots below it first, then its sides, and
-        // only once those are all taken the two above. Six closes the ring.
+        // only once those are all taken the two above. Six surround it.
         internal const int CoverMembers = 6;
         internal const int CoverMinMembers = 3;
 
@@ -68,20 +68,26 @@ namespace BalloonParty.Balloon.Formation
         /// </summary>
         internal Vector2Int? CoveredHost { get; private set; }
 
+        /// <summary>The slot the last plan's ring stands round; null after any other shape, or a plan that found no spot.</summary>
+        internal Vector2Int? RingCentre { get; private set; }
+
         /// <summary>
         ///     Plans <paramref name="shape" /> for up to <see cref="IUnbreakableFormationSettings.MaxMembers" />
         ///     (an item cover, three to six)
         ///     of <paramref name="candidates" />, filling <paramref name="assignmentsOut" /> with one entry per
         ///     formation slot. False when no spot fits. <paramref name="pickIndex" /> maps a count n to an
-        ///     index in [0, n).
+        ///     index in [0, n). A ring takes <see cref="IUnbreakableFormationSettings.RingMinMembers" /> to
+        ///     <see cref="IUnbreakableFormationSettings.RingMaxMembers" />, and with <paramref name="keep" /> (a
+        ///     snake's head, coiling into the ring) only the spots that hold that slot, while any does.
         /// </summary>
         internal bool TryPlan(
             SlotGrid grid, FormationShape shape, IReadOnlyList<IWriteableFormationMember> candidates,
             IUnbreakableFormationSettings settings, Func<int, int> pickIndex,
-            List<FormationAssignment> assignmentsOut)
+            List<FormationAssignment> assignmentsOut, Vector2Int? keep = null)
         {
             assignmentsOut.Clear();
             CoveredHost = null;
+            RingCentre = null;
             var isRow = shape is FormationShape.Horizontal or FormationShape.Snake;
             var count = MemberCount(shape, candidates.Count, settings);
             // A row across the board this close to the cannon walls the player in; a diagonal leaves lanes open.
@@ -100,6 +106,11 @@ namespace BalloonParty.Balloon.Formation
             _wall.Load(grid);
             _walledBefore = _wall.Spans();
             CollectSpots(grid, shape, candidates, count, lastRow);
+            if (shape == FormationShape.Ring && keep.HasValue)
+            {
+                KeepSpotsHolding(grid, keep.Value, count, lastRow);
+            }
+
             if (_spots.Count == 0)
             {
                 return false;
@@ -124,6 +135,10 @@ namespace BalloonParty.Balloon.Formation
             {
                 CoveredHost = chosen.Anchor;
             }
+            else if (shape == FormationShape.Ring)
+            {
+                RingCentre = chosen.Anchor;
+            }
 
             return true;
         }
@@ -138,7 +153,11 @@ namespace BalloonParty.Balloon.Formation
                 for (var row = 0; row < grid.Rows; row++)
                 {
                     var anchor = new Vector2Int(col, row);
-                    if (shape != FormationShape.ItemCover)
+                    if (shape == FormationShape.Ring)
+                    {
+                        CollectRingSpots(grid, candidates, count, lastRow, anchor);
+                    }
+                    else if (shape != FormationShape.ItemCover)
                     {
                         if (BuildSlots(grid, shape, anchor, count, lastRow, 0))
                         {
@@ -151,6 +170,58 @@ namespace BalloonParty.Balloon.Formation
                     }
                 }
             }
+        }
+
+        // One spot for each of the six arcs round a centre: the arc's first slot is the centre's neighbour in the
+        // variant's direction, and the rest follow it clockwise.
+        private void CollectRingSpots(
+            SlotGrid grid, IReadOnlyList<IWriteableFormationMember> candidates, int count, int lastRow,
+            Vector2Int centre)
+        {
+            if (!FormationRing.IsCentre(grid, centre, lastRow))
+            {
+                return;
+            }
+
+            for (var variant = 0; variant < HexCoordinates.Directions; variant++)
+            {
+                if (BuildSlots(grid, FormationShape.Ring, centre, count, lastRow, variant))
+                {
+                    TryAddSpot(grid, candidates, count, centre, variant);
+                }
+            }
+        }
+
+        // A snake coils into its ring from the head. While any arc has the head's slot at one of its ends, only
+        // those spots stay: the head keeps its slot (a member on a formation slot always does) with the open slot
+        // ahead of it, and the arc follows it round. Failing that, the arcs that hold the slot anywhere.
+        private void KeepSpotsHolding(SlotGrid grid, Vector2Int keep, int count, int lastRow)
+        {
+            if (!KeepSpots(grid, keep, count, lastRow, atAnEnd: true))
+            {
+                KeepSpots(grid, keep, count, lastRow, atAnEnd: false);
+            }
+        }
+
+        private bool KeepSpots(SlotGrid grid, Vector2Int keep, int count, int lastRow, bool atAnEnd)
+        {
+            var holding = 0;
+            for (var i = 0; i < _spots.Count; i++)
+            {
+                BuildSlots(grid, FormationShape.Ring, _spots[i].Anchor, count, lastRow, _spots[i].Variant);
+                if (atAnEnd ? _slots[0] == keep || _slots[^1] == keep : Holds(_slots, keep))
+                {
+                    _spots[holding++] = _spots[i];
+                }
+            }
+
+            if (holding == 0)
+            {
+                return false;
+            }
+
+            _spots.RemoveRange(holding, _spots.Count - holding);
+            return true;
         }
 
         private int LeadingGiftSpots(int among)
@@ -293,6 +364,14 @@ namespace BalloonParty.Balloon.Formation
                 case FormationShape.ItemCover:
                     AddCoverSlots(grid, anchor, count, variant);
                     break;
+
+                case FormationShape.Ring:
+                    for (var i = 0; i < count; i++)
+                    {
+                        _slots.Add(HexCoordinates.Step(anchor, variant + i));
+                    }
+
+                    break;
             }
 
             // A cover may come out short at an edge, but a corner leaves fewer neighbours than its smallest.
@@ -325,7 +404,7 @@ namespace BalloonParty.Balloon.Formation
             }
         }
 
-        // A cover takes three to six, whatever MaxMembers says: six closes the ring. A horizontal line stops at
+        // A cover takes three to six, whatever MaxMembers says: six surround it. A horizontal line stops at
         // HorizontalMaxMembers so it never spans the board, a snake at SnakeMaxMembers; a diagonal leaves lanes
         // open and takes up to MaxMembers.
         private static int MemberCount(
@@ -336,6 +415,15 @@ namespace BalloonParty.Balloon.Formation
                 return candidates >= CoverFloor(settings)
                     ? Mathf.Min(candidates, CoverMembers)
                     : 0;
+            }
+
+            // A ring is only a ring with most of its slots taken, and never closes: one slot at least stays open,
+            // whatever the settings say.
+            if (shape == FormationShape.Ring)
+            {
+                var fewest = Mathf.Max(settings.RingMinMembers, 2);
+                var ringMost = Mathf.Min(settings.RingMaxMembers, FormationRing.MostMembers);
+                return candidates >= fewest && fewest <= ringMost ? Mathf.Min(candidates, ringMost) : 0;
             }
 
             var most = shape switch

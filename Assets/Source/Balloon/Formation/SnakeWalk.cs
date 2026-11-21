@@ -65,7 +65,8 @@ namespace BalloonParty.Balloon.Formation
                    && occupant is not IBalanceAnchor { IsAnchored: true };
         }
 
-        private static bool IsOpen(SlotGrid grid, Vector2Int slot)
+        /// <summary>Whether a formation may move into <paramref name="slot" />: empty, or held by a balloon it trades places with.</summary>
+        internal static bool IsOpen(SlotGrid grid, Vector2Int slot)
         {
             return grid.IsEmpty(slot.x, slot.y) || CanPassThrough(grid.At(slot));
         }

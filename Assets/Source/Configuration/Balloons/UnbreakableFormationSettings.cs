@@ -88,6 +88,21 @@ namespace BalloonParty.Configuration.Balloons
                  "at most moves alone on each cycle.")]
         [SerializeField] [Min(1)] private int _loneHoldCycles = 3;
 
+        [Header("Ring")]
+        [Tooltip("Fewest unbreakables a ring forms from. A ring stands round one slot and turns one slot round it " +
+                 "on every beat.")]
+        [SerializeField] [Range(2, 5)] private int _ringMinMembers = 4;
+
+        [Tooltip("Most unbreakables in a ring. Five at most: of the six slots round its centre one always stays " +
+                 "open.")]
+        [SerializeField] [Range(2, 5)] private int _ringMaxMembers = 5;
+
+        [Tooltip("Cycles a ring holds, counting the cycle it formed on, before it changes shape.")]
+        [SerializeField] [Min(1)] private int _ringHoldCycles = 8;
+
+        [Tooltip("Cycles a ring turns one way before it turns the other. 0 = it never turns back by itself.")]
+        [SerializeField] [Min(0)] private int _ringReverseEveryCycles = 4;
+
         [Header("Reinforcements")]
         [Tooltip("Chance, at each wave start, that a formation which stood untouched through the last wave " +
                  "(no member pierced since it formed) calls in one more unbreakable. 0 = never.")]
@@ -109,6 +124,13 @@ namespace BalloonParty.Configuration.Balloons
 
         [Tooltip("Weight of a snake, the line that walks the board.")]
         [SerializeField] [Min(0f)] private float _snakeWeight = 0.25f;
+
+        [Tooltip("Weight of a ring. It forms only from Ring Min Members unbreakables or more.")]
+        [SerializeField] [Min(0f)] private float _ringWeight = 1f;
+
+        [Tooltip("How many times likelier a ring is for a snake done walking: the snake coils into it, its head " +
+                 "leading. 1 = no likelier than for any other formation.")]
+        [SerializeField] [Min(0f)] private float _ringWeightAfterSnake = 4f;
 
         [Tooltip("Added to the snake's weight, as a share of it, for each unbreakable on the board beyond Min " +
                  "Members: 0.25 makes a snake 1.25x as likely with one more, 1.5x with two more.")]
@@ -145,6 +167,12 @@ namespace BalloonParty.Configuration.Balloons
         public float DiagonalWeight => _diagonalWeight;
         public float ItemCoverWeight => _itemCoverWeight;
         public float SnakeWeight => _snakeWeight;
+        public float RingWeight => _ringWeight;
+        public float RingWeightAfterSnake => _ringWeightAfterSnake;
+        public int RingMinMembers => _ringMinMembers;
+        public int RingMaxMembers => Mathf.Max(_ringMaxMembers, _ringMinMembers);
+        public int RingHoldCycles => Mathf.Max(1, _ringHoldCycles);
+        public int RingReverseEveryCycles => Mathf.Max(0, _ringReverseEveryCycles);
         public float SnakeWeightPerExtraUnbreakable => _snakeWeightPerExtraUnbreakable;
         public int MaxUnbreakableSnakes => _maxUnbreakableSnakes;
         public float JoinSnakeChance => _joinSnakeChance;

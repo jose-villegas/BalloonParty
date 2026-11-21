@@ -45,25 +45,44 @@ namespace BalloonParty.Balloon.Formation
         internal bool Armoured { get; set; }
 
         /// <summary>
-        ///     The balloon an item cover stands round, held on <see cref="HostSlot" /> for as long as it is the host
-        ///     (<see cref="IWriteableCoverHost" />); null for any other shape, and once that balloon has popped or
-        ///     been taken off the board (the cover then stands round nothing until it changes).
+        ///     The balloon an item cover stands round, or a ring's centre balloon, held on <see cref="HostSlot" /> for
+        ///     as long as it is the host (<see cref="IWriteableCoverHost" />); null for any other shape, and once that
+        ///     balloon has popped or been taken off the board (the formation then stands round nothing until it
+        ///     changes).
         /// </summary>
         internal IWriteableSlotActor Host { get; set; }
 
-        /// <summary>Where <see cref="Host" /> stood when the cover was planned.</summary>
+        /// <summary>Where <see cref="Host" /> stood when the formation was planned.</summary>
         internal Vector2Int HostSlot { get; set; }
+
+        /// <summary>
+        ///     Whether <see cref="Host" /> gets a ring of light of its own (<see cref="ICoveredHosts" />): a cover's
+        ///     does, so its outline closes over the balloon; a ring's centre does not.
+        /// </summary>
+        internal bool HostLit { get; set; }
+
+        /// <summary>The slot a ring stands round and turns about; its members hold neighbours of it.</summary>
+        internal Vector2Int RingCentre { get; set; }
+
+        /// <summary>The way a ring turns on the beat.</summary>
+        internal bool Clockwise { get; set; }
+
+        /// <summary>Cycles left before a ring turns the other way.</summary>
+        internal int CyclesToReverse { get; set; }
 
         internal void Reset()
         {
             MemberList.Clear();
             Host = null;
+            HostLit = false;
             Armoured = false;
             CyclesLeft = 0;
             FormedOnWave = 0;
             Touched = false;
             Heading = 0;
             ArrangedOnPass = 0;
+            Clockwise = false;
+            CyclesToReverse = 0;
         }
     }
 }

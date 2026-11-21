@@ -6,6 +6,7 @@ using BalloonParty.Configuration.Balloons;
 using BalloonParty.Game.Assist;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
 using UniRx;
@@ -42,6 +43,7 @@ namespace BalloonParty.Balloon.Formation
             FormationShape.DiagonalDownLeft,
             FormationShape.ItemCover,
             FormationShape.Snake,
+            FormationShape.Ring,
         };
 
         // Straight on, then 60° right and left, then 120° right and left: a line bends as little as it can.
@@ -86,6 +88,10 @@ namespace BalloonParty.Balloon.Formation
         private bool _snakesAtCap;
         // Set at the start of each shape plan: the shapes the level in play allows.
         private FormationShapes _allowedShapes = FormationShapes.All;
+        // Set at the start of each shape plan: the formation changing shape is a snake, which leans toward a ring.
+        private bool _planningAfterSnake;
+        // The head of the snake the plan in hand coils into a ring, while there is one.
+        private IWriteableFormationMember _coilingHead;
         private int _reinforcementCalls;
 
         // Set when free toughs had nowhere to fall in; cleared by the next change on the board.
@@ -111,7 +117,8 @@ namespace BalloonParty.Balloon.Formation
 
         // The tough snake's head has landed: a snake formed from toughs still rising takes no step until it has.
         internal bool ToughSnakeLanded => ToughSnake() is { MemberList: { Count: > 0 } members } && members[0].IsStable.Value;
-        internal bool HasUnbreakableSnake => HasSnake();
+        internal bool HasUnbreakableSnake => HasShape(FormationShape.Snake);
+        internal bool HasRing => HasShape(FormationShape.Ring);
 
         public IReadOnlyList<ISlotActor> ToughSnakeMembers =>
             ToughSnake() is { } snake ? snake.MemberList : Array.Empty<ISlotActor>();
@@ -328,6 +335,35 @@ namespace BalloonParty.Balloon.Formation
         }
 
         /// <summary>
+        ///     Every ring turns one slot round its centre, the way it is turning: each member to the next of the
+        ///     centre's neighbours, a balloon in its way going to a slot the ring leaves. A ring that cannot turn
+        ///     that way turns back at once, and one that cannot turn either way misses the beat. Like
+        ///     <see cref="StepSnakes" />, <paramref name="relocate" /> carries out each turn's moves at once, and with
+        ///     <paramref name="afterArranging" /> a ring formed or re-planned in the same balance waits for the
+        ///     next beat.
+        /// </summary>
+        internal void TurnRings(Action<IReadOnlyList<SlotMove>> relocate, bool afterArranging = false)
+        {
+            _arranging = true;
+            try
+            {
+                for (var i = 0; i < _formations.Count; i++)
+                {
+                    var formation = _formations[i];
+                    if (formation.Shape == FormationShape.Ring && formation.MemberList.Count > 0
+                        && !(afterArranging && formation.ArrangedOnPass == _arrangePass))
+                    {
+                        Turn(formation, relocate);
+                    }
+                }
+            }
+            finally
+            {
+                _arranging = false;
+            }
+        }
+
+        /// <summary>
         ///     The tough snake steps once, as <see cref="StepSnakes" /> steps an unbreakable one, and the toughs
         ///     that arrived meanwhile fall in behind its new tail. <paramref name="afterArranging" />: as for
         ///     <see cref="StepSnakes" />.
@@ -362,17 +398,48 @@ namespace BalloonParty.Balloon.Formation
             return SnakeWalk.LastRow(_grid.Rows, _settings);
         }
 
-        private bool HasSnake()
+        private bool HasShape(FormationShape shape)
         {
             for (var i = 0; i < _formations.Count; i++)
             {
-                if (_formations[i].Shape == FormationShape.Snake && !_formations[i].Armoured)
+                if (_formations[i].Shape == shape && !_formations[i].Armoured)
                 {
                     return true;
                 }
             }
 
             return false;
+        }
+
+        private void Turn(StandingFormation ring, Action<IReadOnlyList<SlotMove>> relocate)
+        {
+            // A member a lance plowed holds its slot until the discharge shatters it, and a ring turns as one.
+            if (AwaitsDischarge(ring))
+            {
+                return;
+            }
+
+            if (!FormationRing.TryTurn(_grid, ring.RingCentre, ring.MemberList, ring.Clockwise, LoadWall(), _moves))
+            {
+                // Something it can't pass stands in its way: it turns back, as a snake boxed in does. The wall is
+                // loaded again, since trying a turn on it leaves the slots it touched as the ring's own.
+                if (!FormationRing.TryTurn(_grid, ring.RingCentre, ring.MemberList, !ring.Clockwise, LoadWall(), _moves))
+                {
+                    return;
+                }
+
+                ring.Clockwise = !ring.Clockwise;
+            }
+
+            var members = ring.MemberList;
+            for (var i = 0; i < members.Count; i++)
+            {
+                var around = HexCoordinates.DirectionBetween(ring.RingCentre, members[i].SlotIndex.Value);
+                members[i].SetWalking(true);
+                members[i].SetFormationHeading(DirectionHeading(FormationRing.Tangent(around, ring.Clockwise)));
+            }
+
+            relocate(_moves);
         }
 
         private void Walk(StandingFormation snake, int lastRow, Action<IReadOnlyList<SlotMove>> relocate)
@@ -580,6 +647,7 @@ namespace BalloonParty.Balloon.Formation
                 if (formation.CyclesLeft > 0)
                 {
                     formation.CyclesLeft--;
+                    CountTowardTurningBack(formation);
                     continue;
                 }
 
@@ -605,6 +673,22 @@ namespace BalloonParty.Balloon.Formation
                 }
 
                 Apply(formation, shape, relocate);
+            }
+        }
+
+        // A ring turns the other way every RingReverseEveryCycles cycles.
+        private void CountTowardTurningBack(StandingFormation formation)
+        {
+            if (formation.Shape != FormationShape.Ring || _settings.RingReverseEveryCycles <= 0)
+            {
+                return;
+            }
+
+            formation.CyclesToReverse--;
+            if (formation.CyclesToReverse <= 0)
+            {
+                formation.Clockwise = !formation.Clockwise;
+                formation.CyclesToReverse = _settings.RingReverseEveryCycles;
             }
         }
 
@@ -1256,20 +1340,47 @@ namespace BalloonParty.Balloon.Formation
             {
                 LineUpSnake(formation);
             }
+            else if (shape == FormationShape.Ring)
+            {
+                StartRing(formation);
+            }
         }
 
-        // Only a cover has a host: the balloon the plan just made stands round, held in its slot from now until the
-        // cover lets it go. A cover planned again round the same balloon holds it again at once, so whatever a
-        // view hangs on it (its ring) carries on.
+        // A ring turns round the slot the plan chose, and starts the way its snake's head leads: the head at one
+        // end of the arc, with the open slot ahead of it. With no such head, either way.
+        private void StartRing(StandingFormation ring)
+        {
+            Log.Assert(_planner.RingCentre.HasValue, "UnbreakableFormations", "a ring was planned with no centre");
+            ring.RingCentre = _planner.RingCentre.GetValueOrDefault();
+            ring.CyclesToReverse = _settings.RingReverseEveryCycles;
+            ring.Clockwise = Random01() < 0.5f;
+            for (var i = 0; i < _assignments.Count; i++)
+            {
+                if (_assignments[i].Member == _coilingHead
+                    && FormationRing.LeadsAt(ring.RingCentre, _assignments, _assignments[i].Target, out var clockwise))
+                {
+                    ring.Clockwise = clockwise;
+                }
+            }
+
+            // The head is a balloon of the board's, pooled once it pops: it is not kept past the plan it led.
+            _coilingHead = null;
+        }
+
+        // A cover has a host, the balloon the plan just made stands round, and so has a ring with a balloon at its
+        // centre: held in its slot from now until the formation lets it go. A cover planned again round the same
+        // balloon holds it again at once, so whatever a view hangs on it (its ring of light) carries on.
         private void HoldHost(StandingFormation formation, FormationShape shape)
         {
             LetHostGo(formation);
-            if (shape == FormationShape.ItemCover && _planner.CoveredHost is { } hostSlot
+            var centre = shape == FormationShape.Ring ? _planner.RingCentre : _planner.CoveredHost;
+            if (shape is FormationShape.ItemCover or FormationShape.Ring && centre is { } hostSlot
                 && !_grid.IsEmpty(hostSlot.x, hostSlot.y) && _grid.At(hostSlot) is IWriteableCoverHost host)
             {
                 host.SetHeldByCover(true);
                 formation.Host = _grid.At(hostSlot);
                 formation.HostSlot = hostSlot;
+                formation.HostLit = shape == FormationShape.ItemCover;
                 RebuildCoveredHosts();
             }
         }
@@ -1308,15 +1419,17 @@ namespace BalloonParty.Balloon.Formation
             }
         }
 
-        // The covered balloons are whatever the standing formations hold. Only HoldHost and LetHostGo write a
-        // standing formation's host, and each rebuilds this.
+        // The covered balloons are whatever the standing covers hold. Only HoldHost and LetHostGo write a
+        // standing formation's host, and each rebuilds this. A ring holds its centre balloon too, but that one is
+        // not listed: the list is for the ring of light a cover closes over its balloon, and a ring's own light
+        // stays on its unbreakables, with the middle left open (the owner's ask, 2026-11-21).
         private void RebuildCoveredHosts()
         {
             _coveredHosts.Clear();
             for (var i = 0; i < _formations.Count; i++)
             {
                 var formation = _formations[i];
-                if (formation.Host != null)
+                if (formation.Host != null && formation.HostLit)
                 {
                     _coveredHosts.Add(new CoveredHost(
                         formation.Host, formation.Id, _grid.IndexToWorldPosition(formation.HostSlot)));
@@ -1381,6 +1494,7 @@ namespace BalloonParty.Balloon.Formation
             {
                 FormationShape.Snake => _settings.SnakeHoldCycles,
                 FormationShape.ItemCover => _settings.ItemCoverHoldCycles,
+                FormationShape.Ring => Mathf.Max(1, _settings.RingHoldCycles),
                 _ => _settings.LineHoldCycles,
             };
         }
@@ -1441,6 +1555,10 @@ namespace BalloonParty.Balloon.Formation
             _unbreakablesOnBoard = CountUnbreakables();
             _snakesAtCap = _settings.MaxUnbreakableSnakes > 0 && CountUnbreakableSnakes(own) >= _settings.MaxUnbreakableSnakes;
             _allowedShapes = _level?.Current?.AllowedFormationShapes ?? FormationShapes.All;
+
+            // A snake done walking leans toward the ring and coils into it from its head.
+            _planningAfterSnake = lastShape == FormationShape.Snake && own != null;
+            _coilingHead = _planningAfterSnake && own.MemberList.Count > 0 ? own.MemberList[0] : null;
             _shapePool.Clear();
             foreach (var candidate in Shapes)
             {
@@ -1455,7 +1573,8 @@ namespace BalloonParty.Balloon.Formation
                 var index = PickWeighted();
                 shape = _shapePool[index];
                 _shapePool.RemoveAt(index);
-                if (_planner.TryPlan(_grid, shape, _candidates, _settings, _pickIndex, _assignments))
+                if (_planner.TryPlan(_grid, shape, _candidates, _settings, _pickIndex, _assignments,
+                        shape == FormationShape.Ring ? _coilingHead?.SlotIndex.Value : null))
                 {
                     return true;
                 }
@@ -1511,6 +1630,8 @@ namespace BalloonParty.Balloon.Formation
                     ? 0f
                     : _settings.SnakeWeight * (1f + _settings.SnakeWeightPerExtraUnbreakable
                         * Mathf.Max(0, _unbreakablesOnBoard - _settings.MinMembers)),
+                FormationShape.Ring => _settings.RingWeight
+                                       * (_planningAfterSnake ? Mathf.Max(0f, _settings.RingWeightAfterSnake) : 1f),
                 _ => 0f,
             };
         }

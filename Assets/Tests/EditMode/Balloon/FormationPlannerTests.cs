@@ -30,6 +30,8 @@ namespace BalloonParty.Tests.Balloon
             _settings.MaxMembers.Returns(5);
             _settings.BottomClearance.Returns(2);
             _settings.SpotChoices.Returns(1);
+            _settings.RingMinMembers.Returns(4);
+            _settings.RingMaxMembers.Returns(5);
             _planner = new FormationPlanner();
             _candidates = new List<IWriteableFormationMember>();
             _assignments = new List<FormationAssignment>();
@@ -701,9 +703,157 @@ namespace BalloonParty.Tests.Balloon
             Assert.IsFalse(Plan(FormationShape.Horizontal));
         }
 
-        private bool Plan(FormationShape shape)
+        [Test]
+        public void Ring_NeedsTheMinimumOfCandidates()
         {
-            return _planner.TryPlan(_grid, shape, _candidates, _settings, _ => 0, _assignments);
+            BuildGrid(7, 8);
+            AddMembers(new Vector2Int(0, 0), new Vector2Int(6, 0), new Vector2Int(0, 7));
+
+            Assert.IsFalse(Plan(FormationShape.Ring), "three are too few for a ring");
+            Assert.IsNull(_planner.RingCentre);
+
+            AddMember(new Vector2Int(6, 7));
+
+            Assert.IsTrue(Plan(FormationShape.Ring));
+            Assert.AreEqual(4, _assignments.Count);
+        }
+
+        [TestCase(5, 5, 5)]
+        [TestCase(6, 5, 5)]
+        [TestCase(6, 4, 4)]
+        [TestCase(6, 9, 5)]
+        public void Ring_TakesAtMostItsMaximum_NeverSix(int candidates, int ringMax, int expected)
+        {
+            _settings.RingMaxMembers.Returns(ringMax);
+            BuildGrid(7, 8);
+            AddSixMembers();
+            _candidates.RemoveRange(candidates, _candidates.Count - candidates);
+
+            Assert.IsTrue(Plan(FormationShape.Ring));
+
+            Assert.AreEqual(expected, _assignments.Count, "one slot of the six always stays open");
+        }
+
+        [Test]
+        public void Ring_EverySlotNeighboursTheCentre_AndTheyRunOnConsecutively()
+        {
+            BuildGrid(7, 8);
+            AddSixMembers();
+
+            Assert.IsTrue(Plan(FormationShape.Ring));
+
+            var centre = _planner.RingCentre.Value;
+            var targets = Targets();
+            Assert.IsTrue(targets.All(t => HexCoordinates.DirectionBetween(centre, t) >= 0), "beside the centre");
+            Assert.AreEqual(targets.Count, targets.Distinct().Count());
+            Assert.IsTrue(FormsOneArc(centre, targets), "no gap inside the arc");
+        }
+
+        [Test]
+        public void Ring_StandsRoundASlotWithAllSixNeighboursOnTheBoardAboveTheClearance()
+        {
+            BuildGrid(7, 8);
+            AddSixMembers();
+
+            Assert.IsTrue(Plan(FormationShape.Ring));
+
+            var centre = _planner.RingCentre.Value;
+            Assert.IsTrue(FormationRing.IsCentre(_grid, centre, 5));
+            Assert.IsTrue(Targets().All(t => t.y <= 5), "the bottom two rows stay clear");
+        }
+
+        [Test]
+        public void Ring_OnABoardTooNarrowForACentre_ReturnsFalse()
+        {
+            BuildGrid(2, 8);
+            AddMembers(new Vector2Int(0, 0), new Vector2Int(1, 0), new Vector2Int(0, 1), new Vector2Int(1, 1));
+
+            Assert.IsFalse(Plan(FormationShape.Ring));
+            Assert.IsNull(_planner.RingCentre);
+        }
+
+        [Test]
+        public void ARingsCentre_IsClearedByAnyOtherShape()
+        {
+            BuildGrid(7, 8);
+            AddSixMembers();
+            Assert.IsTrue(Plan(FormationShape.Ring));
+            Assert.IsNotNull(_planner.RingCentre);
+            _candidates.RemoveRange(3, 3);
+
+            Assert.IsTrue(Plan(FormationShape.Horizontal));
+
+            Assert.IsNull(_planner.RingCentre);
+        }
+
+        [Test]
+        public void Ring_WithKeep_HoldsThatSlot()
+        {
+            BuildGrid(7, 8);
+            AddSixMembers();
+            Assert.IsTrue(Plan(FormationShape.Ring));
+            var centre = _planner.RingCentre.Value;
+
+            // The one neighbour the free plan leaves open is the one a head standing there could not be given.
+            var open = Enumerable.Range(0, HexCoordinates.Directions)
+                .Select(d => HexCoordinates.Step(centre, d))
+                .Single(slot => !Targets().Contains(slot));
+
+            Assert.IsTrue(Plan(FormationShape.Ring, open));
+
+            Assert.IsTrue(Targets().Contains(open), "the plan was pulled to one that holds the head's slot");
+            Assert.IsTrue(FormsOneArc(_planner.RingCentre.Value, Targets()));
+        }
+
+        [Test]
+        public void Ring_WithAKeepNoSpotHolds_PlansAnyway()
+        {
+            BuildGrid(7, 8);
+            AddSixMembers();
+
+            Assert.IsTrue(Plan(FormationShape.Ring, new Vector2Int(0, 0)), "(0, 0) is no ring's neighbour");
+
+            Assert.AreEqual(5, _assignments.Count);
+        }
+
+        [Test]
+        public void KeepIsIgnoredByEveryShapeButTheRing()
+        {
+            BuildGrid(7, 8);
+            AddMembers(new Vector2Int(0, 0), new Vector2Int(6, 0), new Vector2Int(3, 5));
+
+            Assert.IsTrue(Plan(FormationShape.Horizontal, new Vector2Int(5, 5)));
+        }
+
+        private bool Plan(FormationShape shape, Vector2Int? keep = null)
+        {
+            return _planner.TryPlan(_grid, shape, _candidates, _settings, _ => 0, _assignments, keep);
+        }
+
+        private static bool FormsOneArc(Vector2Int centre, IReadOnlyList<Vector2Int> slots)
+        {
+            var held = 0;
+            foreach (var slot in slots)
+            {
+                var direction = HexCoordinates.DirectionBetween(centre, slot);
+                if (direction < 0)
+                {
+                    return false;
+                }
+
+                held |= 1 << direction;
+            }
+
+            var starts = 0;
+            for (var direction = 0; direction < HexCoordinates.Directions; direction++)
+            {
+                if ((held & 1 << direction) != 0 && (held & 1 << HexCoordinates.Turn(direction, -1)) == 0)
+                {
+                    starts++;
+                }
+            }
+
+            return starts == 1;
         }
 
         private List<Vector2Int> Targets()

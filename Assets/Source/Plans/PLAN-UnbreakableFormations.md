@@ -18,6 +18,7 @@
    - an **item cover**: three to six unbreakables around a balloon that carries a bomb, a snipe or a
      lightning, filling the slots below it first, then its sides, then above, so the player, who shoots
      from below, can't hit the item directly. (It began as a ring of exactly six around any item.)
+   - a **ring**: four or five unbreakables round one slot, turning one slot round it on every beat (see "As built").
 2. **Holding.** A formation stays in place for **N turns**. Its members do not roam, and they do not
    float up in the balance race. When the N turns are over, they change into a different formation.
 3. **Blue while in formation.** Everything that is red on an unbreakable turns blue while it is in
@@ -208,6 +209,10 @@ playtest. The questions below may change them.
 | `HoldWaves` | **N, open question** | Waves a formation holds |
 | `BottomClearance` | 2 | Bottom rows a formation never uses |
 | `ShapeWeights` | per shape | How often each shape is picked (see open questions) |
+| `RingMinMembers` / `RingMaxMembers` | 4 / 5 | Members of a ring; never six, so one slot round the centre stays open |
+| `RingHoldCycles` | 8 | Cycles a ring holds before it changes shape |
+| `RingReverseEveryCycles` | 4 | Cycles a ring turns one way before the other (0: never turns back) |
+| `RingWeight` / `RingWeightAfterSnake` | 1 / 4 | Pick weight, and its multiplier for a snake done walking |
 | `ColorFadeDuration` | 0.4 s | Red ↔ blue ease |
 
 ---
@@ -265,6 +270,14 @@ Changes from the design above, made during implementation and review:
   `GiftCoverPreference` (2) slots of travel for each member. The covered balloon is the cover's host
   (`ICoveredHosts`), and the formation's light ring closes over it. The shape keeps the name `ItemCover`.
   Both are described in `Balloon/Formation/README.md`.
+- **The ring (2026-11-21).** A formation of four or five unbreakables in neighbouring slots round one slot,
+  its centre, with at least one of the six always open. On every beat the whole ring turns one slot round
+  its centre, and every `RingReverseEveryCycles` cycles the other way. A balloon in its way trades places;
+  something it cannot pass turns it back at once, and blocked both ways it misses the beat. The balloon at the
+  centre is held in its slot as a cover's host is, but gets no ring of light (the owner's ask). A snake done
+  walking leans toward a ring and coils into it from its head. The sky and the water allow it, the meadow
+  does not. The shot solver does not predict its turn, as it does not predict a snake's step. The mechanics
+  are in `Balloon/Formation/README.md`.
 
 ### Second pass: several formations and reinforcements (2026-11-13)
 
