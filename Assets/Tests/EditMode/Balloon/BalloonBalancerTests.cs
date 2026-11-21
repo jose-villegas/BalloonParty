@@ -451,13 +451,56 @@ namespace BalloonParty.Tests.Balloon
 
             Assert.IsFalse(balancer.TickFlightRebalance(0.5f));
 
-            var centre = ring.RingCentre;
+            var centre = ring.TurnCentre;
             for (var i = 0; i < before.Count; i++)
             {
                 var direction = HexCoordinates.DirectionBetween(centre, before[i]);
                 Assert.AreEqual(
                     HexCoordinates.Step(centre, direction + 1), ring.MemberList[i].SlotIndex.Value,
                     "each member a slot clockwise on the beat");
+            }
+
+            formations.Dispose();
+            balancer.ResetRun(balancer.Generation + 1);
+        }
+
+        [Test]
+        public void ASpinner_FallsDueOnTheBeat_LikeARing_NotOnTheOffBeatStep()
+        {
+            var balancer = BalancerWithASpinner(out var formations, out _);
+
+            Assert.IsFalse(balancer.TickFlightRebalance(0.5f), "half a beat in: a snake would step, a spinner does not turn");
+            Assert.IsTrue(balancer.TickFlightRebalance(0.5f), "the beat turns it");
+            Assert.IsFalse(balancer.TickFlightRebalance(0.5f), "the off-beat step again");
+            formations.Dispose();
+            balancer.ResetRun(balancer.Generation + 1);
+        }
+
+        [Test]
+        public void ASpinner_TurnsSixtyDegreesOnTheBeat_ThroughADoomedGlide_WithTheMiddleInPlace()
+        {
+            var balancer = BalancerWithASpinner(out var formations, out var spinner);
+            var before = spinner.MemberList.Select(m => m.SlotIndex.Value).ToList();
+            var shot = LoadFreeProjectile();
+            shot.IsLastShieldApproach.Value = true;
+
+            Assert.IsFalse(balancer.TickFlightRebalance(0.5f), "the doomed glide holds the board");
+            CollectionAssert.AreEqual(before, spinner.MemberList.Select(m => m.SlotIndex.Value).ToList(), "off the beat");
+
+            Assert.IsFalse(balancer.TickFlightRebalance(0.5f));
+
+            var centre = spinner.TurnCentre;
+            for (var i = 0; i < before.Count; i++)
+            {
+                var after = spinner.MemberList[i].SlotIndex.Value;
+                if (before[i] == centre)
+                {
+                    Assert.AreEqual(centre, after, "the middle member stays");
+                    continue;
+                }
+
+                var direction = HexCoordinates.DirectionBetween(centre, before[i]);
+                Assert.AreEqual(HexCoordinates.Step(centre, direction + 1), after, "each other member 60 degrees clockwise");
             }
 
             formations.Dispose();
@@ -681,8 +724,43 @@ namespace BalloonParty.Tests.Balloon
 
             formations.ArrangeOnCycle(_ => { });
             ring = formations.Formations.Single(f => f.Shape == FormationShape.Ring);
-            Assert.AreEqual(centre, ring.RingCentre);
+            Assert.AreEqual(centre, ring.TurnCentre);
             Assert.IsTrue(ring.Clockwise);
+            return balancer;
+        }
+
+        // A spinner of three unbreakables about the middle slot of the 3 by 3 board, on the diagonal from its north-west
+        // to its south-east neighbour (which never reaches the west column, so the spinner never walls the board),
+        // turning clockwise on the beat.
+        private BalloonBalancer BalancerWithASpinner(out UnbreakableFormationService formations, out StandingFormation spinner)
+        {
+            var balancer = BalancerWithAToughSnake(out formations, toughStepSeconds: 100f, formAtOnce: false);
+            var settings = _balloonsConfig.UnbreakableFormation;
+            settings.ToughSnakes.Returns(false);
+            settings.BeatSeconds.Returns(1f);
+            settings.SnakeStepsPerBeat.Returns(2);
+            settings.SpinnerWeight.Returns(1f);
+            settings.SpinnerMaxMembers.Returns(5);
+            settings.SpinnerHoldCycles.Returns(8);
+            _balloonsConfig.FlightRebalanceInterval.Returns(100f);
+            formations.Random01 = () => 0f;
+            for (var col = 0; col < 3; col++)
+            {
+                _grid.Remove(new Vector2Int(col, 0));
+            }
+
+            var centre = new Vector2Int(1, 1);
+            foreach (var slot in new[] { HexCoordinates.Step(centre, 4), centre, HexCoordinates.Step(centre, 1) })
+            {
+                _grid.Place(
+                    new UnbreakableBalloonModel(new BalloonModelConfig(typeName: BalloonType.Unbreakable)),
+                    ViewObject(), slot);
+            }
+
+            formations.ArrangeOnCycle(_ => { });
+            spinner = formations.Formations.Single(f => f.Shape == FormationShape.Spinner);
+            Assert.AreEqual(centre, spinner.TurnCentre);
+            Assert.IsTrue(spinner.Clockwise);
             return balancer;
         }
 

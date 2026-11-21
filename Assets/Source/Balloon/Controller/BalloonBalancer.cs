@@ -64,7 +64,7 @@ namespace BalloonParty.Balloon.Controller
 
         private bool _balanceRequested;
         private bool _snakeStepDue;
-        private bool _ringTurnDue;
+        private bool _turnDue;
         private bool _cycleDue;
         private bool _formDue;
         private bool _toughGatherDue;
@@ -139,7 +139,7 @@ namespace BalloonParty.Balloon.Controller
             _generation = generation;
             _balanceRequested = false;
             _snakeStepDue = false;
-            _ringTurnDue = false;
+            _turnDue = false;
             _cycleDue = false;
             _formDue = false;
             _toughGatherDue = false;
@@ -298,11 +298,11 @@ namespace BalloonParty.Balloon.Controller
                 _formations?.StepSnakes(_relocateActors, afterArranging: arranged);
             }
 
-            // A ring turns on the beat, with the snakes' step on it.
-            if (_ringTurnDue)
+            // Rings and spinners turn on the beat, with the snakes' step on it.
+            if (_turnDue)
             {
-                _ringTurnDue = false;
-                _formations?.TurnRings(_relocateActors, afterArranging: arranged);
+                _turnDue = false;
+                _formations?.TurnOnTheBeat(_relocateActors, afterArranging: arranged);
             }
 
             if (_toughStepDue)
@@ -683,7 +683,7 @@ namespace BalloonParty.Balloon.Controller
         // glide, as everything else on the board does.
         private void KeepTheBeatThroughADoomedGlide(float deltaTime)
         {
-            if (_formations == null || !TickBeat(deltaTime) || !(_snakeStepDue || _ringTurnDue))
+            if (_formations == null || !TickBeat(deltaTime) || !(_snakeStepDue || _turnDue))
             {
                 return;
             }
@@ -695,10 +695,10 @@ namespace BalloonParty.Balloon.Controller
                 _formations.StepSnakes(_relocateActors);
             }
 
-            if (_ringTurnDue)
+            if (_turnDue)
             {
-                _ringTurnDue = false;
-                _formations.TurnRings(_relocateActors);
+                _turnDue = false;
+                _formations.TurnOnTheBeat(_relocateActors);
             }
 
             AnimatePaths(_paths);
@@ -740,21 +740,21 @@ namespace BalloonParty.Balloon.Controller
             var snakeStep = _formations.HasUnbreakableSnake;
             var cycle = false;
             var form = false;
-            var ringTurn = false;
+            var turnDue = false;
             if (_snakeSteps % _formations.SnakeStepsPerBeat == 0)
             {
                 cycle = _beats % _formations.BeatsPerCycle == 0 && _formations.HasUnbreakables;
                 form = !cycle && _formations.UnbreakablesDueToForm();
 
-                // A ring turns once a beat, on the beat: a snake's off-beat step is not its turn.
-                ringTurn = _formations.HasRing;
+                // A ring or a spinner turns once a beat, on the beat: a snake's off-beat step is not its turn.
+                turnDue = _formations.HasTurningFormation;
             }
 
             _snakeStepDue |= snakeStep;
             _cycleDue |= cycle;
             _formDue |= form;
-            _ringTurnDue |= ringTurn;
-            return snakeStep || cycle || form || ringTurn;
+            _turnDue |= turnDue;
+            return snakeStep || cycle || form || turnDue;
         }
 
         // The clock alone, asking nothing of the board: counts a snake step each time one falls, and a beat every

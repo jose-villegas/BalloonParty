@@ -61,14 +61,14 @@ namespace BalloonParty.Balloon.Formation
         /// </summary>
         internal bool HostLit { get; set; }
 
-        /// <summary>The slot a ring stands round and turns about; its members hold neighbours of it.</summary>
-        internal Vector2Int RingCentre { get; set; }
+        /// <summary>
+        ///     The slot a ring or a spinner turns about: a ring's members hold neighbours of it, and a spinner's
+        ///     middle member stands on it.
+        /// </summary>
+        internal Vector2Int TurnCentre { get; set; }
 
-        /// <summary>The way a ring turns on the beat.</summary>
+        /// <summary>The way a ring or a spinner turns on the beat.</summary>
         internal bool Clockwise { get; set; }
-
-        /// <summary>Cycles left before a ring turns the other way.</summary>
-        internal int CyclesToReverse { get; set; }
 
         internal void Reset()
         {
@@ -82,7 +82,6 @@ namespace BalloonParty.Balloon.Formation
             Heading = 0;
             ArrangedOnPass = 0;
             Clockwise = false;
-            CyclesToReverse = 0;
         }
     }
 }

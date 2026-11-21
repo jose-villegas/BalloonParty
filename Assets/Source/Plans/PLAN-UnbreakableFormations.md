@@ -19,6 +19,8 @@
      lightning, filling the slots below it first, then its sides, then above, so the player, who shoots
      from below, can't hit the item directly. (It began as a ring of exactly six around any item.)
    - a **ring**: four or five unbreakables round one slot, turning one slot round it on every beat (see "As built").
+   - a **spinner**: a straight line of three or five that turns 60° about the member in its middle on every
+     beat (see "As built").
 2. **Holding.** A formation stays in place for **N turns**. Its members do not roam, and they do not
    float up in the balance race. When the N turns are over, they change into a different formation.
 3. **Blue while in formation.** Everything that is red on an unbreakable turns blue while it is in
@@ -211,7 +213,8 @@ playtest. The questions below may change them.
 | `ShapeWeights` | per shape | How often each shape is picked (see open questions) |
 | `RingMinMembers` / `RingMaxMembers` | 4 / 5 | Members of a ring; never six, so one slot round the centre stays open |
 | `RingHoldCycles` | 8 | Cycles a ring holds before it changes shape |
-| `RingReverseEveryCycles` | 4 | Cycles a ring turns one way before the other (0: never turns back) |
+| `TurnReverseEveryCycles` | 4 | Cycles between the beats on which every ring and spinner turns the other way, all together (0: never turns back) |
+| `SpinnerMaxMembers` / `SpinnerHoldCycles` / `SpinnerWeight` | 5 / 6 / 1 | A spinner's longest line (3 or 5), its hold in cycles, and its pick weight |
 | `RingWeight` / `RingWeightAfterSnake` | 1 / 4 | Pick weight, and its multiplier for a snake done walking |
 | `ColorFadeDuration` | 0.4 s | Red ↔ blue ease |
 
@@ -272,12 +275,22 @@ Changes from the design above, made during implementation and review:
   Both are described in `Balloon/Formation/README.md`.
 - **The ring (2026-11-21).** A formation of four or five unbreakables in neighbouring slots round one slot,
   its centre, with at least one of the six always open. On every beat the whole ring turns one slot round
-  its centre, and every `RingReverseEveryCycles` cycles the other way. A balloon in its way trades places;
+  its centre. Every `TurnReverseEveryCycles` (4) cycles counted in the run, every ring and spinner standing turns
+  the other way together (a formation formed on that cycle keeps the way it started). A balloon in its way trades places;
   something it cannot pass turns it back at once, and blocked both ways it misses the beat. The balloon at the
   centre is held in its slot as a cover's host is, but gets no ring of light (the owner's ask). A snake done
   walking leans toward a ring and coils into it from its head. The sky and the water allow it, the meadow
   does not. The shot solver does not predict its turn, as it does not predict a snake's step. The mechanics
   are in `Balloon/Formation/README.md`.
+- **The spinner (2026-11-21).** A straight line of three or five unbreakables through one slot, its centre,
+  which the member in the middle holds. On every beat the line turns 60° about that member: flat, one diagonal,
+  the other diagonal, flat again, so six beats bring every member back to its own slot. It turns back on the
+  same board-wide beat as the rings. It has no host: nothing is held at its centre but its own middle member.
+  It holds `SpinnerHoldCycles` (6) cycles. A centre needs every slot up to the line's reach on the board and
+  above `BottomClearance`, and its own row above `HorizontalBottomClearance`. On the six-column board a flat
+  line of five is one slot short of full width for one beat in three: the owner asked for lines of 3 or 5, so
+  that is accepted, and the per-turn wall check still refuses a turn that would link the two side walls. The
+  sky and the water allow it, the meadow does not. The mechanics are in `Balloon/Formation/README.md`.
 
 ### Second pass: several formations and reinforcements (2026-11-13)
 

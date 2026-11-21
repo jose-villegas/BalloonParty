@@ -100,8 +100,18 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("Cycles a ring holds, counting the cycle it formed on, before it changes shape.")]
         [SerializeField] [Min(1)] private int _ringHoldCycles = 8;
 
-        [Tooltip("Cycles a ring turns one way before it turns the other. 0 = it never turns back by itself.")]
-        [SerializeField] [Min(0)] private int _ringReverseEveryCycles = 4;
+        [Tooltip("Cycles between the beats on which every ring and every spinner turns the other way. It is one " +
+                 "beat for the whole board, so they all turn back together. 0 = they never turn back by " +
+                 "themselves.")]
+        [SerializeField] [Min(0)] private int _turnReverseEveryCycles = 4;
+
+        [Header("Spinner")]
+        [Tooltip("Most unbreakables in a spinner, a straight line that turns 60 degrees about the member in its " +
+                 "middle on every beat: 3 or 5.")]
+        [SerializeField] [Range(3, 5)] private int _spinnerMaxMembers = 5;
+
+        [Tooltip("Cycles a spinner holds, counting the cycle it formed on, before it changes shape.")]
+        [SerializeField] [Min(1)] private int _spinnerHoldCycles = 6;
 
         [Header("Reinforcements")]
         [Tooltip("Chance, at each wave start, that a formation which stood untouched through the last wave " +
@@ -127,6 +137,10 @@ namespace BalloonParty.Configuration.Balloons
 
         [Tooltip("Weight of a ring. It forms only from Ring Min Members unbreakables or more.")]
         [SerializeField] [Min(0f)] private float _ringWeight = 1f;
+
+        [Tooltip("Weight of a spinner, the line that turns about its middle. It forms from three unbreakables " +
+                 "or more.")]
+        [SerializeField] [Min(0f)] private float _spinnerWeight = 1f;
 
         [Tooltip("How many times likelier a ring is for a snake done walking: the snake coils into it, its head " +
                  "leading. 1 = no likelier than for any other formation.")]
@@ -172,7 +186,10 @@ namespace BalloonParty.Configuration.Balloons
         public int RingMinMembers => _ringMinMembers;
         public int RingMaxMembers => Mathf.Max(_ringMaxMembers, _ringMinMembers);
         public int RingHoldCycles => Mathf.Max(1, _ringHoldCycles);
-        public int RingReverseEveryCycles => Mathf.Max(0, _ringReverseEveryCycles);
+        public int TurnReverseEveryCycles => Mathf.Max(0, _turnReverseEveryCycles);
+        public float SpinnerWeight => _spinnerWeight;
+        public int SpinnerMaxMembers => _spinnerMaxMembers;
+        public int SpinnerHoldCycles => Mathf.Max(1, _spinnerHoldCycles);
         public float SnakeWeightPerExtraUnbreakable => _snakeWeightPerExtraUnbreakable;
         public int MaxUnbreakableSnakes => _maxUnbreakableSnakes;
         public float JoinSnakeChance => _joinSnakeChance;

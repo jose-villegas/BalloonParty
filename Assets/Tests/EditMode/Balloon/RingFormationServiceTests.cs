@@ -51,7 +51,7 @@ namespace BalloonParty.Tests.Balloon
             _settings.RingMinMembers.Returns(4);
             _settings.RingMaxMembers.Returns(5);
             _settings.RingHoldCycles.Returns(8);
-            _settings.RingReverseEveryCycles.Returns(4);
+            _settings.TurnReverseEveryCycles.Returns(4);
 
             var balloonsConfig = Substitute.For<IBalloonsConfiguration>();
             balloonsConfig.UnbreakableFormation.Returns(_settings);
@@ -85,7 +85,7 @@ namespace BalloonParty.Tests.Balloon
         {
             var ring = FormRing();
 
-            Assert.IsTrue(_service.HasRing);
+            Assert.IsTrue(_service.HasTurningFormation);
             Assert.AreEqual(4, ring.MemberList.Count);
             Assert.IsTrue(_unbreakables.All(u => u.IsAnchored && u.InFormation.Value));
         }
@@ -107,7 +107,7 @@ namespace BalloonParty.Tests.Balloon
 
             Arrange();
 
-            Assert.IsFalse(_service.HasRing);
+            Assert.IsFalse(_service.HasTurningFormation);
             Assert.AreEqual(0, _service.Formations.Count, "a ring is the only shape in the pick");
             Assert.IsFalse(_unbreakables.Any(u => u.IsAnchored));
         }
@@ -120,11 +120,11 @@ namespace BalloonParty.Tests.Balloon
             var before = ring.MemberList.Select(Direction).ToList();
             var turn = clockwise ? 1 : -1;
 
-            _service.TurnRings(Relocate);
+            _service.TurnOnTheBeat(Relocate);
 
             AssertDirections(ring, before.Select(d => HexCoordinates.Turn(d, turn)).ToList());
 
-            _service.TurnRings(Relocate);
+            _service.TurnOnTheBeat(Relocate);
 
             AssertDirections(ring, before.Select(d => HexCoordinates.Turn(d, 2 * turn)).ToList());
             Assert.IsTrue(_unbreakables.All(u => _grid.At(u.SlotIndex.Value) == u), "every member is on its slot");
@@ -136,7 +136,7 @@ namespace BalloonParty.Tests.Balloon
             FormRing();
             var expected = _unbreakables.ToDictionary(u => u, u => AlongTheRing(u, true));
 
-            _service.TurnRings(Relocate);
+            _service.TurnOnTheBeat(Relocate);
 
             Assert.IsTrue(_unbreakables.All(u => Vector2.Angle(u.FormationHeading, expected[u]) < 1f));
         }
@@ -147,14 +147,14 @@ namespace BalloonParty.Tests.Balloon
             FormRing();
             var relocations = _relocations;
 
-            _service.TurnRings(Relocate, afterArranging: true);
+            _service.TurnOnTheBeat(Relocate, afterArranging: true);
 
             Assert.AreEqual(relocations, _relocations, "formed this pass: it waits for the beat");
 
-            _service.TurnRings(Relocate, afterArranging: true);
+            _service.TurnOnTheBeat(Relocate, afterArranging: true);
             Assert.AreEqual(relocations, _relocations);
 
-            _service.TurnRings(Relocate);
+            _service.TurnOnTheBeat(Relocate);
             Assert.AreEqual(relocations + 4, _relocations, "the beat itself turns it");
         }
 
@@ -165,42 +165,45 @@ namespace BalloonParty.Tests.Balloon
             Arrange();
             var relocations = _relocations;
 
-            _service.TurnRings(Relocate, afterArranging: true);
+            _service.TurnOnTheBeat(Relocate, afterArranging: true);
 
             Assert.AreEqual(relocations + 4, _relocations);
         }
 
+        // The run counts its cycles, not the formation: forming the ring is cycle 1, and every fourth cycle of the
+        // run turns every ring and spinner standing the other way.
         [Test]
-        public void TheRing_TurnsTheOtherWay_EveryRingReverseEveryCyclesCycles()
+        public void TheRing_TurnsTheOtherWay_OnEveryTurnReverseEveryCyclesCycleOfTheRun()
         {
             var ring = FormRing();
             Assert.IsTrue(ring.Clockwise);
 
-            for (var cycle = 0; cycle < 3; cycle++)
-            {
-                Arrange();
-            }
+            Arrange();
+            Arrange();
 
-            Assert.IsTrue(ring.Clockwise, "three cycles of four");
+            Assert.IsTrue(ring.Clockwise, "cycles 2 and 3 of the run");
 
             Arrange();
 
-            Assert.IsFalse(ring.Clockwise, "the fourth turns it round");
+            Assert.IsFalse(ring.Clockwise, "cycle 4 turns it round");
             var before = ring.MemberList.Select(Direction).ToList();
-            _service.TurnRings(Relocate);
+            _service.TurnOnTheBeat(Relocate);
             AssertDirections(ring, before.Select(d => HexCoordinates.Turn(d, -1)).ToList());
         }
 
         [Test]
-        public void TheRing_TurnsBackAgainAfterAnotherFourCycles()
+        public void TheRing_TurnsBackAgain_OnCycleEightOfTheRun()
         {
             _settings.RingHoldCycles.Returns(12);
             var ring = FormRing();
 
-            for (var cycle = 0; cycle < 8; cycle++)
+            for (var cycle = 2; cycle <= 7; cycle++)
             {
                 Arrange();
+                Assert.AreEqual(cycle < 4, ring.Clockwise, "turned round on cycle 4 and not again before 8: cycle " + cycle);
             }
+
+            Arrange();
 
             Assert.IsTrue(ring.Clockwise, "round and back");
         }
@@ -208,7 +211,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void TheRing_NeverTurnsTheOtherWay_WhenReversingIsOff()
         {
-            _settings.RingReverseEveryCycles.Returns(0);
+            _settings.TurnReverseEveryCycles.Returns(0);
             var ring = FormRing();
 
             for (var cycle = 0; cycle < 7; cycle++)
@@ -220,13 +223,88 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void ARingFormedLater_TurnsBackOnTheSameCycleAsOneAlreadyStanding_NotFourCyclesAfterItForms()
+        {
+            var first = FormRing();
+            Arrange();
+            var other = new Vector2Int(1, 1);
+            AddUnbreakables(
+                HexCoordinates.Step(other, 0), HexCoordinates.Step(other, 1), HexCoordinates.Step(other, 2),
+                HexCoordinates.Step(other, 3));
+            Arrange();
+            var second = _service.Formations.Single(f => f != first);
+            Assert.AreEqual(other, second.TurnCentre, "control: the second ring formed on cycle 3");
+            Assert.IsTrue(first.Clockwise);
+            Assert.IsTrue(second.Clockwise);
+
+            Arrange();
+
+            Assert.IsFalse(first.Clockwise, "cycle 4 of the run");
+            Assert.IsFalse(second.Clockwise, "one cycle after it formed, not four");
+        }
+
+        [Test]
+        public void ARingAndASpinner_TurnBackTogether_EveryTurnReverseEveryCyclesCycleOfTheRun()
+        {
+            _settings.SpinnerMaxMembers.Returns(5);
+            _settings.SpinnerHoldCycles.Returns(8);
+            var ring = FormRing();
+            _settings.RingWeight.Returns(0f);
+            _settings.SpinnerWeight.Returns(1f);
+            var middle = new Vector2Int(1, 1);
+            AddUnbreakables(HexCoordinates.Step(middle, 3), middle, HexCoordinates.Step(middle, 0));
+            Arrange();
+            var spinner = _service.Formations.Single(f => f.Shape == FormationShape.Spinner);
+            Assert.AreEqual(middle, spinner.TurnCentre, "control: the spinner formed on cycle 2");
+
+            Arrange();
+            Assert.IsTrue(ring.Clockwise);
+            Assert.IsTrue(spinner.Clockwise);
+
+            Arrange();
+
+            Assert.IsFalse(ring.Clockwise, "cycle 4");
+            Assert.IsFalse(spinner.Clockwise, "cycle 4");
+
+            for (var cycle = 5; cycle <= 7; cycle++)
+            {
+                Arrange();
+            }
+
+            Arrange();
+
+            Assert.IsTrue(ring.Clockwise, "cycle 8");
+            Assert.IsTrue(spinner.Clockwise, "cycle 8");
+        }
+
+        [Test]
+        public void ResetRun_StartsTheCycleCountOver_SoTheNextRunsFirstReverseIsOnItsFourthCycle()
+        {
+            FormRing();
+            _service.ResetRun(1);
+            Assert.AreEqual(0, _service.Formations.Count, "control: the run's formations are let go");
+
+            Arrange();
+            var ring = _service.Formations[0];
+            Assert.IsTrue(ring.Clockwise, "the first cycle of the new run");
+            Arrange();
+            Arrange();
+
+            Assert.IsTrue(ring.Clockwise, "cycle 3 of the new run: it would be cycle 4 had the count carried on");
+
+            Arrange();
+
+            Assert.IsFalse(ring.Clockwise, "cycle 4 of the new run");
+        }
+
+        [Test]
         public void ARingBlockedOneWay_TurnsTheOtherWayTheSameBeat()
         {
             var ring = FormRing();
             var before = ring.MemberList.Select(Direction).ToList();
             Outsider(Slot(4));
 
-            _service.TurnRings(Relocate);
+            _service.TurnOnTheBeat(Relocate);
 
             Assert.IsFalse(ring.Clockwise, "it keeps the way that worked");
             AssertDirections(ring, before.Select(d => HexCoordinates.Turn(d, -1)).ToList());
@@ -241,7 +319,7 @@ namespace BalloonParty.Tests.Balloon
             Outsider(Slot(4));
             Outsider(Slot(5));
 
-            _service.TurnRings(Relocate);
+            _service.TurnOnTheBeat(Relocate);
 
             Assert.AreEqual(relocations, _relocations);
             Assert.IsTrue(ring.Clockwise);
@@ -255,7 +333,7 @@ namespace BalloonParty.Tests.Balloon
             var before = ring.MemberList.Select(Direction).ToList();
             Plow(_unbreakables[0]);
 
-            _service.TurnRings(Relocate);
+            _service.TurnOnTheBeat(Relocate);
 
             AssertDirections(ring, before);
         }
@@ -267,7 +345,7 @@ namespace BalloonParty.Tests.Balloon
             var balloon = new BalloonModel();
             _grid.Place(balloon, null, Slot(4));
 
-            _service.TurnRings(Relocate);
+            _service.TurnOnTheBeat(Relocate);
 
             Assert.AreEqual(Slot(0), balloon.SlotIndex.Value, "it goes to the slot the tail left");
             Assert.IsTrue(_unbreakables.All(u => _grid.At(u.SlotIndex.Value) == u));
@@ -325,7 +403,7 @@ namespace BalloonParty.Tests.Balloon
 
             Arrange();
             Assert.AreEqual(FormationShape.Horizontal, _service.CurrentShape);
-            Assert.IsFalse(_service.HasRing);
+            Assert.IsFalse(_service.HasTurningFormation);
         }
 
         [Test]
@@ -369,7 +447,7 @@ namespace BalloonParty.Tests.Balloon
             var ring = _service.Formations[0];
             Assert.AreEqual(FormationShape.Ring, ring.Shape);
             Assert.IsTrue(ring.MemberList.Any(m => m.SlotIndex.Value == headSlot), "the ring takes in the head's slot");
-            Assert.GreaterOrEqual(HexCoordinates.DirectionBetween(ring.RingCentre, headSlot), 0);
+            Assert.GreaterOrEqual(HexCoordinates.DirectionBetween(ring.TurnCentre, headSlot), 0);
         }
 
         [Test]
@@ -385,7 +463,7 @@ namespace BalloonParty.Tests.Balloon
 
             var ring = _service.Formations[0];
             var assignments = ring.MemberList.Select(m => new FormationAssignment(m, m.SlotIndex.Value)).ToList();
-            if (!FormationRing.LeadsAt(ring.RingCentre, assignments, head.SlotIndex.Value, out var leadsClockwise))
+            if (!FormationRing.LeadsAt(ring.TurnCentre, assignments, head.SlotIndex.Value, out var leadsClockwise))
             {
                 Assert.Inconclusive("the head landed mid-arc, so no way leads");
             }
@@ -431,7 +509,7 @@ namespace BalloonParty.Tests.Balloon
 
             var ring = _service.Formations[0];
             Assert.AreEqual(FormationShape.Ring, ring.Shape);
-            Assert.AreEqual(Centre, ring.RingCentre);
+            Assert.AreEqual(Centre, ring.TurnCentre);
             Assert.AreEqual(clockwise, ring.Clockwise);
             return ring;
         }

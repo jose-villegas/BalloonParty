@@ -124,8 +124,19 @@ namespace BalloonParty.Configuration.Balloons
         /// <summary>Cycles a ring holds, counting the cycle it formed on, before it changes shape.</summary>
         int RingHoldCycles { get; }
 
-        /// <summary>Cycles a ring turns one way before it turns the other. 0: it never turns back by itself.</summary>
-        int RingReverseEveryCycles { get; }
+        /// <summary>Cycles between the beats on which every ring and spinner turns the other way, all together. 0: never.</summary>
+        int TurnReverseEveryCycles { get; }
+
+        /// <summary>Pick weight of a spinner. It forms from three unbreakables or more.</summary>
+        float SpinnerWeight { get; }
+
+        /// <summary>
+        ///     Most unbreakables in a spinner: 3 or 5, a line with as many on each side of the one it turns about.
+        /// </summary>
+        int SpinnerMaxMembers { get; }
+
+        /// <summary>Cycles a spinner holds, counting the cycle it formed on, before it changes shape.</summary>
+        int SpinnerHoldCycles { get; }
 
         /// <summary>
         ///     Added to the snake's weight, as a share of <see cref="SnakeWeight" />, for each unbreakable on the

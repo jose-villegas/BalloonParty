@@ -62,21 +62,25 @@ namespace BalloonParty.Balloon.Formation
         // Slots of travel a gift's spot counts as cheaper, for each member of the cover.
         private float _giftPreference;
 
+        // The deepest row a line across the board may lie on: a spinner's centre keeps above it.
+        private int _lastFlatRow;
+
         /// <summary>
         ///     The slot of the balloon the last plan's cover stands round; null after any other shape, or a plan that
         ///     found no spot.
         /// </summary>
         internal Vector2Int? CoveredHost { get; private set; }
 
-        /// <summary>The slot the last plan's ring stands round; null after any other shape, or a plan that found no spot.</summary>
-        internal Vector2Int? RingCentre { get; private set; }
+        /// <summary>The slot the last plan's ring or spinner turns about; null after any other shape, or a plan that found no spot.</summary>
+        internal Vector2Int? TurnCentre { get; private set; }
 
         /// <summary>
         ///     Plans <paramref name="shape" /> for up to <see cref="IUnbreakableFormationSettings.MaxMembers" />
         ///     (an item cover, three to six)
         ///     of <paramref name="candidates" />, filling <paramref name="assignmentsOut" /> with one entry per
         ///     formation slot. False when no spot fits. <paramref name="pickIndex" /> maps a count n to an
-        ///     index in [0, n). A ring takes <see cref="IUnbreakableFormationSettings.RingMinMembers" /> to
+        ///     index in [0, n). A spinner takes five, or three when fewer are free or its settings allow no more.
+        ///     A ring takes <see cref="IUnbreakableFormationSettings.RingMinMembers" /> to
         ///     <see cref="IUnbreakableFormationSettings.RingMaxMembers" />, and with <paramref name="keep" /> (a
         ///     snake's head, coiling into the ring) only the spots that hold that slot, while any does.
         /// </summary>
@@ -87,7 +91,7 @@ namespace BalloonParty.Balloon.Formation
         {
             assignmentsOut.Clear();
             CoveredHost = null;
-            RingCentre = null;
+            TurnCentre = null;
             var isRow = shape is FormationShape.Horizontal or FormationShape.Snake;
             var count = MemberCount(shape, candidates.Count, settings);
             // A row across the board this close to the cannon walls the player in; a diagonal leaves lanes open.
@@ -102,6 +106,7 @@ namespace BalloonParty.Balloon.Formation
             }
 
             _coverFloor = CoverFloor(settings);
+            _lastFlatRow = grid.Rows - 1 - Mathf.Max(settings.HorizontalBottomClearance, settings.BottomClearance);
             _giftPreference = Mathf.Max(0f, settings.GiftCoverPreference);
             _wall.Load(grid);
             _walledBefore = _wall.Spans();
@@ -135,9 +140,9 @@ namespace BalloonParty.Balloon.Formation
             {
                 CoveredHost = chosen.Anchor;
             }
-            else if (shape == FormationShape.Ring)
+            else if (shape is FormationShape.Ring or FormationShape.Spinner)
             {
-                RingCentre = chosen.Anchor;
+                TurnCentre = chosen.Anchor;
             }
 
             return true;
@@ -156,6 +161,10 @@ namespace BalloonParty.Balloon.Formation
                     if (shape == FormationShape.Ring)
                     {
                         CollectRingSpots(grid, candidates, count, lastRow, anchor);
+                    }
+                    else if (shape == FormationShape.Spinner)
+                    {
+                        CollectSpinnerSpots(grid, candidates, count, lastRow, anchor);
                     }
                     else if (shape != FormationShape.ItemCover)
                     {
@@ -189,6 +198,38 @@ namespace BalloonParty.Balloon.Formation
                 {
                     TryAddSpot(grid, candidates, count, centre, variant);
                 }
+            }
+        }
+
+        // One spot for a centre the spinner can turn all the way round: the cheapest of the three lines through
+        // it. One for each line would fill the few cheapest spots with one centre's three, and the pick among
+        // them would nearly always stand the spinner in the same place.
+        private void CollectSpinnerSpots(
+            SlotGrid grid, IReadOnlyList<IWriteableFormationMember> candidates, int count, int lastRow,
+            Vector2Int centre)
+        {
+            if (!FormationSpinner.IsCentre(grid, centre, count / 2, lastRow, _lastFlatRow))
+            {
+                return;
+            }
+
+            var first = _spots.Count;
+            for (var axis = 0; axis < FormationSpinner.Axes; axis++)
+            {
+                if (BuildSlots(grid, FormationShape.Spinner, centre, count, lastRow, axis))
+                {
+                    TryAddSpot(grid, candidates, count, centre, axis);
+                }
+            }
+
+            for (var i = _spots.Count - 1; i > first; i--)
+            {
+                if (_spots[i].Cost < _spots[first].Cost)
+                {
+                    _spots[first] = _spots[i];
+                }
+
+                _spots.RemoveAt(i);
             }
         }
 
@@ -372,6 +413,17 @@ namespace BalloonParty.Balloon.Formation
                     }
 
                     break;
+
+                case FormationShape.Spinner:
+                    // The line through the anchor along the variant's axis: as many on one side as on the other.
+                    for (var i = -(count / 2); i <= count / 2; i++)
+                    {
+                        _slots.Add(i < 0
+                            ? FormationSpinner.Out(anchor, variant + FormationSpinner.Axes, -i)
+                            : FormationSpinner.Out(anchor, variant, i));
+                    }
+
+                    break;
             }
 
             // A cover may come out short at an edge, but a corner leaves fewer neighbours than its smallest.
@@ -424,6 +476,20 @@ namespace BalloonParty.Balloon.Formation
                 var fewest = Mathf.Max(settings.RingMinMembers, 2);
                 var ringMost = Mathf.Min(settings.RingMaxMembers, FormationRing.MostMembers);
                 return candidates >= fewest && fewest <= ringMost ? Mathf.Min(candidates, ringMost) : 0;
+            }
+
+            // A spinner is a line with one member in the middle and as many on each side: five, or three.
+            if (shape == FormationShape.Spinner)
+            {
+                var longest = Mathf.Min(settings.SpinnerMaxMembers, FormationSpinner.MostMembers);
+                if (candidates >= FormationSpinner.MostMembers && longest >= FormationSpinner.MostMembers)
+                {
+                    return FormationSpinner.MostMembers;
+                }
+
+                return candidates >= FormationSpinner.LeastMembers && longest >= FormationSpinner.LeastMembers
+                    ? FormationSpinner.LeastMembers
+                    : 0;
             }
 
             var most = shape switch

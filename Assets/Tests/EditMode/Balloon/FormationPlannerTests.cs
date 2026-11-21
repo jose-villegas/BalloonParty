@@ -32,6 +32,7 @@ namespace BalloonParty.Tests.Balloon
             _settings.SpotChoices.Returns(1);
             _settings.RingMinMembers.Returns(4);
             _settings.RingMaxMembers.Returns(5);
+            _settings.SpinnerMaxMembers.Returns(5);
             _planner = new FormationPlanner();
             _candidates = new List<IWriteableFormationMember>();
             _assignments = new List<FormationAssignment>();
@@ -710,7 +711,7 @@ namespace BalloonParty.Tests.Balloon
             AddMembers(new Vector2Int(0, 0), new Vector2Int(6, 0), new Vector2Int(0, 7));
 
             Assert.IsFalse(Plan(FormationShape.Ring), "three are too few for a ring");
-            Assert.IsNull(_planner.RingCentre);
+            Assert.IsNull(_planner.TurnCentre);
 
             AddMember(new Vector2Int(6, 7));
 
@@ -742,7 +743,7 @@ namespace BalloonParty.Tests.Balloon
 
             Assert.IsTrue(Plan(FormationShape.Ring));
 
-            var centre = _planner.RingCentre.Value;
+            var centre = _planner.TurnCentre.Value;
             var targets = Targets();
             Assert.IsTrue(targets.All(t => HexCoordinates.DirectionBetween(centre, t) >= 0), "beside the centre");
             Assert.AreEqual(targets.Count, targets.Distinct().Count());
@@ -757,7 +758,7 @@ namespace BalloonParty.Tests.Balloon
 
             Assert.IsTrue(Plan(FormationShape.Ring));
 
-            var centre = _planner.RingCentre.Value;
+            var centre = _planner.TurnCentre.Value;
             Assert.IsTrue(FormationRing.IsCentre(_grid, centre, 5));
             Assert.IsTrue(Targets().All(t => t.y <= 5), "the bottom two rows stay clear");
         }
@@ -769,7 +770,7 @@ namespace BalloonParty.Tests.Balloon
             AddMembers(new Vector2Int(0, 0), new Vector2Int(1, 0), new Vector2Int(0, 1), new Vector2Int(1, 1));
 
             Assert.IsFalse(Plan(FormationShape.Ring));
-            Assert.IsNull(_planner.RingCentre);
+            Assert.IsNull(_planner.TurnCentre);
         }
 
         [Test]
@@ -778,12 +779,12 @@ namespace BalloonParty.Tests.Balloon
             BuildGrid(7, 8);
             AddSixMembers();
             Assert.IsTrue(Plan(FormationShape.Ring));
-            Assert.IsNotNull(_planner.RingCentre);
+            Assert.IsNotNull(_planner.TurnCentre);
             _candidates.RemoveRange(3, 3);
 
             Assert.IsTrue(Plan(FormationShape.Horizontal));
 
-            Assert.IsNull(_planner.RingCentre);
+            Assert.IsNull(_planner.TurnCentre);
         }
 
         [Test]
@@ -792,7 +793,7 @@ namespace BalloonParty.Tests.Balloon
             BuildGrid(7, 8);
             AddSixMembers();
             Assert.IsTrue(Plan(FormationShape.Ring));
-            var centre = _planner.RingCentre.Value;
+            var centre = _planner.TurnCentre.Value;
 
             // The one neighbour the free plan leaves open is the one a head standing there could not be given.
             var open = Enumerable.Range(0, HexCoordinates.Directions)
@@ -802,7 +803,7 @@ namespace BalloonParty.Tests.Balloon
             Assert.IsTrue(Plan(FormationShape.Ring, open));
 
             Assert.IsTrue(Targets().Contains(open), "the plan was pulled to one that holds the head's slot");
-            Assert.IsTrue(FormsOneArc(_planner.RingCentre.Value, Targets()));
+            Assert.IsTrue(FormsOneArc(_planner.TurnCentre.Value, Targets()));
         }
 
         [Test]
@@ -814,6 +815,124 @@ namespace BalloonParty.Tests.Balloon
             Assert.IsTrue(Plan(FormationShape.Ring, new Vector2Int(0, 0)), "(0, 0) is no ring's neighbour");
 
             Assert.AreEqual(5, _assignments.Count);
+        }
+
+        [TestCase(5, 5, 5)]
+        [TestCase(6, 5, 5)]
+        [TestCase(4, 5, 3)]
+        [TestCase(3, 5, 3)]
+        [TestCase(6, 3, 3)]
+        [TestCase(6, 4, 3)]
+        public void Spinner_PlansFiveOrThree_NeverFour_AndNoMoreThanItsMaximum(int candidates, int spinnerMax, int expected)
+        {
+            _settings.SpinnerMaxMembers.Returns(spinnerMax);
+            BuildGrid(7, 8);
+            AddSixMembers();
+            _candidates.RemoveRange(candidates, _candidates.Count - candidates);
+
+            Assert.IsTrue(Plan(FormationShape.Spinner));
+
+            Assert.AreEqual(expected, _assignments.Count);
+        }
+
+        [TestCase(2, 5)]
+        [TestCase(3, 2)]
+        public void Spinner_WithTooFewCandidatesOrTooSmallAMaximum_PlansNothing(int candidates, int spinnerMax)
+        {
+            _settings.SpinnerMaxMembers.Returns(spinnerMax);
+            BuildGrid(7, 8);
+            AddSixMembers();
+            _candidates.RemoveRange(candidates, _candidates.Count - candidates);
+
+            Assert.IsFalse(Plan(FormationShape.Spinner));
+
+            Assert.AreEqual(0, _assignments.Count);
+            Assert.IsNull(_planner.TurnCentre);
+        }
+
+        [TestCase(3)]
+        [TestCase(5)]
+        public void Spinner_PlansAStraightLineThroughItsCentre_WithAsManyOnEachSide(int candidates)
+        {
+            BuildGrid(7, 8);
+            AddSixMembers();
+            _candidates.RemoveRange(candidates, _candidates.Count - candidates);
+
+            Assert.IsTrue(Plan(FormationShape.Spinner));
+
+            var centre = _planner.TurnCentre.Value;
+            var targets = Targets();
+            Assert.AreEqual(candidates, targets.Count);
+            Assert.AreEqual(targets.Count, targets.Distinct().Count());
+            Assert.IsTrue(targets.Contains(centre), "the middle member stands on the centre");
+            var axes = new HashSet<int>();
+            foreach (var target in targets.Where(t => t != centre))
+            {
+                Assert.IsTrue(FormationSpinner.TryLocate(centre, target, 2, out var direction, out var distance));
+                var opposite = FormationSpinner.Out(centre, direction + 3, distance);
+                Assert.IsTrue(targets.Contains(opposite), "the slot across the centre is held too");
+                axes.Add(direction % FormationSpinner.Axes);
+            }
+
+            Assert.AreEqual(1, axes.Count, "one line");
+        }
+
+        [TestCase(3, 0, 0)]
+        [TestCase(5, 0, 0)]
+        [TestCase(3, 6, 7)]
+        [TestCase(5, 6, 7)]
+        public void Spinner_ItsCentreCanTurnAllTheWayRound_AboveTheClearance(int candidates, int col, int row)
+        {
+            BuildGrid(7, 8);
+            AddMembers(
+                new Vector2Int(col, row), new Vector2Int(6 - col, row), new Vector2Int(3, row),
+                new Vector2Int(col, 7 - row), new Vector2Int(6 - col, 7 - row));
+            _candidates.RemoveRange(candidates, _candidates.Count - candidates);
+
+            Assert.IsTrue(Plan(FormationShape.Spinner));
+
+            // Clearance 2 on an eight-row board: the last row is 5, and so is the last flat row.
+            Assert.IsTrue(FormationSpinner.IsCentre(_grid, _planner.TurnCentre.Value, candidates / 2, 5, 5));
+            Assert.IsTrue(Targets().All(t => t.y <= 5), "the bottom two rows stay clear");
+        }
+
+        [Test]
+        public void Spinner_TheCentreKeepsAboveTheHorizontalClearance_ThoughItsArmsMayReachBelow()
+        {
+            BuildGrid(7, 8);
+            AddMembers(new Vector2Int(2, 4), new Vector2Int(3, 4), new Vector2Int(4, 4));
+
+            Assert.IsTrue(Plan(FormationShape.Spinner));
+            Assert.AreEqual(4, _planner.TurnCentre.Value.y, "the line already stands on row 4");
+
+            _settings.HorizontalBottomClearance.Returns(4);
+
+            Assert.IsTrue(Plan(FormationShape.Spinner));
+            Assert.LessOrEqual(_planner.TurnCentre.Value.y, 3, "a line across the board keeps off the last rows");
+        }
+
+        [Test]
+        public void Spinner_OnABoardTooNarrowForACentre_ReturnsFalse()
+        {
+            BuildGrid(2, 8);
+            AddMembers(new Vector2Int(0, 0), new Vector2Int(1, 0), new Vector2Int(0, 1));
+
+            Assert.IsFalse(Plan(FormationShape.Spinner));
+            Assert.IsNull(_planner.TurnCentre);
+        }
+
+        [Test]
+        public void ASpinnersCentre_IsClearedByAnyOtherShape()
+        {
+            BuildGrid(7, 8);
+            AddSixMembers();
+            _candidates.RemoveRange(3, 3);
+            Assert.IsTrue(Plan(FormationShape.Spinner));
+            Assert.IsNotNull(_planner.TurnCentre);
+
+            Assert.IsTrue(Plan(FormationShape.Horizontal));
+
+            Assert.IsNull(_planner.TurnCentre);
         }
 
         [Test]

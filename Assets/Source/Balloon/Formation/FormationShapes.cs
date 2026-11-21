@@ -16,7 +16,8 @@ namespace BalloonParty.Balloon.Formation
         ItemCover = 1 << (int)FormationShape.ItemCover,
         Snake = 1 << (int)FormationShape.Snake,
         Ring = 1 << (int)FormationShape.Ring,
-        All = Horizontal | DiagonalDownRight | DiagonalDownLeft | ItemCover | Snake | Ring
+        Spinner = 1 << (int)FormationShape.Spinner,
+        All = Horizontal | DiagonalDownRight | DiagonalDownLeft | ItemCover | Snake | Ring | Spinner
     }
 
     internal static class FormationShapesExtensions

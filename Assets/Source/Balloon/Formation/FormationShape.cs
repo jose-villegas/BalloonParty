@@ -16,7 +16,11 @@ namespace BalloonParty.Balloon.Formation
         Snake,
 
         // Four or five round one slot, so at least one of its six neighbours stays open. On every beat the whole
-        // ring turns one slot round its centre, and every few cycles it turns the other way.
-        Ring
+        // ring turns one slot round its centre, and now and then every ring and spinner turns the other way together.
+        Ring,
+
+        // A straight line of three or five that turns about the member in its middle, 60° on every beat: flat,
+        // then one diagonal, then the other. It turns the other way on the same beat as every ring.
+        Spinner
     }
 }
