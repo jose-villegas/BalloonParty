@@ -30,7 +30,7 @@ Shader "BalloonParty/Scenario/SpeckField"
             "IgnoreProjector" = "True"
         }
 
-        Blend SrcAlpha OneMinusSrcAlpha
+        Blend SrcAlpha OneMinusSrcAlpha, One OneMinusSrcAlpha
         ZWrite Off
         Cull Off
         Lighting Off

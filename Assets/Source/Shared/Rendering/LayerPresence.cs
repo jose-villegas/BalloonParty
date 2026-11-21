@@ -8,7 +8,7 @@ namespace BalloonParty.Shared.Rendering
     ///     map) can skip the frames it would render empty. Every pooled object with a renderer is tracked from the
     ///     moment its pool creates it, and counts on its renderers' layers while it's active: pooled effects live
     ///     exactly as long as they're out of the pool. A persistent object that shows and hides by its renderer
-    ///     instead (the nuke cloud) is watched by that renderer.
+    ///     instead (the nuke cloud, the dust speck field, the formation glow ring) is watched by that renderer.
     /// </summary>
     internal static class LayerPresence
     {

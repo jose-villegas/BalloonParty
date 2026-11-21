@@ -94,7 +94,8 @@ open while a clearing is.
 | Item range previews (`Item/Preview/`) | `Items`, PowerUps 0–100 | yes |
 | Shield item's gain burst (`PSVFX_ShieldGainPU`) | `Items`, PowerUps 20 | yes: news about the ball, not chaos around it |
 | Shield bounce/gain/lose VFX | `Projectile`, PowerUps 20 | yes |
-| Dust speck field (`SpeckField`) | `Field`, Sky 0 | yes |
+| Dust speck field (`SpeckField`) | `Effects` (was `Field`), Default 0 | **done**: open question 2 |
+| Unbreakable formation glow ring (`FormationGlowView`) | `Effects` (was `Balloons`), Balloons −2 | **done**: open question 2 |
 | Nuke blast flood, disco wash, bubble merge cue, paint drip overlay | Balloons layer, under or on the balloons | no: the ground beneath the balloons or a balloon's own coat, never over the ball (open question 1) |
 | Ball trail (`ProjectileTrail`), snipe lance line, trace prediction | `Projectile` / `TracePrediction` | no: they *are* the ball's readout |
 | Danger walls (`Limits`), clouds, bushes, puffs, the wall net | board layers | no: gameplay information |
@@ -103,7 +104,7 @@ open while a clearing is.
 The main camera's effects live on several physics layers that also hold board pieces (`Items` holds the
 badges as well as item VFX, `Projectile` the ball as well as the shield VFX). So this phase needs a new
 physics layer, `Effects` (17), added in the Editor (`TagManager.asset` is never edited by hand). The
-chaos effects above are on it; the rest of the table would move to it. The composite collapses these effects to one sorting
+chaos effects above, the dust specks and the formation rings are on it; the rest of the table would move to it. The composite collapses these effects to one sorting
 position: Sky −1, below the danger walls and the light quad. One visible change comes with that: item VFX on
 PowerUps draw under bushes and puffs (GridActors) today, and would draw over them.
 
@@ -300,7 +301,7 @@ laser, made to pass the bloom threshold (`_HdrBoost` 2–3), were clipped to 1 w
 physics layer is added, the pops, item effects and nuke cloud are on it, and the main camera has its own
 `EffectsMapCompositor` (`ARGBHalf`, composite at Sky −1, before post). The composite shader reads the map in
 `half`, since `fixed` is low precision on some mobile GPUs. The GI capture takes `Effects`, as it took them on
-`Trail`. The rest of the table above (range previews, shield VFX, the dust specks) waits on open question 2.
+`Trail`. The dust specks and the formation rings followed (open question 2). The rest of the table above (range previews, shield VFX) waits on it.
 
 Off, the main camera draws these effects in their own sorting places: under the ball, and the pops on
 `Default` under the balloons. So the map stays on for `MapHoldSeconds` (1.5, game time) after the mask
@@ -344,8 +345,19 @@ minus the claims.
    lightning's glow (`LVFX_LightningRange/Glow`, on `Items`): a light on the ground under the balloons, which
    the map, laying everything over them, would lift over them.
 2. **The rest of phase 3.** The score shapes and trails are the HUD map, the chaos effects the main map. Should range
-   previews, shield VFX and the dust specks clear as well? The main map already runs while a ball flies, so
+   previews and shield VFX clear as well? The main map already runs while a ball flies, so
    they would add only their own draws into it.
+
+   Partly answered, by the owner on 2026-11-20: the dust specks and the unbreakable formation's glow rings
+   clear, so the ball's lens bends and fades the specks and rings around it. The specks moved from `Field`
+   to `Effects`, the rings from `Balloons`; both renderers are watched by `LayerPresence`, as neither is
+   pooled (the rings' is on only while a ring glows). The owner accepted two consequences. While a ball flies,
+   both are laid at the map's place, over the board and the ball, and not under the balloons where they sort;
+   they drop back when the map is released. And the specks are alive the whole run, so the effects camera
+   renders on every frame of a flight and of the hold after it, where it rendered only on frames with a
+   pooled effect alive. That cost has not been measured on a device. The speck shader got a separate alpha
+   blend, so its coverage is right in the premultiplied map; drawn straight to the main camera its colour is
+   unchanged. Range previews and shield VFX remain open.
 3. **How clear is clear.** Answered: a hard cut near the rim read too strong. The clearing is now the
    glass dome above, its effects thinning slowly from the rim to near nothing over the ball, with the lens
    the owner picked from stills (refraction 0.5, dispersion 0.15). It still needs a look in play.

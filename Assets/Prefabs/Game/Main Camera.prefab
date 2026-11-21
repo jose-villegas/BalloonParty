@@ -398,7 +398,7 @@ MonoBehaviour:
   _camera: {fileID: 9161632677401763229}
   _launchMask:
     serializedVersion: 2
-    m_Bits: 69634
+    m_Bits: 200706
   _gameMask:
     serializedVersion: 2
     m_Bits: 4294967071

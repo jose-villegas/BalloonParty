@@ -7,6 +7,7 @@ using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Shared.Rendering;
 using BalloonParty.Shared.SceneLight;
 using BalloonParty.Slots.Capabilities;
 using MessagePipe;
@@ -126,7 +127,7 @@ namespace BalloonParty.Slots.Actor
         {
             if (_compute == null || _renderMaterial == null || _settings == null || _settings.Count <= 0)
             {
-                enabled = false;
+                SwitchOff();
                 return;
             }
 
@@ -137,7 +138,7 @@ namespace BalloonParty.Slots.Actor
             if (!SystemInfo.supportsComputeShaders)
             {
                 Log.Warn("SpeckField", "disabled: compute shaders unsupported (graphics API — use Vulkan/Metal).", this);
-                enabled = false;
+                SwitchOff();
                 return;
             }
 
@@ -145,7 +146,7 @@ namespace BalloonParty.Slots.Actor
             {
                 Log.Warn("SpeckField", "disabled: the vertex stage can't read compute buffers on this " +
                     "device/API (use Vulkan/Metal, or a texture-based fallback).", this);
-                enabled = false;
+                SwitchOff();
                 return;
             }
 
@@ -255,7 +256,20 @@ namespace BalloonParty.Slots.Actor
             _mesh.bounds = new Bounds(Vector3.zero, Vector3.one * 10000f);
 
             GetComponent<MeshFilter>().sharedMesh = _mesh;
-            GetComponent<MeshRenderer>().sharedMaterial = _renderMaterial;
+            var meshRenderer = GetComponent<MeshRenderer>();
+            meshRenderer.sharedMaterial = _renderMaterial;
+
+            // The field is on the Effects layer, so a flying ball's lens bends and clears the specks around it as
+            // it does the pops. It isn't pooled, so the effects map knows it is there by its renderer.
+            LayerPresence.Watch(meshRenderer);
+        }
+
+        // A field that can't run draws nothing: its renderer is on the Effects layer, and left on it would
+        // count there as an effect nobody tracks.
+        private void SwitchOff()
+        {
+            GetComponent<MeshRenderer>().enabled = false;
+            enabled = false;
         }
 
         // The per-frame material state (only what actually changes each frame); runs in LateUpdate, before the

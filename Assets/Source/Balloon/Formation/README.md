@@ -374,7 +374,7 @@ and the next begins; where two formations' light overlaps, the brighter shows. A
 ring adds less to that sum as it goes, down to only the threshold, which is what draws it back into its
 member, and the noise eats its light as far as the dissolving rings' share of the sum. The light is
 additive and HDR (`HdrBoost`, 2.5 over the palette blue), so it blooms. It sorts under the balloons
-(`Balloons` -2), on the `Balloons` layer: the main camera draws it in play and the launch screen doesn't.
+(`Balloons` -2), built on the `Effects` layer: the main camera draws it in play and the launch screen's mask takes `Effects` too (for the specks), but no ring glows there: the quad's renderer is on only while a ring glows. While a ball flies, its lens (`Display/README.md`, `EffectsMapCompositor`) bends and fades the rings around it, and the rings are laid over the board with the other effects instead of under the balloons; they sort back under them when the map is released. The renderer is watched by `LayerPresence`, since it is not pooled.
 The GI capture (`Display/SceneCaptureService`) draws it too, so the rings are in the colour the GI smear
 bounces and their light spreads over the ground beside them. The shader writes colour only, so a ring
 adds no coverage to the capture and casts no shadow. The capture is 8 bits, so the ring's HDR blue clamps

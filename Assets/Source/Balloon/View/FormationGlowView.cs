@@ -32,7 +32,7 @@ namespace BalloonParty.Balloon.View
 
         private static readonly int DissolveId = Shader.PropertyToID("_GlowDissolve");
 
-        private static int BalloonsLayer = -1;
+        private static int EffectsLayer = -1;
 
         private readonly Vector4[] _points = new Vector4[FormationGlowField.MaxPoints];
         private readonly float[] _formations = new float[FormationGlowField.MaxPoints];
@@ -121,20 +121,25 @@ namespace BalloonParty.Balloon.View
                 _settings.Fill));
             _material.SetVector(DissolveId, new Vector4(_settings.DissolveNoiseScale, 0f, 0f, 0f));
 
-            if (BalloonsLayer == -1)
+            if (EffectsLayer == -1)
             {
-                BalloonsLayer = LayerMask.NameToLayer("Balloons");
+                EffectsLayer = LayerMask.NameToLayer("Effects");
             }
 
-            // The balloons' layer: the main camera draws it in play, the launch screen doesn't, and the GI capture
-            // does, so the rings' light is in the colour the GI smear bounces. The shader writes colour only, so
-            // a ring adds no coverage there and casts no shadow.
+            // The effects layer: a flying ball's lens bends the rings around it. While one flies the rings are
+            // drawn with the effects, over the board, and not under the balloons where they sort: the owner
+            // chose the lens over the order (2026-11-20). The GI capture draws the layer too, so the rings'
+            // light is in the colour the GI smear bounces. The shader writes colour only, so a ring adds no
+            // coverage there and casts no shadow.
             var quad = QuadRendererBuilder.Build(
-                "FormationGlowQuad", _material, BalloonsLayer, _settings.SortingLayerName, _settings.SortingOrder);
+                "FormationGlowQuad", _material, EffectsLayer, _settings.SortingLayerName, _settings.SortingOrder);
             _quad = quad.transform;
             _quad.SetParent(transform, false);
             _renderer = quad.GetComponent<MeshRenderer>();
             _renderer.enabled = false;
+
+            // Not pooled: the effects map knows a ring is up by its renderer, which is on only while one glows.
+            LayerPresence.Watch(_renderer);
         }
 
         // A light is on only while its group glows: the field loops over every registered light, a dark one too.
