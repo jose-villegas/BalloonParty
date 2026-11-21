@@ -130,6 +130,9 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Formation_1_1FormationShapesExtensions.html">FormationShapesExtensions</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Formation_1_1FormationSpinner.html">FormationSpinner</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A spinner's geometry: a straight line of three or five through one slot, its centre, which the member in the middle holds.  <a href="classBalloonParty_1_1Balloon_1_1Formation_1_1FormationSpinner.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Formation_1_1ICoveredHosts.html">ICoveredHosts</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The balloons item covers stand round now, for views that draw a cover as one body with what it covers (<code>Balloon/View/FormationGlowHosts</code>).  <a href="interfaceBalloonParty_1_1Balloon_1_1Formation_1_1ICoveredHosts.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -165,6 +168,7 @@ Enumerations</h2></td></tr>
 , <br />
 &#160;&#160;<a class="el" href="#a7d189f644fea0191bb4f5acaef4bf746adfa90f1b4eb3affbd3b46af34ed2477c">Snake</a>
 , <a class="el" href="#a7d189f644fea0191bb4f5acaef4bf746ad4db177c94738b72bf9ce61e988ab1f1">Ring</a>
+, <a class="el" href="#a7d189f644fea0191bb4f5acaef4bf746a9b2c85dd7af17d4528bd7489e72c59c5">Spinner</a>
 <br />
  }</td></tr>
 <tr class="separator:a7d189f644fea0191bb4f5acaef4bf746"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -177,7 +181,9 @@ Enumerations</h2></td></tr>
 &#160;&#160;<a class="el" href="#a8d2d65777aaac2e933178f9b7ba0c7b9ad762f03b0ac739c5834f7b68c2c7ddb7">ItemCover</a> = 1 &lt;&lt; (int)FormationShape.ItemCover
 , <a class="el" href="#a8d2d65777aaac2e933178f9b7ba0c7b9adfa90f1b4eb3affbd3b46af34ed2477c">Snake</a> = 1 &lt;&lt; (int)FormationShape.Snake
 , <a class="el" href="#a8d2d65777aaac2e933178f9b7ba0c7b9ad4db177c94738b72bf9ce61e988ab1f1">Ring</a> = 1 &lt;&lt; (int)FormationShape.Ring
-, <a class="el" href="#a8d2d65777aaac2e933178f9b7ba0c7b9ab1c94ca2fbc3e78fc30069c8d0f01680">All</a> = Horizontal | DiagonalDownRight | DiagonalDownLeft | ItemCover | Snake | Ring
+, <a class="el" href="#a8d2d65777aaac2e933178f9b7ba0c7b9a9b2c85dd7af17d4528bd7489e72c59c5">Spinner</a> = 1 &lt;&lt; (int)FormationShape.Spinner
+, <br />
+&#160;&#160;<a class="el" href="#a8d2d65777aaac2e933178f9b7ba0c7b9ab1c94ca2fbc3e78fc30069c8d0f01680">All</a> = Horizontal | DiagonalDownRight | DiagonalDownLeft | ItemCover | Snake | Ring | Spinner
 <br />
  }</td></tr>
 <tr class="memdesc:a8d2d65777aaac2e933178f9b7ba0c7b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">A set of FormationShapes, one bit each: the shapes a level lets its unbreakables form (<code>ILevelParameters.AllowedFormationShapes</code>).  <a href="#a8d2d65777aaac2e933178f9b7ba0c7b9">More...</a><br /></td></tr>
@@ -210,6 +216,7 @@ Enumerations</h2></td></tr>
 <tr><td class="fieldname"><a id="a7d189f644fea0191bb4f5acaef4bf746ad762f03b0ac739c5834f7b68c2c7ddb7" name="a7d189f644fea0191bb4f5acaef4bf746ad762f03b0ac739c5834f7b68c2c7ddb7"></a>ItemCover&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a7d189f644fea0191bb4f5acaef4bf746adfa90f1b4eb3affbd3b46af34ed2477c" name="a7d189f644fea0191bb4f5acaef4bf746adfa90f1b4eb3affbd3b46af34ed2477c"></a>Snake&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a7d189f644fea0191bb4f5acaef4bf746ad4db177c94738b72bf9ce61e988ab1f1" name="a7d189f644fea0191bb4f5acaef4bf746ad4db177c94738b72bf9ce61e988ab1f1"></a>Ring&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a7d189f644fea0191bb4f5acaef4bf746a9b2c85dd7af17d4528bd7489e72c59c5" name="a7d189f644fea0191bb4f5acaef4bf746a9b2c85dd7af17d4528bd7489e72c59c5"></a>Spinner&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 </div>
@@ -244,6 +251,7 @@ Enumerations</h2></td></tr>
 <tr><td class="fieldname"><a id="a8d2d65777aaac2e933178f9b7ba0c7b9ad762f03b0ac739c5834f7b68c2c7ddb7" name="a8d2d65777aaac2e933178f9b7ba0c7b9ad762f03b0ac739c5834f7b68c2c7ddb7"></a>ItemCover&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a8d2d65777aaac2e933178f9b7ba0c7b9adfa90f1b4eb3affbd3b46af34ed2477c" name="a8d2d65777aaac2e933178f9b7ba0c7b9adfa90f1b4eb3affbd3b46af34ed2477c"></a>Snake&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a8d2d65777aaac2e933178f9b7ba0c7b9ad4db177c94738b72bf9ce61e988ab1f1" name="a8d2d65777aaac2e933178f9b7ba0c7b9ad4db177c94738b72bf9ce61e988ab1f1"></a>Ring&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a8d2d65777aaac2e933178f9b7ba0c7b9a9b2c85dd7af17d4528bd7489e72c59c5" name="a8d2d65777aaac2e933178f9b7ba0c7b9a9b2c85dd7af17d4528bd7489e72c59c5"></a>Spinner&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a8d2d65777aaac2e933178f9b7ba0c7b9ab1c94ca2fbc3e78fc30069c8d0f01680" name="a8d2d65777aaac2e933178f9b7ba0c7b9ab1c94ca2fbc3e78fc30069c8d0f01680"></a>All&#160;</td><td class="fielddoc"></td></tr>
 </table>
 

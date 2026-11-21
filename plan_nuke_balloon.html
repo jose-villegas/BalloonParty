@@ -110,13 +110,13 @@ $(function(){initNavTree('plan_nuke_balloon.html',''); initResizable(true); });
   <div class="headertitle"><div class="title">Nuke Balloon</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md858"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md859"></a>
 Nuke Balloon</h1>
 <blockquote class="doxtable">
 <p>A fourth reward balloon: a <b>nuke</b>. It is plated in dull lead and bolted together, with a riveted danger placard on its face, a small LED counter and a status lamp that flares green. Shots bounce off it and dent it, and the counter shows in green how many dents it still takes. The third dent, or any piercing damage, <b>arms</b> it. The counter flashes a red heart for a second, then the lamp turns red, the counter runs down from 3 with a beep each second, and the board leans in towards it. At zero it goes off. A blinding light floods the board behind a growing shock disc that pops every balloon and every shot in flight. A mushroom cloud rises where it stood. Then the spawn clock gives the breather a big clear earns, on a gust of wind. It is rare, and it comes when the player is in trouble: a full board, a fast clock, few hearts, or hearts lost one after another. </p>
 </blockquote>
 <hr  />
-<h2><a class="anchor" id="autotoc_md860"></a>
+<h2><a class="anchor" id="autotoc_md861"></a>
 Goals</h2>
 <ol type="1">
 <li><b>A rescue, placed by <code>RewardBalloonService</code></b> and never by a level's mix, like the golden balloon, the heart balloon and the disco ball (<code><a class="el" href="PLAN-RewardBalloons_8md.html">Plans/PLAN-RewardBalloons.md</a></code>, <code><a class="el" href="PLAN-DiscoBalloon_8md.html">Plans/PLAN-DiscoBalloon.md</a></code>). At most one on the board.</li>
@@ -127,7 +127,7 @@ Goals</h2>
 <li><b>The spectacle.</b> The disco wave's growing disc, with light that blinds the board as it spreads. The disturbance field's strongest push. A nudge outward running just ahead of the disc. A mushroom cloud rising where the nuke stood. The owner flagged the cloud as the hard part.</li>
 <li><b>The bar the other rewards set.</b> Depth (the plated sphere's relief, a baked ground shadow), the scene light (lit by the time of day, like the golden balloon), and its own sounds.</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md861"></a>
+<h2><a class="anchor" id="autotoc_md862"></a>
 Decisions</h2>
 <p>These were open in the brief. Each is decided here, and each can be changed.</p>
 <table class="markdownTable">
@@ -152,7 +152,7 @@ Decisions</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">What stops a fuse?   </td><td class="markdownTableBodyNone"><b>A level change, a game over or a run reset</b>, with no blast and no breather. A pause holds it: it runs on scaled time   </td><td class="markdownTableBodyNone">The same rule as the blast. A level the shot completes during the fuse ends as any level does, and the level-up takes the board   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md862"></a>
+<h2><a class="anchor" id="autotoc_md863"></a>
 How it fits</h2>
 <p>Almost everything has a precedent in the disco ball. The new pieces are the model, the odds, the fuse, the blast, the breather grant, the cloud and the nuke's sound router.</p>
 <table class="markdownTable">
@@ -222,7 +222,7 @@ How it fits</h2>
 <div class="line">    end</div>
 <div class="line">    Blast-&gt;&gt;Registry: last sweep of anything left</div>
 <div class="line">    Blast-&gt;&gt;Clock: Grant, the breather starts on a gust of wind</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md863"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md864"></a>
 When it comes</h2>
 <p>Through <code>RewardBalloonService</code>, rolled on each clock line while the level is played, and only for a type the catalogue has an entry for. The numbers are <code>INukeOddsSettings</code>.</p>
 <p><b>The gates.</b></p>
@@ -255,7 +255,7 @@ When it comes</h2>
 <li>The pressure signal is the odd one: pressure builds only while the player is comfortable and the board is low. It is there because the owner asked for "high spawning rates", and its weight keeps it a nudge.</li>
 </ul>
 <p><b>Where it lands.</b> The reward goes to the front of its line (<code>BalloonSpawner.MoveRewardToFront</code>), so it lands as long as any column takes a balloon. An almost-full board still takes it. A full board passes it on, owed, to the next line with room.</p>
-<h2><a class="anchor" id="autotoc_md864"></a>
+<h2><a class="anchor" id="autotoc_md865"></a>
 Arming it</h2>
 <ul>
 <li><b>The shot's ordinary hit</b> deflects and costs one of its hits: <code>BalloonDeflectedMessage</code>, the deflect nudge and stamp, and the tough balloon's cracks (the prefab keeps <code>ToughBalloonVariant</code>, which draws them for any balloon with durability, and the body shader dents a plate for each). The last hit arms it, and that shot bounces off as from any dent.</li>
@@ -265,7 +265,7 @@ Arming it</h2>
 <li><b>A board clear or a level change</b> takes it away unarmed. Only arming starts the fuse.</li>
 </ul>
 <p>Armed, it deflects every ball for the rest of the fuse. A ball can ricochet off it, so the deflect chain counts those bounces (<code>DeflectChainController</code>). That is four seconds at most, and the shot dies at zero, so it stays as it is.</p>
-<h2><a class="anchor" id="autotoc_md865"></a>
+<h2><a class="anchor" id="autotoc_md866"></a>
 The fuse</h2>
 <p><code>NukeFuseSettings.Seconds</code> (3). It starts on the hit that arms the nuke and runs on scaled time.</p>
 <ul>
@@ -274,7 +274,7 @@ The fuse</h2>
 <li><b>The pull.</b> Twice a second, every balloon within <code>PullRadius</code> (4 world units) of the nuke gets a single-actor nudge towards it (<code>NudgeType.Wave</code>, a negative distance). The nudge grows from <code>PullDistanceStart</code> (0.04) to <code>PullDistanceEnd</code> (0.16) over the fuse, so the board seems to lean in harder as the count runs down. A disturbance-field implosion stamp at the nuke (negative strength, as the bomb's first stamp) pulls the clouds, grass and specks in with it.</li>
 <li><b>The end.</b> At zero, <code>NukeBlast.Detonate(nuke)</code>.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md866"></a>
+<h2><a class="anchor" id="autotoc_md867"></a>
 The blast</h2>
 <p><code>NukeBlast.Detonate</code> at the nuke's position:</p>
 <ol type="1">
@@ -292,7 +292,7 @@ The blast</h2>
 </ol>
 <p>A level change, a run reset or a game over stops the blast where it is, without the breather. A pause holds it: it runs on scaled time. A second nuke can't be on the board while one blast runs, but if a cheat places one, the first blast finishes at once.</p>
 <p><b>The breather.</b> The same breather a big clear earns: the clock drops to <code>BreatherPace</code> (0.2) and eases back over <code>BreatherSeconds</code> (11 s), then the cooldown (14 s) holds before another. A big clear would often start it anyway, from the fall in occupancy, but not inside the cooldown of an earlier one. The grant starts it whatever the cooldown. The sparse board's speedup still applies, so an empty board refills sooner than a full one even in the breather. That is the existing rule for any big clear.</p>
-<h2><a class="anchor" id="autotoc_md867"></a>
+<h2><a class="anchor" id="autotoc_md868"></a>
 The look</h2>
 <p><b>The body: <code>Balloon/NukeBalloon.shader</code></b>, a fork of <code>GoldenBalloon.shader</code> on a prefab built from the golden balloon's. It keeps the golden balloon's depth and light: the sphere projection, the relief of bevelled, tilted plates, the sky and floor reflection, and the scene light (<code>Include/SceneLight.cginc</code>). So it is dull at noon and near black at night, with its rim still catching the light. Its ground shadow is the prefab's baked shadow child, as the golden balloon's is.</p>
 <ul>
@@ -329,7 +329,7 @@ The look</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>NukeBreatherWind</code>   </td><td class="markdownTableBodyNone">the breather   </td><td class="markdownTableBodyNone">a long gust of wind swelling in and fading   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md868"></a>
+<h2><a class="anchor" id="autotoc_md869"></a>
 Open questions</h2>
 <ol type="1">
 <li><b>Dents or plated?</b> Decided as dents (3 hits). If the owner wants the golden balloon's rule exactly, set the catalogue entry's hit count very high, or make <code>NukeBalloonModel</code> deflect forever. The bot measures how often the nuke is armed either way.</li>
@@ -337,7 +337,7 @@ Open questions</h2>
 <li><b>Items on cleared balloons.</b> Decided they vanish with their balloon. The alternative fires them, which is spectacular and chaotic.</li>
 <li><b>The wind on every breather?</b> Decided only on the nuke's, the moment the owner described. Any breather could have it.</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md869"></a>
+<h2><a class="anchor" id="autotoc_md870"></a>
 Phases</h2>
 <p>Each phase follows the per-phase review: implement, then review, curate and quick fixes, then the owner's sign-off.</p>
 <ol type="1">

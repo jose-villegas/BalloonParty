@@ -125,7 +125,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Editor tooling for the shot geometry system — sweeps aim angle against the live board and reports which windows reach a target score. The shot is modelled as a deterministic billiard; the simulation mirrors the runtime projectile rules.</p>
-<h1><a class="anchor" id="autotoc_md184"></a>
+<h1><a class="anchor" id="autotoc_md185"></a>
 Contents</h1>
 <p>Only <code>ShotSolverWindow</code> lives in this folder. The simulation classes it drives live in <code>Assets/Source/Solver/</code> (runtime <code>BalloonParty.Runtime</code> assembly, not <code>Editor/</code>) so they stay unit-testable outside the editor.</p>
 <table class="markdownTable">
@@ -156,7 +156,7 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>ShotSimEffectBoard</code>   </td><td class="markdownTableBodyNone"><code>Solver/</code>   </td><td class="markdownTableBodyNone">The sim's <code>IEffectBoard</code> adapter (<code>Item/Effects/</code>) — rebuilds <code>EffectOccupant</code>s from the active working set (statics and the popped host excluded) over a <code>ShotSlotLattice</code> (<code>HexCoordinates</code> math only, no live grid/dynamics reference), so an item core selects identically whether or not a dynamic board is present   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md185"></a>
+<h1><a class="anchor" id="autotoc_md186"></a>
 Rule mirroring</h1>
 <p>The simulator reproduces these runtime rules without touching a live <code>IBalloonModel</code>:</p>
 <ul>
@@ -178,7 +178,7 @@ Rule mirroring</h1>
 <li><b>Foam coats</b> — <code>ShotBalloonSnapshot.Coat</code> carries a coloured or rainbow balloon's coat layers (<code>ICoatable</code>) at gather. The shot's non-piercing contact on a coated balloon strips one layer, flies on unbent, washes the shot, scores nothing, leaves the streak alone and is not a pop; the segment's sweep is invalidated as on any contact. A piercing contact takes the coat with the balloon: it pops and the shot adopts its colour as an ordinary pop. An item's hit strips one layer unless it is <code>Piercing</code> or <code>Beam</code>, which pops the balloon under it (<code>BalloonModel.EvaluateHit</code>). The wash is decided per contact, since a coat can come off mid-flight: a contact washes when the target is soap, or when it wears a coat and the hit is not piercing; the snapshot's <code>WashesProjectileColor</code> stays keyed to the real <code>IWashesProjectileColor</code> marker, which is what the item effect board's resist-paint rule reads.</li>
 <li><code>ShotSimulationResult.FinalColor</code> and <code>FinalStreak</code> report the colour and streak the shot ends the flight with, so the mirror tests can compare them with the game's.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md186"></a>
+<h1><a class="anchor" id="autotoc_md187"></a>
 Accepted approximations (plan §7)</h1>
 <ul>
 <li><b>Known divergence, not yet mirrored (2026-08-17):</b> live's <code>ScoreController.RecordStreakMultiplier</code> now gates streak GROWTH on <code>DamageFlags.DirectHit</code> — an item/AOE pop (Bomb/Laser/Lightning) scores at whatever multiplier is already live but can no longer climb it, only the shot's own contact/pierce- discharge hits can. <code>ShotSimulator</code>'s mirror (<code>RecordColor</code>, called from <code>ResolvePopScore</code>) still increments unconditionally for every same-colour pop regardless of <code>cause.Flags</code>, so the solver currently OVER-predicts streak/score for any shot chain with item/AOE pops — <code>FireBestShotCheat</code> and <code>ShotSolverWindow</code> will rank those chains above what live actually pays out. Needs <code>RecordColor</code> threading <code>cause.Flags.HasFlag(DamageFlags.DirectHit)</code> the same way live threads it into <code>ColorStreakTracker.Record</code>'s <code>canIncrement</code>.</li>
@@ -202,11 +202,11 @@ Accepted approximations (plan §7)</h1>
 <li><b>Blast-hit order and the streak.</b> The sim lands an item's hits in the effect board's order, which need not be the order the game's physics delivers them; when a blast mixes coloured pops with a cluster or tough that breaks the streak, the final streak can differ though the score agrees (<code>RipeClusterMirrorTests</code> compares only the score for that case).</li>
 <li>Balance fidelity honours <code>WeightBias</code>/<code>OmnidirectionalBalance</code> only — <code>ShoveVector</code> pop-pressure shoves are never exercised by a flight-rebalance pulse, so a board effect that leans on pressure propagation diverges from the sim.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md187"></a>
+<h1><a class="anchor" id="autotoc_md188"></a>
 Sweep and refine</h1>
 <p><code>ShotSolverWindow</code> samples N angles across a configurable arc (seeded from <code>IProjectileFlightConfig.AimAngleMinDegrees</code>/<code>AimAngleMaxDegrees</code> — 5°–175° by default, measured from +X — but user-editable from there for experimentation beyond what the player can actually aim at), then finds contiguous runs where <code>RawScore &gt;= target</code>. Each run's edges are refined by bisection to ~0.01° (the plan's §2 fair-window resolution threshold), not by enumerating exact tangency angles — the plan calls that exact enumeration v2. The "best" window is the widest qualifying one; "Draw Best" re-simulates its centre angle with the simulator's optional path-capture list and draws it via <code>SceneDrawingHelper.DrawWorldPolyline</code>.</p>
 <p><b>Sample count.</b> With <code>IProjectileFlightConfig.AimAngleStepDegrees</code> at 0 (continuous aim, the default), N is the editable <b>Samples</b> field (default 2048), lerped evenly across the arc — unchanged from before quantization existed. Once a non-zero step is configured, the aim only ever lands on multiples of that step (<code>ThrowerController.ClampAndQuantizeAimDirection</code>), so the window instead derives N from the arc and the step (<code>AimAngleGrid.ResolveSweepSampleCount</code>) and samples exactly those reachable angles (<code>AimAngleGrid.ResolveSweepAngle</code>) — the <b>Samples</b> field becomes a read-only display of that derived count rather than an editable one, so it can't drift back to sampling off-grid angles. This is both cheaper (a ~31° usable arc at a 5° step is ~7 samples instead of thousands) and more correct: a sweep over off-grid angles could recommend, and via <b>Fire Best</b>, actually fire, a shot the player could never aim at. Note this only covers the SWEEP itself — a qualifying window's centre (what <b>Fire Best</b> actually fires when a window is found) is still bisection-refined between two on-grid samples to ~0.01°, so it is not itself guaranteed to land back on the step grid; only the no-window fallback path (drawn straight from a sample) is guaranteed on-grid. Snapping the fired centre to the grid too is a follow-up, not done here.</p>
-<h1><a class="anchor" id="autotoc_md188"></a>
+<h1><a class="anchor" id="autotoc_md189"></a>
 Usage</h1>
 <ol type="1">
 <li>Enter Play Mode with the Game scene loaded.</li>

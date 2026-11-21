@@ -1,9 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Shared_1_1IReadyGate.html" title="Blocks a caller until some external condition allows it to proceed; &quot;ready&quot; is implementation&#45;defined..." alt="" coords="5,83,236,111"/>
-<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html" title="Holds the GameOver screen shut until the loss cinematic finishes." alt="" coords="284,5,500,50"/>
-<area shape="poly" id="edge714_Node000000_Node000001" title=" " alt="" coords="191,76,304,49,299,52,193,81"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Shared_1_1GameState_1_1CinematicEndGate.html" title=" " alt="" coords="295,75,488,119"/>
-<area shape="poly" id="edge715_Node000000_Node000002" title=" " alt="" coords="251,94,297,96,292,98,252,100"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Shared_1_1GameState_1_1NavigationReadyGate.html" title=" " alt="" coords="291,144,493,189"/>
-<area shape="poly" id="edge716_Node000000_Node000003" title=" " alt="" coords="193,113,304,143,299,144,192,118"/>
+<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Shared_1_1IPitySettings.html" title="How a chance roll forgives a player in trouble (Game/Assist/PityRoll): each roll it misses while the ..." alt="" coords="5,5,189,50"/>
+<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Configuration_1_1PitySettings.html" title="Inspector&#45;authored IPitySettings, one per chance roll in AssistSettings." alt="" coords="237,5,433,50"/>
+<area shape="poly" id="edge713_Node000000_Node000001" title=" " alt="" coords="204,25,239,27,234,28,205,30"/>
 </map>

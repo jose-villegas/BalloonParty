@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Item_1_1Effects_1_1PaintEffectParams.html" target="_top" xlink:title="Paint&#45;core scalars — mirrors PaintSettings&#39;s spread&#45;triangle fields (PaintTriangle....">
+<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Item_1_1Effects_1_1LightningEffectParams.html" target="_top" xlink:title="Lightning&#45;core scalars — mirrors LightningSettings&#39;s selection fields only (glow/visual fields exclud...">
 <polygon fill="white" stroke="#666666" points="140.5,-33.5 0,-33.5 0,0 140.5,0 140.5,-33.5"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.Effects.</text>
-<text xml:space="preserve" text-anchor="middle" x="70.25" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">PaintEffectParams</text>
+<text xml:space="preserve" text-anchor="middle" x="70.25" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">LightningEffectParams</text>
 </a>
 </g>
 </g>

@@ -22,7 +22,6 @@ var interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationS
     [ "RingHoldCycles", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#abcb9ea3c54b56535d314135233cc2ade", null ],
     [ "RingMaxMembers", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a05c5196d0ecf3089baaca7de5bd38805", null ],
     [ "RingMinMembers", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a7b2f8fc29a9edf9838a854749229a91d", null ],
-    [ "RingReverseEveryCycles", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#ac9d98989b95b6fa361951dec49dedb6a", null ],
     [ "RingWeight", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a2d8d538c89666eb1d15d67a91b29344e", null ],
     [ "RingWeightAfterSnake", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a8be790f7a6e1acf2393750822135aedf", null ],
     [ "SnakeHoldCycles", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#ad99b4bba26df4f361816ee98cd86c561", null ],
@@ -30,8 +29,12 @@ var interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationS
     [ "SnakeStepsPerBeat", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a49e6a58cddddba66cf379f3644d90baa", null ],
     [ "SnakeWeight", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a7da097d9ad46cdaf9471eb941d324602", null ],
     [ "SnakeWeightPerExtraUnbreakable", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a4442040732bde015e6ee6375de802533", null ],
+    [ "SpinnerHoldCycles", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#aa5b3d2b6d0a6599cfb85deed9842a0fe", null ],
+    [ "SpinnerMaxMembers", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a8c409d0fc01642240baa79737a3ebdaa", null ],
+    [ "SpinnerWeight", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a1305ebbc18984ddacef8e8752f24ef2e", null ],
     [ "SpotChoices", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#ada71cd4f8cd3413be4ec54509e232556", null ],
     [ "ToughSnakeMinMembers", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#ae89296edae98f4bc666be6180cc6b997", null ],
     [ "ToughSnakes", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a11b522ef2c041a3e16995984ded83d73", null ],
-    [ "ToughSnakeStepSeconds", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a72a958f42f4d9e945064f71fa55525b9", null ]
+    [ "ToughSnakeStepSeconds", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a72a958f42f4d9e945064f71fa55525b9", null ],
+    [ "TurnReverseEveryCycles", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#adba5cd21cdb8aaffb3d8bbc10ca1dcde", null ]
 ];

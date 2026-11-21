@@ -89,6 +89,7 @@ var annotated_dup =
           [ "FormationPlanner", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner" ],
           [ "FormationRing", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationRing.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationRing" ],
           [ "FormationShapesExtensions", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationShapesExtensions.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationShapesExtensions" ],
+          [ "FormationSpinner", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationSpinner.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationSpinner" ],
           [ "ICoveredHosts", "interfaceBalloonParty_1_1Balloon_1_1Formation_1_1ICoveredHosts.html", "interfaceBalloonParty_1_1Balloon_1_1Formation_1_1ICoveredHosts" ],
           [ "IFormationReinforcements", "interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IFormationReinforcements.html", "interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IFormationReinforcements" ],
           [ "IToughSnakeBody", "interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IToughSnakeBody.html", "interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IToughSnakeBody" ],

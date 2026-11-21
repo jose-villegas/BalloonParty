@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Configuration_1_1ShapeInkSettings.html" target="_top" xlink:title="How a score shape&#39;s ink is drawn (ShapeInkView, on the shape&#39;s baked mesh): the material that gives t...">
+<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourEntry.html" target="_top" xlink:title="One row of the choreography table: the handler to use once a group clears MinPoints.">
 <polygon fill="white" stroke="#666666" points="147.25,-33.5 0,-33.5 0,0 147.25,0 147.25,-33.5"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
-<text xml:space="preserve" text-anchor="middle" x="73.62" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">ShapeInkSettings</text>
+<text xml:space="preserve" text-anchor="middle" x="73.62" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">ScoreTrailBehaviourEntry</text>
 </a>
 </g>
 </g>

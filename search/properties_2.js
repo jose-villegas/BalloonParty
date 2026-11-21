@@ -115,6 +115,5 @@ var searchData=
   ['cutlog_112',['CutLog',['../classBalloonParty_1_1Solver_1_1ShotBumperLayer.html#aa79f1bead83091ca8104b36fc3c88c87',1,'BalloonParty::Solver::ShotBumperLayer']]],
   ['cutscale_113',['CutScale',['../structBalloonParty_1_1Slots_1_1Actor_1_1MushroomSporeTuning.html#ac36b7a4e414815b0069a6c8bbdb6c39c',1,'BalloonParty::Slots::Actor::MushroomSporeTuning']]],
   ['cyclecomplete_114',['CycleComplete',['../classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewTicker.html#a98c5af7bfbcfaadb91a0e28f785c3d4e',1,'BalloonParty::Item::Preview::ItemPreviewTicker']]],
-  ['cyclesleft_115',['CyclesLeft',['../classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation.html#ad5718e2e7a3cfe4b0a4306ec8205e886',1,'BalloonParty::Balloon::Formation::StandingFormation']]],
-  ['cyclestoreverse_116',['CyclesToReverse',['../classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation.html#a7aa81327bec1a38d0ad9c7f734b4bed1',1,'BalloonParty::Balloon::Formation::StandingFormation']]]
+  ['cyclesleft_115',['CyclesLeft',['../classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation.html#ad5718e2e7a3cfe4b0a4306ec8205e886',1,'BalloonParty::Balloon::Formation::StandingFormation']]]
 ];

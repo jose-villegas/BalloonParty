@@ -110,12 +110,12 @@ $(function(){initNavTree('plan_meadow_mushrooms.html',''); initResizable(true); 
   <div class="headertitle"><div class="title">Meadow Mushrooms</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md803"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md804"></a>
 Meadow mushrooms: bumpers that earn a lance</h1>
 <blockquote class="doxtable">
 <p>On meadow levels the board grows <b>mushrooms</b>: permanent bumpers the ball bounces off, pinball style. A ball that hits three of them in one flight, without touching a wall in between, becomes the Snipe lance. To make room, the meadow loses its Tough and Tougher balloons, and its unbreakables form only the snake. Talked through with the owner on 2026-11-18 and banked; started on 2026-11-19, when he settled the open points below and decisions A to F. <b>Status: phase 1 (the pure rules) is built, with the kick amended to look one mushroom ahead (decision H, taken for the owner and waiting for him to confirm). Phase 2 (generation) is built: meadow levels have no toughs, allow only the snake and carry a mushroom count. Phase 3 (the live bounce) is built headless: the ball bounces off mushroom models, and the spawner knows how to place a chain. Phase 4 (the reward) is built: a chain pays the Snipe lance, with its sounds and its counters, and its review's fixes are in (one extra charge a flight, whatever walls it meets; the step ends at the bounce that pays). Phase 5 (the mirror and the aim line) is built: the shot solver and the aim line bounce off the mushrooms as the ball does, held by mirror tests. Phase 6 (the view and the art) is built: mushrooms now appear on meadow levels, drawn by a shader with no painted art, and the cap leans away from a hit and wobbles back. The owner rejected its first look, a toadstool seen from the side, and it was redrawn as the board is seen, from above: a cap over the circle the ball bounces off, its stem showing only when it is knocked (<em>Phase 6, the top view</em>). They have been seen in the Editor, in staged scenes and a filmed chain, and not yet played by a person or run on a device. One choice made in phase 3 is open for the owner: what a mushroom bounce does to a shot's run of wall bounces (below, after decision H). Two in phase 6 are his to look at: the cap's colour and the shadow (see <em>Phase 6 as built</em> and <em>Phase 6, the top view</em>). Since then the owner chose walls with a kick (decision I): 2 to 4 walls of caps a level, dealt from a baked catalogue, the kick bending only toward another wall and one hit counting per wall. It is built and replaces the planned chain; where the sections on phases 1 to 5 and on the spacing speak of the planner and its chain, they are the record of what was built then (<em>Walls with a kick as built</em>). Last, he asked that a lance cut the caps instead of bouncing off them, which replaces decisions A and B (decision J). Both halves are built: the rule (<em>The lance cuts caps: the rule as built</em>) and what a cut looks like (<em>The lance cuts caps: the view</em>).</b> </p>
 </blockquote>
-<h2><a class="anchor" id="autotoc_md804"></a>
+<h2><a class="anchor" id="autotoc_md805"></a>
 The owner's direction (verbatim)</h2>
 <p>2026-11-18, in conversation:</p>
 <ul>
@@ -172,7 +172,7 @@ The owner's direction (verbatim)</h2>
   charge for every cut mushroom", and "This means you could also snipe them for extra charges".</li>
 <li>Of a lance that keeps re-arming itself: "Might end up messy though clearing the board". And, asked whether to limit the charges one flight may bank: "Don't cap".</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md805"></a>
+<h2><a class="anchor" id="autotoc_md806"></a>
 The rules</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -218,7 +218,7 @@ The rules</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">A cap a lance cut   </td><td class="markdownTableBodyNone">Splits in two where the lance cut it; the pieces fall, fade and shrink away and the stem stays; the cap pops back in the same place, growing, after about 8 seconds: on the board's fifth beat after the cut. While it is cut nothing bounces off it, counts it or is kicked toward it   </td><td class="markdownTableBodyNone">Owner, 2026-11-19 (decision J; <em>The lance cuts caps: the rule as built</em> and <em>the view</em>)   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md806"></a>
+<h2><a class="anchor" id="autotoc_md807"></a>
 Decisions A to G</h2>
 <p>The owner chose each on 2026-11-19 from the options put to him; G is how the work is done, not a choice of his.</p>
 <table class="markdownTable">
@@ -240,7 +240,7 @@ Decisions A to G</h2>
 <td class="markdownTableBodyNone">G   </td><td class="markdownTableBodyNone">The prefab and settings asset   </td><td class="markdownTableBodyNone"><b>An editor menu builds them</b>, run once by the owner, who also assigns the settings asset on the game scope. Hand-written prefab YAML is too fragile. As it turned out he has nothing to run or assign: the settings ride on the Level Pacing asset (phase 2), and in phase 6 the menu was run in the second Editor and what it built was committed   </td></tr>
 </table>
 <p><b>A and B are replaced (the owner, 2026-11-19).</b> A lance no longer bounces off mushrooms: it flies straight through and cuts every cap in its path. A cut pays nothing, so the extra charge of B is dropped. The rows above are the record of what was chosen first. What replaced them is decision J, below.</p>
-<h3><a class="anchor" id="autotoc_md807"></a>
+<h3><a class="anchor" id="autotoc_md808"></a>
 Decision H, taken for the owner: the kick looks one mushroom ahead</h3>
 <p>Decided by Claude on 2026-11-19 on the owner's behalf while he was away. <b>He has not seen it; it is his to confirm or change.</b> Decision I keeps the lookahead and restates it for walls: the ball is landed for the nearest cap of another wall, where this decision landed it for the next mushroom of a planned chain.</p>
 <ul>
@@ -251,7 +251,7 @@ Decision H, taken for the owner: the kick looks one mushroom ahead</h3>
 <li><b>What was decided.</b> The kick looks one mushroom ahead. It lands the ball on the next mushroom at the point from which a true reflection sends it on toward the mushroom after that, so each bounce sets up the next. With three or more mushrooms the ball moves on; with two it comes back, which is how two mushrooms give three hits. Where it may land is kept between two offsets, never the centre and never a thin graze. The planner plans only the turns those two offsets can make, and accepts a layout only when the kick flies its chain.</li>
 <li><b>Why this and not a tuned fixed offset.</b> No one offset fits a board: the turn a chain needs differs at every mushroom. Looking ahead is the smallest change that makes the sentence he chose true.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md808"></a>
+<h3><a class="anchor" id="autotoc_md809"></a>
 Decision I, chosen by the owner: walls with a kick</h3>
 <p>Chosen on 2026-11-19, after the spacing, from options measured for him (<em>Walls with a kick as built</em> has the numbers). It replaces the single mushrooms spread over the board and the chain planned through them.</p>
 <ul>
@@ -262,7 +262,7 @@ Decision I, chosen by the owner: walls with a kick</h3>
   degrees. About 10 to 12% of aim angles arm, in windows about 3 degrees wide."</li>
 <li><b>How it is built.</b> A level's walls are dealt from a catalogue of layouts baked ahead of time, each kept because of what it measured when flown from every aim angle. Nothing is planned or flown when a level is dealt. Decision H's lookahead stands, restated for walls: the ball is landed on a cap for the nearest cap of another wall, which between two facing walls is the wall it came from.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md809"></a>
+<h3><a class="anchor" id="autotoc_md810"></a>
 Decision J, chosen by the owner: the lance cuts caps</h3>
 <p>Chosen on 2026-11-19, after he had played the walls. It replaces decision A (a lance bounces off mushrooms) and decision B (a fourth hit banks a charge).</p>
 <ul>
@@ -290,7 +290,7 @@ Decision J, chosen by the owner: the lance cuts caps</h3>
 <ul>
 <li><b>How it is built:</b> <em>The lance cuts caps: the rule as built</em> and <em>The lance cuts caps: the view</em>.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md810"></a>
+<h3><a class="anchor" id="autotoc_md811"></a>
 Decision K, chosen by the owner: every cap a lance cuts banks a charge</h3>
 <p>Chosen on 2026-11-19. It amends decision J, which had dropped the bank with the fourth hit that paid it.</p>
 <ul>
@@ -316,7 +316,7 @@ Decision K, chosen by the owner: every cap a lance cuts banks a charge</h3>
 <ul>
 <li><b>How it is built, and what it is worth:</b> <em>The bank, as built</em>.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md811"></a>
+<h3><a class="anchor" id="autotoc_md812"></a>
 Open for the owner: what was decided for him in the bank</h3>
 <p>Decided on 2026-11-19 while building decision K. <b>He has not seen these; each is his to keep or change.</b></p>
 <ul>
@@ -330,7 +330,7 @@ Open for the owner: what was decided for him in the bank</h3>
 <li><b><code>mushroom_charges_banked</code> runs level with <code>mushroom_caps_cut</code></b> in play, since every cut banks. It is kept apart for the day a limit is tried. Nothing counts the charges that are spent, which is the number that would say whether the bank matters in play.</li>
 <li><b>The solver banks and gives a charge no value.</b> For a Snipe's lance it never spends one either, since its lance is never spent (an approximation older than the mushrooms).</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md812"></a>
+<h3><a class="anchor" id="autotoc_md813"></a>
 Open for the owner: what was decided for him in the lance's cut</h3>
 <p>Decided on 2026-11-19 while building decision J, each the nearest thing to what he chose. <b>He has not seen these; each is his to keep or change.</b> The first four were decided by the coordinator, the rest while building.</p>
 <ul>
@@ -345,7 +345,7 @@ Open for the owner: what was decided for him in the lance's cut</h3>
 <li><b>No heads-up names a cut,</b> and none named the chain: there was no text to change.</li>
 <li><b>The solver does not model the regrow.</b> A flight is simulated on the board as it stands: a cap cut before the aim stays cut for the whole simulated flight, and one the simulated lance cuts stays cut to its end. A flight is seconds long and a regrow is 7 or 8 away, so the two seldom meet.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md813"></a>
+<h3><a class="anchor" id="autotoc_md814"></a>
 Open for the owner: what was decided for him in the blasts</h3>
 <p>Decided on 2026-11-19 while building <em>Blasts take caps off</em>. <b>He has not seen these; each is his to keep or change.</b></p>
 <ul>
@@ -361,7 +361,7 @@ Open for the owner: what was decided for him in the blasts</h3>
 <li><b>Blown caps have their own counter,</b> <code>mushroom_caps_blown</code>, so <code>mushroom_caps_cut</code> goes on telling how much the chain's reward is used.</li>
 <li><b>The solver takes a bomb's caps off and knows nothing of a nuke's or of the sway</b> (<em>Blasts take caps off: the rule as built</em>, the mirror).</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md814"></a>
+<h3><a class="anchor" id="autotoc_md815"></a>
 Open for the owner: what was chosen for him in walls with a kick</h3>
 <p>Decided by Claude on 2026-11-19 while building decision I. <b>He has not seen these; each is his to keep or change.</b></p>
 <ul>
@@ -376,7 +376,7 @@ Open for the owner: what was chosen for him in walls with a kick</h3>
 <li><b>When the rows the balloon spawner keeps leave no layout standing,</b> the level gets one wall fewer, down to two, then none with a warning. With the shipped two rows kept, or three, every layout fits; with four rows kept 6, 20 and 5 of the layouts of 2, 3 and 4 walls do, and with five one of two and one of three.</li>
 <li><b>The walls are placed first, and a cloud does not stand next to a cap.</b> The clouds and the bushes are placed with random numbers a retry does not replay, so the walls go before both: a retry stands them where they stood. What is placed after the walls keeps off the slots next to a cap, which used to hold for the bushes alone and now holds for the clouds too.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md815"></a>
+<h3><a class="anchor" id="autotoc_md816"></a>
 Open for the owner: the cannon's room</h3>
 <p>Built on 2026-11-19 from his words (<em>The owner's direction</em>); the numbers are ours. <b>He has not seen them; each is his to keep or change.</b></p>
 <ul>
@@ -386,7 +386,7 @@ Open for the owner: the cannon's room</h3>
 <li><b>The catalogue is thinner for it: 18 layouts of two walls, 64 of three, 45 of four,</b> where there were 64 of each. The 18 and the 45 are every board of those counts that keeps the rule and is inside the band with the bake's room; nothing was left out by choice. Two walls are a meadow stretch's first level, so a run sees one of 18 boards there. A ceiling of a quarter of the angles would give 22 and 58; no clearance at all gives 61 of two walls, never 64.</li>
 <li><b>Arming is where it was:</b> 9.7, 11.6 and 13.2 in 100 angles on average (it was 9.9, 11.8 and 13.9), in windows of 3.0, 3.3 and 3.1 degrees, and no layout under 8.6 in 100. Walls higher up the board do not arm less often. The band's floor of 7 in 100 turns nothing away; what limits two walls is the window of 2 degrees, and what limits four is the band's top.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md816"></a>
+<h3><a class="anchor" id="autotoc_md817"></a>
 Open for the owner: a mushroom bounce and the cruise pierce</h3>
 <p>Built one way in phase 3, where the plan was silent. <b>He has not seen it; it is his to keep or change.</b></p>
 <ul>
@@ -395,18 +395,18 @@ Open for the owner: a mushroom bounce and the cruise pierce</h3>
 <li><b>What does not depend on it.</b> The chain itself (a wall clears it either way), an armed shot's run, and the taps a shot has earned.</li>
 <li><b>Since decision J</b> a shot that does earn the cruise pierce is a piercing ball like any lance, so it cuts the caps in its way (<em>Open for the owner: what was decided for him in the lance's cut</em>).</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md817"></a>
+<h3><a class="anchor" id="autotoc_md818"></a>
 Open for the owner: a lance spent at a wall can be armed again</h3>
 <p>Found by the review of phase 5. <b>He has not seen it; it is his to keep or change.</b></p>
 <ul>
 <li><b>As built.</b> The chain rule does not cap how often a flight is armed. A lance bounces off no mushroom (decision J), so its chain never completes, but a lance spent at a wall is an ordinary ball again, the wall has cleared its chain, and a new chain arms it again (at most 2 armings with the single starting shield; unreachable on the meadow today because a lance only discharges at a wall after piercing a tough).</li>
 <li><b>The alternative.</b> One arming a flight: the rule would remember that it armed the ball, and a later chain flown by a ball that is no longer a lance would pay nothing.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md818"></a>
+<h3><a class="anchor" id="autotoc_md819"></a>
 Closed by decision J: the Snipe corridor counted its chain from the host</h3>
 <p>The corridor is a lance's run, and a lance no longer bounces off mushrooms: it is the straight segment to the wall again, with no chain to count. What follows is the record of the point as it stood.</p>
 <p>Found by the review of phase 5 and not fixed. The Snipe's pierce corridor (<code>SnipeRangePreview</code>) starts its chain at none where the aim line meets the Snipe's host. The ball's own count there is whatever its flight has: one for each mushroom it bounced off since its last wall, so the corridor is a count behind by one for each of those. The kick depends on the count (the bounce that reaches the chain target is aimed differently, and the ones past it are plain reflections), so on a shot that reaches the host off a mushroom the corridor's later turns can differ from the lance's. The fix is to hand the corridor the chain the aim line has at that point, which the line does not publish yet.</p>
-<h3><a class="anchor" id="autotoc_md819"></a>
+<h3><a class="anchor" id="autotoc_md820"></a>
 Open for the owner: how far apart the walls stand</h3>
 <p>Built on 2026-11-19 from his words; the distance is ours. <b>He has not seen it; it is his to keep or change.</b></p>
 <ul>
@@ -414,9 +414,9 @@ Open for the owner: how far apart the walls stand</h3>
 <li><b>Wider or nearer</b> needs the catalogue baked again, and changes which boards are inside the band: facing walls measured best at the nearest gap the ball can enter.</li>
 <li><b>Not ruled on.</b> How far caps stand from the board's walls: the kept-clear columns and rows decide it. How far they stand from the cannon he ruled on afterwards (<em>Open for the owner: the cannon's room</em>).</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md820"></a>
+<h2><a class="anchor" id="autotoc_md821"></a>
 Design</h2>
-<h3><a class="anchor" id="autotoc_md821"></a>
+<h3><a class="anchor" id="autotoc_md822"></a>
 Contact is worked out, not left to physics</h3>
 <p>The live ball only collides with balloons: <code>ProjectileView.OnTriggerEnter2D</code> looks for a <code>BalloonView</code> and calls <code>ProjectileHitResolver</code>. Bushes have no collider, and the Deflector, Absorber and Gatekeeper actors are not reachable in play. So a mushroom is not a new collider. There are at most 7 permanent circles, and <code>ProjectileMotionResolver.Step</code> tests the step's segment against them before the walls, then carries the rest of the step along the new direction, as <code>Deflect</code> does for a deflecting balloon.</p>
 <ul>
@@ -424,7 +424,7 @@ Contact is worked out, not left to physics</h3>
 <li>The shot solver works event to event, so it mirrors the bounce exactly.</li>
 <li>At most 7 circle tests a fixed step, nothing allocated.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md822"></a>
+<h3><a class="anchor" id="autotoc_md823"></a>
 Types</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -496,7 +496,7 @@ Types</h3>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>LevelGenerator</code>   </td><td class="markdownTableBodyNone">changed   </td><td class="markdownTableBodyNone">The count of walls from the stretch; mushrooms forced in like bushes, outside the threat budget; the bush limit capped at the shared limit less the most caps the level's walls may hold   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md823"></a>
+<h3><a class="anchor" id="autotoc_md824"></a>
 The forgiving kick</h3>
 <p>As built in phase 1, after decision H, and restated for walls in decision I. <code>c</code> is the contact point and <code>r</code> the true reflection. An <b>offset</b> is where a ball lands on a cap: its impact parameter as a share of the radius it bounces at, 0 dead centre and 1 a graze. A ball landing at an offset turns by 180 degrees less twice the arcsine of the offset.</p>
 <ul>
@@ -510,7 +510,7 @@ The forgiving kick</h3>
 <li><b>And the flight is bounded whatever happens.</b> The chain rule counts every bounce off a mushroom since the last wall, the ones that did not count included, and past <code>MaxBouncesPerStretch</code> (12) the mushrooms let the ball through until it meets a wall, which spends a shield. The kick cannot hold that by itself: a ricochet off an unbreakable can send the ball back to the mushroom it just left, a hit that does not count and is kicked again, and true reflections between mushrooms standing too close can trap a ball. A chain is paid in full by its fourth bounce, so the cap costs no reward.</li>
 <li><b>The cone the composition needs.</b> Where the follower fits, the reflection points at its centre, so the next kick takes hold inside any cone. Coming straight back, the offset is clamped at the smallest, which leaves the reflection up to twice its arcsine off the way back: 17 degrees at 0.15. Two walls therefore want the cone wider than that, and 20 leaves 3 degrees to spare (<code>MushroomSettings.Validate</code> says so when it is not). The cone is otherwise the dial for how much skill a rally asks: the owner narrowed it from 30 to 20 in decision I.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md824"></a>
+<h3><a class="anchor" id="autotoc_md825"></a>
 Placement</h3>
 <p>As built for decision I (<em>Walls with a kick as built</em>). Phase 1 planned a chain through single mushrooms with a seeded search (<em>Phase 1 as built</em> is the record of it); that planner is gone.</p>
 <ul>
@@ -523,10 +523,10 @@ Placement</h3>
 <li>Caps are placed before the clouds and the bushes, which keep off the slots next to a cap.</li>
 <li>A cap's place in its layout is the id its bumper carries, and its wall rides with it.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md825"></a>
+<h3><a class="anchor" id="autotoc_md826"></a>
 The mirror and the aim line</h3>
 <p>Every rule a shot meets is mirrored in <code>Solver/</code> and held by mirror tests. A mushroom is a new contact kind there, and the chain state rides in the solver's flight state. <code>PredictionTraceCalculator</code> already reflects off deflector circles and ignores them while piercing; it takes the same bounce rule (decisions A and C). Built in phase 5: see <em>Phase 5 as built</em>.</p>
-<h3><a class="anchor" id="autotoc_md826"></a>
+<h3><a class="anchor" id="autotoc_md827"></a>
 Art and the cap's reaction</h3>
 <ul>
 <li><b>The body is drawn in a shader</b> from the quad's own position, as the nuke, the disco ball and the golden balloon are: the cap and the stem as distance fields, lit through <code>Include/SceneLight.cginc</code>. No painted sprite, one renderer. <code>dotnet build</code> does not compile shaders, so each change needs a look in the Editor.</li>
@@ -536,7 +536,7 @@ Art and the cap's reaction</h3>
 <li><b>Nothing ticks at rest:</b> the view switches itself off once the spring is still and on again at an impulse. No tweens, and the spring is reset when the view goes back to the pool.</li>
 <li><b>A lance cuts the cap</b> (the owner, 2026-11-19): the same shader on the same quad draws the cap in two pieces that part along the lance's line, fall and fade, then the bare stem, then the cap popping back. See <em>The lance cuts caps: the view</em>.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md827"></a>
+<h2><a class="anchor" id="autotoc_md828"></a>
 Diagrams</h2>
 <div class="fragment"><div class="line">classDiagram</div>
 <div class="line">    class IMushroomSettings {</div>
@@ -728,7 +728,7 @@ Diagrams</h2>
 <div class="line">    View-&gt;&gt;Mot: Step reaches a wall</div>
 <div class="line">    Mot-&gt;&gt;Flight: OnWall, count 0, no last wall</div>
 <div class="line">    Mot--&gt;&gt;View: Bounced, shield spent</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md828"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md829"></a>
 Risks</h2>
 <ul>
 <li><b>Piercing means "unbent" in three places</b> (the game, the solver, the aim line). Bending a lance off mushrooms (decision A, taken) is the largest change to the mirror.</li>
@@ -738,7 +738,7 @@ Risks</h2>
 <li><b>Needs the Editor:</b> the prefab, the material, the config entries, the settings asset on the game scope (decision G), and every look at the shader. Done in phase 6, in the second Editor.</li>
 <li><b>Assumed, not verified:</b> that no shot is in flight while the board ascends between levels (a mushroom's circle stands at its slot's resting position). Settled in phase 6: the layer the mushroom draws on (<code>Grid</code>, with the bushes, which the GI's scene capture reads) and the spring's first constants. Settled in phase 3: which rows the spawner reserves, that the balancer leaves a mushroom alone, and where the cannon is when a chain is planned (the point it rests at, whatever it is doing; see <em>Phase 3 as built</em>).</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md829"></a>
+<h2><a class="anchor" id="autotoc_md830"></a>
 Phases</h2>
 <p>Each is testable by itself and built in this order. Per phase: build, then review, then the owner signs off.</p>
 <table class="markdownTable">
@@ -765,7 +765,7 @@ Phases</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">7   </td><td class="markdownTableBodyNone">Tuning with the playtest bot   </td><td class="markdownTableBodyNone">Where each bot skill first loses on the meadow, against the level-10 target   </td><td class="markdownTableBodyNone">Open   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md830"></a>
+<h3><a class="anchor" id="autotoc_md831"></a>
 Phase 1 as built</h3>
 <p>What the code settled where the design left room. The READMEs of <code>Shared/</code>, <code>Slots/</code> and <code>Configuration/</code> describe the types.</p>
 <p><b>Since replaced in part.</b> The layout planner, its planned chain, the order by ids and the figures measured on planned layouts below are the record of phase 1. Decision I replaced them with walls dealt from a catalogue (<em>Walls with a kick as built</em>); the chain rule, the reflection, the kick's geometry and the cap on bounces stand, the count and the kick's follower restated for walls. One thing said here was wrong: that a chain was flown in the planned order. The kick bent toward whichever mushroom lay nearest the reflection, and most arming flights took the mushrooms in another order.</p>
@@ -806,7 +806,7 @@ Phase 1 as built</h3>
 </table>
 <p>The averages are reported, not held. What the test holds is the least forgiving layout: measured at 8.2% of first hits (5 of the 61 shots), held to 3 of 61. An estimate of 11%, the share of a mushroom's face whose reflection falls inside the cone at the gentlest turn the planner allows, is logged beside it for comparison; it is not a floor, and the least forgiving layouts fall under it. The rows other than the shipped one were measured once, by hand, and are not held by a test. None of it has been flown in the game: the numbers say how wide the window is on a board with nothing else on it, not how it feels. These are the figures of phase 1; the spacing moved the shipped row and the least forgiving layout (<em>Spacing as built</em>).</p>
 <p><b>Whether the bank flies.</b> The planner's fly-check holds the arm for every layout: the ideal shot reaches the chain target on all of them. The hit after it, which banks, is held only where it is part of the chain, on four mushrooms. Measured from the ideal shot over the 500 seeds: the bank flies on 100% of layouts of two mushrooms, 99.2% of three and 100% of four.</p>
-<h3><a class="anchor" id="autotoc_md831"></a>
+<h3><a class="anchor" id="autotoc_md832"></a>
 Notes for the later phases</h3>
 <p>What phase 1's rules ask of the code that will call them.</p>
 <ul>
@@ -816,7 +816,7 @@ Notes for the later phases</h3>
 <li><b>Phase 5, the solver and the aim line.</b> Call <code>OnBounce</code> before <code>Resolve</code>, as the game does, and skip <code>Resolve</code> on <code>PassThrough</code>. Seed the aim line's chain state from the live flight, not from an empty one: the kick depends on the count, and the cap on the bounces already made. Pass the exact point where the ball's centre enters the circle as the contact, not the end of a step. Keep the kick blind to balloons: it tests its corridors against mushrooms only, in the game and in the mirror alike. What the game does at a bounce besides turning, for the mirror to match: no shield and no wall hit; an unarmed shot's cruise ends and its empty wall bounces start again at 0, taps kept; the Sweep segment starts again at the bounce (pops to 0, valid, the back-trace's origin moved there); a lance's tunnelling sweep runs leg by leg. The game tests the point the walls test, and uses <code>BumperSweep</code> for it, which the mirror can call as it is. The flight's chain state lives on <code>ProjectileFlightState.MushroomChain</code>, an internal field the read-only flight interface does not show. <code>SnipeRangePreview</code> draws the lance's corridor straight to the wall and wants the same bend as the aim line.</li>
 <li><b>Phase 6, the view.</b> Add the Mushroom entry to the <code>GridActorConfiguration</code> asset (see <em>Phase 3 as built</em>); the prefab needs no collider. The cap leans on <code>MushroomBouncedMessage</code>: <code>Slot</code> says which mushroom, <code>Incoming</code> and <code>Speed</code> are the ball's as it arrived. A bounce plays the ball's shield squash and nothing of the wall's: no bounce VFX, no shield loss, no stamp. Whatever the mushroom should add is the view's to play.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md832"></a>
+<h3><a class="anchor" id="autotoc_md833"></a>
 Phase 2 as built</h3>
 <p>What the code settled where the design left room. The READMEs of <code>Configuration/</code>, <code>Balloon/Formation/</code> and <code>Scenario/</code> describe the types.</p>
 <ul>
@@ -830,7 +830,7 @@ Phase 2 as built</h3>
 <li><b>What that does to a snake.</b> With no other shape to change to, a snake done holding is planned again as a snake (the service's last resort): every <code>SnakeHoldCycles</code> it lines up as a row once more and takes in loose unbreakables up to <code>SnakeMaxMembers</code>. A line left from the sky holds its cycles out, then turns into a snake or, at the snake cap, breaks up. None of it has been seen in play.</li>
 <li><b>The shipped Tougher loses its introduction.</b> It unlocks on level 6, which is always the first meadow level, and its two featured levels fall inside that meadow. The water that follows keeps it off too, so the player first meets it as an ordinary budget pick on the first sky after the water. Not tuned here: it belongs to phase 7.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md833"></a>
+<h3><a class="anchor" id="autotoc_md834"></a>
 Phase 3 as built</h3>
 <p>What the code settled where the design left room. The READMEs of <code>Projectile/</code>, <code>Slots/</code> and <code>Shared/</code> describe the types.</p>
 <p><b>Since replaced in part.</b> <code>ChainSlotSelectionStrategy</code>, the planned flight it traced and the corridors the bushes kept out of are the record of phase 3; <code>WallSlotSelectionStrategy</code> picks a layout of walls from the catalogue and the bushes keep off the slots next to a cap (<em>Walls with a kick as built</em>). The model, the board, the spawner's three stages and the resolver's bumper step stand, a cap now carrying its wall.</p>
@@ -858,7 +858,7 @@ Phase 3 as built</h3>
 <p><b>How it was checked.</b> The three projects build and the style audit is clean. The phase's 100 test cases passed in the Editor with the rest of the EditMode suite (4449 of 4449). <code>ProjectileView</code> has no test: the message and the lance's bookkeeping are untested code.</p>
 <p><b>That the flight of every other level is unchanged</b> is held by numbers from the code before the mushrooms (<code>ProjectileMotionResolverGoldenTests</code>). Five scripted flights (walls alone, a corner, a doomed last-shield glide, a cruise entry and a pierce discharge at a wall) were flown through the resolver as it stood in the commit before phase 3, compiled beside today's, and every step's position, direction, counters and outcome written down: 345 rows. Today's resolver, with no bumper field and wired to an empty board, agreed with it to the bit when they were captured. The capture ran outside the Editor, on .NET and with the speed curves stubbed to the identity, so the test holds the numbers to 2e-5 and the counters and outcomes exactly.</p>
 <p><b>The review's fixes</b> (the resting pivot, the rebuilt stretch, <code>WallDirection</code>, the lookahead's legs, the seed's level, the copy, the golden numbers) carry 32 more cases, run outside the Editor except the three that need a <code>GameObject</code> (<code>ThrowerOriginProviderTests</code>). Not run in the Editor, and nothing was played.</p>
-<h3><a class="anchor" id="autotoc_md834"></a>
+<h3><a class="anchor" id="autotoc_md835"></a>
 Phase 4 as built</h3>
 <p>What the code settled where the design left room. The READMEs of <code>Item/</code>, <code>Audio/</code>, <code>Shared/</code> and <code>Game/Telemetry/</code> describe the types.</p>
 <ul>
@@ -875,7 +875,7 @@ Phase 4 as built</h3>
 <li><b>Telemetry counts chains, in five level counters</b> (ids 37 to 41): <code>mushroom_bounces</code>, <code>mushroom_chains_completed</code>, <code>mushroom_charges_banked</code>, <code>mushroom_chains_broken</code> (a chain ended at 1 or 2) and <code>mushroom_chains_one_short</code> (ended at 2: the near miss the cone is tuned against). The plan asked for one near-miss counter; the second splits off the ones that say something about the cone from a ball that touched one mushroom on its way to a wall. A chain ends at a wall the ball survives or with the ball. Since the review: a chain is counted completed from the bounce that brought its count to the target, whatever it paid, and a ball the game took off the board (the level-up cap, an emptied board) breaks no chain.</li>
 </ul>
 <p><b>How it was checked.</b> The three projects build and the style audit is clean. The phase's 32 test cases were run outside the Editor against the stubbed copy of the engine assembly, with the Snipe's and the Sharpshooter's existing tests, unchanged, beside them. Not run in the Editor, nothing was played or heard, and the VContainer registrations have not been resolved by a running game.</p>
-<h3><a class="anchor" id="autotoc_md835"></a>
+<h3><a class="anchor" id="autotoc_md836"></a>
 Phase 4, after its review</h3>
 <p>Five findings of the review of phase 4, fixed with phase 5 because the first two change the rules the mirror has to match.</p>
 <ul>
@@ -903,7 +903,7 @@ Phase 4, after its review</h3>
 <li><b>The knocks give way to the deflects they borrow their sound from.</b> The shipped <code>BalloonDeflect</code> entry has no cooldown, four voices (the fifth steals the oldest of the same sound) and shares the burst gate of four plays in 60 ms. A ball can knock every 80 ms or so, so a run of knocks could hold all four voices and cut a real deflect's tail with each new one. <code>MushroomSoundRouter</code> now keeps at most two knocks sounding and ends its own oldest first. The burst gate is left shared: it takes four knocks inside 60 ms to cost a deflect its play. On the meadow the generic deflect is rare anyway: no toughs, and the unbreakable has its own sound.</li>
 <li><b>The tests the review missed</b> are there: a step that arms with a wall just beyond it, with a shield and with none, in the resolver's tests and through the controller with the real Snipe handler.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md836"></a>
+<h3><a class="anchor" id="autotoc_md837"></a>
 Phase 5 as built</h3>
 <p>What the code settled where the design left room. The READMEs of <code>Solver/</code>, <code>Editor/ShotSolver/</code> and <code>Prediction/</code> describe the types.</p>
 <p><b>Since re-measured.</b> The figures below were measured on planned layouts of single mushrooms. The mirror and the aim line stand as built and now fly layouts of walls; their figures as they are now are in <em>Walls with a kick as built</em>.</p>
@@ -932,7 +932,7 @@ Phase 5 as built</h3>
 <p>Of the angles that complete a chain nearly all go on to bank the charge (means 10.3, 20.9 and 33.0; the least any layout has is 4, 2 and 6). An angle is a third of a degree, so the least forgiving layout of two is a window of about 1.3 degrees in all. The playtest bot's average skill aims with an error of 4 degrees standard deviation and its high skill 1.5: the chain is a shot to mean, which is phase 7's to tune against the cone.</p>
 <p><b>That a board without mushrooms is untouched.</b> Eight seeded boards of the shipped grid (colours, toughs, unbreakables, rainbows; cruise, the sweep and the earned pierce switched on) were flown from all 511 angles and every flight's result, path and timeline folded into one number: <code>40BD7F3BA0F6AE8C</code> over the 4088 flights before the simulator knew the mushrooms, and the same after, on one runtime (<code>ShotMushroomFreeBoardTests</code> holds it since the review: <em>Phase 5, after its review</em>). The solver's and the aim line's existing fixtures, untouched, pass as before (344 cases, with the same 31 that need the engine). Held by tests: four mushrooms outside the walls change no flight to the bit; a sweep over a planned chain allocates nothing; with no mushrooms the aim line draws the points it drew, to the bit.</p>
 <p><b>How it was checked.</b> The three projects build and the style audit has no error. The phase's 44 test cases and the review fixes' 19 were run outside the Editor against the stubbed copy of the engine assembly, with the fixtures they touch. The mirror's game side is the real resolver, chain controller, Snipe handler and buff service; the view's physics trigger is stood in for by the test harness, which leaves out flights where one fixed step enters a balloon and then turns, crosses two walls, or deflects into a wall (4.7% and 7.9% of the ordinary and the lance flights): three places the game and the simulator differed before the mushrooms. Not run in the Editor, nothing was played, and the aim line has not been seen on a board.</p>
-<h3><a class="anchor" id="autotoc_md837"></a>
+<h3><a class="anchor" id="autotoc_md838"></a>
 Phase 5, after its review</h3>
 <p>What the independent review of phase 5 asked for. It found no change of behaviour on boards without mushrooms.</p>
 <ul>
@@ -961,7 +961,7 @@ Phase 5, after its review</h3>
 <li><b>The aim grid test's numbers are checked against what ships</b> (<code>TheNumbersFlownWith_AreTheShippedOnes</code>): the thrower's place in the Game scene and its prefab's entrance and muzzle, the ball's collider, the flight config's walls and aim grid, the grid's slots and the mushrooms' radius. The sweep itself still runs on the numbers written in the test, so it runs outside the Editor too.</li>
 <li><b>The seeded mirror cannot pass empty-handed:</b> it now needs over 100 flights armed by their chain, over 100 of them held past the arming bounce and over 300 turns held as the lance the chain made (276, 267 and 922 as measured), and 85% of all flights placed (95% and 92%).</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md838"></a>
+<h3><a class="anchor" id="autotoc_md839"></a>
 Phase 6 as built</h3>
 <p><b>The look this section describes, a toadstool seen from the side, was rejected by the owner and redrawn:</b> see <em>Phase 6, the top view</em> for what a mushroom looks like now, how its cap reacts and where it sorts. What is said here of the spring, the view, the builder, the shadow being the shader's and the stage still stands.</p>
 <p>What the code settled where the design left room. The READMEs of <code>Slots/</code>, <code>Shaders/BalloonParty/</code>, <code>Configuration/</code>, <code>Editor/</code> and <code>Tools/stage/</code> describe the parts.</p>
@@ -1009,7 +1009,7 @@ Phase 6 as built</h3>
 </ul>
 <p><b>How it was checked.</b> The three projects build and the style audit is clean. The whole EditMode suite ran in the second Editor, straight after a staged scene: 4604 of 4604, the phase's 28 new cases among them (the spring settles and says so, leans the way the ball was going, holds its reach at any frame rate and through a hitch; the view wakes on its own slot's bounce, sleeps when still, and leaves nothing running in the pool). The shader compiles for GLES 3, Vulkan and Direct3D 11 with no error; its GLES source takes its only derivative before any branch. Captures of staged scenes are in the phase's hand-over: a meadow board at day, dusk and night; the cap's reaction frame by frame for a hit from the left and one from below; a chain flown for real from the cannon to the lance; and the render maps behind one frame.</p>
 <p><b>Not checked.</b> Nothing was played by a person and nothing ran on a device: the shader was compiled for the device's targets, not drawn by them. The fade through a mist reveal was seen only with the reveal's hole forced open by hand in a staged scene (the bushes outside it gone, a mushroom on its edge half faded), not through a real change of level. The mushroom's knock is still the stand-in sound of phase 4.</p>
-<h3><a class="anchor" id="autotoc_md839"></a>
+<h3><a class="anchor" id="autotoc_md840"></a>
 Phase 6, after its review</h3>
 <p>Two independent reads of the phase (one for correctness and the project's rules, one for cost) found no defect that blocks it. What they asked for and what was done:</p>
 <ul>
@@ -1025,7 +1025,7 @@ Phase 6, after its review</h3>
 <li><b>Left as they are.</b> The spot sizes are still worked out per pixel from <code>_SpotSize</code> (now on the dome's pixels only); the colour terms keep <code>float</code> (no measured need, and a risk of banding on the cap's gradient); the view still writes the radius and the seed with every wobble frame (four floats, only while a cap moves).</li>
 <li><b>For a look in the Editor or on the device, not settled by reading:</b> the mushroom's prefab drew on the <code>GridActors</code> sorting layer, over the balloons' as the clouds are, and nobody had checked a lance's trail, a pop's burst or a balloon overlapping a cap by eye. That has since been looked at and changed (<em>Phase 6, the top view</em>). The side view's cast shadow showed a thin dark whisker beside the rim where the dome's and the gills' outlines met; the top view has no gills and no such seam.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md840"></a>
+<h3><a class="anchor" id="autotoc_md841"></a>
 Phase 6, the top view</h3>
 <p>The owner, on the first look (2026-11-19): "The art is wrong because the game is seen from the top view. So what
 we could be looking is at the mushroom cap, and the stem would probably only reveal during bounces". The toadstool seen from the side was dropped and the shader redrawn; the spring, the view, the builder and the tests' subjects are the ones of <em>Phase 6 as built</em>.</p>
@@ -1070,7 +1070,7 @@ we could be looking is at the mushroom cap, and the stem would probably only rev
 <p><b>How it was checked.</b> The shader compiles for GLES 3, Vulkan and Direct3D 11 with no error, and its GLES source takes its only derivative before any branch. Films of staged scenes in the second Editor: a meadow board beside red, green and blue balloons, a golden one, an unbreakable and bushes at day, dusk and night; the cap's reaction frame by frame from the left, from below and for a hit that pays; a chain flown for real from the cannon to the lance with its aim line; the bumper's circle drawn over a cap with a ball at the touch; and a knocked cap with a ball and a pop's burst over it. The whole EditMode suite: 4619 of 4619.</p>
 <p><b>Not checked.</b> Nothing was played by a person and nothing ran on a device. A real balloon overlapping a knocked cap was not caught on film (the frame staged for it shows the ball and the burst over the cap, and the balloon just clear of it). <b>Seen on the way, and left:</b> after the stage's <code>ball</code> command, <code>fire</code> answers "no
 ball loaded" until a board is dealt again, because the staged ball is loaded over the thrower's own in the registry.</p>
-<h3><a class="anchor" id="autotoc_md841"></a>
+<h3><a class="anchor" id="autotoc_md842"></a>
 Spacing as built</h3>
 <p>Asked for by the owner on 2026-11-19, after the phases above: the mushrooms of a level stand apart, like the bumpers of a pinball table, so that a shot at one is not crowded by the others.</p>
 <p><b>Since carried over to the walls.</b> The spacing of 1.9 measured here for single mushrooms is kept as the least distance between two walls, nearest cap to nearest cap (<em>Walls with a kick as built</em>). The planner, the legs and the figures on planned layouts below are the record of the spacing as it was built.</p>
@@ -1139,7 +1139,7 @@ Spacing as built</h3>
 </table>
 <p>The least forgiving layout of two is now a window of five angles, about 1.7 degrees. The mirror's floors (over 100 flights armed, over 100 held past the arming, over 300 turns as the lance, 85% of flights placed) hold as they were set, with room.</p>
 <p><b>How it was checked.</b> The three projects build and the style audit has no error. The planner's, the settings', the mirror's, the aim grid's and the aim line's fixtures, with the generator's and the live bounce's, were run outside the Editor and pass. Seven planner cases expect a logged warning, which only the Editor's test runner can hold: outside it they were run once with that expectation taken out, and passed. Not run in the Editor, and nothing was played: whether mushrooms 1.98 apart feel like a pinball table is the owner's to say.</p>
-<h3><a class="anchor" id="autotoc_md842"></a>
+<h3><a class="anchor" id="autotoc_md843"></a>
 Walls with a kick as built</h3>
 <p>Decision I, built on 2026-11-19. The single mushrooms spread 1.9 apart and the chain planned through them are gone; the art, the cap's spring, the reward, the telemetry and the sounds are as they were.</p>
 <p>This section is the record of the first build. Its review changed three things written here (<em>Walls with a kick, after its review</em>): the walls are placed before the clouds, a layout must leave the cannon its room, and the catalogue was baked again with more room inside the band, to 18, 64 and 45 layouts. The tables below are the first bake's.</p>
@@ -1184,7 +1184,7 @@ Walls with a kick as built</h3>
 <li>A rally is many bounces off round caps, and each multiplies the rounding the game and the simulator start apart by. The mirror therefore holds a flight up to a real graze and no further: a ball that passes a cap's edge, or sits in the notch between two caps of a wall, by less than fifty times how far apart the two sides already are.</li>
 </ul>
 <p><b>How it was checked.</b> The three projects build and the style audit has no error. The mushroom fixtures were run outside the Editor as the earlier phases were, then the whole EditMode suite in the second Editor (4629 of 4629 pass, among them the ones that only run there: the catalogue's numbers held against the shipped assets, and the warnings and asserts the Editor's log holds). The Editor's runtime rounds a flight differently from the one the catalogue was baked on: 5 of the 192 layouts arm on other angles there, by 3 angles at the most, where the test allows 4. Nothing was played: whether walls with a kick feel like a bouncing area that asks skill is the owner's to say, and phase 7's bot has not been run on them.</p>
-<h3><a class="anchor" id="autotoc_md843"></a>
+<h3><a class="anchor" id="autotoc_md844"></a>
 Walls with a kick, after its review</h3>
 <p>2026-11-19. The independent review found no blocker in the count rule, the kick or the mirror, and asked for seven things. While they were being made the owner played the build and added a rule (<em>The cannon's room</em>, below), which went into the same bake.</p>
 <ul>
@@ -1257,7 +1257,7 @@ wall is too close to the cannon and directly facing it". <code>MushroomCannonCle
 <p>No flight was trapped. Of the flights that crossed from one wall to a second, 100, 97 and 95 in 100 made the third hit. The nearest cap of any layout is 3.31 from the cannon's pivot, and the broadest layout takes 19.4, 19.8 and 19.8 in 100 of the aim angles within the near range. Of the first catalogue's 192 layouts 143 fail the rule (43, 43 and 57), all five with a wall of three caps along the lowest row among them. Flown again on the Editor's runtime (Unity's Mono, run outside the Editor), 6 of the 127 layouts arm on one angle more or fewer than baked and none of their windows moves.</p>
 <p><b>What moved with it.</b> The mirror's seeded test: of 2044 ordinary flights 1944 mirror turn for turn (100 the harness cannot place), 295 are armed by their walls and 291 are held past the bounce that arms, over 1036 turns; of 2044 lance flights 1894 mirror. The aim line holds 10,357 and 10,777 corners on 1619 lines each way, 568 of them armed on the way. On one of those lines the flight met a cap at its very edge after seven turns (0.4251 from a centre whose contact radius is 0.425) and the line passed it by: the aim line's test now holds a line up to such a graze, by the mirror's own bound. The test that a flight which arms nearly always banks asked for over 1000 arming flights a count of walls, which 18 layouts do not give; it asks for the band's 20 a layout. The no-mushroom digest is as pinned.</p>
 <p><b>How it was checked.</b> The three projects build and the style audit has no error. Both Editors were busy, so nothing was run in one. The mushroom fixtures were run outside the Editor: 541 pass, 2 need the Editor's log (a warning and an assert they expect), and 8 need the engine (the catalogue's numbers and the cannon's room held against the shipped assets, the three retry cases, which seed the engine's generator, and <code>ThrowerOriginProviderTests</code>). The whole EditMode suite was run in the second Editor afterwards, at <code>df3641f88</code>, with the rule of the lance's cut on top of these fixes: 4730 of 4730, the tests that only run there among them. Nothing was played.</p>
-<h3><a class="anchor" id="autotoc_md844"></a>
+<h3><a class="anchor" id="autotoc_md845"></a>
 The lance cuts caps: the rule as built</h3>
 <p>Decision J, built on 2026-11-19. The view's half is the next section.</p>
 <p><b>The truth table.</b></p>
@@ -1331,7 +1331,7 @@ The lance cuts caps: the rule as built</h3>
 <li><b>The stage's <code>cut</code> and <code>regrow</code> drove the view alone,</b> so a cap the stage cut still bounced a ball. They go through the board now, and a staged cut is a real one, regrow included (the same section).</li>
 </ul>
 <p><b>How it was checked.</b> The three projects build and the style audit has no error. The mushroom, Snipe, wake, aim line, solver and telemetry fixtures were run outside the Editor: 791 pass, 2 need the Editor's log and 8 the engine. Then the whole EditMode suite in the second Editor, on <code>df3641f88</code>: 4730 of 4730, among them the tests of the walls' review that only run there (the retry that stands the same walls, the catalogue's numbers and the cannon's room held against the shipped assets), which had not been run in an Editor until now. Nothing was played, on the Editor or a device: that a cut reads well in a real flight, that caps popping back on the beat feels right, and what losing a cap or two to every lance does to a level's difficulty are the owner's to see, and phase 7's bot has not been run on it.</p>
-<h3><a class="anchor" id="autotoc_md845"></a>
+<h3><a class="anchor" id="autotoc_md846"></a>
 The lance cuts caps: the rule, after its review</h3>
 <p>2026-11-19. The independent review found no fault in the resolver's cut, the field or the mirror, and asked for these.</p>
 <ul>
@@ -1343,7 +1343,7 @@ The lance cuts caps: the rule, after its review</h3>
 <li><b>Said in the solver's guides:</b> the solver sees neither a regrow nor a cap another ball cuts after the board was gathered. Accepted: a flight is seconds long and the next solve gathers the board as it stands.</li>
 </ul>
 <p>Run outside the Editor: the mushroom, Snipe, wake, aim line, solver and telemetry fixtures, 800 passing, 2 that need the Editor's log and 8 the engine. The suite in the Editor is still to be run on these fixes.</p>
-<h3><a class="anchor" id="autotoc_md846"></a>
+<h3><a class="anchor" id="autotoc_md847"></a>
 The lance cuts caps: the view</h3>
 <p>The owner (2026-11-19): "An interesting feat to try would be to have the snipe discharge cut the mushrooms caps,
 the stem stays after it and we see the cap split it two where the snipe cut. Then it falls, fades and scales
@@ -1423,7 +1423,7 @@ down away. The cap pops again growing with scale up in the same place after n se
 </ul>
 <p><b>How it was checked.</b> The shader compiles for GLES 3, Vulkan and Direct3D 11 with no error, and its GLES source takes its only derivative before the first branch. The three projects build and the style audit has no error. The films above. The whole EditMode suite in the second Editor: 4686 of 4687. The one that fails is <code>FormationGlowFieldTests.TwoFormations_SideBySide_KeepAnOutlineEach</code>, which came with the formation ring's own change and fails the same way run by itself; it draws no mushroom.</p>
 <p><b>Not checked.</b> Nothing was played by a person and nothing ran on a device. A real lance mid-cut could not be filmed before the rule was in; it has been since, with a ball flying through a cut cap (<em>The lance cuts caps: the stem and its roots</em>). A balloon overlapping a falling piece and a cut during a mist reveal were not staged. The stage's times are nominal when the Editor's frames run long.</p>
-<h3><a class="anchor" id="autotoc_md847"></a>
+<h3><a class="anchor" id="autotoc_md848"></a>
 The lance cuts caps: the stem and its roots</h3>
 <p>The owner, on the first films of the cut (2026-11-19): "Stem needs texture". And then: "Also at the floor level
 it could extend its rooting like dendrite". The bare stem as first built was a flat cream disc with a rim, and read as a button; this is what replaced it.</p>
@@ -1473,7 +1473,7 @@ it could extend its rooting like dendrite". The bare stem as first built was a f
 </ul>
 <p><b>How it was checked.</b> The shader compiles for GLES 3, Vulkan and Direct3D 11 with no error, and its GLES source takes its only derivative before the first branch. The three projects build and the style audit has no error. The films above. The whole EditMode suite in the second Editor: 4739 of 4739.</p>
 <p><b>Not checked.</b> Nothing was played by a person and nothing ran on a device. A cut as the cap pops back was not filmed (a test holds the size the view hands the shader). The roots' cost on a device was not measured.</p>
-<h3><a class="anchor" id="autotoc_md848"></a>
+<h3><a class="anchor" id="autotoc_md849"></a>
 Blasts take caps off: the rule as built</h3>
 <p>Built on 2026-11-19, after the owner had played the lance's cut on his phone: "Bombs a nukes should probably
 take the caps off as well? But bombs only when close, they should also swing back in the direction of the
@@ -1534,7 +1534,7 @@ bomb", and, asked how close, "Close I mean as the unbreakable, direct hit, next 
 <p><b>Sound.</b> Nothing new. <code>MushroomSoundRouter</code> plays the cut's stroke only for a cut whose cause is a lance.</p>
 <p><b>Tests</b> (<code>Assets/Tests/README.md</code>, <em>Meadow mushrooms, blasts</em>). <code>MushroomBlastTests</code> over the real board: the caps next to a bomb go and the others stay, each announced as a blast at its own centre and blown away from the bomb; the caps in reach sway with the direction and the strength written above; a cap past the blast neither goes nor sways; the sway's share widens or switches off the sway and takes no cap more; a normal bomb takes by the slot and a rainbow one by its kill radius; a cap already cut is left as it is and its wait is not started again; a bomb at the board's edge; a nuke's <code>BlowOff</code>, one mushroom and all of them; a field that kept its cap; the regrow on the fifth beat; and a level change leaving nothing cut. <code>BombBlastPiercesTests</code> holds the rule against <code>BombBlast.Resolve</code>. <code>NukeBlastTests</code>: near caps before far ones, each once, the mushroom left standing, a level change stopping it. <code>MushroomBlastMirrorTests</code>: both sides over the catalogue, and simulated flights (the cap next to a bomb gone before the ball arrives, the others left, a chain of bombs, a rainbow bomb, a bomb that clears the board, a layer without slots). <code>MushroomBlastRuleTests</code>: the arithmetic. And cases for the counter, the stroke's gate, the setting, and a lance's cut still saying it is a lance's.</p>
 <p><b>How it was checked.</b> The three projects build and the style audit has no error. The fixtures above and the mushroom, bomb, nuke, sound, telemetry and solver fixtures round them were run outside the Editor. <b>Not run: the suite in an Editor,</b> which was busy; the tests that need one (the shipped sound bank's entry among them) have not run at all. Nothing was played, and nothing of a blast can be seen yet beyond what the view does with a lance's cut.</p>
-<h3><a class="anchor" id="autotoc_md849"></a>
+<h3><a class="anchor" id="autotoc_md850"></a>
 The hit's own sound</h3>
 <p>2026-11-19. The owner: "Also the mushrooms need a sound when hit, we can look for something fitting, but it
 has to be short". Until then a bounce played the generic <code>BalloonDeflect</code>, whose entry in the shipped bank has no clip, so a mushroom was in fact silent. Five short sounds were made for him and he chose the second, the "bop": a soft rubbery bump.</p>
@@ -1551,7 +1551,7 @@ has to be short". Until then a bounce played the generic <code>BalloonDeflect</c
 <li><b>The clip's importer</b> was copied from <code>balloon-pop.wav</code>, a quarter of a megabyte long, and so was Vorbis. The short one-shots here are ADPCM, decompressed on load: all 79 fetched clips (which <code>SfxClipImporter</code> sets so, at 22.05 kHz) and <code>bubble-pop.wav</code>, the other short clip placed by hand, which keeps its sample rate. The bump now matches <code>bubble-pop.wav</code>: ADPCM, its own 44.1 kHz. <code>preloadAudioData</code> is 0 on it as on every one of the 92 clips in <code>Audio/Gameplay</code> and <code>Audio/Fetched</code>, and nothing in the game loads a clip ahead of its first play, so if that setting costs a hitch on a first play it costs it for every sound alike. That was not changed here: it is one question for the whole bank, to be answered on a device.</li>
 <li><b>Found, not fixed: the generic deflect is silent.</b> The review confirmed why the stand-in knock was never heard: the shipped bank's <code>BalloonDeflect</code> entry has no clip, and a sound without a clip plays nothing. That silence is still live for everything that falls back to it: <code>CombatSoundRouter</code> plays <code>BalloonDeflect</code> for a deflecting balloon whose type has no deflect sound of its own (<code>DeflectSoundFor</code>'s default) and for every actor that is not a balloon. Whether those should be heard, and with what, is the owner's; nothing was authored.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md850"></a>
+<h3><a class="anchor" id="autotoc_md851"></a>
 Blasts take caps off: the view</h3>
 <p>The owner, after playing the cut on his phone (2026-11-19): "Bombs a nukes should probably take the caps off as
 well? But bombs only when close, they should also swing back in the direction of the bomb". Asked how close: "Close I mean as the unbreakable, direct hit, next to it". The rule is <em>Blasts take caps off: the rule as built</em>; this is what is seen.</p>
@@ -1607,7 +1607,7 @@ well? But bombs only when close, they should also swing back in the direction of
 <p><b>How it was checked.</b> The shader compiles for GLES 3, Vulkan and Direct3D 11 with no error, and its GLES source takes its only derivative before the first branch. The three projects build and the style audit has no error. In the second Editor, in Play mode on a meadow level: bombs and a nuke went off with no error in the console, so the scope resolves with <code>IMushroomBlast</code> in <code>BombItemHandler</code> and <code>NukeBlast</code>; <code>Assets/Audio/Gameplay/mushroom-bop.wav</code> imports as a clip (0.13 seconds, mono, 44.1 kHz); the sound bank has 66 entries and its last, <code>GameSoundId.MushroomBounce</code>, holds that clip; and a bounce published through the game's own publisher puts that clip on a playing audio source. The whole EditMode suite: 4828 of 4828.</p>
 <p><b>Not checked.</b> Nothing was played by a person, nothing ran on a device and nothing was heard. A real ball's bounce was not caught with the clip on a source (the voice gives the clip back within its 0.13 seconds); the published bounce stands in for it.</p>
 <p><b>Seen on the way: an open Editor keeps the old numbers.</b> The mushrooms' settings are a block on the Level Pacing asset whose YAML does not hold them, so they are the field initialisers. An Editor that has the asset loaded keeps the values it loaded through a script reload: after the throw's numbers changed, the second Editor went on playing and building with the first ones until the asset was unloaded (<code>Resources.UnloadAsset</code>) or the Editor restarted. A change to any default in <code>MushroomSettings</code> needs that in an Editor that was open, before a film, a bot run or a build means anything.</p>
-<h3><a class="anchor" id="autotoc_md851"></a>
+<h3><a class="anchor" id="autotoc_md852"></a>
 The warts glow at night</h3>
 <p>The owner (2026-11-19): "Make the white part of the cap in the dynamic range during night so it glows". At night the cap's warts shine past white and bloom; by day they are as they were.</p>
 <ul>
@@ -1619,7 +1619,7 @@ The warts glow at night</h3>
 <li><b>It is the one thing standing on the board that blooms.</b> <code><a class="el" href="PLAN-HDR_8md.html">Plans/PLAN-HDR.md</a></code> keeps everything but effects under the bloom's threshold; this is the owner's exception, noted there.</li>
 </ul>
 <p><b>Not checked.</b> On a device, where bloom costs what it costs and may be scaled down. In play at night.</p>
-<h3><a class="anchor" id="autotoc_md852"></a>
+<h3><a class="anchor" id="autotoc_md853"></a>
 The bank, as built</h3>
 <p>Decision K, built on 2026-11-19.</p>
 <p><b>Where a charge is banked.</b> In the flight's own step, where the cap is cut: <code>ProjectileMotionResolver.CutCaps</code> counts the cut (<code>Flight.CapsCut</code>) and adds one to <code>Flight.BankedPierceCharges</code>, the counter a Snipe picked up mid-pierce has always banked on. Nothing else was needed, and nothing was restored: <code>ISnipeArmer.Bank</code> stays gone. The charge is spent by the code that was there: at a wall the lance reaches with a balloon plowed, <code>SpendPierce</code> keeps the shot piercing while it holds a charge, and <code>SnipeItemHandler</code> takes the charge and arms the lance afresh when it hears of the discharge.</p>
@@ -1684,7 +1684,7 @@ The bank, as built</h3>
 <p>What the measurement is not. The balloons are scattered, not dealt by the level generator: the meadow lines its unbreakables up as snakes, and the game's boards fill from the top. Nothing an item does is in it, nor a pop's ripple, nor the shields a ricochet chain pays. A balloon entered in the same fixed step as a wall is counted as popped, which the game can miss. The lance flew at 1.6 times a ball's speed, not the shipped 3.93: the lines it flies are the same, the fixed steps along them longer in the game. "Best angle" is the angle at which that board's loaded lance cuts the most caps.</p>
 <p><b>After its review</b> (2026-11-19). Nothing blocking was found. Added: the cruise's pierce spelt out, above and under <em>Open for the owner</em>, with a test that holds it as it is; a test that a nuke stopped by a level change leaves nothing blown or cut on the next level, over the real board; and the speed a banked charge re-arms with held to one number on both sides, the Snipe's speed buff in the item configuration (<code>ShotSimulator.BankCutCharge</code>, which the simulator's cut now calls, against what the Snipe handler arms with, and against the shipped asset in a test that needs the Editor). The suite in the Editor before these: 4843 of 4843 at <code>e81c072ae</code>.</p>
 <p><b>How it was checked.</b> The three projects build and the style audit has no error. The bank's fixtures and the mushroom, Snipe, sound, telemetry and solver fixtures round them were run outside the Editor. <b>Not run: the suite in an Editor</b>, and nothing was played: what a charge feels like, whether the climbing stroke and the cue read, and whether four-shield flights are too much are his to judge.</p>
-<h3><a class="anchor" id="autotoc_md853"></a>
+<h3><a class="anchor" id="autotoc_md854"></a>
 A puff of spores</h3>
 <p>The owner (2026-11-19): "given we have a way to draw smoke... what if we drew some when mushrooms are hit? as a
 small cone in direction of the hit". Then: "this would fake 'spores'", "or spawn specks as well, in greenish /
@@ -1733,7 +1733,7 @@ spores". So a mushroom lets spores go, in three steps: a hit, a cut, a blast. Th
 </ul>
 <p><b>How it was checked.</b> The speck shader compiles; the three projects build and the style audit has no error. In the second Editor in Play mode, hits, cuts, bombs and a nuke went off with no error in the console. The whole EditMode suite: 4930 of 4930 on its second run. On the first, straight after the long staged session, six cases of <code>LevelControllerTests</code> failed, the ones that tick the level with the Editor's own frame time; each passes run alone, and none touches a mushroom.</p>
 <p><b>Not checked.</b> Nothing was played by a person and nothing ran on a device: the cost of seven particle systems and of the smoke's extra stamps on a phone was not measured. A real ball's rally was not filmed (the staged one publishes the bounces); in one, the ball's own trail stamps the same smoke field beside the puffs. The router has no test of its own.</p>
-<h3><a class="anchor" id="autotoc_md854"></a>
+<h3><a class="anchor" id="autotoc_md855"></a>
 Bigger spores</h3>
 <p>The owner, having played the first spores on his phone and chosen both the smoke and the specks: "I would also
 exaggerat the spores effect". The first numbers were tuned at twice the game's size and read as a wisp on a phone. Everything below was judged on the game's own pixels.</p>
@@ -1766,7 +1766,7 @@ exaggerat the spores effect". The first numbers were tuned at twice the game's s
 <p><b>A rally</b> of 25 knocks 80 ms apart between two caps leaves one standing cone on the far side of each cap, there while the rally lasts and about a second and a half after, drifting up. The lane between the caps, the caps and the ball stay clear: a cone lies beyond its cap, away from the ball. What keeps it at one cone a cap is the quiet time (a cap knocked every 160 ms puffs every third knock) and the budget: a full hit takes 1, the hit that pays 1.5, a cut 2 and a blast 6 of the board's 18, which come back at 3 a second, so the board cannot keep up more than three full puffs a second for long. Seven caps blown at once ask 42: the first three bursts are whole and the other four are 21 specks each, 264 specks in all.</p>
 <p><b>Cost.</b> Seven whole bursts in one frame (420 specks, more than the budget ever gives) took 0.62 ms in the Editor on the development PC and allocated nothing; a phone was not measured. A mushroom's most alive is a burst's 60, the 6 its flying cap trails and what its last hits left (a cap is hit at most every 0.4 s, 15 specks for the hit that pays, living up to 1.5 s): 128 covers that where 96 did not, and a speck past the cap is dropped, not queued. The smoke is one more stamp a puff. Films: <code>scratchpad/mushroom/puff2/</code> (before and after on one seeded board).</p>
 <p><b>Not checked.</b> Nothing ran on a device and nobody played it: whether a real rally with the ball's own trail in the same smoke field reads as well as the staged one is the owner's to say.</p>
-<h3><a class="anchor" id="autotoc_md855"></a>
+<h3><a class="anchor" id="autotoc_md856"></a>
 An idle cap</h3>
 <p>The owner (2026-11-19): "Two things I believe the mushrooms might need an idle animation, the are bit hidden in
 between all what is happening so might be worth making something that puts focus on then, I think a breather
@@ -1798,7 +1798,7 @@ animation on the cap might be enough and for them to react to the disturbance fi
 <p><b>How far a cap may go.</b> <code>MushroomSettings.Validate</code> counts the rocking with the lean: the two together may not pass three quarters of the radius (shipped 0.15 and 0.065, 0.72 of it), past which the cap stands beside its stem and not on it. It was half the radius for the lean alone, and its reason, the quad's room, has not been true since the quad took its size from the numbers.</p>
 <p><b>The numbers</b> are <code>IMushroomSettings.Idle</code> (<code>MushroomIdleTuning</code>): breath 0.08 over 2.6 s, phase spread 0.1, wave 0.2 a unit, shadow lift 0.8, glow swing 0.4, wart spread 0.08; rock 0.16 a unit of displacement squared, 0.065 at the most, 0.45 s a swing, 0.6 of it swinging. Tests hold the breath to what a bounce allows, the rocking under half a cannon shot's lean, and the built quad to the room the numbers ask for.</p>
 <p><b>Not checked.</b> Nothing was played by a person and nothing ran on a device: stills say the breath and the night's glow are plain to see and that the rocking is there, not whether the motion is pleasant or too busy in play, which is the owner's to say. The before stills of the idle board were taken while its balloons were still rising, the after ones once they had settled, so only the caps compare. The glow's swing was not looked at through the device's own bloom. Films: <code>scratchpad/mushroom/idle/</code>.</p>
-<h3><a class="anchor" id="autotoc_md856"></a>
+<h3><a class="anchor" id="autotoc_md857"></a>
 The view, after its cost and correctness reviews</h3>
 <p>Two reviews of the cut's, the blast's and the spores' view found nothing blocking and asked for these.</p>
 <p><b>The cap's spot loop is cheaper, and the look is kept.</b> The ragged warts had made each wart's reach differ a pixel, which cost two sines and a square root for each of the eighteen warts on every cap pixel: 28 square roots and 36 sines a cap pixel in all, on the one path that is on screen nearly all the time.</p>
@@ -1816,7 +1816,7 @@ The view, after its cost and correctness reviews</h3>
 <p><b>The router has its tests</b> (<code>MushroomSporeRouterTests</code>, nine cases): a hit's and a cut's specks go at once and only from the mushroom they are for; a blast's burst waits its delay and is let go once; it is dropped when its mushroom has left the board, and is not let go to another that took the slot; a ninth burst goes at once when eight are waiting; a run reset and a new level each drop what is waiting.</p>
 <p><b>Read back in the Editor:</b> the prefab's <code>Spores</code> particle system simulates in world space, so a speck let go stays where it is when the board's root moves; it does not loop or play on awake, and holds 96 at the most.</p>
 <p><b>How it was checked.</b> The shader compiles for GLES 3, Vulkan and Direct3D 11 with no error; its GLES source takes its only derivative before the first branch, and the wart loop holds no sine and no square root. The three projects build and the style audit has no error. The whole EditMode suite in the second Editor: 4940 of 4940.</p>
-<h2><a class="anchor" id="autotoc_md857"></a>
+<h2><a class="anchor" id="autotoc_md858"></a>
 Not in scope</h2>
 <ul>
 <li>The dandelion (liked, not chosen).</li>

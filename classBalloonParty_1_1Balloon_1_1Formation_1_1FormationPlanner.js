@@ -11,6 +11,7 @@ var classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner =
     [ "ClosesWall", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#a7d9eef2c87bbcba185621b39c1a9855f", null ],
     [ "CollectCoverSpots", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#a4c32d67d22323c5628a24406c211fe7d", null ],
     [ "CollectRingSpots", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#a5ed294ba6c5fdf74438905dae83b20b3", null ],
+    [ "CollectSpinnerSpots", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#ac323468ac887e67ea3666795ec5b25fa", null ],
     [ "CollectSpots", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#a24143f487cb37757bc2b575fddfd42e2", null ],
     [ "CoverFloor", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#aed29d71e6e7d1dc808df5642ebc04f6a", null ],
     [ "Holds", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#ae1d78285e6c51ede05df6322ace948be", null ],
@@ -29,6 +30,7 @@ var classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner =
     [ "_coverFloor", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#a43b93806abf0e356974fce4942b15bbe", null ],
     [ "_firstCover", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#aaf729e37a0ad647709e5f056e205648b", null ],
     [ "_giftPreference", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#a56ea5559c1cfe0cf2ada26a8cd7b1cfb", null ],
+    [ "_lastFlatRow", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#a4c7ffc8ec7499b2e6ebb8fdf3fbdd97e", null ],
     [ "_pairs", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#afde2d7a848ddc222379a1e026edb30aa", null ],
     [ "_scratch", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#a0516e8e30223dad38f4dd96633fb63a1", null ],
     [ "_slots", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#acd225acd053ac1a18a963b9a06679067", null ],
@@ -41,5 +43,5 @@ var classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner =
     [ "CoverOrders", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#a0cc826f5b26e8458f932a1118081cf21", null ],
     [ "DisplacedBalloonCost", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#a49ef572f30d5352ae8e911db6b5ef169", null ],
     [ "CoveredHost", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#ac9348484cb247b0eae9f2dd9126febdc", null ],
-    [ "RingCentre", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#acb5071c50ea66a2942d08a4cf6579cc7", null ]
+    [ "TurnCentre", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#a27ca7205476d68ee9b07a3cf54264c3f", null ]
 ];

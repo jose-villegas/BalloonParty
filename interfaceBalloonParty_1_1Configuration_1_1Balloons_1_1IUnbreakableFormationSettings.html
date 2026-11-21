@@ -190,9 +190,6 @@ Properties</h2></td></tr>
 <tr class="memitem:a7b2f8fc29a9edf9838a854749229a91d" id="r_a7b2f8fc29a9edf9838a854749229a91d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7b2f8fc29a9edf9838a854749229a91d">RingMinMembers</a><code> [get]</code></td></tr>
 <tr class="memdesc:a7b2f8fc29a9edf9838a854749229a91d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fewest unbreakables a ring forms from.  <br /></td></tr>
 <tr class="separator:a7b2f8fc29a9edf9838a854749229a91d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac9d98989b95b6fa361951dec49dedb6a" id="r_ac9d98989b95b6fa361951dec49dedb6a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac9d98989b95b6fa361951dec49dedb6a">RingReverseEveryCycles</a><code> [get]</code></td></tr>
-<tr class="memdesc:ac9d98989b95b6fa361951dec49dedb6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cycles a ring turns one way before it turns the other. 0: it never turns back by itself.  <br /></td></tr>
-<tr class="separator:ac9d98989b95b6fa361951dec49dedb6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d8d538c89666eb1d15d67a91b29344e" id="r_a2d8d538c89666eb1d15d67a91b29344e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2d8d538c89666eb1d15d67a91b29344e">RingWeight</a><code> [get]</code></td></tr>
 <tr class="memdesc:a2d8d538c89666eb1d15d67a91b29344e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pick weight of a ring. It forms only from <a class="el" href="#a7b2f8fc29a9edf9838a854749229a91d" title="Fewest unbreakables a ring forms from.">RingMinMembers</a> unbreakables or more.  <br /></td></tr>
 <tr class="separator:a2d8d538c89666eb1d15d67a91b29344e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -214,6 +211,15 @@ Properties</h2></td></tr>
 <tr class="memitem:a4442040732bde015e6ee6375de802533" id="r_a4442040732bde015e6ee6375de802533"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4442040732bde015e6ee6375de802533">SnakeWeightPerExtraUnbreakable</a><code> [get]</code></td></tr>
 <tr class="memdesc:a4442040732bde015e6ee6375de802533"><td class="mdescLeft">&#160;</td><td class="mdescRight">Added to the snake's weight, as a share of <a class="el" href="#a7da097d9ad46cdaf9471eb941d324602" title="Pick weight of a snake.">SnakeWeight</a>, for each unbreakable on the board beyond <a class="el" href="#a8a7e96cbdf0a2c82cb071c964262be84" title="Fewest unbreakables on the board that form up.">MinMembers</a>: the more unbreakables, the likelier a snake.  <br /></td></tr>
 <tr class="separator:a4442040732bde015e6ee6375de802533"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5b3d2b6d0a6599cfb85deed9842a0fe" id="r_aa5b3d2b6d0a6599cfb85deed9842a0fe"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa5b3d2b6d0a6599cfb85deed9842a0fe">SpinnerHoldCycles</a><code> [get]</code></td></tr>
+<tr class="memdesc:aa5b3d2b6d0a6599cfb85deed9842a0fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cycles a spinner holds, counting the cycle it formed on, before it changes shape.  <br /></td></tr>
+<tr class="separator:aa5b3d2b6d0a6599cfb85deed9842a0fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c409d0fc01642240baa79737a3ebdaa" id="r_a8c409d0fc01642240baa79737a3ebdaa"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8c409d0fc01642240baa79737a3ebdaa">SpinnerMaxMembers</a><code> [get]</code></td></tr>
+<tr class="memdesc:a8c409d0fc01642240baa79737a3ebdaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Most unbreakables in a spinner: 3 or 5, a line with as many on each side of the one it turns about.  <br /></td></tr>
+<tr class="separator:a8c409d0fc01642240baa79737a3ebdaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1305ebbc18984ddacef8e8752f24ef2e" id="r_a1305ebbc18984ddacef8e8752f24ef2e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1305ebbc18984ddacef8e8752f24ef2e">SpinnerWeight</a><code> [get]</code></td></tr>
+<tr class="memdesc:a1305ebbc18984ddacef8e8752f24ef2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pick weight of a spinner. It forms from three unbreakables or more.  <br /></td></tr>
+<tr class="separator:a1305ebbc18984ddacef8e8752f24ef2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada71cd4f8cd3413be4ec54509e232556" id="r_ada71cd4f8cd3413be4ec54509e232556"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ada71cd4f8cd3413be4ec54509e232556">SpotChoices</a><code> [get]</code></td></tr>
 <tr class="memdesc:ada71cd4f8cd3413be4ec54509e232556"><td class="mdescLeft">&#160;</td><td class="mdescRight">A formation picks at random among this many of its least-travel spots.  <br /></td></tr>
 <tr class="separator:ada71cd4f8cd3413be4ec54509e232556"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -226,6 +232,9 @@ Properties</h2></td></tr>
 <tr class="memitem:a72a958f42f4d9e945064f71fa55525b9" id="r_a72a958f42f4d9e945064f71fa55525b9"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a72a958f42f4d9e945064f71fa55525b9">ToughSnakeStepSeconds</a><code> [get]</code></td></tr>
 <tr class="memdesc:a72a958f42f4d9e945064f71fa55525b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds of play between the tough snake's steps, on a clock of its own apart from the beat.  <br /></td></tr>
 <tr class="separator:a72a958f42f4d9e945064f71fa55525b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adba5cd21cdb8aaffb3d8bbc10ca1dcde" id="r_adba5cd21cdb8aaffb3d8bbc10ca1dcde"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adba5cd21cdb8aaffb3d8bbc10ca1dcde">TurnReverseEveryCycles</a><code> [get]</code></td></tr>
+<tr class="memdesc:adba5cd21cdb8aaffb3d8bbc10ca1dcde"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cycles between the beats on which every ring and spinner turns the other way, all together. 0: never.  <br /></td></tr>
+<tr class="separator:adba5cd21cdb8aaffb3d8bbc10ca1dcde"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>How unbreakables gather into formations, hold them, pick the next shape, and call in more unbreakables while left alone. </p>
@@ -803,32 +812,6 @@ Properties</h2></td></tr>
 
 </div>
 </div>
-<a id="ac9d98989b95b6fa361951dec49dedb6a" name="ac9d98989b95b6fa361951dec49dedb6a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac9d98989b95b6fa361951dec49dedb6a">&#9670;&#160;</a></span>RingReverseEveryCycles</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings.RingReverseEveryCycles</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Cycles a ring turns one way before it turns the other. 0: it never turns back by itself. </p>
-
-<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#acebe7c666a8d2dc3f855e1bc15e26a93">BalloonParty.Configuration.Balloons.UnbreakableFormationSettings</a>.</p>
-
-</div>
-</div>
 <a id="a2d8d538c89666eb1d15d67a91b29344e" name="a2d8d538c89666eb1d15d67a91b29344e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2d8d538c89666eb1d15d67a91b29344e">&#9670;&#160;</a></span>RingWeight</h2>
 
@@ -1012,6 +995,84 @@ Properties</h2></td></tr>
 
 </div>
 </div>
+<a id="aa5b3d2b6d0a6599cfb85deed9842a0fe" name="aa5b3d2b6d0a6599cfb85deed9842a0fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5b3d2b6d0a6599cfb85deed9842a0fe">&#9670;&#160;</a></span>SpinnerHoldCycles</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings.SpinnerHoldCycles</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Cycles a spinner holds, counting the cycle it formed on, before it changes shape. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a46e5799211f61f2e221fa768e2c8d63b">BalloonParty.Configuration.Balloons.UnbreakableFormationSettings</a>.</p>
+
+</div>
+</div>
+<a id="a8c409d0fc01642240baa79737a3ebdaa" name="a8c409d0fc01642240baa79737a3ebdaa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c409d0fc01642240baa79737a3ebdaa">&#9670;&#160;</a></span>SpinnerMaxMembers</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings.SpinnerMaxMembers</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Most unbreakables in a spinner: 3 or 5, a line with as many on each side of the one it turns about. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#ab2c04f06dd6068509f33eebc544bbba0">BalloonParty.Configuration.Balloons.UnbreakableFormationSettings</a>.</p>
+
+</div>
+</div>
+<a id="a1305ebbc18984ddacef8e8752f24ef2e" name="a1305ebbc18984ddacef8e8752f24ef2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1305ebbc18984ddacef8e8752f24ef2e">&#9670;&#160;</a></span>SpinnerWeight</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings.SpinnerWeight</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Pick weight of a spinner. It forms from three unbreakables or more. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a586de2e4adc903d6d013ebf5af19c1ed">BalloonParty.Configuration.Balloons.UnbreakableFormationSettings</a>.</p>
+
+</div>
+</div>
 <a id="ada71cd4f8cd3413be4ec54509e232556" name="ada71cd4f8cd3413be4ec54509e232556"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ada71cd4f8cd3413be4ec54509e232556">&#9670;&#160;</a></span>SpotChoices</h2>
 
@@ -1114,6 +1175,32 @@ Properties</h2></td></tr>
 <p>Seconds of play between the tough snake's steps, on a clock of its own apart from the beat. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a6095b8f0869b5c9c3898c1d42cfd347d">BalloonParty.Configuration.Balloons.UnbreakableFormationSettings</a>.</p>
+
+</div>
+</div>
+<a id="adba5cd21cdb8aaffb3d8bbc10ca1dcde" name="adba5cd21cdb8aaffb3d8bbc10ca1dcde"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adba5cd21cdb8aaffb3d8bbc10ca1dcde">&#9670;&#160;</a></span>TurnReverseEveryCycles</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings.TurnReverseEveryCycles</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Cycles between the beats on which every ring and spinner turns the other way, all together. 0: never. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a23390c3cdc3d213b4cc8c50159cab0d9">BalloonParty.Configuration.Balloons.UnbreakableFormationSettings</a>.</p>
 
 </div>
 </div>

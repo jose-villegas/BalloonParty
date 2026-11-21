@@ -56,7 +56,7 @@ var searchData=
   ['iscadencewave_53',['IsCadenceWave',['../classBalloonParty_1_1Item_1_1ItemAssigner.html#aa44d5be45270094545a45f844a8940de',1,'BalloonParty::Item::ItemAssigner']]],
   ['iscandidate_54',['IsCandidate',['../classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#aa1778b1cb438bd0e5e01d185eddeeacf',1,'BalloonParty::Balloon::Formation::FormationPlanner']]],
   ['iscardlevel_55',['IsCardLevel',['../classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a293b77f7b1316bc594c57a2c36c5e107',1,'BalloonParty::Game::Upgrades::RunUpgrades']]],
-  ['iscentre_56',['IsCentre',['../classBalloonParty_1_1Balloon_1_1Formation_1_1FormationRing.html#a9c0e2510dc9e806e2339d232abae3ddd',1,'BalloonParty::Balloon::Formation::FormationRing']]],
+  ['iscentre_56',['IsCentre',['../classBalloonParty_1_1Balloon_1_1Formation_1_1FormationRing.html#a9c0e2510dc9e806e2339d232abae3ddd',1,'BalloonParty.Balloon.Formation.FormationRing.IsCentre()'],['../classBalloonParty_1_1Balloon_1_1Formation_1_1FormationSpinner.html#a912bcfc6b81deac1f5267a22f3bfd770',1,'BalloonParty.Balloon.Formation.FormationSpinner.IsCentre()']]],
   ['isclearahead_57',['IsClearAhead',['../classBalloonParty_1_1Shared_1_1PathTrace.html#a1d74b87c63260480b65a6ce5d79c3296',1,'BalloonParty::Shared::PathTrace']]],
   ['iscoloractive_58',['IsColorActive',['../classBalloonParty_1_1UI_1_1Score_1_1ColorProgressBar.html#a4447c368e43ad512ca6eeac1e7dd89b3',1,'BalloonParty::UI::Score::ColorProgressBar']]],
   ['iscoverhost_59',['IsCoverHost',['../classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#a87e635f536bc75a14ed0e6a6fbbcd13a',1,'BalloonParty::Balloon::Formation::FormationPlanner']]],
