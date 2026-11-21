@@ -110,13 +110,13 @@ $(function(){initNavTree('plan_ripe_bubble_cluster.html',''); initResizable(true
   <div class="headertitle"><div class="title">Ripe Bubble Cluster</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md935"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md936"></a>
 The ripe bubble cluster: a full cluster is a bomb with a fuse</h1>
 <blockquote class="doxtable">
 <p>On water, a bubble cluster that reaches the cap of 6 becomes <b>ripe</b>. It swells, and a fuse starts. Popped before the fuse runs out, its burst is the player's: a small bomb, whose ripple knocks a hit off every balloon within its radius. Left alone, its burst is the level's: it hands its bubbles out as foam and leaves. Each neighbouring balloon gets a one-bubble coat that must be popped first and washes the shot's colour; neighbouring clusters get the bubbles left after that. Planned 2026-11-18; the owner settled the open decisions the same day, and the player's burst was reworked into a blast after it was played on a phone (decisions 13 to 17). A later run on a phone turned into one explosion after another, so the number of clusters full at once is now limited and spaced out (decision 18), and merging itself was put on the board's beat, with the gap counted in beats (decision 19). <b>Status: building.</b> </p>
 </blockquote>
 <hr  />
-<h2><a class="anchor" id="autotoc_md937"></a>
+<h2><a class="anchor" id="autotoc_md938"></a>
 Owner direction (2026-11-18)</h2>
 <p>"I'm trying to come up with an idea for the bubbles in water levels to make a mechanic after they reach
 the cap of 5 but I cannot think of any, water levels are kinda boring now, as the only pressure is a more
@@ -147,7 +147,7 @@ it converts into a chain of constant explosions, so it becomes full spam, this h
 <li>"Or the snake movement of toughs everything has a rhythm"</li>
 </ul>
 <p>Decision 19 records what was built from it.</p>
-<h2><a class="anchor" id="autotoc_md938"></a>
+<h2><a class="anchor" id="autotoc_md939"></a>
 What exists (verified 2026-11-18)</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -182,7 +182,7 @@ What exists (verified 2026-11-18)</h2>
 <li><b>The solver does not see clusters as targets.</b> <code>ShotBoardGather.TryBuildTargetSnapshot</code> skips actors that are not <code>IHasScore</code>, and <code>BubbleClusterModel</code> is not one. The playtest bot aims through the solver, so no water comparison can be trusted until this is fixed (phase 0). Found by reading; not yet run.</li>
 <li><b>"How many hits until it pops" is read from <code>HitsRemaining</code> in four places</b> (<code>IsTough</code>, the resolver's one-hit check, <code>ShotBoardGather</code>, <code>ShotSimulator</code>). A ripe cluster and a coated balloon both break that reading, so it moves behind one extension.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md939"></a>
+<h2><a class="anchor" id="autotoc_md940"></a>
 The mechanic</h2>
 <div class="fragment"><div class="line">stateDiagram-v2</div>
 <div class="line">    [*] --&gt; Growing</div>
@@ -195,11 +195,11 @@ The mechanic</h2>
 <div class="line">    Burst --&gt; [*]</div>
 <div class="line">    Left --&gt; [*]</div>
 <div class="line">    Gone --&gt; [*]</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md940"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md941"></a>
 Ripening and the fuse</h3>
 <p>A cluster is ripe when its count reaches <code>BubbleMergeMax</code>: the existing cap is the threshold, with no second number. Ripening starts a fuse of <code>FuseSeconds</code> (6) on <code>ISpawnClock.SecondsOnLevel</code>, held as a deadline.</p>
 <p>The fuse is in seconds on the level clock, not in spawn lines. Lines arrive anywhere from 0.55 s to 1.7 s apart, and their rate is multiplied by things the player cannot see (up to 8 times faster on a sparse board, 3 times faster in flight, slower in a breather). The level clock holds through exactly the moments a timed threat would be unfair: pause, the level-up cinematic, game over.</p>
-<h3><a class="anchor" id="autotoc_md941"></a>
+<h3><a class="anchor" id="autotoc_md942"></a>
 Merging on the beat</h3>
 <p>Clusters merge on the board's rhythm (decision 19), the one the unbreakables keep: a beat is <code>IUnbreakableFormationSettings.BeatSeconds</code> (1.7 s of play), an unbreakable snake steps on the beat and half a beat in, and two beats make a cycle. The bubbles' <b>off-beat</b> falls <code>MergeOffBeat</code> (0.25) of a beat after each beat: a quarter beat, between the snake's two steps, so a merge never lands on a snake's step.</p>
 <ul>
@@ -208,7 +208,7 @@ Merging on the beat</h3>
 <li>The beat is <code>BalloonBalancer</code>'s own clock, read through <code>IBoardBeat.OffBeats(share)</code>: how many off-beats have passed in the run. A reader keeps no timer, only the count it last saw. The clock runs with no unbreakable and no snake on the board, so it ticks on every water level. A pause holds it. A doomed shot's last glide does not: the rhythm comes first there, as it does for the snake's step. A new run starts the count over, which a reader takes as a start and not as an off-beat.</li>
 <li>Who gives to whom, how long an absorbed cluster takes to slide in (<code>BubbleMergeSeconds</code>) and the fuse, on the level clock, are as they were.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md942"></a>
+<h3><a class="anchor" id="autotoc_md943"></a>
 Room for full clusters</h3>
 <p>Not every cluster may be filled to the cap at any time (decision 18). <code>RipeRoom</code> answers what a cluster may be filled to right now, and everything that gives a cluster bubbles asks it: the merge pass (<code>BubbleMergeService</code>) and the foam's hand-out (<code>RipeBubbleBurst</code>).</p>
 <ul>
@@ -222,7 +222,7 @@ Room for full clusters</h3>
 <li>When the gap is over, nothing on the board changes. A merge pass that held a merge back marks it as something to look at, so the service scans again on each off-beat until the merge is made: a cluster waiting at 5 beside a giver fills on the off-beat the gap ends on, with no change on the board.</li>
 <li>With ripeness off (<code>FuseSeconds</code> 0) nothing is limited.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md943"></a>
+<h3><a class="anchor" id="autotoc_md944"></a>
 Popped in time: the ripple</h3>
 <p><b>A ripe cluster is fragile: any hit bursts the whole cluster.</b> A cluster loses one bubble a hit, so without this the first hit on a ripe 5 would make it a 4 and the choice would be between two bad rules. If that hit defused it, the ripple could only come from a one-shot pop (a pierce, a bomb, a laser) and the reward would be out of reach. If it stayed ripe, the ripple would cost five hits and five streak breaks. Fragile makes the answer one accurate shot.</p>
 <p>The burst is a small bomb (decision 13; this section first described a ripple into the six neighbours, which it replaced). It sends one hit to every balloon on a slot whose centre lies within <code>RippleRadius</code> (1.35 world units) of the burst's slot centre, through <code>IHitDispatcher</code>, so scoring, items and chains behave as for any other hit. Slots are 0.75 apart, so the radius takes the first ring at 0.75 and, of the next, the six slots at 1.30 but not the six at 1.50: 12 slots on an open board. (The bomb item's kill radius is 1.25, by collider overlap.) The reach is measured between slot centres, not by physics overlap and not from where a balloon is drawn on its way to a slot, so it is the same on every run and the shot solver repeats it exactly. One pure rule, <code>RipeBubbleRule.RippleReaches</code>, answers for the game and the solver.</p>
@@ -237,7 +237,7 @@ Popped in time: the ripple</h3>
 <li>A ripple strips foam coats, so popping a ripe cluster cleans the foam round it.</li>
 <li>A burst scores the bubbles the cluster held.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md944"></a>
+<h3><a class="anchor" id="autotoc_md945"></a>
 Fuse runs out: the foam</h3>
 <p>The cluster hands its bubbles out and leaves. <code>RipeBubbleBurst.PlanFoam</code> decides where each bubble goes (<code>RipeBubbleRule.PlanHandout</code>), in this order:</p>
 <ol type="1">
@@ -253,7 +253,7 @@ Fuse runs out: the foam</h3>
 <li>A piercing or beam hit pops the balloon, coat and all. That contact does not wash: the coat went with the balloon, so the shot steals the balloon's colour as from any pop.</li>
 <li>One coat at most (<code>CoatLayers</code>, 1). Toughs, unbreakables, reward balloons and grid actors take nothing. Clusters take bubbles, never a coat.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md945"></a>
+<h2><a class="anchor" id="autotoc_md946"></a>
 Architecture</h2>
 <p>State sits on the models. One small controller beside <code>BubbleMergeService</code> makes the decisions, woken the same way. The merge service keeps the merging: it has no fuse and no teardown, and ripeness has both. Since decision 18 it asks <code>RipeRoom</code> what it may fill a cluster to, as the foam's hand-out does.</p>
 <div class="fragment"><div class="line">classDiagram</div>
@@ -448,7 +448,7 @@ Architecture</h2>
 <div class="line">    Burst-&gt;&gt;Burst: stamp pull then shock, flash the light</div>
 <div class="line">    Burst--&gt;&gt;Ripe: how many hits landed</div>
 <div class="line">    Ripe-&gt;&gt;Ripe: publish RipeBubbleBurstMessage</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md946"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md947"></a>
 The coat: why it is state on the balloon</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -463,7 +463,7 @@ The coat: why it is state on the balloon</h3>
 <td class="markdownTableBodyNone">A service that intercepts hits outside the model   </td><td class="markdownTableBodyNone">Hits are evaluated inside the model by six or more callers; the check has to live there   </td></tr>
 </table>
 <p>Nothing is saved mid-level and models are built new for each spawn, so ripe state and coats need no reset or save work of their own.</p>
-<h2><a class="anchor" id="autotoc_md947"></a>
+<h2><a class="anchor" id="autotoc_md948"></a>
 Presentation</h2>
 <p>All of it is done from C# with the soap shader's existing properties; nothing here edits a shader.</p>
 <ul>
@@ -479,7 +479,7 @@ Presentation</h2>
 <li>A digit counting the fuse down, and foam drawn on the water's surface, are both shader edits. Neither is in the plan.</li>
 </ul>
 <p>All of it needs a look and a listen in the Editor.</p>
-<h2><a class="anchor" id="autotoc_md948"></a>
+<h2><a class="anchor" id="autotoc_md949"></a>
 Settings</h2>
 <p><code>IRipeBubbleSettings</code>, a block on <code>IBalloonsConfiguration</code> beside <code>BubbleMergeMax</code>.</p>
 <table class="markdownTable">
@@ -540,7 +540,7 @@ Settings</h2>
 </table>
 <p>The foam's hops reuse <code>IBubbleMergeCueSettings</code> (<code>HopSeconds</code>, <code>ArcHeight</code>, <code>BubbleScale</code>, <code>SortingOrderOffset</code>), so the two kinds of hopping bubble stay alike; they leave one per <code>FoamStepSeconds</code> rather than the merge's <code>HopStagger</code>. The fold's share of <code>BurstSeconds</code> (<code>FoldShare</code>) and the arm's quickening in the last seconds (<code>FastTurnSpeedup</code>) are constants in <code>RipeBubbleRule</code>; a leftover's drift and how ragged a burst's throw is are constants in <code>RipeBubbleBurstView</code>; and the sounds' pitches and volumes are constants in <code>CombatSoundRouter</code>. The stamps on the disturbance field are profiles in <code>DisturbanceFieldSettings</code>: <code>BubbleRipple</code> (radius 2.4, strength 6, over 0.12 s) for the blast and <code>BubbleFoam</code> (1.6, 6, 0.2 s, the numbers both endings shared before) for the foam.</p>
 <p>No water-only switch is needed: clusters spawn only on water, and the board clears on every level change.</p>
-<h2><a class="anchor" id="autotoc_md949"></a>
+<h2><a class="anchor" id="autotoc_md950"></a>
 Owner decisions (2026-11-18)</h2>
 <p>Eight decisions were put to the owner, each with a recommendation. The answer: "Go with your
 recommendations, build the ripe cluster".</p>
@@ -590,7 +590,7 @@ toughs" do, since "everything has a rhythm". This one was decided for the owner 
 </ul>
 </li>
 </ol>
-<h2><a class="anchor" id="autotoc_md950"></a>
+<h2><a class="anchor" id="autotoc_md951"></a>
 Phases</h2>
 <p>Each phase can be played and checked on its own.</p>
 <table class="markdownTable">
@@ -617,7 +617,7 @@ Phases</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">9   </td><td class="markdownTableBodyNone">Merging on the beat (decision 19): <code>IBoardBeat</code> on the balancer, <code>MergeOffBeat</code>, one merge pass an off-beat, <code>RipenCooldownBeats</code> in place of the seconds   </td><td class="markdownTableBodyNone">clusters merge a step a beat, a quarter beat after an unbreakable snake's step, on a water level with no unbreakable too; after a burst the next cluster fills two off-beats later. <b>Built</b>; compiled and unit-tested only, not yet played   </td><td class="markdownTableBodyNone">slower gathering leaves more small clusters on a fast clock; whether a quarter beat reads as rhythm or as lag; the bot's water baselines move again   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md951"></a>
+<h2><a class="anchor" id="autotoc_md952"></a>
 Tests</h2>
 <ul>
 <li><code>RipeBubbleRule</code>: the ripe threshold; what a cluster may be filled to and how many more may be filled, by the count of full clusters and the time since a ripe one ended (<code>FillLimit</code>, <code>FillsLeft</code>); how far a ripple reaches (the radius between slot centres, and the 12 slots the shipped radius takes on the game's lattice), whom it hits and who takes foam (rewards, deflectors, clusters, already coated); fuse left from the deadline; the hand-out plan (coats first, then clusters a round at a time up to the cap, then leftovers; no more clusters filled than it may, the rest a bubble short, coats never held back); the fold's schedule, its growth a step at a time and its six pumps; the hand-out's schedule; the arm's turn rate, and the cluster's spin turning the drawn cluster with the arm, slow and fast, either way round.</li>
@@ -635,7 +635,7 @@ Tests</h2>
 <li>Presentation: the throb schedule and the warning curve (<code>RipeBubbleRuleTests</code>); the float rebase, the hop's path, the burst message's blast (centre, radius, hits landed), a foam's direction bits and its hand-out entries (<code>RipeBubblePresentationTests</code>); the fast beats the service announces; the router's cue for a coat hit, a resist, a ripple's pops and a ripe cluster's fold (<code>CombatSoundRouterTests</code>); a cluster leaving the board wakes the merge (<code>BubbleMergeServiceTests</code>); the six counters (<code>GameplayMetricsServiceTests</code>, <code>MetricCatalogFoldTests</code>).</li>
 <li>Existing: <code>BubbleClusterModelTests</code>, <code>ProjectileHitResolverTests</code>, the solver's <code>EffectBoardMirrorTests</code>.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md952"></a>
+<h2><a class="anchor" id="autotoc_md953"></a>
 What to watch</h2>
 <p>A ripe cluster in the middle of a crowd cannot merge or move out of the way, so the fuse partly rewards how the board happens to lie. One-hit bursts and a 6 s fuse should keep that fair; the bot runs in phase 4 are where to check it.</p>
 <p>The blast now takes up to 12 slots where the ring took 6, and a chain reaches a ripe cluster two slots away. That makes a ripe pop a bigger reward and water levels easier wherever clusters ripen. The owner's balance target (difficulty picks up after level 10) has not been checked against it: the same bot runs, with and without ripeness, are where to see what the wider blast did.</p>

@@ -30,7 +30,7 @@
 <area shape="poly" id="edge14_Node000002_Node000013" title=" " alt="" coords="1213,302,1502,304,1497,306,1214,308"/>
 <area shape="rect" id="Node000014" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceAnchor.html" title="A dynamic actor that can be pinned where it is." alt="" coords="1019,352,1198,397"/>
 <area shape="poly" id="edge15_Node000002_Node000014" title=" " alt="" coords="1212,357,1502,318,1497,320,1213,362"/>
-<area shape="rect" id="Node000015" href="$interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableCoverHost.html" title="A balloon a cover formation can stand round and hold where it is, the side only UnbreakableFormationS..." alt="" coords="1007,421,1210,466"/>
+<area shape="rect" id="Node000015" href="$interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableCoverHost.html" title="A balloon a cover formation (or a ring, at its centre) can stand round and hold where it is,..." alt="" coords="1007,421,1210,466"/>
 <area shape="poly" id="edge16_Node000002_Node000015" title=" " alt="" coords="1224,419,1341,392,1465,357,1547,329,1552,327,1467,362,1343,397,1225,424"/>
 <area shape="rect" id="Node000016" href="$interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IPaintable.html" title="An actor whose color identity can be overwritten." alt="" coords="1244,537,1466,582"/>
 <area shape="poly" id="edge17_Node000001_Node000016" title=" " alt="" coords="1410,528,1448,512,1489,500,1583,487,1679,483,1769,485,1850,494,1844,494,1769,491,1679,488,1584,492,1491,505,1450,517,1412,533"/>

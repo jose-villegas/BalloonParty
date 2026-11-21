@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"MushroomSporeTuning_8cs.html":[7,0,15,0,24],
 "MushroomSwayedMessage_8cs.html":[7,0,14,7,30],
 "MushroomThrowTuning_8cs.html":[7,0,15,0,25],
 "MushroomView_8cs.html":[7,0,15,0,0,22],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "ScoreTrailBehaviourId_8cs.html":[7,0,7,9,0,7],
 "ScoreTrailBehaviourResolver_8cs.html":[7,0,7,9,0,8],
 "ScoreTrailContext_8cs.html":[7,0,7,9,0,9],
-"ScoreTrailService_8cs.html":[7,0,7,9,5],
-"ScoreUILifetimeScope_8cs.html":[7,0,18,8,7]
+"ScoreTrailService_8cs.html":[7,0,7,9,5]
 };

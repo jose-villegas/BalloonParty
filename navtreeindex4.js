@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"ScoreUILifetimeScope_8cs.html":[7,0,18,8,7],
 "ScoringControlPoint_8cs.html":[7,0,3,9,32],
 "ScreenSpaceLightServiceEditor_8cs.html":[7,0,6,47],
 "ScreenSpaceLightService_8cs.html":[7,0,5,15],
@@ -85,14 +86,14 @@ var NAVTREEINDEX4 =
 "SlotGridPierceItemField_8cs.html":[7,0,15,2,11],
 "SlotGridView_8cs.html":[7,0,15,2,12],
 "SlotGrid_8cs.html":[7,0,15,2,8],
-"SlotMove_8cs.html":[7,0,1,1,7],
+"SlotMove_8cs.html":[7,0,1,1,8],
 "SlotPlacementMode_8cs.html":[7,0,15,0,33],
 "SmokeFieldResources_8cs.html":[7,0,13,10],
 "SmokeFieldService_8cs.html":[7,0,13,11],
 "SmokeFieldSettings_8cs.html":[7,0,3,5,29],
 "SmokeFieldView_8cs.html":[7,0,13,0,4],
-"SnakeBody_8cs.html":[7,0,1,1,8],
-"SnakeWalk_8cs.html":[7,0,1,1,9],
+"SnakeBody_8cs.html":[7,0,1,1,9],
+"SnakeWalk_8cs.html":[7,0,1,1,10],
 "SnipeChanceRoll_8cs.html":[7,0,8,7,8],
 "SnipeDischargeBloom_8cs.html":[7,0,8,7,9],
 "SnipeItemHandler_8cs.html":[7,0,8,7,10],
@@ -142,7 +143,7 @@ var NAVTREEINDEX4 =
 "SpriteShadowBakerEditor_8cs.html":[7,0,6,5,2],
 "SpriteShadowBaker_8cs.html":[7,0,14,10,16],
 "StampProfileDrawer_8cs.html":[7,0,3,4,10],
-"StandingFormation_8cs.html":[7,0,1,1,10],
+"StandingFormation_8cs.html":[7,0,1,1,11],
 "StartFromLevelCheat_8cs.html":[7,0,2,24],
 "StaticActorModel_8cs.html":[7,0,15,0,36],
 "StaticActorSpawner_8cs.html":[7,0,15,0,37],
@@ -216,8 +217,8 @@ var NAVTREEINDEX4 =
 "UnbreakableBalloonModel_8cs.html":[7,0,1,2,20],
 "UnbreakableBalloonVariant_8cs.html":[7,0,1,5,11],
 "UnbreakableFormationLook_8cs.html":[7,0,1,5,12],
-"UnbreakableFormationService_8cs.html":[7,0,1,1,11],
-"UnbreakableFormationService_8cs.html#a832e8f52fca5a678819ec96269dcb532":[7,0,1,1,11,1],
+"UnbreakableFormationService_8cs.html":[7,0,1,1,12],
+"UnbreakableFormationService_8cs.html#a832e8f52fca5a678819ec96269dcb532":[7,0,1,1,12,1],
 "UnbreakableFormationSettings_8cs.html":[7,0,3,0,30],
 "UnitCircleAttribute_8cs.html":[7,0,14,51],
 "UnitCircleDrawer_8cs.html":[7,0,6,56],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "WindSoundRouter_8cs.html":[7,0,0,2,9],
 "WorldPolylineGizmo_8cs.html":[7,0,14,10,17],
 "WriteOnMath_8cs.html":[7,0,18,5,3],
-"WriteOnText_8cs.html":[7,0,18,5,4],
-"XorShift32_8cs.html":[7,0,14,54]
+"WriteOnText_8cs.html":[7,0,18,5,4]
 };

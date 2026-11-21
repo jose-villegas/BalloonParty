@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"IPassThrough_8cs.html":[7,0,15,1,14],
 "IPierceItemField_8cs.html":[7,0,14,30],
 "IPitySettings_8cs.html":[7,0,14,31],
 "IPlayerHealing_8cs.html":[7,0,7,6,2],
@@ -80,7 +81,7 @@ var NAVTREEINDEX2 =
 "ITimeOfDayNight_8cs.html":[7,0,14,11,1],
 "ITimeOfDaySettings_8cs.html":[7,0,3,5,21],
 "ITimeScaleClaims_8cs.html":[7,0,14,8,0],
-"IToughSnakeBody_8cs.html":[7,0,1,1,6],
+"IToughSnakeBody_8cs.html":[7,0,1,1,7],
 "IToughSnakeSpringSettings_8cs.html":[7,0,3,0,21],
 "ITrailEndpoint_8cs.html":[7,0,14,9,5],
 "ITransformCapture_8cs.html":[7,0,8,26],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "MushroomSoundRouter_8cs.html":[7,0,0,2,5],
 "MushroomSporeBurst_8cs.html":[7,0,15,0,0,19],
 "MushroomSporePlanner_8cs.html":[7,0,15,0,0,20],
-"MushroomSporeRouter_8cs.html":[7,0,15,0,0,21],
-"MushroomSporeTuning_8cs.html":[7,0,15,0,24]
+"MushroomSporeRouter_8cs.html":[7,0,15,0,0,21]
 };

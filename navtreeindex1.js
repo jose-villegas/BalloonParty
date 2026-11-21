@@ -36,8 +36,9 @@ var NAVTREEINDEX1 =
 "FormationMembership_8cs.html":[7,0,1,2,7],
 "FormationOverlapResolver_8cs.html":[7,0,7,9,0,3],
 "FormationPlanner_8cs.html":[7,0,1,1,1],
-"FormationShape_8cs.html":[7,0,1,1,2],
-"FormationShapes_8cs.html":[7,0,1,1,3],
+"FormationRing_8cs.html":[7,0,1,1,2],
+"FormationShape_8cs.html":[7,0,1,1,3],
+"FormationShapes_8cs.html":[7,0,1,1,4],
 "FormattedLabel_8cs.html":[7,0,18,16],
 "FrameBreakdown_8cs.html":[7,0,6,9,0],
 "FrameDebuggerDumper_8cs.html":[7,0,6,2,0],
@@ -175,7 +176,7 @@ var NAVTREEINDEX1 =
 "IContentPiece_8cs.html":[7,0,3,9,9],
 "ICounterDisplay_8cs.html":[7,0,18,0,0],
 "ICoveredBombNeed_8cs.html":[7,0,7,0,3],
-"ICoveredHosts_8cs.html":[7,0,1,1,4],
+"ICoveredHosts_8cs.html":[7,0,1,1,5],
 "IDangerLevel_8cs.html":[7,0,7,3,0],
 "IDeflectorField_8cs.html":[7,0,14,25],
 "IDeflectsShots_8cs.html":[7,0,15,1,4],
@@ -195,7 +196,7 @@ var NAVTREEINDEX1 =
 "IFlightStats_8cs.html":[7,0,7,4,2],
 "IFormationGlowSettings_8cs.html":[7,0,3,0,15],
 "IFormationMember_8cs.html":[7,0,1,2,12],
-"IFormationReinforcements_8cs.html":[7,0,1,1,5],
+"IFormationReinforcements_8cs.html":[7,0,1,1,6],
 "IFreeCardGrant_8cs.html":[7,0,7,11,0],
 "IGameDisplayConfiguration_8cs.html":[7,0,3,14],
 "IGamePalette_8cs.html":[7,0,3,10,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "IOverflowSettings_8cs.html":[7,0,3,16],
 "IPaintReactive_8cs.html":[7,0,15,0,10],
 "IPaintable_8cs.html":[7,0,15,1,13],
-"IPaletteColorMasked_8cs.html":[7,0,3,10,3],
-"IPassThrough_8cs.html":[7,0,15,1,14]
+"IPaletteColorMasked_8cs.html":[7,0,3,10,3]
 };

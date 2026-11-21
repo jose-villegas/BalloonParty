@@ -200,6 +200,7 @@ var hierarchy =
     [ "BalloonParty.Balloon.Model.FormationMembership", "classBalloonParty_1_1Balloon_1_1Model_1_1FormationMembership.html", null ],
     [ "BalloonParty.Game.Score.Behaviours.FormationOverlapResolver", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationOverlapResolver.html", null ],
     [ "BalloonParty.Balloon.Formation.FormationPlanner", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html", null ],
+    [ "BalloonParty.Balloon.Formation.FormationRing", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationRing.html", null ],
     [ "BalloonParty.Game.Score.Behaviours.FormationShape", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationShape.html", null ],
     [ "BalloonParty.Balloon.Formation.FormationShapesExtensions", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationShapesExtensions.html", null ],
     [ "BalloonParty.Game.Score.Behaviours.ShapeFormationTicker.FormationState", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html", null ],

@@ -124,6 +124,9 @@ Static Package Functions</h2></td></tr>
 <tr class="memitem:ab66444997071a82cc86b0f24ae2f1473" id="r_ab66444997071a82cc86b0f24ae2f1473"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab66444997071a82cc86b0f24ae2f1473">CanPassThrough</a> (<a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html">IWriteableSlotActor</a> occupant)</td></tr>
 <tr class="memdesc:ab66444997071a82cc86b0f24ae2f1473"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether a snake may walk into <em>occupant</em> 's slot, sending it to the slot its tail leaves: a balloon that moves, held by nothing.  <br /></td></tr>
 <tr class="separator:ab66444997071a82cc86b0f24ae2f1473"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2fe3bcff87776671f4cb5dcc98a17bb0" id="r_a2fe3bcff87776671f4cb5dcc98a17bb0"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2fe3bcff87776671f4cb5dcc98a17bb0">IsOpen</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, Vector2Int slot)</td></tr>
+<tr class="memdesc:a2fe3bcff87776671f4cb5dcc98a17bb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether a formation may move into <em>slot</em> : empty, or held by a balloon it trades places with.  <br /></td></tr>
+<tr class="separator:a2fe3bcff87776671f4cb5dcc98a17bb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4682f624612296b42a3a7c54ac086391" id="r_a4682f624612296b42a3a7c54ac086391"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4682f624612296b42a3a7c54ac086391">LastRow</a> (int rows, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html">IUnbreakableFormationSettings</a> settings)</td></tr>
 <tr class="memdesc:a4682f624612296b42a3a7c54ac086391"><td class="mdescLeft">&#160;</td><td class="mdescRight">The deepest row a snake walks on a board of <em>rows</em> : it keeps a horizontal line's rows, never in the bottom <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a29d6af280feaabfa6fc0601541bd818c" title="Bottom rows a horizontal line never uses, at least BottomClearance, so a wall across the board stands...">IUnbreakableFormationSettings.HorizontalBottomClearance</a>.  <br /></td></tr>
 <tr class="separator:a4682f624612296b42a3a7c54ac086391"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -135,8 +138,6 @@ Static Package Functions</h2></td></tr>
 Static Private Member Functions</h2></td></tr>
 <tr class="memitem:a82b358d80986c6ffb08b70d5affed2a0" id="r_a82b358d80986c6ffb08b70d5affed2a0"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a82b358d80986c6ffb08b70d5affed2a0">ClosesWall</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1ShotWall.html">ShotWall</a> wall, Vector2Int next, Vector2Int tail)</td></tr>
 <tr class="separator:a82b358d80986c6ffb08b70d5affed2a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2fe3bcff87776671f4cb5dcc98a17bb0" id="r_a2fe3bcff87776671f4cb5dcc98a17bb0"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2fe3bcff87776671f4cb5dcc98a17bb0">IsOpen</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, Vector2Int slot)</td></tr>
-<tr class="separator:a2fe3bcff87776671f4cb5dcc98a17bb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
@@ -231,10 +232,12 @@ Static Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Whether a formation may move into <em>slot</em> : empty, or held by a balloon it trades places with. </p>
 
 </div>
 </div>

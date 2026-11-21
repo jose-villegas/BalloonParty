@@ -186,6 +186,24 @@ Properties</h2></td></tr>
 <tr class="memitem:a9f1b9027d29b00bd5eb5b6bef33a1447" id="r_a9f1b9027d29b00bd5eb5b6bef33a1447"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9f1b9027d29b00bd5eb5b6bef33a1447">ReinforcementChance</a><code> [get]</code></td></tr>
 <tr class="memdesc:a9f1b9027d29b00bd5eb5b6bef33a1447"><td class="mdescLeft">&#160;</td><td class="mdescRight">Chance, at each wave start, that a formation which stood untouched through the last wave calls in one more unbreakable.  <br /></td></tr>
 <tr class="separator:a9f1b9027d29b00bd5eb5b6bef33a1447"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a950678ca75fbbdd9baf8560d795fc1a1" id="r_a950678ca75fbbdd9baf8560d795fc1a1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a950678ca75fbbdd9baf8560d795fc1a1">RingHoldCycles</a><code> [get]</code></td></tr>
+<tr class="memdesc:a950678ca75fbbdd9baf8560d795fc1a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cycles a ring holds, counting the cycle it formed on, before it changes shape.  <br /></td></tr>
+<tr class="separator:a950678ca75fbbdd9baf8560d795fc1a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d4472d4dc2142a99ef693f3cf731ad5" id="r_a2d4472d4dc2142a99ef693f3cf731ad5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2d4472d4dc2142a99ef693f3cf731ad5">RingMaxMembers</a><code> [get]</code></td></tr>
+<tr class="memdesc:a2d4472d4dc2142a99ef693f3cf731ad5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Most unbreakables in a ring, five at most: of the six slots round its centre, one always stays open.  <br /></td></tr>
+<tr class="separator:a2d4472d4dc2142a99ef693f3cf731ad5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0ad02648238f6455c729431f511c064" id="r_af0ad02648238f6455c729431f511c064"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af0ad02648238f6455c729431f511c064">RingMinMembers</a><code> [get]</code></td></tr>
+<tr class="memdesc:af0ad02648238f6455c729431f511c064"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fewest unbreakables a ring forms from.  <br /></td></tr>
+<tr class="separator:af0ad02648238f6455c729431f511c064"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acebe7c666a8d2dc3f855e1bc15e26a93" id="r_acebe7c666a8d2dc3f855e1bc15e26a93"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acebe7c666a8d2dc3f855e1bc15e26a93">RingReverseEveryCycles</a><code> [get]</code></td></tr>
+<tr class="memdesc:acebe7c666a8d2dc3f855e1bc15e26a93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cycles a ring turns one way before it turns the other. 0: it never turns back by itself.  <br /></td></tr>
+<tr class="separator:acebe7c666a8d2dc3f855e1bc15e26a93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32e59dc5315f45a1f236a8bc1345635f" id="r_a32e59dc5315f45a1f236a8bc1345635f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a32e59dc5315f45a1f236a8bc1345635f">RingWeight</a><code> [get]</code></td></tr>
+<tr class="memdesc:a32e59dc5315f45a1f236a8bc1345635f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pick weight of a ring. It forms only from <a class="el" href="#af0ad02648238f6455c729431f511c064" title="Fewest unbreakables a ring forms from.">RingMinMembers</a> unbreakables or more.  <br /></td></tr>
+<tr class="separator:a32e59dc5315f45a1f236a8bc1345635f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adbd40199c0dddff855d2e9de7a4fe593" id="r_adbd40199c0dddff855d2e9de7a4fe593"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adbd40199c0dddff855d2e9de7a4fe593">RingWeightAfterSnake</a><code> [get]</code></td></tr>
+<tr class="memdesc:adbd40199c0dddff855d2e9de7a4fe593"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many times likelier a ring is for a snake done walking: the snake coils into it, its head leading.  <br /></td></tr>
+<tr class="separator:adbd40199c0dddff855d2e9de7a4fe593"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e760088aa4aac86777cc79e17223a1f" id="r_a5e760088aa4aac86777cc79e17223a1f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5e760088aa4aac86777cc79e17223a1f">SnakeHoldCycles</a><code> [get]</code></td></tr>
 <tr class="memdesc:a5e760088aa4aac86777cc79e17223a1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cycles a snake walks, counting the cycle it formed on, before it changes shape.  <br /></td></tr>
 <tr class="separator:a5e760088aa4aac86777cc79e17223a1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -254,6 +272,18 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a66df98d79f114edc2671d5626431bc69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a34f8392829f77fc8030ccdb6fcadfc2b" id="r_a34f8392829f77fc8030ccdb6fcadfc2b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a34f8392829f77fc8030ccdb6fcadfc2b">_reinforcementChance</a> = 0.35f</td></tr>
 <tr class="separator:a34f8392829f77fc8030ccdb6fcadfc2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adda0d8e6b8dcca8cf6b120aa23241623" id="r_adda0d8e6b8dcca8cf6b120aa23241623"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adda0d8e6b8dcca8cf6b120aa23241623">_ringHoldCycles</a> = 8</td></tr>
+<tr class="separator:adda0d8e6b8dcca8cf6b120aa23241623"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e1f176d5e1fd02e6e1e147057913285" id="r_a6e1f176d5e1fd02e6e1e147057913285"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6e1f176d5e1fd02e6e1e147057913285">_ringMaxMembers</a> = 5</td></tr>
+<tr class="separator:a6e1f176d5e1fd02e6e1e147057913285"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee7c0e6eb2330f2fa4eb05c920b1ef15" id="r_aee7c0e6eb2330f2fa4eb05c920b1ef15"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aee7c0e6eb2330f2fa4eb05c920b1ef15">_ringMinMembers</a> = 4</td></tr>
+<tr class="separator:aee7c0e6eb2330f2fa4eb05c920b1ef15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ba65b5ac00e84d1b06fd8279b58e9c2" id="r_a8ba65b5ac00e84d1b06fd8279b58e9c2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8ba65b5ac00e84d1b06fd8279b58e9c2">_ringReverseEveryCycles</a> = 4</td></tr>
+<tr class="separator:a8ba65b5ac00e84d1b06fd8279b58e9c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8716b76366ceb866f2f560feed5e3b55" id="r_a8716b76366ceb866f2f560feed5e3b55"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8716b76366ceb866f2f560feed5e3b55">_ringWeight</a> = 1f</td></tr>
+<tr class="separator:a8716b76366ceb866f2f560feed5e3b55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abaa54aabf1db1a9c61489a18c2973a2e" id="r_abaa54aabf1db1a9c61489a18c2973a2e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abaa54aabf1db1a9c61489a18c2973a2e">_ringWeightAfterSnake</a> = 4f</td></tr>
+<tr class="separator:abaa54aabf1db1a9c61489a18c2973a2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91b845b7b787858841b812e01799c61a" id="r_a91b845b7b787858841b812e01799c61a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a91b845b7b787858841b812e01799c61a">_snakeHoldCycles</a> = 3</td></tr>
 <tr class="separator:a91b845b7b787858841b812e01799c61a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5062abc551a70153d4366e14810e954e" id="r_a5062abc551a70153d4366e14810e954e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5062abc551a70153d4366e14810e954e">_snakeMaxMembers</a> = 4</td></tr>
@@ -681,6 +711,138 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">float BalloonParty.Configuration.Balloons.UnbreakableFormationSettings._reinforcementChance = 0.35f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adda0d8e6b8dcca8cf6b120aa23241623" name="adda0d8e6b8dcca8cf6b120aa23241623"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adda0d8e6b8dcca8cf6b120aa23241623">&#9670;&#160;</a></span>_ringHoldCycles</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.UnbreakableFormationSettings._ringHoldCycles = 8</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6e1f176d5e1fd02e6e1e147057913285" name="a6e1f176d5e1fd02e6e1e147057913285"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e1f176d5e1fd02e6e1e147057913285">&#9670;&#160;</a></span>_ringMaxMembers</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.UnbreakableFormationSettings._ringMaxMembers = 5</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aee7c0e6eb2330f2fa4eb05c920b1ef15" name="aee7c0e6eb2330f2fa4eb05c920b1ef15"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee7c0e6eb2330f2fa4eb05c920b1ef15">&#9670;&#160;</a></span>_ringMinMembers</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.UnbreakableFormationSettings._ringMinMembers = 4</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8ba65b5ac00e84d1b06fd8279b58e9c2" name="a8ba65b5ac00e84d1b06fd8279b58e9c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ba65b5ac00e84d1b06fd8279b58e9c2">&#9670;&#160;</a></span>_ringReverseEveryCycles</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.UnbreakableFormationSettings._ringReverseEveryCycles = 4</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8716b76366ceb866f2f560feed5e3b55" name="a8716b76366ceb866f2f560feed5e3b55"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8716b76366ceb866f2f560feed5e3b55">&#9670;&#160;</a></span>_ringWeight</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.UnbreakableFormationSettings._ringWeight = 1f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abaa54aabf1db1a9c61489a18c2973a2e" name="abaa54aabf1db1a9c61489a18c2973a2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abaa54aabf1db1a9c61489a18c2973a2e">&#9670;&#160;</a></span>_ringWeightAfterSnake</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.UnbreakableFormationSettings._ringWeightAfterSnake = 4f</td>
         </tr>
       </table>
   </td>
@@ -1383,6 +1545,163 @@ Private Attributes</h2></td></tr>
 <p>Chance, at each wave start, that a formation which stood untouched through the last wave calls in one more unbreakable. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#ab57ce9338d75ace4254ea5c59f50c575">BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings</a>.</p>
+
+</div>
+</div>
+<a id="a950678ca75fbbdd9baf8560d795fc1a1" name="a950678ca75fbbdd9baf8560d795fc1a1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a950678ca75fbbdd9baf8560d795fc1a1">&#9670;&#160;</a></span>RingHoldCycles</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.UnbreakableFormationSettings.RingHoldCycles</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Cycles a ring holds, counting the cycle it formed on, before it changes shape. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#abcb9ea3c54b56535d314135233cc2ade">BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings</a>.</p>
+
+</div>
+</div>
+<a id="a2d4472d4dc2142a99ef693f3cf731ad5" name="a2d4472d4dc2142a99ef693f3cf731ad5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d4472d4dc2142a99ef693f3cf731ad5">&#9670;&#160;</a></span>RingMaxMembers</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.UnbreakableFormationSettings.RingMaxMembers</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Most unbreakables in a ring, five at most: of the six slots round its centre, one always stays open. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a05c5196d0ecf3089baaca7de5bd38805">BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings</a>.</p>
+
+</div>
+</div>
+<a id="af0ad02648238f6455c729431f511c064" name="af0ad02648238f6455c729431f511c064"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0ad02648238f6455c729431f511c064">&#9670;&#160;</a></span>RingMinMembers</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.UnbreakableFormationSettings.RingMinMembers</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Fewest unbreakables a ring forms from. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a7b2f8fc29a9edf9838a854749229a91d">BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings</a>.</p>
+
+</div>
+</div>
+<a id="acebe7c666a8d2dc3f855e1bc15e26a93" name="acebe7c666a8d2dc3f855e1bc15e26a93"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acebe7c666a8d2dc3f855e1bc15e26a93">&#9670;&#160;</a></span>RingReverseEveryCycles</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.UnbreakableFormationSettings.RingReverseEveryCycles</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Cycles a ring turns one way before it turns the other. 0: it never turns back by itself. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#ac9d98989b95b6fa361951dec49dedb6a">BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings</a>.</p>
+
+</div>
+</div>
+<a id="a32e59dc5315f45a1f236a8bc1345635f" name="a32e59dc5315f45a1f236a8bc1345635f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32e59dc5315f45a1f236a8bc1345635f">&#9670;&#160;</a></span>RingWeight</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.UnbreakableFormationSettings.RingWeight</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Pick weight of a ring. It forms only from <a class="el" href="#af0ad02648238f6455c729431f511c064" title="Fewest unbreakables a ring forms from.">RingMinMembers</a> unbreakables or more. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a2d8d538c89666eb1d15d67a91b29344e">BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings</a>.</p>
+
+</div>
+</div>
+<a id="adbd40199c0dddff855d2e9de7a4fe593" name="adbd40199c0dddff855d2e9de7a4fe593"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adbd40199c0dddff855d2e9de7a4fe593">&#9670;&#160;</a></span>RingWeightAfterSnake</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.UnbreakableFormationSettings.RingWeightAfterSnake</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How many times likelier a ring is for a snake done walking: the snake coils into it, its head leading. </p>
+<p>1: no likelier than for any other formation. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a8be790f7a6e1acf2393750822135aedf">BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings</a>.</p>
 
 </div>
 </div>

@@ -229,7 +229,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Types and utilities used across multiple features.</p>
-<h1><a class="anchor" id="autotoc_md1203"></a>
+<h1><a class="anchor" id="autotoc_md1204"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -302,7 +302,7 @@ Contents</h1>
 <td class="markdownTableBodyNone"><code>XorShift32</code>   </td><td class="markdownTableBodyNone">A small seeded generator of whole numbers, written out as integer arithmetic so the same seed gives the same sequence on every device and runtime. The mushroom layout shuffles with it   </td></tr>
 </table>
 <p>This table covers the folders and the types other features reach for most; a few small editor-only attributes living alongside these files aren't broken out separately.</p>
-<h1><a class="anchor" id="autotoc_md1204"></a>
+<h1><a class="anchor" id="autotoc_md1205"></a>
 Messages</h1>
 <p>Messages are the signals that decouple systems from one another. A publisher fires a message; any number of subscribers react independently.</p>
 <p><b>This table is a curated subset, not an index.</b> It lists the gameplay-visible consumers of each message — the ones whose absence would break a mechanic — not every subscriber. <code>Game/Telemetry</code>'s <code>GameplayMetricsService</code> and <code>Game/Flight</code>'s <code>FlightStatsService</code> between them subscribe to roughly 21 of these messages without being named in a single row below; they read the game, they don't drive it, so listing them on every row would bury the consumers that do. Check the publisher's own file for the exhaustive subscriber list when it matters.</p>

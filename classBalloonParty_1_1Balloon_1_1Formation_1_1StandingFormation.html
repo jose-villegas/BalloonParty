@@ -137,9 +137,15 @@ Properties</h2></td></tr>
 <tr class="memitem:a60f8de529e3eb03c664a987d2ec1cfcc" id="r_a60f8de529e3eb03c664a987d2ec1cfcc"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a60f8de529e3eb03c664a987d2ec1cfcc">ArrangedOnPass</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:a60f8de529e3eb03c664a987d2ec1cfcc"><td class="mdescLeft">&#160;</td><td class="mdescRight">The cycle's arrangement that last formed or re-planned it.  <br /></td></tr>
 <tr class="separator:a60f8de529e3eb03c664a987d2ec1cfcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a657d6023a77b6442f501887ddeab2c07" id="r_a657d6023a77b6442f501887ddeab2c07"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a657d6023a77b6442f501887ddeab2c07">Clockwise</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a657d6023a77b6442f501887ddeab2c07"><td class="mdescLeft">&#160;</td><td class="mdescRight">The way a ring turns on the beat.  <br /></td></tr>
+<tr class="separator:a657d6023a77b6442f501887ddeab2c07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5718e2e7a3cfe4b0a4306ec8205e886" id="r_ad5718e2e7a3cfe4b0a4306ec8205e886"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad5718e2e7a3cfe4b0a4306ec8205e886">CyclesLeft</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:ad5718e2e7a3cfe4b0a4306ec8205e886"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cycles left to hold the current shape before it changes.  <br /></td></tr>
 <tr class="separator:ad5718e2e7a3cfe4b0a4306ec8205e886"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7aa81327bec1a38d0ad9c7f734b4bed1" id="r_a7aa81327bec1a38d0ad9c7f734b4bed1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7aa81327bec1a38d0ad9c7f734b4bed1">CyclesToReverse</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a7aa81327bec1a38d0ad9c7f734b4bed1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cycles left before a ring turns the other way.  <br /></td></tr>
+<tr class="separator:a7aa81327bec1a38d0ad9c7f734b4bed1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a5712231b53ffdf1dcb7823d4bacf57" id="r_a2a5712231b53ffdf1dcb7823d4bacf57"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2a5712231b53ffdf1dcb7823d4bacf57">FormedOnWave</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:a2a5712231b53ffdf1dcb7823d4bacf57"><td class="mdescLeft">&#160;</td><td class="mdescRight">The wave it formed in, which rolls for no reinforcement.  <br /></td></tr>
 <tr class="separator:a2a5712231b53ffdf1dcb7823d4bacf57"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -147,16 +153,22 @@ Properties</h2></td></tr>
 <tr class="memdesc:afbb3961fe761fccb2e2435f93704a750"><td class="mdescLeft">&#160;</td><td class="mdescRight">A snake's walking direction (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1HexCoordinates.html#ab98ceaa27dad848be1ada5a45480c8bf" title="The neighbour one step from slot  in direction : 0 east, then clockwise on screen in 60° turns.">Slots.Grid.HexCoordinates.Step</a>); its members run head first.  <br /></td></tr>
 <tr class="separator:afbb3961fe761fccb2e2435f93704a750"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada68dcb0930559ff344bec274c0128d9" id="r_ada68dcb0930559ff344bec274c0128d9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html">IWriteableSlotActor</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ada68dcb0930559ff344bec274c0128d9">Host</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:ada68dcb0930559ff344bec274c0128d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The balloon an item cover stands round, held on <a class="el" href="#a3322ba8e3932bfe47f8482de91dea55a" title="Where Host stood when the cover was planned.">HostSlot</a> for as long as it is the host (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableCoverHost.html" title="A balloon a cover formation can stand round and hold where it is, the side only UnbreakableFormationS...">IWriteableCoverHost</a>); null for any other shape, and once that balloon has popped or been taken off the board (the cover then stands round nothing until it changes).  <br /></td></tr>
+<tr class="memdesc:ada68dcb0930559ff344bec274c0128d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The balloon an item cover stands round, or a ring's centre balloon, held on <a class="el" href="#a3322ba8e3932bfe47f8482de91dea55a" title="Where Host stood when the formation was planned.">HostSlot</a> for as long as it is the host (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableCoverHost.html" title="A balloon a cover formation (or a ring, at its centre) can stand round and hold where it is,...">IWriteableCoverHost</a>); null for any other shape, and once that balloon has popped or been taken off the board (the formation then stands round nothing until it changes).  <br /></td></tr>
 <tr class="separator:ada68dcb0930559ff344bec274c0128d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02ddcd0c140b5f65a71e909ec2ddc57d" id="r_a02ddcd0c140b5f65a71e909ec2ddc57d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a02ddcd0c140b5f65a71e909ec2ddc57d">HostLit</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a02ddcd0c140b5f65a71e909ec2ddc57d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether <a class="el" href="#ada68dcb0930559ff344bec274c0128d9" title="The balloon an item cover stands round, or a ring&#39;s centre balloon, held on HostSlot for as long as i...">Host</a> gets a ring of light of its own (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Formation_1_1ICoveredHosts.html" title="The balloons item covers stand round now, for views that draw a cover as one body with what it covers...">ICoveredHosts</a>): a cover's does, so its outline closes over the balloon; a ring's centre does not.  <br /></td></tr>
+<tr class="separator:a02ddcd0c140b5f65a71e909ec2ddc57d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3322ba8e3932bfe47f8482de91dea55a" id="r_a3322ba8e3932bfe47f8482de91dea55a"><td class="memItemLeft" align="right" valign="top">Vector2Int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3322ba8e3932bfe47f8482de91dea55a">HostSlot</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:a3322ba8e3932bfe47f8482de91dea55a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where <a class="el" href="#ada68dcb0930559ff344bec274c0128d9" title="The balloon an item cover stands round, held on HostSlot for as long as it is the host (IWriteableCov...">Host</a> stood when the cover was planned.  <br /></td></tr>
+<tr class="memdesc:a3322ba8e3932bfe47f8482de91dea55a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where <a class="el" href="#ada68dcb0930559ff344bec274c0128d9" title="The balloon an item cover stands round, or a ring&#39;s centre balloon, held on HostSlot for as long as i...">Host</a> stood when the formation was planned.  <br /></td></tr>
 <tr class="separator:a3322ba8e3932bfe47f8482de91dea55a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac199b85c9ed13b99be3ce3f83f0c3ef9" id="r_ac199b85c9ed13b99be3ce3f83f0c3ef9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac199b85c9ed13b99be3ce3f83f0c3ef9">Id</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:ac199b85c9ed13b99be3ce3f83f0c3ef9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Which formation this is, unlike any other standing with it; each member carries it (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember.html#a3ce670557f6017a2a9f4c6b845e63361" title="Which formation it is in: the same for every member of one, and unlike any other formation&#39;s.">IFormationMember.FormationId</a>).  <br /></td></tr>
 <tr class="separator:ac199b85c9ed13b99be3ce3f83f0c3ef9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80fb924c1010c915ef8f41254cfdbc10" id="r_a80fb924c1010c915ef8f41254cfdbc10"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html">IWriteableFormationMember</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a80fb924c1010c915ef8f41254cfdbc10">Members</a><code> [get]</code></td></tr>
 <tr class="separator:a80fb924c1010c915ef8f41254cfdbc10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba3ab0cfe3fcf61e73a5987baa30c7d2" id="r_aba3ab0cfe3fcf61e73a5987baa30c7d2"><td class="memItemLeft" align="right" valign="top">Vector2Int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aba3ab0cfe3fcf61e73a5987baa30c7d2">RingCentre</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:aba3ab0cfe3fcf61e73a5987baa30c7d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">The slot a ring stands round and turns about; its members hold neighbours of it.  <br /></td></tr>
+<tr class="separator:aba3ab0cfe3fcf61e73a5987baa30c7d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8aad8dd00893057380b75d9ae12b2155" id="r_a8aad8dd00893057380b75d9ae12b2155"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Formation.html#a7d189f644fea0191bb4f5acaef4bf746">FormationShape</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8aad8dd00893057380b75d9ae12b2155">Shape</a><code> [get, set]</code></td></tr>
 <tr class="separator:a8aad8dd00893057380b75d9ae12b2155"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af2c1a8f3511be76aceee6c0190d43637" id="r_af2c1a8f3511be76aceee6c0190d43637"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af2c1a8f3511be76aceee6c0190d43637">Touched</a><code> [get, set]</code></td></tr>
@@ -263,6 +275,30 @@ Properties</h2></td></tr>
 
 </div>
 </div>
+<a id="a657d6023a77b6442f501887ddeab2c07" name="a657d6023a77b6442f501887ddeab2c07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a657d6023a77b6442f501887ddeab2c07">&#9670;&#160;</a></span>Clockwise</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Balloon.Formation.StandingFormation.Clockwise</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel set">set</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The way a ring turns on the beat. </p>
+
+</div>
+</div>
 <a id="ad5718e2e7a3cfe4b0a4306ec8205e886" name="ad5718e2e7a3cfe4b0a4306ec8205e886"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad5718e2e7a3cfe4b0a4306ec8205e886">&#9670;&#160;</a></span>CyclesLeft</h2>
 
@@ -284,6 +320,30 @@ Properties</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Cycles left to hold the current shape before it changes. </p>
+
+</div>
+</div>
+<a id="a7aa81327bec1a38d0ad9c7f734b4bed1" name="a7aa81327bec1a38d0ad9c7f734b4bed1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7aa81327bec1a38d0ad9c7f734b4bed1">&#9670;&#160;</a></span>CyclesToReverse</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Balloon.Formation.StandingFormation.CyclesToReverse</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel set">set</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Cycles left before a ring turns the other way. </p>
 
 </div>
 </div>
@@ -355,7 +415,31 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>The balloon an item cover stands round, held on <a class="el" href="#a3322ba8e3932bfe47f8482de91dea55a" title="Where Host stood when the cover was planned.">HostSlot</a> for as long as it is the host (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableCoverHost.html" title="A balloon a cover formation can stand round and hold where it is, the side only UnbreakableFormationS...">IWriteableCoverHost</a>); null for any other shape, and once that balloon has popped or been taken off the board (the cover then stands round nothing until it changes). </p>
+<p>The balloon an item cover stands round, or a ring's centre balloon, held on <a class="el" href="#a3322ba8e3932bfe47f8482de91dea55a" title="Where Host stood when the formation was planned.">HostSlot</a> for as long as it is the host (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableCoverHost.html" title="A balloon a cover formation (or a ring, at its centre) can stand round and hold where it is,...">IWriteableCoverHost</a>); null for any other shape, and once that balloon has popped or been taken off the board (the formation then stands round nothing until it changes). </p>
+
+</div>
+</div>
+<a id="a02ddcd0c140b5f65a71e909ec2ddc57d" name="a02ddcd0c140b5f65a71e909ec2ddc57d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02ddcd0c140b5f65a71e909ec2ddc57d">&#9670;&#160;</a></span>HostLit</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Balloon.Formation.StandingFormation.HostLit</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel set">set</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Whether <a class="el" href="#ada68dcb0930559ff344bec274c0128d9" title="The balloon an item cover stands round, or a ring&#39;s centre balloon, held on HostSlot for as long as i...">Host</a> gets a ring of light of its own (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Formation_1_1ICoveredHosts.html" title="The balloons item covers stand round now, for views that draw a cover as one body with what it covers...">ICoveredHosts</a>): a cover's does, so its outline closes over the balloon; a ring's centre does not. </p>
 
 </div>
 </div>
@@ -379,7 +463,7 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Where <a class="el" href="#ada68dcb0930559ff344bec274c0128d9" title="The balloon an item cover stands round, held on HostSlot for as long as it is the host (IWriteableCov...">Host</a> stood when the cover was planned. </p>
+<p>Where <a class="el" href="#ada68dcb0930559ff344bec274c0128d9" title="The balloon an item cover stands round, or a ring&#39;s centre balloon, held on HostSlot for as long as i...">Host</a> stood when the formation was planned. </p>
 
 </div>
 </div>
@@ -427,6 +511,30 @@ Properties</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="aba3ab0cfe3fcf61e73a5987baa30c7d2" name="aba3ab0cfe3fcf61e73a5987baa30c7d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba3ab0cfe3fcf61e73a5987baa30c7d2">&#9670;&#160;</a></span>RingCentre</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector2Int BalloonParty.Balloon.Formation.StandingFormation.RingCentre</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel set">set</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The slot a ring stands round and turns about; its members hold neighbours of it. </p>
 
 </div>
 </div>

@@ -1,5 +1,5 @@
 <map id="BalloonParty.Balloon.Model.IWriteableCoverHost" name="BalloonParty.Balloon.Model.IWriteableCoverHost">
-<area shape="rect" id="Node000001" title="A balloon a cover formation can stand round and hold where it is, the side only UnbreakableFormationS..." alt="" coords="5,179,208,223"/>
+<area shape="rect" id="Node000001" title="A balloon a cover formation (or a ring, at its centre) can stand round and hold where it is,..." alt="" coords="5,179,208,223"/>
 <area shape="rect" id="Node000002" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html" title=" " alt="" coords="256,179,458,223"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="222,198,258,200,253,202,224,204"/>
 <area shape="rect" id="Node000003" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html" title="The plain balloon (and its silver, gold and rainbow skins): paintable, carries an item,..." alt="" coords="506,5,708,50"/>

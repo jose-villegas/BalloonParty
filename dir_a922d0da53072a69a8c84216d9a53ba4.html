@@ -177,7 +177,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Owns the <b>run lifecycle</b> — the run-based progression model where a loss ends the run and resets it. A run starts at level 1, and only a meta record (best level / best score) survives across runs. The one exception is a run the app was closed or killed in: it's saved at each level boundary and offered as <b>Continue</b> on the next launch (see Resuming an interrupted run below).</p>
-<h1><a class="anchor" id="autotoc_md247"></a>
+<h1><a class="anchor" id="autotoc_md248"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -225,7 +225,7 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>RunResumeController</code>   </td><td class="markdownTableBodyNone">Takes the request while the launch screen is up: loads the save, stages it, and calls <code>RunController.ResumeRun</code>. A run saved on the game-over screen goes back to it on the first <code>Tick</code> after navigation reaches <code>Game</code> (a frame later rather than inside the navigation change, so the two transitions don't nest). Leaving the launch screen without a resume (Play) is a new run, and clears the save   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md248"></a>
+<h1><a class="anchor" id="autotoc_md249"></a>
 Loss flow</h1>
 <div class="fragment"><div class="line">trigger → RunController.EndRun() → (loss cinematic) → GameOver screen</div>
 <div class="line">        → [Restart] → RunController.RestartRun() → Game</div>
@@ -235,7 +235,7 @@ Loss flow</h1>
 <div class="line">                    the retry with a bonus card → RunController.RestartRun() → Game, same level,</div>
 <div class="line">                    RunUpgrades deals the bonus card</div>
 </div><!-- fragment --><p>Reset happens on <b>restart</b>, not on GameOver entry, so the GameOver screen can still show the final score.</p>
-<h1><a class="anchor" id="autotoc_md249"></a>
+<h1><a class="anchor" id="autotoc_md250"></a>
 Resuming an interrupted run</h1>
 <p>A phone call or the OS killing the app would otherwise cost the whole run. The run is saved at level boundaries only: a resume replays the saved level from its start, so there's no mid-level board to restore.</p>
 <div class="fragment"><div class="line">launch → save exists → the Continue balloon drifts about beside Play</div>
@@ -248,10 +248,10 @@ Resuming an interrupted run</h1>
 </div><!-- fragment --><p>The resume <b>reuses the retry path</b>. <code>PrepareResume</code> sets <code>RetryLevel</code> to the saved level, so every reader of a retry (level, difficulty, seed, cards, score) sets the level up as its retry would, and <code>IRetryState.Resuming</code> carries the snapshot for the parts a retry doesn't keep: <code>RunSeed</code> takes the saved seed, <code>ScoreController</code> the saved level-start score, <code>PlayerHealthController</code> the saved hearts, and <code>RunUpgrades</code> the saved cards. <code>RetryTracker</code> then sets the retries used to the saved count instead of counting one more: <b>a resume spends no retry, and can't buy back the ad gate</b>, since quitting and relaunching brings back the same count. Killed on the game-over screen, the player comes back to it, with the same <code>FailureOffers.Current</code>.</p>
 <p><code>ResumeRun</code> resets everything but the board and stays on <code>Launch</code>: nothing has spawned before the first <code>Game</code> (the first spawn waits for it), so the held spawn lays out the resumed level, and resetting the board here would spawn it twice. Its <code>RunResetMessage</code> says the board is settled, since nothing waits on a cinematic. <code>RestoreLoss</code> publishes <code>GameOverMessage</code> with <code>Restored</code> set, without <code>RecordRun</code>: the loss was recorded, sounded and scored when it happened, so the loss cinematic skips its beat (the screen shows bare, and a dismiss restarts at once), the game-over sting stays quiet, and telemetry writes nothing for it.</p>
 <p>A save is dropped when the player starts over (a fresh restart) or presses Play instead of Continue. Playing the Game scene directly in the Editor leaves <code>Launch</code> without a resume too, so it clears the save. A loss arriving during a <code>BlocksLoss</code> cinematic or the <code>LevelUp</code> state is <b>deferred, never dropped</b> — <code>RunController</code> marks it pending and fires <code>EndRun()</code> the moment navigation returns to <code>Game</code>. Outside those gates, <code>EndRun()</code> only commits from <code>NavigationState.Game</code> (the GameOver state gate stops a second trigger from ending the run twice).</p>
-<h1><a class="anchor" id="autotoc_md250"></a>
+<h1><a class="anchor" id="autotoc_md251"></a>
 Testability seams</h1>
 <p><code>RunController</code> reaches navigation and cinematic state through <code>INavigation</code> and <code>ICinematicState</code> (<code>Shared/GameState/</code>) rather than the static <code>Navigation</code> / <code>Cinematic</code>, so the whole lifecycle is unit-testable with substitutes.</p>
-<h1><a class="anchor" id="autotoc_md251"></a>
+<h1><a class="anchor" id="autotoc_md252"></a>
 Interactions</h1>
 <ul>
 <li><b><code>GameOverMessage</code></b> — published by <code>RunController.EndRun()</code>; consumed by the GameOver screen and (later) the loss cinematic.</li>

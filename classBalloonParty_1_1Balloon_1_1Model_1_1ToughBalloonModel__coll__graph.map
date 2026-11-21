@@ -32,7 +32,7 @@
 <area shape="poly" id="edge14_Node000002_Node000013" title=" " alt="" coords="1182,329,1202,323,1307,279,1344,268,1339,270,1309,283,1204,327,1184,334"/>
 <area shape="rect" id="Node000014" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceAnchor.html" title="A dynamic actor that can be pinned where it is." alt="" coords="1002,407,1181,451"/>
 <area shape="poly" id="edge15_Node000002_Node000014" title=" " alt="" coords="1191,397,1201,392,1246,361,1281,320,1292,299,1297,289,1306,279,1324,270,1328,268,1309,283,1301,292,1297,301,1286,322,1249,365,1204,397,1193,402"/>
-<area shape="rect" id="Node000015" href="$interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableCoverHost.html" title="A balloon a cover formation can stand round and hold where it is, the side only UnbreakableFormationS..." alt="" coords="990,60,1193,105"/>
+<area shape="rect" id="Node000015" href="$interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableCoverHost.html" title="A balloon a cover formation (or a ring, at its centre) can stand round and hold where it is,..." alt="" coords="990,60,1193,105"/>
 <area shape="poly" id="edge16_Node000002_Node000015" title=" " alt="" coords="1187,108,1204,115,1305,169,1388,223,1382,223,1303,173,1202,119,1187,113"/>
 <area shape="rect" id="Node000016" href="$interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasDeflectStamp.html" title="An actor whose projectile deflect stamps the disturbance field at its slot — heavy types jolt the air..." alt="" coords="1308,363,1530,407"/>
 <area shape="poly" id="edge17_Node000001_Node000016" title=" " alt="" coords="1512,410,1696,466,1691,466,1512,415"/>

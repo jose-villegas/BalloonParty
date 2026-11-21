@@ -64,6 +64,7 @@ var classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer =
     [ "_relocateActor", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#ace9c54cb1858f2ff85a214b8d82c9341", null ],
     [ "_relocateActors", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a714af914ad5c776d33948ac070658b38", null ],
     [ "_restingSlots", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#afb37f7292de459b0b9bee842fdccdace", null ],
+    [ "_ringTurnDue", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#ae353e23cbf417a4f71ea514120907039", null ],
     [ "_roamers", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#adaef9f46d953a3f09e871c9e80b28760", null ],
     [ "_roamRests", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a61e5e8d99764630b124d9d34d72ad5e7", null ],
     [ "_snakeStepDue", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a9e8fc7bff5f5b176efa69a171abd6789", null ],

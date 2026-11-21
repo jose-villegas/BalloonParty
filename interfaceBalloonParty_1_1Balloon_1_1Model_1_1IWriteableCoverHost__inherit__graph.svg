@@ -58,7 +58,7 @@ var sectionId = 'dynsection-0';
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="A balloon a cover formation can stand round and hold where it is, the side only UnbreakableFormationS...">
+<g id="a_Node000001"><a xlink:title="A balloon a cover formation (or a ring, at its centre) can stand round and hold where it is,...">
 <polygon fill="#999999" stroke="#666666" points="151.75,-163.5 0,-163.5 0,-130 151.75,-130 151.75,-163.5"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-150" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
 <text xml:space="preserve" text-anchor="middle" x="75.88" y="-137.25" font-family="Helvetica,sans-Serif" font-size="10.00">IWriteableCoverHost</text>

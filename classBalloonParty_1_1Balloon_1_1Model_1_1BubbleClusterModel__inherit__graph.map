@@ -30,7 +30,7 @@
 <area shape="poly" id="edge14_Node000002_Node000013" title=" " alt="" coords="987,276,1061,259,1066,258,988,281"/>
 <area shape="rect" id="Node000014" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceAnchor.html" title="A dynamic actor that can be pinned where it is." alt="" coords="794,352,973,397"/>
 <area shape="poly" id="edge15_Node000002_Node000014" title=" " alt="" coords="986,343,993,338,1008,321,1016,304,1024,286,1041,268,1060,259,1065,258,1044,272,1029,289,1021,306,1013,324,996,342,988,348"/>
-<area shape="rect" id="Node000015" href="$interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableCoverHost.html" title="A balloon a cover formation can stand round and hold where it is, the side only UnbreakableFormationS..." alt="" coords="782,421,985,466"/>
+<area shape="rect" id="Node000015" href="$interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableCoverHost.html" title="A balloon a cover formation (or a ring, at its centre) can stand round and hold where it is,..." alt="" coords="782,421,985,466"/>
 <area shape="poly" id="edge16_Node000002_Node000015" title=" " alt="" coords="991,409,993,407,1006,391,1013,374,1016,339,1019,304,1027,286,1041,268,1055,260,1060,258,1045,272,1031,289,1025,305,1021,340,1018,375,1011,393,997,411,993,414"/>
 <area shape="poly" id="edge17_Node000001_Node000016" title=" " alt="" coords="739,25,865,34,931,44,995,60,1056,81,1116,107,1228,169,1321,231,1388,283,1383,282,1318,235,1225,173,1114,112,1054,86,994,65,930,50,864,39,740,30"/>
 <area shape="rect" id="Node000017" href="$interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScore.html" title=" " alt="" coords="1043,283,1265,327"/>

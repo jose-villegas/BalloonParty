@@ -1,5 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html" title="How unbreakables gather into formations, hold them, pick the next shape, and call in more unbreakable..." alt="" coords="5,5,292,50"/>
-<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html" title=" " alt="" coords="340,5,622,50"/>
-<area shape="poly" id="edge89_Node000000_Node000001" title=" " alt="" coords="307,25,342,28,337,28,307,30"/>
+<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IToughSnakeSpringSettings.html" title="A trial look: a spring between each pair of neighbours in the tough snake, from knot to knot,..." alt="" coords="5,5,262,50"/>
+<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Configuration_1_1Balloons_1_1ToughSnakeSpringSettings.html" title=" " alt="" coords="310,5,562,50"/>
+<area shape="poly" id="edge88_Node000000_Node000001" title=" " alt="" coords="277,25,312,28,306,28,277,30"/>
 </map>

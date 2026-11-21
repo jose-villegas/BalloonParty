@@ -26,6 +26,6 @@
 <area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="971,323,1028,318,1023,319,971,328"/>
 <area shape="rect" id="Node000013" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceAnchor.html" title="A dynamic actor that can be pinned where it is." alt="" coords="777,387,956,431"/>
 <area shape="poly" id="edge14_Node000001_Node000013" title=" " alt="" coords="959,378,977,372,1078,328,1083,327,979,377,960,384"/>
-<area shape="rect" id="Node000014" href="$interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableCoverHost.html" title="A balloon a cover formation can stand round and hold where it is, the side only UnbreakableFormationS..." alt="" coords="765,456,968,501"/>
+<area shape="rect" id="Node000014" href="$interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableCoverHost.html" title="A balloon a cover formation (or a ring, at its centre) can stand round and hold where it is,..." alt="" coords="765,456,968,501"/>
 <area shape="poly" id="edge15_Node000001_Node000014" title=" " alt="" coords="967,447,976,441,1015,415,1051,384,1104,329,1109,327,1054,387,1018,419,979,446,968,452"/>
 </map>

@@ -115,7 +115,7 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteabl
 </div><!--header-->
 <div class="contents">
 
-<p>A balloon a cover formation can stand round and hold where it is, the side only <code>UnbreakableFormationService</code> drives.  
+<p>A balloon a cover formation (or a ring, at its centre) can stand round and hold where it is, the side only <code>UnbreakableFormationService</code> drives.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Balloon.Model.IWriteableCoverHost:</div>
@@ -133,11 +133,11 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
 <tr class="memitem:ac23fe608e612bf0fe85ce8e5ea450d24" id="r_ac23fe608e612bf0fe85ce8e5ea450d24"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac23fe608e612bf0fe85ce8e5ea450d24">HeldByCover</a><code> [get]</code></td></tr>
-<tr class="memdesc:ac23fe608e612bf0fe85ce8e5ea450d24"><td class="mdescLeft">&#160;</td><td class="mdescRight">A cover stands round it now. One cover at most holds a balloon.  <br /></td></tr>
+<tr class="memdesc:ac23fe608e612bf0fe85ce8e5ea450d24"><td class="mdescLeft">&#160;</td><td class="mdescRight">A cover or a ring stands round it now. One formation at most holds a balloon.  <br /></td></tr>
 <tr class="separator:ac23fe608e612bf0fe85ce8e5ea450d24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>A balloon a cover formation can stand round and hold where it is, the side only <code>UnbreakableFormationService</code> drives. </p>
+<div class="textblock"><p>A balloon a cover formation (or a ring, at its centre) can stand round and hold where it is, the side only <code>UnbreakableFormationService</code> drives. </p>
 <p>Held, the balloon is anchored (<code>IBalanceAnchor</code>) exactly as a formation's member is, so it stays inside its cover: the balance race, a pressure shove, a snake's walk and the shot solver's pulses all leave it in its slot. Every balloon model has it (<a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html">BalloonModelBase</a>), since a cover's host may be a plain balloon carrying an item or any of the reward balloons. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a5f2155fa4827e82120910a7612e55f39" name="a5f2155fa4827e82120910a7612e55f39"></a>
@@ -180,7 +180,7 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>A cover stands round it now. One cover at most holds a balloon. </p>
+<p>A cover or a ring stands round it now. One formation at most holds a balloon. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a57ca7dc93c85ce072508e4c8569420ee">BalloonParty.Balloon.Model.BalloonModelBase</a>.</p>
 

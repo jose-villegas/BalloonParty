@@ -2,6 +2,7 @@ var dir_3eb84c876e453da644c377a06d391947 =
 [
     [ "FormationAssignment.cs", "FormationAssignment_8cs.html", "FormationAssignment_8cs" ],
     [ "FormationPlanner.cs", "FormationPlanner_8cs.html", "FormationPlanner_8cs" ],
+    [ "FormationRing.cs", "FormationRing_8cs.html", "FormationRing_8cs" ],
     [ "FormationShape.cs", "FormationShape_8cs.html", "FormationShape_8cs" ],
     [ "FormationShapes.cs", "FormationShapes_8cs.html", "FormationShapes_8cs" ],
     [ "ICoveredHosts.cs", "ICoveredHosts_8cs.html", "ICoveredHosts_8cs" ],

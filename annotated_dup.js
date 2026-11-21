@@ -87,6 +87,7 @@ var annotated_dup =
           [ "CoveredHost", "structBalloonParty_1_1Balloon_1_1Formation_1_1CoveredHost.html", "structBalloonParty_1_1Balloon_1_1Formation_1_1CoveredHost" ],
           [ "FormationAssignment", "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html", "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment" ],
           [ "FormationPlanner", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner" ],
+          [ "FormationRing", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationRing.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationRing" ],
           [ "FormationShapesExtensions", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationShapesExtensions.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationShapesExtensions" ],
           [ "ICoveredHosts", "interfaceBalloonParty_1_1Balloon_1_1Formation_1_1ICoveredHosts.html", "interfaceBalloonParty_1_1Balloon_1_1Formation_1_1ICoveredHosts" ],
           [ "IFormationReinforcements", "interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IFormationReinforcements.html", "interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IFormationReinforcements" ],
