@@ -349,7 +349,7 @@ namespace BalloonParty.Game.Upgrades
         {
             var card = _staged;
             _staged = null;
-            if (card == null || StacksOf(card) >= LimitOf(card))
+            if (card == null || !HasRoom(card))
             {
                 return null;
             }
@@ -558,7 +558,7 @@ namespace BalloonParty.Game.Upgrades
         // one attempt, with no room to grow into a raised limit, so it is never the bonus.
         private bool IsDealable(IUpgradeCardSettings card, bool forBonus, bool withCapped)
         {
-            if (card == null || card.Weight <= 0f || (!withCapped && StacksOf(card) >= LimitOf(card)))
+            if (card == null || card.Weight <= 0f || (!withCapped && !HasRoom(card)))
             {
                 return false;
             }
@@ -569,6 +569,27 @@ namespace BalloonParty.Game.Upgrades
                 UpgradeKind.RaiseLimits => !forBonus && AnyCardAtItsLimit(),
                 _ => true
             };
+        }
+
+        // Raise the Bar goes past its own limit once every card is at its limit, so a full deck still deals it,
+        // and each one makes room in every other card again.
+        private bool HasRoom(IUpgradeCardSettings card)
+        {
+            return StacksOf(card) < LimitOf(card) || (card.Kind == UpgradeKind.RaiseLimits && EveryCardAtItsLimit());
+        }
+
+        private bool EveryCardAtItsLimit()
+        {
+            var cards = _settings.Cards;
+            for (var i = 0; i < cards.Count; i++)
+            {
+                if (cards[i] != null && cards[i].Weight > 0f && StacksOf(cards[i]) < LimitOf(cards[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private bool AnyCardAtItsLimit()

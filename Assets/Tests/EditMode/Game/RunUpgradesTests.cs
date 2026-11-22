@@ -1150,6 +1150,62 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void GrantFreeCard_EveryCardAtItsLimitRaiseTheBarToo_DealsRaiseTheBarPastItsLimit()
+        {
+            var raise = UpgradeRig.Card(UpgradeKind.RaiseLimits, 1f, maxStacks: 1);
+            var shield = UpgradeRig.Card(UpgradeKind.Shield, 1f, maxStacks: 1);
+            _rig.Cards.Clear();
+            _rig.Cards.AddRange(new[] { raise, shield });
+            _rig.Hold(shield);
+            _rig.Hold(raise);
+            _rig.Hold(shield);
+
+            var noCard = false;
+            Upgrades.GrantFreeCard(() => noCard = true);
+
+            Assert.IsFalse(noCard, "a full deck still deals Raise the Bar, not a heart");
+            Assert.AreEqual(2, Upgrades.StacksOf(raise));
+            Assert.AreEqual(3, Upgrades.LimitOf(shield), "each raise makes room in every other card again");
+        }
+
+        [Test]
+        public void Present_EveryCardAtItsLimit_OffersRaiseTheBarAndHoldsItPastItsLimit()
+        {
+            var raise = UpgradeRig.Card(UpgradeKind.RaiseLimits, 1f, maxStacks: 1);
+            var shield = UpgradeRig.Card(UpgradeKind.Shield, 1f, maxStacks: 1);
+            _rig.Cards.Clear();
+            _rig.Cards.AddRange(new[] { raise, shield });
+            _rig.Hold(shield);
+            _rig.Hold(raise);
+            _rig.Hold(shield);
+
+            var hand = _rig.Present(_rig.Level.Value + 1);
+            CollectionAssert.AreEqual(new[] { raise }, hand);
+            Upgrades.Pick(0);
+            _rig.Advance();
+
+            Assert.AreEqual(2, Upgrades.StacksOf(raise));
+            Assert.AreEqual(3, Upgrades.LimitOf(shield));
+        }
+
+        [Test]
+        public void Present_ACardWithRoomLeft_KeepsRaiseTheBarAtItsLimitOutOfTheHand()
+        {
+            var raise = UpgradeRig.Card(UpgradeKind.RaiseLimits, 1f, maxStacks: 1);
+            var shield = UpgradeRig.Card(UpgradeKind.Shield, 1f, maxStacks: 1);
+            var reload = UpgradeRig.Card(UpgradeKind.FasterReload, 0.1f, maxStacks: 3);
+            _rig.Cards.Clear();
+            _rig.Cards.AddRange(new[] { raise, shield, reload });
+            _rig.Hold(shield);
+            _rig.Hold(raise);
+            _rig.Hold(shield);
+
+            var hand = _rig.Present(_rig.Level.Value + 1);
+
+            CollectionAssert.AreEqual(new[] { reload }, hand);
+        }
+
+        [Test]
         public void GrantFreeCard_ARetryOfItsLevel_StartsWithoutIt()
         {
             _rig.Hold(_shield);

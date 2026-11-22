@@ -11,8 +11,8 @@ using VContainer.Unity;
 namespace BalloonParty.Balloon.Reward
 {
     /// <summary>
-    ///     Pays a reward balloon's pop. The golden balloon gives a free card, or a heart back when every card is at
-    ///     its limit; the heart balloon gives a heart back, up to the maximum, or past it on a purple level (an extra
+    ///     Pays a reward balloon's pop. The golden balloon gives a free card (Raise the Bar past its limit once every
+    ///     card is at its limit), or a heart back when the deck can deal none; the heart balloon gives a heart back, up to the maximum, or past it on a purple level (an extra
     ///     heart, read from the level being played when it pops). Only a pop pays: the leave
     ///     callback also fires for a board clear and a level change, and the level's closing pop wave publishes
     ///     no hit at all. A pierce can land after the level's last claim;

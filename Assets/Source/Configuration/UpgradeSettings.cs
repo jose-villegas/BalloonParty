@@ -20,7 +20,7 @@ namespace BalloonParty.Configuration
         [SerializeField] [Min(0f)] private float _amount = 1f;
 
         [Tooltip("Most times a run can hold this card, before Raise Limits cards raise it; at its limit it is no " +
-            "longer dealt.")]
+            "longer dealt, but for a Raise Limits card once every card is at its limit.")]
         [SerializeField] [Min(1)] private int _maxStacks = 3;
 
         [Tooltip("Relative odds of this card being dealt. 0 keeps it out of the deck.")]

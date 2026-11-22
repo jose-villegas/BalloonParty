@@ -431,7 +431,11 @@ namespace BalloonParty.UI.LevelUp
 
                 if (i < offer.Count && view.IsWired)
                 {
-                    view.Show(offer[i], _draft.StacksOf(offer[i]), _draft.LimitOf(offer[i]), i, OnCardPicked);
+                    // An offered card has room for one more: Raise the Bar, dealt past its own limit once every
+                    // card is at its limit, reads one over what is held.
+                    var held = _draft.StacksOf(offer[i]);
+                    var limit = Mathf.Max(_draft.LimitOf(offer[i]), held + 1);
+                    view.Show(offer[i], held, limit, i, OnCardPicked);
                 }
                 else
                 {
