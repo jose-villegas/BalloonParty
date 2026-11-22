@@ -66,6 +66,9 @@ namespace BalloonParty.Editor.Staging
             var drawn = Drawn(camera);
             var cameraData = camera.GetUniversalAdditionalCameraData();
             var hadPost = cameraData.renderPostProcessing;
+            var mask = camera.cullingMask;
+            var effectsBit = 1 << LayerMask.NameToLayer(EffectsLayer);
+            var effectsGroup = Array.IndexOf(Groups, "effects");
             var lightColor = Shader.GetGlobalColor(SceneLightColorId);
             var fieldOn = Shader.GetGlobalFloat(SceneLightFieldOnId);
             var answer = new StringBuilder();
@@ -74,11 +77,17 @@ namespace BalloonParty.Editor.Staging
                 cameraData.renderPostProcessing = false;
                 for (var step = 0; step < Groups.Length; step++)
                 {
+                    // While a ball flies the lens takes the effects layer off the camera, and the specks and the
+                    // rings reach the frame only through the effects group's quad: before that group the camera
+                    // draws them itself, where they sort, or the specks' own step would add nothing.
+                    camera.cullingMask = step < effectsGroup ? mask | effectsBit : mask;
                     var upTo = step;
                     var count = Show(drawn, group => group <= upTo, step);
                     SceneStage.Capture(PathOf(directory, Groups[step]), around, size, scale);
                     answer.Append(answer.Length > 0 ? "|" : "").Append(Groups[step]).Append('=').Append(count);
                 }
+
+                camera.cullingMask = mask;
 
                 var lightGroup = Array.IndexOf(Groups, "light");
                 if (flat)
@@ -98,6 +107,7 @@ namespace BalloonParty.Editor.Staging
             finally
             {
                 Show(drawn, _ => true, 0);
+                camera.cullingMask = mask;
                 cameraData.renderPostProcessing = hadPost;
                 Shader.SetGlobalColor(SceneLightColorId, lightColor);
                 Shader.SetGlobalFloat(SceneLightFieldOnId, fieldOn);
@@ -221,8 +231,8 @@ namespace BalloonParty.Editor.Staging
                 return Array.IndexOf(Groups, "effects");
             }
 
-            // The specks and the unbreakables' rings are on the effects layer for the lens's sake, but with no
-            // ball in the air they are drawn where they sort: over the backdrop, and under the balloons.
+            // The specks and the unbreakables' rings are on the effects layer for the lens's sake, but they sort
+            // over the backdrop and under the balloons, and that is where the build-up draws them.
             if (shader.Contains(SpeckShader))
             {
                 return Array.IndexOf(Groups, "specks");
