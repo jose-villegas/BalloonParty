@@ -87,7 +87,7 @@ is too faint to see otherwise.
 - **3. The balloons' shadows.** Each balloon carries its shadow as a sprite of its own. The shader slides it away from the light.
 - **4. The balloons' bodies**, with their knots and items. The mushrooms' caps, the unbreakables' ring and the nuke's blast disc sort with them.
 - **5. The shines.** Each highlight is another sprite, turned to face the light.
-- **6. The rest of the board.** The cannon, the ball, clouds and deflectors on some levels, the frame's soft edges, and here the ribbons of the upgrade the golden balloon paid on the lance's way.
+- **6. The rest of the board.** The cannon, the ball, clouds and deflectors on some levels, the frame's soft edges.
 - **7. The effects.** Pops, shards, sparks and the nuke's cloud, all particles.
 - **8. The light, laid over.** One quad the size of the screen multiplies the frame by the GI light buffer: it darkens where the shadow is strong and tints where the bounce is.
 - **9. Post-processing.** Bloom, colour grading and the tone map.
