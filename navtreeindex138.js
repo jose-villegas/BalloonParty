@@ -1,5 +1,9 @@
 var NAVTREEINDEX138 =
 {
+"plan_grid_actor_expansion.html#autotoc_md659":[3,3,0,2],
+"plan_grid_actor_expansion.html#autotoc_md661":[3,3,0,2,0],
+"plan_grid_actor_expansion.html#autotoc_md662":[3,3,0,2,0,0],
+"plan_grid_actor_expansion.html#autotoc_md664":[3,3,0,2,1],
 "plan_grid_actor_expansion.html#autotoc_md665":[3,3,0,2,1,0],
 "plan_grid_actor_expansion.html#autotoc_md667":[3,3,0,2,2],
 "plan_grid_actor_expansion.html#autotoc_md668":[3,3,0,2,2,0],
@@ -245,9 +249,5 @@ var NAVTREEINDEX138 =
 "plan_reward_balloons.html#autotoc_md934":[3,24,0,5],
 "plan_reward_balloons.html#autotoc_md935":[3,24,0,6],
 "plan_reward_balloons.html#autotoc_md936":[3,24,0,7],
-"plan_ripe_bubble_cluster.html":[3,11],
-"plan_ripe_bubble_cluster.html#autotoc_md937":[3,11,0],
-"plan_ripe_bubble_cluster.html#autotoc_md939":[3,11,0,0],
-"plan_ripe_bubble_cluster.html#autotoc_md940":[3,11,0,1],
-"plan_ripe_bubble_cluster.html#autotoc_md941":[3,11,0,2]
+"plan_ripe_bubble_cluster.html":[3,11]
 };

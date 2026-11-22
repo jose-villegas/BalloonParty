@@ -1,5 +1,9 @@
 var NAVTREEINDEX104 =
 {
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomView.html#a6b24d2de96e53379ef21da25ce86e8c9":[5,0,0,13,0,0,23,13],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomView.html#a6b24d2de96e53379ef21da25ce86e8c9":[6,0,0,13,0,0,23,13],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomView.html#a6d178e3f7122776ca09ca6f26cd57813":[5,0,0,13,0,0,23,49],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomView.html#a6d178e3f7122776ca09ca6f26cd57813":[6,0,0,13,0,0,23,49],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomView.html#a6e5fac9cef807f1a97d2272f26bfbc57":[5,0,0,13,0,0,23,28],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomView.html#a6e5fac9cef807f1a97d2272f26bfbc57":[6,0,0,13,0,0,23,28],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomView.html#a719967fc2f46c94af00e2b40528de2b7":[5,0,0,13,0,0,23,43],
@@ -245,9 +249,5 @@ var NAVTREEINDEX104 =
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#af1cda09287cc4a50360580e858a2a950":[5,0,0,13,0,0,26,22],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#af1cda09287cc4a50360580e858a2a950":[6,0,0,13,0,0,26,22],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html":[5,0,0,13,0,0,27],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html":[6,0,0,13,0,0,27],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html#a08da43df6360e982a7c181a099363f9d":[5,0,0,13,0,0,27,1],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html#a08da43df6360e982a7c181a099363f9d":[6,0,0,13,0,0,27,1],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html#a0c1fd040ac538217f25bd66a63ad42da":[5,0,0,13,0,0,27,3],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html#a0c1fd040ac538217f25bd66a63ad42da":[6,0,0,13,0,0,27,3]
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html":[6,0,0,13,0,0,27]
 };

@@ -179,7 +179,7 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>PlatedRewardTuning</code>   </td><td class="markdownTableBodyNone">One plated balloon's numbers, read from <code>IRewardBalloonSettings</code> each line (<code>Golden(settings)</code>, <code>Disco(settings)</code>), so the two share the rules and differ only in these    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>RewardBalloonPayout</code>   </td><td class="markdownTableBodyNone">Pays a reward balloon's pop, read from <code>ActorHitMessage</code>. The golden balloon: a free card (<code>IFreeCardGrant</code>), or a heart (<code>IPlayerHealing.Heal</code>) when every card is at its limit. The heart balloon: a heart, or on a purple level an extra one past the maximum (<code>HealPastMax</code>). Pays each balloon once    </td></tr>
+<td class="markdownTableBodyNone"><code>RewardBalloonPayout</code>   </td><td class="markdownTableBodyNone">Pays a reward balloon's pop, read from <code>ActorHitMessage</code>. The golden balloon: a free card (<code>IFreeCardGrant</code>), or a heart (<code>IPlayerHealing.Heal</code>) when the deck can deal none (a full deck still deals Raise the Bar, so only a deck without it comes to that). The heart balloon: a heart, or on a purple level an extra one past the maximum (<code>HealPastMax</code>). Pays each balloon once    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>RewardBalloonPop</code>   </td><td class="markdownTableBodyNone"><code>TryGet(hit, out balloon)</code>: a reward balloon's pop. The payout and the service both read pops through it, so what one pays the other counts    </td></tr>
 <tr class="markdownTableRowEven">

@@ -1,5 +1,9 @@
 var NAVTREEINDEX134 =
 {
+"interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html#ae9f7a0d348a554d513dbae931bee1584":[6,0,0,13,0,12,1],
+"interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html#aef539d7581e7b4662c9e5701cfb941b2":[5,0,0,13,0,12,5],
+"interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html#aef539d7581e7b4662c9e5701cfb941b2":[6,0,0,13,0,12,5],
+"interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotSelectionStrategy.html":[5,0,0,13,0,13],
 "interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotSelectionStrategy.html":[6,0,0,13,0,13],
 "interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotSelectionStrategy.html#aee11f13b38895310b59ed09122d25f49":[5,0,0,13,0,13,0],
 "interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotSelectionStrategy.html#aee11f13b38895310b59ed09122d25f49":[6,0,0,13,0,13,0],
@@ -245,9 +249,5 @@ var NAVTREEINDEX134 =
 "namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60eaf4a6ceffc0054a855f31f42083328df9":[5,0,0,1,5,12,9],
 "namespaceBalloonParty_1_1Balloon_1_1View.html":[5,0,0,1,6],
 "namespaceBalloonParty_1_1Cheats.html":[5,0,0,2],
-"namespaceBalloonParty_1_1Configuration.html":[5,0,0,3],
-"namespaceBalloonParty_1_1Configuration_1_1Balloons.html":[5,0,0,3,0],
-"namespaceBalloonParty_1_1Configuration_1_1Buffs.html":[5,0,0,3,1],
-"namespaceBalloonParty_1_1Configuration_1_1CardReveal.html":[5,0,0,3,2],
-"namespaceBalloonParty_1_1Configuration_1_1Cinematics.html":[5,0,0,3,3]
+"namespaceBalloonParty_1_1Configuration.html":[5,0,0,3]
 };

@@ -1,5 +1,9 @@
 var NAVTREEINDEX139 =
 {
+"plan_ripe_bubble_cluster.html#autotoc_md937":[3,11,0],
+"plan_ripe_bubble_cluster.html#autotoc_md939":[3,11,0,0],
+"plan_ripe_bubble_cluster.html#autotoc_md940":[3,11,0,1],
+"plan_ripe_bubble_cluster.html#autotoc_md941":[3,11,0,2],
 "plan_ripe_bubble_cluster.html#autotoc_md942":[3,11,0,2,0],
 "plan_ripe_bubble_cluster.html#autotoc_md943":[3,11,0,2,1],
 "plan_ripe_bubble_cluster.html#autotoc_md944":[3,11,0,2,2],
@@ -245,9 +249,5 @@ var NAVTREEINDEX139 =
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html":[6,0,0,1,0,1],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#a02b1886e2f53b34563ee080f2f0a7e7c":[5,0,0,1,0,1,0],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#a02b1886e2f53b34563ee080f2f0a7e7c":[6,0,0,1,0,1,0],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#a1e33a67aace9f709d18e001aaf08bbbd":[5,0,0,1,0,1,3],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#a1e33a67aace9f709d18e001aaf08bbbd":[6,0,0,1,0,1,3],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#a5f2c277f41fb18ff29406b17b5366b75":[5,0,0,1,0,1,1],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#a5f2c277f41fb18ff29406b17b5366b75":[6,0,0,1,0,1,1],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#ac91efd65201a510ee5eb4d1168155d87":[5,0,0,1,0,1,2]
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#a1e33a67aace9f709d18e001aaf08bbbd":[5,0,0,1,0,1,3]
 };

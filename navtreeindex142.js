@@ -1,5 +1,9 @@
 var NAVTREEINDEX142 =
 {
+"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a19439140857df82be48affc228fc7b7e":[6,0,0,3,5,29,20],
+"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a2ec9fd9790b33b3bb2ae372e2d7d70e2":[5,0,0,3,5,29,14],
+"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a2ec9fd9790b33b3bb2ae372e2d7d70e2":[6,0,0,3,5,29,14],
+"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a35747897f5a8a0829093f6b6e6e64f6d":[5,0,0,3,5,29,11],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a35747897f5a8a0829093f6b6e6e64f6d":[6,0,0,3,5,29,11],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a4b5e5ab01131829c9a6930f90a635d08":[5,0,0,3,5,29,10],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a4b5e5ab01131829c9a6930f90a635d08":[6,0,0,3,5,29,10],
@@ -245,9 +249,5 @@ var NAVTREEINDEX142 =
 "structBalloonParty_1_1Configuration_1_1Level_1_1BalloonContentEntry.html#ac1ea2071b12c70185ae2981b2b023c79":[6,0,0,3,9,0,16],
 "structBalloonParty_1_1Configuration_1_1Level_1_1BalloonContentEntry.html#ac87be6307f14f4fd736131821fc3e1cd":[5,0,0,3,9,0,13],
 "structBalloonParty_1_1Configuration_1_1Level_1_1BalloonContentEntry.html#ac87be6307f14f4fd736131821fc3e1cd":[6,0,0,3,9,0,13],
-"structBalloonParty_1_1Configuration_1_1Level_1_1BalloonContentEntry.html#adc44b351da5a67fc1b195f95f5ecbe9d":[5,0,0,3,9,0,8],
-"structBalloonParty_1_1Configuration_1_1Level_1_1BalloonContentEntry.html#adc44b351da5a67fc1b195f95f5ecbe9d":[6,0,0,3,9,0,8],
-"structBalloonParty_1_1Configuration_1_1Level_1_1BalloonContentEntry.html#ae8456a8398dfc10d3a9a307267913c50":[5,0,0,3,9,0,7],
-"structBalloonParty_1_1Configuration_1_1Level_1_1BalloonContentEntry.html#ae8456a8398dfc10d3a9a307267913c50":[6,0,0,3,9,0,7],
-"structBalloonParty_1_1Configuration_1_1Level_1_1BudgetFormula.html":[5,0,0,3,9,3]
+"structBalloonParty_1_1Configuration_1_1Level_1_1BalloonContentEntry.html#adc44b351da5a67fc1b195f95f5ecbe9d":[5,0,0,3,9,0,8]
 };

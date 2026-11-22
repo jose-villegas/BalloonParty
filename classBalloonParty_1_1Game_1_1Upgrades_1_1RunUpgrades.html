@@ -245,10 +245,14 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a4de99556c302588154ffdaf4e7897add"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af54d1d8d48e6dee7c4345ab744cd6a27" id="r_af54d1d8d48e6dee7c4345ab744cd6a27"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af54d1d8d48e6dee7c4345ab744cd6a27">DealSeed</a> (int level, int salt, int step)</td></tr>
 <tr class="separator:af54d1d8d48e6dee7c4345ab744cd6a27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9b6e85027cbc543d9d49814fb9e8a5f" id="r_aa9b6e85027cbc543d9d49814fb9e8a5f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa9b6e85027cbc543d9d49814fb9e8a5f">EveryCardAtItsLimit</a> ()</td></tr>
+<tr class="separator:aa9b6e85027cbc543d9d49814fb9e8a5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9327939611aabd8d562a8a7940adab6a" id="r_a9327939611aabd8d562a8a7940adab6a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9327939611aabd8d562a8a7940adab6a">FirstCard</a> (bool forBonus)</td></tr>
 <tr class="separator:a9327939611aabd8d562a8a7940adab6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d1ba05030351d7faaba994dbf8c04b4" id="r_a5d1ba05030351d7faaba994dbf8c04b4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5d1ba05030351d7faaba994dbf8c04b4">GiveBackFreeCards</a> ()</td></tr>
 <tr class="separator:a5d1ba05030351d7faaba994dbf8c04b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac23022848a26d4f1c861b5d1b42d443c" id="r_ac23022848a26d4f1c861b5d1b42d443c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac23022848a26d4f1c861b5d1b42d443c">HasRoom</a> (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a> card)</td></tr>
+<tr class="separator:ac23022848a26d4f1c861b5d1b42d443c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:affdaa038957e30fe9d80bdec502939b6" id="r_affdaa038957e30fe9d80bdec502939b6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#affdaa038957e30fe9d80bdec502939b6">IsDealable</a> (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a> card, bool forBonus, bool withCapped)</td></tr>
 <tr class="separator:affdaa038957e30fe9d80bdec502939b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a54105c0a9217f409f976e51c55a11bae" id="r_a54105c0a9217f409f976e51c55a11bae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a54105c0a9217f409f976e51c55a11bae">OnPhaseChanged</a> (<a class="el" href="namespaceBalloonParty_1_1Game_1_1Level.html#a57ec4a7422d3ec908dda0a536e08a712">LevelUpPhase</a> phase)</td></tr>
@@ -769,6 +773,31 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="aa9b6e85027cbc543d9d49814fb9e8a5f" name="aa9b6e85027cbc543d9d49814fb9e8a5f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9b6e85027cbc543d9d49814fb9e8a5f">&#9670;&#160;</a></span>EveryCardAtItsLimit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Game.Upgrades.RunUpgrades.EveryCardAtItsLimit </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a9327939611aabd8d562a8a7940adab6a" name="a9327939611aabd8d562a8a7940adab6a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9327939611aabd8d562a8a7940adab6a">&#9670;&#160;</a></span>FirstCard()</h2>
 
@@ -835,9 +864,34 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Deals one card the run can still take, holds it, and announces it with <code>UpgradeCardHeldMessage</code>, which plays the card reveal. </p>
-<p>Won while a level-up's hand is on screen, it waits for the pick to be held. A retry of the level it was won on starts without it, as with any card won after the level began. Calls <em>noCardLeft</em>  instead when every card is at its limit, then or once the pick is held, so the winner always gets something. </p>
+<p>Won while a level-up's hand is on screen, it waits for the pick to be held. A retry of the level it was won on starts without it, as with any card won after the level began. A full deck still deals Raise the Bar, past its own limit. Calls <em>noCardLeft</em>  instead only when nothing can be dealt at all (a deck with every card at its limit and no Raise the Bar), then or once the pick is held, so the winner always gets something. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IFreeCardGrant.html#aec6c658fdbb094a75d3469075107014f">BalloonParty.Game.Upgrades.IFreeCardGrant</a>.</p>
+
+</div>
+</div>
+<a id="ac23022848a26d4f1c861b5d1b42d443c" name="ac23022848a26d4f1c861b5d1b42d443c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac23022848a26d4f1c861b5d1b42d443c">&#9670;&#160;</a></span>HasRoom()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Game.Upgrades.RunUpgrades.HasRoom </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a></td>          <td class="paramname"><span class="paramname"><em>card</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
