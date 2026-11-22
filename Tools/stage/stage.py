@@ -210,6 +210,21 @@ class Stage:
         mushroom: its caps belong to the walls the seed picks."""
         return self.call("PlaceActor", kind, int(slot[0]), int(slot[1]))
 
+    def bubbles(self, slot, count=0):
+        """Fills the bubble cluster at slot (col, row) with `count` bubbles, or with 0 up to the merge cap, where the
+        board ripens it and its fuse starts."""
+        return self.call("Bubbles", int(slot[0]), int(slot[1]), int(count))
+
+    def best_shot(self, then, lance=False):
+        """Where to aim on a board with no mushrooms: the angle whose flight pops a `then` balloon (nuke, golden,
+        disco, heart) and scores the most on its way, the loaded ball armed as a lance first with `lance`. Answers
+        (angle or None, the stage's whole answer); fire at it without arming again."""
+        try:
+            answer = self.call("BestShot", then, bool(lance))
+        except StageError as error:
+            return None, str(error)
+        return float(answer.split()[1]), answer
+
     def pop(self, target, settle=None):
         """Pops a balloon for real (its type, or "col,row"); with `settle`, lets that much game time run."""
         result = self.call("Pop", target)

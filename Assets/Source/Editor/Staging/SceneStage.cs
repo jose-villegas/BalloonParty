@@ -879,24 +879,7 @@ namespace BalloonParty.Editor.Staging
             }
 
             var config = container.Resolve<IProjectileFlightConfig>();
-            var itemConfig = container.Resolve<IItemConfiguration>();
-            var context = ShotBoardGather.Gather(
-                container.Resolve<SlotGrid>(), config, container.Resolve<IWeaponStats>().StartingShields,
-                container.Resolve<ISlotGridConfig>(), container.Resolve<IBalloonsConfiguration>(), itemConfig, thrower,
-                container.Resolve<ThrowerSettings>(), container.Resolve<IGamePalette>(),
-                container.Resolve<IActiveLevelParameters>(), container.Resolve<IRunConfig>(), 0f,
-                container.Resolve<BalloonBalancer>().SecondsUntilNextPulse,
-                container.Resolve<IProjectileRegistry>().Loaded,
-                ShotBumperLayer.Gather(
-                    field, container.Resolve<IBumperBounceRule>(), container.Resolve<IMushroomSettings>(), itemConfig));
-            // The solver flies a shot only while something is left to pop, and a stage starts with nothing on it:
-            // an empty board gets one target far outside the walls, and none of the layers that follow balloons.
-            var board = context.Board;
-            var emptyBoard = board.Count == 0;
-            if (emptyBoard)
-            {
-                board = new[] { ShotBalloonSnapshot.ForToughTarget(new Vector2(1000f, 1000f), 0.1f, 0, int.MaxValue) };
-            }
+            var context = GatherShot(container, thrower, out var board, out var emptyBoard);
 
             if (context.LoadedSeed.IsPiercing)
             {
@@ -923,15 +906,7 @@ namespace BalloonParty.Editor.Staging
                 var angle = AimAngleGrid.ResolveSweepAngle(
                     i, config.AimAngleMinDegrees, config.AimAngleMaxDegrees, config.AimAngleStepDegrees,
                     continuousSamples);
-                var flight = ShotSimulator.Simulate(
-                    board, context.WallLimitsClockwise, ShotBoardGather.OriginForAngle(angle, context),
-                    ShotBoardGather.DirectionFromDegrees(angle), context.StartingShields,
-                    context.ProjectileContactRadius, workingSet, context.RippleDamage,
-                    projectileSpeed: context.ProjectileSpeed, cruiseConfig: context.CruiseConfig,
-                    dynamics: emptyBoard ? null : context.Dynamics, allowedColors: context.AllowedColors,
-                    rainbowColorId: context.RainbowColorId, seed: context.LoadedSeed,
-                    items: emptyBoard ? null : context.Items, streakGrantsShields: context.StreakGrantsShields,
-                    rippleRadius: context.RippleRadius, bumpers: context.Bumpers);
+                var flight = Fly(context, board, emptyBoard, workingSet, angle);
                 var flies = flight.Mushrooms.LancesArmed > 0 && Pops(flight, then);
                 run = flies ? run + 1 : 0;
                 runPops = flies ? runPops + flight.Pops : 0;
@@ -980,6 +955,99 @@ namespace BalloonParty.Editor.Staging
                 config.AimAngleStepDegrees, continuousSamples);
             return FormattableString.Invariant(
                 $"angle {best:0.###} (the middle of {widestRun} in a row; {arming}; {where})");
+        }
+
+        /// <summary>
+        ///     Where to aim on a board with no mushrooms to earn the lance off: the shot solver flies every angle the
+        ///     thrower can aim at, the loaded ball as it is (armed as a lance first with <paramref name="lance" />),
+        ///     and the answer is the angle whose flight pops a balloon of the kind <paramref name="then" /> names
+        ///     (<c>nuke</c>, <c>golden</c>, <c>disco</c> or <c>heart</c>) and scores the most on its way, of those
+        ///     whose neighbours on both sides pop it too: a lone angle is the likeliest for the real flight to part
+        ///     from. For <see cref="Fire" />, without arming the ball again. An error when no angle pops it.
+        /// </summary>
+        public static string BestShot(string then, bool lance = false)
+        {
+            if (Array.IndexOf(ChainRewards, (then ?? "").ToLowerInvariant()) < 0)
+            {
+                return $"error: no such reward balloon to aim for: {then}";
+            }
+
+            var scope = Object.FindAnyObjectByType<ThrowerLifetimeScope>();
+            var thrower = Object.FindAnyObjectByType<ThrowerView>();
+            if (scope == null || thrower == null)
+            {
+                return "error: no thrower in the scene";
+            }
+
+            var container = scope.Container;
+            if (lance)
+            {
+                if (container.Resolve<IProjectileRegistry>().Loaded is not IWriteableProjectileModel loaded)
+                {
+                    return "error: no ball loaded in the thrower";
+                }
+
+                if (!loaded.IsPiercing.Value)
+                {
+                    container.Resolve<ISnipeArmer>().Arm(loaded);
+                }
+            }
+
+            var config = container.Resolve<IProjectileFlightConfig>();
+            var context = GatherShot(container, thrower, out var board, out var emptyBoard);
+            var workingSet = new ShotBalloonState[board.Count];
+            const int continuousSamples = 1024;
+            var samples = AimAngleGrid.ResolveSweepSampleCount(
+                config.AimAngleMinDegrees, config.AimAngleMaxDegrees, config.AimAngleStepDegrees, continuousSamples);
+            var scores = new int[samples];
+            var popping = 0;
+            for (var i = 0; i < samples; i++)
+            {
+                var angle = AimAngleGrid.ResolveSweepAngle(
+                    i, config.AimAngleMinDegrees, config.AimAngleMaxDegrees, config.AimAngleStepDegrees,
+                    continuousSamples);
+                var flight = Fly(context, board, emptyBoard, workingSet, angle);
+                scores[i] = Pops(flight, then) ? flight.RawScore : -1;
+                popping += scores[i] >= 0 ? 1 : 0;
+            }
+
+            var best = -1;
+            for (var i = 1; i < samples - 1; i++)
+            {
+                if (scores[i - 1] >= 0 && scores[i] >= 0 && scores[i + 1] >= 0 && (best < 0 || scores[i] > scores[best]))
+                {
+                    best = i;
+                }
+            }
+
+            if (best < 0)
+            {
+                return $"error: no angle of {samples} pops the {then} with its neighbours ({popping} pop it at all)";
+            }
+
+            var bestAngle = AimAngleGrid.ResolveSweepAngle(
+                best, config.AimAngleMinDegrees, config.AimAngleMaxDegrees, config.AimAngleStepDegrees,
+                continuousSamples);
+            return FormattableString.Invariant(
+                $"angle {bestAngle:0.###} (scoring {scores[best]} on the way; {popping} of {samples} angles pop the {then})");
+        }
+
+        /// <summary>
+        ///     Fills the bubble cluster in a slot with <paramref name="count" /> bubbles, or with 0 up to the merge
+        ///     cap, where the board ripens it on its next tick and its fuse starts: a full cluster, as merges make one.
+        /// </summary>
+        public static string Bubbles(int col, int row, int count = 0)
+        {
+            var grid = Resolve<SlotGrid>();
+            var slot = new Vector2Int(col, row);
+            if (grid.At(slot) is not BubbleClusterModel cluster)
+            {
+                return $"error: no bubble cluster at {col},{row}";
+            }
+
+            var bubbles = count > 0 ? count : Resolve<IBalloonsConfiguration>().BubbleMergeMax;
+            cluster.SetBubbles(bubbles);
+            return $"the cluster at {col},{row} holds {bubbles}";
         }
 
         /// <summary>
@@ -1229,6 +1297,49 @@ namespace BalloonParty.Editor.Staging
             EditorApplication.update -= AdvanceTick;
             _advanceUntil = -1f;
             Hold();
+        }
+
+        // The board as the shot solver sees it. The solver flies a shot only while something is left to pop, and
+        // a stage starts with nothing on it: an empty board gets one target far outside the walls, and none of
+        // the layers that follow balloons.
+        private static ShotSolveContext GatherShot(
+            IObjectResolver container, ThrowerView thrower, out IReadOnlyList<ShotBalloonSnapshot> board,
+            out bool emptyBoard)
+        {
+            var itemConfig = container.Resolve<IItemConfiguration>();
+            var context = ShotBoardGather.Gather(
+                container.Resolve<SlotGrid>(), container.Resolve<IProjectileFlightConfig>(),
+                container.Resolve<IWeaponStats>().StartingShields, container.Resolve<ISlotGridConfig>(),
+                container.Resolve<IBalloonsConfiguration>(), itemConfig, thrower, container.Resolve<ThrowerSettings>(),
+                container.Resolve<IGamePalette>(), container.Resolve<IActiveLevelParameters>(),
+                container.Resolve<IRunConfig>(), 0f, container.Resolve<BalloonBalancer>().SecondsUntilNextPulse,
+                container.Resolve<IProjectileRegistry>().Loaded,
+                ShotBumperLayer.Gather(
+                    container.Resolve<IBumperField>(), container.Resolve<IBumperBounceRule>(),
+                    container.Resolve<IMushroomSettings>(), itemConfig));
+            board = context.Board;
+            emptyBoard = board.Count == 0;
+            if (emptyBoard)
+            {
+                board = new[] { ShotBalloonSnapshot.ForToughTarget(new Vector2(1000f, 1000f), 0.1f, 0, int.MaxValue) };
+            }
+
+            return context;
+        }
+
+        private static ShotSimulationResult Fly(
+            ShotSolveContext context, IReadOnlyList<ShotBalloonSnapshot> board, bool emptyBoard,
+            ShotBalloonState[] workingSet, float angle)
+        {
+            return ShotSimulator.Simulate(
+                board, context.WallLimitsClockwise, ShotBoardGather.OriginForAngle(angle, context),
+                ShotBoardGather.DirectionFromDegrees(angle), context.StartingShields,
+                context.ProjectileContactRadius, workingSet, context.RippleDamage,
+                projectileSpeed: context.ProjectileSpeed, cruiseConfig: context.CruiseConfig,
+                dynamics: emptyBoard ? null : context.Dynamics, allowedColors: context.AllowedColors,
+                rainbowColorId: context.RainbowColorId, seed: context.LoadedSeed,
+                items: emptyBoard ? null : context.Items, streakGrantsShields: context.StreakGrantsShields,
+                rippleRadius: context.RippleRadius, bumpers: context.Bumpers);
         }
 
         private static bool Pops(in ShotSimulationResult flight, string kind)
