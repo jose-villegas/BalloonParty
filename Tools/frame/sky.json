@@ -18,13 +18,13 @@
     "~": {"actor": "Puff"}
   },
   "board": [
-    "GSGZr$",
+    "GSGZrG",
     "GGGGbL",
     "~~GGG~",
     "~GNG~~",
     "UUDGbH",
     "GGGrTX",
-    "GGGTXT"
+    "$GGTXT"
   ],
   "settle": 1.5,
   "warm": 0.5,
