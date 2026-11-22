@@ -303,13 +303,12 @@ def capture(setup, out_dir, project, tries=4):
     frames_dir = os.path.join(out_dir, "frames")
     try:
         for attempt in range(tries):
-            build_with_shot(stage, setup)
-            if attempt == 0:
+            if attempt == 0 and setup.get("light_study"):
+                # The study runs some twenty seconds of game time, in which the formations move on and the board
+                # settles anew: the shot is fired on a board built afresh after it, the one a preview fires on.
+                build_with_shot(stage, setup)
                 light_study(stage, setup, out_dir)
-                scene_time = setup.get("scene", {}).get("time")
-                if scene_time is not None:
-                    stage.time_of_day(scene_time)
-                    stage.advance(setup.get("warm", 0.5))
+            build_with_shot(stage, setup)
             closeup = setup.get("closeup")
             if closeup:
                 point = fixed_point(stage, closeup["around"])

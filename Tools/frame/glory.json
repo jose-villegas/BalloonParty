@@ -3,27 +3,27 @@
   "scene": {"scenario": "meadow", "level": 7, "seed": 7, "time": 225},
   "legend": {
     "r": {"type": "Simple", "color": "Red"},
-    "g": {"type": "Simple", "color": "Green"},
+    "G": {"type": "SimpleSilver", "color": "Green"},
     "b": {"type": "Simple", "color": "Blue"},
     "S": {"type": "Simple", "color": "Green", "item": "Shield"},
-    "Z": {"type": "Simple", "color": "Red", "item": "Laser"},
+    "Z": {"type": "Simple", "color": "Green", "item": "Laser"},
     "L": {"type": "Simple", "color": "Blue", "item": "Lightning"},
-    "B": {"type": "Simple", "color": "Blue", "item": "Bomb"},
     "T": {"type": "Tough"},
     "U": {"type": "Unbreakable"},
     "$": {"type": "Golden"},
     "H": {"type": "Heart"},
     "D": {"type": "Disco"},
-    "N": {"type": "Nuke"}
+    "N": {"type": "Nuke"},
+    "*": {"actor": "Bush"}
   },
   "board": [
-    "gSrZbb",
-    "ggrrbL",
-    "ggrr$b",
-    "grNbTb",
-    "UUDbbH",
-    "ggrrbB",
-    "g.rr.b"
+    "GSGZr$",
+    "GGGGbL",
+    "GGGGrb",
+    "GGNGGT",
+    "UUDGbH",
+    "*GGGr*",
+    "*.GG**"
   ],
   "settle": 1.5,
   "warm": 0.5,
