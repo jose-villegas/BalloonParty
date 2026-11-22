@@ -205,6 +205,11 @@ class Stage:
             self.advance(settle)
         return result
 
+    def place_actor(self, kind, slot):
+        """Stands a grid actor (`Bush`, `Puff`) in the empty slot (col, row), as the level's deal would. Not a
+        mushroom: its caps belong to the walls the seed picks."""
+        return self.call("PlaceActor", kind, int(slot[0]), int(slot[1]))
+
     def pop(self, target, settle=None):
         """Pops a balloon for real (its type, or "col,row"); with `settle`, lets that much game time run."""
         result = self.call("Pop", target)
@@ -395,6 +400,9 @@ def main():
     place.add_argument("slot", help="col,row")
     place.add_argument("--item", default="None")
     place.add_argument("--color", default="", help="a palette colour: Red, Green, Blue, Purple")
+    actor = sub.add_parser("place-actor", help="stand a bush or a cloud in an empty slot, as the deal would")
+    actor.add_argument("kind", help="a GridActorType: Bush, Puff")
+    actor.add_argument("slot", help="col,row")
     pop = sub.add_parser("pop", help="pop a balloon for real")
     pop.add_argument("target", help="a balloon type or col,row")
     pop.add_argument("--settle", type=float, help="then let this much game time run")
@@ -483,6 +491,8 @@ def main():
                 parser.error("clear needs --slots or --around")
         elif args.command == "place":
             stage.place(args.kind, pair(args.slot, int), args.item, color=args.color)
+        elif args.command == "place-actor":
+            stage.place_actor(args.kind, pair(args.slot, int))
         elif args.command == "pop":
             stage.pop(args.target, args.settle)
         elif args.command == "freeze-pop":

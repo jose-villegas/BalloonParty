@@ -36,6 +36,7 @@ and only `advance`, `clear`, `pop --settle` and dealing a board let game time ru
 | `list` | Every balloon's type, slot and world position, and the grid's size |
 | `clear --slots c0,r0:c1,r1` / `clear --around x,y [--radius r]` | Pops the balloons there and lets the pops play out |
 | `place TYPE col,row [--item X]` | A balloon of a `BalloonType` in that slot, holding an item; whatever was there is popped first |
+| `place-actor TYPE col,row` | A bush (`Bush`) or a cloud (`Puff`) in that empty slot, as the level's deal would stand one. Not a mushroom: its caps belong to the walls the seed picks |
 | `pop TARGET [--settle S]` | Pops a balloon for real, with its own effect. `TARGET` is a type (the first on the board) or `col,row` |
 | `freeze-pop TARGET SECONDS [...]` | The balloon's pop effect stopped `SECONDS` in, from a fixed seed so runs match. `--hide` hides the balloon; `--dx`/`--dy` move the effect off it; `--seed`; `--texture PNG` swaps the shards' sheet and `--start-frame F` their first-frame range (0..1 of the sheet); `--shader NAME` or `--shader-file PATH` (compiled on the spot, so a worktree's shader can be tried before it's merged) and `--set _Name=value` change their material. Swaps go on copies; no asset changes |
 | `level-up-ready` | Readies a real level-up for the next shot: every balloon on the board turns the level's first colour, every other colour's bar fills, that one is left a point short, and the level-up is let through. `release`, then fire the Fire Best Shot cheat, and the level-up cinematic plays out for real, zoom and all |

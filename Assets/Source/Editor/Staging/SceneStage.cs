@@ -350,6 +350,24 @@ namespace BalloonParty.Editor.Staging
             return $"stripped {string.Join(", ", stripped)}";
         }
 
+        /// <summary>
+        ///     Stands a grid actor (a <see cref="GridActorType" /> by name: <c>Bush</c>, <c>Puff</c>) in an empty slot, as
+        ///     the level's deal would have. Not a mushroom: its caps belong to the walls the seed picks.
+        /// </summary>
+        public static string PlaceActor(string type, int col, int row)
+        {
+            var actorType = (GridActorType)Enum.Parse(typeof(GridActorType), type, true);
+            var grid = Resolve<SlotGrid>();
+            if (col < 0 || row < 0 || col >= grid.Columns || row >= grid.Rows)
+            {
+                return $"error: {col},{row} is off the {grid.Columns}x{grid.Rows} grid";
+            }
+
+            return Resolve<StaticActorSpawner>().PlaceAt(actorType, new Vector2Int(col, row))
+                ? $"placed a {actorType} at {col},{row}"
+                : $"error: no {actorType} placed at {col},{row} (taken, or not a kind that can be placed)";
+        }
+
         /// <summary>Sets the time of day (the light's angle: 45 dawn, 135 noon, 225 dusk, 315 night) and stops the clock.</summary>
         public static string SetTime(float degrees)
         {

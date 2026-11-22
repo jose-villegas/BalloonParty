@@ -238,6 +238,28 @@ namespace BalloonParty.Slots.Actor
             }
         }
 
+        // One actor in a chosen slot, so the scene stage (Editor/Staging) can stand a bush where a staged board
+        // wants it. Not a mushroom: a cap belongs to a wall the level's seed picks. False when the slot is taken,
+        // the type has no entry, or it is a mushroom.
+        internal bool PlaceAt(GridActorType actorType, Vector2Int slot)
+        {
+            if (!_poolsRegistered || actorType == GridActorType.Mushroom || !_grid.IsEmpty(slot.x, slot.y))
+            {
+                return false;
+            }
+
+            foreach (var entry in _gridActorConfig.Entries)
+            {
+                if (entry.ActorType == actorType && _modelFactories.ContainsKey(actorType))
+                {
+                    PlaceActor(entry, slot, new List<Vector2Int>(), 0);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private void ReturnActorsForEntry(GridActorPrefabEntry entry)
         {
             for (var col = 0; col < _grid.Columns; col++)

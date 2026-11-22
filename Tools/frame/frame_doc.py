@@ -87,9 +87,14 @@ def build(stage, setup):
     stage.begin(strip=strip, **scene)
     # The level's own obstacles (its clouds, bushes, mushrooms) keep their slots: the board is drawn round them.
     taken = {slot: kind for kind, slot, _ in stage.list()[0]}
-    for col, row, entry in cells(setup):
+    # The setup's own bushes first, as the deal stands them before any balloon: balloons float round them.
+    placed = sorted(cells(setup), key=lambda cell: "actor" not in cell[2])
+    for col, row, entry in placed:
         if (col, row) in taken:
             print(f"slot {col},{row} holds a {taken[(col, row)]}: nothing placed there", flush=True)
+            continue
+        if "actor" in entry:
+            stage.place_actor(entry["actor"], (col, row))
             continue
         stage.place(entry.get("type", "Simple"), (col, row), entry.get("item", "None"), settle=0,
                     color=entry.get("color", ""))
