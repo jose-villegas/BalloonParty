@@ -215,13 +215,14 @@ class Stage:
         board ripens it and its fuse starts."""
         return self.call("Bubbles", int(slot[0]), int(slot[1]), int(count))
 
-    def best_shot(self, then, lance=False, spare=""):
+    def best_shot(self, then, lance=False, spare="", margin=1):
         """Where to aim on a board with no mushrooms: the angle whose flight pops a `then` balloon (nuke, golden,
         disco, heart) and scores the most on its way, the loaded ball armed as a lance first with `lance`, passing
-        over every angle whose flight pops a `spare` balloon too. Answers (angle or None, the stage's whole answer);
+        over every angle whose flight pops a `spare` balloon too, and every one without `margin` angles on each side
+        that pop the `then` balloon as well. Answers (angle or None, the stage's whole answer);
         fire at it without arming again."""
         try:
-            answer = self.call("BestShot", then, bool(lance), spare)
+            answer = self.call("BestShot", then, bool(lance), spare, int(margin))
         except StageError as error:
             return None, str(error)
         return float(answer.split()[1]), answer
@@ -450,6 +451,8 @@ def main():
     best.add_argument("--lance", action="store_true", help="arm the loaded ball as a lance first")
     best.add_argument("--spare", default="", choices=("", "nuke", "golden", "disco", "heart"),
                       help="pass over the angles whose flight pops a balloon of this kind")
+    best.add_argument("--margin", type=int, default=1,
+                      help="how many angles on each side must pop the balloon too")
     cut = sub.add_parser("cut", help="cut the cap off a mushroom as a lance does: a ball then flies through")
     cut.add_argument("slot", help="col,row")
     cut.add_argument("degrees", type=float, help="the lance's way: 0 = right, 90 = straight up")
@@ -530,7 +533,7 @@ def main():
         elif args.command == "chain":
             stage.call("Chain", args.then)
         elif args.command == "best-shot":
-            stage.call("BestShot", args.then, args.lance, args.spare)
+            stage.call("BestShot", args.then, args.lance, args.spare, args.margin)
         elif args.command == "cut":
             stage.cut(pair(args.slot, int), args.degrees, args.offset)
         elif args.command == "regrow":

@@ -962,11 +962,12 @@ namespace BalloonParty.Editor.Staging
         ///     thrower can aim at, the loaded ball as it is (armed as a lance first with <paramref name="lance" />),
         ///     and the answer is the angle whose flight pops a balloon of the kind <paramref name="then" /> names
         ///     (<c>nuke</c>, <c>golden</c>, <c>disco</c> or <c>heart</c>) and scores the most on its way, of those
-        ///     whose neighbours on both sides pop it too: a lone angle is the likeliest for the real flight to part
-        ///     from. An angle whose flight also pops a balloon of the kind <paramref name="spare" /> names is passed
+        ///     whose <paramref name="margin" /> neighbours on each side pop it too: a lone angle is the likeliest for
+        ///     the real flight to part from, and a board whose balloons float on after the first pops needs a wider
+        ///     run. An angle whose flight also pops a balloon of the kind <paramref name="spare" /> names is passed
         ///     over. For <see cref="Fire" />, without arming the ball again. An error when no angle pops it.
         /// </summary>
-        public static string BestShot(string then, bool lance = false, string spare = "")
+        public static string BestShot(string then, bool lance = false, string spare = "", int margin = 1)
         {
             if (Array.IndexOf(ChainRewards, (then ?? "").ToLowerInvariant()) < 0)
             {
@@ -1019,10 +1020,11 @@ namespace BalloonParty.Editor.Staging
                 popping += scores[i] >= 0 ? 1 : 0;
             }
 
+            margin = Mathf.Max(0, margin);
             var best = -1;
-            for (var i = 1; i < samples - 1; i++)
+            for (var i = margin; i < samples - margin; i++)
             {
-                if (scores[i - 1] >= 0 && scores[i] >= 0 && scores[i + 1] >= 0 && (best < 0 || scores[i] > scores[best]))
+                if ((best < 0 || scores[i] > scores[best]) && PopsAround(scores, i, margin))
                 {
                     best = i;
                 }
@@ -1030,7 +1032,7 @@ namespace BalloonParty.Editor.Staging
 
             if (best < 0)
             {
-                return $"error: no angle of {samples} pops the {then} with its neighbours ({popping} pop it at all)";
+                return $"error: no angle of {samples} pops the {then} with {margin} neighbours ({popping} pop it at all)";
             }
 
             var bestAngle = AimAngleGrid.ResolveSweepAngle(
@@ -1348,6 +1350,19 @@ namespace BalloonParty.Editor.Staging
                 rainbowColorId: context.RainbowColorId, seed: context.LoadedSeed,
                 items: emptyBoard ? null : context.Items, streakGrantsShields: context.StreakGrantsShields,
                 rippleRadius: context.RippleRadius, bumpers: context.Bumpers);
+        }
+
+        private static bool PopsAround(IReadOnlyList<int> scores, int index, int margin)
+        {
+            for (var i = index - margin; i <= index + margin; i++)
+            {
+                if (scores[i] < 0)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private static bool Pops(in ShotSimulationResult flight, string kind)

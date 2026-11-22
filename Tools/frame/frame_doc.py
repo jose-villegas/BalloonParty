@@ -63,17 +63,16 @@ class ShotMissed(RuntimeError):
     solved one (a formation moved, a cap rocked)."""
 
 
-class NoShot(RuntimeError):
-    """No aim angle does what the setup's shot asks on the board as it was dealt."""
-
-
 def build_with_shot(stage, setup, tries=6):
     """Builds the scene until the shot it asks for exists: a level's clouds and bushes land differently on every
-    deal, and now and then one stands in the shot's way."""
+    deal, and now and then one stands in the shot's way. Answers the angle to fire at, solved on the board as it
+    was built: asked again a frame later, the solver can answer another (a cap rocks, a formation steps), one
+    the preview never fired."""
     for attempt in range(tries):
         build(stage, setup)
-        if solve(stage, setup)[0] is not None:
-            return
+        angle = solve(stage, setup)[0]
+        if angle is not None:
+            return angle
         print(f"no such shot on this deal (try {attempt + 1} of {tries}); dealing again", flush=True)
     raise SystemExit("no deal of this board has the shot the setup asks for")
 
@@ -86,7 +85,8 @@ def solve(stage, setup):
     if shot.get("chain"):
         return stage.chain(shot.get("then", ""))
     if shot.get("best"):
-        return stage.best_shot(shot.get("then", "nuke"), shot.get("lance", False), shot.get("spare", ""))
+        return stage.best_shot(shot.get("then", "nuke"), shot.get("lance", False), shot.get("spare", ""),
+                               shot.get("margin", 1))
     return shot.get("angle", 90), "as written"
 
 
@@ -142,16 +142,13 @@ def build(stage, setup):
     settle(stage, setup.get("warm", 0.5))
 
 
-def fire(stage, setup):
-    """Fires the setup's shot: at its angle, or with "chain" at the angle the board's mushrooms pay with the lance
-    (and with "then", one whose lance goes on to pop that reward balloon: nuke, golden, disco, heart), or with
-    "best" at the angle that pops the `then` balloon and scores the most."""
+def fire(stage, setup, angle):
+    """Fires the setup's shot at the angle `build_with_shot` solved: its own angle, or with "chain" the one the
+    board's mushrooms pay with the lance (and with "then", one whose lance goes on to pop that reward balloon:
+    nuke, golden, disco, heart), or with "best" the one that pops the `then` balloon and scores the most."""
     shot = setup.get("shot")
     if not shot:
         return
-    angle, answer = solve(stage, setup)
-    if angle is None:
-        raise NoShot(answer)
     # The best shot armed the lance already, to fly it as one.
     stage.fire(angle, shot.get("lance", False) and not shot.get("best"))
 
@@ -314,8 +311,10 @@ def preview(setup, out_dir, project, frames):
     os.makedirs(directory)
     taken = []
     try:
-        build_with_shot(stage, setup)
-        fire(stage, setup)
+        angle = build_with_shot(stage, setup)
+        # A capture measures a frame before it fires (Stage.frame_seconds, two steps): the preview fires as late.
+        stage.step(2)
+        fire(stage, setup, angle)
         for frame in range(0, frames + 1, every):
             path = os.path.join(directory, f"{frame:04d}.png")
             stage.capture(path)
@@ -347,7 +346,7 @@ def capture(setup, out_dir, project, tries=4):
                 # The study's light is set while the game is held, not paused: its globals follow on the ticks.
                 stage.hold()
                 light_study(stage, setup, out_dir)
-            build_with_shot(stage, setup)
+            angle = build_with_shot(stage, setup)
             closeup = setup.get("closeup")
             if closeup:
                 point = fixed_point(stage, closeup["around"])
@@ -363,7 +362,7 @@ def capture(setup, out_dir, project, tries=4):
             # idle spin, the shaders' clock) running through each capture. The first step measures a frame, and
             # its Game view is the first frame's: the shot is fired after it, with no frame in between.
             stage.frame_length = stage.frame_seconds(screen())
-            fire(stage, setup)
+            fire(stage, setup, angle)
             try:
                 for phase, label, is_glory, key, gap in timeline(stage, setup, screen):
                     capture_frame(stage, os.path.join(frames_dir, f"{len(taken):03d}"), closeup if is_glory else None)

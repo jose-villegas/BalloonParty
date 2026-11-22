@@ -1,8 +1,8 @@
 # How a frame is made
 
 One frame of BalloonParty, taken apart: what the game works out before it draws, what it draws and in
-which order, and what each part adds. The frame is a staged one. In the meadow at dusk a ball bounced between
-the mushrooms' caps, was paid with the lance, and hit the nuke. Four seconds later the nuke went off, and this
+which order, and what each part adds. The frame is a staged one. In the meadow at dusk a ball loaded as a
+lance ran through a field of silver balloons and hit the nuke. Four seconds later the nuke went off, and this
 is a fifth of a second into its blast.
 
 | The frame this page takes apart | The whole shot |

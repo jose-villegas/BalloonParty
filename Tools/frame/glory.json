@@ -27,7 +27,7 @@
   ],
   "settle": 1.5,
   "warm": 0.5,
-  "shot": {"chain": true, "then": "nuke"},
+  "shot": {"best": true, "then": "nuke", "lance": true, "spare": "golden"},
   "moment": {"after": "blast", "frames": 9},
   "timeline": {"detail": 1, "flight_every": 4, "flight_after": 40, "fuse_every": 30, "blast_every": 3, "blast_frames": 48, "after_every": 8, "after_frames": 72},
   "closeup": {"around": "Heart", "size": 360},
