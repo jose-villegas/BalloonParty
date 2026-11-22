@@ -1,5 +1,7 @@
 var NAVTREEINDEX145 =
 {
+"structBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerEventRow.html#adb5fbce694591f72d7dcb7f4adaa7996":[6,0,0,5,2,2,1],
+"structBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Palette.html":[5,0,0,5,20,1],
 "structBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Palette.html":[6,0,0,5,20,1],
 "structBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Palette.html#a1425e6455c8aa4ade139106029a9c002":[5,0,0,5,20,1,3],
 "structBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Palette.html#a1425e6455c8aa4ade139106029a9c002":[6,0,0,5,20,1,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX145 =
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html#a50a97971b1b69d7f7bef6c0108eb201f":[6,0,0,6,5,6,0],
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html#a77905a88372d1e86c74e672fb0b140d9":[5,0,0,6,5,6,2],
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html#a77905a88372d1e86c74e672fb0b140d9":[6,0,0,6,5,6,2],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html#a93e0e983b6ebc944eef483bfcc572863":[5,0,0,6,5,6,3],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html#a93e0e983b6ebc944eef483bfcc572863":[6,0,0,6,5,6,3],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html#afd177696079acd0ce177c29a0b15bfa0":[5,0,0,6,5,6,1]
+"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html#a93e0e983b6ebc944eef483bfcc572863":[5,0,0,6,5,6,3]
 };

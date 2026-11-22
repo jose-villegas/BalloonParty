@@ -1,5 +1,7 @@
 var NAVTREEINDEX128 =
 {
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckAppearanceSettings.html#a0584204b413c86fdb7732cfcdbeb7278":[6,0,0,3,5,20,6],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckAppearanceSettings.html#a0605388fe4ac42ecfc9e5ae0fa0c01f9":[5,0,0,3,5,20,14],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckAppearanceSettings.html#a0605388fe4ac42ecfc9e5ae0fa0c01f9":[6,0,0,3,5,20,14],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckAppearanceSettings.html#a0bb48e6c348903366d72b677b6fd4f5f":[5,0,0,3,5,20,7],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckAppearanceSettings.html#a0bb48e6c348903366d72b677b6fd4f5f":[6,0,0,3,5,20,7],
@@ -247,7 +249,5 @@ var NAVTREEINDEX128 =
 "interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings.html#a7c9940e26db07e1d8f4aeb848e7675b6":[6,0,0,3,9,7,3],
 "interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings.html#ae7d1b3cf4e16e5eadcc19856f0ccbc26":[5,0,0,3,9,7,5],
 "interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings.html#ae7d1b3cf4e16e5eadcc19856f0ccbc26":[6,0,0,3,9,7,5],
-"interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings.html#af57a2e7d6f7c0f78d3bcdb4329b10f95":[5,0,0,3,9,7,4],
-"interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings.html#af57a2e7d6f7c0f78d3bcdb4329b10f95":[6,0,0,3,9,7,4],
-"interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings.html#afe236c0fd76aab5085ded440b03fa9d2":[5,0,0,3,9,7,0]
+"interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings.html#af57a2e7d6f7c0f78d3bcdb4329b10f95":[5,0,0,3,9,7,4]
 };

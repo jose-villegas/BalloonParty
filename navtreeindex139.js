@@ -1,5 +1,7 @@
 var NAVTREEINDEX139 =
 {
+"plan_reward_balloons.html#autotoc_md936":[3,24,0,7],
+"plan_ripe_bubble_cluster.html":[3,11],
 "plan_ripe_bubble_cluster.html#autotoc_md937":[3,11,0],
 "plan_ripe_bubble_cluster.html#autotoc_md939":[3,11,0,0],
 "plan_ripe_bubble_cluster.html#autotoc_md940":[3,11,0,1],
@@ -247,7 +249,5 @@ var NAVTREEINDEX139 =
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1NodeRecord.html#afaa63e65565cd990807561813a5ed88e":[6,0,0,1,0,0,2,1],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html":[5,0,0,1,0,1],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html":[6,0,0,1,0,1],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#a02b1886e2f53b34563ee080f2f0a7e7c":[5,0,0,1,0,1,0],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#a02b1886e2f53b34563ee080f2f0a7e7c":[6,0,0,1,0,1,0],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#a1e33a67aace9f709d18e001aaf08bbbd":[5,0,0,1,0,1,3]
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#a02b1886e2f53b34563ee080f2f0a7e7c":[5,0,0,1,0,1,0]
 };

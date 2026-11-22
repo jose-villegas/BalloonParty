@@ -1,5 +1,7 @@
 var NAVTREEINDEX140 =
 {
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#a02b1886e2f53b34563ee080f2f0a7e7c":[6,0,0,1,0,1,0],
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#a1e33a67aace9f709d18e001aaf08bbbd":[5,0,0,1,0,1,3],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#a1e33a67aace9f709d18e001aaf08bbbd":[6,0,0,1,0,1,3],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#a5f2c277f41fb18ff29406b17b5366b75":[5,0,0,1,0,1,1],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#a5f2c277f41fb18ff29406b17b5366b75":[6,0,0,1,0,1,1],
@@ -247,7 +249,5 @@ var NAVTREEINDEX140 =
 "structBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardTuning.html#af78a10d22eab21e967c6fcb7a17b9408":[6,0,0,1,3,11,10],
 "structBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardTuning.html#aff14631bc786c52ac92e00d9d78ba8d7":[5,0,0,1,3,11,2],
 "structBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardTuning.html#aff14631bc786c52ac92e00d9d78ba8d7":[6,0,0,1,3,11,2],
-"structBalloonParty_1_1Balloon_1_1Spawner_1_1ToughRunPlan.html":[5,0,0,1,4,13],
-"structBalloonParty_1_1Balloon_1_1Spawner_1_1ToughRunPlan.html":[6,0,0,1,4,13],
-"structBalloonParty_1_1Balloon_1_1Spawner_1_1ToughRunPlan.html#a0c8cd6ad8df3c606148bd9c00f10d834":[5,0,0,1,4,13,0]
+"structBalloonParty_1_1Balloon_1_1Spawner_1_1ToughRunPlan.html":[5,0,0,1,4,13]
 };

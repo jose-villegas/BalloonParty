@@ -1,5 +1,7 @@
 var NAVTREEINDEX129 =
 {
+"interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings.html#af57a2e7d6f7c0f78d3bcdb4329b10f95":[6,0,0,3,9,7,4],
+"interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings.html#afe236c0fd76aab5085ded440b03fa9d2":[5,0,0,3,9,7,0],
 "interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings.html#afe236c0fd76aab5085ded440b03fa9d2":[6,0,0,3,9,7,0],
 "interfaceBalloonParty_1_1Configuration_1_1Level_1_1IContentPiece.html":[5,0,0,3,9,8],
 "interfaceBalloonParty_1_1Configuration_1_1Level_1_1IContentPiece.html":[6,0,0,3,9,8],
@@ -247,7 +249,5 @@ var NAVTREEINDEX129 =
 "interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStatsWriter.html#a80345045e90ee7557f36650058ea816a":[6,0,0,6,4,4,1],
 "interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStatsWriter.html#ad1a9b9a0ecd36e8d9ab429434076fbf4":[5,0,0,6,4,4,0],
 "interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStatsWriter.html#ad1a9b9a0ecd36e8d9ab429434076fbf4":[6,0,0,6,4,4,0],
-"interfaceBalloonParty_1_1Game_1_1HeadsUp_1_1IHeadsUpPresenter.html":[5,0,0,6,5,8],
-"interfaceBalloonParty_1_1Game_1_1HeadsUp_1_1IHeadsUpPresenter.html":[6,0,0,6,5,8],
-"interfaceBalloonParty_1_1Game_1_1HeadsUp_1_1IHeadsUpPresenter.html#a19b7b7df342d2947e1e199858cfd9c00":[5,0,0,6,5,8,0]
+"interfaceBalloonParty_1_1Game_1_1HeadsUp_1_1IHeadsUpPresenter.html":[5,0,0,6,5,8]
 };

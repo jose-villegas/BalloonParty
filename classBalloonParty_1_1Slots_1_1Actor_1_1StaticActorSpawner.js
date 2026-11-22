@@ -17,6 +17,7 @@ var classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner =
     [ "ModelMatches", "classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#a071fcf53a16d64a9fb589afebc7c0cf3", null ],
     [ "OnBoardClear", "classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#a6b2c1a215cbbecb5f7e2df1bbe182e3c", null ],
     [ "PlaceActor", "classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#a6ed9364f2c98b08662cd0602aa756a35", null ],
+    [ "PlaceAt", "classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#ae11484ca903231044a3ec1f4d9304ace", null ],
     [ "PlaceEntry", "classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#ab87632e72804ddc214822a23ee6e9419", null ],
     [ "RegisterPools", "classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#a306ef4ab414703102f4b01f594e218a9", null ],
     [ "ReturnActorAt", "classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#ab41b6e5efd968b4733265b80507a4668", null ],

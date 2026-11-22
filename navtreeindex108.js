@@ -1,5 +1,7 @@
 var NAVTREEINDEX108 =
 {
+"classBalloonParty_1_1Slots_1_1Grid_1_1MushroomBoard.html":[5,0,0,13,2,5],
+"classBalloonParty_1_1Slots_1_1Grid_1_1MushroomBoard.html":[6,0,0,13,2,5],
 "classBalloonParty_1_1Slots_1_1Grid_1_1MushroomBoard.html#a2620a994a956ffed729236708d670168":[5,0,0,13,2,5,10],
 "classBalloonParty_1_1Slots_1_1Grid_1_1MushroomBoard.html#a2620a994a956ffed729236708d670168":[6,0,0,13,2,5,10],
 "classBalloonParty_1_1Slots_1_1Grid_1_1MushroomBoard.html#a296ac7f2ecc8056535f6396bf98381ec":[5,0,0,13,2,5,24],
@@ -247,7 +249,5 @@ var NAVTREEINDEX108 =
 "classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html#ae9e6bf63d3fd3d4276732ddee8191705":[5,0,0,14,5,14],
 "classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html#ae9e6bf63d3fd3d4276732ddee8191705":[6,0,0,14,5,14],
 "classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html#aee0636e4a51715400af4d8db5674a4c0":[5,0,0,14,5,9],
-"classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html#aee0636e4a51715400af4d8db5674a4c0":[6,0,0,14,5,9],
-"classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html#af08ab58a91bda30db104d3cab50fc5e5":[5,0,0,14,5,27],
-"classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html#af08ab58a91bda30db104d3cab50fc5e5":[6,0,0,14,5,27]
+"classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html#aee0636e4a51715400af4d8db5674a4c0":[6,0,0,14,5,9]
 };

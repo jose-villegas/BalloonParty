@@ -1,5 +1,7 @@
 var NAVTREEINDEX158 =
 {
+"structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a11dd18570c10430a11750c2eb568ab2c":[6,0,0,14,26,16],
+"structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a13d013506632605b32f4a2f2cfebe3fc":[5,0,0,14,26,3],
 "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a13d013506632605b32f4a2f2cfebe3fc":[6,0,0,14,26,3],
 "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a344cc65a94b06ec5a8963f06f9cab965":[5,0,0,14,26,5],
 "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a344cc65a94b06ec5a8963f06f9cab965":[6,0,0,14,26,5],
@@ -247,7 +249,5 @@ var NAVTREEINDEX158 =
 "style_guide.html#autotoc_md1111":[1,0,12,2],
 "style_guide.html#autotoc_md1112":[1,0,12,3],
 "style_guide.html#autotoc_md1113":[1,0,12,4],
-"style_guide.html#autotoc_md1115":[1,0,13],
-"style_guide.html#autotoc_md1116":[1,0,13,0],
-"style_guide.html#autotoc_md1117":[1,0,13,1]
+"style_guide.html#autotoc_md1115":[1,0,13]
 };

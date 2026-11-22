@@ -1,5 +1,7 @@
 var NAVTREEINDEX141 =
 {
+"structBalloonParty_1_1Balloon_1_1Spawner_1_1ToughRunPlan.html":[6,0,0,1,4,13],
+"structBalloonParty_1_1Balloon_1_1Spawner_1_1ToughRunPlan.html#a0c8cd6ad8df3c606148bd9c00f10d834":[5,0,0,1,4,13,0],
 "structBalloonParty_1_1Balloon_1_1Spawner_1_1ToughRunPlan.html#a0c8cd6ad8df3c606148bd9c00f10d834":[6,0,0,1,4,13,0],
 "structBalloonParty_1_1Balloon_1_1Spawner_1_1ToughRunPlan.html#a269c3134d58015a916b39adc6b030fa3":[5,0,0,1,4,13,1],
 "structBalloonParty_1_1Balloon_1_1Spawner_1_1ToughRunPlan.html#a269c3134d58015a916b39adc6b030fa3":[6,0,0,1,4,13,1],
@@ -247,7 +249,5 @@ var NAVTREEINDEX141 =
 "structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html":[6,0,0,3,5,29],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a09eba7c6bc214def9e3537adcac60c17":[5,0,0,3,5,29,4],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a09eba7c6bc214def9e3537adcac60c17":[6,0,0,3,5,29,4],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a0ee36ff4cc5a3278c1482efd0b7b6793":[5,0,0,3,5,29,8],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a0ee36ff4cc5a3278c1482efd0b7b6793":[6,0,0,3,5,29,8],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a19439140857df82be48affc228fc7b7e":[5,0,0,3,5,29,20]
+"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a0ee36ff4cc5a3278c1482efd0b7b6793":[5,0,0,3,5,29,8]
 };

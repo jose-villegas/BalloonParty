@@ -1,5 +1,7 @@
 var NAVTREEINDEX135 =
 {
+"namespaceBalloonParty_1_1Cheats.html":[5,0,0,2],
+"namespaceBalloonParty_1_1Configuration.html":[5,0,0,3],
 "namespaceBalloonParty_1_1Configuration_1_1Balloons.html":[5,0,0,3,0],
 "namespaceBalloonParty_1_1Configuration_1_1Buffs.html":[5,0,0,3,1],
 "namespaceBalloonParty_1_1Configuration_1_1CardReveal.html":[5,0,0,3,2],
@@ -247,7 +249,5 @@ var NAVTREEINDEX135 =
 "namespaceBalloonParty_1_1Nudge.html#a4d2e641b1da2f9eb813f7185abd74329ad911b34823c7674c292556dc56148c27":[5,0,0,8,6,4],
 "namespaceBalloonParty_1_1Nudge_1_1Editor.html":[5,0,0,8,0],
 "namespaceBalloonParty_1_1Prediction.html":[5,0,0,9],
-"namespaceBalloonParty_1_1Prediction.html#a254a3b76e2281f08bf6f5a0b1024809b":[5,0,0,9,8],
-"namespaceBalloonParty_1_1Prediction.html#a254a3b76e2281f08bf6f5a0b1024809ba68e6202e50e4806f18d28cab574e0d82":[5,0,0,9,8,2],
-"namespaceBalloonParty_1_1Prediction.html#a254a3b76e2281f08bf6f5a0b1024809ba694d154d83bf9e21a5dccd5cbf861add":[5,0,0,9,8,0]
+"namespaceBalloonParty_1_1Prediction.html#a254a3b76e2281f08bf6f5a0b1024809b":[5,0,0,9,8]
 };
