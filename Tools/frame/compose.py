@@ -38,6 +38,8 @@ VIDEO_SLOW = 2.5
 PHASE_GAP = {"flight": "flight_every", "fuse": "fuse_every", "blast": "blast_every", "after": "after_every"}
 # A gap longer than this many game frames is a skip (the fuse), not motion: the slow pass leaves it as it is.
 LONGEST_MOTION_GAP = 8
+# What the video's frame is labelled with, by the setup's scenario.
+SCENARIO_NAMES = {"meadow": "the meadow", "sky": "the sky", "water": "the water", "paper": "the bonus level"}
 
 # A step's own contribution is the difference from the step before, shown this many times brighter: a soft
 # shadow or a tint is a few levels out of 255, and would not show otherwise.
@@ -220,6 +222,35 @@ def save_video(path, sheets, passes):
     return path
 
 
+def join_videos(paths, out):
+    """The videos one after another as one, each scaled to the widest and centred on the background, since sheets
+    with more maps along the bottom are wider."""
+    ffmpeg = shutil.which("ffmpeg")
+    if not ffmpeg:
+        print("no ffmpeg on the path: the videos are not joined", flush=True)
+        return None
+    probe = shutil.which("ffprobe")
+    widths, heights = [], []
+    for path in paths:
+        answer = subprocess.run([probe, "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height",
+                                 "-of", "csv=p=0", path], capture_output=True, text=True, check=True).stdout.strip()
+        width, height = (int(value) for value in answer.split(",")[:2])
+        widths.append(width)
+        heights.append(height)
+    width = max(widths) + max(widths) % 2
+    height = max(round(h * width / w) for w, h in zip(widths, heights))
+    height += height % 2
+    colour = "0x%02x%02x%02x" % BACKGROUND
+    filters = [f"[{index}:v]scale={width}:-2:flags=lanczos,pad={width}:{height}:(ow-iw)/2:(oh-ih)/2:{colour},"
+               f"setsar=1,format=yuv420p[v{index}]" for index in range(len(paths))]
+    joined = "".join(f"[v{index}]" for index in range(len(paths))) + f"concat=n={len(paths)}:v=1:a=0[out]"
+    inputs = [arg for path in paths for arg in ("-i", path)]
+    subprocess.run([ffmpeg, "-y", "-loglevel", "error", *inputs, "-filter_complex", ";".join(filters + [joined]),
+                    "-map", "[out]", "-fps_mode", "vfr", "-c:v", "libx264", "-crf", "20", "-preset", "slow",
+                    "-movflags", "+faststart", os.path.abspath(out)], check=True)
+    return out
+
+
 def save_gif_plain(path, frames, durations):
     """Without ffmpeg: one palette taken from a few of the frames, every frame stored whole."""
     count = min(4, len(frames))
@@ -392,6 +423,9 @@ def compose(out_dir, animations=("webp",), video=True):
 
     # Everything side by side through the shot, as one video: the frame, its steps, and under them the maps.
     if video:
+        scenario = info.get("setup", {}).get("scene", {}).get("scenario", "")
+        place = SCENARIO_NAMES.get(scenario, scenario)
+
         def sheets():
             # The maps in a row along the bottom set the sheet's width. Above them, the steps in five columns,
             # and the frame beside them as tall as they are, so the two fill that width between them: a step's
@@ -403,7 +437,7 @@ def compose(out_dir, animations=("webp",), video=True):
                 steps = grid([step_cell(directory, step, step_width, screen=view) for step in range(len(STEPS) + 1)], 5)
                 tall = steps.height - LABEL - 2 * GAP
                 large = view.resize((round(tall * view.width / view.height), tall), Image.LANCZOS)
-                yield stack([row([labelled(large, "The frame", frame["label"]), steps]),
+                yield stack([row([labelled(large, "The frame", f"{place}  ·  {frame['label']}"), steps]),
                              row([look.panel(directory) for look in looks.values()])])
 
         # The times between captures as they were in the game: a frame is as long as the capture stepped (1/60 s

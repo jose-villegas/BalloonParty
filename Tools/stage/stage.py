@@ -215,12 +215,13 @@ class Stage:
         board ripens it and its fuse starts."""
         return self.call("Bubbles", int(slot[0]), int(slot[1]), int(count))
 
-    def best_shot(self, then, lance=False):
+    def best_shot(self, then, lance=False, spare=""):
         """Where to aim on a board with no mushrooms: the angle whose flight pops a `then` balloon (nuke, golden,
-        disco, heart) and scores the most on its way, the loaded ball armed as a lance first with `lance`. Answers
-        (angle or None, the stage's whole answer); fire at it without arming again."""
+        disco, heart) and scores the most on its way, the loaded ball armed as a lance first with `lance`, passing
+        over every angle whose flight pops a `spare` balloon too. Answers (angle or None, the stage's whole answer);
+        fire at it without arming again."""
         try:
-            answer = self.call("BestShot", then, bool(lance))
+            answer = self.call("BestShot", then, bool(lance), spare)
         except StageError as error:
             return None, str(error)
         return float(answer.split()[1]), answer
@@ -418,6 +419,9 @@ def main():
     actor = sub.add_parser("place-actor", help="stand a bush or a cloud in an empty slot, as the deal would")
     actor.add_argument("kind", help="a GridActorType: Bush, Puff")
     actor.add_argument("slot", help="col,row")
+    bubbles = sub.add_parser("bubbles", help="fill the bubble cluster in a slot, by default to the merge cap")
+    bubbles.add_argument("slot", help="col,row")
+    bubbles.add_argument("--count", type=int, default=0, help="how many bubbles (0: the merge cap, which ripens it)")
     pop = sub.add_parser("pop", help="pop a balloon for real")
     pop.add_argument("target", help="a balloon type or col,row")
     pop.add_argument("--settle", type=float, help="then let this much game time run")
@@ -441,6 +445,11 @@ def main():
     chain = sub.add_parser("chain", help="the angle that arms the lance off this board's mushroom walls, for fire")
     chain.add_argument("--then", default="", choices=("", "nuke", "golden", "disco", "heart"),
                        help="only angles whose flight also pops a balloon of this kind")
+    best = sub.add_parser("best-shot", help="the angle that pops a reward balloon and scores the most, for fire")
+    best.add_argument("then", choices=("nuke", "golden", "disco", "heart"))
+    best.add_argument("--lance", action="store_true", help="arm the loaded ball as a lance first")
+    best.add_argument("--spare", default="", choices=("", "nuke", "golden", "disco", "heart"),
+                      help="pass over the angles whose flight pops a balloon of this kind")
     cut = sub.add_parser("cut", help="cut the cap off a mushroom as a lance does: a ball then flies through")
     cut.add_argument("slot", help="col,row")
     cut.add_argument("degrees", type=float, help="the lance's way: 0 = right, 90 = straight up")
@@ -508,6 +517,8 @@ def main():
             stage.place(args.kind, pair(args.slot, int), args.item, color=args.color)
         elif args.command == "place-actor":
             stage.place_actor(args.kind, pair(args.slot, int))
+        elif args.command == "bubbles":
+            stage.bubbles(pair(args.slot, int), args.count)
         elif args.command == "pop":
             stage.pop(args.target, args.settle)
         elif args.command == "freeze-pop":
@@ -518,6 +529,8 @@ def main():
             stage.fire(args.degrees, args.lance)
         elif args.command == "chain":
             stage.call("Chain", args.then)
+        elif args.command == "best-shot":
+            stage.call("BestShot", args.then, args.lance, args.spare)
         elif args.command == "cut":
             stage.cut(pair(args.slot, int), args.degrees, args.offset)
         elif args.command == "regrow":

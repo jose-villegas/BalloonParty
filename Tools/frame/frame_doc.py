@@ -72,19 +72,53 @@ def build_with_shot(stage, setup, tries=6):
     deal, and now and then one stands in the shot's way."""
     for attempt in range(tries):
         build(stage, setup)
-        shot = setup.get("shot") or {}
-        if not shot.get("chain") or stage.chain(shot.get("then", ""))[0] is not None:
+        if solve(stage, setup)[0] is not None:
             return
         print(f"no such shot on this deal (try {attempt + 1} of {tries}); dealing again", flush=True)
     raise SystemExit("no deal of this board has the shot the setup asks for")
 
 
+def solve(stage, setup):
+    """The angle the setup's shot is fired at, and the stage's answer: its `angle`, or with "chain" the one the
+    meadow's mushrooms pay with the lance, or with "best" the one that pops the `then` balloon and scores the most
+    (as a lance with "lance"). (None, why) when there is none."""
+    shot = setup.get("shot") or {}
+    if shot.get("chain"):
+        return stage.chain(shot.get("then", ""))
+    if shot.get("best"):
+        return stage.best_shot(shot.get("then", "nuke"), shot.get("lance", False), shot.get("spare", ""))
+    return shot.get("angle", 90), "as written"
+
+
+def settle(stage, seconds):
+    """Lets `seconds` of game time run a frame at a time, as many frames on every build. On the real-time clock it
+    would be however many frames the Editor managed, each as long as it took, and the board would settle a little
+    differently every time."""
+    frames = round(seconds / SETTLE_FRAME_SECONDS)
+    if frames > 0:
+        stage.step(frames)
+
+
+# A stepped frame's game time (SceneStage.Step: the capture measures it as 0.02 s).
+SETTLE_FRAME_SECONDS = 0.02
+
+
 def build(stage, setup):
-    """The scene, held: the board dealt and stripped, the time of day set, every balloon of the setup placed."""
+    """The scene: the board dealt and stripped, the time of day set, every balloon of the setup placed. The Editor
+    is left paused, as it is from the deal on: a held game still runs the Editor's frames, and what those draw from
+    Unity's random numbers (which the deal seeds) would shift the clouds, the formations' steps and the loaded
+    ball's colour by however many of them real time let through. Paused, only the frames counted here run, so the
+    same setup builds the same board and the same shot every time."""
     scene = dict(setup.get("scene", {}))
     strip = scene.pop("strip", ())
     time_of_day = scene.pop("time", None)
-    stage.begin(strip=strip, **scene)
+    stage.begin()
+    stage.step(1)
+    # Dealt twice: a game just come into Play mode starts its systems up over the frames after the first deal,
+    # drawing random numbers a game already running does not, so the board is the second deal's on every build.
+    for _ in range(2):
+        stage.setup(strip=strip, settle=0, **scene)
+        settle(stage, 1.5)
     # The level's own obstacles (its clouds, bushes, mushrooms) keep their slots: the board is drawn round them.
     taken = {slot: kind for kind, slot, _ in stage.list()[0]}
     # The setup's own bushes first, as the deal stands them before any balloon: balloons float round them.
@@ -98,25 +132,28 @@ def build(stage, setup):
             continue
         stage.place(entry.get("type", "Simple"), (col, row), entry.get("item", "None"), settle=0,
                     color=entry.get("color", ""))
-    stage.advance(setup.get("settle", 1.5))
+        if entry.get("full"):
+            stage.bubbles((col, row))
+    settle(stage, setup.get("settle", 1.5))
     if time_of_day is not None:
-        stage.time_of_day(time_of_day)
+        # The light's globals follow on the warm frames below.
+        stage.time_of_day(time_of_day, settle=0)
     # A little game time for the fields that follow the scene (the light's gradient, the capture, the GI).
-    stage.advance(setup.get("warm", 0.5))
+    settle(stage, setup.get("warm", 0.5))
 
 
 def fire(stage, setup):
     """Fires the setup's shot: at its angle, or with "chain" at the angle the board's mushrooms pay with the lance
-    (and with "then", one whose lance goes on to pop that reward balloon: nuke, golden, disco, heart)."""
+    (and with "then", one whose lance goes on to pop that reward balloon: nuke, golden, disco, heart), or with
+    "best" at the angle that pops the `then` balloon and scores the most."""
     shot = setup.get("shot")
     if not shot:
         return
-    angle = shot.get("angle")
-    if shot.get("chain"):
-        angle, answer = stage.chain(shot.get("then", ""))
-        if angle is None:
-            raise NoShot(answer)
-    stage.fire(angle, shot.get("lance", False))
+    angle, answer = solve(stage, setup)
+    if angle is None:
+        raise NoShot(answer)
+    # The best shot armed the lance already, to fly it as one.
+    stage.fire(angle, shot.get("lance", False) and not shot.get("best"))
 
 
 # The nuke's fuse runs four seconds (NukeFuse: one of the heart's flash, three of countdown). This much of it is
@@ -307,6 +344,8 @@ def capture(setup, out_dir, project, tries=4):
                 # The study runs some twenty seconds of game time, in which the formations move on and the board
                 # settles anew: the shot is fired on a board built afresh after it, the one a preview fires on.
                 build_with_shot(stage, setup)
+                # The study's light is set while the game is held, not paused: its globals follow on the ticks.
+                stage.hold()
                 light_study(stage, setup, out_dir)
             build_with_shot(stage, setup)
             closeup = setup.get("closeup")
@@ -359,11 +398,13 @@ def relink(kind):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    parser.add_argument("setup", help="the scene's setup file (JSON)")
+    parser.add_argument("setups", nargs="+", metavar="setup",
+                        help="the scene's setup file (JSON); with more than one, each is captured in turn, the first is "
+                             "the page's, and their videos are joined into one, reel.mp4")
     parser.add_argument("--project", default=EDITOR_PROJECT, help="the project the open Editor has (default: the main checkout)")
-    parser.add_argument("--out", help="where the capture goes (default: Logs/frame/<name>)")
+    parser.add_argument("--out", help="where the capture goes (default: Logs/frame/<name>); one setup only")
     parser.add_argument("--compose", action="store_true", help="compose the last capture again; no Editor needed")
-    parser.add_argument("--publish", action="store_true", help="copy the composed pictures to Docs/frame/")
+    parser.add_argument("--publish", action="store_true", help="copy the first setup's composed pictures to Docs/frame/")
     parser.add_argument("--animations", choices=("webp", "gif", "both"), default="webp",
                         help="what the animations are written as: animated WebP (default; a third of the size), "
                              "GIF (plays everywhere), or both. With --publish the document is pointed at them: "
@@ -375,35 +416,48 @@ def main():
                              "to choose the glory frame by")
     args = parser.parse_args()
     sys.stdout.reconfigure(encoding="utf-8")
-
-    setup = load_setup(args.setup)
-    out_dir = os.path.abspath(args.out or os.path.join(REPO_ROOT, "Logs", "frame", setup["name"]))
-    if args.preview:
-        preview(setup, out_dir, args.project, args.preview)
-        return
-    if not args.compose:
-        for stale in ("frames", "light", "doc"):
-            shutil.rmtree(os.path.join(out_dir, stale), ignore_errors=True)
-        capture(setup, out_dir, args.project)
+    if args.out and len(args.setups) > 1:
+        parser.error("--out takes one setup")
 
     import compose
     kinds = compose.ANIMATIONS if args.animations == "both" else (args.animations,)
-    shutil.rmtree(os.path.join(out_dir, "doc"), ignore_errors=True)
-    written = compose.compose(out_dir, kinds, not args.no_video)
-    print(f"composed {len(written)} pictures in {os.path.join(out_dir, 'doc')}")
-    if args.publish:
-        # The folder holds nothing but these pictures: one a setup no longer makes is not left behind.
-        shutil.rmtree(DOCS_DIR, ignore_errors=True)
-        os.makedirs(DOCS_DIR)
-        for path in written:
-            if path.endswith(".mp4"):
-                # Some fifty megabytes: too much to keep in the repository for a page that can't play it inline.
-                print(f"the video stays where it was written, out of the repository: {path}")
-                continue
-            shutil.copy2(path, os.path.join(DOCS_DIR, os.path.basename(path)))
-        print(f"copied to {DOCS_DIR}")
-        relink(kinds[0])
+    videos = []
+    for index, path in enumerate(args.setups):
+        setup = load_setup(path)
+        out_dir = os.path.abspath(args.out or os.path.join(REPO_ROOT, "Logs", "frame", setup["name"]))
+        if args.preview:
+            preview(setup, out_dir, args.project, args.preview)
+            continue
+        if not args.compose:
+            for stale in ("frames", "light", "doc"):
+                shutil.rmtree(os.path.join(out_dir, stale), ignore_errors=True)
+            capture(setup, out_dir, args.project)
 
+        shutil.rmtree(os.path.join(out_dir, "doc"), ignore_errors=True)
+        written = compose.compose(out_dir, kinds, not args.no_video)
+        print(f"composed {len(written)} pictures in {os.path.join(out_dir, 'doc')}")
+        videos += [written_path for written_path in written if written_path.endswith(".mp4")]
+        if args.publish and index == 0:
+            publish(written, kinds[0])
+    if len(videos) > 1:
+        reel = os.path.join(REPO_ROOT, "Logs", "frame", "reel.mp4")
+        compose.join_videos(videos, reel)
+        print(f"the videos one after another: {reel}")
+
+
+def publish(written, kind):
+    """Copies the composed pictures to Docs/frame/ and points the document at the animations of that type."""
+    # The folder holds nothing but these pictures: one a setup no longer makes is not left behind.
+    shutil.rmtree(DOCS_DIR, ignore_errors=True)
+    os.makedirs(DOCS_DIR)
+    for path in written:
+        if path.endswith(".mp4"):
+            # Some fifty megabytes: too much to keep in the repository for a page that can't play it inline.
+            print(f"the video stays where it was written, out of the repository: {path}")
+            continue
+        shutil.copy2(path, os.path.join(DOCS_DIR, os.path.basename(path)))
+    print(f"copied to {DOCS_DIR}")
+    relink(kind)
 
 if __name__ == "__main__":
     sys.path.insert(0, TOOL_DIR)

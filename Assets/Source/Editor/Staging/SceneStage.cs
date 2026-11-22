@@ -963,13 +963,20 @@ namespace BalloonParty.Editor.Staging
         ///     and the answer is the angle whose flight pops a balloon of the kind <paramref name="then" /> names
         ///     (<c>nuke</c>, <c>golden</c>, <c>disco</c> or <c>heart</c>) and scores the most on its way, of those
         ///     whose neighbours on both sides pop it too: a lone angle is the likeliest for the real flight to part
-        ///     from. For <see cref="Fire" />, without arming the ball again. An error when no angle pops it.
+        ///     from. An angle whose flight also pops a balloon of the kind <paramref name="spare" /> names is passed
+        ///     over. For <see cref="Fire" />, without arming the ball again. An error when no angle pops it.
         /// </summary>
-        public static string BestShot(string then, bool lance = false)
+        public static string BestShot(string then, bool lance = false, string spare = "")
         {
             if (Array.IndexOf(ChainRewards, (then ?? "").ToLowerInvariant()) < 0)
             {
                 return $"error: no such reward balloon to aim for: {then}";
+            }
+
+            spare ??= "";
+            if (spare.Length > 0 && Array.IndexOf(ChainRewards, spare.ToLowerInvariant()) < 0)
+            {
+                return $"error: no such reward balloon to spare: {spare}";
             }
 
             var scope = Object.FindAnyObjectByType<ThrowerLifetimeScope>();
@@ -1007,7 +1014,8 @@ namespace BalloonParty.Editor.Staging
                     i, config.AimAngleMinDegrees, config.AimAngleMaxDegrees, config.AimAngleStepDegrees,
                     continuousSamples);
                 var flight = Fly(context, board, emptyBoard, workingSet, angle);
-                scores[i] = Pops(flight, then) ? flight.RawScore : -1;
+                var spared = spare.Length == 0 || !Pops(flight, spare);
+                scores[i] = spared && Pops(flight, then) ? flight.RawScore : -1;
                 popping += scores[i] >= 0 ? 1 : 0;
             }
 

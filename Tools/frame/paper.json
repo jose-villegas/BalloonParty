@@ -1,0 +1,34 @@
+{
+  "name": "paper",
+  "scene": {"scenario": "paper", "level": 7, "seed": 7, "time": 45},
+  "legend": {
+    "G": {"type": "SimpleSilver", "color": "Green"},
+    "r": {"type": "Simple", "color": "Red"},
+    "b": {"type": "Simple", "color": "Blue"},
+    "S": {"type": "Simple", "color": "Green", "item": "Shield"},
+    "Z": {"type": "Simple", "color": "Green", "item": "Laser"},
+    "L": {"type": "Simple", "color": "Blue", "item": "Lightning"},
+    "U": {"type": "Unbreakable"},
+    "$": {"type": "Golden"},
+    "H": {"type": "Heart"},
+    "D": {"type": "Disco"},
+    "N": {"type": "Nuke"},
+    "B": {"type": "Simple", "color": "Blue", "item": "Bomb"},
+    "P": {"type": "Simple", "color": "Red", "item": "Paint"},
+    "K": {"type": "Simple", "color": "Blue", "item": "Snipe"}
+  },
+  "board": [
+    "GSGZr$",
+    "GGHGbL",
+    "GBGGDb",
+    "GGNGGK",
+    "UUGGbH",
+    "GPGGrr",
+    "GGGGGr"
+  ],
+  "settle": 1.5,
+  "warm": 0.5,
+  "shot": {"best": true, "then": "nuke", "lance": true},
+  "moment": {"after": "blast", "frames": 9},
+  "timeline": {"detail": 1, "flight_every": 4, "flight_after": 40, "fuse_every": 30, "blast_every": 3, "blast_frames": 48, "after_every": 8, "after_frames": 72}
+}

@@ -1,6 +1,6 @@
 # Frame
 
-Stages one shot of the game and takes it apart, for `Docs/frame-composition.md`: every render map, and the
+Stages a shot of the game and takes it apart, for `Docs/frame-composition.md`: every render map, and the
 frame redrawn one draw group at a time, at each of a run of frames over the whole shot; and one balloon under a
 turning light. The scene is a
 text file, so the shot can be changed and retaken in a few minutes. Nothing is left to a bot's luck: the
@@ -12,7 +12,12 @@ python3 Tools/frame/frame_doc.py Tools/frame/glory.json                 # captur
 python3 Tools/frame/frame_doc.py Tools/frame/glory.json --compose       # compose the last capture again
 python3 Tools/frame/frame_doc.py Tools/frame/glory.json --publish       # capture, compose, copy to Docs/frame/
 python3 Tools/frame/frame_doc.py Tools/frame/glory.json --compose --publish --animations gif   # the same pictures as GIFs
+python3 Tools/frame/frame_doc.py Tools/frame/glory.json Tools/frame/sky.json Tools/frame/water.json Tools/frame/paper.json --publish
 ```
+
+Given several setups, the tool captures and composes each in turn, into `Logs/frame/<name>/`, and joins their
+videos one after another into `Logs/frame/reel.mp4`, each frame labelled with its scenario. Only the first
+setup is published.
 
 The Unity Editor must be open and out of Play mode; `--project` picks the project it has open (default: the
 main checkout). The tool drives `Tools/stage` (`SceneStage` and `FrameBreakdown` in
@@ -21,7 +26,8 @@ main checkout). The tool drives `Tools/stage` (`SceneStage` and `FrameBreakdown`
 
 | File | What it is |
 |---|---|
-| `glory.json` | The scene: what the document's frame is |
+| `glory.json` | The scene: what the document's frame is. The meadow at dusk: silver green balloons (3 points each) the lance runs through on its way to the nuke, after the mushrooms arm it |
+| `sky.json`, `water.json`, `paper.json` | The same board in the other scenarios, each at its own time of day: in the sky at day, clouds stand in for the mushrooms and a snake of toughs and toughers, their springs between them, for the bushes; in the water at night, full bubble clusters; on the bonus level at dawn, more reward balloons and items. The lance is loaded armed, and the shot is the best-scoring one that pops the nuke; only the bonus level's may pop a golden balloon on its way |
 | `frame_doc.py` | Builds the scene, fires the shot, captures the frames, and calls the composer |
 | `compose.py` | Lays the captured pictures out as the stills and animations the document shows |
 
@@ -30,9 +36,9 @@ main checkout). The tool drives `Tools/stage` (`SceneStage` and `FrameBreakdown`
 | Key | What it says |
 |---|---|
 | `scene` | `scenario` (`sky`, `meadow`, `water`, `paper`), `level` (the first level of that scenario from there is dealt), `seed`, `time` (the light's angle, or `dawn`, `day`, `dusk`, `night`), and `strip` (kinds to take off the board: `clouds`, `bushes`, `enemies`, `obstacles`) |
-| `legend` | One entry per character of the board: `type` (a `BalloonType`: `Simple`, `Tough`, `Unbreakable`, `Golden`, `Heart`, `Disco`, `Nuke`, ...), and for a balloon that takes them a `color` (`Red`, `Green`, `Blue`, `Purple`) and an `item` (`Shield`, `Laser`, `Lightning`, `Paint`, `Bomb`, `Snipe`). An entry with `actor` (`Bush`, `Puff`) instead stands that in its slot before any balloon is placed, beside the ones the level deals |
+| `legend` | One entry per character of the board: `type` (a `BalloonType`: `Simple`, `Tough`, `Unbreakable`, `Golden`, `Heart`, `Disco`, `Nuke`, ...), and for a balloon that takes them a `color` (`Red`, `Green`, `Blue`, `Purple`) and an `item` (`Shield`, `Laser`, `Lightning`, `Paint`, `Bomb`, `Snipe`). An entry with `actor` (`Bush`, `Puff`) instead stands that in its slot before any balloon is placed, beside the ones the level deals. A `BubbleCluster` with `"full": true` is filled to the merge cap, so it ripens |
 | `board` | Rows of text, the board's top row first, one character a slot (the grid is 6 by 11). A space or a dot is an empty slot |
-| `shot` | `{"angle": 90}` fires at an angle (0 = right, 90 = straight up), `"lance": true` arms the ball first. `{"chain": true}` asks the game's shot solver for the angle the meadow's mushrooms pay with the lance, and `"then": "nuke"` (or `golden`, `disco`, `heart`) for one whose lance goes on to pop that balloon |
+| `shot` | `{"angle": 90}` fires at an angle (0 = right, 90 = straight up), `"lance": true` arms the ball first. `{"chain": true}` asks the game's shot solver for the angle the meadow's mushrooms pay with the lance, and `"then": "nuke"` (or `golden`, `disco`, `heart`) for one whose lance goes on to pop that balloon. `{"best": true, "then": "nuke"}` asks it for the angle that pops that balloon and scores the most on its way (`Tools/stage`'s `best-shot`), with `"lance": true` armed as a lance first, and with `"spare": "golden"` none whose flight pops a golden balloon |
 | `moment` | Which frame is taken apart: `{"after": "blast", "frames": 9}` is nine frames into the nuke's blast, found by watching the nuke, since when a shot reaches it differs from deal to deal. For a shot with no nuke, a number of frames after the shot |
 | `timeline` | Which frames of the shot are captured; the animations run over them. With a nuke: `flight_every` (a frame every so many from the shot to the hit that lights the fuse, and `flight_after` frames past it), `fuse_every` (a few through the fuse's four seconds), `blast_every` for `blast_frames` (the blast, from its first frame; `moment` must be one of them), `after_every` for `after_frames` (the cloud). Without one: `every` and `frames`. `detail` is a finer cadence for the video: with `"detail": 1` every frame of the shot is captured, the fuse's four seconds included (about 460 of them, a quarter of an hour), so the video runs with no cut and stays smooth when it is slowed, while the animations keep to the frames on the cadences above |
 | `closeup` | `around` (a balloon type, `col,row`, or a world point `x;y`) and `size` in pixels: the glory frame's build-up again, cut close. The place is fixed before the shot, so the square stays put if the balloon is popped |
@@ -40,9 +46,14 @@ main checkout). The tool drives `Tools/stage` (`SceneStage` and `FrameBreakdown`
 
 Three things about a board that the text can't pin down:
 
-- **A level's clouds and bushes land in different slots on every deal**, even on one seed. A slot one of
-  them holds is left alone (the tool says which), and if one stands in the way of the shot the setup asks
-  for, the board is dealt again, up to six times. The mushrooms stay where the level puts them.
+- **A level's clouds and bushes take slots of their own.** A slot one of them holds is left alone (the tool
+  says which; `strip` takes them off first), and if one stands in the way of the shot the setup asks for,
+  the board is dealt again, up to six times. The mushrooms stay where the level puts them. The Editor is
+  paused from the deal on and every second of settling is stepped a frame at a time, and the board is dealt
+  twice (a game just come into Play mode draws random numbers the second deal no longer does), so a meadow
+  setup builds the same board and the same shot every time. A board with moving parts of its own (the
+  water's merging clusters) still comes out a little differently from build to build, so the best shot is
+  asked for on each.
 - **Balloons float.** A balloon with nothing above it rises until it rests, and unbreakables gather into
   their formations, so the board in the picture is the text after the game has settled it.
 - **The shot plays for real.** What it pops on its way is popped, and an item it sets off goes off; a lance
