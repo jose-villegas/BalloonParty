@@ -151,7 +151,7 @@ Balloon/Formation/                          (new folder, namespace BalloonParty.
   FormationShape            enum: Horizontal, DiagonalDown, DiagonalUp, ItemCover
   FormationPlanner          pure: shape + grid + members + item hosts → target slots, or none
   FormationAssignment       pure: members → target slots, least total hex travel
-  UnbreakableFormationService   controller: hold counter, shape order, break-up; IRunResettable
+  UnbreakableFormationService   controller: board-wide reshape tick, shape order, break-up; IRunResettable
   README.md
 
 Slots/Actor/IBalanceAnchor.cs               bool IsAnchored: the race, roam and pressure leave it alone
@@ -212,9 +212,9 @@ playtest. The questions below may change them.
 | `BottomClearance` | 2 | Bottom rows a formation never uses |
 | `ShapeWeights` | per shape | How often each shape is picked (see open questions) |
 | `RingMinMembers` / `RingMaxMembers` | 4 / 5 | Members of a ring; never six, so one slot round the centre stays open |
-| `RingHoldCycles` | 8 | Cycles a ring holds before it changes shape |
+| `ReshapeEveryCycles` | 3 | Cycles between the board's reshapes; every shape holds until the next, all changing together |
 | `TurnReverseEveryCycles` | 4 | Cycles between the beats on which every ring and spinner turns the other way, all together (0: never turns back) |
-| `SpinnerMaxMembers` / `SpinnerHoldCycles` / `SpinnerWeight` | 5 / 6 / 1 | A spinner's longest line (3 or 5), its hold in cycles, and its pick weight |
+| `SpinnerMaxMembers` / `SpinnerWeight` | 5 / 1 | A spinner's longest line (3 or 5), and its pick weight |
 | `RingWeight` / `RingWeightAfterSnake` | 1 / 4 | Pick weight, and its multiplier for a snake done walking |
 | `ColorFadeDuration` | 0.4 s | Red ↔ blue ease |
 
@@ -286,7 +286,7 @@ Changes from the design above, made during implementation and review:
   which the member in the middle holds. On every beat the line turns 60° about that member: flat, one diagonal,
   the other diagonal, flat again, so six beats bring every member back to its own slot. It turns back on the
   same board-wide beat as the rings. It has no host: nothing is held at its centre but its own middle member.
-  It holds `SpinnerHoldCycles` (6) cycles. A centre needs every slot up to the line's reach on the board and
+  It holds until the board's next reshape. A centre needs every slot up to the line's reach on the board and
   above `BottomClearance`, and its own row above `HorizontalBottomClearance`. On the six-column board a flat
   line of five is one slot short of full width for one beat in three: the owner asked for lines of 3 or 5, so
   that is accepted, and the per-turn wall check still refuses a turn that would link the two side walls. The

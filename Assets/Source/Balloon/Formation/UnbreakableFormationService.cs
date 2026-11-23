@@ -106,8 +106,9 @@ namespace BalloonParty.Balloon.Formation
         private int _wavePass;
         // The last formation id handed out; each formation taken up gets the next.
         private int _lastFormationId;
-        // Counts the cycles arranged in the run: every TurnReverseEveryCycles of them, the turning formations
-        // turn the other way, all on the same one.
+        // Counts the cycles arranged in the run: every ReshapeEveryCycles of them, from the first, the board
+        // reshapes, and every TurnReverseEveryCycles of them the turning formations turn the other way, all on the
+        // same one.
         private int _cycles;
 
         public int ResetOrder => RunResetOrder.Quiesce;
@@ -191,11 +192,12 @@ namespace BalloonParty.Balloon.Formation
         }
 
         /// <summary>
-        ///     Runs once per cycle of the unbreakables' clock, before the lone unbreakable's move. A formation still
-        ///     holding counts down; one done holding plans its next shape, or breaks if none fits. Then the free
-        ///     unbreakables form new formations while there are enough of them, and the toughs start their snake if
-        ///     none walks. <paramref name="relocate" /> carries out a batch of moves at once and owns the grid change
-        ///     and the glides.
+        ///     Runs once per cycle of the unbreakables' clock, before the lone unbreakable's move. On a reshape (the
+        ///     run's first cycle, then every <see cref="IUnbreakableFormationSettings.ReshapeEveryCycles" />) every
+        ///     formation plans its next shape, or breaks if none fits, and then the free unbreakables form new
+        ///     formations while there are enough of them; on any other cycle every formation holds. Then the toughs
+        ///     start their snake if none walks. <paramref name="relocate" /> carries out a batch of moves at once and
+        ///     owns the grid change and the glides.
         /// </summary>
         internal void ArrangeOnCycle(Action<IReadOnlyList<SlotMove>> relocate)
         {
@@ -211,54 +213,18 @@ namespace BalloonParty.Balloon.Formation
             _arranging = true;
             try
             {
+                _cycles++;
                 TurnBackOnTheBeat();
-                ChangeFormationsDoneHolding(relocate);
-                FormFromFreeUnbreakables(relocate);
+                if ((_cycles - 1) % Mathf.Max(1, _settings.ReshapeEveryCycles) == 0)
+                {
+                    ChangeFormations(relocate);
+                    FormFromFreeUnbreakables(relocate);
+                }
+
                 if (_settings.ToughSnakes)
                 {
                     GatherToughs(relocate);
                 }
-            }
-            finally
-            {
-                _arranging = false;
-            }
-
-            RebuildMemberList();
-        }
-
-        /// <summary>
-        ///     True when <see cref="IUnbreakableFormationSettings.MinMembers" /> or more unbreakables are free, in no
-        ///     formation, gliding in or not. The balancer asks on each beat between cycles. Read-only.
-        /// </summary>
-        internal bool UnbreakablesDueToForm()
-        {
-            if (_settings == null || !_settings.Enabled)
-            {
-                return false;
-            }
-
-            CollectCandidates(null, armoured: false);
-            return _candidates.Count >= _settings.MinMembers;
-        }
-
-        /// <summary>
-        ///     On a beat between cycles, the free unbreakables form new formations, so one that arrives or is set free
-        ///     stays red a beat at most rather than a whole cycle. Only forming: the standing formations count their
-        ///     holds and change shape on the cycle (<see cref="ArrangeOnCycle" />).
-        /// </summary>
-        internal void FormOnBeat(Action<IReadOnlyList<SlotMove>> relocate)
-        {
-            if (_settings == null || !_settings.Enabled)
-            {
-                return;
-            }
-
-            _arrangePass++;
-            _arranging = true;
-            try
-            {
-                FormFromFreeUnbreakables(relocate);
             }
             finally
             {
@@ -658,7 +624,7 @@ namespace BalloonParty.Balloon.Formation
             }
         }
 
-        private void ChangeFormationsDoneHolding(Action<IReadOnlyList<SlotMove>> relocate)
+        private void ChangeFormations(Action<IReadOnlyList<SlotMove>> relocate)
         {
             for (var i = 0; i < _formations.Count; i++)
             {
@@ -670,19 +636,14 @@ namespace BalloonParty.Balloon.Formation
                     continue;
                 }
 
-                if (formation.CyclesLeft > 0)
-                {
-                    formation.CyclesLeft--;
-                    continue;
-                }
-
-                // A lance's plowed member holds its slot till the discharge, so the change waits for the next cycle.
+                // A lance's plowed member holds its slot till the discharge, so the change waits for the next
+                // reshape.
                 if (AwaitsDischarge(formation))
                 {
                     continue;
                 }
 
-                // The hold is over, so the cover's balloon is free before the next shape is planned: a line may
+                // The cover's balloon is free before the next shape is planned: a line may
                 // trade it out, and a cover planned again (round it or another) holds whichever it chose.
                 LetHostGo(formation);
                 JoinASnakesTail(formation, relocate);
@@ -705,7 +666,6 @@ namespace BalloonParty.Balloon.Formation
         // ring and every spinner standing turns the other way, together.
         private void TurnBackOnTheBeat()
         {
-            _cycles++;
             var every = _settings.TurnReverseEveryCycles;
             if (every <= 0 || _cycles % every != 0)
             {
@@ -721,7 +681,7 @@ namespace BalloonParty.Balloon.Formation
             }
         }
 
-        // Each member of a formation done holding rolls JoinSnakeChance to leave it for the tail of the unbreakable
+        // Each member of a formation changing shape rolls JoinSnakeChance to leave it for the tail of the unbreakable
         // snake with the most room, while that snake has room: the snakes grow from the other formations rather
         // than new snakes forming. The joiners fly in one batch to a line of slots on from the tail, each balloon
         // on that line going to the slot a joiner left. The rest of the formation plans its next shape as usual.
@@ -776,6 +736,8 @@ namespace BalloonParty.Balloon.Formation
         }
 
         // The unbreakable snake, other than formation itself, with the most room to grow; null when none has room.
+        // Only a snake that has already taken its shape on this reshape: every formation changes on it, so one
+        // still to change may turn into something else and leave the joiners in a shape they never chose.
         private StandingFormation SnakeToJoin(StandingFormation formation)
         {
             StandingFormation best = null;
@@ -783,6 +745,7 @@ namespace BalloonParty.Balloon.Formation
             {
                 var snake = _formations[i];
                 if (snake != formation && snake.Shape == FormationShape.Snake && !snake.Armoured
+                    && snake.ArrangedOnPass == _arrangePass
                     && snake.MemberList.Count > 0 && snake.MemberList.Count < _settings.MaxMembers
                     && (best == null || snake.MemberList.Count < best.MemberList.Count))
                 {
@@ -1363,7 +1326,6 @@ namespace BalloonParty.Balloon.Formation
             MoveBalloonsOutOfTheWay();
             relocate(_moves);
             formation.Shape = shape;
-            formation.CyclesLeft = HoldCyclesOf(shape) - 1;
             formation.ArrangedOnPass = _arrangePass;
             if (shape == FormationShape.Snake)
             {
@@ -1515,18 +1477,6 @@ namespace BalloonParty.Balloon.Formation
             }
 
             return false;
-        }
-
-        private int HoldCyclesOf(FormationShape shape)
-        {
-            return shape switch
-            {
-                FormationShape.Snake => _settings.SnakeHoldCycles,
-                FormationShape.ItemCover => _settings.ItemCoverHoldCycles,
-                FormationShape.Ring => Mathf.Max(1, _settings.RingHoldCycles),
-                FormationShape.Spinner => Mathf.Max(1, _settings.SpinnerHoldCycles),
-                _ => _settings.LineHoldCycles,
-            };
         }
 
         // A snake forms as a row and sets off along it, east or west at random, led by the member at that end.

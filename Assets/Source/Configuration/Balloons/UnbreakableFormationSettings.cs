@@ -65,24 +65,17 @@ namespace BalloonParty.Configuration.Balloons
         [FormerlySerializedAs("_snakeStepSeconds")]
         [SerializeField] [Min(0.1f)] private float _beatSeconds = 1.7f;
 
-        [Tooltip("Beats in a cycle, the clock the unbreakables keep together: formations form and change shape " +
-                 "only on a cycle, and one lone unbreakable at most moves on each.")]
+        [Tooltip("Beats in a cycle, the clock the unbreakables keep together: one lone unbreakable at most " +
+                 "moves on each, and every Reshape Every Cycles of them the formations form and change shape.")]
         [SerializeField] [Min(1)] private int _beatsPerCycle = 2;
+
+        [Tooltip("Cycles between the board's reshapes. On a reshape every formation changes shape at once and the " +
+                 "free unbreakables form up; in between every formation holds its shape, whatever it is.")]
+        [SerializeField] [Min(1)] private int _reshapeEveryCycles = 3;
 
         [Tooltip("Steps an unbreakable snake takes each beat, evenly spaced: 2 = on the beat and the off-beat, " +
                  "so it walks quicker than the tough snake while keeping the unbreakables' rhythm.")]
         [SerializeField] [Min(1)] private int _snakeStepsPerBeat = 2;
-
-        [Tooltip("Cycles a snake walks, counting the cycle it formed on, before it changes shape.")]
-        [SerializeField] [Min(1)] private int _snakeHoldCycles = 3;
-
-        [Tooltip("Cycles a horizontal or diagonal line holds, counting the cycle it formed on, before it changes " +
-                 "shape.")]
-        [SerializeField] [Min(1)] private int _lineHoldCycles = 3;
-
-        [Tooltip("Cycles a cover (round an item carrier or a gift balloon) holds, counting the cycle it formed " +
-                 "on, before it changes shape.")]
-        [SerializeField] [Min(1)] private int _itemCoverHoldCycles = 3;
 
         [Tooltip("Cycles a lone unbreakable, in no formation, stays where it is before it may move again. One " +
                  "at most moves alone on each cycle.")]
@@ -97,9 +90,6 @@ namespace BalloonParty.Configuration.Balloons
                  "open.")]
         [SerializeField] [Range(2, 5)] private int _ringMaxMembers = 5;
 
-        [Tooltip("Cycles a ring holds, counting the cycle it formed on, before it changes shape.")]
-        [SerializeField] [Min(1)] private int _ringHoldCycles = 8;
-
         [Tooltip("Cycles between the beats on which every ring and every spinner turns the other way. It is one " +
                  "beat for the whole board, so they all turn back together. 0 = they never turn back by " +
                  "themselves.")]
@@ -109,9 +99,6 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("Most unbreakables in a spinner, a straight line that turns 60 degrees about the member in its " +
                  "middle on every beat: 3 or 5.")]
         [SerializeField] [Range(3, 5)] private int _spinnerMaxMembers = 5;
-
-        [Tooltip("Cycles a spinner holds, counting the cycle it formed on, before it changes shape.")]
-        [SerializeField] [Min(1)] private int _spinnerHoldCycles = 6;
 
         [Header("Reinforcements")]
         [Tooltip("Chance, at each wave start, that a formation which stood untouched through the last wave " +
@@ -165,9 +152,7 @@ namespace BalloonParty.Configuration.Balloons
         public float BeatSeconds => Mathf.Max(0.1f, _beatSeconds);
         public int BeatsPerCycle => Mathf.Max(1, _beatsPerCycle);
         public int SnakeStepsPerBeat => Mathf.Max(1, _snakeStepsPerBeat);
-        public int SnakeHoldCycles => Mathf.Max(1, _snakeHoldCycles);
-        public int LineHoldCycles => Mathf.Max(1, _lineHoldCycles);
-        public int ItemCoverHoldCycles => Mathf.Max(1, _itemCoverHoldCycles);
+        public int ReshapeEveryCycles => Mathf.Max(1, _reshapeEveryCycles);
         public int LoneHoldCycles => Mathf.Max(1, _loneHoldCycles);
         public int BottomClearance => _bottomClearance;
         public int HorizontalBottomClearance => Mathf.Max(_horizontalBottomClearance, _bottomClearance);
@@ -185,11 +170,9 @@ namespace BalloonParty.Configuration.Balloons
         public float RingWeightAfterSnake => _ringWeightAfterSnake;
         public int RingMinMembers => _ringMinMembers;
         public int RingMaxMembers => Mathf.Max(_ringMaxMembers, _ringMinMembers);
-        public int RingHoldCycles => Mathf.Max(1, _ringHoldCycles);
         public int TurnReverseEveryCycles => Mathf.Max(0, _turnReverseEveryCycles);
         public float SpinnerWeight => _spinnerWeight;
         public int SpinnerMaxMembers => _spinnerMaxMembers;
-        public int SpinnerHoldCycles => Mathf.Max(1, _spinnerHoldCycles);
         public float SnakeWeightPerExtraUnbreakable => _snakeWeightPerExtraUnbreakable;
         public int MaxUnbreakableSnakes => _maxUnbreakableSnakes;
         public float JoinSnakeChance => _joinSnakeChance;

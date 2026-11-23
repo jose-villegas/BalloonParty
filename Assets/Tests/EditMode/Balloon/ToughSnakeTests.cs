@@ -47,9 +47,7 @@ namespace BalloonParty.Tests.Balloon
             _settings.MaxMembers.Returns(5);
             _settings.SnakeMaxMembers.Returns(4);
             _settings.BeatSeconds.Returns(1.7f);
-            _settings.SnakeHoldCycles.Returns(3);
-            _settings.LineHoldCycles.Returns(3);
-            _settings.ItemCoverHoldCycles.Returns(3);
+            _settings.ReshapeEveryCycles.Returns(3);
             _settings.BottomClearance.Returns(2);
             _settings.SpotChoices.Returns(1);
             _settings.HorizontalWeight.Returns(1f);

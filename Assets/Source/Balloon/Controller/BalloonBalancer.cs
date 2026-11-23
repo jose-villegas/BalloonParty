@@ -66,7 +66,6 @@ namespace BalloonParty.Balloon.Controller
         private bool _snakeStepDue;
         private bool _turnDue;
         private bool _cycleDue;
-        private bool _formDue;
         private bool _toughGatherDue;
         private bool _toughStepDue;
         private int _generation;
@@ -141,7 +140,6 @@ namespace BalloonParty.Balloon.Controller
             _snakeStepDue = false;
             _turnDue = false;
             _cycleDue = false;
-            _formDue = false;
             _toughGatherDue = false;
             _toughStepDue = false;
             _flightRebalanceElapsed = 0f;
@@ -266,22 +264,17 @@ namespace BalloonParty.Balloon.Controller
                 _formations?.RollReinforcementsAtWaveStart();
             }
 
-            // The unbreakables keep one clock: formations change shape, and a lone one moves, only on a cycle; free
-            // ones form up on any beat.
-            var arranged = _cycleDue || _formDue;
+            // The unbreakables keep one clock: formations form and change shape, and a lone one moves, only on a
+            // cycle.
+            var arranged = _cycleDue;
             if (_cycleDue)
             {
                 // Formations go first, so the lone unbreakable sees the formation's slots as taken.
                 _formations?.ArrangeOnCycle(_relocateActors);
                 RelocateOneRoamer();
             }
-            else if (_formDue)
-            {
-                _formations?.FormOnBeat(_relocateActors);
-            }
 
             _cycleDue = false;
-            _formDue = false;
 
             // The toughs form up the moment they can, before the race, so the board settles around them: a tough
             // that a line just brought flies from its entry straight to the snake's tail.
@@ -726,8 +719,8 @@ namespace BalloonParty.Balloon.Controller
         }
 
         // The unbreakables' clock, marking what falls due. True when anything did. An unbreakable snake steps
-        // SnakeStepsPerBeat times a beat, on the beat and evenly between; on a beat the free unbreakables form up;
-        // every BeatsPerCycle beats is a cycle, when formations also change shape and a lone unbreakable may move. The
+        // SnakeStepsPerBeat times a beat, on the beat and evenly between; every BeatsPerCycle beats is a cycle,
+        // when the formations may form and change shape (ArrangeOnCycle) and a lone unbreakable may move. The
         // clock runs with no snake and with no unbreakable on the board too, so the snakes' steps, the cycles and
         // whatever else reads the beat (IBoardBeat) keep one rhythm.
         private bool TickBeat(float deltaTime)
@@ -739,12 +732,10 @@ namespace BalloonParty.Balloon.Controller
 
             var snakeStep = _formations.HasUnbreakableSnake;
             var cycle = false;
-            var form = false;
             var turnDue = false;
             if (_snakeSteps % _formations.SnakeStepsPerBeat == 0)
             {
                 cycle = _beats % _formations.BeatsPerCycle == 0 && _formations.HasUnbreakables;
-                form = !cycle && _formations.UnbreakablesDueToForm();
 
                 // A ring or a spinner turns once a beat, on the beat: a snake's off-beat step is not its turn.
                 turnDue = _formations.HasTurningFormation;
@@ -752,9 +743,8 @@ namespace BalloonParty.Balloon.Controller
 
             _snakeStepDue |= snakeStep;
             _cycleDue |= cycle;
-            _formDue |= form;
             _turnDue |= turnDue;
-            return snakeStep || cycle || form || turnDue;
+            return snakeStep || cycle || turnDue;
         }
 
         // The clock alone, asking nothing of the board: counts a snake step each time one falls, and a beat every

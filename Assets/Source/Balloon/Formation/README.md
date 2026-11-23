@@ -3,8 +3,9 @@
 Unbreakable balloons keep one clock, the **beat** (`BeatSeconds`, 1.7 s of play), and every
 `BeatsPerCycle` (2) beats make a **cycle** (3.4 s). An unbreakable snake steps `SnakeStepsPerBeat` (2) times
 a beat, on the beat and the off-beat (every 0.85 s), so it walks quicker than the tough snake. When two or more are on the board, they gather into a
-**formation**. They form up on any beat, stay in place for a few cycles, then switch to a different line on
-the cycle. While a formation stands, its members float in midair: the balloons below rise until they reach the
+**formation**. The whole board reshapes together, every `ReshapeEveryCycles` (3) cycles (10.2 s): on a reshape
+every formation switches to a different shape and the free unbreakables form up, and in between every
+formation holds the shape it has, whatever the shape. While a formation stands, its members float in midair: the balloons below rise until they reach the
 formation, and spawn lines stop under it. An unbreakable left alone, in no formation, roams: it jumps toward
 the far side of the board, but only on a cycle, only after it has stood `LoneHoldCycles` (3) cycles, and only
 one at a time, so the board moves to one rhythm rather than a lone unbreakable crossing it at every wave.
@@ -41,14 +42,16 @@ biggest group, every other tough falls in behind its tail, and it walks through 
 `BalloonBalancer` keeps the beat (`TickStepClock`): it counts seconds of play, and a pause holds it. The
 rhythm comes before anything else, so a doomed shot's last glide, which freezes the rest of the board,
 doesn't hold the beat: an unbreakable snake steps on its tick right through it, a ring or a spinner turns on its beat
-right through it, and a cycle or form-up that
+right through it, and a cycle that
 falls due in the glide runs in the balance after it. A ring or a spinner turns once a beat (`TurnOnTheBeat`), on the beat
 and not on a snake's off-beat step; one formed or re-planned in the balance that turns it waits for the
-next beat. Turning back is one beat for the whole board: the service counts the cycles it arranges in the run
-(a run reset starts the count over), and every `TurnReverseEveryCycles` (4) of them every ring and every spinner
-standing turns the other way, together. A formation formed on that very cycle keeps the way it started. An unbreakable snake steps `SnakeStepsPerBeat` times a beat, evenly spaced, and on a beat between cycles the free unbreakables form up (`FormOnBeat`) once
-`MinMembers` of them are free, still gliding in or not, so one that arrives or is set free is red a beat at
-most, not a cycle. On every cycle the balancer asks the service to `ArrangeOnCycle`, then moves one
+next beat. The service counts the cycles it arranges in the run (a run reset starts the count over). The run's first
+cycle and every `ReshapeEveryCycles` (3) after it is a **reshape**, one for the whole board: only then does a
+formation change shape or the free unbreakables form up, so one that arrives or is set free between
+reshapes stays red until the next. Turning back is one beat for the whole board too: every
+`TurnReverseEveryCycles` (4) cycles every ring and every spinner standing turns the other way, together. A
+formation formed on that very cycle keeps the way it started. An unbreakable snake steps `SnakeStepsPerBeat`
+times a beat, evenly spaced. On every cycle the balancer asks the service to `ArrangeOnCycle`, then moves one
 lone unbreakable (`RelocateOneRoamer`): the one that has rested longest of those that have stood
 `LoneHoldCycles`, and none while the last one to move is still on its way (`RoamRests` keeps the count).
 Formations go first, so the lone one sees their slots as taken. A cycle with no unbreakable on the board
@@ -84,22 +87,22 @@ bubbles' merging as well as the unbreakables.
 3. **Moving in.** The service hands each member's move to the balancer's relocate routine. That is the
    same routine roam jumps use, so the members glide in at their normal speed. Each member is marked
    in formation (`IWriteableFormationMember.SetInFormation`).
-4. **Holding.** The formation lasts its shape's hold, counted in cycles and counting the one it formed
-   on: a snake walks `SnakeHoldCycles` (3), a horizontal or diagonal line holds `LineHoldCycles` (3), an
-   item cover `ItemCoverHoldCycles` (3), a ring `RingHoldCycles` (8), a spinner `SpinnerHoldCycles` (6). During that time the next cycles only
-   count down: nothing moves but a snake's steps and the rings' and spinners' turns. They turn the other way on the
+4. **Holding.** Every shape holds until the board's next reshape, `ReshapeEveryCycles` (3) cycles on. In
+   between, nothing moves but a snake's steps and the rings' and spinners' turns. They turn the other way on the
    board-wide beat (see "The clock").
-5. **Changing.** On the first cycle after the hold, each member first rolls `JoinSnakeChance` (0.35) to
-   leave for the tail of the unbreakable snake with the most room, while it has room (`MaxMembers`): the
+5. **Changing.** On the next reshape every formation changes, all of them together. Each member first rolls `JoinSnakeChance` (0.35) to
+   leave for the tail of the unbreakable snake with the most room, while it has room (`MaxMembers`), among the
+   snakes that have already taken their shape on this reshape (one still to change may turn into something
+   else): the
    joiners fly in one batch to a line of slots on from the tail, away from its body, each balloon on that
    line going to the slot a joiner left, so snakes grow from the other formations rather than new ones
    forming. Then a new shape is planned for the members left and any free unbreakables. When the formation
    changing is a snake done walking, a ring is `RingWeightAfterSnake` (4) times likelier, and the snake coils
    into it from its head (see "Rings" below). A formation with a
-   member a lance plowed (see "Plowed by a lance" below) waits for the discharge and changes on the cycle
-   after it. Members that stay in the formation are never marked out, even for a
+   member a lance plowed (see "Plowed by a lance" below) holds its shape until the reshape after the
+   discharge. Members that stay in the formation are never marked out, even for a
    moment. Members the new shape doesn't need turn red and roam again, each once it has rested. If no shape fits, the formation
-   breaks up. Each formation keeps its own count, so they change at different waves.
+   breaks up.
 6. **Breaking up.** The service watches `SlotGrid.OnChanged`. When a member leaves the grid (it was
    pierced, or the board was cleared) it drops out of its formation. If fewer than `MinMembers` are left
    in that formation, the rest are released at once. The other formations stand. The next line's balance,
@@ -118,11 +121,11 @@ What follows on a snake-only level, with no other change to the rules:
 
 - Free unbreakables form snakes, up to `MaxUnbreakableSnakes`. Past that cap they have no shape to form, so
   they stay loose and roam. No cap is lifted for them.
-- A snake done holding has no other shape to change to. It is planned again as a snake, the last resort: it
+- A snake at a reshape has no other shape to change to. It is planned again as a snake, the last resort: it
   lines up as a row once more and takes in free unbreakables up to `SnakeMaxMembers`.
-- A line or an item cover left standing from the level before holds its cycles out. Then it turns into a snake,
+- A line or an item cover left standing from the level before holds until the next reshape. Then it turns into a snake,
   or, with the snakes at their cap, breaks up.
-- With no shape allowed at all, nothing forms and a formation done holding breaks up.
+- With no shape allowed at all, nothing forms and a formation breaks up on the next reshape.
 
 The toughs' snake is not a pick, so the level's set does not touch it: toughs carried over from a sky level
 still gather. A meadow level brings no toughs of its own.
@@ -156,7 +159,7 @@ cycle takes its first step on the next tick.
 
 Members stay anchored and blue as they walk (`IFormationMember.Walking`), and the board settles around
 each step in the same pulse. The snake keeps the row's limits: never in the bottom
-`HorizontalBottomClearance` rows. Like any formation it changes shape after its hold (`SnakeHoldCycles`), breaks below
+`HorizontalBottomClearance` rows. Like any formation it changes shape on the board's reshape, breaks below
 `MinMembers`, and calls reinforcements while untouched.
 
 The shot solver predicts the pulse's rise but not a snake's step, so a shot that meets a step mid-flight
@@ -186,7 +189,7 @@ direction (`HexCoordinates.Step` numbers the six from east, clockwise) and the r
   member a lance plowed stops the whole ring until the discharge (see "Plowed by a lance" under "Snakes"),
   since the ring turns as one. The no-wall rule (see "Rules a formation keeps") applies to each turn: a turn
   that would link the board from wall to wall is as good as blocked.
-- **Holding and changing.** A ring holds `RingHoldCycles` (8) cycles, then changes shape like any other
+- **Holding and changing.** A ring holds until the board's next reshape, then changes shape like any other
   formation, and drops out of its formation below `MinMembers` like any other.
 - **After a snake.** A snake done walking leans toward a ring: its ring weight is multiplied by
   `RingWeightAfterSnake` (4). It then coils in from its head: the planner keeps only the arcs that have the
@@ -222,7 +225,8 @@ the way a clock hand turns about its pin.
   cover or a ring does, and gets no ring of light.
 - **Heading.** Each member except the middle one heads along its own arc round the centre, the way it is turning,
   and is marked walking. The middle member keeps the heading it has and is not marked walking.
-- **Holding and changing.** A spinner holds `SpinnerHoldCycles` (6) cycles, weighs `SpinnerWeight` (1) in the pick,
+- **Holding and changing.** A spinner holds until the board's next reshape (3 cycles are 6 beats, a whole
+  turn, so it stands as it formed unless a turn back fell in between), weighs `SpinnerWeight` (1) in the pick,
   then changes shape like any other formation, and drops out of its formation below `MinMembers` like any other.
 
 The shot solver does not predict a spinner's turn either.
@@ -356,8 +360,7 @@ unbreakables: they roam, and once two are free they form a formation of their ow
   never looks for a spot of its own.
 - **A cover prefers a gift.** A cover also stands round a gift balloon: any of the four reward balloons
   (`BalloonType.IsReward`: golden, heart, disco ball, nuke; `Balloon/Reward/README.md`), filled in the same
-  order. The shape and its settings keep their names (`ItemCover`, `ItemCoverWeight`,
-  `ItemCoverHoldCycles`), which tests, plans and the levels' allowed shapes already use. When both a gift
+  order. The shape and its setting keep their names (`ItemCover`, `ItemCoverWeight`), which tests, plans and the levels' allowed shapes already use. When both a gift
   and an item carrier could be covered, the gift's spot counts as cheaper by `GiftCoverPreference` (2)
   slots of travel for each member the cover takes (the owner's ask, 2026-11-19). A spot's cost is the slots
   its members travel to it plus `DisplacedBalloonCost` (3) for each balloon they move, so the number reads
@@ -386,12 +389,12 @@ unbreakables: they roam, and once two are free they form a formation of their ow
   reward balloon has it), and a held balloon is anchored exactly as a member is (see "Anchoring"). It is held
   from the plan, before the first member has set off, and while the cover holds that shape, lost members or
   not. A cover never plans round a balloon another cover holds, so one cover at most holds a balloon.
-- **When a host is let go.** When the cover's hold runs out (before its next shape is planned, so a line may
+- **When a host is let go.** On the board's reshape (before its next shape is planned, so a line may
   trade the balloon out, and a cover planned again round it holds it again at once), when the cover breaks,
   when formations are switched off, and on a run reset. A host that outlives its cover is free again at that
   moment. A formation's host is written in two places only (`HoldHost`, `LetHostGo`), and each rebuilds
   `CoveredHosts`, so the list never names a balloon no cover holds, whatever the caller does next (a cover
-  let go at the end of its hold may then find no shape to change to and be set loose). Nothing that balances the board moves a held host, and the service's own moves ask the same
+  let go on a reshape may then find no shape to change to and be set loose). Nothing that balances the board moves a held host, and the service's own moves ask the same
   question (`SnakeWalk.CanPassThrough`): a snake turns aside from it, a joiner's line and a closing gap go
   round it, and no formation plans over its slot. What still takes one off its slot does so on purpose: a pop
   (the shot, an item, a nuke's blast, which spares only reward balloons), the level's ascent, and the
@@ -519,10 +522,10 @@ The settings are `IUnbreakableFormationSettings`, nested in `BalloonsConfigurati
 - `ToughSnakes` (on: the toughs walk as one snake. `ToughSnakeMinMembers` (2) toughs on the board start it, it steps
   every `ToughSnakeStepSeconds`, and it keeps out of the bottom `HorizontalBottomClearance` rows)
 - `MinMembers` (2) and `MaxMembers` (5)
-- the clock: `BeatSeconds` (1.7: seconds of play between beats), `BeatsPerCycle` (2, so a cycle is 3.4 s)
-  and `SnakeStepsPerBeat` (2: an unbreakable snake steps on the beat and the off-beat, every 0.85 s)
-- the holds, in cycles: `SnakeHoldCycles` (3), `LineHoldCycles` (3, horizontal and diagonal),
-  `ItemCoverHoldCycles` (3), `RingHoldCycles` (8), `SpinnerHoldCycles` (6), and `LoneHoldCycles` (3, a lone unbreakable's rest between moves)
+- the clock: `BeatSeconds` (1.7: seconds of play between beats), `BeatsPerCycle` (2, so a cycle is 3.4 s),
+  `ReshapeEveryCycles` (3: cycles between the board's reshapes, 10.2 s) and `SnakeStepsPerBeat` (2: an
+  unbreakable snake steps on the beat and the off-beat, every 0.85 s)
+- `LoneHoldCycles` (3, a lone unbreakable's rest between moves)
 - `BottomClearance` (2) and `HorizontalBottomClearance` (4, for horizontal lines)
 - `HorizontalMaxMembers` (3, for horizontal lines; an item cover takes three to six)
 - `SnakeMaxMembers` (4)
@@ -533,8 +536,7 @@ The settings are `IUnbreakableFormationSettings`, nested in `BalloonsConfigurati
 - `ReinforcementChance` (0.35, eased in need by `Game/Assist/ThreatEase`) and `ReinforcementCeiling` (4)
 - the ring: `RingMinMembers` (4), `RingMaxMembers` (5; of the six slots round a centre one always stays
   open), and the weights below
-- the spinner: `SpinnerMaxMembers` (5; 3 or 5, a line with as many on each side of its middle member) and
-  `SpinnerHoldCycles` (6)
+- the spinner: `SpinnerMaxMembers` (5; 3 or 5, a line with as many on each side of its middle member)
 - `TurnReverseEveryCycles` (4: cycles between the beats on which every ring and every spinner turns the other way,
   all together; 0 never turns back by itself)
 - the shape weights: horizontal 1, each diagonal 1, item cover 2 (round an item carrier or a gift), snake 0.25

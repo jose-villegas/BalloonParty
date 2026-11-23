@@ -45,9 +45,7 @@ namespace BalloonParty.Tests.Balloon
             _settings.Enabled.Returns(true);
             _settings.MinMembers.Returns(3);
             _settings.MaxMembers.Returns(5);
-            _settings.SnakeHoldCycles.Returns(3);
-            _settings.LineHoldCycles.Returns(3);
-            _settings.ItemCoverHoldCycles.Returns(3);
+            _settings.ReshapeEveryCycles.Returns(3);
             _settings.BottomClearance.Returns(2);
             _settings.SpotChoices.Returns(1);
             _settings.HorizontalWeight.Returns(1f);
@@ -107,7 +105,7 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void AFormation_HoldsForItsHoldCycles_ThenChangesToADifferentShape()
+        public void AFormation_HoldsUntilTheNextReshape_ThenChangesToADifferentShape()
         {
             AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(6, 4), new Vector2Int(3, 5));
             Arrange();
@@ -130,30 +128,26 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void EachShape_HoldsForItsOwnCycles()
+        public void EveryShape_HoldsUntilTheBoardsNextReshape()
         {
-            _settings.SnakeHoldCycles.Returns(2);
-            _settings.LineHoldCycles.Returns(4);
+            _settings.ReshapeEveryCycles.Returns(2);
             FormSnake();
             _settings.SnakeWeight.Returns(0f);
             _settings.HorizontalWeight.Returns(1f);
 
             Arrange();
-            Assert.AreEqual(FormationShape.Snake, _service.CurrentShape, "a snake walks its two cycles");
+            Assert.AreEqual(FormationShape.Snake, _service.CurrentShape, "formed on cycle 1, held through cycle 2");
 
             Arrange();
-            Assert.AreEqual(FormationShape.Horizontal, _service.CurrentShape);
+            Assert.AreEqual(FormationShape.Horizontal, _service.CurrentShape, "cycle 3 reshapes");
 
             _settings.HorizontalWeight.Returns(0f);
             _settings.SnakeWeight.Returns(1f);
-            for (var cycle = 0; cycle < 3; cycle++)
-            {
-                Arrange();
-                Assert.AreEqual(FormationShape.Horizontal, _service.CurrentShape, "a line holds its four");
-            }
+            Arrange();
+            Assert.AreEqual(FormationShape.Horizontal, _service.CurrentShape, "a line holds as long as the snake did");
 
             Arrange();
-            Assert.AreEqual(FormationShape.Snake, _service.CurrentShape);
+            Assert.AreEqual(FormationShape.Snake, _service.CurrentShape, "cycle 5 reshapes");
         }
 
         [Test]
@@ -186,24 +180,25 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void OnABeat_FreeUnbreakablesFormUp_ButAStandingFormationKeepsItsShape()
+        public void FreeUnbreakables_WaitForTheBoardsReshape_ToFormUp()
         {
             _settings.MinMembers.Returns(2);
             AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(6, 4), new Vector2Int(3, 5));
             Arrange();
             var standing = _service.Formations[0];
             var shape = standing.Shape;
-            var cyclesLeft = standing.CyclesLeft;
-            Assert.IsFalse(_service.UnbreakablesDueToForm(), "all three in");
 
             var arrivals = new[] { AddUnbreakable(new Vector2Int(1, 4)), AddUnbreakable(new Vector2Int(5, 0)) };
-            Assert.IsTrue(_service.UnbreakablesDueToForm());
-            _service.FormOnBeat(Relocate);
+            Arrange();
+            Arrange();
 
-            Assert.AreEqual(2, _service.Formations.Count, "the two that arrived form a pair at once");
-            Assert.IsTrue(arrivals.All(u => u.IsAnchored));
+            Assert.IsFalse(arrivals.Any(u => u.InFormation.Value), "no forming between reshapes");
+            Assert.AreEqual(1, _service.Formations.Count);
             Assert.AreEqual(shape, standing.Shape);
-            Assert.AreEqual(cyclesLeft, standing.CyclesLeft, "holds count only on a cycle");
+
+            Arrange();
+
+            Assert.IsTrue(arrivals.All(u => u.InFormation.Value && u.IsAnchored), "cycle 4 reshapes and takes them in");
         }
 
         [Test]
@@ -888,13 +883,20 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void ASnake_TurnsAsideFromTheCoveredBalloon_RatherThanWalkThroughIt()
         {
-            var snake = FormSnake();
-            var head = snake.Members[0].SlotIndex.Value;
+            // Both form on the run's first reshape: the snake from row 2 first (a roll of 0.9 picks it over the
+            // cover), then the three left over cover the bomb ahead of its head.
+            SnakeOnly();
+            _settings.SnakeMaxMembers.Returns(3);
+            AddUnbreakables(new Vector2Int(0, 2), new Vector2Int(1, 2), new Vector2Int(2, 2));
+            var head = new Vector2Int(2, 2);
             var slot = HexCoordinates.Step(head, 0);
             var host = PlaceHost(slot);
-            _settings.SnakeWeight.Returns(0f);
             AddUnbreakables(new Vector2Int(0, 5), new Vector2Int(3, 5), new Vector2Int(6, 5));
+            var rolls = new Queue<float>(new[] { 0.9f });
+            _service.Random01 = () => rolls.Count > 0 ? rolls.Dequeue() : 0f;
             Arrange();
+            var snake = _service.Formations.Single(f => f.Shape == FormationShape.Snake);
+            Assert.AreEqual(head, snake.Members[0].SlotIndex.Value, "control: heading east from row 2");
             Assert.AreEqual(1, _service.CoveredHosts.Count, "the free three cover the bomb ahead of the snake");
 
             _service.StepSnakes(Relocate);
@@ -1125,7 +1127,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void AFormationWithAPlowedMember_WaitsForTheDischarge_ToChangeShape()
         {
-            _settings.LineHoldCycles.Returns(1);
+            _settings.ReshapeEveryCycles.Returns(1);
             AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(6, 4), new Vector2Int(3, 5));
             Arrange();
             var formation = _service.Formations[0];
@@ -1167,17 +1169,23 @@ namespace BalloonParty.Tests.Balloon
         public void AFormationChangingShape_SendsItsMembersToASnakesTail_OnTheJoinRoll()
         {
             _settings.MinMembers.Returns(2);
+            _settings.HorizontalMaxMembers.Returns(2);
+            _settings.DiagonalWeight.Returns(0f);
+            _settings.ReshapeEveryCycles.Returns(1);
+            AddUnbreakables(new Vector2Int(0, 2), new Vector2Int(1, 2), new Vector2Int(4, 5), new Vector2Int(6, 5));
+            Arrange();
+            Assert.AreEqual(2, _service.Formations.Count, "control: two lines of two");
+            var first = _service.Formations[0];
+
+            // On the next reshape the first line turns into a snake, and the second joins its tail.
+            _settings.SnakeWeight.Returns(1f);
+            _settings.SnakeMaxMembers.Returns(5);
+            _settings.BeatSeconds.Returns(1.7f);
             _settings.JoinSnakeChance.Returns(1f);
-            var snake = FormSnake(2);
-            _settings.SnakeWeight.Returns(0f);
-            _settings.HorizontalWeight.Returns(1f);
-            _settings.LineHoldCycles.Returns(1);
-            AddUnbreakables(new Vector2Int(4, 5), new Vector2Int(6, 5));
-            Arrange();
-            Assert.AreEqual(2, _service.Formations.Count, "the two newcomers line up");
-
             Arrange();
 
+            Assert.AreEqual(FormationShape.Snake, first.Shape);
+            var snake = first;
             Assert.AreEqual(1, _service.Formations.Count, "the line left for the snake");
             Assert.AreEqual(4, snake.Members.Count);
             for (var i = 1; i < snake.Members.Count; i++)
@@ -1420,7 +1428,7 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void ALevelAllowingNoShape_LeavesTheUnbreakablesLoose_OnTheCycleAndOnTheBeat()
+        public void ALevelAllowingNoShape_LeavesTheUnbreakablesLoose()
         {
             _settings.SnakeWeight.Returns(1f);
             Allow(FormationShapes.None);
@@ -1428,7 +1436,6 @@ namespace BalloonParty.Tests.Balloon
             var slots = _unbreakables.Select(u => u.SlotIndex.Value).ToList();
 
             Assert.DoesNotThrow(Arrange);
-            Assert.DoesNotThrow(() => _service.FormOnBeat(Relocate));
             Assert.DoesNotThrow(() => _service.StepSnakes(Relocate));
 
             Assert.IsNull(_service.CurrentShape);

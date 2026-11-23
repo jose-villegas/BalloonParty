@@ -44,13 +44,11 @@ namespace BalloonParty.Tests.Balloon
             _settings.Enabled.Returns(true);
             _settings.MinMembers.Returns(3);
             _settings.MaxMembers.Returns(5);
-            _settings.SnakeHoldCycles.Returns(3);
-            _settings.LineHoldCycles.Returns(3);
+            _settings.ReshapeEveryCycles.Returns(6);
             _settings.BottomClearance.Returns(2);
             _settings.SpotChoices.Returns(1);
             _settings.SpinnerWeight.Returns(1f);
             _settings.SpinnerMaxMembers.Returns(5);
-            _settings.SpinnerHoldCycles.Returns(6);
             _settings.TurnReverseEveryCycles.Returns(4);
 
             var balloonsConfig = Substitute.For<IBalloonsConfiguration>();
@@ -290,7 +288,7 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void ASpinnerHoldsForItsHoldCycles_ThenChangesToAnotherShape()
+        public void ASpinnerHoldsUntilTheNextReshape_ThenChangesToAnotherShape()
         {
             FormSpinner();
             _settings.SpinnerWeight.Returns(0f);
@@ -311,7 +309,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void ASpinnerThatEndsWithNothingToChangeTo_IsPlannedAgain()
         {
-            _settings.SpinnerHoldCycles.Returns(1);
+            _settings.ReshapeEveryCycles.Returns(1);
             FormSpinner();
 
             Arrange();

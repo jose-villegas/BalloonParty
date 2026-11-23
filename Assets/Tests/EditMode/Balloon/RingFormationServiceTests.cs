@@ -43,14 +43,12 @@ namespace BalloonParty.Tests.Balloon
             _settings.Enabled.Returns(true);
             _settings.MinMembers.Returns(3);
             _settings.MaxMembers.Returns(5);
-            _settings.SnakeHoldCycles.Returns(3);
-            _settings.LineHoldCycles.Returns(3);
+            _settings.ReshapeEveryCycles.Returns(8);
             _settings.BottomClearance.Returns(2);
             _settings.SpotChoices.Returns(1);
             _settings.RingWeight.Returns(1f);
             _settings.RingMinMembers.Returns(4);
             _settings.RingMaxMembers.Returns(5);
-            _settings.RingHoldCycles.Returns(8);
             _settings.TurnReverseEveryCycles.Returns(4);
 
             var balloonsConfig = Substitute.For<IBalloonsConfiguration>();
@@ -194,7 +192,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void TheRing_TurnsBackAgain_OnCycleEightOfTheRun()
         {
-            _settings.RingHoldCycles.Returns(12);
+            _settings.ReshapeEveryCycles.Returns(12);
             var ring = FormRing();
 
             for (var cycle = 2; cycle <= 7; cycle++)
@@ -223,40 +221,19 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void ARingFormedLater_TurnsBackOnTheSameCycleAsOneAlreadyStanding_NotFourCyclesAfterItForms()
-        {
-            var first = FormRing();
-            Arrange();
-            var other = new Vector2Int(1, 1);
-            AddUnbreakables(
-                HexCoordinates.Step(other, 0), HexCoordinates.Step(other, 1), HexCoordinates.Step(other, 2),
-                HexCoordinates.Step(other, 3));
-            Arrange();
-            var second = _service.Formations.Single(f => f != first);
-            Assert.AreEqual(other, second.TurnCentre, "control: the second ring formed on cycle 3");
-            Assert.IsTrue(first.Clockwise);
-            Assert.IsTrue(second.Clockwise);
-
-            Arrange();
-
-            Assert.IsFalse(first.Clockwise, "cycle 4 of the run");
-            Assert.IsFalse(second.Clockwise, "one cycle after it formed, not four");
-        }
-
-        [Test]
         public void ARingAndASpinner_TurnBackTogether_EveryTurnReverseEveryCyclesCycleOfTheRun()
         {
-            _settings.SpinnerMaxMembers.Returns(5);
-            _settings.SpinnerHoldCycles.Returns(8);
-            var ring = FormRing();
-            _settings.RingWeight.Returns(0f);
+            // Ring first in the pick (Random01 0), four round the centre; the three left over make a spinner.
+            _settings.RingMaxMembers.Returns(4);
             _settings.SpinnerWeight.Returns(1f);
+            _settings.SpinnerMaxMembers.Returns(3);
             var middle = new Vector2Int(1, 1);
             AddUnbreakables(HexCoordinates.Step(middle, 3), middle, HexCoordinates.Step(middle, 0));
-            Arrange();
+            var ring = FormRing();
             var spinner = _service.Formations.Single(f => f.Shape == FormationShape.Spinner);
-            Assert.AreEqual(middle, spinner.TurnCentre, "control: the spinner formed on cycle 2");
+            Assert.AreEqual(middle, spinner.TurnCentre, "control: the spinner formed on the same reshape");
 
+            Arrange();
             Arrange();
             Assert.IsTrue(ring.Clockwise);
             Assert.IsTrue(spinner.Clockwise);
@@ -355,7 +332,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void TheBalloonAtTheCentre_IsHeld_UntilTheRingEndsItsHold_AndDrawsNoRingOfLight()
         {
-            _settings.RingHoldCycles.Returns(2);
+            _settings.ReshapeEveryCycles.Returns(2);
             var host = new BalloonModel();
             _grid.Place(host, null, Centre);
             FormRing();
@@ -378,7 +355,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void ARingThatEndsWithNothingToChangeTo_IsPlannedAgain_AndHoldsItsCentreStill()
         {
-            _settings.RingHoldCycles.Returns(1);
+            _settings.ReshapeEveryCycles.Returns(1);
             var host = new BalloonModel();
             _grid.Place(host, null, Centre);
             FormRing();
@@ -391,9 +368,9 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void ARingHoldsForItsHoldCycles_ThenChangesToAnotherShape()
+        public void ARingHoldsUntilTheNextReshape_ThenChangesToAnotherShape()
         {
-            _settings.RingHoldCycles.Returns(2);
+            _settings.ReshapeEveryCycles.Returns(2);
             FormRing();
             _settings.RingWeight.Returns(0f);
             _settings.HorizontalWeight.Returns(1f);
@@ -532,11 +509,14 @@ namespace BalloonParty.Tests.Balloon
             return _service.Formations[0];
         }
 
-        // The snake formed on the first cycle and holds SnakeHoldCycles (3): two more cycles hold it.
+        // The snake formed on the first cycle, a reshape; the cycles up to the next reshape hold it.
         private void LetTheSnakeFinishItsHold()
         {
-            Arrange();
-            Arrange();
+            for (var cycle = 2; cycle <= _settings.ReshapeEveryCycles; cycle++)
+            {
+                Arrange();
+            }
+
             Assert.AreEqual(FormationShape.Snake, _service.CurrentShape, "held through its cycles");
         }
 

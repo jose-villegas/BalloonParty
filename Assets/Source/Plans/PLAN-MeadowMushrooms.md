@@ -989,9 +989,9 @@ What the code settled where the design left room. The READMEs of `Configuration/
 - **Snake only is a set on the level.** `ILevelParameters.AllowedFormationShapes` is `FormationShapes.Snake` on the
   meadow, extra-colour levels included, and every shape elsewhere and on debug presets.
   `UnbreakableFormationService.WeightOf` weighs a shape outside the set as 0, and no cap is lifted (decision D).
-- **What that does to a snake.** With no other shape to change to, a snake done holding is planned again as a snake
-  (the service's last resort): every `SnakeHoldCycles` it lines up as a row once more and takes in loose
-  unbreakables up to `SnakeMaxMembers`. A line left from the sky holds its cycles out, then turns into a snake or,
+- **What that does to a snake.** With no other shape to change to, a snake is planned again as a snake on each
+  reshape (the service's last resort): every `ReshapeEveryCycles` it lines up as a row once more and takes in loose
+  unbreakables up to `SnakeMaxMembers`. A line left from the sky holds until the next reshape, then turns into a snake or,
   at the snake cap, breaks up. None of it has been seen in play.
 - **The shipped Tougher loses its introduction.** It unlocks on level 6, which is always the first meadow level, and
   its two featured levels fall inside that meadow. The water that follows keeps it off too, so the player first

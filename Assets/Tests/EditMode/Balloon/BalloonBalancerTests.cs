@@ -376,7 +376,7 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void FreeUnbreakables_FormUpOnABeat_BetweenCycles()
+        public void FreeUnbreakables_FormUpOnACycle_NotOnTheBeatBetween()
         {
             var balancer = BalancerWithAToughSnake(out var formations, toughStepSeconds: 100f, formAtOnce: false);
             _balloonsConfig.UnbreakableFormation.ToughSnakes.Returns(false);
@@ -385,13 +385,11 @@ namespace BalloonParty.Tests.Balloon
             _balloonsConfig.FlightRebalanceInterval.Returns(100f);
             _grid.Place(new UnbreakableBalloonModel(new BalloonModelConfig(typeName: BalloonType.Unbreakable)), null,
                 new Vector2Int(0, 1));
-
-            Assert.IsFalse(balancer.TickFlightRebalance(1f), "one alone: nothing to form on the first beat");
-
             _grid.Place(new UnbreakableBalloonModel(new BalloonModelConfig(typeName: BalloonType.Unbreakable)), null,
                 new Vector2Int(2, 1));
+
+            Assert.IsFalse(balancer.TickFlightRebalance(1f), "two free, but the first beat is between cycles");
             Assert.IsTrue(balancer.TickFlightRebalance(1f), "the second beat is a cycle");
-            Assert.IsTrue(balancer.TickFlightRebalance(1f), "and the third, between cycles, forms the pair up");
             formations.Dispose();
             balancer.ResetRun(balancer.Generation + 1);
         }
@@ -706,7 +704,7 @@ namespace BalloonParty.Tests.Balloon
             settings.RingWeight.Returns(1f);
             settings.RingMinMembers.Returns(4);
             settings.RingMaxMembers.Returns(5);
-            settings.RingHoldCycles.Returns(8);
+            settings.ReshapeEveryCycles.Returns(8);
             _balloonsConfig.FlightRebalanceInterval.Returns(100f);
             formations.Random01 = () => 0f;
             for (var col = 0; col < 3; col++)
@@ -741,7 +739,7 @@ namespace BalloonParty.Tests.Balloon
             settings.SnakeStepsPerBeat.Returns(2);
             settings.SpinnerWeight.Returns(1f);
             settings.SpinnerMaxMembers.Returns(5);
-            settings.SpinnerHoldCycles.Returns(8);
+            settings.ReshapeEveryCycles.Returns(8);
             _balloonsConfig.FlightRebalanceInterval.Returns(100f);
             formations.Random01 = () => 0f;
             for (var col = 0; col < 3; col++)
@@ -788,9 +786,13 @@ namespace BalloonParty.Tests.Balloon
                     new Vector2Int(col, 0));
             }
 
-            settings.ToughSnakes.Returns(formAtOnce);
-            formations.ArrangeOnCycle(_ => { });
-            settings.ToughSnakes.Returns(true);
+            // Only a snake formed at once takes the run's first cycle, so a test that arranges its own starts on
+            // that one, a reshape.
+            if (formAtOnce)
+            {
+                formations.ArrangeOnCycle(_ => { });
+            }
+
             Assert.AreEqual(formAtOnce ? 1 : 0, formations.Formations.Count);
 
             var pathHolder = new BalancePathHolder();

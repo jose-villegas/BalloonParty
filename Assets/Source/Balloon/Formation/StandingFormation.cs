@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace BalloonParty.Balloon.Formation
 {
-    /// <summary>One standing formation: its members, its shape, and how long it holds that shape.</summary>
+    /// <summary>One standing formation: its members and its shape.</summary>
     internal sealed class StandingFormation
     {
         internal readonly List<IWriteableFormationMember> MemberList = new();
@@ -18,9 +18,6 @@ namespace BalloonParty.Balloon.Formation
         ///     (<see cref="IFormationMember.FormationId" />). A new one each time the object is taken up again.
         /// </summary>
         internal int Id { get; set; }
-
-        /// <summary>Cycles left to hold the current shape before it changes.</summary>
-        internal int CyclesLeft { get; set; }
 
         /// <summary>The wave it formed in, which rolls for no reinforcement.</summary>
         internal int FormedOnWave { get; set; }
@@ -76,7 +73,6 @@ namespace BalloonParty.Balloon.Formation
             Host = null;
             HostLit = false;
             Armoured = false;
-            CyclesLeft = 0;
             FormedOnWave = 0;
             Touched = false;
             Heading = 0;

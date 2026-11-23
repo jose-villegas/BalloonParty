@@ -26,10 +26,10 @@ namespace BalloonParty.Configuration.Balloons
 
         /// <summary>
         ///     Seconds of play between the unbreakables' beats. An unbreakable snake steps
-        ///     <see cref="SnakeStepsPerBeat" /> times a beat; every
-        ///     <see cref="BeatsPerCycle" /> beats make a cycle, the clock formations form, hold and change shape on and
-        ///     a lone unbreakable moves on. It is the board's beat: bubble clusters merge on it too, a share of a beat
-        ///     after each one (<see cref="IRipeBubbleSettings.MergeOffBeat" />).
+        ///     <see cref="SnakeStepsPerBeat" /> times a beat. Every <see cref="BeatsPerCycle" /> beats make a cycle,
+        ///     when a lone unbreakable may move; every <see cref="ReshapeEveryCycles" /> cycles the formations form
+        ///     and change shape. It is the board's beat: bubble clusters merge on it too, a share of a beat after
+        ///     each one (<see cref="IRipeBubbleSettings.MergeOffBeat" />).
         /// </summary>
         float BeatSeconds { get; }
 
@@ -37,18 +37,15 @@ namespace BalloonParty.Configuration.Balloons
         int BeatsPerCycle { get; }
 
         /// <summary>
+        ///     Cycles between the board's reshapes. On a reshape every formation changes shape at once and the free
+        ///     unbreakables form up; in between every formation holds its shape, whatever it is.
+        /// </summary>
+        int ReshapeEveryCycles { get; }
+
+        /// <summary>
         ///     Steps an unbreakable snake takes each beat, evenly spaced: 2 steps on the beat and the off-beat.
         /// </summary>
         int SnakeStepsPerBeat { get; }
-
-        /// <summary>Cycles a snake walks, counting the cycle it formed on, before it changes shape.</summary>
-        int SnakeHoldCycles { get; }
-
-        /// <summary>Cycles a horizontal or diagonal line holds, counting the cycle it formed on.</summary>
-        int LineHoldCycles { get; }
-
-        /// <summary>Cycles a cover (round an item carrier or a gift balloon) holds, counting the cycle it formed on.</summary>
-        int ItemCoverHoldCycles { get; }
 
         /// <summary>
         ///     Cycles a lone unbreakable (in no formation) stays where it is before it may move again. Only one moves
@@ -121,9 +118,6 @@ namespace BalloonParty.Configuration.Balloons
         /// </summary>
         int RingMaxMembers { get; }
 
-        /// <summary>Cycles a ring holds, counting the cycle it formed on, before it changes shape.</summary>
-        int RingHoldCycles { get; }
-
         /// <summary>Cycles between the beats on which every ring and spinner turns the other way, all together. 0: never.</summary>
         int TurnReverseEveryCycles { get; }
 
@@ -134,9 +128,6 @@ namespace BalloonParty.Configuration.Balloons
         ///     Most unbreakables in a spinner: 3 or 5, a line with as many on each side of the one it turns about.
         /// </summary>
         int SpinnerMaxMembers { get; }
-
-        /// <summary>Cycles a spinner holds, counting the cycle it formed on, before it changes shape.</summary>
-        int SpinnerHoldCycles { get; }
 
         /// <summary>
         ///     Added to the snake's weight, as a share of <see cref="SnakeWeight" />, for each unbreakable on the

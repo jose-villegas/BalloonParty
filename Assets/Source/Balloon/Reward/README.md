@@ -69,8 +69,8 @@ shorter (`GodRaysLook` again, on the `HeartRays` material and palette entry). It
 The unbreakables' cover formation (`FormationShape.ItemCover`, `Balloon/Formation/README.md`) stands round a
 reward balloon as it does round a bomb, and prefers one to an item carrier
 (`IUnbreakableFormationSettings.GiftCoverPreference`). It takes three to six unbreakables: the two slots below
-the balloon first, toward the cannon, then its sides, then above, and it holds `ItemCoverHoldCycles` (3 cycles,
-about 10 s) before it changes shape. The cover holds the balloon in its slot all that time
+the balloon first, toward the cannon, then its sides, then above, and it holds until the board's next reshape
+(`ReshapeEveryCycles`, 3 cycles, about 10 s) before it changes shape. The cover holds the balloon in its slot all that time
 (`IWriteableCoverHost`, on `BalloonModelBase`): it is anchored as the members are, so it stays between them and
 can drift neither into reach nor out of it. The formation's light ring closes over it. Not on the meadow, whose
 unbreakables form only the snake.
