@@ -53,8 +53,9 @@ namespace BalloonParty.Slots.Actor
 
         /// <summary>
         ///     Scales the incoming and the outgoing content about the camera (the world origin), each by its own
-        ///     factor. Spawn nothing under the root while either is off 1: a view that places itself in world space
-        ///     under a scaled root keeps the wrong local offset once the scale returns.
+        ///     factor. Content spawned under the root while either is off 1 is placed in the root's own space (its
+        ///     position at rest), not in world space: a world position set under a scaled root keeps the wrong
+        ///     local offset once the scale returns.
         /// </summary>
         internal void SetDepth(float incoming, float outgoing)
         {

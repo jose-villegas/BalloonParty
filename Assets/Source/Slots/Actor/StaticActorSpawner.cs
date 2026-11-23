@@ -188,9 +188,12 @@ namespace BalloonParty.Slots.Actor
             {
                 view = _poolManager.Get<GridActorView>(entry.PoolKey);
 
-                // Parent under the scenario root so Ascent can move the whole scenario as one unit.
+                // Parent under the scenario root so Ascent can move the whole scenario as one unit. Placed in
+                // the root's own space, where it stands at rest: a saved run continued from the launch screen
+                // spawns as its mist reveal starts scaling the root, and a world position set then would leave
+                // the view off its slot by that scale once the reveal ends.
                 view.transform.SetParent(_scenarioRoot?.Transform, false);
-                view.transform.position = _grid.IndexToWorldPosition(slot);
+                view.transform.localPosition = _grid.IndexToWorldPosition(slot);
             }
 
             _grid.Place(model, view, slot);

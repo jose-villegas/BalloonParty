@@ -251,13 +251,12 @@ namespace BalloonParty.Game.Cinematics
             _pauseService.Pause(PauseSource.Cinematic);
             _staticActorSpawner.ClearStaticActors();
 
-            // Spawn the scenery with the root at origin (its views set their WORLD transform, so spawning
-            // while the root is displaced would bake in that offset), THEN drop the root below view to rise.
+            // Spawn the scenery, which stands in the root's own space where it rests, THEN drop the root below
+            // view to rise: the drop carries it down with the root.
             await _spawnerCoordinator.RunStagesAsync(s => s < SpawnStage.BalloonActors, _cts.Token);
             _scenarioRoot.SetTravel(-height);
 
-            // Only now, with the new scenery placed: the mist reveal this starts scales the root, and a view placed
-            // under a scaled root would keep the wrong offset.
+            // The mist reveal this starts scales the root, with the new scenery on it.
             _riseStartedPublisher.Publish(default);
 
             // One travel: outgoing rides up and out (balloons popping in a wave), new scenery rises in
