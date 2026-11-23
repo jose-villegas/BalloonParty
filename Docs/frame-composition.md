@@ -33,45 +33,29 @@ A field is a small texture laid over the board in world space, a few texels to e
 5.2 by 9.6 units). Play writes into the fields: a ball flies, a balloon pops, a blast spreads. Shaders look
 up their own world position in a field to find out what is happening where they stand.
 
-| Field | Size here | What it holds | Who writes it | What it does to the picture |
-|---|---|---|---|---|
-| Time of day | 3 numbers | The light's direction, colour and strength | `TimeOfDayService`, from the light's angle | Tints everything. Night is this colour going dark; the strength stays at 1 |
-| Disturbance field | 43 x 77 | Red: how dense the air is (1 at rest). Green, blue: which way things are pushed. Alpha: the palette colour of what pushed | `DisturbanceFieldService`: stamps from the ball, pops and blasts, then a blur that spreads and settles them | Clouds part, leaves rattle, mushrooms rock, specks are pushed, grass bends |
-| Light field | 86 x 154 | Red: light added on top of the time of day, up to 3 times. Green, blue: the way to that light. Alpha: which palette colour it is | `SceneLightFieldService`, from every light registered with it: the ball, some pops, the reward balloons' rays, the unbreakables, the items, the nuke's blast | Brightens and colours what is near a light, and tells shines and shadows which way to face |
-| Light colour | 43 x 77 | The lights' colours, each weighted by its share | The same service, in a second pass | The hue of a local light |
-| Background field | 86 x 154 | Red: the cloud's shape. Green: the same before it is sharpened | `BackgroundFieldService`, from noise and the disturbance field | The backdrop's clouds. It also says where a balloon's shadow has something to land on |
-| Smoke field | 86 x 154 | Colour and thickness of smoke, fading with time | `SmokeFieldService`: stamps along the ball's path and at some pops | The ball's trail, drawn behind the clouds; shadows land on it |
-
 The meadow adds a wake buffer that lays the grass down behind the ball, and the water level has two of its
 own, the ripples and the caustics on the sand; the tool shows none of the three.
 
-Through the shot, the ball draws its line into the disturbance and smoke fields, each pop and each cut
-mushroom leaves its mark, and then the blast pushes everything outward, floods the light field, and blows a
-hole in the clouds.
-
-|  | In this frame | Its alpha | Through the shot | Its alpha, through the shot |
-|---|---|---|---|---|
-| **Disturbance field** | <img src="frame/map-disturbance-field.jpg" width="150"> | <img src="frame/map-disturbance-field-alpha.jpg" width="150"> | <img src="frame/map-disturbance-field.webp" width="150"> | <img src="frame/map-disturbance-field-alpha.webp" width="150"> |
-| **Light field** | <img src="frame/map-scene-light-field.jpg" width="150"> | <img src="frame/map-scene-light-field-alpha.jpg" width="150"> | <img src="frame/map-scene-light-field.webp" width="150"> | <img src="frame/map-scene-light-field-alpha.webp" width="150"> |
-| **Light colour** | <img src="frame/map-scene-light-colour.jpg" width="150"> | <img src="frame/map-scene-light-colour-alpha.jpg" width="150"> | <img src="frame/map-scene-light-colour.webp" width="150"> | <img src="frame/map-scene-light-colour-alpha.webp" width="150"> |
-| **Background field** | <img src="frame/map-background-field.jpg" width="150"> |  | <img src="frame/map-background-field.webp" width="150"> |  |
-| **Smoke field** | <img src="frame/map-smoke-field.jpg" width="150"> | <img src="frame/map-smoke-field-alpha.jpg" width="150"> | <img src="frame/map-smoke-field.webp" width="150"> | <img src="frame/map-smoke-field-alpha.webp" width="150"> |
+|  | Size | In this frame | Its alpha | Through the shot | Its alpha, through the shot |
+|---|---|---|---|---|---|
+| **Disturbance field** | 43 x 77 | <img src="frame/map-disturbance-field.jpg" width="150"> | <img src="frame/map-disturbance-field-alpha.jpg" width="150"> | <img src="frame/map-disturbance-field.webp" width="150"> | <img src="frame/map-disturbance-field-alpha.webp" width="150"> |
+| **Light field** | 86 x 154 | <img src="frame/map-scene-light-field.jpg" width="150"> | <img src="frame/map-scene-light-field-alpha.jpg" width="150"> | <img src="frame/map-scene-light-field.webp" width="150"> | <img src="frame/map-scene-light-field-alpha.webp" width="150"> |
+| **Light colour** | 43 x 77 | <img src="frame/map-scene-light-colour.jpg" width="150"> | <img src="frame/map-scene-light-colour-alpha.jpg" width="150"> | <img src="frame/map-scene-light-colour.webp" width="150"> | <img src="frame/map-scene-light-colour-alpha.webp" width="150"> |
+| **Background field** | 86 x 154 | <img src="frame/map-background-field.jpg" width="150"> |  | <img src="frame/map-background-field.webp" width="150"> |  |
+| **Smoke field** | 86 x 154 | <img src="frame/map-smoke-field.jpg" width="150"> | <img src="frame/map-smoke-field-alpha.jpg" width="150"> | <img src="frame/map-smoke-field.webp" width="150"> | <img src="frame/map-smoke-field-alpha.webp" width="150"> |
 
 ## 2. The frame looks at itself
 
 Two more textures are made from the picture itself, not from play.
 
-- **The scene capture.** A second camera draws the board's layers (balloons, obstacles, the ball, effects)
-  into a texture a seventh of the screen's size, 154 by 274 here. Its colour is the scene before any grading.
-  Its alpha is 1 on a sprite and 0 on open ground.
-- **The GI light buffer.** Worked out from that capture, at half its size. Its colour is the *bounce*: the
-  scene's colours gathered from the side the light comes from, so a red balloon lends a little red to what
-  stands behind it. Its alpha is the *shadow*: how much stands between the point and the light.
+|  | Size | In this frame | Its alpha | Through the shot | Its alpha, through the shot |
+|---|---|---|---|---|---|
+| **Scene capture** | 154 x 274 | <img src="frame/map-scene-capture.jpg" width="150"> | <img src="frame/map-scene-capture-alpha.jpg" width="150"> | <img src="frame/map-scene-capture.webp" width="150"> | <img src="frame/map-scene-capture-alpha.webp" width="150"> |
+| **GI light buffer** | 77 x 137 | <img src="frame/map-gi-light-buffer.jpg" width="150"> | <img src="frame/map-gi-light-buffer-alpha.jpg" width="150"> | <img src="frame/map-gi-light-buffer.webp" width="150"> | <img src="frame/map-gi-light-buffer-alpha.webp" width="150"> |
 
-|  | In this frame | Its alpha | Through the shot | Its alpha, through the shot |
-|---|---|---|---|---|
-| **Scene capture** | <img src="frame/map-scene-capture.jpg" width="150"> | <img src="frame/map-scene-capture-alpha.jpg" width="150"> | <img src="frame/map-scene-capture.webp" width="150"> | <img src="frame/map-scene-capture-alpha.webp" width="150"> |
-| **GI light buffer** | <img src="frame/map-gi-light-buffer.jpg" width="150"> | <img src="frame/map-gi-light-buffer-alpha.jpg" width="150"> | <img src="frame/map-gi-light-buffer.webp" width="150"> | <img src="frame/map-gi-light-buffer-alpha.webp" width="150"> |
+The GI light buffer is worked out from the scene capture. Its colour is the *bounce*: the scene's colours
+gathered from the side the light comes from, so a red balloon lends a little red to what stands behind it.
+Its alpha is the *shadow*: how much stands between the point and the light.
 
 Both run one frame late: the buffer is worked out from the capture of the frame before. The capture is also
 what the unbreakable balloon's chrome and the disco ball's mirrors reflect.
