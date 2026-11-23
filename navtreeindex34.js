@@ -1,7 +1,5 @@
 var NAVTREEINDEX34 =
 {
-"classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#aeadf058f65759094e5ac5e29cb279de1":[5,0,0,3,2,0,77],
-"classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#aeadf058f65759094e5ac5e29cb279de1":[6,0,0,3,2,0,77],
 "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#aebd8df5117b33e7e20aa59d53fbac47f":[5,0,0,3,2,0,114],
 "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#aebd8df5117b33e7e20aa59d53fbac47f":[6,0,0,3,2,0,114],
 "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#af0d0a1f8bf1524596c1da7c55f084957":[5,0,0,3,2,0,76],
@@ -249,5 +247,7 @@ var NAVTREEINDEX34 =
 "classBalloonParty_1_1Configuration_1_1Editor_1_1MapLimitsSceneOverlay.html":[5,0,0,3,4,6],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1MapLimitsSceneOverlay.html":[6,0,0,3,4,6],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1MapLimitsSceneOverlay.html#a0b568b1d7c14339c21d0bfc6dcbf16eb":[5,0,0,3,4,6,6],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1MapLimitsSceneOverlay.html#a0b568b1d7c14339c21d0bfc6dcbf16eb":[6,0,0,3,4,6,6]
+"classBalloonParty_1_1Configuration_1_1Editor_1_1MapLimitsSceneOverlay.html#a0b568b1d7c14339c21d0bfc6dcbf16eb":[6,0,0,3,4,6,6],
+"classBalloonParty_1_1Configuration_1_1Editor_1_1MapLimitsSceneOverlay.html#a12188a29460c03c7d8ff7f108e7e775a":[5,0,0,3,4,6,3],
+"classBalloonParty_1_1Configuration_1_1Editor_1_1MapLimitsSceneOverlay.html#a12188a29460c03c7d8ff7f108e7e775a":[6,0,0,3,4,6,3]
 };

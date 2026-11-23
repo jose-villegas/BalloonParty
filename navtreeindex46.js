@@ -1,7 +1,5 @@
 var NAVTREEINDEX46 =
 {
-"classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html":[5,0,0,3,32],
-"classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html":[6,0,0,3,32],
 "classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html#a1027e4f1728e3470c4aa58b5d25da68a":[5,0,0,3,32,16],
 "classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html#a1027e4f1728e3470c4aa58b5d25da68a":[6,0,0,3,32,16],
 "classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html#a23f66d39922b4dab4ba3bd963bf9dfd6":[5,0,0,3,32,6],
@@ -249,5 +247,7 @@ var NAVTREEINDEX46 =
 "classBalloonParty_1_1Display_1_1CameraShakeView.html#aa7bab0f6c869738a0faaa88eb1f334e8":[5,0,0,4,3,1],
 "classBalloonParty_1_1Display_1_1CameraShakeView.html#aa7bab0f6c869738a0faaa88eb1f334e8":[6,0,0,4,3,1],
 "classBalloonParty_1_1Display_1_1CameraShakeView.html#ae1d731d794951951171c3efc6713d083":[5,0,0,4,3,12],
-"classBalloonParty_1_1Display_1_1CameraShakeView.html#ae1d731d794951951171c3efc6713d083":[6,0,0,4,3,12]
+"classBalloonParty_1_1Display_1_1CameraShakeView.html#ae1d731d794951951171c3efc6713d083":[6,0,0,4,3,12],
+"classBalloonParty_1_1Display_1_1CameraShakeView.html#af7f85b784e7379b3070a52cbb313e360":[5,0,0,4,3,6],
+"classBalloonParty_1_1Display_1_1CameraShakeView.html#af7f85b784e7379b3070a52cbb313e360":[6,0,0,4,3,6]
 };

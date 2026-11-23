@@ -1,13 +1,5 @@
 var NAVTREEINDEX153 =
 {
-"structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html#ad4c0c4ffe5380847234b49ea0483e9aa":[6,0,0,12,7,68,1],
-"structBalloonParty_1_1Shared_1_1MushroomBlastTuning.html":[5,0,0,12,46],
-"structBalloonParty_1_1Shared_1_1MushroomBlastTuning.html":[6,0,0,12,46],
-"structBalloonParty_1_1Shared_1_1MushroomBlastTuning.html#a4f2f17655f77410c76c525d54613f747":[5,0,0,12,46,2],
-"structBalloonParty_1_1Shared_1_1MushroomBlastTuning.html#a4f2f17655f77410c76c525d54613f747":[6,0,0,12,46,2],
-"structBalloonParty_1_1Shared_1_1MushroomBlastTuning.html#a5c1d3998530262597ba29066d1cffa99":[5,0,0,12,46,0],
-"structBalloonParty_1_1Shared_1_1MushroomBlastTuning.html#a5c1d3998530262597ba29066d1cffa99":[6,0,0,12,46,0],
-"structBalloonParty_1_1Shared_1_1MushroomBlastTuning.html#a61980edc598fc9582e2b559648be6c97":[5,0,0,12,46,1],
 "structBalloonParty_1_1Shared_1_1MushroomBlastTuning.html#a61980edc598fc9582e2b559648be6c97":[6,0,0,12,46,1],
 "structBalloonParty_1_1Shared_1_1MushroomChainRules.html":[5,0,0,12,48],
 "structBalloonParty_1_1Shared_1_1MushroomChainRules.html":[6,0,0,12,48],
@@ -249,5 +241,13 @@ var NAVTREEINDEX153 =
 "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCutTimeline.html#aec5d621ea5601ef23158c2acceaa0239a1a46b4cdebd891663bff56824736236c":[6,0,0,13,0,0,19,0,3],
 "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCutTimeline.html#aec5d621ea5601ef23158c2acceaa0239a545e303beabc266f9c55f08c03784f35":[5,0,0,13,0,0,19,0,4],
 "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCutTimeline.html#aec5d621ea5601ef23158c2acceaa0239a545e303beabc266f9c55f08c03784f35":[6,0,0,13,0,0,19,0,4],
-"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCutTimeline.html#aec5d621ea5601ef23158c2acceaa0239aaefbc20d5c3605cd16f59d1876298696":[5,0,0,13,0,0,19,0,2]
+"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCutTimeline.html#aec5d621ea5601ef23158c2acceaa0239aaefbc20d5c3605cd16f59d1876298696":[5,0,0,13,0,0,19,0,2],
+"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCutTimeline.html#aec5d621ea5601ef23158c2acceaa0239aaefbc20d5c3605cd16f59d1876298696":[6,0,0,13,0,0,19,0,2],
+"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCutTimeline.html#aec5d621ea5601ef23158c2acceaa0239ac8d2fc8ed10b21e647d7f58d4436b050":[5,0,0,13,0,0,19,0,0],
+"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCutTimeline.html#aec5d621ea5601ef23158c2acceaa0239ac8d2fc8ed10b21e647d7f58d4436b050":[6,0,0,13,0,0,19,0,0],
+"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCutTimeline.html#af4aba6b6ce95abe734db5879eae2733a":[5,0,0,13,0,0,19,2],
+"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCutTimeline.html#af4aba6b6ce95abe734db5879eae2733a":[6,0,0,13,0,0,19,2],
+"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCutTimeline.html#af722bb483e70228f5276f230814ecc05":[5,0,0,13,0,0,19,14],
+"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomCutTimeline.html#af722bb483e70228f5276f230814ecc05":[6,0,0,13,0,0,19,14],
+"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1MushroomSporeBurst.html":[5,0,0,13,0,0,20]
 };

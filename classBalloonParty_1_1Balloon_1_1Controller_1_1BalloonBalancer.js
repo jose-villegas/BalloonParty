@@ -50,7 +50,6 @@ var classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer =
     [ "_finalizeBalanceMove", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#add3338e6b2649a7dfb4ddb46b43c3b4a", null ],
     [ "_flightRebalanceElapsed", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#ac885f15813dd6e4232210af6fa7ea94f", null ],
     [ "_formations", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a5de1bb5c53addf7d23709088cb8d6625", null ],
-    [ "_formDue", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#af798d772da74c55b73271a649cd5980a", null ],
     [ "_generation", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a8fb438be26459faebd371c41fc0c26b1", null ],
     [ "_grid", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a8c4d12a02ff18c8f206f4dd8f34b73c9", null ],
     [ "_liftedViews", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#aaceca271246040b59e74d748e2dfa809", null ],

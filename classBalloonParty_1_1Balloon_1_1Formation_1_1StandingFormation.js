@@ -5,7 +5,6 @@ var classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation =
     [ "Armoured", "classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation.html#a7611b3df8f7c6d9786bff64e426a1b42", null ],
     [ "ArrangedOnPass", "classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation.html#a60f8de529e3eb03c664a987d2ec1cfcc", null ],
     [ "Clockwise", "classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation.html#a657d6023a77b6442f501887ddeab2c07", null ],
-    [ "CyclesLeft", "classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation.html#ad5718e2e7a3cfe4b0a4306ec8205e886", null ],
     [ "FormedOnWave", "classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation.html#a2a5712231b53ffdf1dcb7823d4bacf57", null ],
     [ "Heading", "classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation.html#afbb3961fe761fccb2e2435f93704a750", null ],
     [ "Host", "classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation.html#ada68dcb0930559ff344bec274c0128d9", null ],

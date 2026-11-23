@@ -1,7 +1,5 @@
 var NAVTREEINDEX61 =
 {
-"classBalloonParty_1_1Game_1_1AppLifetimeScope.html#a27c6db78ea787d8555ffb9cdbc0beb99":[5,0,0,6,12,1],
-"classBalloonParty_1_1Game_1_1AppLifetimeScope.html#a27c6db78ea787d8555ffb9cdbc0beb99":[6,0,0,6,12,1],
 "classBalloonParty_1_1Game_1_1AppLifetimeScope.html#a3326e031087dbe623af65bb101bba146":[5,0,0,6,12,2],
 "classBalloonParty_1_1Game_1_1AppLifetimeScope.html#a3326e031087dbe623af65bb101bba146":[6,0,0,6,12,2],
 "classBalloonParty_1_1Game_1_1AppLifetimeScope.html#a45c040b34eb439e957d5eb6a33453302":[5,0,0,6,12,4],
@@ -249,5 +247,7 @@ var NAVTREEINDEX61 =
 "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealBoardHold.html#af516f7ddff411e24ab462fc3b446865c":[5,0,0,6,1,0,2],
 "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealBoardHold.html#af516f7ddff411e24ab462fc3b446865c":[6,0,0,6,1,0,2],
 "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealBoardHold.html#afcbae95ff2ec6554ce10d94580e6ddf2":[5,0,0,6,1,0,10],
-"classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealBoardHold.html#afcbae95ff2ec6554ce10d94580e6ddf2":[6,0,0,6,1,0,10]
+"classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealBoardHold.html#afcbae95ff2ec6554ce10d94580e6ddf2":[6,0,0,6,1,0,10],
+"classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html":[5,0,0,6,1,1],
+"classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html":[6,0,0,6,1,1]
 };

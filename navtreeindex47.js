@@ -1,7 +1,5 @@
 var NAVTREEINDEX47 =
 {
-"classBalloonParty_1_1Display_1_1CameraShakeView.html#af7f85b784e7379b3070a52cbb313e360":[5,0,0,4,3,6],
-"classBalloonParty_1_1Display_1_1CameraShakeView.html#af7f85b784e7379b3070a52cbb313e360":[6,0,0,4,3,6],
 "classBalloonParty_1_1Display_1_1EffectsClearingController.html":[5,0,0,4,5],
 "classBalloonParty_1_1Display_1_1EffectsClearingController.html":[6,0,0,4,5],
 "classBalloonParty_1_1Display_1_1EffectsClearingController.html#a0259cb2c607fff42d30be1c58286f561":[5,0,0,4,5,6],
@@ -249,5 +247,7 @@ var NAVTREEINDEX47 =
 "classBalloonParty_1_1Display_1_1NavigationCameraReveal.html#ae7dfa7d5853ad0ac452f8c66ca6c2bbe":[5,0,0,4,12,5],
 "classBalloonParty_1_1Display_1_1NavigationCameraReveal.html#ae7dfa7d5853ad0ac452f8c66ca6c2bbe":[6,0,0,4,12,5],
 "classBalloonParty_1_1Display_1_1NavigationCameraReveal.html#af2dffb6ddd4e08805f86db50b75750b1":[5,0,0,4,12,2],
-"classBalloonParty_1_1Display_1_1NavigationCameraReveal.html#af2dffb6ddd4e08805f86db50b75750b1":[6,0,0,4,12,2]
+"classBalloonParty_1_1Display_1_1NavigationCameraReveal.html#af2dffb6ddd4e08805f86db50b75750b1":[6,0,0,4,12,2],
+"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html":[5,0,0,4,13],
+"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html":[6,0,0,4,13]
 };

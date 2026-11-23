@@ -1,7 +1,5 @@
 var NAVTREEINDEX120 =
 {
-"classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice.html#ae9ac2f4718bcb8986eaa882d62f57f09":[5,0,0,16,8,4,31],
-"classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice.html#ae9ac2f4718bcb8986eaa882d62f57f09":[6,0,0,16,8,4,31],
 "classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice.html#aefb17a13fb498f9c2a03c4613c25daf4":[5,0,0,16,8,4,15],
 "classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice.html#aefb17a13fb498f9c2a03c4613c25daf4":[6,0,0,16,8,4,15],
 "classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice.html#af4acdc6ede3f831d434d19bbcdef6788":[5,0,0,16,8,4,12],
@@ -249,5 +247,7 @@ var NAVTREEINDEX120 =
 "classBalloonParty_1_1UI_1_1TimeOfDaySpecular.html#a3ccf35a60a0ec5626227b15dae5b83bd":[5,0,0,16,23,9],
 "classBalloonParty_1_1UI_1_1TimeOfDaySpecular.html#a3ccf35a60a0ec5626227b15dae5b83bd":[6,0,0,16,23,9],
 "classBalloonParty_1_1UI_1_1TimeOfDaySpecular.html#a44888fdc361f851dfe8b7cc20fdc7648":[5,0,0,16,23,10],
-"classBalloonParty_1_1UI_1_1TimeOfDaySpecular.html#a44888fdc361f851dfe8b7cc20fdc7648":[6,0,0,16,23,10]
+"classBalloonParty_1_1UI_1_1TimeOfDaySpecular.html#a44888fdc361f851dfe8b7cc20fdc7648":[6,0,0,16,23,10],
+"classBalloonParty_1_1UI_1_1TimeOfDaySpecular.html#a45b94eb171451214488327418f77396e":[5,0,0,16,23,14],
+"classBalloonParty_1_1UI_1_1TimeOfDaySpecular.html#a45b94eb171451214488327418f77396e":[6,0,0,16,23,14]
 };

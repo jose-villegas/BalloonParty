@@ -1,7 +1,5 @@
 var NAVTREEINDEX66 =
 {
-"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a10fca38ec0c8d172d6755a7258ad7ff1":[5,0,0,6,6,5,0],
-"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a10fca38ec0c8d172d6755a7258ad7ff1":[6,0,0,6,6,5,0],
 "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a13ca9962bfa3604103112910ae089b75":[5,0,0,6,6,5,3],
 "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a13ca9962bfa3604103112910ae089b75":[6,0,0,6,6,5,3],
 "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a31d41353205ba9fabcbc12f476f0d9cd":[5,0,0,6,6,5,6],
@@ -249,5 +247,7 @@ var NAVTREEINDEX66 =
 "classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html#ae5f3bc5e238af45ca86b5051ae50adc5":[5,0,0,6,7,0,8],
 "classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html#ae5f3bc5e238af45ca86b5051ae50adc5":[6,0,0,6,7,0,8],
 "classBalloonParty_1_1Game_1_1Level_1_1LevelCompletion.html":[5,0,0,6,7,5],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelCompletion.html":[6,0,0,6,7,5]
+"classBalloonParty_1_1Game_1_1Level_1_1LevelCompletion.html":[6,0,0,6,7,5],
+"classBalloonParty_1_1Game_1_1Level_1_1LevelCompletion.html#a6453747b2ae27a337b4f1f51215fdbea":[5,0,0,6,7,5,0],
+"classBalloonParty_1_1Game_1_1Level_1_1LevelCompletion.html#a6453747b2ae27a337b4f1f51215fdbea":[6,0,0,6,7,5,0]
 };

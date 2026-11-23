@@ -1,7 +1,5 @@
 var NAVTREEINDEX121 =
 {
-"classBalloonParty_1_1UI_1_1TimeOfDaySpecular.html#a45b94eb171451214488327418f77396e":[5,0,0,16,23,14],
-"classBalloonParty_1_1UI_1_1TimeOfDaySpecular.html#a45b94eb171451214488327418f77396e":[6,0,0,16,23,14],
 "classBalloonParty_1_1UI_1_1TimeOfDaySpecular.html#a462cdd777f06cc56fa87de1c686dd7ec":[5,0,0,16,23,6],
 "classBalloonParty_1_1UI_1_1TimeOfDaySpecular.html#a462cdd777f06cc56fa87de1c686dd7ec":[6,0,0,16,23,6],
 "classBalloonParty_1_1UI_1_1TimeOfDaySpecular.html#a59f781f27b39257be8c2164793b84957":[5,0,0,16,23,16],
@@ -249,5 +247,7 @@ var NAVTREEINDEX121 =
 "disturbance_field.html":[2,14],
 "disturbance_field.html#autotoc_md1163":[2,14,0],
 "disturbance_field.html#autotoc_md1164":[2,14,0,0],
-"disturbance_field.html#autotoc_md1165":[2,14,0,1]
+"disturbance_field.html#autotoc_md1165":[2,14,0,1],
+"disturbance_field.html#autotoc_md1166":[2,14,0,2],
+"disturbance_field.html#autotoc_md1167":[2,14,0,2,0]
 };

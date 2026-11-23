@@ -1,7 +1,5 @@
 var NAVTREEINDEX38 =
 {
-"classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#a5a53c6c1fd3c1e2d16731f3b7782bcd5":[5,0,0,3,5,31,6],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#a5a53c6c1fd3c1e2d16731f3b7782bcd5":[6,0,0,3,5,31,6],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#a5bfae6209ce1f3872c3f7e63dcfbfebe":[5,0,0,3,5,31,5],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#a5bfae6209ce1f3872c3f7e63dcfbfebe":[6,0,0,3,5,31,5],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#a5ca05cef16b6e171606436791f5c710b":[5,0,0,3,5,31,66],
@@ -249,5 +247,7 @@ var NAVTREEINDEX38 =
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SmokeFieldSettings.html#ac7190d2709c2a9ea3f7089be1f833f16":[5,0,0,3,5,34,26],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SmokeFieldSettings.html#ac7190d2709c2a9ea3f7089be1f833f16":[6,0,0,3,5,34,26],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SmokeFieldSettings.html#ad6fb0a86f5b6749834d49878d229ae1c":[5,0,0,3,5,34,17],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1SmokeFieldSettings.html#ad6fb0a86f5b6749834d49878d229ae1c":[6,0,0,3,5,34,17]
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SmokeFieldSettings.html#ad6fb0a86f5b6749834d49878d229ae1c":[6,0,0,3,5,34,17],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SmokeFieldSettings.html#ada97f029f697027f7125ce7858f97105":[5,0,0,3,5,34,16],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SmokeFieldSettings.html#ada97f029f697027f7125ce7858f97105":[6,0,0,3,5,34,16]
 };

@@ -1,9 +1,7 @@
 var NAVTREEINDEX33 =
 {
-"classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#af0ad02648238f6455c729431f511c064":[5,0,0,3,0,30,58],
-"classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#af0ad02648238f6455c729431f511c064":[6,0,0,3,0,30,58],
-"classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#af1faf93d863550ddbded0b8b84a960d0":[5,0,0,3,0,30,37],
-"classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#af1faf93d863550ddbded0b8b84a960d0":[6,0,0,3,0,30,37],
+"classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#af1faf93d863550ddbded0b8b84a960d0":[5,0,0,3,0,30,34],
+"classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#af1faf93d863550ddbded0b8b84a960d0":[6,0,0,3,0,30,34],
 "classBalloonParty_1_1Configuration_1_1Buffs_1_1BuffConfiguration.html":[5,0,0,3,1,0],
 "classBalloonParty_1_1Configuration_1_1Buffs_1_1BuffConfiguration.html":[6,0,0,3,1,0],
 "classBalloonParty_1_1Configuration_1_1Buffs_1_1BuffConfiguration.html#a075af2587b088fdd2eeb856eaf189456":[5,0,0,3,1,0,1],
@@ -249,5 +247,7 @@ var NAVTREEINDEX33 =
 "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#ae60311bd8c76312f028198fc30ce93bf":[5,0,0,3,2,0,23],
 "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#ae60311bd8c76312f028198fc30ce93bf":[6,0,0,3,2,0,23],
 "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#aea4ae2609bf3378588fe2acd1835298b":[5,0,0,3,2,0,108],
-"classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#aea4ae2609bf3378588fe2acd1835298b":[6,0,0,3,2,0,108]
+"classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#aea4ae2609bf3378588fe2acd1835298b":[6,0,0,3,2,0,108],
+"classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#aeadf058f65759094e5ac5e29cb279de1":[5,0,0,3,2,0,77],
+"classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#aeadf058f65759094e5ac5e29cb279de1":[6,0,0,3,2,0,77]
 };

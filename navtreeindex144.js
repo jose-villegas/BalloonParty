@@ -1,13 +1,5 @@
 var NAVTREEINDEX144 =
 {
-"structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedFloat.html#a3355f8f91105e356cdca90f6bfb2fae3":[6,0,0,3,11,1,3],
-"structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedFloat.html#a7777d2f409aba15847dcf002a68b0dd2":[5,0,0,3,11,1,7],
-"structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedFloat.html#a7777d2f409aba15847dcf002a68b0dd2":[6,0,0,3,11,1,7],
-"structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedFloat.html#a89e1a24fec5e3d69a6d3cfee098f88db":[5,0,0,3,11,1,5],
-"structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedFloat.html#a89e1a24fec5e3d69a6d3cfee098f88db":[6,0,0,3,11,1,5],
-"structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedFloat.html#ab1a7ae8448f8d591cbf3ed8e9aa7d621":[5,0,0,3,11,1,0],
-"structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedFloat.html#ab1a7ae8448f8d591cbf3ed8e9aa7d621":[6,0,0,3,11,1,0],
-"structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedFloat.html#ade8f47254e98bdebbd8450d4998d4483":[5,0,0,3,11,1,2],
 "structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedFloat.html#ade8f47254e98bdebbd8450d4998d4483":[6,0,0,3,11,1,2],
 "structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedFloat.html#adfa95ae2da4c20f63256a188af8994d4":[5,0,0,3,11,1,4],
 "structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedFloat.html#adfa95ae2da4c20f63256a188af8994d4":[6,0,0,3,11,1,4],
@@ -249,5 +241,13 @@ var NAVTREEINDEX144 =
 "structBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerEventRow.html#a12af803516d350f0f71004e5c944cc8d":[6,0,0,5,2,2,3],
 "structBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerEventRow.html#ad80ea2bd697f849fd71b24d8aa700eb8":[5,0,0,5,2,2,0],
 "structBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerEventRow.html#ad80ea2bd697f849fd71b24d8aa700eb8":[6,0,0,5,2,2,0],
-"structBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerEventRow.html#adb5fbce694591f72d7dcb7f4adaa7996":[5,0,0,5,2,2,1]
+"structBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerEventRow.html#adb5fbce694591f72d7dcb7f4adaa7996":[5,0,0,5,2,2,1],
+"structBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerEventRow.html#adb5fbce694591f72d7dcb7f4adaa7996":[6,0,0,5,2,2,1],
+"structBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Palette.html":[5,0,0,5,20,1],
+"structBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Palette.html":[6,0,0,5,20,1],
+"structBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Palette.html#a1425e6455c8aa4ade139106029a9c002":[5,0,0,5,20,1,3],
+"structBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Palette.html#a1425e6455c8aa4ade139106029a9c002":[6,0,0,5,20,1,3],
+"structBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Palette.html#a46c2be4e6248ec04b90573ac2035f572":[5,0,0,5,20,1,2],
+"structBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Palette.html#a46c2be4e6248ec04b90573ac2035f572":[6,0,0,5,20,1,2],
+"structBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Palette.html#aa9639b6ef59bea97e001418c9256c554":[5,0,0,5,20,1,1]
 };

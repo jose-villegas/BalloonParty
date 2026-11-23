@@ -1,7 +1,5 @@
 var NAVTREEINDEX60 =
 {
-"classBalloonParty_1_1Editor_1_1SpriteCombine_1_1SpriteLayerCombinerEditor.html#aab7e54a09896590d40ceff0aa0d31a8c":[5,0,0,5,8,0,11],
-"classBalloonParty_1_1Editor_1_1SpriteCombine_1_1SpriteLayerCombinerEditor.html#aab7e54a09896590d40ceff0aa0d31a8c":[6,0,0,5,8,0,11],
 "classBalloonParty_1_1Editor_1_1SpriteCombine_1_1SpriteLayerCombinerEditor.html#aad25cb6da9977adca34a7abbcc5d3248":[5,0,0,5,8,0,3],
 "classBalloonParty_1_1Editor_1_1SpriteCombine_1_1SpriteLayerCombinerEditor.html#aad25cb6da9977adca34a7abbcc5d3248":[6,0,0,5,8,0,3],
 "classBalloonParty_1_1Editor_1_1SpriteCombine_1_1SpriteLayerCombinerEditor.html#ac5fbfa0bf68cacbb7a3dc05f79ae418d":[5,0,0,5,8,0,4],
@@ -249,5 +247,7 @@ var NAVTREEINDEX60 =
 "classBalloonParty_1_1Game_1_1AppLifetimeScope.html#a21dc7b02f40b8dcb9b5ecc6188003a70":[5,0,0,6,12,7],
 "classBalloonParty_1_1Game_1_1AppLifetimeScope.html#a21dc7b02f40b8dcb9b5ecc6188003a70":[6,0,0,6,12,7],
 "classBalloonParty_1_1Game_1_1AppLifetimeScope.html#a230305700c5f8ae5c6ed7cde6a983c4d":[5,0,0,6,12,8],
-"classBalloonParty_1_1Game_1_1AppLifetimeScope.html#a230305700c5f8ae5c6ed7cde6a983c4d":[6,0,0,6,12,8]
+"classBalloonParty_1_1Game_1_1AppLifetimeScope.html#a230305700c5f8ae5c6ed7cde6a983c4d":[6,0,0,6,12,8],
+"classBalloonParty_1_1Game_1_1AppLifetimeScope.html#a27c6db78ea787d8555ffb9cdbc0beb99":[5,0,0,6,12,1],
+"classBalloonParty_1_1Game_1_1AppLifetimeScope.html#a27c6db78ea787d8555ffb9cdbc0beb99":[6,0,0,6,12,1]
 };

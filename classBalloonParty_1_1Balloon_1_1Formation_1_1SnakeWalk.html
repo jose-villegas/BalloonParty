@@ -133,6 +133,9 @@ Static Package Functions</h2></td></tr>
 <tr class="memitem:a7d2326aed94c62ecd1e8e6305b9f5505" id="r_a7d2326aed94c62ecd1e8e6305b9f5505"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7d2326aed94c62ecd1e8e6305b9f5505">TryStep</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, Vector2Int head, Vector2Int tail, int heading, int lastRow, <a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1ShotWall.html">ShotWall</a> wall, out int direction)</td></tr>
 <tr class="memdesc:a7d2326aed94c62ecd1e8e6305b9f5505"><td class="mdescLeft">&#160;</td><td class="mdescRight">The direction the head at <em>head</em> , walking <em>heading</em> , steps in.  <br /></td></tr>
 <tr class="separator:a7d2326aed94c62ecd1e8e6305b9f5505"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aedb2207c37a5af9bf5600a85d1443957" id="r_aedb2207c37a5af9bf5600a85d1443957"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aedb2207c37a5af9bf5600a85d1443957">TryStepTowardRow</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, Vector2Int head, int heading, int lastRow, int row, bool boxedIn, out int direction)</td></tr>
+<tr class="memdesc:aedb2207c37a5af9bf5600a85d1443957"><td class="mdescLeft">&#160;</td><td class="mdescRight">The direction the head of a snake that keeps to <em>row</em>  steps in: it climbs toward the row, and on it walks only east or west, so once its whole body is up the snake slides along the row.  <br /></td></tr>
+<tr class="separator:aedb2207c37a5af9bf5600a85d1443957"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
@@ -141,12 +144,28 @@ Static Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
+<tr class="memitem:a5f0111e53dd1432b276940b15f80e239" id="r_a5f0111e53dd1432b276940b15f80e239"><td class="memItemLeft" align="right" valign="top">static readonly int[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5f0111e53dd1432b276940b15f80e239">ClimbEast</a> = { 5, 4, 0, 3, 1, 2 }</td></tr>
+<tr class="separator:a5f0111e53dd1432b276940b15f80e239"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46ba12fb882a33f01177aae003d95a40" id="r_a46ba12fb882a33f01177aae003d95a40"><td class="memItemLeft" align="right" valign="top">static readonly int[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a46ba12fb882a33f01177aae003d95a40">ClimbWest</a> = { 4, 5, 3, 0, 2, 1 }</td></tr>
+<tr class="separator:a46ba12fb882a33f01177aae003d95a40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a483cc0450509af648a971bbb760dfcb0" id="r_a483cc0450509af648a971bbb760dfcb0"><td class="memItemLeft" align="right" valign="top">static readonly int[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a483cc0450509af648a971bbb760dfcb0">DescendEast</a> = { 1, 2, 0, 3 }</td></tr>
+<tr class="separator:a483cc0450509af648a971bbb760dfcb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30c7d6644ebaed667137313f9356cb29" id="r_a30c7d6644ebaed667137313f9356cb29"><td class="memItemLeft" align="right" valign="top">static readonly int[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a30c7d6644ebaed667137313f9356cb29">DescendWest</a> = { 2, 1, 3, 0 }</td></tr>
+<tr class="separator:a30c7d6644ebaed667137313f9356cb29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af44d2751477c0b81f51248b8cec806f6" id="r_af44d2751477c0b81f51248b8cec806f6"><td class="memItemLeft" align="right" valign="top">static readonly int[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af44d2751477c0b81f51248b8cec806f6">DipEast</a> = { 0, 3, 1, 2 }</td></tr>
+<tr class="separator:af44d2751477c0b81f51248b8cec806f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9aa95c0d8ccca84d0b25501e1d000ac" id="r_af9aa95c0d8ccca84d0b25501e1d000ac"><td class="memItemLeft" align="right" valign="top">static readonly int[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af9aa95c0d8ccca84d0b25501e1d000ac">DipWest</a> = { 3, 0, 2, 1 }</td></tr>
+<tr class="separator:af9aa95c0d8ccca84d0b25501e1d000ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7aa9c7f7ca958d34f4f683cbafd06979" id="r_a7aa9c7f7ca958d34f4f683cbafd06979"><td class="memItemLeft" align="right" valign="top">static readonly int[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7aa9c7f7ca958d34f4f683cbafd06979">SlideEast</a> = { 0, 3 }</td></tr>
+<tr class="separator:a7aa9c7f7ca958d34f4f683cbafd06979"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92bfa5d8f15e4cb237de760bbf653640" id="r_a92bfa5d8f15e4cb237de760bbf653640"><td class="memItemLeft" align="right" valign="top">static readonly int[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a92bfa5d8f15e4cb237de760bbf653640">SlideWest</a> = { 3, 0 }</td></tr>
+<tr class="separator:a92bfa5d8f15e4cb237de760bbf653640"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d29387fb1fec45c50cdd954513230dd" id="r_a1d29387fb1fec45c50cdd954513230dd"><td class="memItemLeft" align="right" valign="top">static readonly int[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1d29387fb1fec45c50cdd954513230dd">Turns</a> = { 0, 1, -1, 2, -2 }</td></tr>
 <tr class="separator:a1d29387fb1fec45c50cdd954513230dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Where a snake's head steps next: on along its heading when that slot is open, else the gentlest open turn, right before left. </p>
-<p>A slot is open when empty or held by a balloon the snake trades places with (<a class="el" href="#ab66444997071a82cc86b0f24ae2f1473" title="Whether a snake may walk into occupant &#39;s slot, sending it to the slot its tail leaves: a balloon tha...">CanPassThrough</a>). It never turns back, and its own body fills the slots behind it, so it never walks over itself. Nor does it step where its body would link the board's unbreakables side to side. </p>
+<p>A slot is open when empty or held by a balloon the snake trades places with (<a class="el" href="#ab66444997071a82cc86b0f24ae2f1473" title="Whether a snake may walk into occupant &#39;s slot, sending it to the slot its tail leaves: a balloon tha...">CanPassThrough</a>). It never turns back, and its own body fills the slots behind it, so it never walks over itself. Nor does it step where its body would link the board's unbreakables side to side. The toughs' snake keeps to one row instead (<a class="el" href="#aedb2207c37a5af9bf5600a85d1443957" title="The direction the head of a snake that keeps to row  steps in: it climbs toward the row,...">TryStepTowardRow</a>), and its head may fold back beside its body; the body still fills the slot right behind it. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="ab66444997071a82cc86b0f24ae2f1473" name="ab66444997071a82cc86b0f24ae2f1473"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab66444997071a82cc86b0f24ae2f1473">&#9670;&#160;</a></span>CanPassThrough()</h2>
@@ -329,7 +348,240 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="aedb2207c37a5af9bf5600a85d1443957" name="aedb2207c37a5af9bf5600a85d1443957"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aedb2207c37a5af9bf5600a85d1443957">&#9670;&#160;</a></span>TryStepTowardRow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool BalloonParty.Balloon.Formation.SnakeWalk.TryStepTowardRow </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a></td>          <td class="paramname"><span class="paramname"><em>grid</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector2Int</td>          <td class="paramname"><span class="paramname"><em>head</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>heading</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>lastRow</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>row</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>boxedIn</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out int</td>          <td class="paramname"><span class="paramname"><em>direction</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The direction the head of a snake that keeps to <em>row</em>  steps in: it climbs toward the row, and on it walks only east or west, so once its whole body is up the snake slides along the row. </p>
+<p>False when every way it may take is off the board, below <em>lastRow</em> , above the row while climbing, or taken; the caller then turns the snake round, tail leading. With <em>boxedIn</em>  (both ends found no step) a head on the row may also step down off it, and climbs back on the next step. </p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a5f0111e53dd1432b276940b15f80e239" name="a5f0111e53dd1432b276940b15f80e239"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f0111e53dd1432b276940b15f80e239">&#9670;&#160;</a></span>ClimbEast</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int [] BalloonParty.Balloon.Formation.SnakeWalk.ClimbEast = { 5, 4, 0, 3, 1, 2 }</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a46ba12fb882a33f01177aae003d95a40" name="a46ba12fb882a33f01177aae003d95a40"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46ba12fb882a33f01177aae003d95a40">&#9670;&#160;</a></span>ClimbWest</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int [] BalloonParty.Balloon.Formation.SnakeWalk.ClimbWest = { 4, 5, 3, 0, 2, 1 }</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a483cc0450509af648a971bbb760dfcb0" name="a483cc0450509af648a971bbb760dfcb0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a483cc0450509af648a971bbb760dfcb0">&#9670;&#160;</a></span>DescendEast</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int [] BalloonParty.Balloon.Formation.SnakeWalk.DescendEast = { 1, 2, 0, 3 }</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a30c7d6644ebaed667137313f9356cb29" name="a30c7d6644ebaed667137313f9356cb29"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30c7d6644ebaed667137313f9356cb29">&#9670;&#160;</a></span>DescendWest</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int [] BalloonParty.Balloon.Formation.SnakeWalk.DescendWest = { 2, 1, 3, 0 }</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af44d2751477c0b81f51248b8cec806f6" name="af44d2751477c0b81f51248b8cec806f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af44d2751477c0b81f51248b8cec806f6">&#9670;&#160;</a></span>DipEast</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int [] BalloonParty.Balloon.Formation.SnakeWalk.DipEast = { 0, 3, 1, 2 }</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af9aa95c0d8ccca84d0b25501e1d000ac" name="af9aa95c0d8ccca84d0b25501e1d000ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9aa95c0d8ccca84d0b25501e1d000ac">&#9670;&#160;</a></span>DipWest</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int [] BalloonParty.Balloon.Formation.SnakeWalk.DipWest = { 3, 0, 2, 1 }</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7aa9c7f7ca958d34f4f683cbafd06979" name="a7aa9c7f7ca958d34f4f683cbafd06979"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7aa9c7f7ca958d34f4f683cbafd06979">&#9670;&#160;</a></span>SlideEast</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int [] BalloonParty.Balloon.Formation.SnakeWalk.SlideEast = { 0, 3 }</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a92bfa5d8f15e4cb237de760bbf653640" name="a92bfa5d8f15e4cb237de760bbf653640"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92bfa5d8f15e4cb237de760bbf653640">&#9670;&#160;</a></span>SlideWest</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int [] BalloonParty.Balloon.Formation.SnakeWalk.SlideWest = { 3, 0 }</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a1d29387fb1fec45c50cdd954513230dd" name="a1d29387fb1fec45c50cdd954513230dd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1d29387fb1fec45c50cdd954513230dd">&#9670;&#160;</a></span>Turns</h2>
 

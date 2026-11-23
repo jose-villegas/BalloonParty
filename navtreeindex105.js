@@ -1,7 +1,5 @@
 var NAVTREEINDEX105 =
 {
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html#a08da43df6360e982a7c181a099363f9d":[5,0,0,13,0,0,27,1],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html#a08da43df6360e982a7c181a099363f9d":[6,0,0,13,0,0,27,1],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html#a0c1fd040ac538217f25bd66a63ad42da":[5,0,0,13,0,0,27,3],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html#a0c1fd040ac538217f25bd66a63ad42da":[6,0,0,13,0,0,27,3],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html#a13d2601304b0dbb3023514b6e8e9583d":[5,0,0,13,0,0,27,0],
@@ -249,5 +247,7 @@ var NAVTREEINDEX105 =
 "classBalloonParty_1_1Slots_1_1Actor_1_1MushroomPlacementSource.html#aa76607ec624d795b461a846278568f25":[5,0,0,13,0,23,3],
 "classBalloonParty_1_1Slots_1_1Actor_1_1MushroomPlacementSource.html#aa76607ec624d795b461a846278568f25":[6,0,0,13,0,23,3],
 "classBalloonParty_1_1Slots_1_1Actor_1_1MushroomPlacementSource.html#ab9d15374ac983885787b67126423427e":[5,0,0,13,0,23,2],
-"classBalloonParty_1_1Slots_1_1Actor_1_1MushroomPlacementSource.html#ab9d15374ac983885787b67126423427e":[6,0,0,13,0,23,2]
+"classBalloonParty_1_1Slots_1_1Actor_1_1MushroomPlacementSource.html#ab9d15374ac983885787b67126423427e":[6,0,0,13,0,23,2],
+"classBalloonParty_1_1Slots_1_1Actor_1_1MushroomPlacementSource.html#adc0b7847776f51ef03ab5f4060fef390":[5,0,0,13,0,23,0],
+"classBalloonParty_1_1Slots_1_1Actor_1_1MushroomPlacementSource.html#adc0b7847776f51ef03ab5f4060fef390":[6,0,0,13,0,23,0]
 };

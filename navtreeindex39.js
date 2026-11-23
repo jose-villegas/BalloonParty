@@ -1,7 +1,5 @@
 var NAVTREEINDEX39 =
 {
-"classBalloonParty_1_1Configuration_1_1Effects_1_1SmokeFieldSettings.html#ada97f029f697027f7125ce7858f97105":[5,0,0,3,5,34,16],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1SmokeFieldSettings.html#ada97f029f697027f7125ce7858f97105":[6,0,0,3,5,34,16],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SmokeFieldSettings.html#adde8633318044c95a77bf2259cf6f25b":[5,0,0,3,5,34,22],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SmokeFieldSettings.html#adde8633318044c95a77bf2259cf6f25b":[6,0,0,3,5,34,22],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SmokeFieldSettings.html#ae5b06d50f4d420808adb6d821fba3273":[5,0,0,3,5,34,21],
@@ -249,5 +247,7 @@ var NAVTREEINDEX39 =
 "classBalloonParty_1_1Configuration_1_1GridActors_1_1MushroomSettings.html#a88bb8a59d33bcb6586bd05ff02c7601f":[5,0,0,3,6,5,25],
 "classBalloonParty_1_1Configuration_1_1GridActors_1_1MushroomSettings.html#a88bb8a59d33bcb6586bd05ff02c7601f":[6,0,0,3,6,5,25],
 "classBalloonParty_1_1Configuration_1_1GridActors_1_1MushroomSettings.html#a8b054ceaf26578a285d9fb9522099448":[5,0,0,3,6,5,9],
-"classBalloonParty_1_1Configuration_1_1GridActors_1_1MushroomSettings.html#a8b054ceaf26578a285d9fb9522099448":[6,0,0,3,6,5,9]
+"classBalloonParty_1_1Configuration_1_1GridActors_1_1MushroomSettings.html#a8b054ceaf26578a285d9fb9522099448":[6,0,0,3,6,5,9],
+"classBalloonParty_1_1Configuration_1_1GridActors_1_1MushroomSettings.html#a9efe78b3f9a3df854aa3a2d1e40c9865":[5,0,0,3,6,5,4],
+"classBalloonParty_1_1Configuration_1_1GridActors_1_1MushroomSettings.html#a9efe78b3f9a3df854aa3a2d1e40c9865":[6,0,0,3,6,5,4]
 };

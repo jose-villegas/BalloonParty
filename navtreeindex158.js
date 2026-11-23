@@ -1,13 +1,5 @@
 var NAVTREEINDEX158 =
 {
-"structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a11dd18570c10430a11750c2eb568ab2c":[6,0,0,14,26,16],
-"structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a13d013506632605b32f4a2f2cfebe3fc":[5,0,0,14,26,3],
-"structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a13d013506632605b32f4a2f2cfebe3fc":[6,0,0,14,26,3],
-"structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a344cc65a94b06ec5a8963f06f9cab965":[5,0,0,14,26,5],
-"structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a344cc65a94b06ec5a8963f06f9cab965":[6,0,0,14,26,5],
-"structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a45e2e9743dceda3ae170e0a6cb89f432":[5,0,0,14,26,4],
-"structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a45e2e9743dceda3ae170e0a6cb89f432":[6,0,0,14,26,4],
-"structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a7337d1ee8e1b9ec6ffc8e4a18521ee60":[5,0,0,14,26,6],
 "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a7337d1ee8e1b9ec6ffc8e4a18521ee60":[6,0,0,14,26,6],
 "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a81a3d13afb675c63a83d4cdf92e67ee9":[5,0,0,14,26,8],
 "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a81a3d13afb675c63a83d4cdf92e67ee9":[6,0,0,14,26,8],
@@ -249,5 +241,13 @@ var NAVTREEINDEX158 =
 "style_guide.html#autotoc_md1111":[1,0,12,2],
 "style_guide.html#autotoc_md1112":[1,0,12,3],
 "style_guide.html#autotoc_md1113":[1,0,12,4],
-"style_guide.html#autotoc_md1115":[1,0,13]
+"style_guide.html#autotoc_md1115":[1,0,13],
+"style_guide.html#autotoc_md1116":[1,0,13,0],
+"style_guide.html#autotoc_md1117":[1,0,13,1],
+"style_guide.html#autotoc_md1118":[1,0,13,2],
+"style_guide.html#autotoc_md1120":[1,0,14],
+"style_guide.html#autotoc_md1122":[1,0,15],
+"style_guide.html#autotoc_md1123":[1,0,15,0],
+"style_guide.html#autotoc_md1125":[1,0,16],
+"style_guide.html#autotoc_md1127":[1,0,17]
 };
