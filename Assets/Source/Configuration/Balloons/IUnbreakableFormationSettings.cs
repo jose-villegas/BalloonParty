@@ -74,6 +74,12 @@ namespace BalloonParty.Configuration.Balloons
         /// <summary>Seconds of play between the tough snake's steps, on a clock of its own apart from the beat.</summary>
         float ToughSnakeStepSeconds { get; }
 
+        /// <summary>
+        ///     The row the tough snake keeps to, counted from the top (0 is the top row). It climbs toward it, and on
+        ///     it walks only left and right, so once its body is up the whole snake slides along it.
+        /// </summary>
+        int ToughSnakeRow { get; }
+
         /// <summary>A formation picks at random among this many of its least-travel spots.</summary>
         int SpotChoices { get; }
 

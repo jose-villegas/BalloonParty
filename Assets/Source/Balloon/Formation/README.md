@@ -234,9 +234,9 @@ The shot solver does not predict a spinner's turn either.
 ## Tough snakes
 
 The board's toughs and toughers (`ToughBalloonModel`, an `IArmouredFormationMember`) are one body: a
-single snake of their own, walking with the same `SnakeWalk` as an unbreakable snake but slower, on a clock
+single snake of their own. It walks through the board as an unbreakable snake does, but slower, on a clock
 of its own: a step every `ToughSnakeStepSeconds` (1.5 s) of play, held by a pause or a doomed glide
-(`BalloonBalancer`).
+(`BalloonBalancer`). And it keeps to one row near the top, where an unbreakable snake roams.
 Toughs never join an unbreakable formation, and unbreakables never join theirs.
 
 - **Starting as one body.** The initial fill deals the toughs side by side on one line
@@ -278,6 +278,15 @@ Toughs never join an unbreakable formation, and unbreakables never join theirs.
   formation), anchored actors and anything static still stand in its way, and then it turns as any snake
   does. The balancer carries out each step as one batch (`SlotMove`): every mover leaves its slot before
   any lands, so the head and the balloon it passes can trade slots.
+- **Keeping to its row.** The tough snake heads for `ToughSnakeRow` (1, the row below the top) and walks
+  along it (`SnakeWalk.TryStepTowardRow`). Below it, the head climbs: north-east or north-west, the way it
+  leans first; with both taken it walks along its own row, and steps down only when nothing else is open. On
+  the row it walks only east or west, so once the body has followed the head up, the whole snake slides
+  along the row; until then the body trails below, and a tough that falls in at the tail climbs with it.
+  At the board's edge, or against something in its way, it turns round, its tail leading, and slides back.
+  Boxed in at both ends (an unbreakable formation or a mushroom on the row), the leading end dips to the row
+  below to get round, and climbs back on the next step. A head above the row steps down to it. The row is
+  never deeper than the last row a snake walks (`HorizontalBottomClearance`).
 - **Keeping its shape.** The snake never re-orders: each member walks into the slot the one ahead of it
   left, a tough that's hit keeps its place, and one that joins stays at the tail. Boxed in, the snake
   turns round like any snake, its tail leading, and walks on in the same order.
@@ -530,6 +539,7 @@ The settings are `IUnbreakableFormationSettings`, nested in `BalloonsConfigurati
 - `HorizontalMaxMembers` (3, for horizontal lines; an item cover takes three to six)
 - `SnakeMaxMembers` (4)
 - `ToughSnakeStepSeconds` (1.5: seconds of play between the tough snake's steps, its own clock apart from the beat)
+- `ToughSnakeRow` (1: the row the tough snake climbs to and slides along, counted from the top)
 - `SpotChoices` (3)
 - `GiftCoverPreference` (2: slots of travel, for each member, that a cover's spot round a gift balloon counts
   as cheaper than one round an item carrier; 0 for no preference)

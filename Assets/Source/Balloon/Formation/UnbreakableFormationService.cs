@@ -365,6 +365,25 @@ namespace BalloonParty.Balloon.Formation
             }
         }
 
+        // Where the head of snake, walking its first walking members, steps next. The toughs' snake keeps to its
+        // row (ToughSnakeRow, no deeper than the last row a snake walks): it climbs to it and slides along it, and
+        // boxedIn (both ends tried) lets it dip below the row to get round what blocks it. An unbreakable snake
+        // roams the rows it walks.
+        private bool TryStep(
+            StandingFormation snake, int walking, int lastRow, ShotWall wall, out int direction, bool boxedIn = false)
+        {
+            var members = snake.MemberList;
+            var head = members[0].SlotIndex.Value;
+            if (snake.Armoured)
+            {
+                var row = Mathf.Clamp(_settings.ToughSnakeRow, 0, lastRow);
+                return SnakeWalk.TryStepTowardRow(_grid, head, snake.Heading, lastRow, row, boxedIn, out direction);
+            }
+
+            return SnakeWalk.TryStep(_grid, head, members[walking - 1].SlotIndex.Value, snake.Heading, lastRow, wall,
+                out direction);
+        }
+
         // A snake keeps a horizontal line's rows: never in the bottom HorizontalBottomClearance rows.
         private int LastSnakeRow()
         {
@@ -456,8 +475,7 @@ namespace BalloonParty.Balloon.Formation
             // A tough never walls, so moving one can't close a wall. Every snake walks through the board's balloons
             // rather than wait for an empty slot, which a full board seldom has: it steps on every tick.
             var wall = snake.Armoured ? null : LoadWall();
-            if (!SnakeWalk.TryStep(_grid, members[0].SlotIndex.Value, members[walking - 1].SlotIndex.Value,
-                    snake.Heading, lastRow, wall, out var direction))
+            if (!TryStep(snake, walking, lastRow, wall, out var direction))
             {
                 // A part split off a plowed member can't turn round through it.
                 if (walking < members.Count)
@@ -466,8 +484,8 @@ namespace BalloonParty.Balloon.Formation
                 }
 
                 TurnRound(snake);
-                if (!SnakeWalk.TryStep(_grid, members[0].SlotIndex.Value, members[^1].SlotIndex.Value, snake.Heading,
-                        lastRow, wall, out direction))
+                if (!TryStep(snake, members.Count, lastRow, wall, out direction)
+                    && !(snake.Armoured && TryStep(snake, members.Count, lastRow, wall, out direction, boxedIn: true)))
                 {
                     // Boxed in at both ends: it stays turned round, and next beat tries the other end again.
                     return;

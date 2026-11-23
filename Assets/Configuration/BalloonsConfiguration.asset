@@ -355,6 +355,7 @@ MonoBehaviour:
     _horizontalMaxMembers: 3
     _snakeMaxMembers: 4
     _toughSnakeMinMembers: 2
+    _toughSnakeRow: 1
     _spotChoices: 3
     _reinforcementChance: 0.35
     _reinforcementCeiling: 4

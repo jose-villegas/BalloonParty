@@ -10,12 +10,27 @@ namespace BalloonParty.Balloon.Formation
     ///     Where a snake's head steps next: on along its heading when that slot is open, else the gentlest open
     ///     turn, right before left. A slot is open when empty or held by a balloon the snake trades places with
     ///     (<see cref="CanPassThrough" />). It never turns back, and its own body fills the slots behind it, so it never
-    ///     walks over itself. Nor does it step where its body would link the board's unbreakables side to side.
+    ///     walks over itself. Nor does it step where its body would link the board's unbreakables side to side. The
+    ///     toughs' snake keeps to one row instead (<see cref="TryStepTowardRow" />), and its head may fold back
+    ///     beside its body; the body still fills the slot right behind it.
     /// </summary>
     internal static class SnakeWalk
     {
         // Straight on, then 60° right and left, then 120° right and left.
         private static readonly int[] Turns = { 0, 1, -1, 2, -2 };
+
+        // A snake that keeps to one row, by the way it leans (east: heading east, south-east or north-east). Below
+        // the row: up first, the way it leans, then along its own row, then down as a last resort. On the row:
+        // along it only, unless boxed in at both ends, when it dips to the row below to get round. Above it: down
+        // to it, then along.
+        private static readonly int[] ClimbEast = { 5, 4, 0, 3, 1, 2 };
+        private static readonly int[] ClimbWest = { 4, 5, 3, 0, 2, 1 };
+        private static readonly int[] SlideEast = { 0, 3 };
+        private static readonly int[] SlideWest = { 3, 0 };
+        private static readonly int[] DipEast = { 0, 3, 1, 2 };
+        private static readonly int[] DipWest = { 3, 0, 2, 1 };
+        private static readonly int[] DescendEast = { 1, 2, 0, 3 };
+        private static readonly int[] DescendWest = { 2, 1, 3, 0 };
 
         /// <summary>
         ///     The direction the head at <paramref name="head" />, walking <paramref name="heading" />, steps in. False
@@ -35,6 +50,37 @@ namespace BalloonParty.Balloon.Formation
                     && !ClosesWall(wall, next, tail))
                 {
                     direction = turned;
+                    return true;
+                }
+            }
+
+            direction = heading;
+            return false;
+        }
+
+        /// <summary>
+        ///     The direction the head of a snake that keeps to <paramref name="row" /> steps in: it climbs toward the
+        ///     row, and on it walks only east or west, so once its whole body is up the snake slides along the row.
+        ///     False when every way it may take is off the board, below <paramref name="lastRow" />, above the row
+        ///     while climbing, or taken; the caller then turns the snake round, tail leading. With
+        ///     <paramref name="boxedIn" /> (both ends found no step) a head on the row may also step down off it, and
+        ///     climbs back on the next step.
+        /// </summary>
+        internal static bool TryStepTowardRow(
+            SlotGrid grid, Vector2Int head, int heading, int lastRow, int row, bool boxedIn, out int direction)
+        {
+            var east = heading is 0 or 1 or 5;
+            var order = head.y > row ? east ? ClimbEast : ClimbWest
+                : head.y < row ? east ? DescendEast : DescendWest
+                : boxedIn ? east ? DipEast : DipWest
+                : east ? SlideEast : SlideWest;
+            for (var i = 0; i < order.Length; i++)
+            {
+                var next = HexCoordinates.Step(head, order[i]);
+                if (grid.InBounds(next) && next.y <= lastRow && (head.y < row || next.y >= row)
+                    && IsOpen(grid, next))
+                {
+                    direction = order[i];
                     return true;
                 }
             }

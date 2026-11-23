@@ -48,6 +48,9 @@ namespace BalloonParty.Tests.Balloon
             _settings.SnakeMaxMembers.Returns(4);
             _settings.BeatSeconds.Returns(1.7f);
             _settings.ReshapeEveryCycles.Returns(3);
+
+            // The row GrowSnake's snake stands on, so it walks along it.
+            _settings.ToughSnakeRow.Returns(2);
             _settings.BottomClearance.Returns(2);
             _settings.SpotChoices.Returns(1);
             _settings.HorizontalWeight.Returns(1f);
@@ -340,12 +343,73 @@ namespace BalloonParty.Tests.Balloon
         {
             var snake = GrowSnake(3, 2, 1);
             var head = snake.Members[0].SlotIndex.Value;
+            var tail = snake.Members[2];
+            var tailSlot = tail.SlotIndex.Value;
             _grid.Place(new UnbreakableBalloonModel(new BalloonModelConfig()), null, HexCoordinates.Step(head, 0));
 
             _service.StepToughSnake(Relocate);
 
-            Assert.AreEqual(1, snake.Heading, "east is blocked: it turns south-east");
-            Assert.AreEqual(HexCoordinates.Step(head, 1), snake.Members[0].SlotIndex.Value);
+            Assert.AreSame(tail, snake.Members[0], "east is blocked, and on its row it only walks along: it turns round");
+            Assert.AreEqual(3, snake.Heading);
+            Assert.AreEqual(HexCoordinates.Step(tailSlot, 3), tail.SlotIndex.Value);
+        }
+
+        [Test]
+        public void BelowItsRow_TheToughSnakeClimbs_ThenWalksAlongTheRow()
+        {
+            _settings.ToughSnakeRow.Returns(1);
+            var snake = GrowSnake(3, 2, 1);
+            var head = snake.Members[0];
+
+            _service.StepToughSnake(Relocate);
+
+            Assert.AreEqual(5, snake.Heading, "below its row: up, north-east, the way it leans");
+            Assert.AreEqual(1, head.SlotIndex.Value.y);
+
+            var onTheRow = head.SlotIndex.Value;
+            _service.StepToughSnake(Relocate);
+
+            Assert.AreEqual(0, snake.Heading, "on its row: along it, never higher");
+            Assert.AreEqual(HexCoordinates.Step(onTheRow, 0), head.SlotIndex.Value);
+            Assert.IsTrue(AllOnTheirSlots());
+        }
+
+        [Test]
+        public void OnItsRow_BoxedInAtBothEnds_TheSnakeDipsBelowTheRow_RatherThanStandStill()
+        {
+            var snake = GrowSnake(3, 2, 1);
+            var tail = snake.Members[2];
+            var tailSlot = tail.SlotIndex.Value;
+            _grid.Place(new UnbreakableBalloonModel(new BalloonModelConfig()), null,
+                HexCoordinates.Step(snake.Members[0].SlotIndex.Value, 0));
+            if (_grid.InBounds(HexCoordinates.Step(tailSlot, 3)))
+            {
+                _grid.Place(new UnbreakableBalloonModel(new BalloonModelConfig()), null, HexCoordinates.Step(tailSlot, 3));
+            }
+
+            _service.StepToughSnake(Relocate);
+
+            Assert.AreSame(tail, snake.Members[0], "turned round, the tail leading");
+            Assert.AreEqual(3, tail.SlotIndex.Value.y, "both ways along the row are blocked: it dips below");
+            Assert.IsTrue(AllOnTheirSlots());
+        }
+
+        [Test]
+        public void OnItsRow_TheWholeSnakeSlidesToTheEdge_AndBack()
+        {
+            var snake = GrowSnake(3, 2, 1);
+            Assert.IsTrue(snake.Members.All(m => m.SlotIndex.Value.y == 2), "control: the body lies along row 2");
+            var turned = false;
+
+            for (var step = 0; step < 2 * _grid.Columns; step++)
+            {
+                _service.StepToughSnake(Relocate);
+                Assert.IsTrue(snake.Members.All(m => m.SlotIndex.Value.y == 2), "it keeps to its row: step " + step);
+                turned |= snake.Heading == 3;
+            }
+
+            Assert.IsTrue(turned, "at the east edge it turned round and slid back west");
+            Assert.IsTrue(IsOneLine(snake));
         }
 
         [Test]

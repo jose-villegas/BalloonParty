@@ -46,6 +46,10 @@ namespace BalloonParty.Configuration.Balloons
                  "which the unbreakables' formations keep, so a pair of toughers walks as one too.")]
         [SerializeField] [Min(1)] private int _toughSnakeMinMembers = 2;
 
+        [Tooltip("The row the tough snake keeps to, counted from the top (0 is the top row). It climbs toward it, " +
+                 "and on it walks only left and right, so once its body is up the whole snake slides along it.")]
+        [SerializeField] [Min(0)] private int _toughSnakeRow = 1;
+
         [Tooltip("A formation picks at random among this many of its least-travel spots, so it doesn't " +
                  "always form in the same place. 1 = always the least travel.")]
         [SerializeField] [Min(1)] private int _spotChoices = 3;
@@ -160,6 +164,7 @@ namespace BalloonParty.Configuration.Balloons
         public int SnakeMaxMembers => Mathf.Clamp(_snakeMaxMembers, _minMembers, MaxMembers);
         public float ToughSnakeStepSeconds => Mathf.Max(0.1f, _toughSnakeStepSeconds);
         public int ToughSnakeMinMembers => Mathf.Max(1, _toughSnakeMinMembers);
+        public int ToughSnakeRow => Mathf.Max(0, _toughSnakeRow);
         public int SpotChoices => _spotChoices;
         public float GiftCoverPreference => Mathf.Max(0f, _giftCoverPreference);
         public float HorizontalWeight => _horizontalWeight;
