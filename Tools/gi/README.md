@@ -22,20 +22,18 @@ main checkout). The tool drives `Tools/stage`. A capture takes a few minutes. It
 
 ## The board
 
-The sky at dusk (level 7, seed 7, the enemies taken off): coloured balloons fill the top rows, so what comes
-after rests in the middle of the board, away from the danger gradient at the top. Below them five unbreakables
-are placed round a golden balloon, among toughs, toughers, coloured balloons and a disco ball; the unbreakables
-form a ring on the run's first reshape, and the toughs a snake of their own. The level's own puff clouds stay,
-and the board is placed round them. For the staging the formation rolls rings only: the tool sets every other shape's weight to 0
-and puts the weights back afterwards. A ring stands where its roll puts it, so the tool says when the golden
-balloon is not its centre; look at the crop before publishing then.
+The meadow at night (level 7, seed 7, its obstacles taken off): coloured balloons fill the top four rows, so
+what comes after rests in the middle of the board, away from the danger gradient at the top. Below them hang three
+columns of different lengths, with open grass beside each. The night's light comes from below, so a balloon's shadow
+falls up beside its column, on the grass, and on the meadow the cloud gate takes none of it away. The board is
+simple balloons only: toughs walk along their row, and a golden balloon gives off light of its own. A balloon
+placed in a slot with an empty one above it floats up into it, so the tool says when a placed balloon is not where
+it was put; look at the crop before publishing then.
 
-What the board is, the squares the pictures crop, the texel the tap diagram follows (`TAP_TEXEL`) and the values
-each setting is taken at (`VARIANTS`) are constants at the top of `gi_doc.py`. There are two squares. `CROP`
-holds the ring and the snake, for the bounce. `SHADOW_CROP` holds the balloons above the ring, for the shadow:
-the formation's glow is in the capture and in the light field, so round the ring the bounce lifts the sky and
-takes much of the shadow back. Only the frame's own crop is cut at capture time; the maps are cut when composing,
-so a change to `SHADOW_CROP` needs only `--compose`.
+What the board is, the square the pictures crop (`CROP`), the texel the tap diagram follows (`TAP_TEXEL`) and the
+values each setting is taken at (`VARIANTS`) are constants at the top of `gi_doc.py`. Only the frame's own crop
+is cut at capture time; the maps are cut, and the tap diagram drawn, when composing, so a change to `TAP_TEXEL`
+needs only `--compose`.
 
 ## What a capture holds
 
@@ -44,8 +42,8 @@ so a change to `SHADOW_CROP` needs only `--compose`.
 | Where | What |
 |---|---|
 | `capture.json` | The view (the camera's size, the light's direction), the crop, the game's GI settings and the values each was taken at |
-| `as-is/` | The game's settings (`game/`), the frame without the light quad (`unlit/`), the phone's lighter buffer (`phone/`), and each setting at its lower and higher value (`<setting>-<value>/`) |
-| `shadow-alone/` | For the settings that move the shadow: the same with the cloud gate at 0, so the whole shadow shows, and the bounce strength at 0, so the light quad lays on the shadow alone |
+| `as-is/` | The game's settings (`game/`), the frame without the light quad (`unlit/`), and each setting at its lower and higher value (`<setting>-<value>/`) |
+| `shadow-alone/` | For the settings that move the shadow: the same with the bounce strength at 0, so the light quad lays on the shadow alone |
 | `doc/` | The composed pictures, which `--publish` copies to `Docs/gi/` |
 
 Each folder has `crop.png` (the frame's square), every render map as `Tools/stage`'s `maps` writes them, and
@@ -56,5 +54,4 @@ Each folder has `crop.png` (the frame's square), every render map as `Tools/stag
 The settings are the `SceneLightFieldSettings` asset the running game reads. The tool writes each value into
 it in Play mode, has the buffer worked out again, steps three frames and captures. An asset changed in Play
 mode keeps the change after it, so before it leaves Play mode the tool writes every value back as it found it,
-reads them all again, and stops with an error if any reads back different. The phone's buffer is the
-`_LOW_QUALITY_SMEAR` keyword switched on the buffer's material for one capture.
+reads them all again, and stops with an error if any reads back different.

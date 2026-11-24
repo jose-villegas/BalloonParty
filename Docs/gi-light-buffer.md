@@ -6,11 +6,10 @@ of a small texture, a shader looks along the light: toward it, for how much stan
 the frame by it. [How a frame is made](frame-composition.md) shows where it sits among the other maps; this
 page takes it apart.
 
-The pictures are of a staged board: the sky at dusk, unbreakables standing in a ring round a golden balloon, a
-disco ball beside them, toughs and toughers joined in a snake above, and coloured balloons round them all. The
-light comes from the lower left. The first pictures, and the bounce's, show the ring and the snake, 3.8 world
-units across. The shadow's show the balloons above the ring, 2.6 across: round the ring the bounce takes much of
-the shadow back (see [Laid over the frame](#laid-over-the-frame)).
+The pictures are of a staged board: the meadow at night, its obstacles taken off, with coloured balloons and
+three columns of them hanging below the rest. The night's light comes from the lower right, so each balloon's
+shadow falls up and to its left, on the grass beside its column. Every picture shows the same square, 4.2 world
+units across.
 
 | Without the light | With it | What the light does, three times stronger | The bounce (colour) | The shadow (alpha) |
 |---|---|---|---|---|
@@ -21,7 +20,7 @@ In *what the light does*, mid grey is a pixel the light leaves as it is: darker 
 ## What it reads
 
 It reads the scene capture: the board drawn again, small, by a camera of its own. Its colour is what is
-there; its alpha is *coverage*, how much of the texel a sprite covers (open sky is 0). The capture is 154 x
+there; its alpha is *coverage*, how much of the texel a sprite covers (open ground or sky is 0). The capture is 154 x
 274 for a 1080 x 1920 screen (`SceneCaptureDownscale` 7), and it has a mip chain: each level is half the size
 of the one before, every texel the average of four in the level below. A tap that reads a higher level still
 costs one fetch, but averages a wider square: level 3 averages 8 x 8 texels of the capture.
@@ -54,8 +53,8 @@ The shadow's spread is `ShadowMipSpread` (0.65): its last tap reads level 1.95, 
 (0.14 world units) across. The bounce's is `MipSpread` (1.25): its last tap reads level 3.75, about 13 texels
 (0.47 world units), most of a balloon.
 
-Where the taps land, for a texel in the gap between the golden balloon and two of its ring (the light's
-direction is the evening light's here; the field turns it near a local light):
+Where the taps land, for a texel on the grass beside the green balloon at the foot of the longest column, on
+its side away from the light. No local light is near, so the direction is the night's own:
 
 <img src="gi/taps.png" width="820">
 
@@ -72,11 +71,11 @@ stands between the texel and the light. Two masks then take away what should not
 - **The surface under it.** In the sky, a shadow is something the backdrop's clouds receive (the background
   field). The shadow is multiplied by their density there, as much as `CloudShadowGate` says (0.66): at 1
   the shadow falls only on them, at 0 everywhere. On the meadow the grass is such a surface everywhere, so
-  there the gate takes nothing away.
+  there the gate takes nothing away, as on this board.
 
-| Coverage | The shadow, gate 0 | The backdrop's clouds | The shadow, gate 0.66 (the game's) | The shadow, gate 1 |
-|---|---|---|---|---|
-| <img src="gi/mask-coverage.png" width="150"> | <img src="gi/mask-shadow-gate-low.png" width="150"> | <img src="gi/mask-clouds.png" width="150"> | <img src="gi/mask-shadow-gate-game.png" width="150"> | <img src="gi/mask-shadow-gate-high.png" width="150"> |
+| Coverage | The shadow |
+|---|---|
+| <img src="gi/mask-coverage.png" width="200"> | <img src="gi/mask-shadow.png" width="200"> |
 
 ### The bounce
 
@@ -105,24 +104,15 @@ grey leaves a pixel as it is.
 - **The cap.** The lift is held under what would take the brightest balloon past the start of the bloom, so
   by day only what glows of itself blooms. At night, with the balloons dimmer, the bounce has more room.
 
-Shadow and bounce go into one multiplier, so a bright bounce takes shadow back. Round a standing formation it
-does: the capture sees the formation's blue glow, and the glow's light in the light field raises the bounce's
-strength there, so the sky between the ring's members is lifted almost half as much as the shadow darkens it.
-Above the ring, where no local light reaches, the dark toughs pull the bounce the other way, and the open sky is
-darkened nearly twice as much.
-
-| Round the ring | Above it |
-|---|---|
-| <img src="gi/light-ring.jpg" width="200"> | <img src="gi/light-shadow.jpg" width="200"> |
+Shadow and bounce go into one multiplier, so a bright bounce takes some of the shadow back.
 
 ## The settings
 
 They are on `SceneLightFieldSettings` (`Assets/Configuration/SceneLightFieldSettings.asset`), read as
 `IScreenSpaceLightSettings`, and tune live in Play mode. Each below is shown at a lower value, the game's,
-and a higher one, on the same board. The ones that move the shadow are shown on the balloons above the ring,
-taken with the cloud gate at 0, so the whole shadow shows, and with the bounce strength at 0, so *what the light
-does* is the shadow alone (their buffer's bounce is still shown). The ones that move only the bounce are shown
-round the ring, at the game's settings.
+and a higher one, on the same board. The ones that move the shadow are taken with the bounce strength at 0, so
+*what the light does* is the shadow alone (their buffer's bounce is still shown). The ones that move only the
+bounce are taken at the game's settings.
 
 **`ShadowMipSpread`**: how fast the shadow's cone widens. Low, every tap reads single texels and the shadow
 keeps a sharp edge; high, it blurs into a soft dark between the balloons.
@@ -163,7 +153,7 @@ the neighbours, and the shadow from further along the light.
 | Bounce | <img src="gi/tapStart-0-bounce.png" width="150"> | <img src="gi/tapStart-game-bounce.png" width="150"> | <img src="gi/tapStart-3-bounce.png" width="150"> |
 
 **`MipSpread`**: how fast the bounce's cone widens. At 0 the bounce is eight sharp samples a march, and the
-ring's outline stays in it; high, it is a soft wash.
+balloons' outlines stay in it; high, it is a soft wash.
 
 | | 0 | 1.25 (the game's) | 3 |
 |---|---|---|---|
@@ -180,9 +170,9 @@ same, and colour gathers evenly round each texel.
 | Bounce | <img src="gi/secondaryBounceWeight-0-bounce.png" width="150"> | <img src="gi/secondaryBounceWeight-game-bounce.png" width="150"> | <img src="gi/secondaryBounceWeight-1-bounce.png" width="150"> |
 
 **`ShadowStrength`** and **`BounceStrength`** only weigh the buffer as the quad lays it on, so the buffer is
-the same at every value. `ShadowStrength` is shown with the bounce off, like the other shadow settings. At dusk
-`ShadowStrengthOverAngle` scales it 2.58 times, and the strength the quad uses stops at 1, so the game's 0.385
-lays on 0.99 and a higher value changes almost nothing. At a
+the same at every value. `ShadowStrength` is shown with the bounce off, like the other shadow settings. At night
+`ShadowStrengthOverAngle` scales it 2.24 times, and the strength the quad uses stops at 1, so the game's 0.385
+lays on 0.86 and 1 lays on 1. At a
 bounce strength of 1 the balloons tint what is round them strongly, and where the lift reaches the cap the
 light is flat: the shadow is lost under it.
 
@@ -190,18 +180,6 @@ light is flat: the shadow is lost under it.
 |---|---|---|---|
 | `ShadowStrength` | <img src="gi/shadowStrength-0-light.jpg" width="150"> | <img src="gi/shadowStrength-game-light.jpg" width="150"> | <img src="gi/shadowStrength-1-light.jpg" width="150"> |
 | `BounceStrength` | <img src="gi/bounceStrength-0-light.jpg" width="150"> | <img src="gi/bounceStrength-game-light.jpg" width="150"> | <img src="gi/bounceStrength-1-light.jpg" width="150"> |
-
-## On a phone
-
-A phone build runs a lighter buffer (`_LOW_QUALITY_SMEAR`): five taps a march instead of eight, and two
-bounce marches, the one away from the light and one side, instead of four. That is 16 fetches a texel
-instead of 41. The bounce leans further to one side, and the shadow reaches 0.42 world units instead of 0.67.
-
-| | The Editor | A phone |
-|---|---|---|
-| What the light does | <img src="gi/editor-light.jpg" width="150"> | <img src="gi/phone-light.jpg" width="150"> |
-| Shadow | <img src="gi/editor-shadow.png" width="150"> | <img src="gi/phone-shadow.png" width="150"> |
-| Bounce | <img src="gi/editor-bounce.png" width="150"> | <img src="gi/phone-bounce.png" width="150"> |
 
 ## Where it lives
 
