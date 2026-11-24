@@ -54,8 +54,11 @@ Two more textures are made from the picture itself, not from play.
 | **GI light buffer** | 77 x 137 | <img src="frame/map-gi-light-buffer.jpg" width="150"> | <img src="frame/map-gi-light-buffer-alpha.jpg" width="150"> | <img src="frame/map-gi-light-buffer.webp" width="150"> | <img src="frame/map-gi-light-buffer-alpha.webp" width="150"> |
 
 The GI light buffer is worked out from the scene capture. Its colour is the *bounce*: the scene's colours
-gathered from the side the light comes from, so a red balloon lends a little red to what stands behind it.
-Its alpha is the *shadow*: how much stands between the point and the light.
+gathered round the point, most from the side away from the light, where what stands there turns its lit face
+to it; so a red balloon lends a little red to what stands in front of its lit side. Its alpha is the
+*shadow*: how much stands between the point and the light. [The GI light buffer](gi-light-buffer.md) takes it
+apart: the march along the light, the mip levels that widen it into a cone, what is masked out, and what each
+setting does.
 
 Both run one frame late: the buffer is worked out from the capture of the frame before. The capture is also
 what the unbreakable balloon's chrome and the disco ball's mirrors reflect.
