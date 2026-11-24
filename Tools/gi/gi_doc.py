@@ -55,8 +55,9 @@ FORMATION_WEIGHTS = ["_horizontalWeight", "_diagonalWeight", "_itemCoverWeight",
 LIGHT_FIELDS = ["_smearDistance", "_tapDecay", "_tapStart", "_mipSpread", "_shadowMipSpread", "_shadowStrength",
                 "_bounceStrength", "_secondaryBounceWeight", "_cloudShadowGate"]
 
-# Each setting at a lower and a higher value than the game's. "as-is" keeps the game's cloud gate; "gate-off" sets
-# it to 0 so the whole shadow shows, for the settings that move the shadow.
+# Each setting at a lower and a higher value than the game's. "as-is" keeps the game's settings; "shadow-alone", for
+# the settings that move the shadow, sets the cloud gate to 0 so the whole shadow shows and the bounce strength to 0
+# so none of it is taken back.
 VARIANTS = {
     "_shadowMipSpread": (0.01, 2.0),
     "_smearDistance": (0.3, 1.5),
@@ -70,8 +71,8 @@ VARIANTS = {
 }
 PASSES = {
     "as-is": ({}, list(VARIANTS)),
-    "gate-off": ({"_cloudShadowGate": 0.0},
-                 ["_shadowMipSpread", "_smearDistance", "_tapDecay", "_tapStart", "_shadowStrength"]),
+    "shadow-alone": ({"_cloudShadowGate": 0.0, "_bounceStrength": 0.0},
+                     ["_shadowMipSpread", "_smearDistance", "_tapDecay", "_tapStart", "_shadowStrength"]),
 }
 
 REFLECT = r'''

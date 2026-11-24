@@ -120,7 +120,9 @@ darkened nearly twice as much.
 They are on `SceneLightFieldSettings` (`Assets/Configuration/SceneLightFieldSettings.asset`), read as
 `IScreenSpaceLightSettings`, and tune live in Play mode. Each below is shown at a lower value, the game's,
 and a higher one, on the same board. The ones that move the shadow are shown on the balloons above the ring,
-taken with the cloud gate at 0, so the whole shadow shows; the ones that move only the bounce, round the ring.
+taken with the cloud gate at 0, so the whole shadow shows, and with the bounce strength at 0, so *what the light
+does* is the shadow alone (their buffer's bounce is still shown). The ones that move only the bounce are shown
+round the ring, at the game's settings.
 
 **`ShadowMipSpread`**: how fast the shadow's cone widens. Low, every tap reads single texels and the shadow
 keeps a sharp edge; high, it blurs into a soft dark between the balloons.
@@ -178,8 +180,11 @@ same, and colour gathers evenly round each texel.
 | Bounce | <img src="gi/secondaryBounceWeight-0-bounce.png" width="150"> | <img src="gi/secondaryBounceWeight-game-bounce.png" width="150"> | <img src="gi/secondaryBounceWeight-1-bounce.png" width="150"> |
 
 **`ShadowStrength`** and **`BounceStrength`** only weigh the buffer as the quad lays it on, so the buffer is
-the same at every value. At a bounce strength of 1 the balloons tint what is round them strongly, and
-where the lift reaches the cap the light is flat: the shadow is lost under it.
+the same at every value. `ShadowStrength` is shown with the bounce off, like the other shadow settings. At dusk
+`ShadowStrengthOverAngle` scales it 2.58 times, and the strength the quad uses stops at 1, so the game's 0.385
+lays on 0.99 and a higher value changes almost nothing. At a
+bounce strength of 1 the balloons tint what is round them strongly, and where the lift reaches the cap the
+light is flat: the shadow is lost under it.
 
 | | 0 | The game's (0.385, 0.25) | 1 |
 |---|---|---|---|

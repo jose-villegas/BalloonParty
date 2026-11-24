@@ -21,11 +21,11 @@ MIP_LEVELS = 6
 # shown in. The ring's glow lifts the sky round it through the bounce, so what moves the shadow is shown on the
 # balloons above it, where no local light reaches.
 KNOBS = {
-    "shadowMipSpread": ("gate-off", ("shadow",), "shadow"),
-    "smearDistance": ("gate-off", ("shadow", "bounce"), "shadow"),
-    "tapDecay": ("gate-off", ("shadow", "bounce"), "shadow"),
-    "tapStart": ("gate-off", ("shadow", "bounce"), "shadow"),
-    "shadowStrength": ("gate-off", (), "shadow"),
+    "shadowMipSpread": ("shadow-alone", ("shadow",), "shadow"),
+    "smearDistance": ("shadow-alone", ("shadow", "bounce"), "shadow"),
+    "tapDecay": ("shadow-alone", ("shadow", "bounce"), "shadow"),
+    "tapStart": ("shadow-alone", ("shadow", "bounce"), "shadow"),
+    "shadowStrength": ("shadow-alone", (), "shadow"),
     "mipSpread": ("as-is", ("bounce",), "ring"),
     "secondaryBounceWeight": ("as-is", ("bounce",), "ring"),
     "bounceStrength": ("as-is", (), "ring"),

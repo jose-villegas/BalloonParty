@@ -45,7 +45,7 @@ so a change to `SHADOW_CROP` needs only `--compose`.
 |---|---|
 | `capture.json` | The view (the camera's size, the light's direction), the crop, the game's GI settings and the values each was taken at |
 | `as-is/` | The game's settings (`game/`), the frame without the light quad (`unlit/`), the phone's lighter buffer (`phone/`), and each setting at its lower and higher value (`<setting>-<value>/`) |
-| `gate-off/` | The same with the cloud gate at 0, so the whole shadow shows, for the settings that move the shadow |
+| `shadow-alone/` | For the settings that move the shadow: the same with the cloud gate at 0, so the whole shadow shows, and the bounce strength at 0, so the light quad lays on the shadow alone |
 | `doc/` | The composed pictures, which `--publish` copies to `Docs/gi/` |
 
 Each folder has `crop.png` (the frame's square), every render map as `Tools/stage`'s `maps` writes them, and
