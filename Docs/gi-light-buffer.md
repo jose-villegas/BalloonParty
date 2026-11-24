@@ -6,9 +6,9 @@ of a small texture, a shader looks along the light: toward it, for how much stan
 the frame by it. [How a frame is made](frame-composition.md) shows where it sits among the other maps; this
 page takes it apart.
 
-The pictures are of a staged board: the sky at dusk, ten unbreakables standing in two rings, one round a
-golden balloon, with coloured balloons above them and a disco ball at their side. The light comes from the
-lower left. Each picture is the middle of the board, 3.4 world units across.
+The pictures are of a staged board: the sky at dusk, unbreakables standing in a ring round a golden balloon, a
+disco ball beside them, toughs and toughers joined in a snake above, and coloured balloons round them all. The
+light comes from the lower left. Each picture shows the ring and the snake, 3.8 world units across.
 
 | Without the light | With it | What the light does, three times stronger | The bounce (colour) | The shadow (alpha) |
 |---|---|---|---|---|
@@ -52,8 +52,8 @@ The shadow's spread is `ShadowMipSpread` (0.65): its last tap reads level 1.95, 
 (0.14 world units) across. The bounce's is `MipSpread` (1.25): its last tap reads level 3.75, about 13 texels
 (0.47 world units), most of a balloon.
 
-Where the taps land, for the texel at the empty middle of the lower ring (the light's direction is the
-evening light's here; the field turns it near a local light):
+Where the taps land, for a texel in the gap between the golden balloon and two of its ring (the light's
+direction is the evening light's here; the field turns it near a local light):
 
 <img src="gi/taps.png" width="820">
 
@@ -74,7 +74,7 @@ stands between the texel and the light. Two masks then take away what should not
 
 | Coverage | The shadow, gate 0 | The backdrop's clouds | The shadow, gate 0.66 (the game's) | The shadow, gate 1 |
 |---|---|---|---|---|
-| <img src="gi/mask-coverage.png" width="150"> | <img src="gi/mask-shadow-gate-0.png" width="150"> | <img src="gi/mask-clouds.png" width="150"> | <img src="gi/mask-shadow-gate-066.png" width="150"> | <img src="gi/mask-shadow-gate-1.png" width="150"> |
+| <img src="gi/mask-coverage.png" width="150"> | <img src="gi/mask-shadow-gate-low.png" width="150"> | <img src="gi/mask-clouds.png" width="150"> | <img src="gi/mask-shadow-gate-game.png" width="150"> | <img src="gi/mask-shadow-gate-high.png" width="150"> |
 
 ### The bounce
 
@@ -115,8 +115,8 @@ keeps a sharp edge; high, it blurs into a soft dark between the balloons.
 
 | | 0.01 | 0.65 (the game's) | 2 |
 |---|---|---|---|
-| What the light does | <img src="gi/shadowMipSpread-0.01-light.jpg" width="150"> | <img src="gi/shadowMipSpread-game-light.jpg" width="150"> | <img src="gi/shadowMipSpread-2.0-light.jpg" width="150"> |
-| Shadow | <img src="gi/shadowMipSpread-0.01-shadow.png" width="150"> | <img src="gi/shadowMipSpread-game-shadow.png" width="150"> | <img src="gi/shadowMipSpread-2.0-shadow.png" width="150"> |
+| What the light does | <img src="gi/shadowMipSpread-0.01-light.jpg" width="150"> | <img src="gi/shadowMipSpread-game-light.jpg" width="150"> | <img src="gi/shadowMipSpread-2-light.jpg" width="150"> |
+| Shadow | <img src="gi/shadowMipSpread-0.01-shadow.png" width="150"> | <img src="gi/shadowMipSpread-game-shadow.png" width="150"> | <img src="gi/shadowMipSpread-2-shadow.png" width="150"> |
 
 **`SmearDistance`**: how far the marches reach. Short, the shadow hugs each balloon and the bounce is close
 to a blurred picture of the board; long, the shadow reaches further and the bounce washes out toward the
@@ -144,17 +144,17 @@ the neighbours, and the shadow from further along the light.
 
 | | 0 | 1.215 (the game's) | 3 |
 |---|---|---|---|
-| What the light does | <img src="gi/tapStart-0.0-light.jpg" width="150"> | <img src="gi/tapStart-game-light.jpg" width="150"> | <img src="gi/tapStart-3.0-light.jpg" width="150"> |
-| Shadow | <img src="gi/tapStart-0.0-shadow.png" width="150"> | <img src="gi/tapStart-game-shadow.png" width="150"> | <img src="gi/tapStart-3.0-shadow.png" width="150"> |
-| Bounce | <img src="gi/tapStart-0.0-bounce.png" width="150"> | <img src="gi/tapStart-game-bounce.png" width="150"> | <img src="gi/tapStart-3.0-bounce.png" width="150"> |
+| What the light does | <img src="gi/tapStart-0-light.jpg" width="150"> | <img src="gi/tapStart-game-light.jpg" width="150"> | <img src="gi/tapStart-3-light.jpg" width="150"> |
+| Shadow | <img src="gi/tapStart-0-shadow.png" width="150"> | <img src="gi/tapStart-game-shadow.png" width="150"> | <img src="gi/tapStart-3-shadow.png" width="150"> |
+| Bounce | <img src="gi/tapStart-0-bounce.png" width="150"> | <img src="gi/tapStart-game-bounce.png" width="150"> | <img src="gi/tapStart-3-bounce.png" width="150"> |
 
 **`MipSpread`**: how fast the bounce's cone widens. At 0 the bounce is eight sharp samples a march, and the
-rings' outline stays in it; high, it is a soft wash.
+ring's outline stays in it; high, it is a soft wash.
 
 | | 0 | 1.25 (the game's) | 3 |
 |---|---|---|---|
-| What the light does | <img src="gi/mipSpread-0.0-light.jpg" width="150"> | <img src="gi/mipSpread-game-light.jpg" width="150"> | <img src="gi/mipSpread-3.0-light.jpg" width="150"> |
-| Bounce | <img src="gi/mipSpread-0.0-bounce.png" width="150"> | <img src="gi/mipSpread-game-bounce.png" width="150"> | <img src="gi/mipSpread-3.0-bounce.png" width="150"> |
+| What the light does | <img src="gi/mipSpread-0-light.jpg" width="150"> | <img src="gi/mipSpread-game-light.jpg" width="150"> | <img src="gi/mipSpread-3-light.jpg" width="150"> |
+| Bounce | <img src="gi/mipSpread-0-bounce.png" width="150"> | <img src="gi/mipSpread-game-bounce.png" width="150"> | <img src="gi/mipSpread-3-bounce.png" width="150"> |
 
 **`SecondaryBounceWeight`**: how much the three other marches count beside the first. At 0 only the march
 away from the light gathers, and the bounce is the board shifted along the light; at 1 all four count the
@@ -162,17 +162,17 @@ same, and colour gathers evenly round each texel.
 
 | | 0 | 0.5 (the game's) | 1 |
 |---|---|---|---|
-| What the light does | <img src="gi/secondaryBounceWeight-0.0-light.jpg" width="150"> | <img src="gi/secondaryBounceWeight-game-light.jpg" width="150"> | <img src="gi/secondaryBounceWeight-1.0-light.jpg" width="150"> |
-| Bounce | <img src="gi/secondaryBounceWeight-0.0-bounce.png" width="150"> | <img src="gi/secondaryBounceWeight-game-bounce.png" width="150"> | <img src="gi/secondaryBounceWeight-1.0-bounce.png" width="150"> |
+| What the light does | <img src="gi/secondaryBounceWeight-0-light.jpg" width="150"> | <img src="gi/secondaryBounceWeight-game-light.jpg" width="150"> | <img src="gi/secondaryBounceWeight-1-light.jpg" width="150"> |
+| Bounce | <img src="gi/secondaryBounceWeight-0-bounce.png" width="150"> | <img src="gi/secondaryBounceWeight-game-bounce.png" width="150"> | <img src="gi/secondaryBounceWeight-1-bounce.png" width="150"> |
 
 **`ShadowStrength`** and **`BounceStrength`** only weigh the buffer as the quad lays it on, so the buffer is
-the same at every value. At a bounce strength of 1 the lift reaches the cap nearly everywhere: the light
-lifts the whole patch evenly and the shadow is lost under it.
+the same at every value. At a bounce strength of 1 the balloons tint what is round them strongly, and
+where the lift reaches the cap the light is flat: the shadow is lost under it.
 
 | | 0 | The game's (0.385, 0.25) | 1 |
 |---|---|---|---|
-| `ShadowStrength` | <img src="gi/shadowStrength-0.0-light.jpg" width="150"> | <img src="gi/shadowStrength-game-light.jpg" width="150"> | <img src="gi/shadowStrength-1.0-light.jpg" width="150"> |
-| `BounceStrength` | <img src="gi/bounceStrength-0.0-light.jpg" width="150"> | <img src="gi/bounceStrength-game-light.jpg" width="150"> | <img src="gi/bounceStrength-1.0-light.jpg" width="150"> |
+| `ShadowStrength` | <img src="gi/shadowStrength-0-light.jpg" width="150"> | <img src="gi/shadowStrength-game-light.jpg" width="150"> | <img src="gi/shadowStrength-1-light.jpg" width="150"> |
+| `BounceStrength` | <img src="gi/bounceStrength-0-light.jpg" width="150"> | <img src="gi/bounceStrength-game-light.jpg" width="150"> | <img src="gi/bounceStrength-1-light.jpg" width="150"> |
 
 ## On a phone
 
@@ -196,5 +196,12 @@ instead of 41. The bounce leans further to one side, and the shadow reaches 0.42
 | The capture it reads | `Assets/Source/Display/SceneCaptureService.cs` |
 | The design, as a diagram | `Assets/Source/Diagrams/arch_screen_space_light.md` |
 
-The board was staged with [`Tools/stage`](../Tools/stage), each setting changed in Play mode and put back
-after.
+## Retaking the pictures
+
+With the Unity Editor open, [`Tools/gi`](../Tools/gi) stages the board, takes every setting at its three
+values, puts the settings back, and lays the pictures and the plots out again (the plots from the game's
+settings as they stand):
+
+```bash
+python3 Tools/gi/gi_doc.py --publish
+```
