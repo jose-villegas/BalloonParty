@@ -8,7 +8,9 @@ page takes it apart.
 
 The pictures are of a staged board: the sky at dusk, unbreakables standing in a ring round a golden balloon, a
 disco ball beside them, toughs and toughers joined in a snake above, and coloured balloons round them all. The
-light comes from the lower left. Each picture shows the ring and the snake, 3.8 world units across.
+light comes from the lower left. The first pictures, and the bounce's, show the ring and the snake, 3.8 world
+units across. The shadow's show the balloons above the ring, 2.6 across: round the ring the bounce takes much of
+the shadow back (see [Laid over the frame](#laid-over-the-frame)).
 
 | Without the light | With it | What the light does, three times stronger | The bounce (colour) | The shadow (alpha) |
 |---|---|---|---|---|
@@ -103,12 +105,22 @@ grey leaves a pixel as it is.
 - **The cap.** The lift is held under what would take the brightest balloon past the start of the bloom, so
   by day only what glows of itself blooms. At night, with the balloons dimmer, the bounce has more room.
 
+Shadow and bounce go into one multiplier, so a bright bounce takes shadow back. Round a standing formation it
+does: the capture sees the formation's blue glow, and the glow's light in the light field raises the bounce's
+strength there, so the sky between the ring's members is lifted almost half as much as the shadow darkens it.
+Above the ring, where no local light reaches, the dark toughs pull the bounce the other way, and the open sky is
+darkened nearly twice as much.
+
+| Round the ring | Above it |
+|---|---|
+| <img src="gi/light-ring.jpg" width="200"> | <img src="gi/light-shadow.jpg" width="200"> |
+
 ## The settings
 
 They are on `SceneLightFieldSettings` (`Assets/Configuration/SceneLightFieldSettings.asset`), read as
 `IScreenSpaceLightSettings`, and tune live in Play mode. Each below is shown at a lower value, the game's,
-and a higher one, on the same board. The ones that move the shadow were taken with the cloud gate at 0, so
-the whole shadow shows.
+and a higher one, on the same board. The ones that move the shadow are shown on the balloons above the ring,
+taken with the cloud gate at 0, so the whole shadow shows; the ones that move only the bounce, round the ring.
 
 **`ShadowMipSpread`**: how fast the shadow's cone widens. Low, every tap reads single texels and the shadow
 keeps a sharp edge; high, it blurs into a soft dark between the balloons.

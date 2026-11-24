@@ -30,8 +30,12 @@ and the board is placed round them. For the staging the formation rolls rings on
 and puts the weights back afterwards. A ring stands where its roll puts it, so the tool says when the golden
 balloon is not its centre; look at the crop before publishing then.
 
-What the board is, the square the pictures crop (`CROP`), the texel the tap diagram follows (`TAP_TEXEL`) and
-the values each setting is taken at (`VARIANTS`) are constants at the top of `gi_doc.py`.
+What the board is, the squares the pictures crop, the texel the tap diagram follows (`TAP_TEXEL`) and the values
+each setting is taken at (`VARIANTS`) are constants at the top of `gi_doc.py`. There are two squares. `CROP`
+holds the ring and the snake, for the bounce. `SHADOW_CROP` holds the balloons above the ring, for the shadow:
+the formation's glow is in the capture and in the light field, so round the ring the bounce lifts the sky and
+takes much of the shadow back. Only the frame's own crop is cut at capture time; the maps are cut when composing,
+so a change to `SHADOW_CROP` needs only `--compose`.
 
 ## What a capture holds
 

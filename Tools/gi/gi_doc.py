@@ -45,8 +45,10 @@ FORM_SECONDS = 8.0
 RING_CENTRE = (2, 5)
 # The texel the tap diagram follows: the gap between the golden balloon and two of its ring on this deal.
 TAP_TEXEL = (0.35, -0.35)
-# The square the pictures show, in world units: the ring and the tough snake above it.
+# The squares the pictures show, in world units: the ring and the tough snake above it, and, for the shadow, the
+# balloons above the ring, which no local light reaches (the ring's glow lifts the sky round it through the bounce).
 CROP = {"x": -0.45, "y": 0.7, "size": 3.8}
+SHADOW_CROP = {"x": -0.3, "y": 2.45, "size": 2.6}
 
 FORMATION_WEIGHTS = ["_horizontalWeight", "_diagonalWeight", "_itemCoverWeight", "_snakeWeight", "_ringWeight",
                      "_spinnerWeight"]
@@ -213,7 +215,8 @@ def capture(project):
                     board.relight({**game, **base, field: value})
                     board.take(os.path.join(root, f"{field.lstrip('_')}-{value:g}"))
         with open(os.path.join(OUT_DIR, "capture.json"), "w", encoding="utf-8") as handle:
-            json.dump({"view": board.view, "crop": CROP, "settings": game, "tap_texel": TAP_TEXEL,
+            json.dump({"view": board.view, "crop": CROP, "shadow_crop": SHADOW_CROP, "settings": game,
+                       "tap_texel": TAP_TEXEL,
                        "variants": {field.lstrip("_"): values for field, values in VARIANTS.items()}}, handle, indent=1)
     finally:
         # Changed in Play mode, an asset's values outlive it: put back and read back before leaving.
@@ -250,6 +253,14 @@ def main():
         for stale in list(PASSES) + ["doc"]:
             shutil.rmtree(os.path.join(OUT_DIR, stale), ignore_errors=True)
         capture(args.project)
+    else:
+        # The shadow's square is cut from the maps when composing, so a new one needs no new capture.
+        path = os.path.join(OUT_DIR, "capture.json")
+        with open(path, encoding="utf-8") as handle:
+            taken = json.load(handle)
+        taken["shadow_crop"] = SHADOW_CROP
+        with open(path, "w", encoding="utf-8") as handle:
+            json.dump(taken, handle, indent=1)
 
     import compose
     written = compose.compose(OUT_DIR)

@@ -17,16 +17,18 @@ TAPS, PHONE_TAPS = 8, 5
 LIGHT_GAIN = 3
 SIDE = 192
 MIP_LEVELS = 6
-# The settings each picture row shows: the pass it comes from, and the buffer channels it moves.
+# The settings each picture row shows: the pass it comes from, the buffer channels it moves, and the square it is
+# shown in. The ring's glow lifts the sky round it through the bounce, so what moves the shadow is shown on the
+# balloons above it, where no local light reaches.
 KNOBS = {
-    "shadowMipSpread": ("gate-off", ("shadow",)),
-    "smearDistance": ("gate-off", ("shadow", "bounce")),
-    "tapDecay": ("gate-off", ("shadow", "bounce")),
-    "tapStart": ("gate-off", ("shadow", "bounce")),
-    "shadowStrength": ("gate-off", ()),
-    "mipSpread": ("as-is", ("bounce",)),
-    "secondaryBounceWeight": ("as-is", ("bounce",)),
-    "bounceStrength": ("as-is", ()),
+    "shadowMipSpread": ("gate-off", ("shadow",), "shadow"),
+    "smearDistance": ("gate-off", ("shadow", "bounce"), "shadow"),
+    "tapDecay": ("gate-off", ("shadow", "bounce"), "shadow"),
+    "tapStart": ("gate-off", ("shadow", "bounce"), "shadow"),
+    "shadowStrength": ("gate-off", (), "shadow"),
+    "mipSpread": ("as-is", ("bounce",), "ring"),
+    "secondaryBounceWeight": ("as-is", ("bounce",), "ring"),
+    "bounceStrength": ("as-is", (), "ring"),
 }
 
 SURFACE, INK, INK2, GRID = "#fcfcfb", "#0b0b0b", "#52514e", "#e4e3df"
@@ -42,23 +44,24 @@ class Layout:
         self.view = capture["view"]
         self.view_h = self.view["ortho"] * 2
         self.view_w = self.view_h * self.view["aspect"]
-        self.crop = capture["crop"]
+        self.squares = {"ring": capture["crop"], "shadow": capture["shadow_crop"]}
         self.settings = capture["settings"]
         self.variants = capture["variants"]
         self.tap_texel = capture["tap_texel"]
         self.written = []
 
-    def box(self, width, height):
-        half = self.crop["size"] / 2
-        left = (self.crop["x"] - half + self.view_w / 2) / self.view_w * width
-        right = (self.crop["x"] + half + self.view_w / 2) / self.view_w * width
-        top = (self.view_h / 2 - (self.crop["y"] + half)) / self.view_h * height
-        bottom = (self.view_h / 2 - (self.crop["y"] - half)) / self.view_h * height
+    def box(self, width, height, square):
+        crop = self.squares[square]
+        half = crop["size"] / 2
+        left = (crop["x"] - half + self.view_w / 2) / self.view_w * width
+        right = (crop["x"] + half + self.view_w / 2) / self.view_w * width
+        top = (self.view_h / 2 - (crop["y"] + half)) / self.view_h * height
+        bottom = (self.view_h / 2 - (crop["y"] - half)) / self.view_h * height
         return round(left), round(top), round(right), round(bottom)
 
-    def cropped(self, path, grey=False, nearest=True, gain=None, side=SIDE):
+    def cropped(self, path, grey=False, nearest=True, gain=None, side=SIDE, square="ring"):
         picture = Image.open(path).convert("RGB")
-        picture = picture.crop(self.box(*picture.size))
+        picture = picture.crop(self.box(*picture.size, square))
         if grey:
             # A map's alpha, and a field's density, are written as grey pictures: their red is the value.
             picture = picture.getchannel("R").convert("RGB")
@@ -98,6 +101,10 @@ def lead(layout):
         layout.save(picture.resize((SIDE * 2, SIDE * 2), Image.LANCZOS), name)
     layout.save(layout.cropped(os.path.join(game, "light.png"), nearest=False, gain=LIGHT_GAIN, side=SIDE * 2),
                 "light.jpg")
+    # The light at the game's settings round the ring, and above it where no local light reaches.
+    for square in ("ring", "shadow"):
+        layout.save(layout.cropped(os.path.join(game, "light.png"), nearest=False, gain=LIGHT_GAIN, square=square),
+                    f"light-{square}.jpg")
     layout.save(layout.cropped(os.path.join(game, "gi-light-buffer-rgb.png"), side=SIDE * 2), "buffer-bounce.png")
     layout.save(layout.cropped(os.path.join(game, "gi-light-buffer-a.png"), grey=True, side=SIDE * 2),
                 "buffer-shadow.png")
@@ -130,24 +137,27 @@ def masks(layout):
             ("mask-clouds.png", os.path.join(game, "background-field-rgb.png")),
             ("mask-shadow-gate-game.png", os.path.join(game, shadow)),
             ("mask-shadow-gate-high.png", layout.folder("as-is", f"cloudShadowGate-{gate[1]:g}", shadow))):
-        layout.save(layout.cropped(path, grey=True), name)
+        layout.save(layout.cropped(path, grey=True, square="shadow"), name)
 
 
 def knobs(layout):
-    for knob, (run, channels) in KNOBS.items():
+    for knob, (run, channels, square) in KNOBS.items():
         low, high = layout.variants[knob]
         for value, folder in ((f"{low:g}", f"{knob}-{low:g}"), ("game", "game"), (f"{high:g}", f"{knob}-{high:g}")):
-            pictures(layout, layout.folder(run, folder), f"{knob}-{value}", channels)
+            pictures(layout, layout.folder(run, folder), f"{knob}-{value}", channels, square)
     for tag, folder in (("phone", "phone"), ("editor", "game")):
-        pictures(layout, layout.folder("as-is", folder), tag, ("shadow", "bounce"))
+        pictures(layout, layout.folder("as-is", folder), tag, ("shadow", "bounce"), "shadow")
 
 
-def pictures(layout, folder, tag, channels):
-    layout.save(layout.cropped(os.path.join(folder, "light.png"), nearest=False, gain=LIGHT_GAIN), f"{tag}-light.jpg")
+def pictures(layout, folder, tag, channels, square):
+    layout.save(layout.cropped(os.path.join(folder, "light.png"), nearest=False, gain=LIGHT_GAIN, square=square),
+                f"{tag}-light.jpg")
     if "shadow" in channels:
-        layout.save(layout.cropped(os.path.join(folder, "gi-light-buffer-a.png"), grey=True), f"{tag}-shadow.png")
+        layout.save(layout.cropped(os.path.join(folder, "gi-light-buffer-a.png"), grey=True, square=square),
+                    f"{tag}-shadow.png")
     if "bounce" in channels:
-        layout.save(layout.cropped(os.path.join(folder, "gi-light-buffer-rgb.png")), f"{tag}-bounce.png")
+        layout.save(layout.cropped(os.path.join(folder, "gi-light-buffer-rgb.png"), square=square),
+                    f"{tag}-bounce.png")
 
 
 def plots(layout):
