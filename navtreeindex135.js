@@ -1,5 +1,13 @@
 var NAVTREEINDEX135 =
 {
+"namespaceBalloonParty_1_1Cheats.html":[5,0,0,2],
+"namespaceBalloonParty_1_1Configuration.html":[5,0,0,3],
+"namespaceBalloonParty_1_1Configuration_1_1Balloons.html":[5,0,0,3,0],
+"namespaceBalloonParty_1_1Configuration_1_1Buffs.html":[5,0,0,3,1],
+"namespaceBalloonParty_1_1Configuration_1_1CardReveal.html":[5,0,0,3,2],
+"namespaceBalloonParty_1_1Configuration_1_1Cinematics.html":[5,0,0,3,3],
+"namespaceBalloonParty_1_1Configuration_1_1Editor.html":[5,0,0,3,4],
+"namespaceBalloonParty_1_1Configuration_1_1Effects.html":[5,0,0,3,5],
 "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0e":[5,0,0,3,5,45],
 "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0ea0e30236f031ba5b65ca19c59d8bd912c":[5,0,0,3,5,45,14],
 "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0ea1f4a87dac642b8064a663eb742408cb2":[5,0,0,3,5,45,10],
@@ -241,13 +249,5 @@ var NAVTREEINDEX135 =
 "namespaceBalloonParty_1_1Nudge.html#a4d2e641b1da2f9eb813f7185abd74329ad911b34823c7674c292556dc56148c27":[5,0,0,8,6,4],
 "namespaceBalloonParty_1_1Nudge_1_1Editor.html":[5,0,0,8,0],
 "namespaceBalloonParty_1_1Prediction.html":[5,0,0,9],
-"namespaceBalloonParty_1_1Prediction.html#a254a3b76e2281f08bf6f5a0b1024809b":[5,0,0,9,8],
-"namespaceBalloonParty_1_1Prediction.html#a254a3b76e2281f08bf6f5a0b1024809ba68e6202e50e4806f18d28cab574e0d82":[5,0,0,9,8,2],
-"namespaceBalloonParty_1_1Prediction.html#a254a3b76e2281f08bf6f5a0b1024809ba694d154d83bf9e21a5dccd5cbf861add":[5,0,0,9,8,0],
-"namespaceBalloonParty_1_1Prediction.html#a254a3b76e2281f08bf6f5a0b1024809ba8500b63132a4f08ad0e93aa4802c3b13":[5,0,0,9,8,3],
-"namespaceBalloonParty_1_1Prediction.html#a254a3b76e2281f08bf6f5a0b1024809ba94e8a499539d1a472f3b5dbbb85508c0":[5,0,0,9,8,1],
-"namespaceBalloonParty_1_1Projectile.html":[5,0,0,10],
-"namespaceBalloonParty_1_1Projectile_1_1Buffs.html":[5,0,0,10,0],
-"namespaceBalloonParty_1_1Projectile_1_1Controller.html":[5,0,0,10,1],
-"namespaceBalloonParty_1_1Projectile_1_1Controller.html#a269c35de6ac7d821e1a397646dd92704":[5,0,0,10,1,18]
+"namespaceBalloonParty_1_1Prediction.html#a254a3b76e2281f08bf6f5a0b1024809b":[5,0,0,9,8]
 };

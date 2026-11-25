@@ -1,5 +1,13 @@
 var NAVTREEINDEX110 =
 {
+"classBalloonParty_1_1Solver_1_1ShotSimStaticActor.html":[5,0,0,14,25],
+"classBalloonParty_1_1Solver_1_1ShotSimStaticActor.html":[6,0,0,14,25],
+"classBalloonParty_1_1Solver_1_1ShotSimStaticActor.html#a4f6144bf7910b960e3df235b98f78715":[5,0,0,14,25,0],
+"classBalloonParty_1_1Solver_1_1ShotSimStaticActor.html#a4f6144bf7910b960e3df235b98f78715":[6,0,0,14,25,0],
+"classBalloonParty_1_1Solver_1_1ShotSimStaticActor.html#ac720090df32da0e04be9166011757e8c":[5,0,0,14,25,1],
+"classBalloonParty_1_1Solver_1_1ShotSimStaticActor.html#ac720090df32da0e04be9166011757e8c":[6,0,0,14,25,1],
+"classBalloonParty_1_1Solver_1_1ShotSimulator.html":[5,0,0,14,27],
+"classBalloonParty_1_1Solver_1_1ShotSimulator.html":[6,0,0,14,27],
 "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a0057c7b9d24a82caf0b6b44f0b94ae04":[5,0,0,14,27,67],
 "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a0057c7b9d24a82caf0b6b44f0b94ae04":[6,0,0,14,27,67],
 "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a0129f8b8bf715af04092120345fafa95":[5,0,0,14,27,9],
@@ -241,13 +249,5 @@ var NAVTREEINDEX110 =
 "classBalloonParty_1_1Thrower_1_1SnipeWhirlwindView.html#af375cb660c0197b466b65cb9c77fe777":[5,0,0,15,1,11],
 "classBalloonParty_1_1Thrower_1_1SnipeWhirlwindView.html#af375cb660c0197b466b65cb9c77fe777":[6,0,0,15,1,11],
 "classBalloonParty_1_1Thrower_1_1SnipeWhirlwindView.html#af43c9ac1c416428eb37b9bb82938c23a":[5,0,0,15,1,42],
-"classBalloonParty_1_1Thrower_1_1SnipeWhirlwindView.html#af43c9ac1c416428eb37b9bb82938c23a":[6,0,0,15,1,42],
-"classBalloonParty_1_1Thrower_1_1SnipeWhirlwindView.html#afb612f5aa1b9826e0a60bc7f773104d2":[5,0,0,15,1,21],
-"classBalloonParty_1_1Thrower_1_1SnipeWhirlwindView.html#afb612f5aa1b9826e0a60bc7f773104d2":[6,0,0,15,1,21],
-"classBalloonParty_1_1Thrower_1_1SnipeWhirlwindView.html#aff3064e3018c24e58f8bc3bb229ec1ec":[5,0,0,15,1,27],
-"classBalloonParty_1_1Thrower_1_1SnipeWhirlwindView.html#aff3064e3018c24e58f8bc3bb229ec1ec":[6,0,0,15,1,27],
-"classBalloonParty_1_1Thrower_1_1ThrowerController.html":[5,0,0,15,2],
-"classBalloonParty_1_1Thrower_1_1ThrowerController.html":[6,0,0,15,2],
-"classBalloonParty_1_1Thrower_1_1ThrowerController.html#a02930293b10d19627f15ddb4abbc0f61":[5,0,0,15,2,20],
-"classBalloonParty_1_1Thrower_1_1ThrowerController.html#a02930293b10d19627f15ddb4abbc0f61":[6,0,0,15,2,20]
+"classBalloonParty_1_1Thrower_1_1SnipeWhirlwindView.html#af43c9ac1c416428eb37b9bb82938c23a":[6,0,0,15,1,42]
 };

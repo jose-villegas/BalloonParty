@@ -1,5 +1,13 @@
 var NAVTREEINDEX65 =
 {
+"classBalloonParty_1_1Game_1_1GameLifetimeScope.html#af0766435eeb184ac7a7f5ac648deb15e":[5,0,0,6,17,28],
+"classBalloonParty_1_1Game_1_1GameLifetimeScope.html#af0766435eeb184ac7a7f5ac648deb15e":[6,0,0,6,17,28],
+"classBalloonParty_1_1Game_1_1GameLifetimeScope.html#af7500696180dd81b5727f9ffb622983d":[5,0,0,6,17,3],
+"classBalloonParty_1_1Game_1_1GameLifetimeScope.html#af7500696180dd81b5727f9ffb622983d":[6,0,0,6,17,3],
+"classBalloonParty_1_1Game_1_1GameLifetimeScope.html#affbe79c5b3014ce24d5f67324a277803":[5,0,0,6,17,0],
+"classBalloonParty_1_1Game_1_1GameLifetimeScope.html#affbe79c5b3014ce24d5f67324a277803":[6,0,0,6,17,0],
+"classBalloonParty_1_1Game_1_1GameScopeRegistration.html":[5,0,0,6,18],
+"classBalloonParty_1_1Game_1_1GameScopeRegistration.html":[6,0,0,6,18],
 "classBalloonParty_1_1Game_1_1GameScopeRegistration.html#a09b26181830b8a5cd04ab7c6a15a5750":[5,0,0,6,18,14],
 "classBalloonParty_1_1Game_1_1GameScopeRegistration.html#a09b26181830b8a5cd04ab7c6a15a5750":[6,0,0,6,18,14],
 "classBalloonParty_1_1Game_1_1GameScopeRegistration.html#a143e0fa66785e50bbb6ddf5071af25a3":[5,0,0,6,18,9],
@@ -241,13 +249,5 @@ var NAVTREEINDEX65 =
 "classBalloonParty_1_1Game_1_1Health_1_1LossForecast.html#a46065db2ef8fab46d3928d8b26e1958a":[5,0,0,6,6,4,0],
 "classBalloonParty_1_1Game_1_1Health_1_1LossForecast.html#a46065db2ef8fab46d3928d8b26e1958a":[6,0,0,6,6,4,0],
 "classBalloonParty_1_1Game_1_1Health_1_1LossForecast.html#a62dd0d388a210364496bfe3b36f834e6":[5,0,0,6,6,4,2],
-"classBalloonParty_1_1Game_1_1Health_1_1LossForecast.html#a62dd0d388a210364496bfe3b36f834e6":[6,0,0,6,6,4,2],
-"classBalloonParty_1_1Game_1_1Health_1_1LossForecast.html#ab1b8af74127e8660b276fc8e42c3d1f7":[5,0,0,6,6,4,1],
-"classBalloonParty_1_1Game_1_1Health_1_1LossForecast.html#ab1b8af74127e8660b276fc8e42c3d1f7":[6,0,0,6,6,4,1],
-"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html":[5,0,0,6,6,5],
-"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html":[6,0,0,6,6,5],
-"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a0e0ac40e95366b8e51bde5c185817b60":[5,0,0,6,6,5,4],
-"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a0e0ac40e95366b8e51bde5c185817b60":[6,0,0,6,6,5,4],
-"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a10fca38ec0c8d172d6755a7258ad7ff1":[5,0,0,6,6,5,0],
-"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a10fca38ec0c8d172d6755a7258ad7ff1":[6,0,0,6,6,5,0]
+"classBalloonParty_1_1Game_1_1Health_1_1LossForecast.html#a62dd0d388a210364496bfe3b36f834e6":[6,0,0,6,6,4,2]
 };

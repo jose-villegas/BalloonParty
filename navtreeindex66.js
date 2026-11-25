@@ -1,5 +1,13 @@
 var NAVTREEINDEX66 =
 {
+"classBalloonParty_1_1Game_1_1Health_1_1LossForecast.html#ab1b8af74127e8660b276fc8e42c3d1f7":[5,0,0,6,6,4,1],
+"classBalloonParty_1_1Game_1_1Health_1_1LossForecast.html#ab1b8af74127e8660b276fc8e42c3d1f7":[6,0,0,6,6,4,1],
+"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html":[5,0,0,6,6,5],
+"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html":[6,0,0,6,6,5],
+"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a0e0ac40e95366b8e51bde5c185817b60":[5,0,0,6,6,5,4],
+"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a0e0ac40e95366b8e51bde5c185817b60":[6,0,0,6,6,5,4],
+"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a10fca38ec0c8d172d6755a7258ad7ff1":[5,0,0,6,6,5,0],
+"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a10fca38ec0c8d172d6755a7258ad7ff1":[6,0,0,6,6,5,0],
 "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a13ca9962bfa3604103112910ae089b75":[5,0,0,6,6,5,3],
 "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a13ca9962bfa3604103112910ae089b75":[6,0,0,6,6,5,3],
 "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a31d41353205ba9fabcbc12f476f0d9cd":[5,0,0,6,6,5,6],
@@ -241,13 +249,5 @@ var NAVTREEINDEX66 =
 "classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html#ad8acd24cbf2f2a00b1d630d028779109":[5,0,0,6,7,0,4],
 "classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html#ad8acd24cbf2f2a00b1d630d028779109":[6,0,0,6,7,0,4],
 "classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html#ad99d408636c7cc894e3a8515988ff694":[5,0,0,6,7,0,0],
-"classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html#ad99d408636c7cc894e3a8515988ff694":[6,0,0,6,7,0,0],
-"classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html#ae22fc0a50825c9c6585312caa3d9a409":[5,0,0,6,7,0,1],
-"classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html#ae22fc0a50825c9c6585312caa3d9a409":[6,0,0,6,7,0,1],
-"classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html#ae5f3bc5e238af45ca86b5051ae50adc5":[5,0,0,6,7,0,8],
-"classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html#ae5f3bc5e238af45ca86b5051ae50adc5":[6,0,0,6,7,0,8],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelCompletion.html":[5,0,0,6,7,5],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelCompletion.html":[6,0,0,6,7,5],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelCompletion.html#a6453747b2ae27a337b4f1f51215fdbea":[5,0,0,6,7,5,0],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelCompletion.html#a6453747b2ae27a337b4f1f51215fdbea":[6,0,0,6,7,5,0]
+"classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html#ad99d408636c7cc894e3a8515988ff694":[6,0,0,6,7,0,0]
 };

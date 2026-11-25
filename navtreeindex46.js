@@ -1,5 +1,13 @@
 var NAVTREEINDEX46 =
 {
+"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#abaeb09222d0547a6b4fe71a9bcc37f17":[5,0,0,3,29,1],
+"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#abaeb09222d0547a6b4fe71a9bcc37f17":[6,0,0,3,29,1],
+"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#ad0a64e70d7d8d41c3fa63ba33bdbc11d":[5,0,0,3,29,5],
+"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#ad0a64e70d7d8d41c3fa63ba33bdbc11d":[6,0,0,3,29,5],
+"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#ae50419a0d7a8da0c50bbbd7f1f3d164d":[5,0,0,3,29,8],
+"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#ae50419a0d7a8da0c50bbbd7f1f3d164d":[6,0,0,3,29,8],
+"classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html":[5,0,0,3,32],
+"classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html":[6,0,0,3,32],
 "classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html#a1027e4f1728e3470c4aa58b5d25da68a":[5,0,0,3,32,16],
 "classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html#a1027e4f1728e3470c4aa58b5d25da68a":[6,0,0,3,32,16],
 "classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html#a23f66d39922b4dab4ba3bd963bf9dfd6":[5,0,0,3,32,6],
@@ -241,13 +249,5 @@ var NAVTREEINDEX46 =
 "classBalloonParty_1_1Display_1_1CameraShakeView.html#a8193f1d0c7e9eeba0b1c8bae9764737d":[5,0,0,4,3,11],
 "classBalloonParty_1_1Display_1_1CameraShakeView.html#a8193f1d0c7e9eeba0b1c8bae9764737d":[6,0,0,4,3,11],
 "classBalloonParty_1_1Display_1_1CameraShakeView.html#a975ba3c51480760466ce658719c2264b":[5,0,0,4,3,14],
-"classBalloonParty_1_1Display_1_1CameraShakeView.html#a975ba3c51480760466ce658719c2264b":[6,0,0,4,3,14],
-"classBalloonParty_1_1Display_1_1CameraShakeView.html#aa374b04d0801581e3417d436e6392e41":[5,0,0,4,3,4],
-"classBalloonParty_1_1Display_1_1CameraShakeView.html#aa374b04d0801581e3417d436e6392e41":[6,0,0,4,3,4],
-"classBalloonParty_1_1Display_1_1CameraShakeView.html#aa7bab0f6c869738a0faaa88eb1f334e8":[5,0,0,4,3,1],
-"classBalloonParty_1_1Display_1_1CameraShakeView.html#aa7bab0f6c869738a0faaa88eb1f334e8":[6,0,0,4,3,1],
-"classBalloonParty_1_1Display_1_1CameraShakeView.html#ae1d731d794951951171c3efc6713d083":[5,0,0,4,3,12],
-"classBalloonParty_1_1Display_1_1CameraShakeView.html#ae1d731d794951951171c3efc6713d083":[6,0,0,4,3,12],
-"classBalloonParty_1_1Display_1_1CameraShakeView.html#af7f85b784e7379b3070a52cbb313e360":[5,0,0,4,3,6],
-"classBalloonParty_1_1Display_1_1CameraShakeView.html#af7f85b784e7379b3070a52cbb313e360":[6,0,0,4,3,6]
+"classBalloonParty_1_1Display_1_1CameraShakeView.html#a975ba3c51480760466ce658719c2264b":[6,0,0,4,3,14]
 };
