@@ -14,10 +14,12 @@ namespace BalloonParty.Tests.Configuration
         private const int Seeds = 200;
         private const int LastLevel = 120;
 
-        // The shipped numbers: from level 8, 15% after two ordinary levels, 10% more for each level that misses.
+        // The shipped numbers: the first on level 7, then 15% after two ordinary levels, 10% more for each level
+        // that misses.
         private static ExtraColorLevelSettings Shipped()
         {
-            return new ExtraColorLevelSettings(8, 0.15f, 0.7f, 0.3f, minLevelsBetween: 2, chanceGrowthPerLevel: 0.1f);
+            return new ExtraColorLevelSettings(8, 0.15f, 0.7f, 0.3f, minLevelsBetween: 2, chanceGrowthPerLevel: 0.1f,
+                firstLevel: 7);
         }
 
         [Test]
@@ -53,16 +55,50 @@ namespace BalloonParty.Tests.Configuration
         }
 
         [Test]
-        public void TheFirst_ComesNoEarlierThanFromLevel()
+        public void TheFirst_IsTheFirstLevel_InEveryRun()
         {
             var settings = Shipped();
             for (var seed = 0; seed < Seeds; seed++)
             {
-                for (var level = 1; level < 8; level++)
+                for (var level = 1; level < 7; level++)
                 {
                     Assert.IsFalse(settings.IsExtraColorLevel(level, seed), $"seed {seed} level {level}");
                 }
+
+                Assert.IsTrue(settings.IsExtraColorLevel(7, seed), $"seed {seed}");
             }
+        }
+
+        [Test]
+        public void AfterTheFirst_TheGapHolds()
+        {
+            var settings = Shipped();
+            for (var seed = 0; seed < Seeds; seed++)
+            {
+                Assert.IsFalse(settings.IsExtraColorLevel(8, seed), $"seed {seed}");
+                Assert.IsFalse(settings.IsExtraColorLevel(9, seed), $"seed {seed}");
+            }
+        }
+
+        [Test]
+        public void WithNoFirstLevel_TheFirstIsRolled_NoEarlierThanFromLevel()
+        {
+            var settings = new ExtraColorLevelSettings(8, 0.15f, 0.7f, 0.3f, minLevelsBetween: 2,
+                chanceGrowthPerLevel: 0.1f);
+            var firsts = new HashSet<int>();
+            for (var seed = 0; seed < Seeds; seed++)
+            {
+                var level = 1;
+                while (!settings.IsExtraColorLevel(level, seed))
+                {
+                    level++;
+                }
+
+                Assert.GreaterOrEqual(level, 8, $"seed {seed}");
+                firsts.Add(level);
+            }
+
+            Assert.Greater(firsts.Count, 1, "runs roll their own first");
         }
 
         // Each answer walks the run from its start, so asking out of order, or again, changes nothing.
@@ -111,7 +147,8 @@ namespace BalloonParty.Tests.Configuration
         [Test]
         public void NoChance_NeverABonusLevel_HoweverLongTheWait()
         {
-            var settings = new ExtraColorLevelSettings(8, 0f, 0.7f, 0f, minLevelsBetween: 2, chanceGrowthPerLevel: 0.1f);
+            var settings = new ExtraColorLevelSettings(8, 0f, 0.7f, 0f, minLevelsBetween: 2, chanceGrowthPerLevel: 0.1f,
+                firstLevel: 7);
             for (var level = 1; level <= LastLevel; level++)
             {
                 Assert.IsFalse(settings.IsExtraColorLevel(level, 7), $"level {level}");

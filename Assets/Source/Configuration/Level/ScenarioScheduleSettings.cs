@@ -12,14 +12,14 @@ namespace BalloonParty.Configuration.Level
     {
         [Tooltip("Every level before this one is sky. From here the first ground stretch can start: its first " +
                  "level is rolled between this and Ground By Level, so whatever needs ground (bushes) can appear.")]
-        [SerializeField] [Min(1)] private int _groundFromLevel = 6;
+        [SerializeField] [Min(1)] private int _groundFromLevel = 4;
 
         [Tooltip("The first ground stretch has started by this level at the latest.")]
-        [SerializeField] [Min(1)] private int _groundByLevel = 6;
+        [SerializeField] [Min(1)] private int _groundByLevel = 4;
 
         [Tooltip("Length of the first ground stretch, fixed rather than rolled: once the run reaches the ground " +
                  "it stays there at least this many levels.")]
-        [SerializeField] [Min(1)] private int _firstGroundStretch = 4;
+        [SerializeField] [Min(1)] private int _firstGroundStretch = 3;
 
         [Tooltip("Fewest levels a later ground stretch lasts. Two flickers once the transition each way counts.")]
         [SerializeField] [Min(1)] private int _minGroundStretch = 3;
@@ -32,6 +32,10 @@ namespace BalloonParty.Configuration.Level
 
         [Tooltip("Most levels a sky stretch between two ground stretches lasts.")]
         [SerializeField] [Min(1)] private int _maxSkyStretch = 4;
+
+        [Tooltip("Length of the sky stretch right after the first meadow, fixed rather than rolled, so the first " +
+                 "water comes on the same level every run. 0 = rolled like any other sky stretch.")]
+        [SerializeField] [Min(0)] private int _skyAfterFirstMeadow = 2;
 
         [Tooltip("Chance that a surface stretch after the first meadow is water rather than a meadow. Rolled " +
                  "after the stretch's length, so it changes which surface a stretch shows, never where it falls.")]
@@ -52,6 +56,7 @@ namespace BalloonParty.Configuration.Level
         public int MaxGroundStretch => Mathf.Max(MinGroundStretch, _maxGroundStretch);
         public int MinSkyStretch => Mathf.Max(1, _minSkyStretch);
         public int MaxSkyStretch => Mathf.Max(MinSkyStretch, _maxSkyStretch);
+        public int SkyAfterFirstMeadow => Mathf.Max(0, _skyAfterFirstMeadow);
         public float WaterShare => Mathf.Clamp01(_waterShare);
         public bool WaterAfterFirstMeadow => _waterAfterFirstMeadow;
         public int Salt => _salt;
@@ -64,8 +69,9 @@ namespace BalloonParty.Configuration.Level
         // Without groundFromLevel the first ground level is groundByLevel, fixed.
         internal ScenarioScheduleSettings(int groundByLevel, int firstGroundStretch, int minGroundStretch,
             int maxGroundStretch, int minSkyStretch, int maxSkyStretch, int salt, int groundFromLevel = 0,
-            float waterShare = 0f, bool waterAfterFirstMeadow = false)
+            float waterShare = 0f, bool waterAfterFirstMeadow = false, int skyAfterFirstMeadow = 0)
         {
+            _skyAfterFirstMeadow = skyAfterFirstMeadow;
             _groundByLevel = groundByLevel;
             _groundFromLevel = groundFromLevel > 0 ? groundFromLevel : groundByLevel;
             _firstGroundStretch = firstGroundStretch;

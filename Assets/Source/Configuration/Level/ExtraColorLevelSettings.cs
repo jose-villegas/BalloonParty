@@ -6,8 +6,9 @@ namespace BalloonParty.Configuration.Level
     /// <summary>
     ///     A rare level that plays one more colour than its step gives (the fourth, purple), with no threats and
     ///     lines arriving faster: the pressure is a colour more to juggle and a busier board, not armour to
-    ///     break. More items come with it, to help sort the extra colour out. Rolled per level from the run's seed,
-    ///     so runs differ and a retry replays it. At least <see cref="MinLevelsBetween" /> ordinary levels come
+    ///     break. More items come with it, to help sort the extra colour out. The first can be pinned to a level
+    ///     (<see cref="FirstLevel" />), so every run meets one early; the rest are rolled per level from the run's
+    ///     seed, so runs differ and a retry replays it. At least <see cref="MinLevelsBetween" /> ordinary levels come
     ///     between two, so it never feels spammy, and each level after that which misses it raises the next one's
     ///     chance (<see cref="ChanceGrowthPerLevel" />), so a run never goes too long without one.
     /// </summary>
@@ -17,7 +18,11 @@ namespace BalloonParty.Configuration.Level
         // Keeps this roll's stream apart from the other per-level rolls on the same run seed.
         private const int RollSalt = 0x3C6EF372;
 
-        [Tooltip("First level that can roll an extra colour.")]
+        [Tooltip("The level every run plays its first extra colour on; the rolls start after it, and From Level " +
+                 "no longer applies. 0 = no fixed first, it is rolled from From Level like the rest.")]
+        [SerializeField] [Min(0)] private int _firstLevel = 7;
+
+        [Tooltip("First level that can roll an extra colour, when First Level is 0.")]
         [SerializeField] [Min(1)] private int _fromLevel = 8;
 
         [Tooltip("Chance the first level that can roll one (From Level, or the first after the gap) plays one more " +
@@ -44,6 +49,7 @@ namespace BalloonParty.Configuration.Level
         public float ExtraItemChance => _extraItemChance;
         public float ChanceGrowthPerLevel => _chanceGrowthPerLevel;
         public int MinLevelsBetween => Mathf.Max(0, _minLevelsBetween);
+        public int FirstLevel => Mathf.Max(0, _firstLevel);
 
         public ExtraColorLevelSettings()
         {
@@ -51,8 +57,9 @@ namespace BalloonParty.Configuration.Level
 
         // The defaults for the gap and the growth are the rule before the soft pity: never two in a row, a flat chance.
         internal ExtraColorLevelSettings(int fromLevel, float chance, float spawnIntervalScale,
-            float extraItemChance = 0f, int minLevelsBetween = 1, float chanceGrowthPerLevel = 0f)
+            float extraItemChance = 0f, int minLevelsBetween = 1, float chanceGrowthPerLevel = 0f, int firstLevel = 0)
         {
+            _firstLevel = firstLevel;
             _fromLevel = fromLevel;
             _chance = chance;
             _spawnIntervalScale = spawnIntervalScale;
@@ -63,12 +70,14 @@ namespace BalloonParty.Configuration.Level
 
         /// <summary>
         ///     Whether <paramref name="level" /> plays an extra colour in the run seeded <paramref name="runSeed" />.
-        ///     The run's levels are walked from <see cref="_fromLevel" />, since each one's chance depends on how long
-        ///     ago the last one came; every draw is the level's own hash, so the answer is the same each time asked.
+        ///     The run's levels are walked from the first that can play one, since each one's chance depends on how
+        ///     long ago the last one came; every draw is the level's own hash, so the answer is the same each time
+        ///     asked.
         /// </summary>
         internal bool IsExtraColorLevel(int level, int runSeed)
         {
-            if (level < _fromLevel || _chance <= 0f)
+            var start = FirstLevel > 0 ? FirstLevel : _fromLevel;
+            if (level < start || _chance <= 0f)
             {
                 return false;
             }
@@ -76,7 +85,7 @@ namespace BalloonParty.Configuration.Level
             var between = MinLevelsBetween;
             // Primed so From Level rolls at the base chance.
             var sinceLast = between;
-            for (var at = _fromLevel; at < level; at++)
+            for (var at = start; at < level; at++)
             {
                 sinceLast = Plays(at, runSeed, sinceLast, between) ? 0 : sinceLast + 1;
             }
@@ -92,6 +101,11 @@ namespace BalloonParty.Configuration.Level
 
         private bool Plays(int level, int runSeed, int sinceLast, int between)
         {
+            if (level == FirstLevel)
+            {
+                return true;
+            }
+
             if (sinceLast < between)
             {
                 return false;

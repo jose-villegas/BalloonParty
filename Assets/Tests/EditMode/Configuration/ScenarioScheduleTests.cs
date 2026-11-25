@@ -58,8 +58,9 @@ namespace BalloonParty.Tests.Configuration
         {
             var settings = new ScenarioScheduleSettings();
 
-            Assert.AreEqual((6, 6), (settings.GroundFromLevel, settings.GroundByLevel));
-            Assert.AreEqual(4, settings.FirstGroundStretch);
+            Assert.AreEqual((4, 4), (settings.GroundFromLevel, settings.GroundByLevel));
+            Assert.AreEqual(3, settings.FirstGroundStretch);
+            Assert.AreEqual(2, settings.SkyAfterFirstMeadow);
             Assert.AreEqual((3, 5), (settings.MinGroundStretch, settings.MaxGroundStretch));
             Assert.AreEqual((2, 4), (settings.MinSkyStretch, settings.MaxSkyStretch));
         }
@@ -343,16 +344,39 @@ namespace BalloonParty.Tests.Configuration
         }
 
         [Test]
-        public void ShippedDefaults_PutTheFirstMeadowOnLevelSix_AndWaterRightAfterIt([Values(0, 3, 98765)] int runSeed)
+        public void ShippedDefaults_PutTheFirstMeadowOnLevelFour_AndTheFirstWaterOnLevelNine(
+            [Values(0, 3, 98765)] int runSeed)
         {
             var settings = new ScenarioScheduleSettings();
 
             Assert.IsTrue(settings.WaterAfterFirstMeadow);
-            Assert.AreEqual(ScenarioKind.Sky, ScenarioSchedule.ForLevel(settings, 5, runSeed));
-            AssertStretch(ScenarioSchedule.StretchAt(settings, 6, runSeed), ScenarioKind.Ground, 0, 4);
-            Assert.AreEqual(ScenarioKind.Sky, ScenarioSchedule.ForLevel(settings, 10, runSeed));
-            Assert.AreEqual(ScenarioKind.Water, ScenarioSchedule.ForLevel(settings, NextSurface(settings, 10, runSeed),
-                runSeed));
+            Assert.AreEqual(ScenarioKind.Sky, ScenarioSchedule.ForLevel(settings, 3, runSeed));
+            AssertStretch(ScenarioSchedule.StretchAt(settings, 4, runSeed), ScenarioKind.Ground, 0, 3);
+            AssertStretch(ScenarioSchedule.StretchAt(settings, 7, runSeed), ScenarioKind.Sky, 0, 2);
+            Assert.AreEqual(ScenarioKind.Water, ScenarioSchedule.StretchAt(settings, 9, runSeed).Kind);
+            Assert.AreEqual(0, ScenarioSchedule.StretchAt(settings, 9, runSeed).Position);
+        }
+
+        [Test]
+        public void SkyAfterFirstMeadow_FixesThatStretchOnly([Values(1, 7919, 123456)] int salt,
+            [Values(0, 42)] int runSeed)
+        {
+            var rolled = Schedule(salt: salt);
+            var fixedSky = new ScenarioScheduleSettings(16, 4, 3, 5, 2, 4, salt, skyAfterFirstMeadow: 3);
+
+            AssertStretch(ScenarioSchedule.StretchAt(fixedSky, 20, runSeed), ScenarioKind.Sky, 0, 3);
+            var second = NextSurface(fixedSky, 20, runSeed);
+            Assert.AreEqual(23, second);
+            for (var level = second; level < LevelsChecked; level++)
+            {
+                var stretch = ScenarioSchedule.StretchAt(fixedSky, level, runSeed);
+                if (stretch.Kind == ScenarioKind.Sky)
+                {
+                    Assert.That(stretch.Length, Is.InRange(2, 4), $"level {level}");
+                }
+            }
+
+            Assert.That(ScenarioSchedule.StretchAt(rolled, 20, runSeed).Length, Is.InRange(2, 4));
         }
 
         [Test]

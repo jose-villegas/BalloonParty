@@ -1324,6 +1324,7 @@ MonoBehaviour:
     - _fromLevel: 5
       _value: 3
     _extraColor:
+      _firstLevel: 7
       _fromLevel: 8
       _chance: 0.15
       _chanceGrowthPerLevel: 0.1
@@ -1695,7 +1696,7 @@ MonoBehaviour:
       _guaranteedInitialCount: 0
     - _type: 4
       _role: 1
-      _unlockLevel: 4
+      _unlockLevel: 2
       _cost: 1
       _weight:
         _introWeight: 1
@@ -1889,7 +1890,7 @@ MonoBehaviour:
       _guaranteedInitialCount: 0
     - _type: 7
       _role: 0
-      _unlockLevel: 6
+      _unlockLevel: 8
       _cost: 2
       _weight:
         _introWeight: 0
@@ -2275,7 +2276,7 @@ MonoBehaviour:
       _requiresGround: 0
     - _type: 1
       _withheld: 0
-      _unlockLevel: 6
+      _unlockLevel: 4
       _cost: 2
       _count:
         _min: 3
@@ -2288,3 +2289,15 @@ MonoBehaviour:
       _rampLevels: 8
       _maxPerCluster: 3
       _requiresGround: 1
+    _scenario:
+      _groundFromLevel: 4
+      _groundByLevel: 4
+      _firstGroundStretch: 3
+      _minGroundStretch: 3
+      _maxGroundStretch: 5
+      _minSkyStretch: 2
+      _maxSkyStretch: 4
+      _skyAfterFirstMeadow: 2
+      _waterShare: 0.5
+      _waterAfterFirstMeadow: 1
+      _salt: 7919

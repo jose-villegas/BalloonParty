@@ -9,8 +9,9 @@ using UnityEditor;
 namespace BalloonParty.Tests.Configuration
 {
     /// <summary>
-    ///     Pins the shipped early game (levels 1-3) by loading the real <c>LevelPacingConfiguration.asset</c>,
-    ///     so a tuning edit that changes the opening fails here rather than in a playtest.
+    ///     Pins the shipped early game by loading the real <c>LevelPacingConfiguration.asset</c>: what levels 1-3
+    ///     bring, and that the first ten show the sky, the meadow, a bonus level and the water in every run. A
+    ///     tuning edit that changes the opening fails here rather than in a playtest.
     /// </summary>
     [TestFixture]
     public class ShippedEarlyLevelsTests
@@ -119,6 +120,42 @@ namespace BalloonParty.Tests.Configuration
 
             Assert.AreEqual(1, level.ItemWeights.Single(w => w.Type == ItemType.Bomb).GuaranteedInitialCount);
             Assert.IsTrue(level.GridActorGates.Any(g => g.Type == GridActorType.Puff));
+        }
+
+        [Test]
+        public void TheFirstTenLevels_ShowSkyMeadowBonusAndWater([Values(0, 1, 7, 98765)] int runSeed)
+        {
+            var expected = new[]
+            {
+                ScenarioKind.Sky, ScenarioKind.Sky, ScenarioKind.Sky,
+                ScenarioKind.Ground, ScenarioKind.Ground, ScenarioKind.Ground,
+                ScenarioKind.Paper, ScenarioKind.Sky,
+                ScenarioKind.Water, ScenarioKind.Water,
+            };
+
+            for (var level = 1; level <= expected.Length; level++)
+            {
+                Assert.AreEqual(expected[level - 1], _pacing.BackdropForLevel(level, runSeed), $"level {level}");
+            }
+        }
+
+        [Test]
+        public void TheMeadowBringsBushes_FromItsFirstLevel()
+        {
+            Assert.IsTrue(_pacing.ParametersForLevel(4, 0).GridActorGates.Any(g => g.Type == GridActorType.Bush));
+        }
+
+        // Tough and Tougher stay off the meadow and the water, so Tougher arrives on the sky after the bonus level.
+        [Test]
+        public void TougherArrives_OnTheSkyAfterTheFirstBonus()
+        {
+            for (var level = 1; level < 8; level++)
+            {
+                Assert.IsFalse(_pacing.ParametersForLevel(level, 0).BalloonWeights.Any(w => w.Type == BalloonType.Tougher),
+                    $"level {level}");
+            }
+
+            Assert.IsTrue(_pacing.ParametersForLevel(8, 0).BalloonWeights.Any(w => w.Type == BalloonType.Tougher));
         }
 
         [Test]

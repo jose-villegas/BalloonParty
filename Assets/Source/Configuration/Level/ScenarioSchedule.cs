@@ -6,7 +6,8 @@ namespace BalloonParty.Configuration.Level
     ///     <see cref="ScenarioScheduleSettings.GroundFromLevel" /> and
     ///     <see cref="ScenarioScheduleSettings.GroundByLevel" />, then a ground stretch of a fixed
     ///     <see cref="ScenarioScheduleSettings.FirstGroundStretch" />, then sky and surface stretches alternate,
-    ///     each lasting a rolled number of levels in its own range. The surface stretch right after the first
+    ///     each lasting a rolled number of levels in its own range, except the sky right after the first meadow
+    ///     when <see cref="ScenarioScheduleSettings.SkyAfterFirstMeadow" /> fixes its length. The surface stretch right after the first
     ///     meadow is water when <see cref="ScenarioScheduleSettings.WaterAfterFirstMeadow" /> is on; every later
     ///     one is water or a meadow by its own roll (<see cref="ScenarioScheduleSettings.WaterShare" />), made
     ///     after its length, so water changes which surface a stretch shows but never where the stretches fall.
@@ -50,8 +51,10 @@ namespace BalloonParty.Configuration.Level
             {
                 stretchStart += length;
                 var surfaceNext = kind == ScenarioKind.Sky;
-                length = StretchLength(settings, surfaceNext ? ScenarioKind.Ground : ScenarioKind.Sky,
-                    stretchStart, salt);
+                var firstSky = !surfaceNext && laterSurfaces == 0 && settings.SkyAfterFirstMeadow > 0;
+                length = firstSky
+                    ? settings.SkyAfterFirstMeadow
+                    : StretchLength(settings, surfaceNext ? ScenarioKind.Ground : ScenarioKind.Sky, stretchStart, salt);
                 if (!surfaceNext)
                 {
                     kind = ScenarioKind.Sky;

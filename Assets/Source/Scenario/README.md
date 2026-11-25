@@ -41,9 +41,10 @@ covers it (see the next section).
 
 Each level is set either in the **sky** (the backdrop above) or on the **ground**, a meadow the board rests
 on, so actors that need ground under them (bushes) don't look like they float. Which one is a per-level,
-seeded choice: `ILevelPacingConfiguration.ScenarioForLevel` (see `Configuration/README.md`) is sky until the
-first ground level, level 6, stays on the ground for a fixed first meadow, then alternates sky and surface
-stretches of a rolled length; the first surface after that meadow is water. The rolls mix in the run's seed, so each run lays
+seeded choice: `ILevelPacingConfiguration.ScenarioForLevel` (see `Configuration/README.md`) opens the same way
+in every run, so the first ten levels show every scenario: sky on levels 1–3, a first meadow on 4–6, sky on 7–8
+(level 7 is the first bonus level, on paper, see Paper below) and water from level 9. After that first water it
+alternates sky and surface stretches of a rolled length. The rolls mix in the run's seed, so each run lays
 out its own, and a retry keeps the same scenario. A meadow arrives under puff clouds and
 trades them for bushes as it goes: by the level's place in its stretch, the level generator thins and then
 drops the board's puff-cloud actors and grows the bushes, so the meadow's clear second half is its bushiest.
@@ -173,7 +174,7 @@ Plan: `Plans/PLAN-TerrainBiomes.md`.
 ### Water
 
 The third scenario: the surface stretch right after the first meadow is always **water**
-(`ScenarioKind.Water`), so every run meets it around levels 12–14; each surface stretch after that is a
+(`ScenarioKind.Water`), so every run meets it on level 9; each surface stretch after that is a
 meadow or water by a coin flip. Water levels have no puff clouds or bushes, and nothing on them bounces shots but the
 unbreakable balloon; the longer a water level runs, the more of each spawn line is bubble clusters
 (`Balloon/Spawner/BalloonSpawner`), except on an extra-colour level, which brings none. Plan: `Plans/PLAN-WaterScenario.md`.
